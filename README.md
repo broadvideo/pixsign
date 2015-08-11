@@ -11,7 +11,7 @@ CentOS 7, JDK1.8.0 (/opt/pix/jdk8/)
 - cd pixsignage
 - mvn clean
 - mvn package
-- 进入pixsignage-dist/target目录获取pixsignage-dist-[version]-bin.tar.gz
+- 进入pixsignage-dist/target目录获取pixsignage-[version]-dist.tar.gz
 
 
 
@@ -19,7 +19,7 @@ CentOS 7, JDK1.8.0 (/opt/pix/jdk8/)
 ###安装    
 
 - 上传压缩包至服务器/tmp/目录。
-- 解压安装包后得到pixsignage-dist-[version]目录
+- 解压安装包后得到pixsignage-[version]-dist目录
 - 进入目录，执行安装脚本 ./install/install.sh
 
 
