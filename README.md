@@ -14,7 +14,6 @@ CentOS 7, JDK1.8.0 (/opt/pix/jdk8/)
 - 进入pixsignage-dist/target目录获取pixsignage-[version]-dist.tar.gz
 
 
-
 ## 安装、管理和配置
 ###安装    
 
