@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.SchedulefileMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Schedulefile" >
+    <id column="schedulefileid" property="schedulefileid" jdbcType="INTEGER" />
+    <result column="scheduleid" property="scheduleid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="uploadtype" property="uploadtype" jdbcType="CHAR" />
+    <result column="filetype" property="filetype" jdbcType="CHAR" />
+    <result column="fileid" property="fileid" jdbcType="INTEGER" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="fileuri" property="fileuri" jdbcType="VARCHAR" />
+    <result column="filesize" property="filesize" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="complete" property="complete" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    schedulefileid, scheduleid, deviceid, uploadtype, filetype, fileid, filename, fileuri, filesize, 
+    md5, complete, status, description, createtime, updatetime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from schedulefile
+    where schedulefileid = #{schedulefileid,jdbcType=INTEGER}
+  </select>
+  
+	<select id="selectCountBySchedule" resultType="Integer">
+		select count(1) from schedulefile
+		where scheduleid = ${scheduleid}
+	</select>
+
+	<select id="selectBySchedule" resultMap="BaseResultMap">
+		select * from schedulefile
+		where scheduleid = ${scheduleid}
+		order by filetype, fileid 
+		<if test="start != null and length != null">
+			limit ${start}, ${length}
+		</if>
+	</select>
+
+	<select id="selectByFile" resultMap="BaseResultMap">
+		select * from schedulefile
+		where filetype = '${filetype}' and deviceid = ${deviceid} and fileid = ${fileid}
+	</select>
+
+	<select id="selectDownloadingFileBySchedule" resultMap="BaseResultMap">
+		select * from schedulefile
+		where scheduleid = ${scheduleid} and complete != 100
+		order by fileid desc 
+	</select>
+	
+	<select id="selectFilesizecompleteBySchedule" resultType="Long">
+		select floor(coalesce(sum(filesize*complete/100),0)) from schedulefile
+		where scheduleid = ${scheduleid} and filetype='3';
+	</select>
+
+  <delete id="deleteByKeys">
+    delete from schedulefile
+    where schedulefileid in (#{ids})
+  </delete>
+
+  <delete id="deleteBySchedule">
+    delete from schedulefile
+    where scheduleid = ${scheduleid}
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Schedulefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="schedulefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as schedulefileid
+    </selectKey>
+    insert into schedulefile (scheduleid, deviceid, uploadtype, filetype, 
+      fileid, filename, fileuri, 
+      filesize, md5, complete, status, description, 
+      createtime, updatetime)
+    values (#{scheduleid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, #{uploadtype,jdbcType=CHAR}, #{filetype,jdbcType=CHAR}, 
+      #{fileid,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{fileuri,jdbcType=VARCHAR}, 
+      #{filesize,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, #{complete,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Schedulefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="schedulefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as schedulefileid
+    </selectKey>
+    insert into schedulefile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        scheduleid,
+      </if>
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="uploadtype != null" >
+        uploadtype,
+      </if>
+      <if test="filetype != null" >
+        filetype,
+      </if>
+      <if test="fileid != null" >
+        fileid,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="fileuri != null" >
+        fileuri,
+      </if>
+      <if test="filesize != null" >
+        filesize,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
+      <if test="complete != null" >
+        complete,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtype != null" >
+        #{uploadtype,jdbcType=CHAR},
+      </if>
+      <if test="filetype != null" >
+        #{filetype,jdbcType=CHAR},
+      </if>
+      <if test="fileid != null" >
+        #{fileid,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileuri != null" >
+        #{fileuri,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="complete != null" >
+        #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Schedulefile" >
+    update schedulefile
+    <set >
+      <if test="scheduleid != null" >
+        scheduleid = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtype != null" >
+        uploadtype = #{uploadtype,jdbcType=CHAR},
+      </if>
+      <if test="filetype != null" >
+        filetype = #{filetype,jdbcType=CHAR},
+      </if>
+      <if test="fileid != null" >
+        fileid = #{fileid,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileuri != null" >
+        fileuri = #{fileuri,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        filesize = #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="complete != null" >
+        complete = #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where schedulefileid = #{schedulefileid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Schedulefile" >
+    update schedulefile
+    set scheduleid = #{scheduleid,jdbcType=INTEGER},
+      deviceid = #{deviceid,jdbcType=INTEGER},
+      uploadtype = #{uploadtype,jdbcType=CHAR},
+      filetype = #{filetype,jdbcType=CHAR},
+      fileid = #{fileid,jdbcType=INTEGER},
+      filename = #{filename,jdbcType=VARCHAR},
+      fileuri = #{fileuri,jdbcType=VARCHAR},
+      filesize = #{filesize,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
+      complete = #{complete,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where schedulefileid = #{schedulefileid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name></display-name>	
+  
+	<!-- spring监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- spring监听器,使用scope=request 时必须加上 -->
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<!-- Context Configuration locations for Spring XML files -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext*.xml,classpath*:applicationContext*.xml</param-value>
+	</context-param>
+  
+  <!-- jersey servlet -->
+  <servlet>
+  	<display-name>jersey-serlvet</display-name>
+  	<servlet-name>jersey-serlvet</servlet-name>
+  	<servlet-class>
+  		com.sun.jersey.spi.spring.container.servlet.SpringServlet
+  	</servlet-class>
+  	<init-param>
+		<param-name>com.sun.jersey.config.property.packages</param-name>
+		<param-value>com.broadvideo.signage</param-value>
+	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>jersey-serlvet</servlet-name>
+  	<url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

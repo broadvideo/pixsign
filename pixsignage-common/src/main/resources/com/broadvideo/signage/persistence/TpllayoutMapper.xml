@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.TpllayoutMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Tpllayout" >
+    <id column="tpllayoutid" property="tpllayoutid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="ratio" property="ratio" jdbcType="CHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  <collection property="tplregions" ofType="com.broadvideo.signage.domain.Tplregion"
+    column="{tpllayoutid=tpllayoutid}" select="com.broadvideo.signage.persistence.TplregionMapper.selectByTpllayout" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    tpllayoutid, name, type, code, status, ratio, height, width, description
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpllayout
+    where tpllayoutid = '${tpllayoutid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from tpllayout
+    where status='1'
+    <if test="type != null">
+      and type = '${type}'
+    </if>
+    order by tpllayoutid
+  </select>
+
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select * from tpllayout
+    where status='1' and code = '${code}'
+  </select>
+
+  <delete id="deleteByKeys">
+    update tpllayout
+    set status='9'
+    where tpllayoutid in (#{ids})
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Tpllayout" >
+    <selectKey resultType="java.lang.Integer" keyProperty="tpllayoutid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as tpllayoutid
+    </selectKey>
+    insert into tpllayout (name, type, code, status, ratio, height, width, description)
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
+      #{width,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Tpllayout" >
+    <selectKey resultType="java.lang.Integer" keyProperty="tpllayoutid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as tpllayoutid
+    </selectKey>
+    insert into tpllayout
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Tpllayout" >
+    update tpllayout
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tpllayoutid = #{tpllayoutid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Tpllayout" >
+    update tpllayout
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      code = #{code,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      ratio = #{ratio,jdbcType=CHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR}
+    where tpllayoutid = #{tpllayoutid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

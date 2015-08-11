@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.MetroplatformMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Metroplatform" >
+    <id column="metroplatformid" property="metroplatformid" jdbcType="INTEGER" />
+    <result column="metrolineid" property="metrolineid" jdbcType="INTEGER" />
+    <result column="metrostationid" property="metrostationid" jdbcType="INTEGER" />
+    <result column="atsstationcode" property="atsstationcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="CHAR" />
+    <result column="groupcode" property="groupcode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    metroplatformid, metrolineid, metrostationid, atsstationcode, name, code, direction, 
+    groupcode
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from metroplatform
+    where metroplatformid = #{metroplatformid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from metroplatform
+    where metrolineid = '${metrolineid}'
+      and metrostationid = '${metrostationid}'
+      and direction = '${direction}'
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from metroplatform
+    where metroplatformid = #{metroplatformid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Metroplatform" >
+    <selectKey resultType="java.lang.Integer" keyProperty="metroplatformid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into metroplatform (metrolineid, metrostationid, atsstationcode, 
+      name, code, direction, 
+      groupcode)
+    values (#{metrolineid,jdbcType=INTEGER}, #{metrostationid,jdbcType=INTEGER}, #{atsstationcode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{direction,jdbcType=CHAR}, 
+      #{groupcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Metroplatform" >
+    <selectKey resultType="java.lang.Integer" keyProperty="metroplatformid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into metroplatform
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="metrolineid != null" >
+        metrolineid,
+      </if>
+      <if test="metrostationid != null" >
+        metrostationid,
+      </if>
+      <if test="atsstationcode != null" >
+        atsstationcode,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="direction != null" >
+        direction,
+      </if>
+      <if test="groupcode != null" >
+        groupcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="metrolineid != null" >
+        #{metrolineid,jdbcType=INTEGER},
+      </if>
+      <if test="metrostationid != null" >
+        #{metrostationid,jdbcType=INTEGER},
+      </if>
+      <if test="atsstationcode != null" >
+        #{atsstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=CHAR},
+      </if>
+      <if test="groupcode != null" >
+        #{groupcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Metroplatform" >
+    update metroplatform
+    <set >
+      <if test="metrolineid != null" >
+        metrolineid = #{metrolineid,jdbcType=INTEGER},
+      </if>
+      <if test="metrostationid != null" >
+        metrostationid = #{metrostationid,jdbcType=INTEGER},
+      </if>
+      <if test="atsstationcode != null" >
+        atsstationcode = #{atsstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        direction = #{direction,jdbcType=CHAR},
+      </if>
+      <if test="groupcode != null" >
+        groupcode = #{groupcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where metroplatformid = #{metroplatformid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Metroplatform" >
+    update metroplatform
+    set metrolineid = #{metrolineid,jdbcType=INTEGER},
+      metrostationid = #{metrostationid,jdbcType=INTEGER},
+      atsstationcode = #{atsstationcode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      direction = #{direction,jdbcType=CHAR},
+      groupcode = #{groupcode,jdbcType=VARCHAR}
+    where metroplatformid = #{metroplatformid,jdbcType=INTEGER}
+  </update>
+</mapper>

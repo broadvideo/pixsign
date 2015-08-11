@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.ScheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Schedule" >
+    <id column="scheduleid" property="scheduleid" jdbcType="INTEGER" />
+    <result column="taskid" property="taskid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="utype" property="utype" jdbcType="CHAR" />
+    <result column="fromdate" property="fromdate" jdbcType="TIMESTAMP" />
+    <result column="todate" property="todate" jdbcType="TIMESTAMP" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="syncstatus" property="syncstatus" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="complete" property="complete" jdbcType="INTEGER" />
+    <result column="filesize" property="filesize" jdbcType="BIGINT" />
+    <result column="filesizecomplete" property="filesizecomplete" jdbcType="BIGINT" />
+    <result column="syncstarttime" property="syncstarttime" jdbcType="TIMESTAMP" />
+    <result column="syncendtime" property="syncendtime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.signage.persistence.DeviceMapper.selectByPrimaryKey" />
+    <association property="layout" column="{layoutid=layoutid}" select="com.broadvideo.signage.persistence.LayoutMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    scheduleid, taskid, deviceid, layoutid, type, utype, fromdate, todate, priority, syncstatus, 
+    status, complete, filesize, filesizecomplete, syncstarttime, syncendtime, createtime, createstaffid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from schedule
+    where scheduleid = #{scheduleid,jdbcType=INTEGER}
+  </select>
+  
+	<select id="selectByDevice" resultMap="BaseResultMap">
+		select * from schedule
+		where status='1' and deviceid=${deviceid}
+		order by scheduleid
+	</select>
+
+	<select id="selectByDeviceAndDate" resultMap="BaseResultMap">
+		select * from schedule
+		where status='1' and deviceid=${deviceid} 
+		and date_format(fromdate, '%Y%m%d') = #{date}
+		order by fromdate
+	</select>
+
+	<select id="selectCountByTask" resultType="Integer">
+		select count(1) from schedule
+		where taskid='${taskid}'
+	</select>
+
+	<select id="selectByTask" resultMap="BaseResultMap">
+		select * from schedule
+		where taskid='${taskid}'
+		order by deviceid desc
+		<if test="start != null and length != null">
+			limit ${start}, ${length}
+		</if>
+	</select>
+
+	<select id="selectListToSyncByDevice" resultMap="BaseResultMap">
+		select * from schedule
+		where utype='0' and syncstatus='0' and status='1' and deviceid=${deviceid} and UNIX_TIMESTAMP(todate) > UNIX_TIMESTAMP()
+		order by fromdate asc, scheduleid desc
+	</select>
+
+	<select id="selectByLayout" resultMap="BaseResultMap">
+		select * from schedule
+		where status='1' and layoutid=${layoutid} and UNIX_TIMESTAMP(todate) > UNIX_TIMESTAMP()
+		order by scheduleid
+	</select>
+
+	<delete id="deleteByKeys">
+		delete from schedule 
+		where scheduleid in (#{ids})
+	</delete>
+
+	<update id="updateStatusByDevice">
+		update schedule set status = #{status}
+		where deviceid = #{deviceid}
+	</update>
+
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Schedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="scheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as scheduleid
+    </selectKey>
+    insert into schedule (taskid, deviceid, layoutid, 
+      type, utype, fromdate, todate, priority, syncstatus, status, 
+      complete, filesize, filesizecomplete, syncstarttime, syncendtime, createtime, createstaffid
+      )
+    values (#{taskid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, 
+      #{type,jdbcType=CHAR}, #{utype,jdbcType=CHAR}, #{fromdate,jdbcType=TIMESTAMP}, #{todate,jdbcType=TIMESTAMP}, 
+      #{priority,jdbcType=INTEGER}, #{syncstatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+      #{complete,jdbcType=INTEGER}, #{filesize,jdbcType=BIGINT}, #{filesizecomplete,jdbcType=BIGINT}, 
+      #{syncstarttime,jdbcType=TIMESTAMP}, #{syncendtime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Schedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="scheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as scheduleid
+    </selectKey>
+    insert into schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskid != null" >
+        taskid,
+      </if>
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="layoutid != null" >
+        layoutid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="utype != null" >
+        utype,
+      </if>
+      <if test="fromdate != null" >
+        fromdate,
+      </if>
+      <if test="todate != null" >
+        todate,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="syncstatus != null" >
+        syncstatus,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="complete != null" >
+        complete,
+      </if>
+      <if test="filesize != null" >
+        filesize,
+      </if>
+      <if test="filesizecomplete != null" >
+        filesizecomplete,
+      </if>
+      <if test="syncstarttime != null" >
+        syncstarttime,
+      </if>
+      <if test="syncendtime != null" >
+        syncendtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskid != null" >
+        #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="layoutid != null" >
+        #{layoutid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="utype != null" >
+        #{utype,jdbcType=CHAR},
+      </if>
+      <if test="fromdate != null" >
+        #{fromdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="todate != null" >
+        #{todate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="syncstatus != null" >
+        #{syncstatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="complete != null" >
+        #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="filesize != null" >
+        #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="filesizecomplete != null" >
+        #{filesizecomplete,jdbcType=BIGINT},
+      </if>
+      <if test="syncstarttime != null" >
+        #{syncstarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncendtime != null" >
+        #{syncendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Schedule" >
+    update schedule
+    <set >
+      <if test="taskid != null" >
+        taskid = #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="layoutid != null" >
+        layoutid = #{layoutid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="utype != null" >
+        utype = #{utype,jdbcType=CHAR},
+      </if>
+      <if test="fromdate != null" >
+        fromdate = #{fromdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="todate != null" >
+        todate = #{todate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="syncstatus != null" >
+        syncstatus = #{syncstatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="complete != null" >
+        complete = #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="filesize != null" >
+        filesize = #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="filesizecomplete != null" >
+        filesizecomplete = #{filesizecomplete,jdbcType=BIGINT},
+      </if>
+      <if test="syncstarttime != null" >
+        syncstarttime = #{syncstarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncendtime != null" >
+        syncendtime = #{syncendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where scheduleid = #{scheduleid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Schedule" >
+    update schedule
+    set taskid = #{taskid,jdbcType=INTEGER},
+      deviceid = #{deviceid,jdbcType=INTEGER},
+      layoutid = #{layoutid,jdbcType=INTEGER},
+      type = #{type,jdbcType=CHAR},
+      utype = #{utype,jdbcType=CHAR},
+      fromdate = #{fromdate,jdbcType=TIMESTAMP},
+      todate = #{todate,jdbcType=TIMESTAMP},
+      priority = #{priority,jdbcType=INTEGER},
+      syncstatus = #{syncstatus,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      complete = #{complete,jdbcType=INTEGER},
+      filesize = #{filesize,jdbcType=BIGINT},
+      filesizecomplete = #{filesizecomplete,jdbcType=BIGINT},
+      syncstarttime = #{syncstarttime,jdbcType=TIMESTAMP},
+      syncendtime = #{syncendtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where scheduleid = #{scheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

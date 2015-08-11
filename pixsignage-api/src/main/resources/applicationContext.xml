@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
+		<property name="username" value="pixsignage" />
+		<property name="password" value="pixsignage@01" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="500" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven /> 
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/pix/signage/persistence/*.xml" />
+		<property name="typeAliasesPackage" value="com.mybatis.model" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.broadvideo.signage.persistence" />
+	</bean>
+
+    <context:component-scan base-package="com.broadvideo.signage" />
+    <!-- 
+	<context:component-scan base-package="com.broadvideo.signage" use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	 -->
+
+</beans>

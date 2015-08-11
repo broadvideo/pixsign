@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.TplregionMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Tplregion" >
+    <id column="tplregionid" property="tplregionid" jdbcType="INTEGER" />
+    <result column="tpllayoutid" property="tpllayoutid" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
+    <result column="leftoffset" property="leftoffset" jdbcType="INTEGER" />
+    <result column="zindex" property="zindex" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    tplregionid, tpllayoutid, code, height, width, topoffset, leftoffset, zindex
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tplregion
+    where tplregionid = #{tplregionid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByTpllayout" resultMap="BaseResultMap">
+    select *
+    from tplregion
+    where tpllayoutid = #{tpllayoutid}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tplregion
+    where tplregionid = #{tplregionid,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByTpllayout" parameterType="java.lang.Integer" >
+    delete from tplregion
+    where tpllayoutid = #{tpllayoutid}
+  </delete>
+  
+  <delete id="deleteByTpllayouts" >
+    delete from tplregion
+    where tpllayoutid in (#{ids})
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Tplregion" >
+    <selectKey resultType="java.lang.Integer" keyProperty="tplregionid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as tplregionid
+    </selectKey>
+    insert into tplregion (tpllayoutid, code, height, width, 
+      topoffset, leftoffset, zindex
+      )
+    values (#{tpllayoutid,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, #{zindex,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Tplregion" >
+    <selectKey resultType="java.lang.Integer" keyProperty="tplregionid" order="AFTER" >
+      SELECT LAST_INSERT_ID() as tplregionid
+    </selectKey>
+    insert into tplregion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tpllayoutid != null" >
+        tpllayoutid,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="topoffset != null" >
+        topoffset,
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset,
+      </if>
+      <if test="zindex != null" >
+        zindex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tpllayoutid != null" >
+        #{tpllayoutid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        #{zindex,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Tplregion" >
+    update tplregion
+    <set >
+      <if test="tpllayoutid != null" >
+        tpllayoutid = #{tpllayoutid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        topoffset = #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset = #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        zindex = #{zindex,jdbcType=INTEGER},
+      </if>
+    </set>
+    where tplregionid = #{tplregionid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Tplregion" >
+    update tplregion
+    set tpllayoutid = #{tpllayoutid,jdbcType=INTEGER},
+      code = #{code,jdbcType=VARCHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER}
+    where tplregionid = #{tplregionid,jdbcType=INTEGER}
+  </update>
+
+</mapper>

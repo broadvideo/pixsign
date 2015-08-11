@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.DevicefileMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Devicefile" >
+    <id column="devicefileid" property="devicefileid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="uploadtype" property="uploadtype" jdbcType="CHAR" />
+    <result column="filetype" property="filetype" jdbcType="CHAR" />
+    <result column="fileid" property="fileid" jdbcType="INTEGER" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="fileuri" property="fileuri" jdbcType="VARCHAR" />
+    <result column="filesize" property="filesize" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="complete" property="complete" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="syncstatus" property="syncstatus" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.signage.persistence.DeviceMapper.selectByPrimaryKey" />
+    <association property="media" column="{mediaid=fileid}" select="com.broadvideo.signage.persistence.MediaMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    devicefileid, deviceid, uploadtype, filetype, fileid, filename, fileuri, filesize, md5, 
+    complete, status, name, syncstatus, description, createtime, updatetime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from devicefile
+    where devicefileid = '${devicefileid}'
+  </select>
+  
+	<select id="selectCountByDevice" resultType="Integer">
+		select count(1) from devicefile
+		where filetype = '${filetype}' and deviceid = ${deviceid}
+	</select>
+
+	<select id="selectByDevice" resultMap="BaseResultMap">
+		select * from devicefile
+		where filetype = '${filetype}' and deviceid = ${deviceid}
+		<if test="syncstatus != null">
+			and syncstatus = ${syncstatus}
+		</if>
+		order by fileid desc 
+		<if test="start != null and length != null">
+			limit ${start}, ${length}
+		</if>
+	</select>
+
+	<select id="selectByFile" resultMap="BaseResultMap">
+		select * from devicefile
+		where filetype = '${filetype}' and deviceid = ${deviceid} and fileid = ${fileid}
+	</select>
+
+	<select id="selectDownloadingFileByDevice" resultMap="BaseResultMap">
+		select * from devicefile
+		where deviceid = ${deviceid} and complete != 100
+		order by fileid desc 
+	</select>
+	
+  <delete id="deleteByKeys">
+    delete from devicefile
+    where devicefileid in (#{ids})
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Devicefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicefile (deviceid, uploadtype, filetype, fileid, 
+      filename, fileuri, filesize, md5, complete, status, name, 
+      syncstatus, description, createtime, updatetime)
+    values (#{deviceid,jdbcType=INTEGER}, #{uploadtype,jdbcType=CHAR}, #{filetype,jdbcType=CHAR}, #{fileid,jdbcType=INTEGER}, 
+      #{filename,jdbcType=VARCHAR}, #{fileuri,jdbcType=VARCHAR}, #{filesize,jdbcType=BIGINT}, 
+      #{md5,jdbcType=VARCHAR}, #{complete,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{syncstatus,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Devicefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicefile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="uploadtype != null" >
+        uploadtype,
+      </if>
+      <if test="filetype != null" >
+        filetype,
+      </if>
+      <if test="fileid != null" >
+        fileid,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="fileuri != null" >
+        fileuri,
+      </if>
+      <if test="filesize != null" >
+        filesize,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
+      <if test="complete != null" >
+        complete,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="syncstatus != null" >
+        syncstatus,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtype != null" >
+        #{uploadtype,jdbcType=CHAR},
+      </if>
+      <if test="filetype != null" >
+        #{filetype,jdbcType=CHAR},
+      </if>
+      <if test="fileid != null" >
+        #{fileid,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileuri != null" >
+        #{fileuri,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="complete != null" >
+        #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="syncstatus != null" >
+        #{syncstatus,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Devicefile" >
+    update devicefile
+    <set >
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtype != null" >
+        uploadtype = #{uploadtype,jdbcType=CHAR},
+      </if>
+      <if test="filetype != null" >
+        filetype = #{filetype,jdbcType=CHAR},
+      </if>
+      <if test="fileid != null" >
+        fileid = #{fileid,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileuri != null" >
+        fileuri = #{fileuri,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        filesize = #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="complete != null" >
+        complete = #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="syncstatus != null" >
+        syncstatus = #{syncstatus,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where devicefileid = #{devicefileid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Devicefile" >
+    update devicefile
+    set deviceid = #{deviceid,jdbcType=INTEGER},
+      uploadtype = #{uploadtype,jdbcType=CHAR},
+      filetype = #{filetype,jdbcType=CHAR},
+      fileid = #{fileid,jdbcType=INTEGER},
+      filename = #{filename,jdbcType=VARCHAR},
+      fileuri = #{fileuri,jdbcType=VARCHAR},
+      filesize = #{filesize,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
+      complete = #{complete,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      syncstatus = #{syncstatus,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where devicefileid = #{devicefileid,jdbcType=INTEGER}
+  </update>
+</mapper>

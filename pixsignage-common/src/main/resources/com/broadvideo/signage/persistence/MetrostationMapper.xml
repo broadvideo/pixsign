@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.signage.persistence.MetrostationMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.signage.domain.Metrostation" >
+    <id column="metrostationid" property="metrostationid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="groupcode" property="groupcode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    metrostationid, name, code, groupcode
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from metrostation
+    where metrostationid = '${metrostationid}'
+  </select>
+  
+  <select id="selectByMetroline" resultMap="BaseResultMap" >
+    select s.*
+    from metrostation s, metrolinestation ls
+    where s.metrostationid=ls.metrostationid and ls.metrolineid = '${metrolineid}'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from metrostation
+    where metrostationid = #{metrostationid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.signage.domain.Metrostation" >
+    <selectKey resultType="java.lang.Integer" keyProperty="metrostationid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into metrostation (name, code, groupcode
+      )
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{groupcode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.signage.domain.Metrostation" >
+    <selectKey resultType="java.lang.Integer" keyProperty="metrostationid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into metrostation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="groupcode != null" >
+        groupcode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="groupcode != null" >
+        #{groupcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.signage.domain.Metrostation" >
+    update metrostation
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="groupcode != null" >
+        groupcode = #{groupcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where metrostationid = #{metrostationid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.signage.domain.Metrostation" >
+    update metrostation
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      groupcode = #{groupcode,jdbcType=VARCHAR}
+    where metrostationid = #{metrostationid,jdbcType=INTEGER}
+  </update>
+</mapper>
