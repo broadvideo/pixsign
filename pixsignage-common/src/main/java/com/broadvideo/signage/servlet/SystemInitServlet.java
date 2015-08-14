@@ -1,6 +1,10 @@
 package com.broadvideo.signage.servlet;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -25,9 +29,26 @@ public class SystemInitServlet extends HttpServlet {
 		super.init();
 
 		try {
-			IOUtil.mkdirs(CommonConfig.CONFIG_IMAGE_HOME);
-			IOUtil.mkdirs(CommonConfig.CONFIG_VIDEO_HOME);
-			IOUtil.mkdirs(CommonConfig.CONFIG_TEMP_HOME);
+			Properties properties = new Properties();
+			InputStream is = new BufferedInputStream(new FileInputStream("/opt/pix/conf/common.properties"));
+			properties.load(is);
+			CommonConfig.CONFIG_SERVER_IP = properties.getProperty("common.server.ip");
+			CommonConfig.CONFIG_SERVER_PORT = properties.getProperty("common.server.port");
+			is.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME);
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video/combine");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/app");
+			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/temp");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -65,14 +86,14 @@ public class SystemInitServlet extends HttpServlet {
 			CommonConfig.LICENSE_HOSTID_VERIFY = (Boolean) licensecontext.getAttribute("HostIDVerify");
 			CommonConfig.LICENSE_Expire = sf.parse((String) licensecontext.getAttribute("Expire"));
 			CommonConfig.LICENSE_MaxOrgs = Integer.parseInt((String) licensecontext.getAttribute("MaxOrgs"));
-			CommonConfig.LICENSE_MaxDevicesPerSigOrg = Integer.parseInt((String) licensecontext
-					.getAttribute("MaxDevicesPerSigOrg"));
-			CommonConfig.LICENSE_MaxStoragePerSigOrg = Integer.parseInt((String) licensecontext
-					.getAttribute("MaxStoragePerSigOrg"));
-			CommonConfig.LICENSE_MaxDevicesPerMovieOrg = Integer.parseInt((String) licensecontext
-					.getAttribute("MaxDevicesPerMovieOrg"));
-			CommonConfig.LICENSE_MaxStoragePerMovieOrg = Integer.parseInt((String) licensecontext
-					.getAttribute("MaxStoragePerMovieOrg"));
+			CommonConfig.LICENSE_MaxDevicesPerSigOrg = Integer
+					.parseInt((String) licensecontext.getAttribute("MaxDevicesPerSigOrg"));
+			CommonConfig.LICENSE_MaxStoragePerSigOrg = Integer
+					.parseInt((String) licensecontext.getAttribute("MaxStoragePerSigOrg"));
+			CommonConfig.LICENSE_MaxDevicesPerMovieOrg = Integer
+					.parseInt((String) licensecontext.getAttribute("MaxDevicesPerMovieOrg"));
+			CommonConfig.LICENSE_MaxStoragePerMovieOrg = Integer
+					.parseInt((String) licensecontext.getAttribute("MaxStoragePerMovieOrg"));
 			log.info("License HostID verify: " + CommonConfig.LICENSE_HOSTID_VERIFY);
 			log.info("License Expire: " + sf.format(CommonConfig.LICENSE_Expire));
 			log.info("License MaxOrgs: " + CommonConfig.LICENSE_MaxOrgs);

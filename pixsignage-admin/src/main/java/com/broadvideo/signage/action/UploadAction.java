@@ -92,9 +92,11 @@ public class UploadAction extends BaseAction {
 					File fileToCreate;
 					if (type[i].equals("1")) {
 						log.info("Upload image: " + newFileName);
-						fileToCreate = new File(CommonConfig.CONFIG_IMAGE_HOME, newFileName);
+						fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload", newFileName);
 						FileUtils.moveFile(mymedia[i], fileToCreate);
 						log.info("Finish image upload: " + newFileName);
+
+						media.setFilename("/image/upload/" + newFileName);
 						try {
 							// Generate thumbnail
 							media.setThumbnail(CommonUtil.generateThumbnail(fileToCreate, 120));
@@ -104,9 +106,11 @@ public class UploadAction extends BaseAction {
 						}
 					} else {
 						log.info("Upload content: " + newFileName);
-						fileToCreate = new File(CommonConfig.CONFIG_VIDEO_HOME, newFileName);
+						fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload", newFileName);
 						FileUtils.moveFile(mymedia[i], fileToCreate);
 						log.info("Finish content upload: " + newFileName);
+
+						media.setFilename("/video/upload/" + newFileName);
 						try {
 							// Generate preview gif
 							String cmd = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + fileToCreate
@@ -138,14 +142,12 @@ public class UploadAction extends BaseAction {
 								GifImage gifImage = new GifImage();
 								gifImage.setDefaultDelay(100);
 								for (int j = 0; j < jpgList.size(); j++) {
-									BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_TEMP_HOME + "/"
-											+ jpgList.get(j)));
+									BufferedImage img = ImageIO
+											.read(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)));
 									gifImage.addGifFrame(new GifFrame(img));
 								}
-								GifEncoder
-										.encode(gifImage,
-												new File(CommonConfig.CONFIG_IMAGE_HOME + "/gif/" + media.getMediaid()
-														+ ".gif"));
+								GifEncoder.encode(gifImage, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif/"
+										+ media.getMediaid() + ".gif"));
 								media.setPreviewduration(jpgList.size() - 1);
 							}
 							log.info("Finish preview generating.");
@@ -155,8 +157,8 @@ public class UploadAction extends BaseAction {
 							if (jpgList.size() >= 6) {
 								thumbnailFile = new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5));
 							} else if (jpgList.size() >= 1) {
-								thumbnailFile = new File(CommonConfig.CONFIG_TEMP_HOME + "/"
-										+ jpgList.get(jpgList.size() - 1));
+								thumbnailFile = new File(
+										CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1));
 							}
 							if (thumbnailFile != null) {
 								media.setThumbnail(CommonUtil.generateThumbnail(thumbnailFile, 120));
@@ -172,7 +174,6 @@ public class UploadAction extends BaseAction {
 
 					}
 
-					media.setFilename(newFileName);
 					media.setSize(FileUtils.sizeOf(fileToCreate));
 					FileInputStream fis = new FileInputStream(fileToCreate);
 					media.setMd5(DigestUtils.md5Hex(fis));

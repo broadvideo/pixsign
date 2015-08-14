@@ -6,6 +6,12 @@
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
   <display-name></display-name>	
   
+	<servlet>
+		<servlet-name>SystemInit</servlet-name>
+		<servlet-class>com.broadvideo.signage.servlet.SystemInitServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<!-- spring监听器 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

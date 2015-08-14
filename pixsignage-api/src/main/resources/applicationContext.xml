@@ -10,11 +10,15 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="file:/opt/pix/conf/common.properties"></property>
+	</bean>
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
-		<property name="username" value="pixsignage" />
-		<property name="password" value="pixsignage@01" />
+		<property name="url" value="${common.pixsignage.db.url}" />
+		<property name="username" value="${common.pixsignage.db.username}" />
+		<property name="password" value="${common.pixsignage.db.password}" />
 		<property name="maxActive" value="100" />
 		<property name="maxIdle" value="30" />
 		<property name="maxWait" value="500" />

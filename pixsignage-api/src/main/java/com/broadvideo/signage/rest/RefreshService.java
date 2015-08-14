@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.InputSource;
 
+import com.broadvideo.signage.common.CommonConfig;
 import com.broadvideo.signage.domain.Device;
 import com.broadvideo.signage.domain.Schedule;
 import com.broadvideo.signage.domain.Schedulefile;
@@ -148,9 +149,11 @@ public class RefreshService {
 			xmlOutput.setFormat(Format.getPrettyFormat().setEncoding("UTF-8"));
 			String response = xmlOutput.outputString(rspdoc);
 			if (refreshFlag) {
-				log.info("Refresh response to " + device.getHardkey() + "(" + device.getTerminalid() + "): " + response);
+				log.info(
+						"Refresh response to " + device.getHardkey() + "(" + device.getTerminalid() + "): " + response);
 			} else {
-				log.info("Refresh response to " + device.getHardkey() + "(" + device.getTerminalid() + "): " + response);
+				log.info(
+						"Refresh response to " + device.getHardkey() + "(" + device.getTerminalid() + "): " + response);
 			}
 			return response;
 		} catch (Exception ex) {
@@ -198,7 +201,9 @@ public class RefreshService {
 						fileElement.addContent(new Element("type").setText("layout"));
 						fileElement.addContent(new Element("downloadmode").setText("0"));
 						fileElement.addContent(new Element("name").setText(schedulefile.getFilename()));
-						fileElement.addContent(new Element("uri").setText("" + schedulefile.getFileid()));
+						fileElement.addContent(new Element("uri").setText("http://" + CommonConfig.CONFIG_SERVER_IP
+								+ ":" + CommonConfig.CONFIG_SERVER_PORT
+								+ "/pixsignage/org/layout!download.action?layoutid=" + schedulefile.getFileid()));
 						fileElement.addContent(new Element("size").setText("" + schedulefile.getFilesize()));
 						fileElement.addContent(new Element("md5").setText(schedulefile.getMd5()));
 						filesElement.addContent(fileElement);
@@ -215,7 +220,9 @@ public class RefreshService {
 							}
 							if (schedulefile.getUploadtype().equals("0")) {
 								fileElement.addContent(new Element("downloadmode").setText("0"));
-								fileElement.addContent(new Element("uri").setText(schedulefile.getFilename()));
+								fileElement.addContent(new Element("uri").setText("http://"
+										+ CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+										+ "/pixsigdata" + schedulefile.getFilename()));
 							} else if (schedulefile.getUploadtype().equals("1")) {
 								fileElement.addContent(new Element("downloadmode").setText("2"));
 								fileElement.addContent(new Element("uri").setText(schedulefile.getFileuri()));

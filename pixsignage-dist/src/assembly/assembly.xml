@@ -6,7 +6,7 @@
 	<formats>
 		<format>tar.gz</format>
 	</formats>
-	<includeBaseDirectory>true</includeBaseDirectory>
+	<includeBaseDirectory>false</includeBaseDirectory>
 
 	<fileSets>
 		<fileSet>
@@ -22,6 +22,12 @@
 			<includes>
 				<include>*.war</include>
 			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/install</directory>
+			<outputDirectory>install</outputDirectory>
+			<lineEnding>unix</lineEnding>
+			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/dbscript</directory>

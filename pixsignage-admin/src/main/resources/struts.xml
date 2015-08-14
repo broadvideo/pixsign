@@ -10,7 +10,7 @@
 	<constant name="struts.i18n.encodeing" value="UTF-8" />
 	
 	<constant name="struts.multipart.maxSize" value="2147483648" />
-	<constant name="struts.multipart.saveDir" value="/opt/pix/storage/tmp" />
+	<constant name="struts.multipart.saveDir" value="/pixdata/pixsignage/temp" />
 	
 	<include file="struts-pix.xml" />
 	

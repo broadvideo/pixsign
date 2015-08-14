@@ -15,12 +15,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import com.broadvideo.signage.common.CommonConstants;
+import com.broadvideo.signage.common.SessionConstants;
+
 public class SecurityFilter implements Filter {
 
+	private static final Logger log = Logger.getLogger(SecurityFilter.class);
+
 	protected FilterConfig filterConfig = null;
-	private String redirectURL = null;
-	private List<String> excludeLoginUrls = new ArrayList<String>();
-	private String sessionKey = null;
+	private String orgRedirectURL = null;
+	private String vspRedirectURL = null;
+	private List<String> excludeLoginURLs = new ArrayList<String>();
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
@@ -29,22 +36,33 @@ public class SecurityFilter implements Filter {
 
 		HttpSession session = request.getSession();
 
-		if (sessionKey == null) {
-			chain.doFilter(request, response);
-			return;
-		}
-
-		String resource = request.getServletPath();
-
-		for (int i = 0; i < excludeLoginUrls.size(); i++) {
-			if (resource.matches(excludeLoginUrls.get(i))) {
+		String servletPath = request.getServletPath();
+		log.debug("Servlet path: " + servletPath);
+		for (int i = 0; i < excludeLoginURLs.size(); i++) {
+			if (servletPath.matches(excludeLoginURLs.get(i))) {
 				chain.doFilter(request, response);
 				return;
 			}
 		}
 
-		if (session.getAttribute(sessionKey) == null) {
-			response.sendRedirect(request.getContextPath() + redirectURL);
+		if (session.getAttribute(SessionConstants.SESSION_TOKEN) == null
+				|| session.getAttribute(SessionConstants.SESSION_SUBSYSTEM) == null) {
+			if (servletPath.startsWith("/vsp/")) {
+				response.sendRedirect(request.getContextPath() + vspRedirectURL);
+			} else {
+				response.sendRedirect(request.getContextPath() + orgRedirectURL);
+			}
+			return;
+		}
+
+		if (session.getAttribute(SessionConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
+				&& servletPath.startsWith("/vsp/")) {
+			response.sendRedirect(request.getContextPath() + vspRedirectURL);
+			return;
+		}
+		if (session.getAttribute(SessionConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_VSP)
+				&& servletPath.startsWith("/org/")) {
+			response.sendRedirect(request.getContextPath() + orgRedirectURL);
 			return;
 		}
 
@@ -52,20 +70,20 @@ public class SecurityFilter implements Filter {
 	}
 
 	public void destroy() {
-		excludeLoginUrls.clear();
+		excludeLoginURLs.clear();
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		redirectURL = filterConfig.getInitParameter("redirectUrl");
-		sessionKey = filterConfig.getInitParameter("checkSessionKey");
-		String s = filterConfig.getInitParameter("excludeLoginUrls");
+		orgRedirectURL = filterConfig.getInitParameter("orgRedirectURL");
+		vspRedirectURL = filterConfig.getInitParameter("vspRedirectURL");
 
-		if (excludeLoginUrls != null) {
+		String s = filterConfig.getInitParameter("excludeLoginURLs");
+		if (excludeLoginURLs != null) {
 			StringTokenizer st = new StringTokenizer(s, ";");
-			excludeLoginUrls.clear();
+			excludeLoginURLs.clear();
 			while (st.hasMoreTokens()) {
-				excludeLoginUrls.add(st.nextToken());
+				excludeLoginURLs.add(st.nextToken());
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 var myurls = {
-	'common.list' : 'media!videolist.action',
+	'common.list' : 'media!imagelist.action',
 	'common.add' : 'media!add.action',
 	'common.update' : 'media!update.action',
 	'common.delete' : 'media!delete.action',
@@ -51,13 +51,8 @@ function initMyTable() {
 				thumbmailhtml += '<div class="row" >';
 			}
 			thumbmailhtml += '<div class="col-md-2 col-xs-2">';
-			if (aData['uploadtype'] == 0) {
-				thumbmailhtml += '<a class="fancybox" href="/image/gif/' + aData['mediaid'] + '.gif" title="' + aData['name'] + '">';
-				thumbmailhtml += '<img src="media!getthumb.action?mediaid=' + aData['mediaid'] + '" alt="' + aData['name'] + '" /> </a>';
-			} else {
-				//thumbmailhtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width=100 />';
-				thumbmailhtml += '<img src="media!getthumb.action?mediaid=' + aData['mediaid'] + '" alt="' + aData['name'] + '" />';
-			}
+			thumbmailhtml += '<a class="fancybox" href="/pixsigdata' + aData['filename'] + '" title="' + aData['name'] + '">';
+			thumbmailhtml += '<img src="media!getthumb.action?mediaid=' + aData['mediaid'] + '" alt="' + aData['name'] + '" /> </a>';
 			thumbmailhtml += '<h6>' + aData['mediaid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			thumbmailhtml += '' + transferIntToComma(filesize) + 'KB</h6>';
@@ -77,7 +72,6 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 	        aoData.push({'name':'branchid','value':currentSelectBranchid });
-	        aoData.push({'name':'type','value':myType });
 		}
 		
 	});
@@ -126,9 +120,9 @@ function initMyTable() {
 		data : {},
 		success : function(data, status) {
 			if (data.errorcode == 0) {
-				var currentSelectBranchTreeData = [];
-				createBranchTreeData(data.aaData, currentSelectBranchTreeData);
-				createSelectBranchTree(currentSelectBranchTreeData);
+				var currentBranchTreeData = [];
+				createBranchTreeData(data.aaData, currentBranchTreeData);
+				createSelectBranchTree(currentBranchTreeData);
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}
@@ -193,10 +187,6 @@ function initMyTable() {
 		initBranchBreadcrumb(currentSelectBranchid);
 		refreshMyTable();
 	});
-
-	$('body').on('click', '.pix-trans', function(event) {
-		bootbox.alert('请打开PixTrans客户端上传视频文件。');
-	});			
 
 	$('body').on('click', '.pix-full', function(event) {
 		bootbox.alert('存储已达上限，无法上传文件。');

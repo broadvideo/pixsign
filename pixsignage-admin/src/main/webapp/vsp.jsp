@@ -7,6 +7,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><title>稍候。。。</title></head>
 <body>
-<script language='javascript'>document.location = 'web/vsp/index.jsp'</script>
+<script language='javascript'>document.location = 'vsp/index.jsp'</script>
 </body>
 </html>
