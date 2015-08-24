@@ -4,7 +4,7 @@
 
 set @version = 1;
 set @module = 'pixsignage';
-set @dbscript=concat(@module , '_init.sql');
+set @dbscript=concat(@module , '-init.sql');
 
 create table dbversion( 
    dbversionid int not null auto_increment , 

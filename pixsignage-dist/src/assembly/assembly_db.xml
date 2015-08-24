@@ -10,24 +10,10 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>${project.parent.basedir}/pixsignage-admin/target</directory>
-			<outputDirectory>.</outputDirectory>
-			<includes>
-				<include>*.war</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/pixsignage-api/target</directory>
-			<outputDirectory>.</outputDirectory>
-			<includes>
-				<include>*.war</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/install</directory>
+			<directory>${project.parent.basedir}/dbscript</directory>
 			<outputDirectory>.</outputDirectory>
 			<lineEnding>unix</lineEnding>
-			<fileMode>0755</fileMode>
+			<fileMode>0644</fileMode>
 		</fileSet>
 	</fileSets>
 </assembly>

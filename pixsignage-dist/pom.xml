@@ -34,6 +34,19 @@
 							</descriptors>
 						</configuration>
 					</execution>
+					<execution>
+						<id>make-db-bundles</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<finalName>pixsignage-db-${project.version}</finalName>
+							<descriptors>
+								<descriptor>src/assembly/assembly_db.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
