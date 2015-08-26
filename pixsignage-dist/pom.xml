@@ -43,7 +43,7 @@
 						<configuration>
 							<finalName>pixsignage-db-${project.version}</finalName>
 							<descriptors>
-								<descriptor>src/assembly/assembly_db.xml</descriptor>
+								<descriptor>src/assembly/assembly-db.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
