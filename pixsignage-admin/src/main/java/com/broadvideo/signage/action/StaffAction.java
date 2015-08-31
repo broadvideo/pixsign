@@ -30,18 +30,15 @@ public class StaffAction extends BaseDatatableAction {
 
 	@Autowired
 	private StaffService staffService;
-	
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"),"utf-8");
-			}
+			String search = getParameter("sSearch");
 
-			String subsystem = (String)getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+			String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
 			String vspid = null;
 			String orgid = null;
 			if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
@@ -73,7 +70,7 @@ public class StaffAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			staff.setCreatestaffid(getLoginStaff().getStaffid());
-			staff.setSubsystem((String)getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM));
+			staff.setSubsystem((String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM));
 			staff.setVspid(getLoginStaff().getVspid());
 			staff.setOrgid(getLoginStaff().getOrgid());
 			staffService.addStaff(staff);
@@ -143,7 +140,7 @@ public class StaffAction extends BaseDatatableAction {
 	public String doValidate() {
 		try {
 			if (staff.getLoginname() != null) {
-				String subsystem = (String)getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+				String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
 				String vspid = null;
 				String orgid = null;
 				if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {

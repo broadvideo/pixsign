@@ -64,10 +64,7 @@ public class MediaAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String branchid = getParameter("branchid");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"), "utf-8");
-			}
+			String search = getParameter("sSearch");
 
 			if (branchid == null) {
 				branchid = "" + getLoginStaff().getBranchid();

@@ -42,18 +42,15 @@ public class LayoutAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"), "utf-8");
-			}
+			String search = getParameter("sSearch");
 
 			int count = layoutService.selectCount(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(), search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Layout> layoutList = layoutService.selectList(getLoginStaff().getOrgid(), getLoginStaff()
-					.getBranchid(), search, start, length);
+			List<Layout> layoutList = layoutService.selectList(getLoginStaff().getOrgid(),
+					getLoginStaff().getBranchid(), search, start, length);
 			for (int i = 0; i < layoutList.size(); i++) {
 				aaData.add(layoutList.get(i));
 			}

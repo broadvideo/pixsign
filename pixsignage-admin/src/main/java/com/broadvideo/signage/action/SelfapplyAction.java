@@ -27,18 +27,15 @@ public class SelfapplyAction extends BaseDatatableAction {
 
 	@Autowired
 	private SelfapplyService selfapplyService;
-	
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String status = getParameter("status");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"),"utf-8");
-			}
-			
+			String search = getParameter("sSearch");
+
 			int count = selfapplyService.selectCount(status, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);

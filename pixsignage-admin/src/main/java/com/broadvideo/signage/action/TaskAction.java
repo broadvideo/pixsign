@@ -27,23 +27,21 @@ public class TaskAction extends BaseDatatableAction {
 
 	@Autowired
 	private TaskService taskService;
-	
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"),"utf-8");
-			}
-			
+			String search = getParameter("sSearch");
+
 			int count = taskService.selectCount(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(), search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Task> taskList = taskService.selectList(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(), search, start, length);
+			List<Task> taskList = taskService.selectList(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(),
+					search, start, length);
 			for (int i = 0; i < taskList.size(); i++) {
 				aaData.add(taskList.get(i));
 			}

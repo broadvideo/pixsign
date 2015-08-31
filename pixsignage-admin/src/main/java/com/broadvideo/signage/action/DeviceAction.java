@@ -36,16 +36,12 @@ public class DeviceAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
 			String branchid = getParameter("branchid");
 			String metrolineid = getParameter("metrolineid");
 			String metrostationid = getParameter("metrostationid");
 			String metrotype = getParameter("metrotype");
 			String metrodirection = getParameter("metrodirection");
-
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"), "utf-8");
-			}
 
 			if (branchid == null) {
 				branchid = "" + getLoginStaff().getBranchid();
@@ -88,8 +84,8 @@ public class DeviceAction extends BaseDatatableAction {
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectUnregisterList("" + getLoginStaff().getOrgid(), search,
-					start, length);
+			List<Device> deviceList = deviceService.selectUnregisterList("" + getLoginStaff().getOrgid(), search, start,
+					length);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}
@@ -111,8 +107,8 @@ public class DeviceAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String devicegroupid = getParameter("devicegroupid");
 
-			int count = deviceService.selectAvailCountByDeviceGroup(getLoginStaff().getOrgid(), getLoginStaff()
-					.getBranchid(), devicegroupid);
+			int count = deviceService.selectAvailCountByDeviceGroup(getLoginStaff().getOrgid(),
+					getLoginStaff().getBranchid(), devicegroupid);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 

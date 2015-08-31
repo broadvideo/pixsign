@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.signage.domain.Device;
 import com.broadvideo.signage.domain.Devicegroup;
 import com.broadvideo.signage.service.DeviceService;
 import com.broadvideo.signage.service.DevicegroupService;
@@ -31,23 +29,22 @@ public class DevicegroupAction extends BaseDatatableAction {
 	private DevicegroupService devicegroupService;
 	@Autowired
 	private DeviceService deviceService;
-	
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"),"utf-8");
-			}
-			
-			int count = devicegroupService.selectCount(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(), search);
+			String search = getParameter("sSearch");
+
+			int count = devicegroupService.selectCount(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(),
+					search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Devicegroup> devicegroupList = devicegroupService.selectList(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(), search, start, length);
+			List<Devicegroup> devicegroupList = devicegroupService.selectList(getLoginStaff().getOrgid(),
+					getLoginStaff().getBranchid(), search, start, length);
 			for (int i = 0; i < devicegroupList.size(); i++) {
 				aaData.add(devicegroupList.get(i));
 			}
@@ -67,7 +64,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroup.setOrgid(getLoginStaff().getOrgid());
 			devicegroup.setBranchid(getLoginStaff().getBranchid());
 			devicegroup.setCreatestaffid(getLoginStaff().getStaffid());
-			
+
 			devicegroupService.addDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {
