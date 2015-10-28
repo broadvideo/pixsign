@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Device" >
+    <id column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="hardkey" property="hardkey" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="mac" property="mac" jdbcType="VARCHAR" />
+    <result column="schedulestatus" property="schedulestatus" jdbcType="CHAR" />
+    <result column="filestatus" property="filestatus" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="activetime" property="activetime" jdbcType="TIMESTAMP" />
+    <result column="refreshtime" property="refreshtime" jdbcType="TIMESTAMP" />
+    <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, mac, schedulestatus, 
+    filestatus, status, description, onlineflag, version, type, devicegroupid, createtime, 
+    activetime, refreshtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select * from device
+    where deviceid = '${deviceid}'
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from device 
+    where status = 1 and orgid = #{orgid} and branchid = #{branchid}
+    <if test="devicegroupid != null">
+      and devicegroupid = '${devicegroupid}'
+    </if>
+    <if test="search != null">
+      and (terminalid like '%${search}%' or name like '%${search}%' or position like '%${search}%')
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from device
+    where status = 1 and orgid = #{orgid} and branchid = #{branchid}
+    <if test="devicegroupid != null">
+      and devicegroupid = '${devicegroupid}'
+    </if>
+    <if test="search != null">
+      and (terminalid like '%${search}%' or name like '%${search}%' or position like '%${search}%')
+    </if>
+    order by deviceid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectUnregisterCount" resultType="Integer">
+    select count(1) from device 
+    where status != 1 and orgid = #{orgid}
+    <if test="search != null">
+      and terminalid like '%${search}%'
+    </if>
+  </select>
+
+  <select id="selectUnregisterList" resultMap="BaseResultMap">
+    select * from device
+    where status != 1 and orgid = #{orgid}
+    <if test="search != null">
+      and terminalid like '%${search}%'
+    </if>
+    order by terminalid 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectByDeviceGroup" resultMap="BaseResultMap">
+    select * from device
+    where status = 1
+    and devicegroupid = '${devicegroupid}'
+    order by deviceid
+  </select>
+
+  <select id="selectByHardkey" resultMap="BaseResultMap">
+    select * from device
+    where status=1 and hardkey='${hardkey}'
+  </select>
+
+  <select id="selectByTerminalid" resultMap="BaseResultMap">
+    select * from device
+    where terminalid='${terminalid}'
+    order by deviceid desc
+  </select>
+
+  <select id="selectByOrgtype" resultMap="BaseResultMap">
+    select d.* from device d, org o
+    where d.orgid=o.orgid and o.orgtype='${orgtype}' and d.status='1'
+    order by deviceid desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update device set status='9'
+    where deviceid = '${deviceid}'
+  </delete>
+
+  <update id="updateOnlineflag" >
+    update device d, org o
+    set d.onlineflag=9 
+    where d.orgid=o.orgid and d.refreshtime is null or (unix_timestamp()-unix_timestamp(d.refreshtime)>300)
+  </update>
+
+  <insert id="insertList">
+    insert into device(orgid, branchid, terminalid, name, status) 
+    values 
+    <foreach collection="devices" item="item"  separator=",">
+      (#{item.orgid}, 
+      #{item.branchid}, 
+      #{item.terminalid}, 
+      #{item.name}, 
+      #{item.status})
+    </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Device" >
+    <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device (orgid, branchid, terminalid, 
+      hardkey, name, position, 
+      ip, mac, schedulestatus, 
+      filestatus, status, description, 
+      onlineflag, version, type, 
+      devicegroupid, createtime, activetime, 
+      refreshtime)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
+      #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
+      #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{onlineflag,jdbcType=CHAR}, #{version,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{devicegroupid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, 
+      #{refreshtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
+    <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="terminalid != null" >
+        terminalid,
+      </if>
+      <if test="hardkey != null" >
+        hardkey,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="mac != null" >
+        mac,
+      </if>
+      <if test="schedulestatus != null" >
+        schedulestatus,
+      </if>
+      <if test="filestatus != null" >
+        filestatus,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="onlineflag != null" >
+        onlineflag,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="activetime != null" >
+        activetime,
+      </if>
+      <if test="refreshtime != null" >
+        refreshtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="hardkey != null" >
+        #{hardkey,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulestatus != null" >
+        #{schedulestatus,jdbcType=CHAR},
+      </if>
+      <if test="filestatus != null" >
+        #{filestatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="onlineflag != null" >
+        #{onlineflag,jdbcType=CHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        #{devicegroupid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activetime != null" >
+        #{activetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtime != null" >
+        #{refreshtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
+    update device
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="terminalid != null" >
+        terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="hardkey != null" >
+        hardkey = #{hardkey,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null" >
+        mac = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulestatus != null" >
+        schedulestatus = #{schedulestatus,jdbcType=CHAR},
+      </if>
+      <if test="filestatus != null" >
+        filestatus = #{filestatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="onlineflag != null" >
+        onlineflag = #{onlineflag,jdbcType=CHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activetime != null" >
+        activetime = #{activetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtime != null" >
+        refreshtime = #{refreshtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where deviceid = #{deviceid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Device" >
+    update device
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      terminalid = #{terminalid,jdbcType=VARCHAR},
+      hardkey = #{hardkey,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      mac = #{mac,jdbcType=VARCHAR},
+      schedulestatus = #{schedulestatus,jdbcType=CHAR},
+      filestatus = #{filestatus,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      onlineflag = #{onlineflag,jdbcType=CHAR},
+      version = #{version,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      activetime = #{activetime,jdbcType=TIMESTAMP},
+      refreshtime = #{refreshtime,jdbcType=TIMESTAMP}
+    where deviceid = #{deviceid,jdbcType=INTEGER}
+  </update>
+</mapper>

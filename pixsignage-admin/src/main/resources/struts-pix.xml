@@ -5,7 +5,7 @@
 
 <struts>
 	<package name="pixpkg" extends="json-default">
-		<!-- <interceptors> <interceptor name="businessInterceptor" class="com.broadvideo.signage.interceptor.BusinessInterceptor" 
+		<!-- <interceptors> <interceptor name="businessInterceptor" class="com.broadvideo.pixsignage.interceptor.BusinessInterceptor" 
 			/> <interceptor-stack name="mystack"> <interceptor-ref name="defaultStack" 
 			/> <interceptor-ref name="businessInterceptor" /> </interceptor-stack> </interceptors> 
 			<default-interceptor-ref name="mystack" /> <global-results> <result name="error">/error.jsp</result> 
@@ -36,16 +36,6 @@
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
-		</action>
-
-		<action name="upload" method="upload" class="uploadAction">
-			<interceptor-ref name="fileUpload">
-				<param name="maximumSize">2147483648</param>
-				<!-- <param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg</param> -->
-			</interceptor-ref>
-			<interceptor-ref name="defaultStack"></interceptor-ref>
-			<result name="success" type="json"></result>
-			<result name="input" type="json"></result>
 		</action>
 
 		<action name="org!list" method="doList" class="orgAction">
@@ -240,90 +230,215 @@
 		</action>
 
 
-		<action name="media!imagelist" method="doImageList" class="mediaAction">
+		<action name="image!list" method="doList" class="imageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="media!videolist" method="doVideoList" class="mediaAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
+		<action name="image!upload" method="doUpload" class="imageAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">10240000</param>
+				<!-- <param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
 		</action>
-		<action name="media!add" method="doAdd" class="mediaAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="media!update" method="doUpdate" class="mediaAction">
+		<action name="image!add" method="doAdd" class="imageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="media!delete" method="doDelete" class="mediaAction">
+		<action name="image!update" method="doUpdate" class="imageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="media!getthumb" method="getThumbnail" class="mediaAction">
-		</action>
-
-		<action name="livesource!list" method="doList" class="livesourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="livesource!add" method="doAdd" class="livesourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="livesource!update" method="doUpdate" class="livesourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="livesource!delete" method="doDelete" class="livesourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		
-		
-		<action name="widgetsource!list" method="doList" class="widgetsourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="widgetsource!add" method="doAdd" class="widgetsourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="widgetsource!update" method="doUpdate" class="widgetsourceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="widgetsource!delete" method="doDelete" class="widgetsourceAction">
+		<action name="image!delete" method="doDelete" class="imageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 
+		<action name="video!list" method="doList" class="videoAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="video!upload" method="doUpload" class="videoAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">2147483648</param>
+				<!-- <param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="video!add" method="doAdd" class="videoAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="video!update" method="doUpdate" class="videoAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="video!delete" method="doDelete" class="videoAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="text!list" method="doList" class="textAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="text!add" method="doAdd" class="textAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="text!update" method="doUpdate" class="textAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="text!delete" method="doDelete" class="textAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="stream!list" method="doList" class="streamAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="stream!add" method="doAdd" class="streamAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="stream!update" method="doUpdate" class="streamAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="stream!delete" method="doDelete" class="streamAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		
+		<action name="dvb!list" method="doList" class="dvbAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="dvb!add" method="doAdd" class="dvbAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="dvb!update" method="doUpdate" class="dvbAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="dvb!delete" method="doDelete" class="dvbAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		
+		<action name="widget!list" method="doList" class="widgetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="widget!add" method="doAdd" class="widgetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="widget!update" method="doUpdate" class="widgetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="widget!delete" method="doDelete" class="widgetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="medialist!list" method="doList" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="medialist!add" method="doAdd" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="medialist!update" method="doUpdate" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="medialist!delete" method="doDelete" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="medialist!dtllist" method="doDtlList" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="medialist!dtlsync" method="doDtlSync" class="medialistAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="device!list" method="doList" class="deviceAction">
 			<result name="success" type="json">
@@ -361,12 +476,6 @@
 				<param name="includeProperties">device.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="device!availlist" method="doAvailListByDeviceGroup" class="deviceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
 
 		<action name="devicegroup!list" method="doList" class="devicegroupAction">
 			<result name="success" type="json">
@@ -392,27 +501,19 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		
-		<action name="devicegroupdtl!list" method="doList" class="devicegroupdtlAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="devicegroupdtl!add" method="doAdd" class="devicegroupdtlAction">
+		<action name="devicegroup!deviceadd" method="doDeviceAdd" class="devicegroupAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicegroupdtl!delete" method="doDelete" class="devicegroupdtlAction">
+		<action name="devicegroup!devicedelete" method="doDeviceDelete" class="devicegroupAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 		
-
 		<action name="devicefile!list" method="doList" class="devicefileAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -456,7 +557,19 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layout!updatewithregion" method="doUpdateWithRegion" class="layoutAction">
+		<action name="layout!delete" method="doDelete" class="layoutAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="layout!dtllist" method="doDtlList" class="layoutAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="layout!dtlsync" method="doDtlSync" class="layoutAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="json">
 				<param name="enableSMD">true</param>
@@ -464,6 +577,12 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="layout!regionlist" method="doRegionList" class="layoutAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
 		<action name="layout!wizard" method="doWizard" class="layoutAction">
@@ -476,68 +595,28 @@
 				<param name="includeProperties">dataid,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layout!delete" method="doDelete" class="layoutAction">
+
+		<action name="crashreport!list" method="doList" class="crashreportAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layout!get" method="doGet" class="layoutAction">
+		<action name="crashreport!get" method="doGet" class="crashreportAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">layout.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="layout!download" method="doDownload" class="layoutAction">
-			<result name="success" type="stream">
-				<param name="contentType">application/octet-stream</param>
-				<param name="inputName">inputStream</param>
-				<param name="contentDisposition">attachment;filename="${xlfname}"</param>
-				<param name="bufferSize">1024</param>
+				<param name="includeProperties">crashreport.*,errorcode,errormsg</param>
 			</result>
 		</action>
 
-
-		<action name="tpllayout!list" method="doList" class="tpllayoutAction">
+		<action name="stat" method="doStat" class="statAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="tpllayout!add" method="doAdd" class="tpllayoutAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="tpllayout!update" method="doUpdate" class="tpllayoutAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="tpllayout!updatewithregion" method="doUpdateWithRegion" class="tpllayoutAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="tpllayout!delete" method="doDelete" class="tpllayoutAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="tpllayout!get" method="doGet" class="tpllayoutAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">tpllayout.*,errorcode,errormsg</param>
-			</result>
-		</action>
+		
+
 
 
 		<action name="task!list" method="doList" class="taskAction">
@@ -614,13 +693,6 @@
 			<result name="success">/web/org/preview_text.jsp</result>
 		</action>
 
-		<action name="stat" method="doStat" class="statAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		
 		<action name="metroline!list" method="doList" class="metroAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

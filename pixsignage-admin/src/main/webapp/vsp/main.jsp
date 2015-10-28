@@ -41,7 +41,7 @@
 	<!-- BEGIN PAGE LEVEL PLUGINS -->
 	<!-- END PAGE LEVEL PLUGINS -->
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	<script src="../assets/scripts/app.js" type="text/javascript"></script>
+	<script src="/pixsignage-static/scripts/app.js" type="text/javascript"></script>
 	<script src="../local/scripts/pix-datainit.js"></script>
 	<!-- END PAGE LEVEL SCRIPTS -->  
 	<script>

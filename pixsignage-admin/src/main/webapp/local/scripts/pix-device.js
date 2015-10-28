@@ -27,7 +27,7 @@ function initMyTable() {
 		                {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
-						{'sTitle' : '分组码', 'mData' : 'groupcode', 'bSortable' : false, 'sWidth' : '18%' }, 
+						{'sTitle' : '分组', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '18%' }, 
 						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '8%' }, 
 						{'sTitle' : '计划', 'mData' : 'schedulestatus', 'bSortable' : false, 'sWidth' : '8%' }, 
 						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '8%' }],
@@ -40,11 +40,11 @@ function initMyTable() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
 
-			/*if (data['type'] == 1) {
-				$('td:eq(4)', nRow).html('普通终端');
-			} else if (data['type'] == 2) {
-				$('td:eq(4)', nRow).html('安卓终端');
-			}*/
+			if (data.devicegroupid > 0) {
+				$('td:eq(4)', nRow).html(data.devicegroup.name);
+			} else {
+				$('td:eq(4)', nRow).html('');
+			}
 			if (data['onlineflag'] == 9) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">离线</span>');
 			} else if (data['onlineflag'] == 1) {
@@ -55,8 +55,6 @@ function initMyTable() {
 			if (data['schedulestatus'] == 0) {
 				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">最新</span>');
 			} else if (data['schedulestatus'] == 1) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-warning">待同步</span>');
-			} else if (data['schedulestatus'] == 2) {
 				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">同步中</span>');
 			}
 			
@@ -66,7 +64,6 @@ function initMyTable() {
 			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-file"><i class="fa fa-list-ul"></i> 文件列表</a></li>';
 			if (hasPrivilege(2020101)) {
 				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-				//dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-config"><i class="fa fa-gear"></i> 更新配置</a></li>';
 				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
 			}
 			dropdownBtn += '</ul></div>';
@@ -82,9 +79,9 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
+    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+    jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
 	
     function fnFormatDetails ( oTable, nTr )
     {
@@ -93,16 +90,7 @@ function initMyTable() {
         sOut += '<tr><td>硬编码:</td><td>'+aData['hardkey']+'</td></tr>';
         sOut += '<tr><td>IP地址:</td><td>'+aData['ip']+'</td></tr>';
         sOut += '<tr><td>MAC地址:</td><td>'+aData['mac']+'</td></tr>';
-        sOut += '<tr><td>屏幕宽高比:</td><td>'+aData['asp']+'</td></tr>';
-        sOut += '<tr><td>音量:</td><td>'+aData['volume']+'</td></tr>';
-        sOut += '<tr><td>输出接口和分辨率:</td><td>'+aData['port']+'</td></tr>';
-        sOut += '<tr><td>刷新时间间隔:</td><td>'+aData['refreshtime']+'秒</td></tr>';
-        sOut += '<tr><td>上报事件级别:</td><td>'+aData['loglevel']+'</td></tr>';
-        sOut += '<tr><td>描述:</td><td>'+aData['description']+'</td></tr>';
-        sOut += '<tr><td>激活时间:</td><td>'+aData['createtime']+'</td></tr>';
-        sOut += '<tr><td>正在使用的布局:</td><td>'+aData['onlinelayoutid']+'</td></tr>';
-        sOut += '<tr><td>正在播放的视频:</td><td>'+aData['onlinemediaid']+'</td></tr>';
-        sOut += '<tr><td>平均下载速度:</td><td>'+aData['rate']+' kbyte/s</td></tr>';
+        sOut += '<tr><td>激活时间:</td><td>'+aData['activetime']+'</td></tr>';
         sOut += '</table>';
          
         return sOut;
@@ -142,7 +130,7 @@ function initMyTable() {
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['deviceid']
+						'device.deviceid': currentItem['deviceid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -275,16 +263,15 @@ function initMyTable() {
 		'sAjaxSource' : myurls['device.unregisterlist'],
 		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
 						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '分组码', 'mData' : 'groupcode', 'bSortable' : false }, 
 						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage
 	});
 
-    jQuery('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#UnDeviceTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+    jQuery('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
+    jQuery('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+    jQuery('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
 
     $('body').on('click', '.pix-DeviceReload', function(event) {
 		if ($('#portlet_device1').hasClass('active')) {
@@ -470,129 +457,95 @@ function initDeviceFileModal() {
 		
 		$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 		$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
-		$('#DeviceLayoutTable').dataTable()._fnAjaxUpdate();
 		
 		$('#DeviceFileModal').modal();
 	});
 	
 	$('#DeviceVideoTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
 		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] // change per page values here
 						],
 		"bProcessing" : true,
 		"bServerSide" : true,
 		"sAjaxSource" : myurls['devicefile.list'],
-		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'fileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'filesize', 'bSortable' : false }, 
-						{'sTitle' : 'MD5', 'mData' : 'md5', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'complete', 'bSortable' : false },
+		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
+						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
 		"iDisplayLength" : 10,
 		"sPaginationType" : "bootstrap",
 		"oLanguage" : DataTableLanguage,
 		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html(transferIntToComma(aData['filesize']));
-			if (aData['complete'] == 0) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData['complete'] + '%</span>');
-			} else if (aData['complete'] == 100) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData['complete'] + '%</span>');
+			$('td:eq(0)', nRow).html('video-' + aData.video.videoid);
+			$('td:eq(1)', nRow).html(aData.video.filename);
+			$('td:eq(2)', nRow).html(transferIntToComma(aData.video.size));
+			$('td:eq(3)', nRow).html(aData.video.md5);
+			if (aData.progress == 0) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
+			} else if (aData['progress'] == 100) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData.progress + '%</span>');
 			} else {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData['complete'] + '%</span>');
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData.progress + '%</span>');
 			}
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
 	        aoData.push({'name':'deviceid','value':currentDeviceid },
-	        			{'name':'filetype','value':'2' });
+	        			{'name':'objtype','value':'1' });
 	    } 
 	});
 
-	jQuery('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); // modify table search input
-	jQuery('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
+	jQuery('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	jQuery('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 
 	$('#DeviceImageTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
 		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] // change per page values here
 						],
 		"bProcessing" : true,
 		"bServerSide" : true,
 		"sAjaxSource" : myurls['devicefile.list'],
-		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'fileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'filesize', 'bSortable' : false }, 
-						{'sTitle' : 'MD5', 'mData' : 'md5', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'complete', 'bSortable' : false },
+		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
+						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
 		"iDisplayLength" : 10,
 		"sPaginationType" : "bootstrap",
 		"oLanguage" : DataTableLanguage,
 		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html(transferIntToComma(aData['filesize']));
-			if (aData['complete'] == 0) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData['complete'] + '%</span>');
-			} else if (aData['complete'] == 100) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData['complete'] + '%</span>');
+			$('td:eq(0)', nRow).html('image-' + aData.image.videoid);
+			$('td:eq(1)', nRow).html(aData.image.filename);
+			$('td:eq(2)', nRow).html(transferIntToComma(aData.image.size));
+			$('td:eq(3)', nRow).html(aData.image.md5);
+			if (aData.progress == 0) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
+			} else if (aData['progress'] == 100) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData.progress + '%</span>');
 			} else {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData['complete'] + '%</span>');
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData.progress + '%</span>');
 			}
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
 	        aoData.push({'name':'deviceid','value':currentDeviceid },
-	        			{'name':'filetype','value':'1' });
+	        			{'name':'objtype','value':'2' });
 	    } 
 	});
 
-	jQuery('#DeviceImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); // modify table search input
-	jQuery('#DeviceImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-
-	$('#DeviceLayoutTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
-		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
-						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['devicefile.list'],
-		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'fileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'filesize', 'bSortable' : false }, 
-						{'sTitle' : 'MD5', 'mData' : 'md5', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'complete', 'bSortable' : false },
-						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
-		"iDisplayLength" : 10,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html(transferIntToComma(aData['filesize']));
-			if (aData['complete'] == 0) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData['complete'] + '%</span>');
-			} else if (aData['complete'] == 100) {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData['complete'] + '%</span>');
-			} else {
-				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData['complete'] + '%</span>');
-			}
-			return nRow;
-		},
-		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'deviceid','value':currentDeviceid },
-	        			{'name':'filetype','value':'0' });
-	    } 
-	});
-
-	jQuery('#DeviceLayoutTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); // modify table search input
-	jQuery('#DeviceLayoutTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
+	jQuery('#DeviceImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	jQuery('#DeviceImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 
 	$('body').on('click', '.pix-DeviceFileReload', function(event) {
 		if ($('#portlet_tab1').hasClass('active')) {
 			$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 		} else if ($('#portlet_tab2').hasClass('active')) {
 			$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
-		} else if ($('#portlet_tab3').hasClass('active')) {
-			$('#DeviceLayoutTable').dataTable()._fnAjaxUpdate();
 		}
 	});			
 

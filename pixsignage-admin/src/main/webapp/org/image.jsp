@@ -2,8 +2,8 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/fancybox/source/jquery.fancybox.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css"/>
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/fancybox/source/jquery.fancybox.css"/>
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/jquery-file-upload/css/jquery.fileupload-ui.css"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="../common/common2.jsp"%>
@@ -20,7 +20,7 @@
 				</div>
 				<div class="modal-body">
 
-					<form id="UploadForm" class="form-horizontal" action="upload.action" method="POST" enctype="multipart/form-data">
+					<form id="UploadForm" class="form-horizontal" action="image!upload.action" method="POST" enctype="multipart/form-data">
 						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 						<div class="row fileupload-buttonbar">
 							<div class="col-lg-6">
@@ -77,13 +77,13 @@
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" method="POST">
-						<input type="hidden" name="media.mediaid" value="0" />
+						<input type="hidden" name="image.imageid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label">图片名称<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="media.name" placeholder="请输入图片名称" />
+										<i class="fa"></i> <input type="text" class="form-control" name="image.name" placeholder="请输入图片名称" />
 									</div>
 								</div>
 							</div>
@@ -107,14 +107,14 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-			<h3 class="page-title">图片管理</h3>
+			<h3 class="page-title">图片</h3>
 			<ul class="page-breadcrumb breadcrumb">
 				<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 					class="fa fa-angle-right"></i>
 				</li>
-				<li><a href="#">媒体管理</a><i class="fa fa-angle-right"></i>
+				<li><a href="#">素材管理</a><i class="fa fa-angle-right"></i>
 				</li>
-				<li><a href="#">图片管理</a>
+				<li><a href="#">图片</a>
 				</li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -181,7 +181,6 @@
 		    <tr class="template-upload fade">
 		        <td>
 					<div class="input-icon right">
-						<input type="hidden" class="form-control" name="type" value="1" />
 						<i class="fa"></i> <input type="text" class="form-control" name="name" placeholder="图片名称" />
 					</div>
 		        </td>
@@ -269,45 +268,44 @@
 	</script>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
-<script type="text/javascript" src="../assets/plugins/bootstrap-jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-jstree/jquery.jstree.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 	<!-- BEGIN:File Upload Plugin JS files-->
 	<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-	<script src="../assets/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
 	<!-- The Templates plugin is included to render the upload/download listings -->
-	<script src="../assets/plugins/jquery-file-upload/js/vendor/tmpl.min.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/vendor/tmpl.min.js"></script>
 	<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-	<script src="../assets/plugins/jquery-file-upload/js/vendor/load-image.min.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/vendor/load-image.min.js"></script>
 	<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-	<script src="../assets/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
 	<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
 	<!-- The basic File Upload plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
 	<!-- The File Upload processing plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-process.js"></script>
 	<!-- The File Upload image preview & resize plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-image.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-image.js"></script>
 	<!-- The File Upload audio preview plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
 	<!-- The File Upload video preview plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-video.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-video.js"></script>
 	<!-- The File Upload validation plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
 	<!-- The File Upload user interface plugin -->
-	<script src="../assets/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
 	<!-- The main application script -->
 	<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 	<!--[if (gte IE 8)&(lt IE 10)]>
-	<script src="../assets/plugins/jquery-file-upload/js/cors/jquery.xdr-transport.js"></script>
+	<script src="/pixsignage-static/plugins/jquery-file-upload/js/cors/jquery.xdr-transport.js"></script>
 	<![endif]-->
 	<!-- END:File Upload Plugin JS files-->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-image.js?t=2"></script>
-<script src="../local/scripts/pix-upload.js"></script>
 <script>
 //上传文件的后缀
 var acceptFileTypes = /(\.|\/)(bmp|jpe?g|png)$/i;

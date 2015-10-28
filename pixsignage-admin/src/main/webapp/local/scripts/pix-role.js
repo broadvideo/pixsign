@@ -55,7 +55,7 @@ function initMyTable() {
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['roleid']
+						'role.roleid': currentItem['roleid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {

@@ -22,7 +22,7 @@
 	
 	<packaging>war</packaging>
 	<build>
-		<finalName>pixservice##${project.version}</finalName>
+		<finalName>pixservice</finalName>
 	</build>
 	
 </project>

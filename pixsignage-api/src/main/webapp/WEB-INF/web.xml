@@ -8,7 +8,7 @@
   
 	<servlet>
 		<servlet-name>SystemInit</servlet-name>
-		<servlet-class>com.broadvideo.signage.servlet.SystemInitServlet</servlet-class>
+		<servlet-class>com.broadvideo.pixsignage.servlet.SystemInitServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -41,7 +41,7 @@
   </servlet>
   <servlet-mapping>
   	<servlet-name>jersey-serlvet</servlet-name>
-  	<url-pattern>/rest/*</url-pattern>
+  	<url-pattern>/service/*</url-pattern>
   </servlet-mapping>
   
   

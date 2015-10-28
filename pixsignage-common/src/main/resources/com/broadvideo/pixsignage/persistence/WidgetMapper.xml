@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.WidgetMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Widget" >
+    <id column="widgetid" property="widgetid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    widgetid, orgid, name, url, status, description, createtime, createstaffid
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from widget
+    where widgetid = '${widgetid}'
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from widget
+    where status='1' and orgid=#{orgid}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from widget
+    where status='1' and  orgid=#{orgid}
+    order by widgetid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update widget
+    set status='9'
+    where widgetid = '${widgetid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Widget" >
+    <selectKey resultType="java.lang.Integer" keyProperty="widgetid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into widget (orgid, name, url, 
+      status, description, createtime, 
+      createstaffid)
+    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Widget" >
+    <selectKey resultType="java.lang.Integer" keyProperty="widgetid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into widget
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Widget" >
+    update widget
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where widgetid = #{widgetid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Widget" >
+    update widget
+    set orgid = #{orgid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where widgetid = #{widgetid,jdbcType=INTEGER}
+  </update>
+</mapper>

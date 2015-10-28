@@ -1,8 +1,8 @@
 var myurls = {
-	'common.list' : 'widgetsource!list.action',
-	'common.add' : 'widgetsource!add.action',
-	'common.update' : 'widgetsource!update.action',
-	'common.delete' : 'widgetsource!delete.action',
+	'common.list' : 'widget!list.action',
+	'common.add' : 'widget!add.action',
+	'common.update' : 'widget!update.action',
+	'common.delete' : 'widget!delete.action',
 };
 
 function refreshMyTable() {
@@ -19,9 +19,9 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "地址", "mData" : "uri", "bSortable" : false }, 
+						{"sTitle" : "地址", "mData" : "url", "bSortable" : false }, 
 						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "widgetsourceid", "bSortable" : false }],
+						{"sTitle" : "操作", "mData" : "widgetid", "bSortable" : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -59,7 +59,7 @@ function initMyTable() {
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['widgetsourceid']
+						'ids': currentItem['widgetid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -81,10 +81,10 @@ function initMyTable() {
 function initMyEditModal() {
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
-	FormValidateOption.rules['widgetsource.name'] = {};
-	FormValidateOption.rules['widgetsource.name']['required'] = true;
-	FormValidateOption.rules['widgetsource.uri'] = {};
-	FormValidateOption.rules['widgetsource.uri']['required'] = true;
+	FormValidateOption.rules['widget.name'] = {};
+	FormValidateOption.rules['widget.name']['required'] = true;
+	FormValidateOption.rules['widget.uri'] = {};
+	FormValidateOption.rules['widget.uri']['required'] = true;
 	FormValidateOption.submitHandler = function(form) {
 		$.ajax({
 			type : 'POST',
@@ -129,7 +129,7 @@ function initMyEditModal() {
 		var action = myurls['common.update'];
 		var formdata = new Object();
 		for (var name in data) {
-			formdata['widgetsource.' + name] = data[name];
+			formdata['widget.' + name] = data[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);

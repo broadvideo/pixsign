@@ -2,7 +2,7 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css">
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css">
 <link rel="stylesheet" type="text/css" href="../local/css/pix.css" />
 <!-- END PAGE LEVEL STYLES -->
 
@@ -233,10 +233,10 @@
 
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-tpllayout.js"></script>
 <script>

@@ -22,7 +22,26 @@
 
 	<packaging>war</packaging>
 	<build>
-		<finalName>pixsignage##${project.version}</finalName>
+		<finalName>pixsignage</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<webAppConfig>
+						<contextPath>/pixsignage</contextPath>
+					</webAppConfig>
+					<contextHandlers>
+						<contextHandler implementation="org.eclipse.jetty.server.handler.ContextHandler">
+							<contextPath>/pixsignage-static</contextPath>
+							<resourceBase>../pixsignage-res/</resourceBase>
+							<handler implementation="org.eclipse.jetty.server.handler.ResourceHandler" />
+						</contextHandler>
+					</contextHandlers>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>

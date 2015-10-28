@@ -1,0 +1,100 @@
+package com.broadvideo.pixsignage.action;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.broadvideo.pixsignage.domain.Stream;
+import com.broadvideo.pixsignage.service.StreamService;
+
+@Scope("request")
+@Controller("streamAction")
+public class StreamAction extends BaseDatatableAction {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4304469915361193060L;
+
+	private static final Logger log = Logger.getLogger(StreamAction.class);
+
+	private Stream stream;
+
+	@Autowired
+	private StreamService streamService;
+
+	public String doList() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String start = getParameter("iDisplayStart");
+			String length = getParameter("iDisplayLength");
+			List<Object> aaData = new ArrayList<Object>();
+			int count = streamService.selectCount("" + getLoginStaff().getOrgid());
+			this.setiTotalRecords(count);
+			this.setiTotalDisplayRecords(count);
+			List<Stream> streamList = streamService.selectList("" + getLoginStaff().getOrgid(), start, length);
+			for (int i = 0; i < streamList.size(); i++) {
+				aaData.add(streamList.get(i));
+			}
+			this.setAaData(aaData);
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doAdd() {
+		try {
+			stream.setOrgid(getLoginStaff().getOrgid());
+			stream.setCreatestaffid(getLoginStaff().getStaffid());
+			streamService.addStream(stream);
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUpdate() {
+		try {
+			streamService.updateStream(stream);
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doDelete() {
+		try {
+			streamService.deleteStream("" + stream.getStreamid());
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public Stream getStream() {
+		return stream;
+	}
+
+	public void setStream(Stream stream) {
+		this.stream = stream;
+	}
+
+}

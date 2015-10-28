@@ -21,15 +21,15 @@ response.setDateHeader("Expires",0);
 	<meta content="" name="author" />
 	<meta name="MobileOptimized" content="320">
 	<!-- BEGIN GLOBAL MANDATORY STYLES -->          
-	<link href="../assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 	<!-- END GLOBAL MANDATORY STYLES -->
 	
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/gritter/css/jquery.gritter.css" />
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/select2/select2_metro.css" />
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/data-tables/DT_bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
-	<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/gritter/css/jquery.gritter.css" />
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/select2/select2_metro.css" />
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/data-tables/DT_bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+	<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
 	

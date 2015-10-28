@@ -1,7 +1,7 @@
 var myurls = {
 	'org.get' : 'org!get.action',
 	'device.list' : 'device!list.action',
-	'task.list' : 'task!list.action',
+	'video.list' : 'video!list.action',
 	'stat' : 'stat.action',
 };
 
@@ -72,37 +72,13 @@ function initDeviceTable() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#DeviceTable').dataTable().fnGetData(iDisplayIndex);
 
-			/*
 			if (data['onlineflag'] == 9) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">离线</span>');
 			} else if (data['onlineflag'] == 1) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">在线</span>');
 			} else if (data['onlineflag'] == 0) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">空闲</span>');
-			}*/
-
-			if (data['onlineflag'] == 0) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">离线</span>');
-			} else if (data['onlineflag'] == 1) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">空闲</span>');
-			} else if (data['onlineflag'] == 2) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-danger">认证中</span>');
-			} else if (data['onlineflag'] == 3) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">在播</span>');
-			} else if (data['onlineflag'] == 4) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">暂停</span>');
-			} else if (data['onlineflag'] == 5) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">预览</span>');
-			} else if (data['onlineflag'] == 6) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">预览暂停</span>');
-			} else if (data['onlineflag'] == 7) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">预览停止</span>');
-			} else if (data['onlineflag'] == 8) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-danger">认证失败</span>');
-			} else {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">未知</span>');
-			} 
-
+			}
 			return nRow;
 		}
 	});
@@ -110,25 +86,19 @@ function initDeviceTable() {
 }
 
 function initTaskTable() {
-	var oTable = $('#TaskTable').dataTable({
+	var oTable = $('#VideoTable').dataTable({
 		'sDom' : 'rt',
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : myurls['task.list'],
+		'sAjaxSource' : myurls['video.list'],
 		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "类型", "mData" : "type", "bSortable" : false }, 
-						{"sTitle" : "开始时间", "mData" : "fromdate", "bSortable" : false }, 
-						{"sTitle" : "结束时间", "mData" : "todate", "bSortable" : false }],
+						{"sTitle" : "大小", "mData" : "size", "bSortable" : false }, 
+						{"sTitle" : "上传时间", "mData" : "createtime", "bSortable" : false }],
 		'iDisplayLength' : 5,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#TaskTable').dataTable().fnGetData(iDisplayIndex);
-			if (data['type'] == 1) {
-				$('td:eq(1)', nRow).html('<span class="label label-sm label-info">排期任务</span>');
-			} else if (data['type'] == 2) {
-				$('td:eq(1)', nRow).html('<span class="label label-sm label-success">即时任务</span>');
-			}
+			$('td:eq(1)', nRow).html(transferIntToComma(parseInt(aData['size'] / 1024)) + ' KB');
 			return nRow;
 		}
 	});
@@ -224,9 +194,9 @@ function initMediaChart() {
     function onDataReceived(data, type) {
     	var series = {};
     	if (type == '1') {
-    		series.label = '图片';
-    	} else if (type == '2') {
     		series.label = '视频';
+    	} else if (type == '2') {
+    		series.label = '图片';
     	} 
     	series.data = [];
     	

@@ -30,7 +30,6 @@
 						<div class="portlet-body">
 							<div class="portlet-tabs">
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li id="nav_tab3"><a href="#portlet_tab3" data-toggle="tab">布局</a></li>
 									<li id="nav_tab2" class="imageflag"><a href="#portlet_tab2" data-toggle="tab">图片</a></li>
 									<li id="nav_tab1" class="videoflag"><a href="#portlet_tab1" data-toggle="tab">视频</a></li>
 								</ul>
@@ -43,12 +42,6 @@
 									</div>
 									<div class="tab-pane" id="portlet_tab2">
 										<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
-											<thead></thead>
-											<tbody></tbody>
-										</table>
-									</div>
-									<div class="tab-pane" id="portlet_tab3">
-										<table id="DeviceLayoutTable" class="table table-striped table-bordered table-hover">
 											<thead></thead>
 											<tbody></tbody>
 										</table>
@@ -204,11 +197,11 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/bootstrap-jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-jstree/jquery.jstree.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js?t=3"></script>
 <script src="../local/scripts/pix-device.js?t=6"></script>
 <script>

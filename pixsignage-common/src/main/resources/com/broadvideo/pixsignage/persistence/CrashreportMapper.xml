@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.CrashreportMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Crashreport" >
+    <id column="crashreportid" property="crashreportid" jdbcType="INTEGER" />
+    <result column="hardkey" property="hardkey" jdbcType="VARCHAR" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="clientip" property="clientip" jdbcType="VARCHAR" />
+    <result column="clientname" property="clientname" jdbcType="VARCHAR" />
+    <result column="os" property="os" jdbcType="VARCHAR" />
+    <result column="appname" property="appname" jdbcType="VARCHAR" />
+    <result column="vname" property="vname" jdbcType="VARCHAR" />
+    <result column="vcode" property="vcode" jdbcType="VARCHAR" />
+    <result column="resolution" property="resolution" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Crashreport" extends="BaseResultMap" >
+    <result column="stack" property="stack" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    crashreportid, hardkey, terminalid, clientip, clientname, os, appname, vname, vcode, 
+    resolution, other, createtime
+  </sql>
+  <sql id="Blob_Column_List" >
+    stack
+  </sql>
+  
+  <select id="selectAllByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from crashreport
+    where crashreportid = '${crashreportid}'
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from crashreport
+    where crashreportid = '${crashreportid}'
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from crashreport
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from crashreport
+    order by crashreportid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from crashreport
+    where crashreportid = '${crashreportid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >
+    <selectKey resultType="java.lang.Integer" keyProperty="crashreportid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into crashreport (hardkey, terminalid, clientip, 
+      clientname, os, appname, 
+      vname, vcode, resolution, 
+      other, createtime, stack
+      )
+    values (#{hardkey,jdbcType=VARCHAR}, #{terminalid,jdbcType=VARCHAR}, #{clientip,jdbcType=VARCHAR}, 
+      #{clientname,jdbcType=VARCHAR}, #{os,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, 
+      #{vname,jdbcType=VARCHAR}, #{vcode,jdbcType=VARCHAR}, #{resolution,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{stack,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >
+    <selectKey resultType="java.lang.Integer" keyProperty="crashreportid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into crashreport
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hardkey != null" >
+        hardkey,
+      </if>
+      <if test="terminalid != null" >
+        terminalid,
+      </if>
+      <if test="clientip != null" >
+        clientip,
+      </if>
+      <if test="clientname != null" >
+        clientname,
+      </if>
+      <if test="os != null" >
+        os,
+      </if>
+      <if test="appname != null" >
+        appname,
+      </if>
+      <if test="vname != null" >
+        vname,
+      </if>
+      <if test="vcode != null" >
+        vcode,
+      </if>
+      <if test="resolution != null" >
+        resolution,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="stack != null" >
+        stack,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hardkey != null" >
+        #{hardkey,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="clientip != null" >
+        #{clientip,jdbcType=VARCHAR},
+      </if>
+      <if test="clientname != null" >
+        #{clientname,jdbcType=VARCHAR},
+      </if>
+      <if test="os != null" >
+        #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="appname != null" >
+        #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="vname != null" >
+        #{vname,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="resolution != null" >
+        #{resolution,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stack != null" >
+        #{stack,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >
+    update crashreport
+    <set >
+      <if test="hardkey != null" >
+        hardkey = #{hardkey,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid != null" >
+        terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="clientip != null" >
+        clientip = #{clientip,jdbcType=VARCHAR},
+      </if>
+      <if test="clientname != null" >
+        clientname = #{clientname,jdbcType=VARCHAR},
+      </if>
+      <if test="os != null" >
+        os = #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="appname != null" >
+        appname = #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="vname != null" >
+        vname = #{vname,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        vcode = #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="resolution != null" >
+        resolution = #{resolution,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stack != null" >
+        stack = #{stack,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where crashreportid = #{crashreportid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >
+    update crashreport
+    set hardkey = #{hardkey,jdbcType=VARCHAR},
+      terminalid = #{terminalid,jdbcType=VARCHAR},
+      clientip = #{clientip,jdbcType=VARCHAR},
+      clientname = #{clientname,jdbcType=VARCHAR},
+      os = #{os,jdbcType=VARCHAR},
+      appname = #{appname,jdbcType=VARCHAR},
+      vname = #{vname,jdbcType=VARCHAR},
+      vcode = #{vcode,jdbcType=VARCHAR},
+      resolution = #{resolution,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      stack = #{stack,jdbcType=LONGVARCHAR}
+    where crashreportid = #{crashreportid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >
+    update crashreport
+    set hardkey = #{hardkey,jdbcType=VARCHAR},
+      terminalid = #{terminalid,jdbcType=VARCHAR},
+      clientip = #{clientip,jdbcType=VARCHAR},
+      clientname = #{clientname,jdbcType=VARCHAR},
+      os = #{os,jdbcType=VARCHAR},
+      appname = #{appname,jdbcType=VARCHAR},
+      vname = #{vname,jdbcType=VARCHAR},
+      vcode = #{vcode,jdbcType=VARCHAR},
+      resolution = #{resolution,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where crashreportid = #{crashreportid,jdbcType=INTEGER}
+  </update>
+</mapper>

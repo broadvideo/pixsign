@@ -66,7 +66,7 @@ function initMyTable() {
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['orgid']
+						'org.orgid': currentItem['orgid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {

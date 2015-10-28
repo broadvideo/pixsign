@@ -1,8 +1,8 @@
 var myurls = {
-	'common.list' : 'media!videolist.action',
-	'common.add' : 'media!add.action',
-	'common.update' : 'media!update.action',
-	'common.delete' : 'media!delete.action',
+	'common.list' : 'video!list.action',
+	'common.add' : 'video!add.action',
+	'common.update' : 'video!update.action',
+	'common.delete' : 'video!delete.action',
 	'branch.list' : 'branch!list.action'
 };
 
@@ -51,14 +51,13 @@ function initMyTable() {
 				thumbmailhtml += '<div class="row" >';
 			}
 			thumbmailhtml += '<div class="col-md-2 col-xs-2">';
-			if (aData['uploadtype'] == 0) {
-				thumbmailhtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['mediaid'] + '.gif" title="' + aData['name'] + '">';
-				thumbmailhtml += '<img src="media!getthumb.action?mediaid=' + aData['mediaid'] + '" alt="' + aData['name'] + '" /> </a>';
+			if (aData['thumbnail'] == null) {
+				thumbmailhtml += '<img src="../local/img/video.jpg' + '" alt="' + aData['name'] + '" width="100%" />';
 			} else {
-				//thumbmailhtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width=100 />';
-				thumbmailhtml += '<img src="media!getthumb.action?mediaid=' + aData['mediaid'] + '" alt="' + aData['name'] + '" />';
+				thumbmailhtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
+				thumbmailhtml += '<img src="/pixsigdata/image/snapshot/' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
 			}
-			thumbmailhtml += '<h6>' + aData['mediaid'] + '：' + aData['name'] + '<br>';
+			thumbmailhtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			thumbmailhtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			if (currentSelectBranchid == myBranchid) {
@@ -102,7 +101,7 @@ function initMyTable() {
 					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'ids': currentItem['mediaid']
+						'video.videoid': currentItem['videoid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -232,9 +231,9 @@ function initMyTable() {
 function initMyEditModal() {
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
-	FormValidateOption.rules['media.name'] = {};
-	FormValidateOption.rules['media.name']['required'] = true;
-	FormValidateOption.rules['media.name']['minlength'] = 2;
+	FormValidateOption.rules['video.name'] = {};
+	FormValidateOption.rules['video.name']['required'] = true;
+	FormValidateOption.rules['video.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
 		$.ajax({
 			type : 'POST',
@@ -270,7 +269,7 @@ function initMyEditModal() {
 		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
 		for (var name in item) {
-			formdata['media.' + name] = item[name];
+			formdata['video.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
@@ -278,4 +277,86 @@ function initMyEditModal() {
 		$('#MyEditModal').modal();
 	});
 
+}
+
+
+function initUploadModal() {
+	var queueItems = new Array();
+	
+    // Initialize the jQuery File Upload widget:
+   $('#UploadForm').fileupload({
+       disableImageResize: false,
+       autoUpload: false,
+       // Uncomment the following to send cross-domain cookies:
+       //xhrFields: {withCredentials: true},                
+       url: 'video!upload.action'
+   });
+
+   // Enable iframe cross-domain access via redirect option:
+   $('#UploadForm').fileupload(
+       'option',
+       'redirect',
+       window.location.href.replace(
+           /\/[^\/]*$/,
+           '/cors/result.html?%s'
+       )
+   );
+
+   // Demo settings:
+   $('#UploadForm').fileupload('option', {
+       url: $('#UploadForm').fileupload('option', 'url'),
+       // Enable image resizing, except for Android and Opera,
+       // which actually support image resizing, but fail to
+       // send Blob objects via XHR requests:
+       disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+       maxFileSize: 2147483648,
+       acceptFileTypes: acceptFileTypes
+   });
+
+       // Upload server status check for browsers with CORS support:
+   if ($.support.cors) {
+       $.ajax({
+           url: 'video!upload.action',
+           type: 'HEAD'
+       }).fail(function () {
+           $('<div class="alert alert-danger"/>')
+               .text('上载服务器当前不可用 - ' +
+                       new Date())
+               .appendTo('#MyUploadForm');
+       });
+   }
+
+   // Load & display existing files:
+   $('#UploadForm').addClass('fileupload-processing');
+   $.ajax({
+       // Uncomment the following to send cross-domain cookies:
+       //xhrFields: {withCredentials: true},
+       url: $('#UploadForm').fileupload('option', 'url'),
+       dataType: 'json',
+       context: $('#UploadForm')[0]
+   }).always(function () {
+       $(this).removeClass('fileupload-processing');
+   }).done(function (result) {
+       $(this).fileupload('option', 'done')
+       .call(this, $.Event('done'), {result: result});
+   });
+
+   $('#UploadForm').bind('fileuploadsubmit', function (e, data) {
+       var inputs = data.context.find(':input');
+       data.formData = inputs.serializeArray();
+   }); 
+
+
+	$('body').on('click', '.pix-add', function(event) {
+		$('#UploadForm').find('.cancel').click();
+		$('#UploadForm .files').html('');
+		$('#UploadModal').modal();
+	});			
+
+	
+	$('body').on('click', '.pix-upload-close', function(event) {
+		refreshMyTable();
+	});
+	
+	
 }

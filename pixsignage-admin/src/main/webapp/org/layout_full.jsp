@@ -3,11 +3,11 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css">
-<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css">
-<link rel="stylesheet" type="text/css" href="../assets/plugins/ion.rangeslider/css/ion.rangeSlider.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css" />
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css">
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css">
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/ion.rangeslider/css/ion.rangeSlider.css"/>
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css"/>
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-datetimepicker/css/datetimepicker.css" />
 
 <link rel="stylesheet" type="text/css" href="../local/css/pix.css" />
 <!-- END PAGE LEVEL STYLES -->
@@ -513,14 +513,14 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
-<script type="text/javascript" src="../assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script type="text/javascript" src="../assets/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
-<script type="text/javascript" src="../assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../assets/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-layout-full.js"></script>
 <script>

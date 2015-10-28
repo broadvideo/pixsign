@@ -18,13 +18,14 @@
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" method="POST">
-						<input type="hidden" name="widgetsource.widgetsourceid" value="0" />
+						<input type="hidden" name="widget.widgetid" value="0" />
+						<input type="hidden" name="widget.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label">Widget名称<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="widgetsource.name" placeholder="请输入Widget名称" />
+										<i class="fa"></i> <input type="text" class="form-control" name="widget.name" placeholder="请输入Widget名称" />
 									</div>
 								</div>
 							</div>
@@ -32,7 +33,7 @@
 								<label class="col-md-3 control-label">Widget地址<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="widgetsource.uri" placeholder="请输入Widget地址" />
+										<i class="fa"></i> <input type="text" class="form-control" name="widget.url" placeholder="请输入Widget地址" />
 									</div>
 								</div>
 							</div>
@@ -60,9 +61,9 @@
 				<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 					class="fa fa-angle-right"></i>
 				</li>
-				<li><a href="#">媒体管理</a><i class="fa fa-angle-right"></i>
+				<li><a href="#">素材管理</a><i class="fa fa-angle-right"></i>
 				</li>
-				<li><a href="#">Widget管理</a>
+				<li><a href="#">Widget</a>
 				</li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -106,7 +107,7 @@
 
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-widget.js?t=1"></script>
 <script>

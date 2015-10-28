@@ -125,11 +125,11 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/bootstrap-jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-jstree/jquery.jstree.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-vspstaff.js"></script>
 <script>

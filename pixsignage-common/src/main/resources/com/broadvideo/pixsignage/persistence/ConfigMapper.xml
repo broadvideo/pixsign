@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.ConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Config" >
+    <id column="configid" property="configid" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="refer" property="refer" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    configid, code, name, value, refer, type
+  </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from config
+    where type = '1'
+    order by configid 
+  </select>
+
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select * from config
+    where code = '${code}'
+  </select>
+
+  <select id="selectValueByCode" resultType="java.lang.String" >
+    select value from config
+    where code = '${code}'
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Config" >
+    update config
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="refer != null" >
+        refer = #{refer,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+    </set>
+    where configid = #{configid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Config" >
+    update config
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      value = #{value,jdbcType=VARCHAR},
+      refer = #{refer,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR}
+    where configid = #{configid,jdbcType=INTEGER}
+  </update>
+</mapper>

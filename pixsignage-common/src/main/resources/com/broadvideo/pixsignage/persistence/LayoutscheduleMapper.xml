@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.LayoutscheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Layoutschedule" >
+    <id column="layoutscheduleid" property="layoutscheduleid" jdbcType="INTEGER" />
+    <result column="bindtype" property="bindtype" jdbcType="CHAR" />
+    <result column="bindid" property="bindid" jdbcType="INTEGER" />
+    <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    layoutscheduleid, bindtype, bindid, layoutid, starttime, endtime, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from layoutschedule
+    where layoutscheduleid = '${layoutscheduleid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from layoutschedule
+    where bindtype = '${bindtype}' and bindid = '${bindid}'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from layoutschedule
+    where layoutscheduleid = '${layoutscheduleid}'
+  </delete>
+  
+    <delete id="deleteByBind" >
+    delete from layoutschedule
+    where bindtype = '${bindtype}' and bindid = '${bindid}'
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Layoutschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="layoutscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into layoutschedule (bindtype, bindid, layoutid, 
+      starttime, endtime, createtime
+      )
+    values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layoutschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="layoutscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into layoutschedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bindtype != null" >
+        bindtype,
+      </if>
+      <if test="bindid != null" >
+        bindid,
+      </if>
+      <if test="layoutid != null" >
+        layoutid,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bindtype != null" >
+        #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        #{bindid,jdbcType=INTEGER},
+      </if>
+      <if test="layoutid != null" >
+        #{layoutid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Layoutschedule" >
+    update layoutschedule
+    <set >
+      <if test="bindtype != null" >
+        bindtype = #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        bindid = #{bindid,jdbcType=INTEGER},
+      </if>
+      <if test="layoutid != null" >
+        layoutid = #{layoutid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where layoutscheduleid = #{layoutscheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Layoutschedule" >
+    update layoutschedule
+    set bindtype = #{bindtype,jdbcType=CHAR},
+      bindid = #{bindid,jdbcType=INTEGER},
+      layoutid = #{layoutid,jdbcType=INTEGER},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where layoutscheduleid = #{layoutscheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

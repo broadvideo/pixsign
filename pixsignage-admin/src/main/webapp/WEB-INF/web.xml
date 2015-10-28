@@ -7,13 +7,13 @@
 
 	<servlet>
 		<servlet-name>SystemInit</servlet-name>
-		<servlet-class>com.broadvideo.signage.servlet.SystemInitServlet</servlet-class>
+		<servlet-class>com.broadvideo.pixsignage.servlet.SystemInitServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<filter>
 		<filter-name>securityFilter</filter-name>
-		<filter-class>com.broadvideo.signage.filter.SecurityFilter</filter-class>
+		<filter-class>com.broadvideo.pixsignage.filter.SecurityFilter</filter-class>
 		<init-param>
 			<param-name>orgRedirectURL</param-name>
 			<param-value>/index.jsp</param-value>

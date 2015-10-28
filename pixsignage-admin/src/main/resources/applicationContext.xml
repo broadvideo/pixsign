@@ -34,16 +34,16 @@
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath*:com/pix/signage/persistence/*.xml" />
+		<property name="mapperLocations" value="classpath*:com/pix/pixsignage/persistence/*.xml" />
 		<property name="typeAliasesPackage" value="com.mybatis.model" />
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.broadvideo.signage.persistence" />
+		<property name="basePackage" value="com.broadvideo.pixsignage.persistence" />
 	</bean>
 
-	<context:component-scan base-package="com.broadvideo.signage" />
-	<!-- <context:component-scan base-package="com.broadvideo.signage" use-default-filters="false"> 
+	<context:component-scan base-package="com.broadvideo.pixsignage" />
+	<!-- <context:component-scan base-package="com.broadvideo.pixsignage" use-default-filters="false"> 
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" 
 		/> <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" 
 		/> <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" 

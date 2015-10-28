@@ -2,7 +2,7 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-slider/css/bootstrap-slider.css"/>
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-slider/css/bootstrap-slider.css"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="../common/common2.jsp"%>
@@ -24,7 +24,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label">默认垫片</label>
 								<div class="col-md-9">
-									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupmediaid">
+									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 								</div>
 							</div>
 						</div>
@@ -91,11 +91,11 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/bootstrap-slider/js/bootstrap-slider.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-slider/js/bootstrap-slider.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-orgconfig.js?t=0"></script>
 <script>

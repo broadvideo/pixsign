@@ -111,14 +111,14 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-			<h3 class="page-title">终端组管理</h3>
+			<h3 class="page-title">终端组</h3>
 			<ul class="page-breadcrumb breadcrumb">
 				<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 					class="fa fa-angle-right"></i>
 				</li>
 				<li><a href="#">终端管理</a><i class="fa fa-angle-right"></i>
 				</li>
-				<li><a href="#">终端组管理</a>
+				<li><a href="#">终端组</a>
 				</li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -162,7 +162,7 @@
 
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-devicegp.js?t=2"></script>
 <script>

@@ -92,7 +92,7 @@ function initMyTable() {
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['branchid']
+						'branch.branchid': currentItem['branchid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {

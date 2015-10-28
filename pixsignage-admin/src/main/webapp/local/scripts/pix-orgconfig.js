@@ -1,7 +1,7 @@
 var myurls = {
 	'common.list' : 'org!list.action',
 	'common.update' : 'org!update.action',
-	'video.list' : 'media!videolist.action',
+	'video.list' : 'video!list.action',
 };
 
 function refreshMyTable() {
@@ -100,7 +100,7 @@ function initMyEditModal() {
 	            		results : $.map(data.aaData, function (item) { 
 	            			return { 
 	            				text:item.name, 
-	            				id:item.mediaid 
+	            				id:item.videoid 
 	            			};
 	            		}),
 	            		more: more
@@ -114,7 +114,7 @@ function initMyEditModal() {
 	        	return media.text;
 	        },
 	        initSelection: function(element, callback) {
-	        	callback({id: currentorg.backupmediaid, text: currentorg.backupmedia.name });
+	        	callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name });
 	        },
 	        dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
 	        escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results

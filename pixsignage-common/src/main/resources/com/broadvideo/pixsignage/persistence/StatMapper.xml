@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.StatMapper" >
+  <resultMap id="BaseResultMap" type="java.util.HashMap" >
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="label" property="label" jdbcType="CHAR" />
+    <result column="value" property="value" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="selectVideoCount" resultMap="BaseResultMap" >
+    select count(1) as value, date(createtime) as label, DATEDIFF(DATE(NOW()),DATE(createtime)) AS sequence
+    from video 
+    where orgid='${orgid}' and status='1'
+    group by date(createtime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+  <select id="selectImageCount" resultMap="BaseResultMap" >
+    select count(1) as value, date(createtime) as label, DATEDIFF(DATE(NOW()),DATE(createtime)) AS sequence
+    from image 
+    where orgid='${orgid}' and status='1'
+    group by date(createtime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+  <select id="selectFilesizeSum" resultMap="BaseResultMap" >
+    select sum(df.size) as value, date(df.updatetime) as label, DATEDIFF(DATE(NOW()),DATE(df.updatetime)) AS sequence
+    from devicefile df, device d
+    where d.orgid='${orgid}' and df.progress='100' and df.deviceid=d.deviceid
+    group by date(df.updatetime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+</mapper>

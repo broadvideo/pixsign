@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.MsgeventMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Msgevent" >
+    <id column="msgeventid" property="msgeventid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="relateid" property="relateid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="sendtime" property="sendtime" jdbcType="TIMESTAMP" />
+    <result column="recvtime" property="recvtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    msgeventid, deviceid, uuid, type, relateid, status, description, createtime, sendtime, 
+    recvtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from msgevent
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from msgevent
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="msgeventid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into msgevent (deviceid, uuid, type, 
+      relateid, status, description, 
+      createtime, sendtime, recvtime
+      )
+    values (#{deviceid,jdbcType=INTEGER}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{relateid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{sendtime,jdbcType=TIMESTAMP}, #{recvtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="msgeventid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into msgevent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="relateid != null" >
+        relateid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="sendtime != null" >
+        sendtime,
+      </if>
+      <if test="recvtime != null" >
+        recvtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null" >
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recvtime != null" >
+        #{recvtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    update msgevent
+    <set >
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        relateid = #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null" >
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recvtime != null" >
+        recvtime = #{recvtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    update msgevent
+    set deviceid = #{deviceid,jdbcType=INTEGER},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      relateid = #{relateid,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      recvtime = #{recvtime,jdbcType=TIMESTAMP}
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </update>
+</mapper>

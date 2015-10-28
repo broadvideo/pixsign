@@ -2,7 +2,7 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css" />
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/bootstrap-datetimepicker/css/datetimepicker.css" />
 <link rel="stylesheet" type="text/css" href="../local/css/pix.css" />
 <!-- END PAGE LEVEL STYLES -->
 
@@ -62,7 +62,10 @@
 										<input type="checkbox" name="org.textflag" value="1" checked>文本
 									</label>
 									<label class="checkbox-inline">
-										<input type="checkbox" name="org.liveflag" value="1" checked>直播
+										<input type="checkbox" name="org.streamflag" value="1" checked>视频流
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="org.dvbflag" value="1" checked>数字频道
 									</label>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="org.widgetflag" value="1" checked>Widget
@@ -105,20 +108,6 @@
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" placeholder="请输入最大存储容量" />
 									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label">媒体上载方式<span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="org.uploadflag" value="1" > 仅在线上传
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="org.uploadflag" value="2" > 仅PixTrans上传
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="org.uploadflag" value="0" checked> 两者皆可
-									</label>
 								</div>
 							</div>
 							<div class="form-group">
@@ -204,17 +193,17 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../assets/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-org.js?t=2"></script>
 <script>
-var MaxOrgs = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxOrgs%>;
-var MaxDevicesPerSigOrg = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
-var MaxStoragePerSigOrg = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
+var MaxOrgs = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxOrgs%>;
+var MaxDevicesPerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
+var MaxStoragePerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
 
 jQuery(document).ready(function() {
 	App.init(); // initlayout and core plugins

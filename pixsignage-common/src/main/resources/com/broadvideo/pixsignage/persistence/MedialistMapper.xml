@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.MedialistMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Medialist" >
+    <id column="medialistid" property="medialistid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    medialistid, orgid, branchid, name, status, description, createtime, createstaffid
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from medialist
+    where medialistid = '${medialistid}'
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from medialist where status = 1 and orgid = ${orgid} and branchid = ${branchid}
+    <if test="search != null">
+      and name like '%${search}%'
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from medialist
+    where status = 1 and orgid = ${orgid} and branchid = ${branchid}
+    <if test="search != null">
+      and name like '%${search}%'
+    </if>
+    order by medialistid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update medialist set status = '9'
+    where medialistid = '${medialistid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Medialist" >
+    <selectKey resultType="java.lang.Integer" keyProperty="medialistid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into medialist (orgid, branchid, name, 
+      status, description, createtime, 
+      createstaffid)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Medialist" >
+    <selectKey resultType="java.lang.Integer" keyProperty="medialistid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into medialist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Medialist" >
+    update medialist
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where medialistid = #{medialistid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Medialist" >
+    update medialist
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where medialistid = #{medialistid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,10 +1,10 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%> 
 <%@page import="java.util.ArrayList"%> 
-<%@page import="com.broadvideo.signage.domain.Staff"%> 
-<%@page import="com.broadvideo.signage.domain.Privilege"%>
-<%@page import="com.broadvideo.signage.domain.Org"%> 
-<%@page import="com.broadvideo.signage.common.SessionConstants"%> 
+<%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
+<%@page import="com.broadvideo.pixsignage.domain.Privilege"%>
+<%@page import="com.broadvideo.pixsignage.domain.Org"%> 
+<%@page import="com.broadvideo.pixsignage.common.SessionConstants"%> 
 
 <%
 	String currentPrivilegeid = request.getParameter("CurrentP");
@@ -33,13 +33,13 @@
 %>
 
 	<!-- BEGIN THEME STYLES --> 
-	<link href="../assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/css/plugins.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
-	<link href="../assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-	<link href="../assets/css/custom.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/style.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/plugins.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
+	<link href="/pixsignage-static/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+	<link href="/pixsignage-static/css/custom.css" rel="stylesheet" type="text/css"/>
 	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="../favicon.ico" />
 
@@ -118,7 +118,7 @@ function hasPrivilege(privilegeid) {
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
 			<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			<img src="../assets/img/menu-toggler.png" alt="" />
+			<img src="/pixsignage-static/img/menu-toggler.png" alt="" />
 			</a> 
 			<!-- END RESPONSIVE MENU TOGGLER -->
 			<!-- BEGIN TOP NAVIGATION MENU -->

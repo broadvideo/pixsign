@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.LayoutMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Layout" >
+    <id column="layoutid" property="layoutid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="ratio" property="ratio" jdbcType="CHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <collection property="layoutdtls" ofType="com.broadvideo.pixsignage.domain.Layoutdtl" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutdtlMapper.selectList" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    layoutid, orgid, name, type, status, ratio, height, width, bgcolor, description, 
+    createtime, createstaffid
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from layout
+    where layoutid = '${layoutid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from layout
+    where status = 1 and orgid = #{orgid}
+    <if test="type != null">
+      and type = '${type}'
+    </if>
+    order by layoutid desc 
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update layout set status = '9'
+    where layoutid = '${layoutid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Layout" >
+    <selectKey resultType="java.lang.Integer" keyProperty="layoutid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into layout (orgid, name, type, 
+      status, ratio, height, width, 
+      bgcolor, description, createtime, 
+      createstaffid)
+    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{bgcolor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layout" >
+    <selectKey resultType="java.lang.Integer" keyProperty="layoutid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into layout
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Layout" >
+    update layout
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where layoutid = #{layoutid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Layout" >
+    update layout
+    set orgid = #{orgid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      ratio = #{ratio,jdbcType=CHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where layoutid = #{layoutid,jdbcType=INTEGER}
+  </update>
+</mapper>

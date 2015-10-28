@@ -113,7 +113,7 @@
 
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js?t=2"></script>
 <script src="../local/scripts/pix-task.js?t=5"></script>
 <script>

@@ -2,7 +2,7 @@
 <%@ include file="../common/common1.jsp"%>
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="../assets/plugins/jquery-treegrid/css/jquery.treegrid.css" />
+<link rel="stylesheet" type="text/css" href="/pixsignage-static/plugins/jquery-treegrid/css/jquery.treegrid.css" />
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="../common/common2.jsp"%>
@@ -109,11 +109,11 @@
 <%@ include file="../common/common3.jsp"%>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/plugins/jquery-treegrid/js/jquery.treegrid.js"></script>
-<script type="text/javascript" src="../assets/plugins/jquery-treegrid/js/jquery.treegrid.bootstrap3.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/jquery-treegrid/js/jquery.treegrid.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/jquery-treegrid/js/jquery.treegrid.bootstrap3.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/scripts/app.js"></script>
+<script src="/pixsignage-static/scripts/app.js"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-branch.js?t=1"></script>
 <script>

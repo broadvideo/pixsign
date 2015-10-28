@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.DevicefileMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Devicefile" >
+    <id column="devicefileid" property="devicefileid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="taskid" property="taskid" jdbcType="INTEGER" />
+    <result column="objtype" property="objtype" jdbcType="CHAR" />
+    <result column="objid" property="objid" jdbcType="INTEGER" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="progress" property="progress" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByPrimaryKey" />
+    <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
+    <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    devicefileid, deviceid, taskid, objtype, objid, size, progress, status, description, 
+    createtime, updatetime
+  </sql>
+
+  <select id="selectVideoid" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
+    select * from video
+    where '${objtype}' = '1' and videoid = '${videoid}'
+  </select>
+
+  <select id="selectImageid" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
+    select * from image
+    where '${objtype}' = '2' and imageid = '${imageid}'
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from devicefile
+    where devicefileid = '${devicefileid}'
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from devicefile
+    where objtype = '${objtype}' and deviceid = '${deviceid}'
+    <if test="status != null">
+      and status = '${status}'
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from devicefile
+    where objtype = '${objtype}' and deviceid = '${deviceid}'
+    <if test="status != null">
+      and status = '${status}'
+    </if>
+    order by devicefileid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectByDeviceMedia" resultMap="BaseResultMap">
+    select * from devicefile
+    where deviceid = '${deviceid}' and objtype = '${objtype}' and objid = '${objid}'
+  </select>
+
+  <select id="selectDownloading" resultMap="BaseResultMap">
+    select * from devicefile
+    where deviceid = '${deviceid}' and progress != 100
+    order by devicefileid desc 
+  </select>
+
+  <insert id="insertDeviceVideoFiles" >
+    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime)
+    select t2.deviceid,#{taskid},'1',t2.videoid,t2.size,0,'0',SYSDATE() from
+    (select * from devicefile df where df.objtype=1 and df.deviceid='${deviceid}') t1
+    right join
+    (select rs.bindid as deviceid,v.videoid,v.size from regionschedule rs, medialistdtl mld, video v
+      where rs.objtype=1 and rs.objid=mld.medialistid and mld.objtype=1
+      and mld.objid=v.videoid and v.status=1 and rs.bindtype=1 and rs.bindid='${deviceid}') t2
+    on t1.objid=t2.videoid
+    where t1.objid is null;
+  </insert>
+  <delete id="deleteDeviceVideoFiles" >
+    delete df from devicefile df
+    left join
+    (select rs.bindid as deviceid,v.videoid from regionschedule rs, medialistdtl mld, video v
+      where rs.objtype=1 and rs.objid=mld.medialistid and mld.objtype=1
+      and mld.objid=v.videoid and v.status=1 and rs.bindtype=1 and rs.bindid='${deviceid}') t
+    on df.objid=t.videoid
+    where df.objtype=1 and df.deviceid='${deviceid}' and t.videoid is null;
+  </delete>
+
+  <insert id="insertDeviceImageFiles" >
+    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime)
+    select t2.deviceid,#{taskid},'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
+    (select * from devicefile df where df.objtype=2 and df.deviceid='${deviceid}') t1
+    right join
+    (select rs.bindid as deviceid,i.imageid,i.size from regionschedule rs, medialistdtl mld, image i
+      where rs.objtype=1 and rs.objid=mld.medialistid and mld.objtype=2
+      and mld.objid=i.imageid and i.status=1 and rs.bindtype=1 and rs.bindid='${deviceid}') t2
+    on t1.objid=t2.imageid
+    where t1.objid is null;
+  </insert>
+  <delete id="deleteDeviceImageFiles" >
+    delete df from devicefile df
+    left join 
+    (select rs.bindid as deviceid,i.imageid from regionschedule rs, medialistdtl mld, image i
+      where rs.objtype=1 and rs.objid=mld.medialistid and mld.objtype=2 
+      and mld.objid=i.imageid and i.status=1 and rs.bindtype=1 and rs.bindid='${deviceid}') t
+    on df.objid=t.imageid 
+    where df.objtype=2 and df.deviceid='${deviceid}' and t.imageid is null;
+  </delete>
+
+  <insert id="insertDevicegroupVideoFiles" >
+    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime) 
+    select t2.deviceid,#{taskid},'1',t2.videoid,t2.size,0,'0',SYSDATE() from 
+    (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=1 and d.devicegroupid='${devicegroupid}') t1
+    right join
+    (select d.deviceid,v.videoid,v.size from regionschedule rs, device d, medialistdtl mld, video v 
+      where rs.bindtype=2 and rs.bindid='${devicegroupid}' and d.devicegroupid='${devicegroupid}' and rs.objtype=1 
+      and rs.objid=mld.medialistid and mld.objtype=1 and mld.objid=v.videoid and v.status=1) t2
+    on t1.objid=t2.videoid and t1.deviceid=t2.deviceid
+    where t1.objid is null;
+  </insert>
+  <delete id="deleteDevicegroupVideoFiles" >
+    delete df from device d, devicefile df
+    left join 
+    (select d.deviceid,v.videoid from regionschedule rs, device d, medialistdtl mld, video v 
+      where rs.bindtype=2 and rs.bindid='${devicegroupid}' and d.devicegroupid='${devicegroupid}' and rs.objtype=1 
+      and rs.objid=mld.medialistid and mld.objtype=1 and mld.objid=v.videoid and v.status=1) t
+    on df.objid=t.videoid and df.deviceid=t.deviceid
+    where df.deviceid=d.deviceid and d.devicegroupid='${devicegroupid}' and df.objtype=1 and t.videoid is null;
+  </delete>
+
+  <insert id="insertDevicegroupImageFiles" >
+    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime) 
+    select t2.deviceid,#{taskid},'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
+    (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=2 and d.devicegroupid='${devicegroupid}') t1
+    right join
+    (select d.deviceid,i.imageid,i.size from regionschedule rs, device d, medialistdtl mld, image i
+      where rs.bindtype=2 and rs.bindid='${devicegroupid}' and d.devicegroupid='${devicegroupid}' and rs.objtype=1 
+      and rs.objid=mld.medialistid and mld.objtype=2 and mld.objid=i.imageid and i.status=1) t2
+    on t1.objid=t2.imageid and t1.deviceid=t2.deviceid
+    where t1.objid is null;
+  </insert>
+  <delete id="deleteDevicegroupImageFiles" >
+    delete df from device d, devicefile df
+    left join 
+    (select d.deviceid,i.imageid from regionschedule rs, device d, medialistdtl mld, image i
+      where rs.bindtype=2 and rs.bindid='${devicegroupid}' and d.devicegroupid='${devicegroupid}' and rs.objtype=1
+      and rs.objid=mld.medialistid and mld.objtype=2 and mld.objid=i.imageid and i.status=1) t
+    on df.objid=t.imageid and df.deviceid=t.deviceid
+    where df.deviceid=d.deviceid and d.devicegroupid='${devicegroupid}' and df.objtype=2 and t.imageid is null;
+  </delete>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from devicefile
+    where devicefileid = '${devicefileid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicefile (deviceid, taskid, objtype, 
+      objid, size, progress, 
+      status, description, createtime, 
+      updatetime)
+    values (#{deviceid,jdbcType=INTEGER}, #{taskid,jdbcType=INTEGER}, #{objtype,jdbcType=CHAR}, 
+      #{objid,jdbcType=INTEGER}, #{size,jdbcType=BIGINT}, #{progress,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicefileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicefile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="taskid != null" >
+        taskid,
+      </if>
+      <if test="objtype != null" >
+        objtype,
+      </if>
+      <if test="objid != null" >
+        objid,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="progress != null" >
+        progress,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="taskid != null" >
+        #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="objtype != null" >
+        #{objtype,jdbcType=CHAR},
+      </if>
+      <if test="objid != null" >
+        #{objid,jdbcType=INTEGER},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="progress != null" >
+        #{progress,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
+    update devicefile
+    <set >
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="taskid != null" >
+        taskid = #{taskid,jdbcType=INTEGER},
+      </if>
+      <if test="objtype != null" >
+        objtype = #{objtype,jdbcType=CHAR},
+      </if>
+      <if test="objid != null" >
+        objid = #{objid,jdbcType=INTEGER},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="progress != null" >
+        progress = #{progress,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where devicefileid = #{devicefileid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
+    update devicefile
+    set deviceid = #{deviceid,jdbcType=INTEGER},
+      taskid = #{taskid,jdbcType=INTEGER},
+      objtype = #{objtype,jdbcType=CHAR},
+      objid = #{objid,jdbcType=INTEGER},
+      size = #{size,jdbcType=BIGINT},
+      progress = #{progress,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    where devicefileid = #{devicefileid,jdbcType=INTEGER}
+  </update>
+</mapper>
