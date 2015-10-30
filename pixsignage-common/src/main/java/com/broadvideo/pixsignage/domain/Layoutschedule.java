@@ -13,11 +13,17 @@ public class Layoutschedule {
 
 	private Integer layoutid;
 
+	private String playmode;
+
+	private Date playdate;
+
 	private Date starttime;
 
 	private Date endtime;
 
 	private Date createtime;
+
+	private Date tempstarttime;
 
 	public Integer getLayoutscheduleid() {
 		return layoutscheduleid;
@@ -51,18 +57,40 @@ public class Layoutschedule {
 		this.layoutid = layoutid;
 	}
 
+	public String getPlaymode() {
+		return playmode;
+	}
+
+	public void setPlaymode(String playmode) {
+		this.playmode = playmode == null ? null : playmode.trim();
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public Date getPlaydate() {
+		return playdate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public void setPlaydate(Date playdate) {
+		this.playdate = playdate;
+	}
+
+	@JSON(format = "HH:mm:ss")
 	public Date getStarttime() {
 		return starttime;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public Date getEndtime() {
 		return endtime;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public void setEndtime(Date endtime) {
 		this.endtime = endtime;
 	}
@@ -75,5 +103,13 @@ public class Layoutschedule {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public Date getTempstarttime() {
+		return tempstarttime;
+	}
+
+	public void setTempstarttime(Date tempstarttime) {
+		this.tempstarttime = tempstarttime;
 	}
 }

@@ -525,7 +525,7 @@ public class JSONObject {
 		try {
 			return object instanceof Number ? ((Number) object).intValue() : Integer.parseInt((String) object);
 		} catch (Exception e) {
-			throw new JSONException("JSONObject[" + quote(key) + "] is not an int.");
+			return 0;
 		}
 	}
 

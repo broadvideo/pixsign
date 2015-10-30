@@ -399,8 +399,10 @@ create table layoutschedule(
    bindtype char(1) not null,
    bindid int not null,
    layoutid int not null,
-   starttime datetime,
-   endtime datetime,
+   playmode char(1) not null,
+   playdate date,
+   starttime time,
+   endtime time,
    createtime timestamp not null default current_timestamp,
    primary key (layoutscheduleid),
    foreign key (layoutid) references layout(layoutid)

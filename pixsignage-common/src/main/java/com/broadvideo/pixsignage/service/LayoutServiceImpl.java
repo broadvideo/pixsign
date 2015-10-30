@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Layout;
@@ -152,6 +153,11 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutschedule.setBindtype("1");
 			layoutschedule.setBindid(device.getDeviceid());
 			layoutschedule.setLayoutid(layout.getLayoutid());
+			layoutschedule.setPlaymode("2");
+			try {
+				layoutschedule.setStarttime(CommonConstants.DateFormat_Time.parse("00:00:00"));
+			} catch (Exception e) {
+			}
 			layoutscheduleMapper.insertSelective(layoutschedule);
 
 			regionscheduleMapper.deleteByBind("1", "" + device.getDeviceid());
@@ -201,6 +207,11 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutschedule.setBindtype("2");
 			layoutschedule.setBindid(devicegroup.getDevicegroupid());
 			layoutschedule.setLayoutid(layout.getLayoutid());
+			layoutschedule.setPlaymode("2");
+			try {
+				layoutschedule.setStarttime(CommonConstants.DateFormat_Time.parse("00:00:00"));
+			} catch (Exception e) {
+			}
 			layoutscheduleMapper.insertSelective(layoutschedule);
 
 			regionscheduleMapper.deleteByBind("2", "" + devicegroup.getDevicegroupid());

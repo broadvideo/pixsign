@@ -9,7 +9,9 @@ import com.broadvideo.pixsignage.domain.Layoutschedule;
 public interface LayoutscheduleMapper {
 	Layoutschedule selectByPrimaryKey(@Param(value = "layoutscheduleid") String layoutscheduleid);
 
-	List<Layoutschedule> selectList(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid);
+	List<Layoutschedule> selectList(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,
+			@Param(value = "playmode") String playmode, @Param(value = "fromdate") String fromdate,
+			@Param(value = "todate") String todate);
 
 	int deleteByPrimaryKey(@Param(value = "layoutscheduleid") String layoutscheduleid);
 

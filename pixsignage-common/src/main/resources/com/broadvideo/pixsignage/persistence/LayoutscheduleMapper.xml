@@ -6,13 +6,16 @@
     <result column="bindtype" property="bindtype" jdbcType="CHAR" />
     <result column="bindid" property="bindid" jdbcType="INTEGER" />
     <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
-    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
-    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="playmode" property="playmode" jdbcType="CHAR" />
+    <result column="playdate" property="playdate" jdbcType="DATE" />
+    <result column="starttime" property="starttime" jdbcType="TIME" />
+    <result column="endtime" property="endtime" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutscheduleid, bindtype, bindid, layoutid, starttime, endtime, createtime
+    layoutscheduleid, bindtype, bindid, layoutid, playmode, playdate, starttime, endtime, 
+    createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -27,6 +30,16 @@
     <include refid="Base_Column_List" />
     from layoutschedule
     where bindtype = '${bindtype}' and bindid = '${bindid}'
+    <if test="playmode != null">
+      and playmode = '${playmode}'
+    </if>
+    <if test="fromdate != null">
+      and playdate &gt;= '${fromdate}'
+    </if>
+    <if test="todate != null">
+      and playdate &lt;= '${todate}'
+    </if>
+    order by playdate, starttime
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -44,11 +57,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into layoutschedule (bindtype, bindid, layoutid, 
-      starttime, endtime, createtime
-      )
+      playmode, playdate, starttime, 
+      endtime, createtime)
     values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, 
-      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}
-      )
+      #{playmode,jdbcType=CHAR}, #{playdate,jdbcType=DATE}, #{starttime,jdbcType=TIME}, 
+      #{endtime,jdbcType=TIME}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layoutschedule" >
     <selectKey resultType="java.lang.Integer" keyProperty="layoutscheduleid" order="AFTER" >
@@ -64,6 +77,12 @@
       </if>
       <if test="layoutid != null" >
         layoutid,
+      </if>
+      <if test="playmode != null" >
+        playmode,
+      </if>
+      <if test="playdate != null" >
+        playdate,
       </if>
       <if test="starttime != null" >
         starttime,
@@ -85,11 +104,17 @@
       <if test="layoutid != null" >
         #{layoutid,jdbcType=INTEGER},
       </if>
+      <if test="playmode != null" >
+        #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        #{playdate,jdbcType=DATE},
+      </if>
       <if test="starttime != null" >
-        #{starttime,jdbcType=TIMESTAMP},
+        #{starttime,jdbcType=TIME},
       </if>
       <if test="endtime != null" >
-        #{endtime,jdbcType=TIMESTAMP},
+        #{endtime,jdbcType=TIME},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -108,11 +133,17 @@
       <if test="layoutid != null" >
         layoutid = #{layoutid,jdbcType=INTEGER},
       </if>
+      <if test="playmode != null" >
+        playmode = #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        playdate = #{playdate,jdbcType=DATE},
+      </if>
       <if test="starttime != null" >
-        starttime = #{starttime,jdbcType=TIMESTAMP},
+        starttime = #{starttime,jdbcType=TIME},
       </if>
       <if test="endtime != null" >
-        endtime = #{endtime,jdbcType=TIMESTAMP},
+        endtime = #{endtime,jdbcType=TIME},
       </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -125,8 +156,10 @@
     set bindtype = #{bindtype,jdbcType=CHAR},
       bindid = #{bindid,jdbcType=INTEGER},
       layoutid = #{layoutid,jdbcType=INTEGER},
-      starttime = #{starttime,jdbcType=TIMESTAMP},
-      endtime = #{endtime,jdbcType=TIMESTAMP},
+      playmode = #{playmode,jdbcType=CHAR},
+      playdate = #{playdate,jdbcType=DATE},
+      starttime = #{starttime,jdbcType=TIME},
+      endtime = #{endtime,jdbcType=TIME},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where layoutscheduleid = #{layoutscheduleid,jdbcType=INTEGER}
   </update>

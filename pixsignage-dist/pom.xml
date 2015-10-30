@@ -22,15 +22,15 @@
 				<version>2.5.5</version>
 				<executions>
 					<execution>
-						<id>make-bundles</id>
+						<id>make-app-bundles</id>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<phase>package</phase>
 						<configuration>
-							<finalName>pixsignage-${project.version}</finalName>
+							<finalName>pixsignage-app-${project.version}</finalName>
 							<descriptors>
-								<descriptor>src/assembly/assembly.xml</descriptor>
+								<descriptor>src/assembly/assembly-app.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
@@ -44,6 +44,19 @@
 							<finalName>pixsignage-db-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/assembly-db.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+					<execution>
+						<id>make-res-bundles</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<finalName>pixsignage-res-${pixsignage-res.version}</finalName>
+							<descriptors>
+								<descriptor>src/assembly/assembly-res.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>

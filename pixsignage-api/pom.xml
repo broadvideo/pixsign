@@ -22,7 +22,7 @@
 	
 	<packaging>war</packaging>
 	<build>
-		<finalName>pixservice</finalName>
+		<finalName>pixsignage-api</finalName>
 	</build>
 	
 </project>

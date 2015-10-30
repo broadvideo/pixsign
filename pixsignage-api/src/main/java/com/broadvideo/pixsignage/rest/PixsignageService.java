@@ -1,6 +1,5 @@
 package com.broadvideo.pixsignage.rest;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
@@ -56,11 +56,6 @@ import com.broadvideo.pixsignage.persistence.WidgetMapper;
 public class PixsignageService {
 
 	private static final Logger log = Logger.getLogger(PixsignageService.class);
-
-	private SimpleDateFormat outformat = new SimpleDateFormat("yyyyMMddHHmmss");
-	private SimpleDateFormat fullformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
 
 	@Autowired
 	private OrgMapper orgMapper;
@@ -100,10 +95,10 @@ public class PixsignageService {
 			String version = requestJson.getString("version");
 
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
+				return handleResult(1002, "硬件码不能为空");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
+				return handleResult(1003, "终端号不能为空");
 			}
 
 			Device device = deviceMapper.selectByHardkey(hardkey);
@@ -115,10 +110,10 @@ public class PixsignageService {
 
 			device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
+				return handleResult(1004, "无效终端号" + terminalid);
 			} else if (device.getStatus().equals("1") && device.getHardkey() != null
 					&& !device.getHardkey().equals(hardkey)) {
-				return handleResult("1005", terminalid + "已经被别的终端注册.");
+				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			}
 
 			if (!device.getStatus().equals("1")) {
@@ -136,28 +131,30 @@ public class PixsignageService {
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP);
-			String msgtopic = device.getTerminalid();
+			JSONArray topicJsonArray = new JSONArray();
+			responseJson.put("msg_topic", topicJsonArray);
+			topicJsonArray.put(device.getTerminalid());
 			if (device.getDevicegroup() != null) {
-				msgtopic += ",group-" + device.getDevicegroup().getDevicegroupid();
+				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
 			}
-			responseJson.put("msg_topic", msgtopic);
+
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();
 				backupvideoJson.put("type", "video");
-				backupvideoJson.put("id", "" + org.getBackupvideoid());
+				backupvideoJson.put("id", org.getBackupvideoid());
 				backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilename());
-				backupvideoJson.put("size", "" + org.getBackupvideo().getSize());
+				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
 			}
 			log.info("Pixsignage Service init response: " + responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -166,7 +163,7 @@ public class PixsignageService {
 	public String getversion(String request) {
 		try {
 			log.info("Pixsignage Service get_version: " + request);
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("version_name", CommonConfig.CONFIG_APP_VERSION_NAME);
 			responseJson.put("version_code", CommonConfig.CONFIG_APP_VERSION_CODE);
 			responseJson.put("name", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
@@ -175,7 +172,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -188,82 +185,104 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
+				return handleResult(1002, "硬件码不能为空");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
+				return handleResult(1003, "终端号不能为空");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
+				return handleResult(1004, "无效终端号" + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult("1006", "硬件码和终端号不匹配");
+				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			HashMap<Integer, JSONObject> layoutHash = new HashMap<Integer, JSONObject>();
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			JSONArray layoutJsonArray = new JSONArray();
 			responseJson.put("layouts", layoutJsonArray);
-			JSONArray layoutScheduleJsonArray = new JSONArray();
-			responseJson.put("layout_schedules", layoutScheduleJsonArray);
+			JSONArray scheduleJsonArray = new JSONArray();
+			responseJson.put("layout_schedules", scheduleJsonArray);
 
+			List<Layoutschedule> finalscheduleList = new ArrayList<Layoutschedule>();
 			List<Layoutschedule> layoutscheduleList;
+			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
+			String tomorrow = CommonConstants.DateFormat_Date
+					.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
 			if (device.getDevicegroupid() > 0) {
-				layoutscheduleList = layoutscheduleMapper.selectList("2", "" + device.getDevicegroupid());
+				layoutscheduleList = layoutscheduleMapper.selectList("2", "" + device.getDevicegroupid(), "2", null,
+						null);
 			} else {
-				layoutscheduleList = layoutscheduleMapper.selectList("1", "" + device.getDeviceid());
+				layoutscheduleList = layoutscheduleMapper.selectList("1", "" + device.getDeviceid(), "2", null, null);
 			}
 
 			for (Layoutschedule layoutschedule : layoutscheduleList) {
-				Layout layout = layoutMapper.selectByPrimaryKey("" + layoutschedule.getLayoutid());
-				JSONObject layoutJson = new JSONObject();
-				layoutJsonArray.put(layoutJson);
-				layoutJson.put("layout_id", "" + layout.getLayoutid());
-				layoutJson.put("width", "" + layout.getWidth());
-				layoutJson.put("height", "" + layout.getHeight());
-				layoutJson.put("bg_color", "#000000");
-				JSONArray regionJsonArray = new JSONArray();
-				layoutJson.put("regions", regionJsonArray);
-				for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
-					JSONObject regionJson = new JSONObject();
-					regionJsonArray.put(regionJson);
-					regionJson.put("region_id", "" + layoutdtl.getRegionid());
-					regionJson.put("width", "" + layoutdtl.getWidth());
-					regionJson.put("height", "" + layoutdtl.getHeight());
-					regionJson.put("top", "" + layoutdtl.getTopoffset());
-					regionJson.put("left", "" + layoutdtl.getLeftoffset());
-					regionJson.put("zindex", "" + layoutdtl.getZindex());
-					regionJson.put("type", "" + layoutdtl.getRegion().getType());
-					if (layoutdtl.getRegion().getType().equals("0")) {
-						regionJson.put("interval", "" + layoutdtl.getIntervaltime());
-					} else {
-						regionJson.put("direction", "" + layoutdtl.getDirection());
-						regionJson.put("speed", "" + layoutdtl.getSpeed());
-						regionJson.put("color", "" + layoutdtl.getColor());
-						regionJson.put("size", "" + layoutdtl.getSize());
-						regionJson.put("opacity", "" + layoutdtl.getOpacity());
+				Layoutschedule newschedule = new Layoutschedule();
+				newschedule.setLayoutid(layoutschedule.getLayoutid());
+				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
+						.parse(today + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime())));
+				finalscheduleList.add(newschedule);
+			}
+			for (Layoutschedule layoutschedule : layoutscheduleList) {
+				Layoutschedule newschedule = new Layoutschedule();
+				newschedule.setLayoutid(layoutschedule.getLayoutid());
+				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
+						.parse(tomorrow + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime())));
+				finalscheduleList.add(newschedule);
+			}
+
+			// generate final json
+			for (Layoutschedule layoutschedule : finalscheduleList) {
+				JSONObject scheduleJson = new JSONObject();
+				scheduleJson.put("layout_id", layoutschedule.getLayoutid());
+				scheduleJson.put("start_time",
+						CommonConstants.DateFormat_Full.format(layoutschedule.getTempstarttime()));
+				scheduleJson.put("start_time_seconds", (long) (layoutschedule.getTempstarttime().getTime() / 1000));
+				scheduleJsonArray.put(scheduleJson);
+
+				if (layoutHash.get(layoutschedule.getLayoutid()) == null) {
+					Layout layout = layoutMapper.selectByPrimaryKey("" + layoutschedule.getLayoutid());
+					JSONObject layoutJson = new JSONObject();
+					layoutJsonArray.put(layoutJson);
+
+					layoutHash.put(layout.getLayoutid(), layoutJson);
+
+					layoutJson.put("layout_id", layout.getLayoutid());
+					layoutJson.put("width", layout.getWidth());
+					layoutJson.put("height", layout.getHeight());
+					layoutJson.put("bg_color", "#000000");
+					JSONArray regionJsonArray = new JSONArray();
+					layoutJson.put("regions", regionJsonArray);
+					for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
+						JSONObject regionJson = new JSONObject();
+						regionJsonArray.put(regionJson);
+						regionJson.put("region_id", layoutdtl.getRegionid());
+						regionJson.put("width", layoutdtl.getWidth());
+						regionJson.put("height", layoutdtl.getHeight());
+						regionJson.put("top", layoutdtl.getTopoffset());
+						regionJson.put("left", layoutdtl.getLeftoffset());
+						regionJson.put("zindex", layoutdtl.getZindex());
+						regionJson.put("type", layoutdtl.getRegion().getType());
+						if (layoutdtl.getRegion().getType().equals("0")) {
+							regionJson.put("interval", layoutdtl.getIntervaltime());
+						} else {
+							regionJson.put("direction", "" + layoutdtl.getDirection());
+							regionJson.put("speed", "" + layoutdtl.getSpeed());
+							regionJson.put("color", "" + layoutdtl.getColor());
+							regionJson.put("size", layoutdtl.getSize());
+							regionJson.put("opacity", layoutdtl.getOpacity());
+						}
 					}
 				}
 
-				JSONObject layoutScheduleJson = new JSONObject();
-				layoutScheduleJsonArray.put(layoutScheduleJson);
-				layoutScheduleJson.put("layout_id", "" + layoutschedule.getLayoutid());
-				if (layoutschedule.getStarttime() != null) {
-					layoutScheduleJson.put("start_time", outformat.format(layoutschedule.getStarttime()));
-				} else {
-					layoutScheduleJson.put("start_time", "");
-				}
-				if (layoutschedule.getEndtime() != null) {
-					layoutScheduleJson.put("end_time", outformat.format(layoutschedule.getEndtime()));
-				} else {
-					layoutScheduleJson.put("end_time", "");
-				}
 			}
 
 			log.info("Pixsignage Service get_layout response: " + responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -275,21 +294,21 @@ public class PixsignageService {
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
-			String regionid = requestJson.getString("region_id");
+			int regionid = requestJson.getInt("region_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
+				return handleResult(1002, "硬件码不能为空");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
+				return handleResult(1003, "终端号不能为空");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
+				return handleResult(1004, "无效终端号" + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult("1006", "硬件码和终端号不匹配");
+				return handleResult(1006, "硬件码和终端号不匹配");
 			}
-			if (regionid == null || regionid.equals("")) {
-				return handleResult("1007", "region_id不能为空");
+			if (regionid == 0) {
+				return handleResult(1007, "无效region_id");
 			}
 
 			HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
@@ -299,7 +318,7 @@ public class PixsignageService {
 			HashMap<Integer, JSONObject> dvbHash = new HashMap<Integer, JSONObject>();
 			HashMap<Integer, JSONObject> widgetHash = new HashMap<Integer, JSONObject>();
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("region_id", regionid);
 			JSONArray videoJsonArray = new JSONArray();
 			responseJson.put("videos", videoJsonArray);
@@ -319,44 +338,46 @@ public class PixsignageService {
 			List<Regionschedule> finalscheduleList = new ArrayList<Regionschedule>();
 			List<Regionschedule> regionscheduleList1;
 			List<Regionschedule> regionscheduleList2;
-			Calendar.getInstance().getTime();
-			String today = dateformat.format(Calendar.getInstance().getTime());
-			String tomorrow = dateformat.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
+			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
+			String tomorrow = CommonConstants.DateFormat_Date
+					.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
 			if (device.getDevicegroupid() > 0) {
-				regionscheduleList1 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(), regionid,
-						"2", null, null);
-				regionscheduleList2 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(), regionid,
-						"1", today, tomorrow);
+				regionscheduleList1 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(),
+						"" + regionid, "2", null, null);
+				regionscheduleList2 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(),
+						"" + regionid, "1", today, tomorrow);
 			} else {
-				regionscheduleList1 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), regionid, "2",
-						null, null);
-				regionscheduleList2 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), regionid, "1",
-						today, tomorrow);
+				regionscheduleList1 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), "" + regionid,
+						"2", null, null);
+				regionscheduleList2 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), "" + regionid,
+						"1", today, tomorrow);
 			}
 
 			for (Regionschedule regionschedule : regionscheduleList1) {
 				Regionschedule newschedule = new Regionschedule();
 				newschedule.setObjtype(regionschedule.getObjtype());
 				newschedule.setObjid(regionschedule.getObjid());
-				newschedule.setTempstarttime(
-						fullformat.parse(today + " " + timeformat.format(regionschedule.getStarttime())));
+				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
+						.parse(today + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime())));
 				finalscheduleList.add(newschedule);
 			}
 			for (Regionschedule regionschedule : regionscheduleList1) {
 				Regionschedule newschedule = new Regionschedule();
 				newschedule.setObjtype(regionschedule.getObjtype());
 				newschedule.setObjid(regionschedule.getObjid());
-				newschedule.setTempstarttime(
-						fullformat.parse(tomorrow + " " + timeformat.format(regionschedule.getStarttime())));
+				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
+						.parse(tomorrow + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime())));
 				finalscheduleList.add(newschedule);
 			}
 
 			// merge
 			for (Regionschedule regionschedule : regionscheduleList2) {
-				Date starttime = fullformat.parse(dateformat.format(regionschedule.getPlaydate()) + " "
-						+ timeformat.format(regionschedule.getStarttime()));
-				Date endtime = fullformat.parse(dateformat.format(regionschedule.getPlaydate()) + " "
-						+ timeformat.format(regionschedule.getEndtime()));
+				Date starttime = CommonConstants.DateFormat_Full
+						.parse(CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
+								+ CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+				Date endtime = CommonConstants.DateFormat_Full
+						.parse(CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
+								+ CommonConstants.DateFormat_Time.format(regionschedule.getEndtime()));
 				Regionschedule newschedule = new Regionschedule();
 				newschedule.setObjtype(regionschedule.getObjtype());
 				newschedule.setObjid(regionschedule.getObjid());
@@ -372,7 +393,7 @@ public class PixsignageService {
 						lastClosedSchedule = temp;
 						index++;
 					}
-					if (temp.getTempstarttime().equals(starttime)
+					if (temp.getTempstarttime().equals(starttime) || temp.getTempstarttime().equals(endtime)
 							|| temp.getTempstarttime().after(starttime) && temp.getTempstarttime().before(endtime)) {
 						lastRemoveSchedule = temp;
 						it.remove();
@@ -397,7 +418,9 @@ public class PixsignageService {
 			// generate final json
 			for (Regionschedule regionschedule : finalscheduleList) {
 				JSONObject scheduleJson = new JSONObject();
-				scheduleJson.put("start_time", outformat.format(regionschedule.getTempstarttime()));
+				scheduleJson.put("start_time",
+						CommonConstants.DateFormat_Full.format(regionschedule.getTempstarttime()));
+				scheduleJson.put("start_time_seconds", (long) (regionschedule.getTempstarttime().getTime() / 1000));
 				if (regionschedule.getObjtype().equals("1")) {
 					scheduleJson.put("type", "list");
 				} else if (regionschedule.getObjtype().equals("2")) {
@@ -409,8 +432,8 @@ public class PixsignageService {
 				} else if (regionschedule.getObjtype().equals("5")) {
 					scheduleJson.put("type", "widget");
 				}
-				JSONArray dtlJsonArray = new JSONArray();
-				scheduleJson.put("dtls", dtlJsonArray);
+				JSONArray playlistJsonArray = new JSONArray();
+				scheduleJson.put("playlist", playlistJsonArray);
 				scheduleJsonArray.put(scheduleJson);
 
 				String objtype = regionschedule.getObjtype();
@@ -420,25 +443,25 @@ public class PixsignageService {
 					for (Medialistdtl medialistdtl : medialistdtls) {
 						if (medialistdtl.getVideo() != null) {
 							Video video = medialistdtl.getVideo();
-							dtlJsonArray.put("video-" + video.getVideoid());
+							playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
 							if (videoHash.get(medialistdtl.getObjid()) == null) {
 								JSONObject videoJson = new JSONObject();
-								videoJson.put("id", "video-" + video.getVideoid());
+								videoJson.put("id", video.getVideoid());
 								videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilename());
-								videoJson.put("size", "" + video.getSize());
+								videoJson.put("size", video.getSize());
 								videoHash.put(video.getVideoid(), videoJson);
 								videoJsonArray.put(videoJson);
 							}
 						} else if (medialistdtl.getImage() != null) {
 							Image image = medialistdtl.getImage();
-							dtlJsonArray.put("image-" + image.getImageid());
+							playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
 							if (imageHash.get(medialistdtl.getObjid()) == null) {
 								JSONObject imageJson = new JSONObject();
-								imageJson.put("id", "image-" + image.getImageid());
+								imageJson.put("id", image.getImageid());
 								imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilename());
-								imageJson.put("size", "" + image.getSize());
+								imageJson.put("size", image.getSize());
 								imageHash.put(image.getImageid(), imageJson);
 								imageJsonArray.put(imageJson);
 							}
@@ -447,10 +470,10 @@ public class PixsignageService {
 				} else if (objtype.equals("2")) {
 					Text text = textMapper.selectByPrimaryKey(objid);
 					if (text != null) {
-						dtlJsonArray.put("text-" + text.getTextid());
+						playlistJsonArray.put(new JSONObject().put("type", "text").put("id", text.getTextid()));
 						if (textHash.get(text.getTextid()) == null) {
 							JSONObject textJson = new JSONObject();
-							textJson.put("id", "text-" + text.getTextid());
+							textJson.put("id", text.getTextid());
 							textJson.put("text", text.getText());
 							textHash.put(text.getTextid(), textJson);
 							textJsonArray.put(textJson);
@@ -459,10 +482,10 @@ public class PixsignageService {
 				} else if (objtype.equals("3")) {
 					Stream stream = streamMapper.selectByPrimaryKey(objid);
 					if (stream != null) {
-						dtlJsonArray.put("stream-" + stream.getStreamid());
+						playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
 						if (streamHash.get(stream.getStreamid()) == null) {
 							JSONObject streamJson = new JSONObject();
-							streamJson.put("id", "stream-" + stream.getStreamid());
+							streamJson.put("id", stream.getStreamid());
 							streamJson.put("url", stream.getUrl());
 							streamHash.put(stream.getStreamid(), streamJson);
 							streamJsonArray.put(streamJson);
@@ -471,10 +494,10 @@ public class PixsignageService {
 				} else if (objtype.equals("4")) {
 					Dvb dvb = dvbMapper.selectByPrimaryKey(objid);
 					if (dvb != null) {
-						dtlJsonArray.put("dvb-" + dvb.getDvbid());
+						playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
 						if (dvbHash.get(dvb.getDvbid()) == null) {
 							JSONObject dvbJson = new JSONObject();
-							dvbJson.put("id", "dvb-" + dvb.getDvbid());
+							dvbJson.put("id", dvb.getDvbid());
 							dvbJson.put("frequency", dvb.getFrequency());
 							dvbHash.put(dvb.getDvbid(), dvbJson);
 							dvbJsonArray.put(dvbJson);
@@ -483,10 +506,10 @@ public class PixsignageService {
 				} else if (objtype.equals("5")) {
 					Widget widget = widgetMapper.selectByPrimaryKey(objid);
 					if (widget != null) {
-						dtlJsonArray.put("widget-" + widget.getWidgetid());
+						playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", widget.getWidgetid()));
 						if (widgetHash.get(widget.getWidgetid()) == null) {
 							JSONObject widgetJson = new JSONObject();
-							widgetJson.put("id", "widget-" + widget.getWidgetid());
+							widgetJson.put("id", widget.getWidgetid());
 							widgetJson.put("url", widget.getUrl());
 							widgetHash.put(widget.getWidgetid(), widgetJson);
 							widgetJsonArray.put(widgetJson);
@@ -499,7 +522,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -514,26 +537,26 @@ public class PixsignageService {
 			String status = requestJson.getString("status");
 
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
+				return handleResult(1002, "硬件码不能为空");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
+				return handleResult(1003, "终端号不能为空");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
+				return handleResult(1004, "无效终端号" + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult("1006", "硬件码和终端号不匹配");
+				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
 			device.setOnlineflag("1");
 			deviceMapper.updateByPrimaryKeySelective(device);
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -546,28 +569,29 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
+				return handleResult(1002, "硬件码不能为空");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
+				return handleResult(1003, "终端号不能为空");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
+				return handleResult(1004, "无效终端号" + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult("1006", "硬件码和终端号不匹配");
+				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
 			JSONArray fileJsonArray = requestJson.getJSONArray("files");
 			for (int i = 0; i < fileJsonArray.length(); i++) {
 				JSONObject fileJson = fileJsonArray.getJSONObject(i);
-				String id = fileJson.getString("id");
-				int progress = Integer.parseInt(fileJson.getString("progress"));
+				String type = fileJson.getString("type");
+				int id = fileJson.getInt("id");
+				int progress = fileJson.getInt("progress");
 				String status = fileJson.getString("status");
 				String desc = fileJson.getString("desc");
-				if (id.startsWith("video-")) {
-					id = id.substring(6);
-					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "1", id);
+				if (type.equals("video")) {
+					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "1",
+							"" + id);
 					if (devicefile != null) {
 						devicefile.setProgress(progress);
 						devicefile.setStatus(status);
@@ -575,9 +599,9 @@ public class PixsignageService {
 						devicefile.setUpdatetime(Calendar.getInstance().getTime());
 						devicefileMapper.updateByPrimaryKeySelective(devicefile);
 					}
-				} else if (id.startsWith("image-")) {
-					id = id.substring(6);
-					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "2", id);
+				} else if (type.equals("image")) {
+					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "2",
+							"" + id);
 					if (devicefile != null) {
 						devicefile.setProgress(progress);
 						devicefile.setStatus(status);
@@ -588,42 +612,11 @@ public class PixsignageService {
 				}
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
-		}
-	}
-
-	@POST
-	@Path("report_msg")
-	public String reportmsg(String request) {
-		try {
-			log.info("Pixsignage Service report_msg: " + request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			if (hardkey == null || hardkey.equals("")) {
-				return handleResult("1002", "硬件码不能为空");
-			}
-			if (terminalid == null || terminalid.equals("")) {
-				return handleResult("1003", "终端号不能为空");
-			}
-			Device device = deviceMapper.selectByTerminalid(terminalid);
-			if (device == null) {
-				return handleResult("1004", "无效终端号" + terminalid);
-			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult("1006", "硬件码和终端号不匹配");
-			}
-
-			String msguuid = requestJson.getString("msg_uuid");
-
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
-			return responseJson.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
@@ -646,6 +639,8 @@ public class PixsignageService {
 			String other = requestJson.getString("other");
 
 			Crashreport crashreport = new Crashreport();
+			crashreport.setHardkey(hardkey);
+			crashreport.setTerminalid(terminalid);
 			crashreport.setClientip(clientip);
 			crashreport.setClientname(clientname);
 			crashreport.setOs(os);
@@ -657,15 +652,15 @@ public class PixsignageService {
 			crashreport.setOther(other);
 			crashreportMapper.insertSelective(crashreport);
 
-			JSONObject responseJson = new JSONObject().put("code", "0").put("message", "成功");
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult("1001", "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常:" + e.getMessage());
 		}
 	}
 
-	private String handleResult(String code, String message) {
+	private String handleResult(int code, String message) {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("code", code);
 		responseJson.put("message", message);
