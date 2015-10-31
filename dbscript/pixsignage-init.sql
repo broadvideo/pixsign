@@ -446,17 +446,16 @@ default character set utf8;
 
 create table msgevent( 
    msgeventid int not null auto_increment,
-   deviceid int not null,
-   uuid varchar(64),
-   type char(1),
-   relateid int,
+   msgtype char(1),
+   objtype1 char(1),
+   objid1 int,
+   objtype2 char(1),
+   objid2 int,
    status char(1),
    description varchar(1024),
    createtime timestamp not null default current_timestamp,
    sendtime datetime,
-   recvtime datetime,
-   primary key (msgeventid),
-   foreign key (deviceid) references device(deviceid)
+   primary key (msgeventid)
  )engine = innodb
 default character set utf8;
 

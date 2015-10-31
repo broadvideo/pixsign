@@ -449,6 +449,7 @@ public class PixsignageService {
 								videoJson.put("id", video.getVideoid());
 								videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilename());
+								videoJson.put("file", video.getFilename());
 								videoJson.put("size", video.getSize());
 								videoHash.put(video.getVideoid(), videoJson);
 								videoJsonArray.put(videoJson);
@@ -461,6 +462,7 @@ public class PixsignageService {
 								imageJson.put("id", image.getImageid());
 								imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilename());
+								imageJson.put("file", image.getFilename());
 								imageJson.put("size", image.getSize());
 								imageHash.put(image.getImageid(), imageJson);
 								imageJsonArray.put(imageJson);
