@@ -10,6 +10,24 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
+	<bean id="activemqTask" class="com.broadvideo.pixsignage.quartz.ActivemqTask"></bean>
+	<bean id="activemqJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="activemqTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="activemqJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="activemqJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/15 * * * * ?</value>
+		</property>
+	</bean>
+
 	<bean id="deviceTask" class="com.broadvideo.pixsignage.quartz.DeviceTask"></bean>
 	<bean id="deviceJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
@@ -24,14 +42,53 @@
 			<ref bean="deviceJob" />
 		</property>
 		<property name="cronExpression">
-			<value>0 * * * * ?</value>
+			<value>5 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="vcssTask" class="com.broadvideo.pixsignage.quartz.VCSSTask"></bean>
+	<bean id="vcssJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="vcssTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="vcssJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="vcssJob" />
+		</property>
+		<property name="cronExpression">
+			<value>10 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="pixboxTask" class="com.broadvideo.pixsignage.quartz.PixboxTask"></bean>
+	<bean id="pixboxJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="pixboxTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="pixboxJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="pixboxJob" />
+		</property>
+		<property name="cronExpression">
+			<value>20 * * * * ?</value>
 		</property>
 	</bean>
 
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
+				<ref bean="activemqJobTrigger" />
 				<ref bean="deviceJobTrigger" />
+				<ref bean="vcssJobTrigger" />
+				<ref bean="pixboxJobTrigger" />
 			</list>
 		</property>
 	</bean>

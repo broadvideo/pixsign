@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.servlet;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -10,10 +11,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
-import com.broadvideo.pixsignage.util.IOUtil;
 
 public class SystemInitServlet extends HttpServlet {
 
@@ -42,16 +43,16 @@ public class SystemInitServlet extends HttpServlet {
 			ex.printStackTrace();
 		}
 		try {
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME);
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/video/combine");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/app");
-			IOUtil.mkdirs(CommonConfig.CONFIG_PIXDATA_HOME + "/temp");
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/combine"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/temp"));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

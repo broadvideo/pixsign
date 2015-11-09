@@ -19,14 +19,14 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "企业名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "企业编码", "mData" : "code", "bSortable" : false }, 
-						{"sTitle" : "过期时间", "mData" : "expiretime", "bSortable" : false }, 
-						{"sTitle" : "终端上限", "mData" : "maxdevices", "bSortable" : false }, 
-						{"sTitle" : "当前终端", "mData" : "currentdevices", "bSortable" : false }, 
-						{"sTitle" : "存储上限", "mData" : "maxstorage", "bSortable" : false }, 
-						{"sTitle" : "当前存储", "mData" : "currentstorage", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "orgid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '企业名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '企业编码', 'mData' : 'code', 'bSortable' : false }, 
+						{'sTitle' : '过期时间', 'mData' : 'expiretime', 'bSortable' : false }, 
+						{'sTitle' : '终端上限', 'mData' : 'maxdevices', 'bSortable' : false }, 
+						{'sTitle' : '当前终端', 'mData' : 'currentdevices', 'bSortable' : false }, 
+						{'sTitle' : '存储上限', 'mData' : 'maxstorage', 'bSortable' : false }, 
+						{'sTitle' : '当前存储', 'mData' : 'currentstorage', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -44,11 +44,11 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
+	jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
 	
-    
+	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
@@ -80,7 +80,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 }
@@ -159,11 +159,11 @@ function initMyEditModal() {
 		
 		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 		$.each( checkboxes, function( key, value ) {
-		    if (value.checked === false) {
-		        value.value = 0;
-		    } else {
-		        value.value = 1;
-		    }
+			if (value.checked === false) {
+				value.value = 0;
+			} else {
+				value.value = 1;
+			}
 		});
 		var data = jQuery("#MyEditForm").serializeArray();
 		data = data.concat(
@@ -171,7 +171,7 @@ function initMyEditModal() {
 				function() {
 					return {"name": this.name, "value": this.value};
 				}).get()
-	    );
+		);
 		
 		$.ajax({
 			type : 'POST',
@@ -209,8 +209,8 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 		$.each( checkboxes, function( index, checkbox ) {
-		    $(checkbox).attr('checked');
-		    $(checkbox).parent().addClass('checked');
+			$(checkbox).attr('checked');
+			$(checkbox).parent().addClass('checked');
 		});
 		if ($('input[name="org.expireflag"]:checked').val() == 0) {
 			$('.expiretime').css('display', 'none');
@@ -227,22 +227,22 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var action = myurls['common.update'];
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['org.' + name] = data[name];
+		for (var name in item) {
+			formdata['org.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 		$.each( checkboxes, function( index, checkbox ) {
 			if (formdata[$(checkbox).attr('name')] == 0) {
-			    $(checkbox).removeAttr('checked');
-			    $(checkbox).parent().removeClass('checked');
+				$(checkbox).removeAttr('checked');
+				$(checkbox).parent().removeClass('checked');
 			} else {
-			    $(checkbox).attr('checked');
-			    $(checkbox).parent().addClass('checked');
+				$(checkbox).attr('checked');
+				$(checkbox).parent().addClass('checked');
 			}
 		});
 		if ($('input[name="org.expireflag"]:checked').val() == 0) {
@@ -263,14 +263,14 @@ function initMyEditModal() {
 	});  
 
 	$(".form_datetime").datetimepicker({
-        autoclose: true,
-        isRTL: App.isRTL(),
-        format: "yyyy-mm-dd",
-        pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
-        language: "zh-CN",
-        minView: 'month',
-        todayBtn: true
-    });
+		autoclose: true,
+		isRTL: Metronic.isRTL(),
+		format: "yyyy-mm-dd",
+		pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+		language: "zh-CN",
+		minView: 'month',
+		todayBtn: true
+	});
 }
 
 

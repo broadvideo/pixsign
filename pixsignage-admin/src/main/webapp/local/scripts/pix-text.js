@@ -11,16 +11,16 @@ function refreshMyTable() {
 
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "内容", "mData" : "text", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "textid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '内容', 'mData' : 'text', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'textid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -36,11 +36,10 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
-    
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
@@ -48,17 +47,16 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
 		currentItem = item;
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'ids': currentItem['textid']
+						'text.textid': currentItem['textid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -72,7 +70,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 }
@@ -99,12 +97,12 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert('出错了！');
 			}
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
-
+	
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
 			$('#MyEditForm').submit();
@@ -124,15 +122,14 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.update'];
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['text.' + name] = data[name];
+		for (var name in item) {
+			formdata['text.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
-		$('#MyEditForm').attr('action', action);
+		$('#MyEditForm').attr('action', myurls['common.update']);
 		$('#MyEditModal').modal();
 	});
 

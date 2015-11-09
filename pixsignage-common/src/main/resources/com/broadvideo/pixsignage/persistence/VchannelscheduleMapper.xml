@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.VchannelscheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Vchannelschedule" >
+    <id column="vchannelscheduleid" property="vchannelscheduleid" jdbcType="INTEGER" />
+    <result column="vchannelid" property="vchannelid" jdbcType="INTEGER" />
+    <result column="playmode" property="playmode" jdbcType="CHAR" />
+    <result column="playdate" property="playdate" jdbcType="DATE" />
+    <result column="starttime" property="starttime" jdbcType="TIME" />
+    <result column="endtime" property="endtime" jdbcType="TIME" />
+    <result column="playlistid" property="playlistid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="playlist" column="{playlistid=playlistid}" select="com.broadvideo.pixsignage.persistence.PlaylistMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    vchannelscheduleid, vchannelid, playmode, playdate, starttime, endtime, playlistid, 
+    createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from vchannelschedule
+    where vchannelscheduleid = '${vchannelscheduleid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from vchannelschedule
+    where vchannelid = '${vchannelid}'
+    order by starttime
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from vchannelschedule
+    where vchannelscheduleid = '${vchannelscheduleid}'
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Vchannelschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="vchannelscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vchannelschedule (vchannelid, playmode, playdate, 
+      starttime, endtime, playlistid, 
+      createtime)
+    values (#{vchannelid,jdbcType=INTEGER}, #{playmode,jdbcType=CHAR}, #{playdate,jdbcType=DATE}, 
+      #{starttime,jdbcType=TIME}, #{endtime,jdbcType=TIME}, #{playlistid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Vchannelschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="vchannelscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vchannelschedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vchannelid != null" >
+        vchannelid,
+      </if>
+      <if test="playmode != null" >
+        playmode,
+      </if>
+      <if test="playdate != null" >
+        playdate,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="playlistid != null" >
+        playlistid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vchannelid != null" >
+        #{vchannelid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIME},
+      </if>
+      <if test="playlistid != null" >
+        #{playlistid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Vchannelschedule" >
+    update vchannelschedule
+    <set >
+      <if test="vchannelid != null" >
+        vchannelid = #{vchannelid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        playmode = #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        playdate = #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIME},
+      </if>
+      <if test="playlistid != null" >
+        playlistid = #{playlistid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where vchannelscheduleid = #{vchannelscheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Vchannelschedule" >
+    update vchannelschedule
+    set vchannelid = #{vchannelid,jdbcType=INTEGER},
+      playmode = #{playmode,jdbcType=CHAR},
+      playdate = #{playdate,jdbcType=DATE},
+      starttime = #{starttime,jdbcType=TIME},
+      endtime = #{endtime,jdbcType=TIME},
+      playlistid = #{playlistid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where vchannelscheduleid = #{vchannelscheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

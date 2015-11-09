@@ -16,24 +16,24 @@ function initMyTable() {
 	var currentSelectBranchid = myBranchid;
 	
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-		                {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : '分组', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '18%' }, 
 						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '8%' }, 
 						{'sTitle' : '计划', 'mData' : 'schedulestatus', 'bSortable' : false, 'sWidth' : '8%' }, 
 						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '8%' }],
-        'aoColumnDefs': [
-     	                {'bSortable': false, 'aTargets': [ 0 ] }
-     	            ],
+		'aoColumnDefs': [
+	 					{'bSortable': false, 'aTargets': [ 0 ] }
+	 				],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -75,43 +75,43 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'branchid','value':currentSelectBranchid });
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
-    function fnFormatDetails ( oTable, nTr )
-    {
-        var aData = oTable.fnGetData( nTr );
-        var sOut = '<table>';
-        sOut += '<tr><td>硬编码:</td><td>'+aData['hardkey']+'</td></tr>';
-        sOut += '<tr><td>IP地址:</td><td>'+aData['ip']+'</td></tr>';
-        sOut += '<tr><td>MAC地址:</td><td>'+aData['mac']+'</td></tr>';
-        sOut += '<tr><td>激活时间:</td><td>'+aData['activetime']+'</td></tr>';
-        sOut += '</table>';
-         
-        return sOut;
-    }
+	function fnFormatDetails ( oTable, nTr )
+	{
+		var aData = oTable.fnGetData( nTr );
+		var sOut = '<table>';
+		sOut += '<tr><td>硬编码:</td><td>'+aData['hardkey']+'</td></tr>';
+		sOut += '<tr><td>IP地址:</td><td>'+aData['ip']+'</td></tr>';
+		sOut += '<tr><td>MAC地址:</td><td>'+aData['mac']+'</td></tr>';
+		sOut += '<tr><td>激活时间:</td><td>'+aData['activetime']+'</td></tr>';
+		sOut += '</table>';
+		 
+		return sOut;
+	}
 
 
-    $('#MyTable').on('click', ' tbody td .row-details', function () {
-        var nTr = $(this).parents('tr')[0];
-        if ( oTable.fnIsOpen(nTr) )
-        {
-            /* This row is already open - close it */
-            $(this).addClass('row-details-close').removeClass('row-details-open');
-            oTable.fnClose( nTr );
-        }
-        else
-        {
-            /* Open this row */                
-            $(this).addClass('row-details-open').removeClass('row-details-close');
-            oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
-        }
-    });
+	$('#MyTable').on('click', ' tbody td .row-details', function () {
+		var nTr = $(this).parents('tr')[0];
+		if ( oTable.fnIsOpen(nTr) )
+		{
+			/* This row is already open - close it */
+			$(this).addClass('row-details-close').removeClass('row-details-open');
+			oTable.fnClose( nTr );
+		}
+		else
+		{
+			/* Open this row */				
+			$(this).addClass('row-details-open').removeClass('row-details-close');
+			oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
+		}
+	});
 
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -120,14 +120,13 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
 		currentItem = item;
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
 						'device.deviceid': currentItem['deviceid']
@@ -144,7 +143,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 
@@ -185,10 +184,10 @@ function initMyTable() {
 	}
 	function createSelectBranchTree(treeData) {
 		$('#SelectBranchTree').jstree('destroy');
-	    $('#SelectBranchTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		$('#SelectBranchTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'ui' ],
 			'core' : {
 				'animation' : 100
@@ -202,9 +201,9 @@ function initMyTable() {
 				'icons' : false,
 			}
 		});
-	    $('#SelectBranchTree').on('loaded.jstree', function() {
-	    	$('#SelectBranchTree').jstree('open_all');
-	    });
+		$('#SelectBranchTree').on('loaded.jstree', function() {
+			$('#SelectBranchTree').jstree('open_all');
+		});
 	}
 	
 	var BranchidList = [];
@@ -254,9 +253,9 @@ function initMyTable() {
 	}
 	
 	$('#UnDeviceTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ]
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
@@ -269,11 +268,11 @@ function initMyTable() {
 		'oLanguage' : DataTableLanguage
 	});
 
-    jQuery('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-    jQuery('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-    jQuery('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
+	jQuery('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
+	jQuery('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	jQuery('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
 
-    $('body').on('click', '.pix-DeviceReload', function(event) {
+	$('body').on('click', '.pix-DeviceReload', function(event) {
 		if ($('#portlet_device1').hasClass('active')) {
 			$('#MyTable').dataTable()._fnAjaxUpdate();
 		} else if ($('#portlet_device2').hasClass('active')) {
@@ -331,10 +330,10 @@ function initMyEditModal() {
 	}
 	function createEditBranchTree(treeData) {
 		$('#EditFormBranchTree').jstree('destroy');
-	    $('#EditFormBranchTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		$('#EditFormBranchTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'ui' ],
 			'core' : {
 				'animation' : 100
@@ -348,9 +347,9 @@ function initMyEditModal() {
 				'icons' : false,
 			}
 		});
-	    $('#EditFormBranchTree').on('loaded.jstree', function() {
-	    	$('#EditFormBranchTree').jstree('open_all');
-	    });
+		$('#EditFormBranchTree').on('loaded.jstree', function() {
+			$('#EditFormBranchTree').jstree('open_all');
+		});
 	}
 
 	
@@ -462,23 +461,23 @@ function initDeviceFileModal() {
 	});
 	
 	$('#DeviceVideoTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+						[ 10, 25, 50, 100 ]
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['devicefile.list'],
-		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['devicefile.list'],
+		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
 						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
-		"iDisplayLength" : 10,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(0)', nRow).html('video-' + aData.video.videoid);
 			$('td:eq(1)', nRow).html(aData.video.filename);
 			$('td:eq(2)', nRow).html(transferIntToComma(aData.video.size));
@@ -493,32 +492,32 @@ function initDeviceFileModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'deviceid','value':currentDeviceid },
-	        			{'name':'objtype','value':'1' });
-	    } 
+			aoData.push({'name':'deviceid','value':currentDeviceid },
+						{'name':'objtype','value':'1' });
+		} 
 	});
 
 	jQuery('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
 	jQuery('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 
 	$('#DeviceImageTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+						[ 10, 25, 50, 100 ]
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['devicefile.list'],
-		"aoColumns" : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['devicefile.list'],
+		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
 						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
-		"iDisplayLength" : 10,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(0)', nRow).html('image-' + aData.image.videoid);
 			$('td:eq(1)', nRow).html(aData.image.filename);
 			$('td:eq(2)', nRow).html(transferIntToComma(aData.image.size));
@@ -533,9 +532,9 @@ function initDeviceFileModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'deviceid','value':currentDeviceid },
-	        			{'name':'objtype','value':'2' });
-	    } 
+			aoData.push({'name':'deviceid','value':currentDeviceid },
+						{'name':'objtype','value':'2' });
+		} 
 	});
 
 	jQuery('#DeviceImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 

@@ -67,8 +67,8 @@ create table org(
    expiretime datetime,
    maxdevices int,
    maxstorage bigint,
-   currentdevices int,
-   currentstorage bigint,
+   currentdevices int default 0,
+   currentstorage bigint default 0,
    currentdeviceidx int,
    copyright varchar(512),
    description varchar(512),
@@ -191,8 +191,9 @@ create table video(
    orgid int not null,
    branchid int not null,
    name varchar(256) not null,
+   uuid varchar(64) not null,
    type char(1) default '1',
-   filename varchar(256) not null,
+   filename varchar(256),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
@@ -267,15 +268,13 @@ default character set utf8;
 create table medialist( 
    medialistid int not null auto_increment,
    orgid int not null,
-   branchid int not null,
    name varchar(256) not null,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
    createstaffid int,
    primary key (medialistid),
-   foreign key (orgid) references org(orgid),
-   foreign key (branchid) references branch(branchid)
+   foreign key (orgid) references org(orgid)
  )engine = innodb
 default character set utf8;
 
@@ -322,7 +321,7 @@ create table devicegroup(
    branchid int not null,
    name varchar(64) not null,
    code varchar(32) not null,
-   status char(1),
+   status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
    createstaffid int,
@@ -348,9 +347,9 @@ create table layout(
    type char(1) default '0',
    status char(1) default '1',
    ratio char(1) default '1',
-   height int,
-   width int,
-   bgcolor varchar(8),
+   height int not null,
+   width int not null,
+   bgcolor varchar(8) default '#000000',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
    createstaffid int,
@@ -367,13 +366,13 @@ create table layoutdtl(
    width int not null,
    topoffset int not null,
    leftoffset int not null,
-   zindex int not null,
-   intervaltime int,
-   direction char(1),
-   speed char(1),
-   color varchar(8),
-   size int,
-   opacity int,
+   zindex int not null default 0,
+   intervaltime int default 10,
+   direction char(1) default '4',
+   speed char(1) default '2',
+   color varchar(8) default '#FFFFFF',
+   size int default 30,
+   opacity int default 100,
    createtime timestamp not null default current_timestamp,
    primary key (layoutdtlid),
    foreign key (layoutid) references layout(layoutid),
@@ -424,6 +423,57 @@ create table regionschedule(
    createtime timestamp not null default current_timestamp,
    primary key (regionscheduleid),
    foreign key (regionid) references region(regionid)
+ )engine = innodb
+default character set utf8;
+
+create table vchannel( 
+   vchannelid int not null auto_increment,
+   orgid int not null,
+   name varchar(64) not null,
+   uuid varchar(64) not null,
+   backupvideoid int,
+   status char(1) default '1',
+   description varchar(512),
+   createtime timestamp not null default current_timestamp,
+   primary key (vchannelid),
+   foreign key (orgid) references org(orgid)
+ )engine = innodb
+default character set utf8;
+
+create table vchannelschedule( 
+   vchannelscheduleid int not null auto_increment,
+   vchannelid int not null,
+   playmode char(1) not null,
+   playdate date,
+   starttime time,
+   endtime time,
+   playlistid int not null,
+   createtime timestamp not null default current_timestamp,
+   primary key (vchannelscheduleid),
+   foreign key (vchannelid) references vchannel(vchannelid)
+ )engine = innodb
+default character set utf8;
+
+create table playlist( 
+   playlistid int not null auto_increment,
+   orgid int not null,
+   name varchar(256) not null,
+   type char(1) default '0',
+   status char(1) default '1',
+   description varchar(512),
+   createtime timestamp not null default current_timestamp,
+   createstaffid int,
+   primary key (playlistid),
+   foreign key (orgid) references org(orgid)
+ )engine = innodb
+default character set utf8;
+
+create table playlistdtl( 
+   playlistdtlid int not null auto_increment,
+   playlistid int not null,
+   videoid int not null,
+   sequence int not null,
+   primary key (playlistdtlid)
  )engine = innodb
 default character set utf8;
 
@@ -497,49 +547,91 @@ default character set utf8;
 ## init data  ##############################################
 ############################################################
 
-INSERT INTO vsp(name,code,status) VALUES('PIX','root','1');
+insert into vsp(name,code) values('PIX','root');
+insert into staff(subsystem,vspid,loginname,password,name,token) values(1,1,'admin','9c6e77902e2a6feca343509566af87ff','admin','admin_5926b1fafa508d17ff6e7a1c41e17b0f');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(0,'',0,'SUPER','','',2,1,'0');
+insert into staffprivilege(staffid,privilegeid) values(1,0);
 
-INSERT INTO staff(subsystem,vspid,loginname,password,name,status,token) VALUES('1',1,'admin','9c6e77902e2a6feca343509566af87ff','admin','1','admin_5926b1fafa508d17ff6e7a1c41e17b0f');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(0,'',0,'SUPER','','',2,1,'0');
-INSERT INTO staffprivilege(staffid,privilegeid) VALUES(1,0);
+insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(1,'pix','pix',0,'2037-01-01 00:00:00',20,30000,20,'Default Org',1);
+select last_insert_id() into @orgid;
+insert into branch(orgid,parentid,name,code,description,createstaffid) values(@orgid,0,'super','pix-root','Pix Root Branch',1);
+select last_insert_id() into @branchid;
+insert into staff(subsystem,orgid,branchid,loginname,password,name,token,description,createstaffid) values(2,@orgid,@branchid,'admin','9c6e77902e2a6feca343509566af87ff','admin','admin_d40f5160587a54029b2f7740de40dfa6','Pix admin',1);
+select last_insert_id() into @staffid;
+insert into staffprivilege(staffid,privilegeid) values(@staffid,0);
 
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(101,1,0,'运营管理','','fa-cloud',1,1,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10101,1,101,'企业管理','org.jsp','',1,1,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10102,1,101,'审核申请','audit.jsp','',1,2,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(109,1,0,'系统管理','','fa-cogs',1,9,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10901,1,109,'操作员管理','staff.jsp','',1,1,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10902,1,109,'角色管理','role.jsp','',1,2,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10909,1,109,'系统配置','config.jsp','',1,9,'0');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(10910,1,109,'终端调试','crashreport.jsp','',1,10,'0');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0001','pix0001');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0002','pix0002');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0003','pix0003');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0004','pix0004');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0005','pix0005');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0006','pix0006');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0007','pix0007');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0008','pix0008');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0009','pix0009');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0010','pix0010');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0011','pix0011');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0012','pix0012');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0013','pix0013');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0014','pix0014');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0015','pix0015');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0016','pix0016');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0017','pix0017');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0018','pix0018');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0019','pix0019');
+insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0020','pix0020');
 
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(301,2,0,'快速发布','wizard.jsp','fa-hand-o-up',1,1,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(201,2,0,'素材管理','','fa-video-camera',1,2,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20101,2,201,'播放列表','medialist.jsp','',1,1,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20102,2,201,'本地视频','video-int.jsp','',1,2,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20103,2,201,'引入视频','video-ext.jsp','',1,3,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20104,2,201,'图片','image.jsp','',1,4,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20105,2,201,'文本','text.jsp','',1,5,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20106,2,201,'视频流','stream.jsp','',1,6,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20107,2,201,'数字频道','dvb.jsp','',1,7,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20108,2,201,'Widget','widget.jsp','',1,8,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(202,2,0,'终端管理','','fa-desktop',1,3,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20201,2,202,'终端','device.jsp','',1,1,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20202,2,202,'终端组','devicegp.jsp','',1,2,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(203,2,0,'播出管理','','fa-calendar',1,4,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20301,2,203,'布局设计','layout-design.jsp','',1,1,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20302,2,203,'布局计划','layout-schedule.jsp','',1,2,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20303,2,203,'播出计划','schedule.jsp','',1,3,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(209,2,0,'系统管理','','fa-cogs',1,10,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20901,2,209,'操作员管理','staff.jsp','',1,1,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20902,2,209,'角色管理','role.jsp','',1,2,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20903,2,209,'部门管理','branch.jsp','',1,3,'1');
-INSERT INTO privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) VALUES(20909,2,209,'系统配置','config.jsp','',1,9,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,1,0,'运营管理','','fa-cloud',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,1,101,'企业管理','org.jsp','',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10102,1,101,'审核申请','audit.jsp','',1,2,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(109,1,0,'系统管理','','fa-cogs',1,9,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10901,1,109,'操作员管理','staff.jsp','',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10902,1,109,'角色管理','role.jsp','',1,2,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10909,1,109,'系统配置','config.jsp','',1,9,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10910,1,109,'终端调试','crashreport.jsp','',1,10,'0');
 
-INSERT INTO region(regionid,name,code,type) VALUES(1,'主区域','main','0');
-INSERT INTO region(regionid,name,code,type) VALUES(2,'文本区域','text','1');
-INSERT INTO region(regionid,name,code,type) VALUES(3,'附加区域1','extra-1','0');
-INSERT INTO region(regionid,name,code,type) VALUES(4,'附加区域2','extra-2','0');
-INSERT INTO region(regionid,name,code,type) VALUES(5,'附加区域3','extra-3','0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(301,2,0,'快速发布','wizard.jsp','fa-hand-o-up',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(201,2,0,'素材管理','','fa-qrcode',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20101,2,201,'媒体列表','medialist.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20102,2,201,'本地视频','video-int.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20103,2,201,'引入视频','video-ext.jsp','',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20104,2,201,'图片','image.jsp','',1,4,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20105,2,201,'文本','text.jsp','',1,5,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20106,2,201,'视频流','stream.jsp','',1,6,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20107,2,201,'数字频道','dvb.jsp','',1,7,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20108,2,201,'Widget','widget.jsp','',1,8,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(202,2,0,'终端管理','','fa-desktop',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20201,2,202,'终端','device.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20202,2,202,'终端组','devicegp.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(203,2,0,'播出管理','','fa-calendar',1,4,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20301,2,203,'布局设计','layout-design.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20302,2,203,'布局计划','layout-schedule.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20303,2,203,'播出计划','region-schedule.jsp','',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(204,2,0,'数字电视台','','fa-video-camera',1,5,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20401,2,204,'轮播频道','vchannel.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20402,2,204,'轮播列表','vchannel-playlist.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20403,2,204,'播出计划','vchannel-schedule.jsp','',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(209,2,0,'系统管理','','fa-cogs',1,10,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20901,2,209,'操作员管理','staff.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20902,2,209,'角色管理','role.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20903,2,209,'部门管理','branch.jsp','',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20909,2,209,'系统配置','config.jsp','',1,9,'1');
+
+insert into region(regionid,name,code,type) values(1,'主区域','main','0');
+insert into region(regionid,name,code,type) values(2,'文本区域','text','1');
+insert into region(regionid,name,code,type) values(3,'附加区域1','extra-1','0');
+insert into region(regionid,name,code,type) values(4,'附加区域2','extra-2','0');
+insert into region(regionid,name,code,type) values(5,'附加区域3','extra-3','0');
+
+insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
+select last_insert_id() into @layoutid;
+insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,1,1080,1920,0,0);
+
+insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-带字幕',0,1,1,1080,1920,@staffid);
+select last_insert_id() into @layoutid;
+insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,1,977,1920,0,0);
+insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,2,100,1920,980,0);
+
 
 ############################################################
 ## post script  ############################################

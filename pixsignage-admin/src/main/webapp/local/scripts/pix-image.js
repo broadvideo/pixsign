@@ -22,7 +22,7 @@ function initMyTable() {
 	var currentSelectBranchid = myBranchid;
 	var thumbmailhtml = '';
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
 						[ 12, 24, 48, 96 ] 
 						],
@@ -30,22 +30,22 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [
-						{"sTitle" : "图片名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "文件大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "orgid", "bSortable" : false }],
+						{'sTitle' : '图片名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
-		"fnPreDrawCallback": function (oSettings) {
+		'fnPreDrawCallback': function (oSettings) {
 			if ($('#MediaContainer').length < 1) {
 				$('#MyTable').append('<div id="MediaContainer"></div>');
 			}
 			$('#MediaContainer').html(''); 
 			return true;
 		},
-		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 			if (iDisplayIndex % 6 == 0) {
 				thumbmailhtml = '';
 				thumbmailhtml += '<div class="row" >';
@@ -71,14 +71,13 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'branchid','value':currentSelectBranchid });
 		}
-		
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-    jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -110,7 +109,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 	});
 
 
@@ -150,10 +149,10 @@ function initMyTable() {
 	}
 	function createSelectBranchTree(treeData) {
 		$('#SelectBranchTree').jstree('destroy');
-	    $('#SelectBranchTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		$('#SelectBranchTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'ui' ],
 			'core' : {
 				'animation' : 100
@@ -167,9 +166,9 @@ function initMyTable() {
 				'icons' : false,
 			}
 		});
-	    $('#SelectBranchTree').on('loaded.jstree', function() {
-	    	$('#SelectBranchTree').jstree('open_all');
-	    });
+		$('#SelectBranchTree').on('loaded.jstree', function() {
+			$('#SelectBranchTree').jstree('open_all');
+		});
 	}
 	
 	var BranchidList = [];
@@ -271,69 +270,56 @@ function initMyEditModal() {
 }
 
 function initUploadModal() {
-	var queueItems = new Array();
-	
-    // Initialize the jQuery File Upload widget:
-   $('#UploadForm').fileupload({
-       disableImageResize: false,
-       autoUpload: false,
-       // Uncomment the following to send cross-domain cookies:
-       //xhrFields: {withCredentials: true},                
-       url: 'image!upload.action'
-   });
+	$('#UploadForm').fileupload({
+		disableImageResize: false,
+		autoUpload: false,
+		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		maxFileSize: 10240000,
+		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},				
+	});
 
-   // Enable iframe cross-domain access via redirect option:
-   $('#UploadForm').fileupload(
-       'option',
-       'redirect',
-       window.location.href.replace(
-           /\/[^\/]*$/,
-           '/cors/result.html?%s'
-       )
-   );
+	// Enable iframe cross-domain access via redirect option:
+	$('#UploadForm').fileupload(
+		'option',
+		'redirect',
+		window.location.href.replace(
+			/\/[^\/]*$/,
+			'/cors/result.html?%s'
+		)
+	);
 
-   // Demo settings:
-   $('#UploadForm').fileupload('option', {
-       url: $('#UploadForm').fileupload('option', 'url'),
-       // Enable image resizing, except for Android and Opera,
-       // which actually support image resizing, but fail to
-       // send Blob objects via XHR requests:
-       disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-       maxFileSize: 10240000,
-       acceptFileTypes: acceptFileTypes
-   });
+	// Upload server status check for browsers with CORS support:
+	if ($.support.cors) {
+		$.ajax({
+			type: 'HEAD'
+		}).fail(function () {
+			$('<div class="alert alert-danger"/>')
+				.text('Upload server currently unavailable - ' +
+						new Date())
+				.appendTo('#UploadForm');
+		});
+	}
 
-       // Upload server status check for browsers with CORS support:
-   if ($.support.cors) {
-       $.ajax({
-           url: 'image!upload.action',
-           type: 'HEAD'
-       }).fail(function () {
-           $('<div class="alert alert-danger"/>')
-               .text('上载服务器当前不可用 - ' +
-                       new Date())
-               .appendTo('#MyUploadForm');
-       });
-   }
-
-   // Load & display existing files:
-   $('#UploadForm').addClass('fileupload-processing');
-   $.ajax({
-       // Uncomment the following to send cross-domain cookies:
-       //xhrFields: {withCredentials: true},
-       url: $('#UploadForm').fileupload('option', 'url'),
-       dataType: 'json',
-       context: $('#UploadForm')[0]
-   }).always(function () {
-       $(this).removeClass('fileupload-processing');
-   }).done(function (result) {
-       $(this).fileupload('option', 'done')
-       .call(this, $.Event('done'), {result: result});
-   });
+	// Load & display existing files:
+	$('#UploadForm').addClass('fileupload-processing');
+	$.ajax({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		url: $('#UploadForm').attr("action"),
+		dataType: 'json',
+		context: $('#UploadForm')[0]
+	}).always(function () {
+		$(this).removeClass('fileupload-processing');
+	}).done(function (result) {
+		$(this).fileupload('option', 'done')
+		.call(this, $.Event('done'), {result: result});
+	});
 
    $('#UploadForm').bind('fileuploadsubmit', function (e, data) {
-       var inputs = data.context.find(':input');
-       data.formData = inputs.serializeArray();
+	   var inputs = data.context.find(':input');
+	   data.formData = inputs.serializeArray();
    }); 
 
 
@@ -341,7 +327,7 @@ function initUploadModal() {
 		$('#UploadForm').find('.cancel').click();
 		$('#UploadForm .files').html('');
 		$('#UploadModal').modal();
-	});
+	});			
 
 	
 	$('body').on('click', '.pix-upload-close', function(event) {
@@ -350,4 +336,3 @@ function initUploadModal() {
 	
 	
 }
-

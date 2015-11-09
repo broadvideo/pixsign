@@ -20,12 +20,12 @@ public class MedialistServiceImpl implements MedialistService {
 	@Autowired
 	private MedialistdtlMapper medialistdtlMapper;
 
-	public int selectCount(int orgid, int branchid, String search) {
-		return medialistMapper.selectCount(orgid, branchid, search);
+	public int selectCount(int orgid, String search) {
+		return medialistMapper.selectCount(orgid, search);
 	}
 
-	public List<Medialist> selectList(int orgid, int branchid, String search, String start, String length) {
-		return medialistMapper.selectList(orgid, branchid, search, start, length);
+	public List<Medialist> selectList(int orgid, String search, String start, String length) {
+		return medialistMapper.selectList(orgid, search, start, length);
 	}
 
 	public List<Medialistdtl> selectMedialistdtlList(String medialistid) {

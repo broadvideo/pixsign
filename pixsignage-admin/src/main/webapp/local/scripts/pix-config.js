@@ -11,14 +11,14 @@ function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ]
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "配置项", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "配置值", "mData" : "value", "bSortable" : false },
-						{"sTitle" : "操作", "mData" : "configid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '配置项', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '配置值', 'mData' : 'value', 'bSortable' : false },
+						{'sTitle' : '操作', 'mData' : 'configid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -30,9 +30,9 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
 }
 

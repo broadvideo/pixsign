@@ -9,23 +9,23 @@ function refreshMyTable() {
 
 function initMyTable() {
 	$('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['crashreport.list'],
-		'aoColumns' : [ {"sTitle" : "硬件码", "mData" : "hardkey", "bSortable" : false }, 
-		                {"sTitle" : "终端号", "mData" : "terminalid", "bSortable" : false }, 
-						{"sTitle" : "设备IP", "mData" : "clientip", "bSortable" : false }, 
-						{"sTitle" : "设备名称", "mData" : "clientname", "bSortable" : false }, 
-						{"sTitle" : "系统版本", "mData" : "os", "bSortable" : false }, 
-						{"sTitle" : "应用名称", "mData" : "appname", "bSortable" : false }, 
-						{"sTitle" : "版本名", "mData" : "vname", "bSortable" : false }, 
-						{"sTitle" : "版本号", "mData" : "vcode", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "更多", "mData" : "crashreportid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '硬件码', 'mData' : 'hardkey', 'bSortable' : false }, 
+						{'sTitle' : '终端号', 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : '设备IP', 'mData' : 'clientip', 'bSortable' : false }, 
+						{'sTitle' : '设备名称', 'mData' : 'clientname', 'bSortable' : false }, 
+						{'sTitle' : '系统版本', 'mData' : 'os', 'bSortable' : false }, 
+						{'sTitle' : '应用名称', 'mData' : 'appname', 'bSortable' : false }, 
+						{'sTitle' : '版本名', 'mData' : 'vname', 'bSortable' : false }, 
+						{'sTitle' : '版本号', 'mData' : 'vcode', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '更多', 'mData' : 'crashreportid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -36,9 +36,9 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
 	
 	$('body').on('click', '.pix-detail', function(event) {
 		var index = $(event.target).attr('data-id');

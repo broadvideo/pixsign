@@ -20,29 +20,32 @@
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 	<!-- BEGIN CORE PLUGINS -->   
 	<!--[if lt IE 9]>
-	<script src="/pixsignage-static/plugins/respond.min.js"></script>
-	<script src="/pixsignage-static/plugins/excanvas.min.js"></script> 
+	<script src="/pixsignage-static/global/plugins/respond.min.js"></script>
+	<script src="/pixsignage-static/global/plugins/excanvas.min.js"></script> 
 	<![endif]-->   
-	<script src="/pixsignage-static/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
-	<script src="/pixsignage-static/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>   
-	<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-	<script src="/pixsignage-static/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-	<script src="/pixsignage-static/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-	<script src="/pixsignage-static/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript" ></script>
-	<script src="/pixsignage-static/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-	<script src="/pixsignage-static/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
-	<script src="/pixsignage-static/plugins/jquery.cookie.min.js" type="text/javascript"></script>
-	<script src="/pixsignage-static/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script>
-	<!-- END CORE PLUGINS -->
-	
-	<script type="text/javascript" src="/pixsignage-static/plugins/select2/select2.min.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/data-tables/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/data-tables/DT_bootstrap.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/jquery-validation/localization/messages_zh.js"> </script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/bootbox/bootbox.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/jquery-loadJSON/jquery.loadJSON.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/jquery-json/jquery.json-2.4.js"></script>
-	<script type="text/javascript" src="/pixsignage-static/plugins/gritter/js/jquery.gritter.js"></script>
-	
-	
+<script src="/pixsignage-static/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="/pixsignage-static/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="/pixsignage-static/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+
+<script type="text/javascript" src="/pixsignage-static/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/jquery-validation/js/localization/messages_zh.js"> </script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/bootbox/bootbox.min.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/jquery-loadJSON/jquery.loadJSON.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/jquery-json/jquery.json-2.4.js"></script>
+<script type="text/javascript" src="/pixsignage-static/global/plugins/gritter/js/jquery.gritter.js"></script>
+
+<script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
+

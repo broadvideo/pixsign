@@ -126,8 +126,14 @@ public class LayoutAction extends BaseDatatableAction {
 
 	public String doRegionList() {
 		try {
+			String active = getParameter("active");
 			List<Object> aaData = new ArrayList<Object>();
-			List<Region> regionList = layoutService.selectRegionList();
+			List<Region> regionList;
+			if (active == null) {
+				regionList = layoutService.selectRegionList();
+			} else {
+				regionList = layoutService.selectActiveRegionList();
+			}
 			for (int i = 0; i < regionList.size(); i++) {
 				aaData.add(regionList.get(i));
 			}

@@ -91,6 +91,9 @@ public class VideoAction extends BaseDatatableAction {
 
 					log.info("Upload content: " + newFileName);
 					fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload", newFileName);
+					if (fileToCreate.exists()) {
+						fileToCreate.delete();
+					}
 					FileUtils.moveFile(mymedia[i], fileToCreate);
 					log.info("Finish content upload: " + newFileName);
 

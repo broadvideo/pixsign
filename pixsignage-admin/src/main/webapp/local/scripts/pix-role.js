@@ -14,15 +14,15 @@ function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "角色名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "创建者", "mData" : "createstaff.name", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "roleid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '角色名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '创建者', 'mData' : 'createstaff.name', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'roleid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -45,14 +45,13 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
 		currentItem = item;
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
 						'role.roleid': currentItem['roleid']
@@ -69,7 +68,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 }
@@ -126,10 +125,10 @@ function initMyEditModal() {
 
 	function createTree(treeData) {
 		$('#PrivilegeTree').jstree('destroy');
-	    var treeview = $('#PrivilegeTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		var treeview = $('#PrivilegeTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
 			'core' : {
 				'animation' : 100
@@ -143,20 +142,20 @@ function initMyEditModal() {
 				'icons' : false,
 			}
 		});
-	    treeview.on('loaded.jstree', function() {
-	        treeview.jstree('open_all');
-	    });
-	    treeview.on('check_node.jstree', function(e, data) {
-	    	var parentNode = data.rslt.obj.attr('parentid');
-	    	treeview.jstree('check_node', '#'+parentNode);
-	    });
-	    treeview.on('uncheck_node.jstree', function(e, data) {
-	    	var allChildNodes = data.inst._get_children(data.rslt.obj);
-	    	allChildNodes.each(function(idx, listItem) { 
-	    		treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
-	    	});
-	    });
-	    
+		treeview.on('loaded.jstree', function() {
+			treeview.jstree('open_all');
+		});
+		treeview.on('check_node.jstree', function(e, data) {
+			var parentNode = data.rslt.obj.attr('parentid');
+			treeview.jstree('check_node', '#'+parentNode);
+		});
+		treeview.on('uncheck_node.jstree', function(e, data) {
+			var allChildNodes = data.inst._get_children(data.rslt.obj);
+			allChildNodes.each(function(idx, listItem) { 
+				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
+			});
+		});
+		
 	}
 	
 	
@@ -220,17 +219,17 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['role.' + name] = data[name];
+		for (var name in item) {
+			formdata['role.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
 		currentPrivileges = {};
-		for (var i=0; i<data.privileges.length; i++) {
-			currentPrivileges[data.privileges[i].privilegeid] = data.privileges[i];
+		for (var i=0; i<item.privileges.length; i++) {
+			currentPrivileges[item.privileges[i].privilegeid] = item.privileges[i];
 		}
 		refreshTreeData(currentTreeData);
 		createTree(currentTreeData);

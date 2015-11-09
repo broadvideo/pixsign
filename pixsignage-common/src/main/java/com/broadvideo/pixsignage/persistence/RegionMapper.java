@@ -11,6 +11,8 @@ public interface RegionMapper {
 
 	List<Region> selectList();
 
+	List<Region> selectActiveList();
+
 	int deleteByPrimaryKey(@Param(value = "regionid") String regionid);
 
 	int insert(Region record);

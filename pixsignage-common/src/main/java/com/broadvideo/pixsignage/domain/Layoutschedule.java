@@ -25,6 +25,8 @@ public class Layoutschedule {
 
 	private Date tempstarttime;
 
+	private Layout layout;
+
 	public Integer getLayoutscheduleid() {
 		return layoutscheduleid;
 	}
@@ -111,5 +113,13 @@ public class Layoutschedule {
 
 	public void setTempstarttime(Date tempstarttime) {
 		this.tempstarttime = tempstarttime;
+	}
+
+	public Layout getLayout() {
+		return layout;
+	}
+
+	public void setLayout(Layout layout) {
+		this.layout = layout;
 	}
 }

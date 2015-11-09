@@ -31,6 +31,16 @@ public class Regionschedule {
 
 	private Date tempstarttime;
 
+	private Medialist medialist;
+
+	private Text text;
+
+	private Stream stream;
+
+	private Dvb dvb;
+
+	private Widget widget;
+
 	public Integer getRegionscheduleid() {
 		return regionscheduleid;
 	}
@@ -141,5 +151,45 @@ public class Regionschedule {
 
 	public void setTempstarttime(Date tempstarttime) {
 		this.tempstarttime = tempstarttime;
+	}
+
+	public Medialist getMedialist() {
+		return medialist;
+	}
+
+	public void setMedialist(Medialist medialist) {
+		this.medialist = medialist;
+	}
+
+	public Text getText() {
+		return text;
+	}
+
+	public void setText(Text text) {
+		this.text = text;
+	}
+
+	public Stream getStream() {
+		return stream;
+	}
+
+	public void setStream(Stream stream) {
+		this.stream = stream;
+	}
+
+	public Dvb getDvb() {
+		return dvb;
+	}
+
+	public void setDvb(Dvb dvb) {
+		this.dvb = dvb;
+	}
+
+	public Widget getWidget() {
+		return widget;
+	}
+
+	public void setWidget(Widget widget) {
+		this.widget = widget;
 	}
 }

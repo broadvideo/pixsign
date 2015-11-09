@@ -15,18 +15,18 @@ function refreshMyTable() {
 
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "操作员姓名", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "登录名", "mData" : "loginname", "bSortable" : false }, 
-						{"sTitle" : "部门", "mData" : "branch.name", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "staffid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '操作员姓名', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '登录名', 'mData' : 'loginname', 'bSortable' : false }, 
+						{'sTitle' : '部门', 'mData' : 'branch.name', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'staffid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -47,25 +47,24 @@ function initMyTable() {
 			return nRow;
 		}
 	});
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
 
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
-		currentItem = item;
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
 						'staff.staffid': currentItem['staffid']
@@ -82,7 +81,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 }
@@ -138,10 +137,10 @@ function initMyEditModal() {
 	}
 	function createRoleTree(treeData) {
 		$('#RoleTree').jstree('destroy');
-	    var treeview = $('#RoleTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		var treeview = $('#RoleTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
 			'core' : {
 				'animation' : 100
@@ -155,19 +154,19 @@ function initMyEditModal() {
 				'icons' : false,
 			}
 		});
-	    treeview.on('loaded.jstree', function() {
-	        treeview.jstree('open_all');
-	    });
-	    treeview.on('check_node.jstree', function(e, data) {
-	    	var parentNode = data.rslt.obj.attr('parentid');
-	    	treeview.jstree('check_node', '#'+parentNode);
-	    });
-	    treeview.on('uncheck_node.jstree', function(e, data) {
-	    	var allChildNodes = data.inst._get_children(data.rslt.obj);
-	    	allChildNodes.each(function(idx, listItem) { 
-	    		treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
-	    	});
-	    });
+		treeview.on('loaded.jstree', function() {
+			treeview.jstree('open_all');
+		});
+		treeview.on('check_node.jstree', function(e, data) {
+			var parentNode = data.rslt.obj.attr('parentid');
+			treeview.jstree('check_node', '#'+parentNode);
+		});
+		treeview.on('uncheck_node.jstree', function(e, data) {
+			var allChildNodes = data.inst._get_children(data.rslt.obj);
+			allChildNodes.each(function(idx, listItem) { 
+				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
+			});
+		});
 	}
 	
 	var currentEditBranchTreeData = [];
@@ -217,10 +216,10 @@ function initMyEditModal() {
 	}
 	function createEditBranchTree(treeData) {
 		$('#EditFormBranchTree').jstree('destroy');
-	    $('#EditFormBranchTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		$('#EditFormBranchTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'ui' ],
 			'core' : {
 				'animation' : 100
@@ -234,9 +233,9 @@ function initMyEditModal() {
 				'icons' : false,
 			}
 		});
-	    $('#EditFormBranchTree').on('loaded.jstree', function() {
-	    	$('#EditFormBranchTree').jstree('open_all');
-	    });
+		$('#EditFormBranchTree').on('loaded.jstree', function() {
+			$('#EditFormBranchTree').jstree('open_all');
+		});
 	}
 	
 
@@ -338,8 +337,8 @@ function initMyEditModal() {
 			FormValidateOption.rules['staff.password2'] = {};
 			FormValidateOption.rules['staff.password2']['equalTo'] = '#StaffPassword';
 			$('#MyEditForm').validate(FormValidateOption);
-		    $.extend($("#MyEditForm").validate().settings, {
-		    	rules: FormValidateOption.rules
+			$.extend($("#MyEditForm").validate().settings, {
+				rules: FormValidateOption.rules
 			});
 		}
 	}
@@ -434,10 +433,10 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['staff.' + name] = data[name];
+		for (var name in item) {
+			formdata['staff.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
@@ -454,7 +453,7 @@ function initMyEditModal() {
 		
 		oper = 2;
 		initEditForm();
-	    
+		
 		$('#MyEditModal').modal();
 	});
 
@@ -463,10 +462,10 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['staff.' + name] = data[name];
+		for (var name in item) {
+			formdata['staff.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);

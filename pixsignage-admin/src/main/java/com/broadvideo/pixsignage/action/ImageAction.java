@@ -76,6 +76,9 @@ public class ImageAction extends BaseDatatableAction {
 
 					String newFileName = "" + image.getImageid() + "." + FilenameUtils.getExtension(mymediaFileName[i]);
 					File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload", newFileName);
+					if (fileToCreate.exists()) {
+						fileToCreate.delete();
+					}
 					FileUtils.moveFile(mymedia[i], fileToCreate);
 					image.setFilename("/image/upload/" + newFileName);
 					image.setSize(FileUtils.sizeOf(fileToCreate));

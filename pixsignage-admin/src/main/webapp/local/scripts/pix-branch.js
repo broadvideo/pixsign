@@ -25,10 +25,10 @@ function refreshMyTable() {
 				currentTreeData = [];
 				generateTreeHtml(data.aaData);
 				$('#MyTable tbody').html(tbodyhtml);
-		        $('.tree').treegrid({
-                    expanderExpandedClass: 'glyphicon glyphicon-minus',
-                    expanderCollapsedClass: 'glyphicon glyphicon-plus'
-                });
+				$('.tree').treegrid({
+					expanderExpandedClass: 'glyphicon glyphicon-minus',
+					expanderCollapsedClass: 'glyphicon glyphicon-plus'
+				});
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}
@@ -83,13 +83,12 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentItem = currentTreeData[index];;
-		var action = myurls['common.delete'];
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
 						'branch.branchid': currentItem['branchid']
@@ -106,12 +105,10 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
-	
 }
-
 
 function initMyEditModal() {
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();

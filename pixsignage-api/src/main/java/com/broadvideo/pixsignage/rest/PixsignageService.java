@@ -1,11 +1,6 @@
 package com.broadvideo.pixsignage.rest;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -19,35 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
-import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
-import com.broadvideo.pixsignage.domain.Dvb;
-import com.broadvideo.pixsignage.domain.Image;
-import com.broadvideo.pixsignage.domain.Layout;
-import com.broadvideo.pixsignage.domain.Layoutdtl;
-import com.broadvideo.pixsignage.domain.Layoutschedule;
-import com.broadvideo.pixsignage.domain.Medialistdtl;
-import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Regionschedule;
-import com.broadvideo.pixsignage.domain.Stream;
-import com.broadvideo.pixsignage.domain.Text;
-import com.broadvideo.pixsignage.domain.Video;
-import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefileMapper;
-import com.broadvideo.pixsignage.persistence.DvbMapper;
-import com.broadvideo.pixsignage.persistence.LayoutMapper;
-import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
-import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
-import com.broadvideo.pixsignage.persistence.StreamMapper;
-import com.broadvideo.pixsignage.persistence.TextMapper;
-import com.broadvideo.pixsignage.persistence.WidgetMapper;
+import com.broadvideo.pixsignage.service.LayoutService;
 
 @Component
 @Consumes("application/json;charset=UTF-8")
@@ -62,25 +37,12 @@ public class PixsignageService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 	@Autowired
-	private TextMapper textMapper;
-	@Autowired
-	private StreamMapper streamMapper;
-	@Autowired
-	private DvbMapper dvbMapper;
-	@Autowired
-	private WidgetMapper widgetMapper;
-	@Autowired
-	private MedialistdtlMapper medialistdtlMapper;
-	@Autowired
-	private LayoutMapper layoutMapper;
-	@Autowired
-	private LayoutscheduleMapper layoutscheduleMapper;
-	@Autowired
-	private RegionscheduleMapper regionscheduleMapper;
-	@Autowired
 	private DevicefileMapper devicefileMapper;
 	@Autowired
 	private CrashreportMapper crashreportMapper;
+
+	@Autowired
+	private LayoutService layoutService;
 
 	@POST
 	@Path("init")
@@ -132,10 +94,10 @@ public class PixsignageService {
 			deviceMapper.updateByPrimaryKey(device);
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			responseJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP);
+			responseJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
-			topicJsonArray.put(device.getTerminalid());
+			topicJsonArray.put("device-" + device.getDeviceid());
 			if (device.getDevicegroup() != null) {
 				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
 			}
@@ -154,7 +116,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -172,7 +134,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -197,92 +159,18 @@ public class PixsignageService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			HashMap<Integer, JSONObject> layoutHash = new HashMap<Integer, JSONObject>();
-
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			JSONArray layoutJsonArray = new JSONArray();
-			responseJson.put("layouts", layoutJsonArray);
-			JSONArray scheduleJsonArray = new JSONArray();
-			responseJson.put("layout_schedules", scheduleJsonArray);
-
-			List<Layoutschedule> finalscheduleList = new ArrayList<Layoutschedule>();
-			List<Layoutschedule> layoutscheduleList;
-			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-			String tomorrow = CommonConstants.DateFormat_Date
-					.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
+			JSONObject responseJson;
 			if (device.getDevicegroupid() > 0) {
-				layoutscheduleList = layoutscheduleMapper.selectList("2", "" + device.getDevicegroupid(), "2", null,
-						null);
+				responseJson = layoutService.generateLayoutScheduleJson("2", "" + device.getDevicegroupid());
 			} else {
-				layoutscheduleList = layoutscheduleMapper.selectList("1", "" + device.getDeviceid(), "2", null, null);
+				responseJson = layoutService.generateLayoutScheduleJson("1", "" + device.getDeviceid());
 			}
-
-			for (Layoutschedule layoutschedule : layoutscheduleList) {
-				Layoutschedule newschedule = new Layoutschedule();
-				newschedule.setLayoutid(layoutschedule.getLayoutid());
-				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
-						.parse(today + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime())));
-				finalscheduleList.add(newschedule);
-			}
-			for (Layoutschedule layoutschedule : layoutscheduleList) {
-				Layoutschedule newschedule = new Layoutschedule();
-				newschedule.setLayoutid(layoutschedule.getLayoutid());
-				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
-						.parse(tomorrow + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime())));
-				finalscheduleList.add(newschedule);
-			}
-
-			// generate final json
-			for (Layoutschedule layoutschedule : finalscheduleList) {
-				JSONObject scheduleJson = new JSONObject();
-				scheduleJson.put("layout_id", layoutschedule.getLayoutid());
-				scheduleJson.put("start_time",
-						CommonConstants.DateFormat_Full.format(layoutschedule.getTempstarttime()));
-				scheduleJson.put("start_time_seconds", (long) (layoutschedule.getTempstarttime().getTime() / 1000));
-				scheduleJsonArray.put(scheduleJson);
-
-				if (layoutHash.get(layoutschedule.getLayoutid()) == null) {
-					Layout layout = layoutMapper.selectByPrimaryKey("" + layoutschedule.getLayoutid());
-					JSONObject layoutJson = new JSONObject();
-					layoutJsonArray.put(layoutJson);
-
-					layoutHash.put(layout.getLayoutid(), layoutJson);
-
-					layoutJson.put("layout_id", layout.getLayoutid());
-					layoutJson.put("width", layout.getWidth());
-					layoutJson.put("height", layout.getHeight());
-					layoutJson.put("bg_color", "#000000");
-					JSONArray regionJsonArray = new JSONArray();
-					layoutJson.put("regions", regionJsonArray);
-					for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
-						JSONObject regionJson = new JSONObject();
-						regionJsonArray.put(regionJson);
-						regionJson.put("region_id", layoutdtl.getRegionid());
-						regionJson.put("width", layoutdtl.getWidth());
-						regionJson.put("height", layoutdtl.getHeight());
-						regionJson.put("top", layoutdtl.getTopoffset());
-						regionJson.put("left", layoutdtl.getLeftoffset());
-						regionJson.put("zindex", layoutdtl.getZindex());
-						regionJson.put("type", layoutdtl.getRegion().getType());
-						if (layoutdtl.getRegion().getType().equals("0")) {
-							regionJson.put("interval", layoutdtl.getIntervaltime());
-						} else {
-							regionJson.put("direction", "" + layoutdtl.getDirection());
-							regionJson.put("speed", "" + layoutdtl.getSpeed());
-							regionJson.put("color", "" + layoutdtl.getColor());
-							regionJson.put("size", layoutdtl.getSize());
-							regionJson.put("opacity", layoutdtl.getOpacity());
-						}
-					}
-				}
-
-			}
-
+			responseJson.put("code", 0).put("message", "成功");
 			log.info("Pixsignage Service get_layout response: " + responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -311,220 +199,20 @@ public class PixsignageService {
 				return handleResult(1007, "无效region_id");
 			}
 
-			HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
-			HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
-			HashMap<Integer, JSONObject> textHash = new HashMap<Integer, JSONObject>();
-			HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
-			HashMap<Integer, JSONObject> dvbHash = new HashMap<Integer, JSONObject>();
-			HashMap<Integer, JSONObject> widgetHash = new HashMap<Integer, JSONObject>();
-
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			responseJson.put("region_id", regionid);
-			JSONArray videoJsonArray = new JSONArray();
-			responseJson.put("videos", videoJsonArray);
-			JSONArray imageJsonArray = new JSONArray();
-			responseJson.put("images", imageJsonArray);
-			JSONArray textJsonArray = new JSONArray();
-			responseJson.put("texts", textJsonArray);
-			JSONArray streamJsonArray = new JSONArray();
-			responseJson.put("streams", streamJsonArray);
-			JSONArray dvbJsonArray = new JSONArray();
-			responseJson.put("dvbs", dvbJsonArray);
-			JSONArray widgetJsonArray = new JSONArray();
-			responseJson.put("widgets", widgetJsonArray);
-			JSONArray scheduleJsonArray = new JSONArray();
-			responseJson.put("schedules", scheduleJsonArray);
-
-			List<Regionschedule> finalscheduleList = new ArrayList<Regionschedule>();
-			List<Regionschedule> regionscheduleList1;
-			List<Regionschedule> regionscheduleList2;
-			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-			String tomorrow = CommonConstants.DateFormat_Date
-					.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
+			JSONObject responseJson;
 			if (device.getDevicegroupid() > 0) {
-				regionscheduleList1 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(),
-						"" + regionid, "2", null, null);
-				regionscheduleList2 = regionscheduleMapper.selectList("2", "" + device.getDevicegroupid(),
-						"" + regionid, "1", today, tomorrow);
+				responseJson = layoutService.generateRegionScheduleJson("2", "" + device.getDevicegroupid(),
+						"" + regionid);
 			} else {
-				regionscheduleList1 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), "" + regionid,
-						"2", null, null);
-				regionscheduleList2 = regionscheduleMapper.selectList("1", "" + device.getDeviceid(), "" + regionid,
-						"1", today, tomorrow);
+				responseJson = layoutService.generateRegionScheduleJson("1", "" + device.getDeviceid(), "" + regionid);
 			}
-
-			for (Regionschedule regionschedule : regionscheduleList1) {
-				Regionschedule newschedule = new Regionschedule();
-				newschedule.setObjtype(regionschedule.getObjtype());
-				newschedule.setObjid(regionschedule.getObjid());
-				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
-						.parse(today + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime())));
-				finalscheduleList.add(newschedule);
-			}
-			for (Regionschedule regionschedule : regionscheduleList1) {
-				Regionschedule newschedule = new Regionschedule();
-				newschedule.setObjtype(regionschedule.getObjtype());
-				newschedule.setObjid(regionschedule.getObjid());
-				newschedule.setTempstarttime(CommonConstants.DateFormat_Full
-						.parse(tomorrow + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime())));
-				finalscheduleList.add(newschedule);
-			}
-
-			// merge
-			for (Regionschedule regionschedule : regionscheduleList2) {
-				Date starttime = CommonConstants.DateFormat_Full
-						.parse(CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-								+ CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
-				Date endtime = CommonConstants.DateFormat_Full
-						.parse(CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-								+ CommonConstants.DateFormat_Time.format(regionschedule.getEndtime()));
-				Regionschedule newschedule = new Regionschedule();
-				newschedule.setObjtype(regionschedule.getObjtype());
-				newschedule.setObjid(regionschedule.getObjid());
-				newschedule.setTempstarttime(starttime);
-
-				Iterator<Regionschedule> it = finalscheduleList.iterator();
-				Regionschedule lastClosedSchedule = null;
-				Regionschedule lastRemoveSchedule = null;
-				int index = 0;
-				while (it.hasNext()) {
-					Regionschedule temp = it.next();
-					if (temp.getTempstarttime().before(starttime)) {
-						lastClosedSchedule = temp;
-						index++;
-					}
-					if (temp.getTempstarttime().equals(starttime) || temp.getTempstarttime().equals(endtime)
-							|| temp.getTempstarttime().after(starttime) && temp.getTempstarttime().before(endtime)) {
-						lastRemoveSchedule = temp;
-						it.remove();
-					}
-				}
-				if (lastRemoveSchedule != null) {
-					lastRemoveSchedule.setTempstarttime(endtime);
-					finalscheduleList.add(index, newschedule);
-					finalscheduleList.add(index + 1, lastRemoveSchedule);
-				} else if (lastClosedSchedule != null) {
-					lastRemoveSchedule = new Regionschedule();
-					lastRemoveSchedule.setObjtype(lastClosedSchedule.getObjtype());
-					lastRemoveSchedule.setObjid(lastClosedSchedule.getObjid());
-					lastRemoveSchedule.setTempstarttime(endtime);
-					finalscheduleList.add(index, newschedule);
-					finalscheduleList.add(index + 1, lastRemoveSchedule);
-				} else {
-					finalscheduleList.add(index, newschedule);
-				}
-			}
-
-			// generate final json
-			for (Regionschedule regionschedule : finalscheduleList) {
-				JSONObject scheduleJson = new JSONObject();
-				scheduleJson.put("start_time",
-						CommonConstants.DateFormat_Full.format(regionschedule.getTempstarttime()));
-				scheduleJson.put("start_time_seconds", (long) (regionschedule.getTempstarttime().getTime() / 1000));
-				if (regionschedule.getObjtype().equals("1")) {
-					scheduleJson.put("type", "list");
-				} else if (regionschedule.getObjtype().equals("2")) {
-					scheduleJson.put("type", "text");
-				} else if (regionschedule.getObjtype().equals("3")) {
-					scheduleJson.put("type", "stream");
-				} else if (regionschedule.getObjtype().equals("4")) {
-					scheduleJson.put("type", "dvb");
-				} else if (regionschedule.getObjtype().equals("5")) {
-					scheduleJson.put("type", "widget");
-				}
-				JSONArray playlistJsonArray = new JSONArray();
-				scheduleJson.put("playlist", playlistJsonArray);
-				scheduleJsonArray.put(scheduleJson);
-
-				String objtype = regionschedule.getObjtype();
-				String objid = "" + regionschedule.getObjid();
-				if (objtype.equals("1")) {
-					List<Medialistdtl> medialistdtls = medialistdtlMapper.selectList(objid);
-					for (Medialistdtl medialistdtl : medialistdtls) {
-						if (medialistdtl.getVideo() != null) {
-							Video video = medialistdtl.getVideo();
-							playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
-							if (videoHash.get(medialistdtl.getObjid()) == null) {
-								JSONObject videoJson = new JSONObject();
-								videoJson.put("id", video.getVideoid());
-								videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilename());
-								videoJson.put("file", video.getFilename());
-								videoJson.put("size", video.getSize());
-								videoHash.put(video.getVideoid(), videoJson);
-								videoJsonArray.put(videoJson);
-							}
-						} else if (medialistdtl.getImage() != null) {
-							Image image = medialistdtl.getImage();
-							playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
-							if (imageHash.get(medialistdtl.getObjid()) == null) {
-								JSONObject imageJson = new JSONObject();
-								imageJson.put("id", image.getImageid());
-								imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-										+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilename());
-								imageJson.put("file", image.getFilename());
-								imageJson.put("size", image.getSize());
-								imageHash.put(image.getImageid(), imageJson);
-								imageJsonArray.put(imageJson);
-							}
-						}
-					}
-				} else if (objtype.equals("2")) {
-					Text text = textMapper.selectByPrimaryKey(objid);
-					if (text != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "text").put("id", text.getTextid()));
-						if (textHash.get(text.getTextid()) == null) {
-							JSONObject textJson = new JSONObject();
-							textJson.put("id", text.getTextid());
-							textJson.put("text", text.getText());
-							textHash.put(text.getTextid(), textJson);
-							textJsonArray.put(textJson);
-						}
-					}
-				} else if (objtype.equals("3")) {
-					Stream stream = streamMapper.selectByPrimaryKey(objid);
-					if (stream != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
-						if (streamHash.get(stream.getStreamid()) == null) {
-							JSONObject streamJson = new JSONObject();
-							streamJson.put("id", stream.getStreamid());
-							streamJson.put("url", stream.getUrl());
-							streamHash.put(stream.getStreamid(), streamJson);
-							streamJsonArray.put(streamJson);
-						}
-					}
-				} else if (objtype.equals("4")) {
-					Dvb dvb = dvbMapper.selectByPrimaryKey(objid);
-					if (dvb != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
-						if (dvbHash.get(dvb.getDvbid()) == null) {
-							JSONObject dvbJson = new JSONObject();
-							dvbJson.put("id", dvb.getDvbid());
-							dvbJson.put("frequency", dvb.getFrequency());
-							dvbHash.put(dvb.getDvbid(), dvbJson);
-							dvbJsonArray.put(dvbJson);
-						}
-					}
-				} else if (objtype.equals("5")) {
-					Widget widget = widgetMapper.selectByPrimaryKey(objid);
-					if (widget != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", widget.getWidgetid()));
-						if (widgetHash.get(widget.getWidgetid()) == null) {
-							JSONObject widgetJson = new JSONObject();
-							widgetJson.put("id", widget.getWidgetid());
-							widgetJson.put("url", widget.getUrl());
-							widgetHash.put(widget.getWidgetid(), widgetJson);
-							widgetJsonArray.put(widgetJson);
-						}
-					}
-				}
-			}
+			responseJson.put("code", 0).put("message", "成功");
 
 			log.info("Pixsignage Service get_region response: " + responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -558,7 +246,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -618,7 +306,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -658,7 +346,7 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return handleResult(1001, "系统异常:" + e.getMessage());
+			return handleResult(1001, "系统异常");
 		}
 	}
 

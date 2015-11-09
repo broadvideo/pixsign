@@ -26,6 +26,13 @@
     order by regionid 
   </select>
 
+  <select id="selectActiveList" resultMap="BaseResultMap">
+    select distinct r.*
+    from region r, layout l, layoutdtl ld
+    where r.regionid=ld.regionid and l.layoutid=ld.layoutid and l.status=1
+    order by regionid 
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     delete from region
     where regionid = '${regionid}'

@@ -32,15 +32,13 @@
 	Org org = (Org)session.getAttribute(SessionConstants.SESSION_ORG);
 %>
 
-	<!-- BEGIN THEME STYLES --> 
-	<link href="/pixsignage-static/css/style-metronic.css" rel="stylesheet" type="text/css"/>
-	<link href="/pixsignage-static/css/style.css" rel="stylesheet" type="text/css"/>
-	<link href="/pixsignage-static/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-	<link href="/pixsignage-static/css/plugins.css" rel="stylesheet" type="text/css"/>
-	<link href="/pixsignage-static/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
-	<link href="/pixsignage-static/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-	<link href="/pixsignage-static/css/custom.css" rel="stylesheet" type="text/css"/>
-	<!-- END THEME STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="/pixsignage-static/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+<link href="/pixsignage-static/global/css/plugins.css" rel="stylesheet" type="text/css" />
+<link href="/pixsignage-static/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
+<link id="style_color" href="/pixsignage-static/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
+<link href="/pixsignage-static/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
+<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="../favicon.ico" />
 
 <script>
@@ -60,7 +58,7 @@ function hasPrivilege(privilegeid) {
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body class="page-header-fixed">
+<body class="page-header-fixed page-quick-sidebar-over-content">
 
 	<div id="ChangePwdModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
@@ -107,63 +105,70 @@ function hasPrivilege(privilegeid) {
 		</div>
 	</div>
 
-	<!-- BEGIN HEADER -->   
-	<div class="header navbar navbar-inverse navbar-fixed-top">
-		<!-- BEGIN TOP NAVIGATION BAR -->
-		<div class="header-inner">
+	<!-- BEGIN HEADER -->
+	<div class="page-header navbar navbar-fixed-top">
+		<!-- BEGIN HEADER INNER -->
+		<div class="page-header-inner">
 			<!-- BEGIN LOGO -->  
-			<a class="navbar-brand" href="main.jsp">
-				<img src="../local/img/logo.png" alt="logo" />
-			</a>
+			<div class="page-logo">
+				<a href="main.jsp">
+				<img src="../local/img/logo.png" alt="logo" class="logo-default"/>
+				</a>
+				<div class="menu-toggler sidebar-toggler hide">
+				</div>
+			</div>
 			<!-- END LOGO -->
-			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
-			<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			<img src="/pixsignage-static/img/menu-toggler.png" alt="" />
-			</a> 
+			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+			<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+			</a>
 			<!-- END RESPONSIVE MENU TOGGLER -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
-			<ul class="nav navbar-nav pull-right">
-				<!-- BEGIN USER LOGIN DROPDOWN -->
-				<li class="dropdown user">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<img alt="" src="../local/img/anonymous.jpg"/>
-					<span class="username"><%=staff.getName()%></span>
-					<i class="fa fa-angle-down"></i>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> 修改密码</a></li>
-						<li class="divider"></li>
-						<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> 全屏</a></li>
-						<li><a href="logout.action"><i class="fa fa-key"></i> 登出</a></li>
-					</ul>
-				</li>
-				<!-- END USER LOGIN DROPDOWN -->
-			</ul>
+			<div class="top-menu">
+				<ul class="nav navbar-nav pull-right">
+					<!-- BEGIN USER LOGIN DROPDOWN -->
+					<li class="dropdown dropdown-user">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						<img alt="" class="img-circle" src="../local/img/anonymous.jpg"/>
+						<span class="username username-hide-on-mobile"><%=staff.getName()%></span>
+						<i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-default">
+							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> 修改密码</a></li>
+							<li class="divider"></li>
+							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> 全屏</a></li>
+							<li><a href="logout.action"><i class="fa fa-key"></i> 登出</a></li>
+						</ul>
+					</li>
+					<!-- END USER LOGIN DROPDOWN -->
+				</ul>
+			</div>
 			<!-- END TOP NAVIGATION MENU -->
 		</div>
-		<!-- END TOP NAVIGATION BAR -->
+		<!-- END HEADER INNER -->
 	</div>
 	<!-- END HEADER -->
+	
 	<div class="clearfix"></div>
+	
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container">
 		<!-- BEGIN SIDEBAR -->
-		<div class="page-sidebar navbar-collapse collapse">
-			<!-- BEGIN SIDEBAR MENU -->        
-			<ul class="page-sidebar-menu">
-				<li>
-					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-					<div class="sidebar-toggler hidden-phone"></div>
-					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-				</li>
-				<li class="start <%= currentPrivilegeid.equals("")? "active" : "" %> ">
-					<a href="main.jsp">
-					<i class="fa fa-home"></i> 
-					<span class="title">我的首页</span>
-					<span class="selected"></span>
-					</a>
-				</li>
-				
+		<div class="page-sidebar-wrapper">
+			<div class="page-sidebar navbar-collapse collapse">
+				<!-- BEGIN SIDEBAR MENU -->        
+				<ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+					<li class="sidebar-toggler-wrapper">
+						<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+						<div class="sidebar-toggler"></div>
+						<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					</li>
+					<li class="start <%= currentPrivilegeid.equals("")? "active" : "" %> ">
+						<a href="main.jsp">
+						<i class="fa fa-home"></i> 
+						<span class="title">我的首页</span>
+						<span class="selected"></span>
+						</a>
+					</li>
 				<%
 
 				for (Privilege p : pList) {
@@ -206,7 +211,7 @@ function hasPrivilege(privilegeid) {
 											out.println("<a href=\"" + child.getMenuurl()+"?CurrentP="+child.getPrivilegeid()+"&ParentP="+child.getParentid() + "\">" + child.getName() + "</a>");
 										} else {
 											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"无权访问\">");
-											out.println("<a href=\"#\">" + child.getName() + "</a>");
+											out.println("<a href=\"#\" class=\"disabled-link\"><span class=\"disable-target\">" + child.getName() + "</span></a>");
 										}
 										out.println("</li>");
 									}
@@ -220,7 +225,8 @@ function hasPrivilege(privilegeid) {
 				
 				%>
 
-			</ul>
-			<!-- END SIDEBAR MENU -->
+				</ul>
+				<!-- END SIDEBAR MENU -->
+			</div>
 		</div>
 		<!-- END SIDEBAR -->

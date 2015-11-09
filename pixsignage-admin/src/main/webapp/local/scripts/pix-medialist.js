@@ -15,16 +15,16 @@ function refreshMyTable() {
 
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "medialistid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'medialistid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -41,11 +41,10 @@ function initMyTable() {
 		}
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
-    
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
@@ -53,14 +52,13 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
 		currentItem = item;
 		
 		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
 						'medialist.medialistid': currentItem['medialistid']
@@ -77,7 +75,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 		
 	});
 }
@@ -103,12 +101,12 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert('出错了！');
 			}
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
-
+	
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
 			$('#MyEditForm').submit();
@@ -128,17 +126,17 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.update'];
+		var item = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in data) {
-			formdata['medialist.' + name] = data[name];
+		for (var name in item) {
+			formdata['medialist.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
-		$('#MyEditForm').attr('action', action);
+		$('#MyEditForm').attr('action', myurls['common.update']);
 		$('#MyEditModal').modal();
 	});
+
 }
 
 //==============================播放列表明细对话框====================================			
@@ -161,10 +159,10 @@ function initMedialistDtlModal() {
 			url : myurls['medialist.dtllist'],
 			data : {'medialistid' : currentMedialistid},
 			beforeSend: function ( xhr ) {
-				App.blockUI($('#MyTable'));
+				Metronic.startPageLoading({animate: true});
 			},
 			success : function(data, status) {
-				App.unblockUI($('#MyTable'));
+				Metronic.stopPageLoading();
 				if (data.errorcode == 0) {
 					tempMedialistdtls = data.aaData;
 					for (var i=0; i<tempMedialistdtls.length; i++) {
@@ -190,55 +188,55 @@ function initMedialistDtlModal() {
 				}
 			},
 			error : function() {
-				App.unblockUI($('#MyTable'));
+				Metronic.stopPageLoading();
 				bootbox.alert('出错了!');
 			}
 		});
 	});
 	
 	//本地视频table初始化
-	$("#IntVideoTable thead").css("display", "none");
-	$("#IntVideoTable tbody").css("display", "none");	
+	$('#IntVideoTable thead').css('display', 'none');
+	$('#IntVideoTable tbody').css('display', 'none');	
 	var intvideohtml = '';
 	$('#IntVideoTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 12, 24, 48, 96 ],
-		                  [ 12, 24, 48, 96 ] 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
+						  [ 12, 24, 48, 96 ] 
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['video.list'],
-		"aoColumns" : [ {"sTitle" : "视频名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "文件大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "videoid", "bSortable" : false }],
-		"iDisplayLength" : 12,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnPreDrawCallback": function (oSettings) {
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['video.list'],
+		'aoColumns' : [ {'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'videoid', 'bSortable' : false }],
+		'iDisplayLength' : 12,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnPreDrawCallback': function (oSettings) {
 			if ($('#IntVideoContainer').length < 1) {
 				$('#IntVideoTable').append('<div id="IntVideoContainer"></div>');
 			}
 			$('#IntVideoContainer').html(''); 
 			return true;
 		},
-		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-			if (iDisplayIndex % 4 == 0) {
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+			if (iDisplayIndex % 6 == 0) {
 				intvideohtml = '';
 				intvideohtml += '<div class="row" >';
 			}
-			intvideohtml += '<div class="col-md-3 col-xs-3">';
+			intvideohtml += '<div class="col-md-2 col-xs-2">';
 			if (aData['thumbnail'] == null) {
 				intvideohtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width="100%" />';
 			} else {
-				intvideohtml += '<img src="/pixsigdata/image/snapshot/' + aData['videoid'] + '" alt="' + aData['name'] + '" width="100%" />';
+				intvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
 			}
 			intvideohtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			intvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-intvideo-add">增加</button></p>';
 			intvideohtml += '</div>';
-			if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
+			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
 				intvideohtml += '</div>';
 				if ((iDisplayIndex+1) != $('#IntVideoTable').dataTable().fnGetData().length) {
 					intvideohtml += '<hr/>';
@@ -248,55 +246,55 @@ function initMedialistDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'type','value':1 });
+			aoData.push({'name':'type','value':1 });
 		}
 	});
 	jQuery('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 	jQuery('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 	
 	//引入视频table初始化
-	$("#ExtVideoTable thead").css("display", "none");
-	$("#ExtVideoTable tbody").css("display", "none");	
+	$('#ExtVideoTable thead').css('display', 'none');
+	$('#ExtVideoTable tbody').css('display', 'none');	
 	var extvideohtml = '';
 	$('#ExtVideoTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 12, 24, 48, 96 ],
-		                  [ 12, 24, 48, 96 ] 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
+						  [ 12, 24, 48, 96 ] 
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['video.list'],
-		"aoColumns" : [ {"sTitle" : "视频名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "文件大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "videoid", "bSortable" : false }],
-		"iDisplayLength" : 12,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnPreDrawCallback": function (oSettings) {
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['video.list'],
+		'aoColumns' : [ {'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'videoid', 'bSortable' : false }],
+		'iDisplayLength' : 12,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnPreDrawCallback': function (oSettings) {
 			if ($('#ExtVideoContainer').length < 1) {
 				$('#ExtVideoTable').append('<div id="ExtVideoContainer"></div>');
 			}
 			$('#ExtVideoContainer').html(''); 
 			return true;
 		},
-		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-			if (iDisplayIndex % 4 == 0) {
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+			if (iDisplayIndex % 6 == 0) {
 				extvideohtml = '';
 				extvideohtml += '<div class="row" >';
 			}
-			extvideohtml += '<div class="col-md-3 col-xs-3">';
+			extvideohtml += '<div class="col-md-2 col-xs-2">';
 			if (aData['thumbnail'] == null) {
 				extvideohtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width="100%" />';
 			} else {
-				extvideohtml += '<img src="/pixsigdata/image/snapshot/' + aData['videoid'] + '" alt="' + aData['name'] + '" width="100%" />';
+				extvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
 			}
 			extvideohtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			extvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-extvideo-add">增加</button></p>';
 			extvideohtml += '</div>';
-			if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
+			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
 				extvideohtml += '</div>';
 				if ((iDisplayIndex+1) != $('#ExtVideoTable').dataTable().fnGetData().length) {
 					extvideohtml += '<hr/>';
@@ -306,51 +304,51 @@ function initMedialistDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'type','value':2 });
+			aoData.push({'name':'type','value':2 });
 		}
 	});
 	jQuery('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 	jQuery('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 	
 	//图片table初始化
-	$("#ImageTable thead").css("display", "none");
-	$("#ImageTable tbody").css("display", "none");	
+	$('#ImageTable thead').css('display', 'none');
+	$('#ImageTable tbody').css('display', 'none');	
 	var imagehtml = '';
 	$('#ImageTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 12, 24, 48, 96 ],
-		                  [ 12, 24, 48, 96 ] 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
+						  [ 12, 24, 48, 96 ] 
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['image.list'],
-		"aoColumns" : [ {"sTitle" : "图片名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "文件大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "imageid", "bSortable" : false }],
-		"iDisplayLength" : 12,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnPreDrawCallback": function (oSettings) {
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['image.list'],
+		'aoColumns' : [ {'sTitle' : '图片名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'imageid', 'bSortable' : false }],
+		'iDisplayLength' : 12,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnPreDrawCallback': function (oSettings) {
 			if ($('#ImageContainer').length < 1) {
 				$('#ImageTable').append('<div id="ImageContainer"></div>');
 			}
 			$('#ImageContainer').html(''); 
 			return true;
 		},
-		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-			if (iDisplayIndex % 4 == 0) {
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+			if (iDisplayIndex % 6 == 0) {
 				imagehtml = '';
 				imagehtml += '<div class="row" >';
 			}
-			imagehtml += '<div class="col-md-3 col-xs-3">';
+			imagehtml += '<div class="col-md-2 col-xs-2">';
 			imagehtml += '<img src="/pixsigdata' + aData['filename'] + '" alt="' + aData['name'] + '" width="100%" />';
 			imagehtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">增加</button></p>';
 			imagehtml += '</div>';
-			if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
+			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
 				imagehtml += '</div>';
 				if ((iDisplayIndex+1) != $('#ImageTable').dataTable().fnGetData().length) {
 					imagehtml += '<hr/>';
@@ -444,10 +442,10 @@ function initMedialistDtlModal() {
 			dataType : 'json',
 			contentType : 'application/json;charset=utf-8',
 			beforeSend: function ( xhr ) {
-				App.blockUI($('#MedialistDtlModal'));
+				Metronic.startPageLoading({animate: true});
 			},
 			success : function(data, status) {
-				App.unblockUI($('#MedialistDtlModal'));
+				Metronic.stopPageLoading();
 				$('#MedialistDtlModal').modal('hide');
 				if (data.errorcode == 0) {
 					bootbox.alert('操作成功');
@@ -457,7 +455,7 @@ function initMedialistDtlModal() {
 				}
 			},
 			error : function() {
-				App.unblockUI($('#MedialistDtlModal'));
+				Metronic.stopPageLoading();
 				bootbox.alert('出错了!');
 			}
 		});

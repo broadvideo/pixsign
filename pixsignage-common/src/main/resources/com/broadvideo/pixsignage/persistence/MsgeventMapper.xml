@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.MsgeventMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Msgevent" >
+    <id column="msgeventid" property="msgeventid" jdbcType="INTEGER" />
+    <result column="msgtype" property="msgtype" jdbcType="CHAR" />
+    <result column="objtype1" property="objtype1" jdbcType="CHAR" />
+    <result column="objid1" property="objid1" jdbcType="INTEGER" />
+    <result column="objtype2" property="objtype2" jdbcType="CHAR" />
+    <result column="objid2" property="objid2" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="sendtime" property="sendtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    msgeventid, msgtype, objtype1, objid1, objtype2, objid2, status, description, createtime, 
+    sendtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from msgevent
+    where msgeventid = '${msgeventid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from msgevent
+    where msgtype = '${msgtype}'
+    <if test="objtype1 != null">
+      and objtype1 = '${objtype1}'
+    </if>
+    <if test="objtype2 != null">
+      and objtype2 = '${objtype2}'
+    </if>
+    <if test="status != null">
+      and status = '${status}'
+    </if>
+    order by createtime
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectVchannelVCSSEvent" resultMap="BaseResultMap">
+    select * from msgevent
+    where msgtype = '3'
+  </select>
+
+  <select id="selectVchannelscheduleVCSSEvent" resultMap="BaseResultMap">
+    select * from msgevent
+    where msgtype = '4' and objtype1 = '3' and objid1 = '${vchannelid}'
+  </select>
+
+  <select id="selectVchannelPixboxEvent" resultMap="BaseResultMap">
+    select * from msgevent
+    where msgtype = '5'
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from msgevent
+    where msgeventid = '${msgeventid}'
+  </delete>
+  
+  <delete id="deleteByDtl" >
+    delete from msgevent
+    where msgtype = '${msgtype}'
+    <if test="objtype1 != null">
+      and objtype1 = '${objtype1}'
+    </if>
+    <if test="objid1 != null">
+      and objid1 = '${objid1}'
+    </if>
+    <if test="objtype2 != null">
+      and objtype2 = '${objtype2}'
+    </if>
+    <if test="objid2 != null">
+      and objid2 = '${objid2}'
+    </if>
+    <if test="status != null">
+      and status = '${status}'
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="msgeventid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into msgevent (msgtype, objtype1, objid1, 
+      objtype2, objid2, status, 
+      description, createtime, sendtime
+      )
+    values (#{msgtype,jdbcType=CHAR}, #{objtype1,jdbcType=CHAR}, #{objid1,jdbcType=INTEGER}, 
+      #{objtype2,jdbcType=CHAR}, #{objid2,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{sendtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="msgeventid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into msgevent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msgtype != null" >
+        msgtype,
+      </if>
+      <if test="objtype1 != null" >
+        objtype1,
+      </if>
+      <if test="objid1 != null" >
+        objid1,
+      </if>
+      <if test="objtype2 != null" >
+        objtype2,
+      </if>
+      <if test="objid2 != null" >
+        objid2,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="sendtime != null" >
+        sendtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msgtype != null" >
+        #{msgtype,jdbcType=CHAR},
+      </if>
+      <if test="objtype1 != null" >
+        #{objtype1,jdbcType=CHAR},
+      </if>
+      <if test="objid1 != null" >
+        #{objid1,jdbcType=INTEGER},
+      </if>
+      <if test="objtype2 != null" >
+        #{objtype2,jdbcType=CHAR},
+      </if>
+      <if test="objid2 != null" >
+        #{objid2,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null" >
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    update msgevent
+    <set >
+      <if test="msgtype != null" >
+        msgtype = #{msgtype,jdbcType=CHAR},
+      </if>
+      <if test="objtype1 != null" >
+        objtype1 = #{objtype1,jdbcType=CHAR},
+      </if>
+      <if test="objid1 != null" >
+        objid1 = #{objid1,jdbcType=INTEGER},
+      </if>
+      <if test="objtype2 != null" >
+        objtype2 = #{objtype2,jdbcType=CHAR},
+      </if>
+      <if test="objid2 != null" >
+        objid2 = #{objid2,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null" >
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Msgevent" >
+    update msgevent
+    set msgtype = #{msgtype,jdbcType=CHAR},
+      objtype1 = #{objtype1,jdbcType=CHAR},
+      objid1 = #{objid1,jdbcType=INTEGER},
+      objtype2 = #{objtype2,jdbcType=CHAR},
+      objid2 = #{objid2,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP}
+    where msgeventid = #{msgeventid,jdbcType=INTEGER}
+  </update>
+</mapper>

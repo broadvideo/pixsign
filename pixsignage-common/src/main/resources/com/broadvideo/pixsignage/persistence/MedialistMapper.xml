@@ -4,16 +4,17 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Medialist" >
     <id column="medialistid" property="medialistid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
-    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+	<collection property="medialistdtls" ofType="com.broadvideo.pixsignage.domain.Medialistdtl"
+		column="{medialistid=medialistid}" select="com.broadvideo.pixsignage.persistence.MedialistdtlMapper.selectList" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    medialistid, orgid, branchid, name, status, description, createtime, createstaffid
+    medialistid, orgid, name, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -24,7 +25,7 @@
   </select>
   
   <select id="selectCount" resultType="Integer">
-    select count(1) from medialist where status = 1 and orgid = ${orgid} and branchid = ${branchid}
+    select count(1) from medialist where status = 1 and orgid = ${orgid}
     <if test="search != null">
       and name like '%${search}%'
     </if>
@@ -32,7 +33,7 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from medialist
-    where status = 1 and orgid = ${orgid} and branchid = ${branchid}
+    where status = 1 and orgid = ${orgid}
     <if test="search != null">
       and name like '%${search}%'
     </if>
@@ -51,10 +52,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="medialistid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into medialist (orgid, branchid, name, 
+    insert into medialist (orgid, name, 
       status, description, createtime, 
       createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -66,9 +67,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
-      </if>
-      <if test="branchid != null" >
-        branchid,
       </if>
       <if test="name != null" >
         name,
@@ -89,9 +87,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
-      </if>
-      <if test="branchid != null" >
-        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -116,9 +111,6 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
-      <if test="branchid != null" >
-        branchid = #{branchid,jdbcType=INTEGER},
-      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -140,7 +132,6 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Medialist" >
     update medialist
     set orgid = #{orgid,jdbcType=INTEGER},
-      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},

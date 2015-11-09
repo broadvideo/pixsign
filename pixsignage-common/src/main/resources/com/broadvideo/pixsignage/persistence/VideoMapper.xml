@@ -6,6 +6,7 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
@@ -19,7 +20,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, name, type, filename, size, md5, status, progress, description, 
+    videoid, orgid, branchid, name, uuid, type, filename, size, md5, status, progress, description, 
     thumbnail, createtime, createstaffid
   </sql>
   
@@ -67,6 +68,11 @@
     </if>
   </select>
 
+  <select id="selectByUuid" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from video
+    where uuid = '${uuid}'
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     update video
     set status='9'
@@ -77,12 +83,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="videoid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into video (orgid, branchid, name, 
+    insert into video (orgid, branchid, name, uuid, 
       type, filename, size, md5, 
       status, progress, description, 
       thumbnail, createtime, createstaffid
       )
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{thumbnail,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
@@ -102,6 +108,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="uuid != null" >
+        uuid,
       </if>
       <if test="type != null" >
         type,
@@ -143,6 +152,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
         #{type,jdbcType=CHAR},
@@ -188,6 +200,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
@@ -226,6 +241,7 @@
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},

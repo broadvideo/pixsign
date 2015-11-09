@@ -17,6 +17,8 @@ public interface VideoMapper {
 			@Param(value = "type") String type, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
+	Video selectByUuid(@Param(value = "uuid") String uuid);
+
 	int deleteByPrimaryKey(@Param(value = "videoid") String videoid);
 
 	// int insert(Video record);

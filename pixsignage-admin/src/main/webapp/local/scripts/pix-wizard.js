@@ -29,93 +29,93 @@ function initWizard() {
 	initTab4();
 	initData1();
 	
-    var handleTitle = function(tab, navigation, index) {
-        var total = navigation.find('li').length;
-        var current = index + 1;
-        $('.step-title', $('#MyWizard')).text('Step ' + (index + 1) + ' of ' + total);
-        jQuery('li', $('#MyWizard')).removeClass('done');
-        var li_list = navigation.find('li');
-        for (var i = 0; i < index; i++) {
-            jQuery(li_list[i]).addClass('done');
-        }
+	var handleTitle = function(tab, navigation, index) {
+		var total = navigation.find('li').length;
+		var current = index + 1;
+		$('.step-title', $('#MyWizard')).text('Step ' + (index + 1) + ' of ' + total);
+		jQuery('li', $('#MyWizard')).removeClass('done');
+		var li_list = navigation.find('li');
+		for (var i = 0; i < index; i++) {
+			jQuery(li_list[i]).addClass('done');
+		}
 
-        if (current == 1) {
-            $('#MyWizard').find('.button-previous').hide();
-        } else {
-            $('#MyWizard').find('.button-previous').show();
-        }
+		if (current == 1) {
+			$('#MyWizard').find('.button-previous').hide();
+		} else {
+			$('#MyWizard').find('.button-previous').show();
+		}
 
-        if (current >= total) {
-            $('#MyWizard').find('.button-next').hide();
-            $('#MyWizard').find('.button-submit').show();
-        } else {
-            $('#MyWizard').find('.button-next').show();
-            $('#MyWizard').find('.button-submit').hide();
-        }
-        App.scrollTo($('.page-title'));
-        $('.form-group').removeClass('has-error');
-    };
+		if (current >= total) {
+			$('#MyWizard').find('.button-next').hide();
+			$('#MyWizard').find('.button-submit').show();
+		} else {
+			$('#MyWizard').find('.button-next').show();
+			$('#MyWizard').find('.button-submit').hide();
+		}
+		Metronic.scrollTo($('.page-title'));
+		$('.form-group').removeClass('has-error');
+	};
 
-    // default form wizard
-    $('#MyWizard').bootstrapWizard({
-        'nextSelector': '.button-next',
-        'previousSelector': '.button-previous',
-        onTabClick: function (tab, navigation, index, clickedIndex) {
-            if ((clickedIndex-index)>1) {
-                return false;
-            }
-            if (index == 0 && clickedIndex == 1) {
-            	if ($('#LayoutOptionForm').valid() == false) {
-            		return false;
-            	} else {
-            		initData2();
-            	}
-            } else if (index == 1 && clickedIndex == 2) {
-        		initData3();
-            } else if (index == 2 && clickedIndex == 3) {
-            	if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
-            		bootbox.alert('需要选择终端或者终端组。');
-            		return false;
-            	} else {
-            		initData4();
-            	}
-            }
-        },
-        onNext: function (tab, navigation, index) {
-        	if (index == 1) {
-            	if ($('#LayoutOptionForm').valid() == false) {
-            		return false;
-            	} else {
-            		initData2();
-            	}
-        	} else if (index == 2) {
-        		initData3();
-            } else if (index == 3) {
-            	if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
-            		bootbox.alert('需要选择终端或者终端组。');
-            		return false;
-            	} else {
-            		initData4();
-            	}
-            }
-        },
-        onPrevious: function (tab, navigation, index) {
-        },
-        onTabShow: function (tab, navigation, index) {
-            var total = navigation.find('li').length;
-            var current = index + 1;
-            var $percent = (current / total) * 100;
-            $('#MyWizard').find('.progress-bar').css({
-                width: $percent + '%'
-            });
-            handleTitle(tab, navigation, index);
-        }
-    });
+	// default form wizard
+	$('#MyWizard').bootstrapWizard({
+		'nextSelector': '.button-next',
+		'previousSelector': '.button-previous',
+		onTabClick: function (tab, navigation, index, clickedIndex) {
+			if ((clickedIndex-index)>1) {
+				return false;
+			}
+			if (index == 0 && clickedIndex == 1) {
+				if ($('#LayoutOptionForm').valid() == false) {
+					return false;
+				} else {
+					initData2();
+				}
+			} else if (index == 1 && clickedIndex == 2) {
+				initData3();
+			} else if (index == 2 && clickedIndex == 3) {
+				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
+					bootbox.alert('需要选择终端或者终端组。');
+					return false;
+				} else {
+					initData4();
+				}
+			}
+		},
+		onNext: function (tab, navigation, index) {
+			if (index == 1) {
+				if ($('#LayoutOptionForm').valid() == false) {
+					return false;
+				} else {
+					initData2();
+				}
+			} else if (index == 2) {
+				initData3();
+			} else if (index == 3) {
+				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
+					bootbox.alert('需要选择终端或者终端组。');
+					return false;
+				} else {
+					initData4();
+				}
+			}
+		},
+		onPrevious: function (tab, navigation, index) {
+		},
+		onTabShow: function (tab, navigation, index) {
+			var total = navigation.find('li').length;
+			var current = index + 1;
+			var $percent = (current / total) * 100;
+			$('#MyWizard').find('.progress-bar').css({
+				width: $percent + '%'
+			});
+			handleTitle(tab, navigation, index);
+		}
+	});
 
-    $('#MyWizard').find('.button-previous').hide();
-    $('#MyWizard .button-submit').click(function () {
-    	submitData();
-    }).hide();
+	$('#MyWizard').find('.button-previous').hide();
+	$('#MyWizard .button-submit').click(function () {
+		submitData();
+	}).hide();
 	
 }
 
@@ -184,10 +184,10 @@ function initTab1() {
 }
 
 function initData1() {
-    FormValidateOption.rules = {};
+	FormValidateOption.rules = {};
 	$('#LayoutOptionForm').validate(FormValidateOption);
-    $.extend($('#LayoutOptionForm').validate().settings, {
-    	rules: FormValidateOption.rules
+	$.extend($('#LayoutOptionForm').validate().settings, {
+		rules: FormValidateOption.rules
 	});
 }
 
@@ -316,8 +316,8 @@ function initTab2() {
 		FormValidateOption.rules['regiondtl.objid']['required'] = true;
 		FormValidateOption.ignore = null;
 		$('#RegionDtlForm').validate(FormValidateOption);
-	    $.extend($('#RegionDtlForm').validate().settings, {
-	    	rules: FormValidateOption.rules
+		$.extend($('#RegionDtlForm').validate().settings, {
+			rules: FormValidateOption.rules
 		});
 	}
 	
@@ -334,97 +334,97 @@ function initTab2() {
 		} else if ($('input[name="regiondtl.objtype"]:checked').val() == 5) {
 			url = myurls['widget.list']
 		}
-	    $('#RegionDtlSelect').select2({
-	        placeholder: '请选择对应内容',
-	        //minimumResultsForSearch: -1,
-	        minimumInputLength: 0,
-	        ajax: { 
-	            url: url,
-	            type: 'GET',
-	            dataType: 'json',
-	            data: function (term, page) {
-	                return {
-	                	sSearch: term, // search term
-	                    iDisplayStart: (page-1)*10,
-	                    iDisplayLength: 10,
-	                };
-	            },
-	            results: function (data, page) {
-	            	var more = (page * 10) < data.iTotalRecords; 
-	            	return {
-	            		results : $.map(data.aaData, function (item) {
-	            			if (item.medialistid) {
-		            			return {
-		            				text:item.name, 
-		            				id:item.medialistid,
-		            				item:item
-		            			};
-	            			} else if (item.textid) {
-		            			return {
-		            				text:item.name, 
-		            				id:item.textid,
-		            				item:item
-		            			};
-	            			} else if (item.streamid) {
-		            			return {
-		            				text:item.name + '(' + item.url + ')', 
-		            				id:item.streamid,
-		            				item:item
-		            			};
-	            			} else if (item.dvbid) {
-		            			return {
-		            				text:item.name, 
-		            				id:item.dvbid,
-		            				item:item
-		            			};
-	            			} else if (item.widgetid) {
-		            			return {
-		            				text:item.name + '(' + item.url + ')', 
-		            				id:item.widgetid,
-		            				item:item
-		            			};
-	            			}
-	            		}),
-	            		more: more
-	            	};
-	            }
-	        },
-	        formatResult: function (item) {
-	        	return item.text;
-	        },
-	        formatSelection: function (item) {
-	        	return item.text;
-	        },
-	        initSelection: function(element, callback) {
-	        },
-	        dropdownCssClass: 'bigdrop', 
-	        escapeMarkup: function (m) { return m; } 
-	    });
+		$('#RegionDtlSelect').select2({
+			placeholder: '请选择对应内容',
+			//minimumResultsForSearch: -1,
+			minimumInputLength: 0,
+			ajax: { 
+				url: url,
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term, // search term
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) {
+							if (item.medialistid) {
+								return {
+									text:item.name, 
+									id:item.medialistid,
+									item:item
+								};
+							} else if (item.textid) {
+								return {
+									text:item.name, 
+									id:item.textid,
+									item:item
+								};
+							} else if (item.streamid) {
+								return {
+									text:item.name + '(' + item.url + ')', 
+									id:item.streamid,
+									item:item
+								};
+							} else if (item.dvbid) {
+								return {
+									text:item.name, 
+									id:item.dvbid,
+									item:item
+								};
+							} else if (item.widgetid) {
+								return {
+									text:item.name + '(' + item.url + ')', 
+									id:item.widgetid,
+									item:item
+								};
+							}
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function (item) {
+				return item.text;
+			},
+			formatSelection: function (item) {
+				return item.text;
+			},
+			initSelection: function(element, callback) {
+			},
+			dropdownCssClass: 'bigdrop', 
+			escapeMarkup: function (m) { return m; } 
+		});
 		$('#RegionDtlSelect').val('');
 	}
 
 	$('.form_date').datetimepicker({
-        autoclose: true,
-        isRTL: App.isRTL(),
-        format: 'yyyy-mm-dd',
-        pickerPosition: (App.isRTL() ? 'bottom-right' : 'bottom-left'),
-        language: 'zh-CN',
-        minuteStep: 5,
-        startView: 2,
-        minView: 2
-    });
+		autoclose: true,
+		isRTL: Metronic.isRTL(),
+		format: 'yyyy-mm-dd',
+		pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+		language: 'zh-CN',
+		minuteStep: 5,
+		startView: 2,
+		minView: 2
+	});
 
-    $('.form_time').datetimepicker({
-        autoclose: true,
-        isRTL: App.isRTL(),
-        format: 'hh:ii:ss',
-        pickerPosition: (App.isRTL() ? 'bottom-right' : 'bottom-left'),
-        language: 'zh-CN',
-        minuteStep: 5,
-        startView: 1,
-        maxView: 1,
-        formatViewType: 'time'
-    });
+	$('.form_time').datetimepicker({
+		autoclose: true,
+		isRTL: Metronic.isRTL(),
+		format: 'hh:ii:ss',
+		pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+		language: 'zh-CN',
+		minuteStep: 5,
+		startView: 1,
+		maxView: 1,
+		formatViewType: 'time'
+	});
 }
 
 function initData2() {
@@ -501,7 +501,7 @@ function initData2() {
 function initTab3() {
 	//编制计划对话框中的设备table初始化
 	$('#DeviceTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-12 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 20, 40, 60, 100 ],
 						[ 20, 40, 60, 100 ] 
 						],
@@ -509,8 +509,8 @@ function initTab3() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
 		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-		                {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-		                {'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
+						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
 						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
 		'iDisplayLength' : 20,
 		'sPaginationType' : 'bootstrap',
@@ -520,15 +520,15 @@ function initTab3() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push( {'name':'devicegroupid','value':'0' })
-	    }
+			aoData.push( {'name':'devicegroupid','value':'0' })
+		}
 	});
 	jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 	jQuery('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	
 	//编制计划对话框中的设备组table初始化
 	$('#DeviceGroupTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-12 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 20, 40, 60, 100 ],
 						[ 20, 40, 60, 100 ] 
 						],
@@ -701,10 +701,10 @@ function submitData() {
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		beforeSend: function ( xhr ) {
-			App.blockUI($('.button-submit'));
+			Metronic.startPageLoading({animate: true});
 		},
 		success : function(data, status) {
-			App.unblockUI($('.button-submit'));
+			Metronic.stopPageLoading();
 			if (data.errorcode == 0) {
 				bootbox.alert('操作成功');
 				CurrentTaskid = data.dataid;
@@ -719,7 +719,7 @@ function submitData() {
 			}
 		},
 		error : function() {
-			App.unblockUI($('.button-submit'));
+			Metronic.stopPageLoading();
 			bootbox.alert('出错了!');
 		}
 	});
@@ -732,27 +732,27 @@ function submitData() {
 	var currentScheduleid = 0;
 
 	$('#ScheduleTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] // change per page values here
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['device.listbytask'],
-		'aoColumns' : [ {"sTitle" : "终端", "mData" : "device.name", "bSortable" : false }, 
-						{"sTitle" : "类型", "mData" : "type", "bSortable" : false }, 
-						//{"sTitle" : "起止时间", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "视频总量", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "已下载", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "待下载", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "开始下载时间", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "剩余估算时间", "mData" : "device.deviceid", "bSortable" : false }, 
-						{"sTitle" : "同步", "mData" : "syncstatus", "bSortable" : false }, 
-						{"sTitle" : "状态", "mData" : "status", "bSortable" : false }],
-		"iDisplayLength" : 10,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['device.listbytask'],
+		'aoColumns' : [ {'sTitle' : '终端', 'mData' : 'device.name', 'bSortable' : false }, 
+						{'sTitle' : '类型', 'mData' : 'type', 'bSortable' : false }, 
+						//{'sTitle' : '起止时间', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '视频总量', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '已下载', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '待下载', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '开始下载时间', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '剩余估算时间', 'mData' : 'device.deviceid', 'bSortable' : false }, 
+						{'sTitle' : '同步', 'mData' : 'syncstatus', 'bSortable' : false }, 
+						{'sTitle' : '状态', 'mData' : 'status', 'bSortable' : false }],
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			if (aData['type'] == 1) {
 				$('td:eq(1)', nRow).html('<span class="label label-sm label-info">排期计划</span>');
 			} else if (aData['type'] == 2) {
@@ -790,44 +790,44 @@ function submitData() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'taskid','value':currentTaskid });
-	    }, 
-	    'fnServerData': function ( sSource, aoData, fnCallback, oSettings ) {
-	    	$.getJSON( sSource, aoData, function (json) {
-	    		fnCallback(json);
-	    		$('#ScheduleTable tbody tr:first').trigger('click');
-	    	});
-	    }
+			aoData.push({'name':'taskid','value':currentTaskid });
+		}, 
+		'fnServerData': function ( sSource, aoData, fnCallback, oSettings ) {
+			$.getJSON( sSource, aoData, function (json) {
+				fnCallback(json);
+				$('#ScheduleTable tbody tr:first').trigger('click');
+			});
+		}
 	});
 
-    $('#ScheduleTable').on( 'click', 'tbody tr', function () {
-        if (!$(this).hasClass('active')) {
-        	$('#ScheduleTable tr.active').removeClass('active');
-            $(this).addClass('active');
-        }
-        if ($('#ScheduleTable').dataTable().fnGetData(this) != null) {
-            currentScheduleid = $('#ScheduleTable').dataTable().fnGetData(this)['scheduleid'];
-            $('#SchedulefileTable').dataTable()._fnAjaxUpdate();
-        }
-    });
+	$('#ScheduleTable').on( 'click', 'tbody tr', function () {
+		if (!$(this).hasClass('active')) {
+			$('#ScheduleTable tr.active').removeClass('active');
+			$(this).addClass('active');
+		}
+		if ($('#ScheduleTable').dataTable().fnGetData(this) != null) {
+			currentScheduleid = $('#ScheduleTable').dataTable().fnGetData(this)['scheduleid'];
+			$('#SchedulefileTable').dataTable()._fnAjaxUpdate();
+		}
+	});
 	
 	$('#SchedulefileTable').dataTable({
-		"sDom" : "<'row'<'col-md-6 col-sm-12'l>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", 
-		"aLengthMenu" : [ [ 10, 25, 50, 100 ],
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] // change per page values here
 						],
-		"bProcessing" : true,
-		"bServerSide" : true,
-		"sAjaxSource" : myurls['schedulefile.list'],
-		'aoColumns' : [ {"sTitle" : "类型", "mData" : "filetype", "bSortable" : false }, 
-						{"sTitle" : "编号", "mData" : "fileid", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "大小", "mData" : "filesize", "bSortable" : false }, 
-						{"sTitle" : "进度", "mData" : "complete", "bSortable" : false }],
-		"iDisplayLength" : 10,
-		"sPaginationType" : "bootstrap",
-		"oLanguage" : DataTableLanguage,
-		"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['schedulefile.list'],
+		'aoColumns' : [ {'sTitle' : '类型', 'mData' : 'filetype', 'bSortable' : false }, 
+						{'sTitle' : '编号', 'mData' : 'fileid', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '大小', 'mData' : 'filesize', 'bSortable' : false }, 
+						{'sTitle' : '进度', 'mData' : 'complete', 'bSortable' : false }],
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			if (aData['filetype'] == 0) {
 				$('td:eq(0)', nRow).html('布局');
 			} else if (aData['filetype'] == 1) {
@@ -852,6 +852,6 @@ function submitData() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'scheduleid','value':currentScheduleid });
-	    } 
+			aoData.push({'name':'scheduleid','value':currentScheduleid });
+		} 
 	});

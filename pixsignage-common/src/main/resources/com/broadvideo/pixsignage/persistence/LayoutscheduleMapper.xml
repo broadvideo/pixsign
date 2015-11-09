@@ -11,6 +11,7 @@
     <result column="starttime" property="starttime" jdbcType="TIME" />
     <result column="endtime" property="endtime" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="layout" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutMapper.selectByPrimaryKey" />
   </resultMap>
   
   <sql id="Base_Column_List" >

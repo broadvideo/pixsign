@@ -14,6 +14,11 @@
     <result column="objid" property="objid" jdbcType="INTEGER" />
     <result column="taskid" property="taskid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="medialist" column="{objtype=objtype,medialistid=objid}" select="selectMedialistid" />
+    <association property="text" column="{objtype=objtype,textid=objid}" select="selectTextid" />
+    <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStreamid" />
+    <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvbid" />
+    <association property="widget" column="{objtype=objtype,widgetid=objid}" select="selectWidgetid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -21,6 +26,31 @@
     objtype, objid, taskid, createtime
   </sql>
   
+  <select id="selectMedialistid" resultMap="com.broadvideo.pixsignage.persistence.MedialistMapper.BaseResultMap" >
+    select * from medialist
+    where '${objtype}' = '1' and medialistid = '${medialistid}'
+  </select>
+
+  <select id="selectTextid" resultMap="com.broadvideo.pixsignage.persistence.TextMapper.BaseResultMap" >
+    select * from text
+    where '${objtype}' = '2' and textid = '${textid}'
+  </select>
+
+  <select id="selectStreamid" resultMap="com.broadvideo.pixsignage.persistence.StreamMapper.BaseResultMap" >
+    select * from stream
+    where '${objtype}' = '3' and streamid = '${streamid}'
+  </select>
+
+  <select id="selectDvbid" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
+    select * from dvb
+    where '${objtype}' = '4' and dvbid = '${dvbid}'
+  </select>
+
+  <select id="selectWidgetid" resultMap="com.broadvideo.pixsignage.persistence.WidgetMapper.BaseResultMap" >
+    select * from widget
+    where '${objtype}' = '5' and widgetid = '${widgetid}'
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />

@@ -14,6 +14,9 @@ public class CommonConfig {
 	public static String CONFIG_TEMP_HOME = "/pixdata/pixsignage/temp";
 	public static String CONFIG_FFMPEG_HOME = "/opt/pix/ffmpeg";
 
+	public static String CONFIG_VCSS_SERVER = "http://127.0.0.1:6060/";
+	public static String CONFIG_PIXBOX_SERVER = "http://127.0.0.1:8080/sync_api/";
+
 	public static boolean LICENSE = false;
 	public static boolean LICENSE_HOSTID_VERIFY = false;
 	public static Date LICENSE_Expire;

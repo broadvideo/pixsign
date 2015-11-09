@@ -11,9 +11,9 @@ var Login = function () {
 		}
 
 		$('#OrgLoginForm').validate({
-	            errorElement: 'span', //default input error message container
-	            errorClass: 'help-block', // default input error message class
-	            focusInvalid: false, // do not focus the last invalid input
+	            errorElement: 'span', 
+	            errorClass: 'help-block', 
+	            focusInvalid: false, 
 	            rules: {
 	                username: {
 	                    required: true
@@ -39,12 +39,12 @@ var Login = function () {
 	                    required: "必须输入企业编码."
 	                },
 	            },
-	            invalidHandler: function (event, validator) { //display error alert on form submit   
+	            invalidHandler: function (event, validator) {
 	            	$('.alert-danger span', $('#OrgLoginForm')).html('请检查输入项。');
 	            	$('.alert-danger', $('#OrgLoginForm')).show();
 	            },
-	            highlight: function (element) { // hightlight error inputs
-	                $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+	            highlight: function (element) {
+	                $(element).closest('.form-group').addClass('has-error');
 	            },
 	            success: function (label) {
 	                label.closest('.form-group').removeClass('has-error');
@@ -54,7 +54,6 @@ var Login = function () {
 	                error.insertAfter(element.closest('.input-icon'));
 	            },
 	            submitHandler: function (form) {
-	            	$.cookie("login.tab", 'org');
 	            	if ($('input[name=remember]', $('#OrgLoginForm')).prop('checked')) {
 		            	$.cookie("org.username", $('input[name=username]', $('#OrgLoginForm')).attr('value'), {expires:10});
 		            	$.cookie("org.code", $('input[name=code]', $('#OrgLoginForm')).attr('value'), {expires:10});
@@ -64,16 +63,15 @@ var Login = function () {
 		            	$.removeCookie("org.code");
 		            	$.cookie("org.remember", false);
 	            	}
-	            	
 					$.ajax({
 						type : "POST",
-						url : $('#OrgLoginForm').attr('action'),
+						url : 'org/login!org',
 						data : $('#OrgLoginForm').serialize(),
 						beforeSend: function ( xhr ) {
-							App.blockUI($('.tab-content'));
+							Metronic.startPageLoading({animate: true});
 						},
 						success : function(data, status) {
-							App.unblockUI($('.tab-content'));
+							Metronic.stopPageLoading();
 							if (data.errorcode == 0) {
 								window.location.href = 'main.jsp';
 							} else {
@@ -82,7 +80,7 @@ var Login = function () {
 							}
 						},
 						error : function() {
-							App.unblockUI($('.tab-content'));
+							Metronic.stopPageLoading();
 							alert('failure');
 						}
 					});
@@ -110,9 +108,9 @@ var Login = function () {
 		}
 		
 		$('#VspLoginForm').validate({
-	            errorElement: 'span', //default input error message container
-	            errorClass: 'help-block', // default input error message class
-	            focusInvalid: false, // do not focus the last invalid input
+	            errorElement: 'span', 
+	            errorClass: 'help-block', 
+	            focusInvalid: false, 
 	            rules: {
 	                username: {
 	                    required: true
@@ -137,14 +135,14 @@ var Login = function () {
 	                }
 	            },
 
-	            invalidHandler: function (event, validator) { //display error alert on form submit   
+	            invalidHandler: function (event, validator) { 
 	            	$('.alert-danger span', $('#VspLoginForm')).html('请检查输入项。');
 	                $('.alert-danger', $('#VspLoginForm')).show();
 	            },
 
-	            highlight: function (element) { // hightlight error inputs
+	            highlight: function (element) { 
 	                $(element)
-	                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+	                    .closest('.form-group').addClass('has-error'); 
 	            },
 
 	            success: function (label) {
@@ -157,7 +155,6 @@ var Login = function () {
 	            },
 
 	            submitHandler: function (form) {
-	            	$.cookie("login.tab", 'vsp');
 	            	if ($('input[name=remember]', $('#VspLoginForm')).prop('checked')) {
 		            	$.cookie("vsp.username", $('input[name=username]', $('#VspLoginForm')).attr('value'), {expires:10});
 		            	$.cookie("vsp.code", $('input[name=code]', $('#VspLoginForm')).attr('value'), {expires:10});
@@ -170,13 +167,13 @@ var Login = function () {
 
 					$.ajax({
 						type : "POST",
-						url : $('#VspLoginForm').attr('action'),
+						url : 'vsp/login!vsp',
 						data : $('#VspLoginForm').serialize(),
 						beforeSend: function ( xhr ) {
-							App.blockUI($('.tab-content'));
+							Metronic.startPageLoading({animate: true});
 						},
 						success : function(data, status) {
-							App.unblockUI($('.tab-content'));
+							Metronic.stopPageLoading();
 							if (data.errorcode == 0) {
 								window.location.href = 'main.jsp';
 							} else {
@@ -185,7 +182,7 @@ var Login = function () {
 							}
 						},
 						error : function() {
-							App.unblockUI($('.tab-content'));
+							Metronic.stopPageLoading();
 							alert('failure');
 						}
 					});
@@ -208,25 +205,12 @@ var Login = function () {
         	
             handleOrgLogin();
             handleVspLogin();     
-	       
-            /*
-            if ($.cookie("login.tab") == 'vsp') {
-            	$('#li_org').removeClass('active');
-            	$('#tab_org').removeClass('active in');
-            	$('#li_vsp').addClass('active');
-            	$('#tab_vsp').addClass('active in');
-            } else {
-            	$('#li_org').addClass('active');
-            	$('#tab_org').addClass('active in');
-            	$('#li_vsp').removeClass('active');
-            	$('#tab_vsp').removeClass('active in');            	
-            }*/
             
 	       	$.backstretch([
-		        "/pixsignage-static/img/bg/1.jpg",
-		        "/pixsignage-static/img/bg/2.jpg",
-		        "/pixsignage-static/img/bg/3.jpg",
-		        "/pixsignage-static/img/bg/4.jpg"
+		        "/pixsignage-static/admin/pages/media/bg/1.jpg",
+		        "/pixsignage-static/admin/pages/media/bg/2.jpg",
+		        "/pixsignage-static/admin/pages/media/bg/3.jpg",
+		        "/pixsignage-static/admin/pages/media/bg/4.jpg"
 		        ], {
 		          fade: 1000,
 		          duration: 8000

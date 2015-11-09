@@ -12,8 +12,6 @@
 		<fileSet>
 			<directory>${project.parent.basedir}/pixsignage-res</directory>
 			<outputDirectory>.</outputDirectory>
-			<lineEnding>unix</lineEnding>
-			<fileMode>0644</fileMode>
 		</fileSet>
 	</fileSets>
 </assembly>

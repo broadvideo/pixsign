@@ -22,30 +22,30 @@ function initMyTable() {
 	var currentSelectBranchid = myBranchid;
 	var thumbmailhtml = '';
 	var oTable = $('#MyTable').dataTable({
-		'sDom' : "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", //default layout without horizontal scroll(remove this setting to enable horizontal scroll for the table)
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
-						[ 12, 24, 48, 96 ] // change per page values here
+						[ 12, 24, 48, 96 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [
-						{"sTitle" : "视频名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "文件名", "mData" : "filename", "bSortable" : false }, 
-						{"sTitle" : "文件大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "orgid", "bSortable" : false }],
+						{'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
-		"fnPreDrawCallback": function (oSettings) {
+		'fnPreDrawCallback': function (oSettings) {
 			if ($('#MediaContainer').length < 1) {
 				$('#MyTable').append('<div id="MediaContainer"></div>');
 			}
 			$('#MediaContainer').html(''); 
 			return true;
 		},
-		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 			if (iDisplayIndex % 6 == 0) {
 				thumbmailhtml = '';
 				thumbmailhtml += '<div class="row" >';
@@ -55,7 +55,7 @@ function initMyTable() {
 				thumbmailhtml += '<img src="../local/img/video.jpg' + '" alt="' + aData['name'] + '" width="100%" />';
 			} else {
 				thumbmailhtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
-				thumbmailhtml += '<img src="/pixsigdata/image/snapshot/' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
+				thumbmailhtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
 			}
 			thumbmailhtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
@@ -75,15 +75,14 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-	        aoData.push({'name':'branchid','value':currentSelectBranchid });
-	        aoData.push({'name':'type','value':myType });
+			aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'type','value':myType });
 		}
-		
 	});
 
-    jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-    jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-    jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -115,7 +114,7 @@ function initMyTable() {
 					}
 				});				
 			}
-         });
+		 });
 	});
 
 
@@ -125,9 +124,9 @@ function initMyTable() {
 		data : {},
 		success : function(data, status) {
 			if (data.errorcode == 0) {
-				var currentSelectBranchTreeData = [];
-				createBranchTreeData(data.aaData, currentSelectBranchTreeData);
-				createSelectBranchTree(currentSelectBranchTreeData);
+				var currentBranchTreeData = [];
+				createBranchTreeData(data.aaData, currentBranchTreeData);
+				createSelectBranchTree(currentBranchTreeData);
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}
@@ -155,10 +154,10 @@ function initMyTable() {
 	}
 	function createSelectBranchTree(treeData) {
 		$('#SelectBranchTree').jstree('destroy');
-	    $('#SelectBranchTree').jstree({
-	        'json_data' : {
-	            'data' : treeData
-	        },
+		$('#SelectBranchTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
 			'plugins' : [ 'themes', 'json_data', 'ui' ],
 			'core' : {
 				'animation' : 100
@@ -172,9 +171,9 @@ function initMyTable() {
 				'icons' : false,
 			}
 		});
-	    $('#SelectBranchTree').on('loaded.jstree', function() {
-	    	$('#SelectBranchTree').jstree('open_all');
-	    });
+		$('#SelectBranchTree').on('loaded.jstree', function() {
+			$('#SelectBranchTree').jstree('open_all');
+		});
 	}
 	
 	var BranchidList = [];
@@ -279,71 +278,57 @@ function initMyEditModal() {
 
 }
 
-
 function initUploadModal() {
-	var queueItems = new Array();
-	
-    // Initialize the jQuery File Upload widget:
-   $('#UploadForm').fileupload({
-       disableImageResize: false,
-       autoUpload: false,
-       // Uncomment the following to send cross-domain cookies:
-       //xhrFields: {withCredentials: true},                
-       url: 'video!upload.action'
-   });
+	$('#UploadForm').fileupload({
+		disableImageResize: false,
+		autoUpload: false,
+		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		maxFileSize: 2147483648,
+		acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv)$/i,
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},				
+	});
 
-   // Enable iframe cross-domain access via redirect option:
-   $('#UploadForm').fileupload(
-       'option',
-       'redirect',
-       window.location.href.replace(
-           /\/[^\/]*$/,
-           '/cors/result.html?%s'
-       )
-   );
+	// Enable iframe cross-domain access via redirect option:
+	$('#UploadForm').fileupload(
+		'option',
+		'redirect',
+		window.location.href.replace(
+			/\/[^\/]*$/,
+			'/cors/result.html?%s'
+		)
+	);
 
-   // Demo settings:
-   $('#UploadForm').fileupload('option', {
-       url: $('#UploadForm').fileupload('option', 'url'),
-       // Enable image resizing, except for Android and Opera,
-       // which actually support image resizing, but fail to
-       // send Blob objects via XHR requests:
-       disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-       maxFileSize: 2147483648,
-       acceptFileTypes: acceptFileTypes
-   });
+	// Upload server status check for browsers with CORS support:
+	if ($.support.cors) {
+		$.ajax({
+			type: 'HEAD'
+		}).fail(function () {
+			$('<div class="alert alert-danger"/>')
+				.text('Upload server currently unavailable - ' +
+						new Date())
+				.appendTo('#UploadForm');
+		});
+	}
 
-       // Upload server status check for browsers with CORS support:
-   if ($.support.cors) {
-       $.ajax({
-           url: 'video!upload.action',
-           type: 'HEAD'
-       }).fail(function () {
-           $('<div class="alert alert-danger"/>')
-               .text('上载服务器当前不可用 - ' +
-                       new Date())
-               .appendTo('#MyUploadForm');
-       });
-   }
-
-   // Load & display existing files:
-   $('#UploadForm').addClass('fileupload-processing');
-   $.ajax({
-       // Uncomment the following to send cross-domain cookies:
-       //xhrFields: {withCredentials: true},
-       url: $('#UploadForm').fileupload('option', 'url'),
-       dataType: 'json',
-       context: $('#UploadForm')[0]
-   }).always(function () {
-       $(this).removeClass('fileupload-processing');
-   }).done(function (result) {
-       $(this).fileupload('option', 'done')
-       .call(this, $.Event('done'), {result: result});
-   });
+	// Load & display existing files:
+	$('#UploadForm').addClass('fileupload-processing');
+	$.ajax({
+		// Uncomment the following to send cross-domain cookies:
+		//xhrFields: {withCredentials: true},
+		url: $('#UploadForm').attr("action"),
+		dataType: 'json',
+		context: $('#UploadForm')[0]
+	}).always(function () {
+		$(this).removeClass('fileupload-processing');
+	}).done(function (result) {
+		$(this).fileupload('option', 'done')
+		.call(this, $.Event('done'), {result: result});
+	});
 
    $('#UploadForm').bind('fileuploadsubmit', function (e, data) {
-       var inputs = data.context.find(':input');
-       data.formData = inputs.serializeArray();
+	   var inputs = data.context.find(':input');
+	   data.formData = inputs.serializeArray();
    }); 
 
 

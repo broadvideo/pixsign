@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -8,8 +9,6 @@ public class Medialist {
 	private Integer medialistid;
 
 	private Integer orgid;
-
-	private Integer branchid;
 
 	private String name;
 
@@ -20,6 +19,8 @@ public class Medialist {
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private List<Medialistdtl> medialistdtls;
 
 	public Integer getMedialistid() {
 		return medialistid;
@@ -35,14 +36,6 @@ public class Medialist {
 
 	public void setOrgid(Integer orgid) {
 		this.orgid = orgid;
-	}
-
-	public Integer getBranchid() {
-		return branchid;
-	}
-
-	public void setBranchid(Integer branchid) {
-		this.branchid = branchid;
 	}
 
 	public String getName() {
@@ -85,5 +78,13 @@ public class Medialist {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public List<Medialistdtl> getMedialistdtls() {
+		return medialistdtls;
+	}
+
+	public void setMedialistdtls(List<Medialistdtl> medialistdtls) {
+		this.medialistdtls = medialistdtls;
 	}
 }
