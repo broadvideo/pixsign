@@ -8,6 +8,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
+    <result column="filepath" property="filepath" jdbcType="VARCHAR" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="md5" property="md5" jdbcType="VARCHAR" />
@@ -20,7 +21,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, name, uuid, type, filename, size, md5, status, progress, description, 
+    videoid, orgid, branchid, name, uuid, type, filepath, filename, size, md5, status, progress, description, 
     thumbnail, createtime, createstaffid
   </sql>
   
@@ -84,12 +85,12 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into video (orgid, branchid, name, uuid, 
-      type, filename, size, md5, 
+      type, filepath, filename, size, md5, 
       status, progress, description, 
       thumbnail, createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{type,jdbcType=CHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{thumbnail,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
@@ -114,6 +115,9 @@
       </if>
       <if test="type != null" >
         type,
+      </if>
+      <if test="filepath != null" >
+        filepath,
       </if>
       <if test="filename != null" >
         filename,
@@ -158,6 +162,9 @@
       </if>
       <if test="type != null" >
         #{type,jdbcType=CHAR},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
       </if>
       <if test="filename != null" >
         #{filename,jdbcType=VARCHAR},
@@ -206,6 +213,9 @@
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
+      <if test="filepath != null" >
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
       <if test="filename != null" >
         filename = #{filename,jdbcType=VARCHAR},
       </if>
@@ -243,6 +253,7 @@
       name = #{name,jdbcType=VARCHAR},
       uuid = #{uuid,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},
       md5 = #{md5,jdbcType=VARCHAR},

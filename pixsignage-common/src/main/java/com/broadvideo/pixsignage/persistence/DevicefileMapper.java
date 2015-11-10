@@ -21,25 +21,25 @@ public interface DevicefileMapper {
 
 	List<Devicefile> selectDownloading(@Param(value = "deviceid") String deviceid);
 
-	void insertDeviceVideoFiles(@Param(value = "deviceid") String deviceid, @Param(value = "taskid") String taskid);
+	void insertDeviceVideoFiles(@Param(value = "deviceid") String deviceid);
 
 	void deleteDeviceVideoFiles(@Param(value = "deviceid") String deviceid);
 
-	void insertDeviceImageFiles(@Param(value = "deviceid") String deviceid, @Param(value = "taskid") String taskid);
+	void insertDeviceImageFiles(@Param(value = "deviceid") String deviceid);
 
 	void deleteDeviceImageFiles(@Param(value = "deviceid") String deviceid);
 
-	void insertDevicegroupVideoFiles(@Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "taskid") String taskid);
+	void insertDevicegroupVideoFiles(@Param(value = "devicegroupid") String devicegroupid);
 
 	void deleteDevicegroupVideoFiles(@Param(value = "devicegroupid") String devicegroupid);
 
-	void insertDevicegroupImageFiles(@Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "taskid") String taskid);
+	void insertDevicegroupImageFiles(@Param(value = "devicegroupid") String devicegroupid);
 
 	void deleteDevicegroupImageFiles(@Param(value = "devicegroupid") String devicegroupid);
 
 	int deleteByPrimaryKey(@Param(value = "devicefileid") String devicefileid);
+
+	int deleteByObj(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
 
 	// int insert(Devicefile record);
 

@@ -31,6 +31,11 @@
     where playlistdtlid = '${playlistdtlid}'
   </delete>
   
+  <delete id="deleteByDtl" >
+    delete from playlistdtl
+    where videoid = '${videoid}'
+  </delete>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Playlistdtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="playlistdtlid" order="AFTER" >
       SELECT LAST_INSERT_ID()

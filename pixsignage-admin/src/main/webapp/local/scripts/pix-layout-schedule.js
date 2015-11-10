@@ -121,6 +121,9 @@ function refreshSelect() {
 			dropdownCssClass: "bigdrop",
 			escapeMarkup: function (m) { return m; }
 		});
+		if (currentDeviceData == null) {
+			$('#DeviceSelect').val('');
+		}
 	} else if (currentBindtype == 2) {
 		$("#DeviceSelect").select2({
 			placeholder: "请选择终端组",
@@ -163,18 +166,10 @@ function refreshSelect() {
 			dropdownCssClass: "bigdrop",
 			escapeMarkup: function (m) { return m; }
 		});
-	}
-
-	$("#DeviceSelect").on("change", function(e) {
-		currentBindid = $(this).select2('data').id;
-		if (currentBindtype == 1) {
-			currentDeviceData = $(this).select2('data');
-		} else if (currentBindtype == 2) {
-			currentDevicegroupData = $(this).select2('data');
+		if (currentDevicegroupData == null) {
+			$('#DeviceSelect').val('');
 		}
-		refreshLayoutschedule();
-	});	
-
+	}
 }
 
 function initLayoutSchedules() {
@@ -202,6 +197,16 @@ function initLayoutSchedules() {
 		refreshSelect();
 		refreshLayoutschedule();
 	});
+
+	$("#DeviceSelect").on("change", function(e) {
+		currentBindid = $(this).select2('data').id;
+		if (currentBindtype == 1) {
+			currentDeviceData = $(this).select2('data');
+		} else if (currentBindtype == 2) {
+			currentDevicegroupData = $(this).select2('data');
+		}
+		refreshLayoutschedule();
+	});	
 
 	$.ajax({
 		type : 'POST',

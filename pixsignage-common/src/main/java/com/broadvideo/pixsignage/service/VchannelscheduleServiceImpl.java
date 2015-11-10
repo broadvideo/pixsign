@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Vchannelschedule;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
@@ -25,6 +26,14 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 
 	@Transactional
 	public void addVchannelschedule(Vchannelschedule vchannelschedule) {
+		if (vchannelschedule.getPlaydate() == null) {
+			vchannelscheduleMapper.deleteByDtl("" + vchannelschedule.getVchannelid(), vchannelschedule.getPlaymode(),
+					null, CommonConstants.DateFormat_Time.format(vchannelschedule.getStarttime()));
+		} else {
+			vchannelscheduleMapper.deleteByDtl("" + vchannelschedule.getVchannelid(), vchannelschedule.getPlaymode(),
+					CommonConstants.DateFormat_Date.format(vchannelschedule.getPlaydate()),
+					CommonConstants.DateFormat_Time.format(vchannelschedule.getStarttime()));
+		}
 		vchannelscheduleMapper.insertSelective(vchannelschedule);
 		syncVchannelschedule(vchannelschedule.getVchannelid());
 	}

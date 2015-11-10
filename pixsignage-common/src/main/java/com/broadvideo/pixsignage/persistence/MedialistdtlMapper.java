@@ -13,6 +13,8 @@ public interface MedialistdtlMapper {
 
 	int deleteByPrimaryKey(@Param(value = "medialistdtlid") String medialistdtlid);
 
+	int deleteByObj(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
+
 	// int insert(Medialistdtl record);
 
 	int insertSelective(Medialistdtl record);

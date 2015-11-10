@@ -6,6 +6,7 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="filepath" property="filepath" jdbcType="VARCHAR" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="md5" property="md5" jdbcType="VARCHAR" />
@@ -16,7 +17,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    imageid, orgid, branchid, name, filename, size, md5, status, description, createtime, 
+    imageid, orgid, branchid, name, filepath, filename, size, md5, status, description, createtime, 
     createstaffid
   </sql>
   
@@ -69,11 +70,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into image (orgid, branchid, name, 
-      filename, size, md5, 
+      filepath, filename, size, md5, 
       status, description, createtime, 
       createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -91,6 +92,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="filepath != null" >
+        filepath,
       </if>
       <if test="filename != null" >
         filename,
@@ -123,6 +127,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
       </if>
       <if test="filename != null" >
         #{filename,jdbcType=VARCHAR},
@@ -159,6 +166,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="filepath != null" >
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
       <if test="filename != null" >
         filename = #{filename,jdbcType=VARCHAR},
       </if>
@@ -188,6 +198,7 @@
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},
       md5 = #{md5,jdbcType=VARCHAR},

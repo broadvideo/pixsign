@@ -15,7 +15,11 @@ public interface RegionscheduleMapper {
 
 	int deleteByPrimaryKey(@Param(value = "regionscheduleid") String regionscheduleid);
 
-	int deleteByBind(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid);
+	int deleteByDtl(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,
+			@Param(value = "playmode") String playmode, @Param(value = "playdate") String playdate,
+			@Param(value = "starttime") String starttime);
+
+	int deleteByObj(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
 
 	// int insert(Regionschedule record);
 

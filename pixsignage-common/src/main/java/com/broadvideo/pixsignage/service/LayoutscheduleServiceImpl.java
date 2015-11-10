@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Layoutschedule;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
@@ -25,6 +26,15 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 
 	@Transactional
 	public void addLayoutschedule(Layoutschedule layoutschedule) {
+		if (layoutschedule.getPlaydate() == null) {
+			layoutscheduleMapper.deleteByDtl(layoutschedule.getBindtype(), "" + layoutschedule.getBindid(),
+					layoutschedule.getPlaymode(), null,
+					CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime()));
+		} else {
+			layoutscheduleMapper.deleteByDtl(layoutschedule.getBindtype(), "" + layoutschedule.getBindid(),
+					layoutschedule.getPlaymode(), CommonConstants.DateFormat_Date.format(layoutschedule.getPlaydate()),
+					CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime()));
+		}
 		layoutscheduleMapper.insertSelective(layoutschedule);
 		syncLayoutschedule(layoutschedule.getBindtype(), layoutschedule.getBindid());
 	}

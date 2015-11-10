@@ -342,7 +342,7 @@ function initMedialistDtlModal() {
 				imagehtml += '<div class="row" >';
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
-			imagehtml += '<img src="/pixsigdata' + aData['filename'] + '" alt="' + aData['name'] + '" width="100%" />';
+			imagehtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" />';
 			imagehtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
@@ -394,7 +394,7 @@ function initMedialistDtlModal() {
 
 	//增加引入视频到播放明细Table
 	$('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
-		var data = $('#IntVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
+		var data = $('#ExtVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
 		var medialistdtl = {};
 		medialistdtl.medialistdtlid = 0;
 		medialistdtl.medialistid = currentMedialist.medialistid;

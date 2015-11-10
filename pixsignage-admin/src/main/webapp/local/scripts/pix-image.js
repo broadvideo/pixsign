@@ -51,8 +51,8 @@ function initMyTable() {
 				thumbmailhtml += '<div class="row" >';
 			}
 			thumbmailhtml += '<div class="col-md-2 col-xs-2">';
-			thumbmailhtml += '<a class="fancybox" href="/pixsigdata' + aData['filename'] + '" title="' + aData['name'] + '">';
-			thumbmailhtml += '<img src="/pixsigdata' + aData['filename'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
+			thumbmailhtml += '<a class="fancybox" href="/pixsigdata' + aData['filepath'] + '" title="' + aData['name'] + '">';
+			thumbmailhtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
 			thumbmailhtml += '<h6>' + aData['imageid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			thumbmailhtml += '' + transferIntToComma(filesize) + 'KB</h6>';

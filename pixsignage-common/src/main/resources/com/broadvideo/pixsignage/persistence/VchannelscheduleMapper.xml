@@ -38,6 +38,25 @@
     where vchannelscheduleid = '${vchannelscheduleid}'
   </delete>
   
+  <delete id="deleteByDtl" >
+    delete from vchannelschedule
+    where vchannelid = '${vchannelid}'
+    <if test="playmode != null">
+      and playmode = '${playmode}'
+    </if>
+    <if test="playdate != null">
+      and playdate = '${playdate}'
+    </if>
+    <if test="starttime != null">
+      and starttime = '${starttime}'
+    </if>
+  </delete>
+
+  <delete id="deleteByPlaylist" >
+    delete from vchannelschedule
+    where playlistid = '${playlistid}'
+  </delete>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Vchannelschedule" >
     <selectKey resultType="java.lang.Integer" keyProperty="vchannelscheduleid" order="AFTER" >
       SELECT LAST_INSERT_ID()

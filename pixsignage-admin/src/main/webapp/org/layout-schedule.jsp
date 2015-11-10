@@ -117,13 +117,13 @@ response.setDateHeader("Expires",0);
 									<a href="javascript:;" onClick="refreshLayoutschedule();" class="reload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li><a id="DeviceTab" href="#ScheduleTab" data-toggle="tab">终端</a></li>
-									<li class="active"><a id="DevicegroupTab" href="#ScheduleTab" data-toggle="tab">终端组</a></li>
+									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab">终端</a></li>
+									<li class="active"><a id="DevicegroupTab" href="#TopTab" data-toggle="tab">终端组</a></li>
 								</ul>
 							</div>
 							<div class="portlet-body">
 								<div class="tab-content">
-									<div class="tab-pane active" id="ScheduleTab">
+									<div class="tab-pane active" id="TopTab">
 										<div class="row">
 											<div class="col-md1 col-sm-1">
 												<h3 class="event-form-title">请选择</h3>

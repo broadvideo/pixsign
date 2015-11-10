@@ -191,14 +191,17 @@ public class PixboxTask {
 						}
 						log.info("Finish thumbnail generating.");
 
-						video.setSize(FileUtils.sizeOf(new File(newFileName)));
-						FileInputStream fis = new FileInputStream(new File(newFileName));
+						video.setFilepath("/video/external/" + newFileName);
+						video.setFilename(newFileName);
+						video.setSize(FileUtils.sizeOf(new File(newFilePath)));
+						FileInputStream fis = new FileInputStream(new File(newFilePath));
 						video.setMd5(DigestUtils.md5Hex(fis));
 						fis.close();
 						video.setStatus("1");
 						video.setProgress(100);
 						videoMapper.updateByPrimaryKeySelective(video);
 					} catch (Exception ex) {
+						log.error("Handle external video error: " + ex);
 						ex.printStackTrace();
 					}
 				}

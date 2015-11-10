@@ -11,6 +11,7 @@ import com.broadvideo.pixsignage.domain.Playlist;
 import com.broadvideo.pixsignage.domain.Playlistdtl;
 import com.broadvideo.pixsignage.persistence.PlaylistMapper;
 import com.broadvideo.pixsignage.persistence.PlaylistdtlMapper;
+import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
 
 @Service("playlistService")
 public class PlaylistServiceImpl implements PlaylistService {
@@ -19,6 +20,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 	private PlaylistMapper playlistMapper;
 	@Autowired
 	private PlaylistdtlMapper playlistdtlMapper;
+	@Autowired
+	private VchannelscheduleMapper vchannelscheduleMapper;
 
 	public int selectCount(int orgid, String search) {
 		return playlistMapper.selectCount(orgid, search);
@@ -44,6 +47,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 	@Transactional
 	public void deletePlaylist(String playlistid) {
+		vchannelscheduleMapper.deleteByPlaylist(playlistid);
 		playlistMapper.deleteByPrimaryKey(playlistid);
 	}
 

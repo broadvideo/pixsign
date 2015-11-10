@@ -43,6 +43,11 @@
     where medialistdtlid = '${medialistdtlid}'
   </delete>
   
+  <delete id="deleteByObj" >
+    delete from medialistdtl
+    where objtype = '${objtype}' and objid = '${objid}'
+  </delete>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Medialistdtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="medialistdtlid" order="AFTER" >
       SELECT LAST_INSERT_ID()

@@ -15,7 +15,9 @@ public interface LayoutscheduleMapper {
 
 	int deleteByPrimaryKey(@Param(value = "layoutscheduleid") String layoutscheduleid);
 
-	int deleteByBind(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid);
+	int deleteByDtl(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,
+			@Param(value = "playmode") String playmode, @Param(value = "playdate") String playdate,
+			@Param(value = "starttime") String starttime);
 
 	// int insert(Layoutschedule record);
 

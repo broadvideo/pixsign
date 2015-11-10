@@ -7,10 +7,10 @@ var currentRegiontype;
 var currentRegionschedules;
 var currentRegionschedule;
 
-function refreshRegionTab() {
+function refreshLeftTab() {
 	$('.pix-addschedule').css('display', 'none');
 	if (currentBindid == 0) {
-		$('#RegionTab').html('');
+		$('#LeftTab').html('');
 		$('#ScheduleDetail').html('');
 		return;
 	}
@@ -39,7 +39,7 @@ function refreshRegionTab() {
 					regionTabHtml += '</li>';
 				}
 				regionTabHtml += '</ul>';
-				$('#RegionTab').html(regionTabHtml);
+				$('#LeftTab').html(regionTabHtml);
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}
@@ -115,7 +115,7 @@ function refreshRegionschedule() {
 								}
 								scheduleTabHtml += '<h6>' + medialistdtl.video.name + '</h6>';
 							} else if (medialistdtl.objtype == 2) {
-								scheduleTabHtml += '<img src="/pixsigdata' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" width="100%" />';
+								scheduleTabHtml += '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" width="100%" />';
 								scheduleTabHtml += '<h6>' + medialistdtl.image.name + '</h6>';
 							}
 							scheduleTabHtml += '</div>';
@@ -197,6 +197,9 @@ function refreshSelect() {
 			dropdownCssClass: "bigdrop",
 			escapeMarkup: function (m) { return m; }
 		});
+		if (currentDeviceData == null) {
+			$('#DeviceSelect').val('');
+		}
 	} else if (currentBindtype == 2) {
 		$("#DeviceSelect").select2({
 			placeholder: "请选择终端组",
@@ -239,18 +242,10 @@ function refreshSelect() {
 			dropdownCssClass: "bigdrop",
 			escapeMarkup: function (m) { return m; }
 		});
-	}
-
-	$("#DeviceSelect").on("change", function(e) {
-		currentBindid = $(this).select2('data').id;
-		if (currentBindtype == 1) {
-			currentDeviceData = $(this).select2('data');
-		} else if (currentBindtype == 2) {
-			currentDevicegroupData = $(this).select2('data');
+		if (currentDevicegroupData == null) {
+			$('#DeviceSelect').val('');
 		}
-		refreshRegionTab();
-	});	
-
+	}
 }
 
 function refreshRegionDtlSelect() {
@@ -347,7 +342,7 @@ function initRegionSchedules() {
 			currentBindid = 0;
 		}
 		refreshSelect();
-		refreshRegionTab();
+		refreshLeftTab();
 	});
 
 	$('body').on('click', '#DevicegroupTab', function(event) {
@@ -358,9 +353,18 @@ function initRegionSchedules() {
 			currentBindid = 0;
 		}
 		refreshSelect();
-		refreshRegionTab();
+		refreshLeftTab();
 	});
 
+	$("#DeviceSelect").on("change", function(e) {
+		currentBindid = $(this).select2('data').id;
+		if (currentBindtype == 1) {
+			currentDeviceData = $(this).select2('data');
+		} else if (currentBindtype == 2) {
+			currentDevicegroupData = $(this).select2('data');
+		}
+		refreshLeftTab();
+	});	
 
 	FormValidateOption.rules['regionschedule.starttime'] = {};
 	FormValidateOption.rules['regionschedule.starttime']['required'] = true;

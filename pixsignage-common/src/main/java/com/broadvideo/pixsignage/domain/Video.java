@@ -20,6 +20,8 @@ public class Video {
 
 	private String type;
 
+	private String filepath;
+
 	private String filename;
 
 	private Long size;
@@ -84,6 +86,14 @@ public class Video {
 
 	public void setType(String type) {
 		this.type = type == null ? null : type.trim();
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
 	}
 
 	public String getFilename() {

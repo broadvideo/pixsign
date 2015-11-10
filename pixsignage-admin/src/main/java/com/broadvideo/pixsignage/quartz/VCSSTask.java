@@ -85,7 +85,7 @@ public class VCSSTask {
 			vchannelJson.put("url_postfix", "" + vchannel.getVchannelid());
 			if (vchannel.getBackupvideo() != null) {
 				vchannelJson.put("backup_file",
-						CommonConfig.CONFIG_PIXDATA_HOME + vchannel.getBackupvideo().getFilename());
+						CommonConfig.CONFIG_PIXDATA_HOME + vchannel.getBackupvideo().getFilepath());
 			}
 		}
 
@@ -132,7 +132,7 @@ public class VCSSTask {
 					JSONObject videoJson = new JSONObject();
 					playlistJsonArray.put(videoJson);
 					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilename());
+					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
 				}
 			}
 			// Add today schedules
@@ -150,7 +150,7 @@ public class VCSSTask {
 					JSONObject videoJson = new JSONObject();
 					playlistJsonArray.put(videoJson);
 					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilename());
+					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
 				}
 			}
 			// Add tomorrow schedules
@@ -168,7 +168,7 @@ public class VCSSTask {
 					JSONObject videoJson = new JSONObject();
 					playlistJsonArray.put(videoJson);
 					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilename());
+					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
 				}
 			}
 

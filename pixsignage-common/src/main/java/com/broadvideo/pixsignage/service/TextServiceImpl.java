@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.domain.Text;
+import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.TextMapper;
 
 @Service("textService")
@@ -14,6 +16,8 @@ public class TextServiceImpl implements TextService {
 
 	@Autowired
 	private TextMapper textMapper;
+	@Autowired
+	private RegionscheduleMapper regionscheduleMapper;
 
 	public Text selectByPrimaryKey(String textid) {
 		return textMapper.selectByPrimaryKey(textid);
@@ -39,6 +43,7 @@ public class TextServiceImpl implements TextService {
 
 	@Transactional
 	public void deleteText(String textid) {
+		regionscheduleMapper.deleteByObj(Regionschedule.ObjType_Text, textid);
 		textMapper.deleteByPrimaryKey(textid);
 	}
 

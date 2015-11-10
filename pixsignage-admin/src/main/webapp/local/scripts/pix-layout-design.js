@@ -329,7 +329,7 @@ function initLayoutModal() {
 		layoutdtl.intervaltime = 10;
 		layoutdtl.direction = 4;
 		layoutdtl.speed = 2;
-		layoutdtl.color = '000000';
+		layoutdtl.color = '#FFFFFF';
 		layoutdtl.size = 30;
 		layoutdtl.opacity = 100;
 		layoutdtl.region = tempRegions[index];

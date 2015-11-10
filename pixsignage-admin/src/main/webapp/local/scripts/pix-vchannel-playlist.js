@@ -337,7 +337,7 @@ function initPlaylistDtlModal() {
 
 	//增加引入视频到播放明细Table
 	$('body').on('click', '.pix-playlistdtl-extvideo-add', function(event) {
-		var data = $('#IntVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
+		var data = $('#ExtVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
 		var playlistdtl = {};
 		playlistdtl.playlistdtlid = 0;
 		playlistdtl.playlistid = currentPlaylist.playlistid;

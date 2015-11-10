@@ -13,6 +13,8 @@ public class Image {
 
 	private String name;
 
+	private String filepath;
+
 	private String filename;
 
 	private Long size;
@@ -57,6 +59,14 @@ public class Image {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
 	}
 
 	public String getFilename() {

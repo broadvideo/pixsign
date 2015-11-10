@@ -1,6 +1,5 @@
 package com.broadvideo.pixsignage.service;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -187,7 +186,7 @@ public class LayoutServiceImpl implements LayoutService {
 
 		for (int i = 0; i < devices.length; i++) {
 			Device device = devices[i];
-			layoutscheduleMapper.deleteByBind("1", "" + device.getDeviceid());
+			layoutscheduleMapper.deleteByDtl("1", "" + device.getDeviceid(), null, null, null);
 			Layoutschedule layoutschedule = new Layoutschedule();
 			layoutschedule.setBindtype("1");
 			layoutschedule.setBindid(device.getDeviceid());
@@ -210,7 +209,7 @@ public class LayoutServiceImpl implements LayoutService {
 					"" + device.getDeviceid(), null, null, null);
 			msgeventMapper.insertSelective(msgevent);
 
-			regionscheduleMapper.deleteByBind("1", "" + device.getDeviceid());
+			regionscheduleMapper.deleteByDtl("1", "" + device.getDeviceid(), null, null, null);
 			for (Layoutdtl layoutdtl : layoutdtls) {
 				List<HashMap<String, String>> regiondtls = layoutdtl.getRegiondtls();
 				for (HashMap<String, String> regiondtl : regiondtls) {
@@ -257,13 +256,13 @@ public class LayoutServiceImpl implements LayoutService {
 
 			devicefileMapper.deleteDeviceVideoFiles("" + device.getDeviceid());
 			devicefileMapper.deleteDeviceImageFiles("" + device.getDeviceid());
-			devicefileMapper.insertDeviceVideoFiles("" + device.getDeviceid(), "" + task.getTaskid());
-			devicefileMapper.insertDeviceImageFiles("" + device.getDeviceid(), "" + task.getTaskid());
+			devicefileMapper.insertDeviceVideoFiles("" + device.getDeviceid());
+			devicefileMapper.insertDeviceImageFiles("" + device.getDeviceid());
 		}
 
 		for (int i = 0; i < devicegroups.length; i++) {
 			Devicegroup devicegroup = devicegroups[i];
-			layoutscheduleMapper.deleteByBind("2", "" + devicegroup.getDevicegroupid());
+			layoutscheduleMapper.deleteByDtl("2", "" + devicegroup.getDevicegroupid(), null, null, null);
 			Layoutschedule layoutschedule = new Layoutschedule();
 			layoutschedule.setBindtype("2");
 			layoutschedule.setBindid(devicegroup.getDevicegroupid());
@@ -286,7 +285,7 @@ public class LayoutServiceImpl implements LayoutService {
 					"" + devicegroup.getDevicegroupid(), null, null, null);
 			msgeventMapper.insertSelective(msgevent);
 
-			regionscheduleMapper.deleteByBind("2", "" + devicegroup.getDevicegroupid());
+			regionscheduleMapper.deleteByDtl("2", "" + devicegroup.getDevicegroupid(), null, null, null);
 			for (Layoutdtl layoutdtl : layoutdtls) {
 				List<HashMap<String, String>> regiondtls = layoutdtl.getRegiondtls();
 				for (HashMap<String, String> regiondtl : regiondtls) {
@@ -334,8 +333,8 @@ public class LayoutServiceImpl implements LayoutService {
 
 			devicefileMapper.deleteDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
 			devicefileMapper.deleteDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + devicegroup.getDevicegroupid(), "" + task.getTaskid());
-			devicefileMapper.insertDevicegroupImageFiles("" + devicegroup.getDevicegroupid(), "" + task.getTaskid());
+			devicefileMapper.insertDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
+			devicefileMapper.insertDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
 		}
 
 		return "" + task.getTaskid();
@@ -570,8 +569,8 @@ public class LayoutServiceImpl implements LayoutService {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilename());
-							videoJson.put("file", new File(video.getFilename()).getName());
+									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
+							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.put(videoJson);
@@ -583,8 +582,8 @@ public class LayoutServiceImpl implements LayoutService {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
 							imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilename());
-							imageJson.put("file", new File(image.getFilename()).getName());
+									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilepath());
+							imageJson.put("file", image.getFilename());
 							imageJson.put("size", image.getSize());
 							imageHash.put(image.getImageid(), imageJson);
 							imageJsonArray.put(imageJson);

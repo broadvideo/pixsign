@@ -478,7 +478,7 @@ function initDeviceFileModal() {
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(0)', nRow).html('video-' + aData.video.videoid);
+			$('td:eq(0)', nRow).html(aData.video.videoid);
 			$('td:eq(1)', nRow).html(aData.video.filename);
 			$('td:eq(2)', nRow).html(transferIntToComma(aData.video.size));
 			$('td:eq(3)', nRow).html(aData.video.md5);
@@ -518,7 +518,7 @@ function initDeviceFileModal() {
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(0)', nRow).html('image-' + aData.image.videoid);
+			$('td:eq(0)', nRow).html(aData.image.imageid);
 			$('td:eq(1)', nRow).html(aData.image.filename);
 			$('td:eq(2)', nRow).html(transferIntToComma(aData.image.size));
 			$('td:eq(3)', nRow).html(aData.image.md5);

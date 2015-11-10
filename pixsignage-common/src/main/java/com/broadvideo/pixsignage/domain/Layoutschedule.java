@@ -5,6 +5,12 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Layoutschedule {
+	public final static String BindType_Device = "1";
+	public final static String BindType_DeviceGroup = "2";
+
+	public final static String PlayMode_Once = "1";
+	public final static String PlayMode_Daily = "2";
+
 	private Integer layoutscheduleid;
 
 	private String bindtype;

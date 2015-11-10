@@ -173,7 +173,8 @@ create table image(
    orgid int not null,
    branchid int not null,
    name varchar(256) not null,
-   filename varchar(256) not null,
+   filepath varchar(32),
+   filename varchar(32),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
@@ -193,7 +194,8 @@ create table video(
    name varchar(256) not null,
    uuid varchar(64) not null,
    type char(1) default '1',
-   filename varchar(256),
+   filepath varchar(32),
+   filename varchar(32),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
@@ -480,7 +482,6 @@ default character set utf8;
 create table devicefile( 
    devicefileid int not null auto_increment,
    deviceid int not null,
-   taskid int,
    objtype char(1) not null,
    objid int not null,
    size bigint,
@@ -603,6 +604,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(202,2,0,'终端管理','','fa-desktop',1,3,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20201,2,202,'终端','device.jsp','',1,1,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20202,2,202,'终端组','devicegp.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20203,2,202,'终端文件','devicefile.jsp','',1,3,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(203,2,0,'播出管理','','fa-calendar',1,4,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20301,2,203,'布局设计','layout-design.jsp','',1,1,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20302,2,203,'布局计划','layout-schedule.jsp','',1,2,'1');

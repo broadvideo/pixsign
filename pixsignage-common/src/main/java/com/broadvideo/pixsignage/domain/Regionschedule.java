@@ -5,6 +5,18 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Regionschedule {
+	public final static String BindType_Device = "1";
+	public final static String BindType_DeviceGroup = "2";
+
+	public final static String PlayMode_Once = "1";
+	public final static String PlayMode_Daily = "2";
+
+	public final static String ObjType_Medialist = "1";
+	public final static String ObjType_Text = "2";
+	public final static String ObjType_Stream = "3";
+	public final static String ObjType_Dvb = "4";
+	public final static String ObjType_Widget = "5";
+
 	private Integer regionscheduleid;
 
 	private String bindtype;

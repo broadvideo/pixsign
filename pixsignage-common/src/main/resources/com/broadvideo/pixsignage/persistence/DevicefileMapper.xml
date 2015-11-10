@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Devicefile" >
     <id column="devicefileid" property="devicefileid" jdbcType="INTEGER" />
     <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
-    <result column="taskid" property="taskid" jdbcType="INTEGER" />
     <result column="objtype" property="objtype" jdbcType="CHAR" />
     <result column="objid" property="objid" jdbcType="INTEGER" />
     <result column="size" property="size" jdbcType="BIGINT" />
@@ -19,7 +18,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    devicefileid, deviceid, taskid, objtype, objid, size, progress, status, description, 
+    devicefileid, deviceid, objtype, objid, size, progress, status, description, 
     createtime, updatetime
   </sql>
 
@@ -72,8 +71,8 @@
   </select>
 
   <insert id="insertDeviceVideoFiles" >
-    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime)
-    select t2.deviceid,#{taskid},'1',t2.videoid,t2.size,0,'0',SYSDATE() from
+    insert into devicefile(deviceid,objtype,objid,size,progress,status,updatetime)
+    select t2.deviceid,'1',t2.videoid,t2.size,0,'0',SYSDATE() from
     (select * from devicefile df where df.objtype=1 and df.deviceid='${deviceid}') t1
     right join
     (select distinct rs.bindid as deviceid,v.videoid,v.size from regionschedule rs, medialistdtl mld, video v
@@ -93,8 +92,8 @@
   </delete>
 
   <insert id="insertDeviceImageFiles" >
-    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime)
-    select t2.deviceid,#{taskid},'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
+    insert into devicefile(deviceid,objtype,objid,size,progress,status,updatetime)
+    select t2.deviceid,'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
     (select * from devicefile df where df.objtype=2 and df.deviceid='${deviceid}') t1
     right join
     (select distinct rs.bindid as deviceid,i.imageid,i.size from regionschedule rs, medialistdtl mld, image i
@@ -114,8 +113,8 @@
   </delete>
 
   <insert id="insertDevicegroupVideoFiles" >
-    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime) 
-    select t2.deviceid,#{taskid},'1',t2.videoid,t2.size,0,'0',SYSDATE() from 
+    insert into devicefile(deviceid,objtype,objid,size,progress,status,updatetime) 
+    select t2.deviceid,'1',t2.videoid,t2.size,0,'0',SYSDATE() from 
     (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=1 and d.devicegroupid='${devicegroupid}') t1
     right join
     (select distinct d.deviceid,v.videoid,v.size from regionschedule rs, device d, medialistdtl mld, video v 
@@ -135,8 +134,8 @@
   </delete>
 
   <insert id="insertDevicegroupImageFiles" >
-    insert into devicefile(deviceid,taskid,objtype,objid,size,progress,status,updatetime) 
-    select t2.deviceid,#{taskid},'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
+    insert into devicefile(deviceid,objtype,objid,size,progress,status,updatetime) 
+    select t2.deviceid,'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
     (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=2 and d.devicegroupid='${devicegroupid}') t1
     right join
     (select distinct d.deviceid,i.imageid,i.size from regionschedule rs, device d, medialistdtl mld, image i
@@ -160,15 +159,20 @@
     where devicefileid = '${devicefileid}'
   </delete>
   
+  <delete id="deleteByObj" >
+    delete from devicefile
+    where objtype = '${objtype}' and objid = '${objid}'
+  </delete>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
     <selectKey resultType="java.lang.Integer" keyProperty="devicefileid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into devicefile (deviceid, taskid, objtype, 
+    insert into devicefile (deviceid, objtype, 
       objid, size, progress, 
       status, description, createtime, 
       updatetime)
-    values (#{deviceid,jdbcType=INTEGER}, #{taskid,jdbcType=INTEGER}, #{objtype,jdbcType=CHAR}, 
+    values (#{deviceid,jdbcType=INTEGER}, #{objtype,jdbcType=CHAR}, 
       #{objid,jdbcType=INTEGER}, #{size,jdbcType=BIGINT}, #{progress,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP})
@@ -181,9 +185,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="deviceid != null" >
         deviceid,
-      </if>
-      <if test="taskid != null" >
-        taskid,
       </if>
       <if test="objtype != null" >
         objtype,
@@ -213,9 +214,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="deviceid != null" >
         #{deviceid,jdbcType=INTEGER},
-      </if>
-      <if test="taskid != null" >
-        #{taskid,jdbcType=INTEGER},
       </if>
       <if test="objtype != null" >
         #{objtype,jdbcType=CHAR},
@@ -249,9 +247,6 @@
       <if test="deviceid != null" >
         deviceid = #{deviceid,jdbcType=INTEGER},
       </if>
-      <if test="taskid != null" >
-        taskid = #{taskid,jdbcType=INTEGER},
-      </if>
       <if test="objtype != null" >
         objtype = #{objtype,jdbcType=CHAR},
       </if>
@@ -282,7 +277,6 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >
     update devicefile
     set deviceid = #{deviceid,jdbcType=INTEGER},
-      taskid = #{taskid,jdbcType=INTEGER},
       objtype = #{objtype,jdbcType=CHAR},
       objid = #{objid,jdbcType=INTEGER},
       size = #{size,jdbcType=BIGINT},

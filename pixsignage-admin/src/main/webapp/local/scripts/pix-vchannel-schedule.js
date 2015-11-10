@@ -97,7 +97,7 @@ function initVchannels() {
 					vchannelTabHtml += '</li>';
 				}
 				vchannelTabHtml += '</ul>';
-				$('#VchannelTab').html(vchannelTabHtml);
+				$('#LeftTab').html(vchannelTabHtml);
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}

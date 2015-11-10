@@ -108,7 +108,7 @@ public class PixsignageService {
 				backupvideoJson.put("type", "video");
 				backupvideoJson.put("id", org.getBackupvideoid());
 				backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilename());
+						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilepath());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
 			}
@@ -240,6 +240,7 @@ public class PixsignageService {
 			}
 
 			device.setOnlineflag("1");
+			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");

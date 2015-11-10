@@ -43,92 +43,16 @@ response.setDateHeader("Expires",0);
 		<div class="page-content-wrapper">
 			<div class="page-content">
 			
-				<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</div>
-							<div class="modal-body">
-								<form id="ScheduleForm" class="form-horizontal" method="POST">
-									<div class="form-body">
-										<input type="hidden" name="regionschedule.regionscheduleid" value="0" />
-										<input type="hidden" name="regionschedule.bindtype" />
-										<input type="hidden" name="regionschedule.bindid" />
-										<input type="hidden" name="regionschedule.regionid" />
-										<div class="form-group">
-											<label class="control-label col-md-3">选项</label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.playmode" value="2" checked> 每日生效
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label">开始时间<span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-group date form_time">                                       
-													<input type="text" size="16" readonly class="form-control" name="regionschedule.starttime">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group objtype-0">
-											<label class="control-label col-md-3">类型</label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.objtype" value="1" checked> 列表
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.objtype" value="3"> 视频流
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.objtype" value="4"> 数字频道
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.objtype" value="5"> Widget
-												</label>
-											</div>
-										</div>
-										<div class="form-group objtype-1">
-											<label class="control-label col-md-3">类型</label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="regionschedule.objtype" value="2"> 文本
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label">内容<span class="required">*</span></label>
-											<div class="col-md-9">
-												<input type="hidden" id="RegionDtlSelect" class="form-control select2" name="regionschedule.objid" />
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button class="btn default" data-dismiss="modal">取消</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			
-		
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">播出计划</h3>
+				<h3 class="page-title">终端文件</h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">播出管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#">终端管理</a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">播出计划</a>
+						<li><a href="#">终端文件</a>
 						</li>
 					</ul>
 				</div>
@@ -139,9 +63,9 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>播出计划</div>
+								<div class="caption"><i class="fa fa-desktop"></i>终端文件</div>
 								<div class="tools">
-									<a href="javascript:;" onClick="refreshLeftTab();" class="reload"></a>
+									<a href="javascript:;" onClick="refreshLayoutschedule();" class="reload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
 									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab">终端</a></li>
@@ -151,15 +75,12 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="tab-content">
 									<div class="tab-pane active" id="TopTab">
-										<div class="row">
+										<div id="DevicegroupSelectPanel" class="row">
 											<div class="col-md1 col-sm-1">
 												<h3 class="event-form-title">请选择</h3>
 											</div>
 											<div class="col-md3 col-sm-3">
-												<input type="hidden" id="DeviceSelect" class="form-control select2">
-											</div>
-											<div class="col-md8 col-sm-8">
-												<a class="btn purple pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
+												<input type="hidden" id="DevicegroupSelect" class="form-control select2">
 											</div>
 										</div>
 										<br/>
@@ -169,7 +90,17 @@ response.setDateHeader("Expires",0);
 											</div>
 											<div class="col-md-10 col-sm-10 col-xs-10">
 												<div class="tab-content">
-													<div id="ScheduleDetail" class="tab-pane active">
+													<div id="DeviceDetail" class="tab-pane active">
+														<h3>视频文件</h3>
+														<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+														<h3>图片文件</h3>
+														<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
 													</div>
 												</div>
 											</div>
@@ -240,13 +171,13 @@ response.setDateHeader("Expires",0);
 <script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-region-schedule.js?t=2"></script>
+<script src="../local/scripts/pix-devicefile.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initRegionSchedules();
+	initDevicefiles();
 });
 
 </script>

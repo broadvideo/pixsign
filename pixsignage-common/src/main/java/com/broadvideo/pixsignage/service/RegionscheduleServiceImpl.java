@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Regionschedule;
+import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 
@@ -18,6 +20,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 	private RegionscheduleMapper regionscheduleMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
+	@Autowired
+	private DevicefileMapper devicefileMapper;
 
 	public List<Regionschedule> selectList(String bindtype, String bindid, String regionid, String playmode,
 			String fromdate, String todate) {
@@ -26,7 +30,28 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 
 	@Transactional
 	public void addRegionschedule(Regionschedule regionschedule) {
+		if (regionschedule.getPlaydate() == null) {
+			regionscheduleMapper.deleteByDtl(regionschedule.getBindtype(), "" + regionschedule.getBindid(),
+					regionschedule.getPlaymode(), null,
+					CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+		} else {
+			regionscheduleMapper.deleteByDtl(regionschedule.getBindtype(), "" + regionschedule.getBindid(),
+					regionschedule.getPlaymode(), CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()),
+					CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+		}
 		regionscheduleMapper.insertSelective(regionschedule);
+		if (regionschedule.getBindtype().equals("1")) {
+			devicefileMapper.deleteDeviceVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.deleteDeviceImageFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDeviceVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDeviceImageFiles("" + regionschedule.getBindid());
+		} else if (regionschedule.getBindtype().equals("2")) {
+			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDevicegroupImageFiles("" + regionschedule.getBindid());
+
+		}
 		syncRegionschedule(regionschedule.getBindtype(), regionschedule.getBindid(), regionschedule.getRegionid());
 	}
 
@@ -40,6 +65,17 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 	public void deleteRegionschedule(String regionscheduleid) {
 		Regionschedule regionschedule = regionscheduleMapper.selectByPrimaryKey(regionscheduleid);
 		regionscheduleMapper.deleteByPrimaryKey(regionscheduleid);
+		if (regionschedule.getBindtype().equals("1")) {
+			devicefileMapper.deleteDeviceVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.deleteDeviceImageFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDeviceVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDeviceImageFiles("" + regionschedule.getBindid());
+		} else if (regionschedule.getBindtype().equals("2")) {
+			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedule.getBindid());
+			devicefileMapper.insertDevicegroupImageFiles("" + regionschedule.getBindid());
+		}
 		syncRegionschedule(regionschedule.getBindtype(), regionschedule.getBindid(), regionschedule.getRegionid());
 	}
 

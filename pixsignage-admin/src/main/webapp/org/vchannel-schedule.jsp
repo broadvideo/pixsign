@@ -121,7 +121,7 @@ response.setDateHeader("Expires",0);
 							</div>
 							<div class="portlet-body">
 								<div class="row">
-									<div id="VchannelTab" class="col-md-2 col-sm-2 col-xs-2">
+									<div id="LeftTab" class="col-md-2 col-sm-2 col-xs-2">
 									</div>
 									<div class="col-md-10 col-sm-10 col-xs-10">
 										<div class="tab-content">

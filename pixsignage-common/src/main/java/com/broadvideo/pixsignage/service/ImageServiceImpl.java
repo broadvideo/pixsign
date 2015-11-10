@@ -6,14 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.domain.Medialistdtl;
+import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
+import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 
 @Service("imageService")
 public class ImageServiceImpl implements ImageService {
 
 	@Autowired
 	private ImageMapper imageMapper;
+	@Autowired
+	private MedialistdtlMapper medialistdtlMapper;
+	@Autowired
+	private DevicefileMapper devicefileMapper;
 
 	public int selectCount(String orgid, String branchid, String search) {
 		return imageMapper.selectCount(orgid, branchid, search);
@@ -39,6 +47,8 @@ public class ImageServiceImpl implements ImageService {
 
 	@Transactional
 	public void deleteImage(String imageid) {
+		medialistdtlMapper.deleteByObj(Medialistdtl.ObjType_Image, imageid);
+		devicefileMapper.deleteByObj(Devicefile.ObjType_Image, imageid);
 		imageMapper.deleteByPrimaryKey(imageid);
 	}
 

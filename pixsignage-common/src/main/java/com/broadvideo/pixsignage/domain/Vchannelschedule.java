@@ -5,6 +5,9 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Vchannelschedule {
+	public final static String PlayMode_Once = "1";
+	public final static String PlayMode_Daily = "2";
+
 	private Integer vchannelscheduleid;
 
 	private Integer vchannelid;

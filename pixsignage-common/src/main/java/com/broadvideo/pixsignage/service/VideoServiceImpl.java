@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.domain.Devicefile;
+import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.persistence.DevicefileMapper;
+import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
+import com.broadvideo.pixsignage.persistence.PlaylistdtlMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 
 @Service("videoService")
@@ -15,6 +20,12 @@ public class VideoServiceImpl implements VideoService {
 
 	@Autowired
 	private VideoMapper videoMapper;
+	@Autowired
+	private MedialistdtlMapper medialistdtlMapper;
+	@Autowired
+	private PlaylistdtlMapper playlistdtlMapper;
+	@Autowired
+	private DevicefileMapper devicefileMapper;
 
 	public int selectCount(String orgid, String branchid, String type, String search) {
 		return videoMapper.selectCount(orgid, branchid, type, search);
@@ -32,7 +43,7 @@ public class VideoServiceImpl implements VideoService {
 	@Transactional
 	public void addVideo(Video video) {
 		if (video.getUuid() == null) {
-			video.setUuid(UUID.randomUUID().toString());
+			video.setUuid(UUID.randomUUID().toString().replace("-", ""));
 		}
 		videoMapper.insertSelective(video);
 	}
@@ -44,6 +55,9 @@ public class VideoServiceImpl implements VideoService {
 
 	@Transactional
 	public void deleteVideo(String videoid) {
+		medialistdtlMapper.deleteByObj(Medialistdtl.ObjType_Video, videoid);
+		playlistdtlMapper.deleteByDtl(videoid);
+		devicefileMapper.deleteByObj(Devicefile.ObjType_Video, videoid);
 		videoMapper.deleteByPrimaryKey(videoid);
 	}
 

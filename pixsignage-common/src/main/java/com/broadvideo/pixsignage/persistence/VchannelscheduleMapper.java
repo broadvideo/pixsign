@@ -13,6 +13,11 @@ public interface VchannelscheduleMapper {
 
 	int deleteByPrimaryKey(@Param(value = "vchannelscheduleid") String vchannelscheduleid);
 
+	int deleteByDtl(@Param(value = "vchannelid") String vchannelid, @Param(value = "playmode") String playmode,
+			@Param(value = "playdate") String playdate, @Param(value = "starttime") String starttime);
+
+	int deleteByPlaylist(@Param(value = "playlistid") String playlistid);
+
 	// int insert(Vchannelschedule record);
 
 	int insertSelective(Vchannelschedule record);

@@ -5,11 +5,12 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Devicefile {
+	public final static String ObjType_Video = "1";
+	public final static String ObjType_Image = "2";
+
 	private Integer devicefileid;
 
 	private Integer deviceid;
-
-	private Integer taskid;
 
 	private String objtype;
 
@@ -47,14 +48,6 @@ public class Devicefile {
 
 	public void setDeviceid(Integer deviceid) {
 		this.deviceid = deviceid;
-	}
-
-	public Integer getTaskid() {
-		return taskid;
-	}
-
-	public void setTaskid(Integer taskid) {
-		this.taskid = taskid;
 	}
 
 	public String getObjtype() {

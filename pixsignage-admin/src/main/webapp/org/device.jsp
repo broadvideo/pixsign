@@ -42,7 +42,7 @@ response.setDateHeader("Expires",0);
 			
 				<!-- 终端文件列表对话框  -->
 				<div id="DeviceFileModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-wide">
+					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>

@@ -97,7 +97,8 @@ public class VideoAction extends BaseDatatableAction {
 					FileUtils.moveFile(mymedia[i], fileToCreate);
 					log.info("Finish content upload: " + newFileName);
 
-					video.setFilename("/video/upload/" + newFileName);
+					video.setFilepath("/video/upload/" + newFileName);
+					video.setFilename(newFileName);
 					try {
 						// Generate preview gif
 						String cmd = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + fileToCreate
@@ -223,9 +224,6 @@ public class VideoAction extends BaseDatatableAction {
 			video.setCreatestaffid(getLoginStaff().getStaffid());
 			video.setOrgid(getLoginStaff().getOrgid());
 			video.setBranchid(getLoginStaff().getBranchid());
-
-			video.setFilename(video.getName());
-
 			videoService.addVideo(video);
 			return SUCCESS;
 		} catch (Exception ex) {

@@ -13,6 +13,8 @@ public interface PlaylistdtlMapper {
 
 	int deleteByPrimaryKey(@Param(value = "playlistdtlid") String playlistdtlid);
 
+	int deleteByDtl(@Param(value = "videoid") String videoid);
+
 	// int insert(Playlistdtl record);
 
 	int insertSelective(Playlistdtl record);

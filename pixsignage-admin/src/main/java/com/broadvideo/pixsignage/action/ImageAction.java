@@ -80,7 +80,8 @@ public class ImageAction extends BaseDatatableAction {
 						fileToCreate.delete();
 					}
 					FileUtils.moveFile(mymedia[i], fileToCreate);
-					image.setFilename("/image/upload/" + newFileName);
+					image.setFilepath("/image/upload/" + newFileName);
+					image.setFilename(newFileName);
 					image.setSize(FileUtils.sizeOf(fileToCreate));
 					FileInputStream fis = new FileInputStream(fileToCreate);
 					image.setMd5(DigestUtils.md5Hex(fis));
@@ -143,9 +144,6 @@ public class ImageAction extends BaseDatatableAction {
 			image.setCreatestaffid(getLoginStaff().getStaffid());
 			image.setOrgid(getLoginStaff().getOrgid());
 			image.setBranchid(getLoginStaff().getBranchid());
-
-			image.setFilename(image.getName());
-
 			imageService.addImage(image);
 			return SUCCESS;
 		} catch (Exception ex) {
