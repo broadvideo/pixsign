@@ -47,7 +47,7 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    delete from vchannel
+    update vchannel set status = '9'
     where vchannelid = '${vchannelid}'
   </delete>
   

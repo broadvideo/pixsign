@@ -1,7 +1,6 @@
 package com.broadvideo.pixsignage.quartz;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -14,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Msgevent;
-import com.broadvideo.pixsignage.domain.Playlistdtl;
 import com.broadvideo.pixsignage.domain.Vchannel;
-import com.broadvideo.pixsignage.domain.Vchannelschedule;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
 import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
-import com.broadvideo.pixsignage.util.CommonUtil;
+import com.broadvideo.pixsignage.service.VchannelscheduleService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
@@ -35,6 +32,8 @@ public class VCSSTask {
 	private VchannelMapper vchannelMapper;
 	@Autowired
 	private VchannelscheduleMapper vchannelscheduleMapper;
+	@Autowired
+	private VchannelscheduleService vchannelscheduleService;
 
 	public void work() {
 		try {
@@ -67,7 +66,7 @@ public class VCSSTask {
 				sendScheduleMsg(scheduleEvent);
 			}
 		} catch (Exception e) {
-			log.error("ActivemqTask Quartz Task error: " + e.getMessage());
+			log.error("VCSS Quartz Task error: " + e.getMessage());
 		}
 		workflag = false;
 	}
@@ -105,73 +104,7 @@ public class VCSSTask {
 	private void sendScheduleMsg(Msgevent msgevent) {
 		Vchannel vchannel = vchannelMapper.selectByPrimaryKey("" + msgevent.getObjid1());
 		if (vchannel != null && vchannel.getStatus().equals("1")) {
-			JSONObject msgJson = new JSONObject();
-			msgJson.put("vchannel_uuid", vchannel.getUuid());
-			JSONArray scheduleJsonArray = new JSONArray();
-			msgJson.put("schedules", scheduleJsonArray);
-
-			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-			String tomorrow = CommonConstants.DateFormat_Date
-					.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
-			List<Vchannelschedule> scheduleList = vchannelscheduleMapper.selectList("" + vchannel.getVchannelid());
-
-			// Add the first schedule from 00:00
-			if (scheduleList.size() > 0
-					&& !CommonConstants.DateFormat_Time.format(scheduleList.get(0).getStarttime()).equals("00:00:00")) {
-				JSONObject scheduleJson = new JSONObject();
-				scheduleJsonArray.put(scheduleJson);
-				String s = today + " 00:00:00";
-				Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
-				scheduleJson.put("start_time", s);
-				scheduleJson.put("start_time_seconds", (long) (starttime.getTime() / 1000));
-
-				JSONArray playlistJsonArray = new JSONArray();
-				scheduleJson.put("playlist", playlistJsonArray);
-				for (Playlistdtl playlistdtl : scheduleList.get(scheduleList.size() - 1).getPlaylist()
-						.getPlaylistdtls()) {
-					JSONObject videoJson = new JSONObject();
-					playlistJsonArray.put(videoJson);
-					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
-				}
-			}
-			// Add today schedules
-			for (Vchannelschedule schedule : scheduleList) {
-				JSONObject scheduleJson = new JSONObject();
-				scheduleJsonArray.put(scheduleJson);
-				String s = today + " " + CommonConstants.DateFormat_Time.format(schedule.getStarttime());
-				Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
-				scheduleJson.put("start_time", s);
-				scheduleJson.put("start_time_seconds", (long) (starttime.getTime() / 1000));
-
-				JSONArray playlistJsonArray = new JSONArray();
-				scheduleJson.put("playlist", playlistJsonArray);
-				for (Playlistdtl playlistdtl : schedule.getPlaylist().getPlaylistdtls()) {
-					JSONObject videoJson = new JSONObject();
-					playlistJsonArray.put(videoJson);
-					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
-				}
-			}
-			// Add tomorrow schedules
-			for (Vchannelschedule schedule : scheduleList) {
-				JSONObject scheduleJson = new JSONObject();
-				scheduleJsonArray.put(scheduleJson);
-				String s = tomorrow + " " + CommonConstants.DateFormat_Time.format(schedule.getStarttime());
-				Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
-				scheduleJson.put("start_time", s);
-				scheduleJson.put("start_time_seconds", (long) (starttime.getTime() / 1000));
-
-				JSONArray playlistJsonArray = new JSONArray();
-				scheduleJson.put("playlist", playlistJsonArray);
-				for (Playlistdtl playlistdtl : schedule.getPlaylist().getPlaylistdtls()) {
-					JSONObject videoJson = new JSONObject();
-					playlistJsonArray.put(videoJson);
-					videoJson.put("id", playlistdtl.getVideo().getVideoid());
-					videoJson.put("file", CommonConfig.CONFIG_PIXDATA_HOME + playlistdtl.getVideo().getFilepath());
-				}
-			}
-
+			JSONObject msgJson = vchannelscheduleService.generateVchannelScheduleJson("" + msgevent.getObjid1());
 			String url = CommonConfig.CONFIG_VCSS_SERVER + "schedules";
 			log.info("Send schedules message to VCSS: " + msgJson.toString());
 			Client c = Client.create();

@@ -2,6 +2,8 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.broadvideo.pixsignage.domain.Regionschedule;
 
 public interface RegionscheduleService {
@@ -14,4 +16,7 @@ public interface RegionscheduleService {
 
 	public void deleteRegionschedule(String regionscheduleid);
 
+	public void syncRegionschedule(String bindtype, String bindid) throws Exception;
+
+	public JSONObject generateRegionScheduleJson(String bindtype, String bindid, String regionid);
 }

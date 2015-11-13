@@ -22,7 +22,8 @@ import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.service.LayoutService;
+import com.broadvideo.pixsignage.service.LayoutscheduleService;
+import com.broadvideo.pixsignage.service.RegionscheduleService;
 
 @Component
 @Consumes("application/json;charset=UTF-8")
@@ -42,7 +43,9 @@ public class PixsignageService {
 	private CrashreportMapper crashreportMapper;
 
 	@Autowired
-	private LayoutService layoutService;
+	private LayoutscheduleService layoutscheduleService;
+	@Autowired
+	private RegionscheduleService regionscheduleService;
 
 	@POST
 	@Path("init")
@@ -161,9 +164,9 @@ public class PixsignageService {
 
 			JSONObject responseJson;
 			if (device.getDevicegroupid() > 0) {
-				responseJson = layoutService.generateLayoutScheduleJson("2", "" + device.getDevicegroupid());
+				responseJson = layoutscheduleService.generateLayoutScheduleJson("2", "" + device.getDevicegroupid());
 			} else {
-				responseJson = layoutService.generateLayoutScheduleJson("1", "" + device.getDeviceid());
+				responseJson = layoutscheduleService.generateLayoutScheduleJson("1", "" + device.getDeviceid());
 			}
 			responseJson.put("code", 0).put("message", "成功");
 			log.info("Pixsignage Service get_layout response: " + responseJson.toString());
@@ -201,10 +204,11 @@ public class PixsignageService {
 
 			JSONObject responseJson;
 			if (device.getDevicegroupid() > 0) {
-				responseJson = layoutService.generateRegionScheduleJson("2", "" + device.getDevicegroupid(),
+				responseJson = regionscheduleService.generateRegionScheduleJson("2", "" + device.getDevicegroupid(),
 						"" + regionid);
 			} else {
-				responseJson = layoutService.generateRegionScheduleJson("1", "" + device.getDeviceid(), "" + regionid);
+				responseJson = regionscheduleService.generateRegionScheduleJson("1", "" + device.getDeviceid(),
+						"" + regionid);
 			}
 			responseJson.put("code", 0).put("message", "成功");
 

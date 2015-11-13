@@ -83,6 +83,23 @@ public class LayoutscheduleAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doSync() {
+		try {
+			String bindtype = getParameter("bindtype");
+			String bindid = getParameter("bindid");
+			if (bindtype != null && bindid != null) {
+				layoutscheduleService.syncLayoutschedule(bindtype, bindid);
+				log.error("Layout schedule sync success");
+			}
+			return SUCCESS;
+		} catch (Exception ex) {
+			log.error("Layout schedule sync error: " + ex.getMessage());
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Layoutschedule getLayoutschedule() {
 		return layoutschedule;
 	}

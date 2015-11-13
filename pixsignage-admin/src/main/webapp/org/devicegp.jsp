@@ -225,7 +225,7 @@ response.setDateHeader("Expires",0);
 <script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-devicegp.js?t=2"></script>
+<script src="../local/scripts/pix-devicegp.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

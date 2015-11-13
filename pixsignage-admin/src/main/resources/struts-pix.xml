@@ -91,7 +91,7 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		
+
 		<action name="staff!list" method="doList" class="staffAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -128,7 +128,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="staff!resetpassword" method="doResetPassword" class="staffAction">
+		<action name="staff!resetpassword" method="doResetPassword"
+			class="staffAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="json">
 				<param name="enableSMD">true</param>
@@ -138,7 +139,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="staff!updatepassword" method="doUpdatePassword" class="staffAction">
+		<action name="staff!updatepassword" method="doUpdatePassword"
+			class="staffAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="json">
 				<param name="enableSMD">true</param>
@@ -187,7 +189,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="role!privilegelist" method="doPrivilegeList" class="roleAction">
+		<action name="role!privilegelist" method="doPrivilegeList"
+			class="roleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
@@ -347,7 +350,7 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		
+
 		<action name="dvb!list" method="doList" class="dvbAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -372,7 +375,7 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		
+
 		<action name="widget!list" method="doList" class="widgetAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -446,7 +449,8 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="device!unregisterlist" method="doUnregisterList" class="deviceAction">
+		<action name="device!unregisterlist" method="doUnregisterList"
+			class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
@@ -476,6 +480,12 @@
 				<param name="includeProperties">device.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!sync" method="doSync" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="devicegroup!list" method="doList" class="devicegroupAction">
 			<result name="success" type="json">
@@ -501,19 +511,27 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicegroup!deviceadd" method="doDeviceAdd" class="devicegroupAction">
+		<action name="devicegroup!deviceadd" method="doDeviceAdd"
+			class="devicegroupAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicegroup!devicedelete" method="doDeviceDelete" class="devicegroupAction">
+		<action name="devicegroup!devicedelete" method="doDeviceDelete"
+			class="devicegroupAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		
+		<action name="devicegroup!sync" method="doSync" class="devicegroupAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="devicefile!list" method="doList" class="devicefileAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -596,7 +614,8 @@
 			</result>
 		</action>
 
-		<action name="layoutschedule!list" method="doList" class="layoutscheduleAction">
+		<action name="layoutschedule!list" method="doList"
+			class="layoutscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
@@ -608,20 +627,29 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layoutschedule!update" method="doUpdate" class="layoutscheduleAction">
+		<action name="layoutschedule!update" method="doUpdate"
+			class="layoutscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layoutschedule!delete" method="doDelete" class="layoutscheduleAction">
+		<action name="layoutschedule!delete" method="doDelete"
+			class="layoutscheduleAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="layoutschedule!sync" method="doSync" class="layoutscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 
-		<action name="regionschedule!list" method="doList" class="regionscheduleAction">
+		<action name="regionschedule!list" method="doList"
+			class="regionscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
@@ -633,13 +661,21 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="regionschedule!update" method="doUpdate" class="regionscheduleAction">
+		<action name="regionschedule!update" method="doUpdate"
+			class="regionscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="regionschedule!delete" method="doDelete" class="regionscheduleAction">
+		<action name="regionschedule!delete" method="doDelete"
+			class="regionscheduleAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="regionschedule!sync" method="doSync" class="regionscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -713,25 +749,35 @@
 			</result>
 		</action>
 
-		<action name="vchannelschedule!list" method="doList" class="vchannelscheduleAction">
+		<action name="vchannelschedule!list" method="doList"
+			class="vchannelscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="vchannelschedule!add" method="doAdd" class="vchannelscheduleAction">
+		<action name="vchannelschedule!add" method="doAdd"
+			class="vchannelscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="vchannelschedule!update" method="doUpdate" class="vchannelscheduleAction">
+		<action name="vchannelschedule!update" method="doUpdate"
+			class="vchannelscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="vchannelschedule!delete" method="doDelete" class="vchannelscheduleAction">
+		<action name="vchannelschedule!delete" method="doDelete"
+			class="vchannelscheduleAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vchannelschedule!sync" method="doSync" class="vchannelscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -757,7 +803,7 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		
+
 	</package>
 
 </struts>

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.service.DevicegroupService;
+import com.broadvideo.pixsignage.service.LayoutscheduleService;
+import com.broadvideo.pixsignage.service.RegionscheduleService;
 
 @Scope("request")
 @Controller("devicegroupAction")
@@ -27,6 +29,10 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 	@Autowired
 	private DevicegroupService devicegroupService;
+	@Autowired
+	private LayoutscheduleService layoutscheduleService;
+	@Autowired
+	private RegionscheduleService regionscheduleService;
 
 	public String doList() {
 		try {
@@ -115,6 +121,21 @@ public class DevicegroupAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doSync() {
+		try {
+			String devicegroupid = getParameter("devicegroupid");
+			layoutscheduleService.syncLayoutschedule("2", devicegroupid);
+			regionscheduleService.syncRegionschedule("2", devicegroupid);
+			log.error("Devicegroup schedule sync success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			log.error("Devicegroup schedule sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

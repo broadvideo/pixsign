@@ -159,7 +159,8 @@ response.setDateHeader("Expires",0);
 												<input type="hidden" id="DeviceSelect" class="form-control select2">
 											</div>
 											<div class="col-md8 col-sm-8">
-												<a class="btn purple pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
+												<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> 同步计划</a>&nbsp;
+												<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
 											</div>
 										</div>
 										<br/>

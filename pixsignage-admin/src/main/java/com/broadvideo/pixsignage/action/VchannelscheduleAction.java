@@ -82,6 +82,22 @@ public class VchannelscheduleAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doSync() {
+		try {
+			String vchannelid = getParameter("vchannelid");
+			if (vchannelid != null) {
+				vchannelscheduleService.syncVchannelschedule(vchannelid);
+				log.error("Vchannel schedule sync success");
+			}
+			return SUCCESS;
+		} catch (Exception ex) {
+			log.error("Vchannel schedule sync error: " + ex.getMessage());
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Vchannelschedule getVchannelschedule() {
 		return vchannelschedule;
 	}

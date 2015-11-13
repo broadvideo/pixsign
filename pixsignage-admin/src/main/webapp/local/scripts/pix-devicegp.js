@@ -6,6 +6,7 @@ var myurls = {
 	'device.list' : 'device!list.action',
 	'devicegroup.deviceadd' : 'devicegroup!deviceadd.action',
 	'devicegroup.devicedelete' : 'devicegroup!devicedelete.action',
+	'devicegroup.sync' : 'devicegroup!sync.action',
 };
 
 function refreshMyTable() {
@@ -23,19 +24,19 @@ function initMyTable() {
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
 						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'devicegroupid', 'bSortable' : false }],
+						{'sTitle' : '计划', 'mData' : 'devicegroupid', 'bSortable' : false }, 
+						{'sTitle' : '更多操作', 'mData' : 'devicegroupid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-detail"><i class="fa fa-list-ul"></i> 明细</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
-			$('td:eq(2)', nRow).html(dropdownBtn);
+			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> 同步</a>';
+			$('td:eq(2)', nRow).html(synchtml);
+			
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> 明细</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> 编辑</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> 删除</a>';
+			$('td:eq(3)', nRow).html(dropdownBtn);
 			return nRow;
 		}
 	});
@@ -75,7 +76,45 @@ function initMyTable() {
 				});				
 			}
 		 });
-		
+	});
+	
+	$('body').on('click', '.pix-sync', function(event) {
+		var target = $(event.target);
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			target = $(event.target).parent();
+			index = $(event.target).parent().attr('data-id');
+		}
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm('是否同步播放计划至"' + currentItem.name + '"', function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'GET',
+					url : myurls['devicegroup.sync'],
+					cache: false,
+					data : {
+						devicegroupid: currentItem.devicegroupid,
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						if (data.errorcode == 0) {
+							bootbox.alert('同步成功');
+						} else {
+							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+						}
+					},
+					error : function() {
+						Metronic.stopPageLoading();
+						bootbox.alert('出错了！');
+					}
+				});				
+			}
+		});
 	});
 }
 

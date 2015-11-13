@@ -4,6 +4,7 @@ var myurls = {
 	'common.update' : 'device!update.action',
 	'common.delete' : 'device!delete.action',
 	'device.unregisterlist' : 'device!unregisterlist.action',
+	'device.sync' : 'device!sync.action',
 	'devicefile.list' : 'devicefile!list.action',
 	'branch.list' : 'branch!list.action'
 };
@@ -24,13 +25,14 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : '硬件码', 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
-						{'sTitle' : '分组', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '18%' }, 
-						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '8%' }, 
-						{'sTitle' : '计划', 'mData' : 'schedulestatus', 'bSortable' : false, 'sWidth' : '8%' }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '8%' }],
+						{'sTitle' : '分组', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : '计划', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : '更多操作', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
 		'aoColumnDefs': [
 	 					{'bSortable': false, 'aTargets': [ 0 ] }
 	 				],
@@ -41,34 +43,26 @@ function initMyTable() {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
 
 			if (data.devicegroupid > 0) {
-				$('td:eq(4)', nRow).html(data.devicegroup.name);
+				$('td:eq(5)', nRow).html(data.devicegroup.name);
 			} else {
-				$('td:eq(4)', nRow).html('');
+				$('td:eq(5)', nRow).html('');
 			}
 			if (data['onlineflag'] == 9) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">离线</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-default">离线</span>');
 			} else if (data['onlineflag'] == 1) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-success">在线</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">在线</span>');
 			} else if (data['onlineflag'] == 0) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-info">空闲</span>');
-			} 
-			if (data['schedulestatus'] == 0) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">最新</span>');
-			} else if (data['schedulestatus'] == 1) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">同步中</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">空闲</span>');
 			}
 			
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-file"><i class="fa fa-list-ul"></i> 文件列表</a></li>';
-			if (hasPrivilege(2020101)) {
-				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			}
-			dropdownBtn += '</ul></div>';
-			$('td:eq(7)', nRow).html(dropdownBtn);
+			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> 同步</a>';
+			$('td:eq(7)', nRow).html(synchtml);
 			
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> 文件</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> 编辑</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> 解绑</a>';
+			$('td:eq(8)', nRow).html(dropdownBtn);
+
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
 			
@@ -87,7 +81,6 @@ function initMyTable() {
 	{
 		var aData = oTable.fnGetData( nTr );
 		var sOut = '<table>';
-		sOut += '<tr><td>硬编码:</td><td>'+aData['hardkey']+'</td></tr>';
 		sOut += '<tr><td>IP地址:</td><td>'+aData['ip']+'</td></tr>';
 		sOut += '<tr><td>MAC地址:</td><td>'+aData['mac']+'</td></tr>';
 		sOut += '<tr><td>激活时间:</td><td>'+aData['activetime']+'</td></tr>';
@@ -119,10 +112,9 @@ function initMyTable() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		currentItem = item;
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm('请确认是否解绑"' + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -147,7 +139,45 @@ function initMyTable() {
 		
 	});
 
-	
+	$('body').on('click', '.pix-sync', function(event) {
+		var target = $(event.target);
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			target = $(event.target).parent();
+			index = $(event.target).parent().attr('data-id');
+		}
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm('是否同步播放计划至"' + currentItem.name + '"', function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'GET',
+					url : myurls['device.sync'],
+					cache: false,
+					data : {
+						deviceid: currentItem.deviceid,
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						if (data.errorcode == 0) {
+							bootbox.alert('同步成功');
+						} else {
+							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+						}
+					},
+					error : function() {
+						Metronic.stopPageLoading();
+						bootbox.alert('出错了！');
+					}
+				});				
+			}
+		});
+	});
+
 	$.ajax({
 		type : 'POST',
 		url : myurls['branch.list'],
@@ -279,6 +309,14 @@ function initMyTable() {
 			$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
 		}
 	});			
+
+	$('body').on('click', '#DeviceTab', function(event) {
+		$('#MyTable').dataTable()._fnAjaxUpdate();
+	});
+
+	$('body').on('click', '#UnDeviceTab', function(event) {
+		$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
+	});
 	
 }
 

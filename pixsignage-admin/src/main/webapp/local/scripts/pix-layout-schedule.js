@@ -8,11 +8,13 @@ var currentLayoutschedule;
 function refreshLayoutschedule() {
 	if (currentBindid == 0) {
 		$('.pix-addschedule').css('display', 'none');
+		$('.pix-syncschedule').css('display', 'none');
 		$('#ScheduleDetail').html('');
 		return;
 	}
 
 	$('.pix-addschedule').css('display', 'block');
+	$('.pix-syncschedule').css('display', 'block');
 	$.ajax({
 		type : 'GET',
 		url : 'layoutschedule!list.action',
@@ -174,6 +176,7 @@ function refreshSelect() {
 
 function initLayoutSchedules() {
 	$('.pix-addschedule').css('display', 'none');
+	$('.pix-syncschedule').css('display', 'none');
 	refreshSelect();
 	
 	$('body').on('click', '#DeviceTab', function(event) {
@@ -308,6 +311,33 @@ function initLayoutSchedules() {
 	$('body').on('click', '.pix-addschedule', function(event) {
 		$('#ScheduleForm input[name="layoutschedule.starttime"]').attr('value', '');
 		$('#ScheduleModal').modal();
+	});
+
+	$('body').on('click', '.pix-syncschedule', function(event) {
+		$.ajax({
+			type : 'POST',
+			url : 'layoutschedule!sync.action',
+			data : {
+				bindtype: currentBindtype,
+				bindid: currentBindid,
+			},
+			dataType: 'json',
+			beforeSend: function ( xhr ) {
+				Metronic.startPageLoading({animate: true});
+			},
+			success : function(data, status) {
+				Metronic.stopPageLoading();
+				if (data.errorcode == 0) {
+					bootbox.alert('同步成功');
+				} else {
+					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+				}
+			},
+			error : function() {
+				Metronic.stopPageLoading();
+				bootbox.alert('出错了!');
+			}
+		});
 	});
 
 	$('body').on('click', '.pix-schedule-delete', function(event) {

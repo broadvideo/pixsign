@@ -83,6 +83,9 @@
   <delete id="deleteByDtl" >
     delete from regionschedule
     where bindtype = '${bindtype}' and bindid = '${bindid}'
+    <if test="regionid != null">
+      and regionid = '${regionid}'
+    </if>
     <if test="playmode != null">
       and playmode = '${playmode}'
     </if>

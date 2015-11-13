@@ -8,10 +8,11 @@
 	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
 	<constant name="struts.devMode" value="false" />
 	<constant name="struts.i18n.encodeing" value="UTF-8" />
+	<constant name="struts.custom.i18n.resources" value="global" />
 	
 	<constant name="struts.multipart.maxSize" value="2147483648" />
 	<constant name="struts.multipart.saveDir" value="/pixdata/pixsignage/temp" />
-	
+
 	<include file="struts-pix.xml" />
 	
 </struts>

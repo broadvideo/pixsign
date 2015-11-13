@@ -169,8 +169,8 @@ response.setDateHeader("Expires",0);
 									<a href="javascript:;" class="reload pix-DeviceReload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li id="nav_device2"><a href="#portlet_device2" data-toggle="tab">未注册</a></li>
-									<li class="active" id="nav_device1"><a href="#portlet_device1" data-toggle="tab">已注册</a></li>
+									<li id="UnDeviceTab"><a href="#portlet_device2" data-toggle="tab">未注册</a></li>
+									<li class="active" id="DeviceTab"><a href="#portlet_device1" data-toggle="tab">已注册</a></li>
 								</ul>
 							</div>
 							<div class="portlet-body">
@@ -263,7 +263,7 @@ response.setDateHeader("Expires",0);
 <script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-device.js?t=6"></script>
+<script src="../local/scripts/pix-device.js?t=7"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
 var videoflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getVideoflag() %>;

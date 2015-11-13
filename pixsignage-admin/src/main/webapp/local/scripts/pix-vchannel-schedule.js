@@ -4,9 +4,14 @@ var currentVchannelschedule;
 
 function refreshVchannelschedule() {
 	if (currentVchannelid == 0) {
-		return
+		$('.pix-addschedule').css('display', 'none');
+		$('.pix-syncschedule').css('display', 'none');
+		$('#ScheduleDetail').html('');
+		return;
 	}
 
+	$('.pix-addschedule').css('display', 'block');
+	$('.pix-syncschedule').css('display', 'block');
 	$.ajax({
 		type : 'GET',
 		url : 'vchannelschedule!list.action',
@@ -57,13 +62,13 @@ function refreshVchannelschedule() {
 					
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '<div class="timeline-footer">';
-					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-schedule-detail" data-id="'+ i + '">明细<i class="fa fa-arrow-circle-right"></i></a>';
+					//scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-schedule-detail" data-id="'+ i + '">明细<i class="fa fa-arrow-circle-right"></i></a>';
 					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">删除<i class="fa fa-trash-o"></i></a>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</li>';
 				}
-				$('#ScheduleTab').html(scheduleTabHtml);
+				$('#ScheduleDetail').html(scheduleTabHtml);
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
 			}
@@ -75,6 +80,8 @@ function refreshVchannelschedule() {
 }
 
 function initVchannels() {
+	$('.pix-addschedule').css('display', 'none');
+	$('.pix-syncschedule').css('display', 'none');
 	
 	$.ajax({
 		type : 'POST',
@@ -200,6 +207,32 @@ function initVchannels() {
 			$('#ScheduleForm input[name="vchannelschedule.starttime"]').attr('value', '');
 			$('#ScheduleModal').modal();
 		}
+	});
+
+	$('body').on('click', '.pix-syncschedule', function(event) {
+		$.ajax({
+			type : 'POST',
+			url : 'vchannelschedule!sync.action',
+			data : {
+				vchannelid: currentVchannelid,
+			},
+			dataType: 'json',
+			beforeSend: function ( xhr ) {
+				Metronic.startPageLoading({animate: true});
+			},
+			success : function(data, status) {
+				Metronic.stopPageLoading();
+				if (data.errorcode == 0) {
+					bootbox.alert('同步成功');
+				} else {
+					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+				}
+			},
+			error : function() {
+				Metronic.stopPageLoading();
+				bootbox.alert('出错了!');
+			}
+		});
 	});
 
 	$('body').on('click', '.pix-schedule-delete', function(event) {

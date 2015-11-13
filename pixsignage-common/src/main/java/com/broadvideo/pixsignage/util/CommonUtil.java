@@ -37,16 +37,38 @@ public class CommonUtil {
 		return date;
 	}
 
-	public static void execCommand(String command) throws Exception {
-		Process process = Runtime.getRuntime().exec(command);
-		InputStream fis = process.getInputStream();
-		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-		String line;
-		while ((line = br.readLine()) != null) {
-			log.info(line);
+	public static int execCommand(String command) {
+		int result = 0;
+		InputStream fis = null;
+		BufferedReader bufferedReader = null;
+		try {
+			log.info("start to run command: " + command);
+			Process process = Runtime.getRuntime().exec(command);
+			fis = process.getInputStream();
+			bufferedReader = new BufferedReader(new InputStreamReader(fis));
+			result = process.waitFor();
+			String line = null;
+			while ((line = bufferedReader.readLine()) != null) {
+				log.info(line);
+			}
+		} catch (Exception ioe) {
+			result = -1;
+			log.info(ioe.toString());
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (Exception e) {
+				}
+			}
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (Exception e) {
+				}
+			}
 		}
-		br.close();
-		fis.close();
+		return result;
 	}
 
 	public static byte[] generateThumbnail(File file, int width) throws IOException {

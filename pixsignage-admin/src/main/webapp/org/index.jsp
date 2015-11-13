@@ -53,21 +53,21 @@
 		<!-- BEGIN LOGIN FORM -->
 		<form id="OrgLoginForm" class="login-form" method="post">
 			<input type="hidden" name="subsystem" value="2" />
-			<h3 class="form-title">企业用户登录：</h3>
+			<h3 class="form-title"><s:text name="global.login.hint" /></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>请输入用户名和密码</span>
 			</div>
 			<div class="form-group">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-				<label class="control-label visible-ie8 visible-ie9">用户名</label>
+				<label class="control-label visible-ie8 visible-ie9"><s:text name="global.username" /></label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
 					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="用户名" name="username"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label visible-ie8 visible-ie9">密码</label>
+				<label class="control-label visible-ie8 visible-ie9"><s:text name="global.password" /></label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
 					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="密码" name="password"/>
@@ -88,6 +88,7 @@
 			<br/>
 		</form>
 		<!-- END LOGIN FORM -->
+
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->

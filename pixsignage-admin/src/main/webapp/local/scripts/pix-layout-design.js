@@ -330,7 +330,7 @@ function initLayoutModal() {
 		layoutdtl.direction = 4;
 		layoutdtl.speed = 2;
 		layoutdtl.color = '#FFFFFF';
-		layoutdtl.size = 30;
+		layoutdtl.size = 50;
 		layoutdtl.opacity = 100;
 		layoutdtl.region = tempRegions[index];
 		layoutdtl.regionid = tempRegions[index].regionid;

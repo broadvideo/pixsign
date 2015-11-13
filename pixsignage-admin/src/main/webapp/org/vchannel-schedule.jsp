@@ -115,9 +115,6 @@ response.setDateHeader("Expires",0);
 								<div class="tools">
 									<a href="javascript:;" onClick="refreshVchannelschedule();" class="reload"></a>
 								</div>
-								<div class="actions">
-									<a class="btn purple pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
-								</div>
 							</div>
 							<div class="portlet-body">
 								<div class="row">
@@ -125,7 +122,18 @@ response.setDateHeader("Expires",0);
 									</div>
 									<div class="col-md-10 col-sm-10 col-xs-10">
 										<div class="tab-content">
-											<div class="tab-pane active" id="ScheduleTab">
+											<div class="tab-pane active">
+												<div class="row">
+													<div class="col-md12 col-sm-12">
+														<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> 同步计划</a>&nbsp;
+														<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
+													</div>
+												</div>
+												<br/>
+												<div class="row">
+													<div class="col-md12 col-sm-12" id="ScheduleDetail">
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -195,7 +203,7 @@ response.setDateHeader("Expires",0);
 <script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-vchannel-schedule.js?t=2"></script>
+<script src="../local/scripts/pix-vchannel-schedule.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

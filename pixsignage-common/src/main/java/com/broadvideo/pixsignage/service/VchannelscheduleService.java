@@ -2,6 +2,8 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.broadvideo.pixsignage.domain.Vchannelschedule;
 
 public interface VchannelscheduleService {
@@ -13,4 +15,7 @@ public interface VchannelscheduleService {
 
 	public void deleteVchannelschedule(String vchannelscheduleid);
 
+	public void syncVchannelschedule(String vchannelid) throws Exception;
+
+	public JSONObject generateVchannelScheduleJson(String vchannelid);
 }

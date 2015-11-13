@@ -123,10 +123,12 @@ public class PixboxTask {
 					video.setCreatestaffid(2);
 					video.setProgress(0);
 					videoMapper.insertSelective(video);
-				}
+					// }
 
-				if (video != null && !video.getStatus().equals("1")) {
+					// if (video != null && !video.getStatus().equals("1")) {
 					try {
+						log.info("Begin handle external video: videoid=" + video.getVideoid() + ",uuid="
+								+ video.getUuid() + ",name=" + video.getName());
 						// Generate new mp4
 						String newFileName = "" + video.getVideoid() + ".mp4";
 						String newFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/video/external/" + newFileName;
@@ -137,7 +139,11 @@ public class PixboxTask {
 							String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + oldFilePath + " -c copy "
 									+ newFilePath;
 							log.info("Begin to convert m3u8 to mp4: " + command);
-							CommonUtil.execCommand(command);
+							int commandResult = CommonUtil.execCommand(command);
+							if (commandResult > 0) {
+								log.error("Convert command error, result=" + commandResult);
+								continue;
+							}
 						} else {
 							FileUtils.copyFile(new File(oldFilePath), new File(newFilePath));
 						}
@@ -200,6 +206,8 @@ public class PixboxTask {
 						video.setStatus("1");
 						video.setProgress(100);
 						videoMapper.updateByPrimaryKeySelective(video);
+						log.info("Finish external video: videoid=" + video.getVideoid() + ",uuid=" + video.getUuid()
+								+ ",name=" + video.getName());
 					} catch (Exception ex) {
 						log.error("Handle external video error: " + ex);
 						ex.printStackTrace();

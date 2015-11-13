@@ -94,6 +94,23 @@ public class RegionscheduleAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doSync() {
+		try {
+			String bindtype = getParameter("bindtype");
+			String bindid = getParameter("bindid");
+			if (bindtype != null && bindid != null) {
+				regionscheduleService.syncRegionschedule(bindtype, bindid);
+				log.error("Region schedule sync success");
+			}
+			return SUCCESS;
+		} catch (Exception ex) {
+			log.error("Region schedule sync error: " + ex.getMessage());
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Regionschedule getRegionschedule() {
 		return regionschedule;
 	}
