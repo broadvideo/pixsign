@@ -12,6 +12,16 @@
 			</global-results> <global-exception-mappings> <exception-mapping result="error" 
 			exception="java.lang.Exception" /> </global-exception-mappings> -->
 
+		<interceptors>
+			<!-- 使用自定义国际化拦截 -->
+			<interceptor name="pix-i18n" class="com.broadvideo.pixsignage.interceptor.PixI18nInterceptor" />
+			<interceptor-stack name="mystack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="pix-i18n" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mystack" />
+
 		<global-results>
 			<result name="error" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -641,7 +651,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="layoutschedule!sync" method="doSync" class="layoutscheduleAction">
+		<action name="layoutschedule!sync" method="doSync"
+			class="layoutscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -675,7 +686,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="regionschedule!sync" method="doSync" class="regionscheduleAction">
+		<action name="regionschedule!sync" method="doSync"
+			class="regionscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -777,7 +789,8 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="vchannelschedule!sync" method="doSync" class="vchannelscheduleAction">
+		<action name="vchannelschedule!sync" method="doSync"
+			class="vchannelscheduleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

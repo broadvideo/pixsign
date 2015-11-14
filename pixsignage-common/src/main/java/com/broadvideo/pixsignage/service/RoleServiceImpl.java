@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Role;
-import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
 import com.broadvideo.pixsignage.persistence.RoleMapper;
 
 @Service("roleService")
@@ -18,18 +17,18 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RoleMapper roleMapper;
 	@Autowired
-	private PrivilegeMapper privilegeMapper;
+	private PrivilegeService privilegeService;
 
 	public List<Role> selectList(String subsystem, String vspid, String orgid) {
 		return roleMapper.selectList(subsystem, vspid, orgid);
 	}
 
 	public List<Privilege> selectVspPrivilegeTreeList() {
-		return privilegeMapper.selectVspTreeList();
+		return privilegeService.selectVspTreeList();
 	}
 
 	public List<Privilege> selectOrgPrivilegeTreeList(Org org) {
-		List<Privilege> pList = privilegeMapper.selectOrgTreeList(org.getOrgtype());
+		List<Privilege> pList = privilegeService.selectOrgTreeList(org.getOrgtype());
 		for (int i = 0; i < pList.size(); i++) {
 			List<Privilege> secondPrivileges = pList.get(i).getChildren();
 			for (int j = secondPrivileges.size(); j > 0; j--) {

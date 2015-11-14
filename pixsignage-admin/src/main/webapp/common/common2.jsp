@@ -1,4 +1,3 @@
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%> 
 <%@page import="java.util.ArrayList"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
@@ -29,7 +28,7 @@
 		}
 	}
 	
-	Org org = (Org)session.getAttribute(SessionConstants.SESSION_ORG);
+	Org session_org = (Org)session.getAttribute(SessionConstants.SESSION_ORG);
 %>
 
 <!-- BEGIN THEME STYLES -->
@@ -71,26 +70,26 @@ function hasPrivilege(privilegeid) {
 						<input type="hidden" name="staff.staffid" value="<%=staff.getStaffid()%>" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label">原密码<span class="required">*</span></label>
+								<label class="col-md-3 control-label">${global_oldpassword}<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" class="form-control" name="staff.oldpassword" placeholder="请输入原密码" />
+										<i class="fa"></i> <input type="password" class="form-control" name="staff.oldpassword" placeholder="${global_oldpassword}" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">新密码<span class="required">*</span></label>
+								<label class="col-md-3 control-label">${global_newpassword}<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" id="password" class="form-control" name="staff.password" placeholder="请输入新密码" />
+										<i class="fa"></i> <input type="password" id="password" class="form-control" name="staff.password" placeholder="${global_newpassword}" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">密码确认<span class="required">*</span></label>
+								<label class="col-md-3 control-label">${global_newpassword}<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" placeholder="请确认新密码" />
+										<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" placeholder="${global_newpassword}" />
 									</div>
 								</div>
 							</div>
@@ -98,8 +97,8 @@ function hasPrivilege(privilegeid) {
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn blue">提交</button>
-					<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+					<button type="submit" class="btn blue">${global_submit}</button>
+					<button type="button" class="btn default" data-dismiss="modal">${global_close}</button>
 				</div>
 			</div>
 		</div>
@@ -112,7 +111,7 @@ function hasPrivilege(privilegeid) {
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
 				<a href="main.jsp">
-				<img src="../local/img/logo.png" alt="logo" class="logo-default"/>
+				<img src="${base_ctx}/img/logo.png" alt="logo" class="logo-default"/>
 				</a>
 				<div class="menu-toggler sidebar-toggler hide">
 				</div>
@@ -128,15 +127,15 @@ function hasPrivilege(privilegeid) {
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<li class="dropdown dropdown-user">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<img alt="" class="img-circle" src="../local/img/anonymous.jpg"/>
+						<img alt="" class="img-circle" src="${base_ctx}/img/anonymous.jpg"/>
 						<span class="username username-hide-on-mobile"><%=staff.getName()%></span>
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
-							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> 修改密码</a></li>
+							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> ${global_chanegepassword}</a></li>
 							<li class="divider"></li>
-							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> 全屏</a></li>
-							<li><a href="logout.action"><i class="fa fa-key"></i> 登出</a></li>
+							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> ${global_fullscreen}</a></li>
+							<li><a href="logout.action"><i class="fa fa-key"></i> ${global_logout}</a></li>
 						</ul>
 					</li>
 					<!-- END USER LOGIN DROPDOWN -->
@@ -165,7 +164,7 @@ function hasPrivilege(privilegeid) {
 					<li class="start <%= currentPrivilegeid.equals("")? "active" : "" %> ">
 						<a href="main.jsp">
 						<i class="fa fa-home"></i> 
-						<span class="title">我的首页</span>
+						<span class="title">${global_dashboard}</span>
 						<span class="selected"></span>
 						</a>
 					</li>
@@ -210,7 +209,7 @@ function hasPrivilege(privilegeid) {
 											out.println("<li class=\"" + liClass + "\">");
 											out.println("<a href=\"" + child.getMenuurl()+"?CurrentP="+child.getPrivilegeid()+"&ParentP="+child.getParentid() + "\">" + child.getName() + "</a>");
 										} else {
-											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"无权访问\">");
+											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"${global_noprivilege}\">");
 											out.println("<a href=\"#\" class=\"disabled-link\"><span class=\"disable-target\">" + child.getName() + "</span></a>");
 										}
 										out.println("</li>");

@@ -18,8 +18,8 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
+import com.broadvideo.pixsignage.service.PrivilegeService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Scope("request")
@@ -43,7 +43,7 @@ public class LoginAction extends BaseAction {
 	@Autowired
 	private StaffMapper staffMapper;
 	@Autowired
-	private PrivilegeMapper privilegeMapper;
+	private PrivilegeService privilegeService;
 
 	public String doLogin() throws Exception {
 		if (!CommonConfig.LICENSE_HOSTID_VERIFY) {
@@ -64,7 +64,7 @@ public class LoginAction extends BaseAction {
 				code = "root";
 			}
 			staff = staffMapper.loginWithVsp(username, CommonUtil.getPasswordMd5(username, password), code);
-			pList = privilegeMapper.selectVspTreeList();
+			pList = privilegeService.selectVspTreeList();
 		} else if (subsystem != null && subsystem.equals(CommonConstants.SUBSYSTEM_ORG)) {
 			Org org = orgMapper.selectByCode(code);
 			if (org != null) {
@@ -77,7 +77,7 @@ public class LoginAction extends BaseAction {
 					return ERROR;
 				}
 				staff = staffMapper.loginWithOrg(username, CommonUtil.getPasswordMd5(username, password), code);
-				pList = privilegeMapper.selectOrgTreeList(org.getOrgtype());
+				pList = privilegeService.selectOrgTreeList(org.getOrgtype());
 				for (int i = 0; i < pList.size(); i++) {
 					List<Privilege> secondPrivileges = pList.get(i).getChildren();
 					for (int j = secondPrivileges.size(); j > 0; j--) {

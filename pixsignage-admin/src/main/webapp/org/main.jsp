@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/common/taglibs.jsp"%> 
 
 <%
 response.setHeader("Cache-Control","no-store");
@@ -35,14 +36,14 @@ response.setDateHeader("Expires",0);
 <link href="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
-<%@ include file="../common/common2.jsp"%>
+<%@ include file="/common/common2.jsp"%>
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
 		
 				<div class="row">
 					<div class="col-md-12">
-						<h3 class="page-title">我的首页</h3>
+						<h3 class="page-title">${global_dashboard}</h3>
 					</div>
 				</div>
 		
@@ -75,11 +76,11 @@ response.setDateHeader("Expires",0);
 						<div class="portlet box blue">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bell-o"></i>最新终端
+									<i class="fa fa-bell-o"></i><spring:message code="global_main_title1"/>
 								</div>
 								<div class="actions">
 									<a href="device.jsp?CurrentP=20201&ParentP=202" class="btn btn-sm default easy-pie-chart-reload"><i
-										class="m-icon-swapright"></i> 更多</a>
+										class="m-icon-swapright"></i> ${global_more}</a>
 								</div>
 							</div>
 							<div class="portlet-body">
@@ -96,11 +97,11 @@ response.setDateHeader("Expires",0);
 						<div class="portlet box blue">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bell-o"></i>最新视频
+									<i class="fa fa-bell-o"></i><spring:message code="global_main_title2"/>
 								</div>
 								<div class="actions">
 									<a href="video-int.jsp?CurrentP=20102&ParentP=201" class="btn btn-sm default easy-pie-chart-reload"><i
-										class="m-icon-swapright"></i> 更多</a>
+										class="m-icon-swapright"></i> ${global_more}</a>
 								</div>
 							</div>
 							<div class="portlet-body">
@@ -121,7 +122,7 @@ response.setDateHeader("Expires",0);
 						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bar-chart-o"></i>媒体上载数量
+									<i class="fa fa-bar-chart-o"></i><spring:message code="global_main_title3"/>
 								</div>
 							</div>
 							<div class="portlet-body">
@@ -139,7 +140,7 @@ response.setDateHeader("Expires",0);
 						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bar-chart-o"></i>媒体下载流量
+									<i class="fa fa-bar-chart-o"></i><spring:message code="global_main_title4"/>
 								</div>
 							</div>
 							<div class="portlet-body">
@@ -162,10 +163,10 @@ response.setDateHeader("Expires",0);
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			<%if (org == null || org.getCopyright() == null || org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;明视迅达(VideoExpress)&nbsp;&nbsp;粤ICP备14037592号-1 <a href="http://www.miitbeian.gov.cn">工业和信息化部备案管理系统</a>
+			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
 			<%} else { %>
-			©<%=org.getCopyright()%>
+			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
 		<div class="footer-tools">
@@ -210,8 +211,9 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-main.js?t=4"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js"></script>
+<script src="${base_ctx}/scripts/pix-main.js?t=4"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 var videoflag = <%=((Org) session.getAttribute(SessionConstants.SESSION_ORG)).getVideoflag()%>;

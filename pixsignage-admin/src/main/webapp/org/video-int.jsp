@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/common/taglibs.jsp"%> 
 
 <%
 response.setHeader("Cache-Control","no-store");
@@ -23,23 +24,23 @@ response.setDateHeader("Expires",0);
 <meta name="MobileOptimized" content="320">
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-<link href="/pixsignage-static/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link href="/pixsignage-static/global/plugins/select2/select2.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
-<%@ include file="../common/common2.jsp"%>
+<%@ include file="/common/common2.jsp"%>
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
@@ -164,7 +165,7 @@ response.setDateHeader("Expires",0);
 									</div>
 									<div class="btn-group">
 									<%
-										if (org.getCurrentstorage() >= org.getMaxstorage()) {
+										if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
 									%>
 										<button privilegeid="201010" class="btn green pix-full">在线上传 <i class="fa fa-plus"></i></button>
 									<%
@@ -196,10 +197,10 @@ response.setDateHeader("Expires",0);
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			<%if (org == null || org.getCopyright() == null || org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;明视迅达(VideoExpress)&nbsp;&nbsp;粤ICP备14037592号-1 <a href="http://www.miitbeian.gov.cn">工业和信息化部备案管理系统</a>
+			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
 			<%} else { %>
-			©<%=org.getCopyright()%>
+			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
 		<div class="footer-tools">
@@ -291,75 +292,76 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   
 <!--[if lt IE 9]>
-<script src="/pixsignage-static/global/plugins/respond.min.js"></script>
-<script src="/pixsignage-static/global/plugins/excanvas.min.js"></script> 
+<script src="${static_ctx}/global/plugins/respond.min.js"></script>
+<script src="${static_ctx}/global/plugins/excanvas.min.js"></script> 
 <![endif]-->   
-<script src="/pixsignage-static/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="/pixsignage-static/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/pixsignage-static/global/plugins/select2/select2.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
-<script src="/pixsignage-static/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN:File Upload Plugin JS files-->
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/vendor/load-image.min.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/vendor/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
 <!-- blueimp Gallery script -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
 <!-- The File Upload processing plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js"></script>
 <!-- The File Upload image preview & resize plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js"></script>
 <!-- The File Upload audio preview plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
 <!-- The File Upload video preview plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js"></script>
 <!-- The File Upload validation plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
 <!-- The File Upload user interface plugin -->
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
 <!-- The main application script -->
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
-<script src="/pixsignage-static/global/plugins/jquery-file-upload/js/cors/jquery.xdr-transport.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-file-upload/js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
 <!-- END:File Upload Plugin JS files-->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-video.js?t=6"></script>
+<script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js"></script>
+<script src="${base_ctx}/scripts/pix-video.js?t=6"></script>
 <script>
 //上传文件的后缀
 var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
