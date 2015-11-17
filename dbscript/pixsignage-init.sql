@@ -639,4 +639,4 @@ insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) value
 ############################################################
 
 update dbversion set status='1' where dbversionid=@dbversionid;
-update dbversion set version=@version,createtime=now() where type='0';
+update dbversion set version=@version, createtime=now() where type='0';

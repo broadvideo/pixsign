@@ -14,6 +14,7 @@ import com.broadvideo.pixsignage.domain.Layout;
 import com.broadvideo.pixsignage.domain.Layoutdtl;
 import com.broadvideo.pixsignage.domain.Region;
 import com.broadvideo.pixsignage.service.LayoutService;
+import com.broadvideo.pixsignage.service.RegionService;
 
 @Scope("request")
 @Controller("layoutAction")
@@ -33,6 +34,8 @@ public class LayoutAction extends BaseDatatableAction {
 
 	@Autowired
 	private LayoutService layoutService;
+	@Autowired
+	private RegionService regionService;
 
 	public String doList() {
 		try {
@@ -130,9 +133,9 @@ public class LayoutAction extends BaseDatatableAction {
 			List<Object> aaData = new ArrayList<Object>();
 			List<Region> regionList;
 			if (active == null) {
-				regionList = layoutService.selectRegionList();
+				regionList = regionService.selectList();
 			} else {
-				regionList = layoutService.selectActiveRegionList();
+				regionList = regionService.selectActiveList();
 			}
 			for (int i = 0; i < regionList.size(); i++) {
 				aaData.add(regionList.get(i));

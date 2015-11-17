@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,6 @@ import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutdtlMapper;
 import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
-import com.broadvideo.pixsignage.persistence.RegionMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.TaskMapper;
 
@@ -36,8 +37,6 @@ public class LayoutServiceImpl implements LayoutService {
 	@Autowired
 	private LayoutdtlMapper layoutdtlMapper;
 	@Autowired
-	private RegionMapper regionMapper;
-	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
 	private LayoutscheduleMapper layoutscheduleMapper;
@@ -47,6 +46,8 @@ public class LayoutServiceImpl implements LayoutService {
 	private DevicefileMapper devicefileMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
+	@Autowired
+	protected ResourceBundleMessageSource messageSource;
 
 	public Layout selectByPrimaryKey(String layoutid) {
 		return layoutMapper.selectByPrimaryKey(layoutid);
@@ -57,15 +58,14 @@ public class LayoutServiceImpl implements LayoutService {
 	}
 
 	public List<Layoutdtl> selectLayoutdtlList(String layoutid) {
-		return layoutdtlMapper.selectList(layoutid);
-	}
-
-	public List<Region> selectRegionList() {
-		return regionMapper.selectList();
-	}
-
-	public List<Region> selectActiveRegionList() {
-		return regionMapper.selectActiveList();
+		List<Layoutdtl> layoutdtlList = layoutdtlMapper.selectList(layoutid);
+		for (Layoutdtl layoutdtl : layoutdtlList) {
+			Region region = layoutdtl.getRegion();
+			if (region != null) {
+				region.setName(messageSource.getMessage(region.getName(), null, LocaleContextHolder.getLocale()));
+			}
+		}
+		return layoutdtlList;
 	}
 
 	@Transactional
