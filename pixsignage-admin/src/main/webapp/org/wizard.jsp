@@ -111,20 +111,20 @@ response.setDateHeader("Expires",0);
 									<div class="form-body">
 										<input type="hidden" name="regiondtl.regionid" />
 										<div class="form-group">
-											<label class="control-label col-md-3">选项</label>
+											<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 											<div class="col-md-9 radio-list">
 												<!-- 
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.playmode" value="1" checked> 单次播放
+													<input type="radio" name="regiondtl.playmode" value="1" checked> <spring:message code="global.once"/>
 												</label>
 												-->
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.playmode" value="2" checked> 每日播放
+													<input type="radio" name="regiondtl.playmode" value="2" checked> <spring:message code="global.daily"/>
 												</label>
 											</div>
 										</div>
 										<div class="form-group playmode-1">
-											<label class="col-md-3 control-label">播放日期<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.playdate"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_date">                                       
 													<input type="text" size="16" readonly class="form-control" name="regiondtl.playdate">
@@ -135,7 +135,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">开始时间<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_time">                                       
 													<input type="text" size="16" readonly class="form-control" name="regiondtl.starttime">
@@ -146,7 +146,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group playmode-1">
-											<label class="col-md-3 control-label">结束时间<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.endtime"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_time">                                       
 													<input type="text" size="16" readonly class="form-control" name="regiondtl.endtime">
@@ -158,32 +158,32 @@ response.setDateHeader("Expires",0);
 										</div>
 			
 										<div class="form-group objtype-0">
-											<label class="control-label col-md-3">类型</label>
+											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="1" checked> 列表
+													<input type="radio" name="regiondtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="3"> 视频流
+													<input type="radio" name="regiondtl.objtype" value="3"> <spring:message code="global.stream"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="4"> 数字频道
+													<input type="radio" name="regiondtl.objtype" value="4"> <spring:message code="global.dvb"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="5"> Widget
+													<input type="radio" name="regiondtl.objtype" value="5"> <spring:message code="global.widget"/>
 												</label>
 											</div>
 										</div>
 										<div class="form-group objtype-1">
-											<label class="control-label col-md-3">类型</label>
+											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="2"> 文本
+													<input type="radio" name="regiondtl.objtype" value="2"> <spring:message code="global.text"/>
 												</label>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">内容<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.detail"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<input type="hidden" id="RegionDtlSelect" class="form-control select2" name="regiondtl.objid" />
 											</div>
@@ -192,21 +192,21 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button class="btn default" data-dismiss="modal">取消</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">快速发布</h3>
+				<h3 class="page-title"><spring:message code="menu.wizard"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">快速发布</a>
+						<li><a href="#"><spring:message code="menu.wizard"/></a>
 						</li>
 					</ul>
 				</div>
@@ -222,25 +222,25 @@ response.setDateHeader("Expires",0);
 										<li>
 											<a href="#tab1" data-toggle="tab" class="step">
 												<span class="number">1</span>
-												<span class="desc"><i class="fa fa-check"></i> 选择布局</span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selectlayout"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab2" data-toggle="tab" class="step">
 												<span class="number">2</span>
-												<span class="desc"><i class="fa fa-check"></i> 播出明细</span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.playschedule"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab3" data-toggle="tab" class="step">
 												<span class="number">3</span>
-												<span class="desc"><i class="fa fa-check"></i> 选择终端</span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selectdevice"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab4" data-toggle="tab" class="step">
 												<span class="number">4</span>
-												<span class="desc"><i class="fa fa-check"></i> 发布</span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.publish"/></span>   
 											</a> 
 										</li>
 									</ul>
@@ -261,7 +261,7 @@ response.setDateHeader("Expires",0);
 										<div class="tab-pane" id="tab1">
 											<form id="LayoutOptionForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 												<div class="form-group">
-													<label class="control-label col-md-2">选择布局</label>
+													<label class="control-label col-md-2"><spring:message code="global.layout"/></label>
 													<div class="col-md-10 pre-scrollable">
 														<table id="LayoutTable" class="table-striped"></table>
 													</div>
@@ -303,10 +303,10 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-7">
 												<div class="portlet box blue tabbable">
 													<div class="portlet-title">
-														<div class="caption"><i class="fa fa-reorder"></i>选择终端</div>
+														<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.wizard.selectdevice"/></div>
 														<ul class="nav nav-tabs">
-															<li class="active"><a href="#device_tab1" data-toggle="tab">终端</a></li>
-															<li><a href="#device_tab2" data-toggle="tab">终端组</a></li>
+															<li class="active"><a href="#device_tab1" data-toggle="tab"><spring:message code="global.device"/></a></li>
+															<li><a href="#device_tab2" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
 														</ul>
 													</div>
 													<div class="portlet-body">
@@ -330,7 +330,7 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-5">
 												<div class="portlet box green">
 													<div class="portlet-title">
-														<div class="caption"><i class="fa fa-picture"></i>已选择终端</div>
+														<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
 													</div>
 													<div class="portlet-body">
 														<div class="table-responsive">
@@ -343,7 +343,7 @@ response.setDateHeader("Expires",0);
 												</div>
 												<div class="portlet box green">
 													<div class="portlet-title">
-														<div class="caption"><i class="fa fa-picture"></i>已选择终端组</div>
+														<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.devicegroup.selected"/></div>
 													</div>
 													<div class="portlet-body">
 														<div class="table-responsive">
@@ -358,7 +358,7 @@ response.setDateHeader("Expires",0);
 										</div>
 			
 										<div class="tab-pane" id="tab4">
-											<h3 class="block">请确认你的操作：</h3>
+											<h3 class="block"><spring:message code="global.wizard.confirm"/></h3>
 											<table id="ConfirmTable" class="table table-striped table-bordered table-hover"></table>
 										</div>
 										
@@ -369,9 +369,9 @@ response.setDateHeader("Expires",0);
 									<div class="row">
 										<div class="col-md-12">
 											<div class="col-md-offset-9 col-md-3">
-												<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> 上一步 </a>
-												<a href="javascript:;" class="btn blue button-next">下一步 <i class="m-icon-swapright m-icon-white"></i></a>
-												<a href="javascript:;" class="btn green button-submit" style="display: none;">提交 <i class="m-icon-swapright m-icon-white"></i></a>                            
+												<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> <spring:message code="global.wizard.previous"/> </a>
+												<a href="javascript:;" class="btn blue button-next"><spring:message code="global.wizard.next"/> <i class="m-icon-swapright m-icon-white"></i></a>
+												<a href="javascript:;" class="btn green button-submit" style="display: none;"><spring:message code="global.submit"/> <i class="m-icon-swapright m-icon-white"></i></a>                            
 											</div>
 										</div>
 									</div>
@@ -428,7 +428,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

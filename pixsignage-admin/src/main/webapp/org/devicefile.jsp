@@ -45,15 +45,15 @@ response.setDateHeader("Expires",0);
 			<div class="page-content">
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">终端文件</h3>
+				<h3 class="page-title"><spring:message code="menu.devicefile"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">终端管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">终端文件</a>
+						<li><a href="#"><spring:message code="menu.devicefile"/></a>
 						</li>
 					</ul>
 				</div>
@@ -64,13 +64,13 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>终端文件</div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.devicefile"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="refreshLayoutschedule();" class="reload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab">终端</a></li>
-									<li class="active"><a id="DevicegroupTab" href="#TopTab" data-toggle="tab">终端组</a></li>
+									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
+									<li class="active"><a id="DevicegroupTab" href="#TopTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
 								</ul>
 							</div>
 							<div class="portlet-body">
@@ -78,7 +78,7 @@ response.setDateHeader("Expires",0);
 									<div class="tab-pane active" id="TopTab">
 										<div id="DevicegroupSelectPanel" class="row">
 											<div class="col-md1 col-sm-1">
-												<h3 class="event-form-title">请选择</h3>
+												<h3 class="event-form-title"><spring:message code="global.select"/></h3>
 											</div>
 											<div class="col-md3 col-sm-3">
 												<input type="hidden" id="DevicegroupSelect" class="form-control select2">
@@ -92,12 +92,12 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-10 col-sm-10 col-xs-10">
 												<div class="tab-content">
 													<div id="DeviceDetail" class="tab-pane active">
-														<h3>视频文件</h3>
+														<h3><spring:message code="global.video"/></h3>
 														<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
 															<thead></thead>
 															<tbody></tbody>
 														</table>
-														<h3>图片文件</h3>
+														<h3><spring:message code="global.image"/></h3>
 														<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
 															<thead></thead>
 															<tbody></tbody>
@@ -160,7 +160,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

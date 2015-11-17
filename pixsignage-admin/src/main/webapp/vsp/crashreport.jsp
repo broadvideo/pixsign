@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/common/taglibs.jsp"%> 
 
 <%
 response.setHeader("Cache-Control","no-store");
@@ -23,16 +24,16 @@ response.setDateHeader("Expires",0);
 <meta name="MobileOptimized" content="320">
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-<link href="/pixsignage-static/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
 
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link href="/pixsignage-static/global/plugins/select2/select2.css" rel="stylesheet"/>
-<link href="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="../common/common2.jsp"%>
@@ -49,43 +50,43 @@ response.setDateHeader("Expires",0);
 								<form id="CrashDtlForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-2 control-label required">设备IP</label>
+											<label class="col-md-2 control-label required">IP</label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientip"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">设备名称</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.name"/></label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientname"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">系统版本</label>
+											<label class="col-md-2 control-label required">OS</label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.os"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">应用名称</label>
+											<label class="col-md-2 control-label required">APP</label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.appname"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">版本名</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.debug.vname"/><</label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vname"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">版本号</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.debug.vcode"/><</label>
 											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vcode"></label>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">堆栈信息</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.debug.stack"/><</label>
 											<div class="col-md-10">
 												<textarea class="form-control" rows="16" name="crashreport.stack"></textarea>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">分辨率</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.debug.resolution"/><</label>
 											<div class="col-md-10">
 												<textarea class="form-control" rows="4" name="crashreport.resolution"></textarea>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-2 control-label required">其他信息</label>
+											<label class="col-md-2 control-label required"><spring:message code="global.debug.other"/></label>
 											<div class="col-md-10">
 												<textarea class="form-control" rows="3" name="crashreport.other"></textarea>
 											</div>
@@ -94,22 +95,22 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">终端调试</h3>
+				<h3 class="page-title"><spring:message code="menu.debug"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">系统管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">终端调试</a>
+						<li><a href="#"><spring:message code="menu.debug"/></a>
 						</li>
 					</ul>
 				</div>
@@ -118,10 +119,9 @@ response.setDateHeader("Expires",0);
 				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
-						<!-- BEGIN TABLE PORTLET-->
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cogs"></i>终端问题上报</div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.debug"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -145,10 +145,10 @@ response.setDateHeader("Expires",0);
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			<%if (org == null || org.getCopyright() == null || org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;明视迅达(VideoExpress)&nbsp;&nbsp;粤ICP备14037592号-1 <a href="http://www.miitbeian.gov.cn">工业和信息化部备案管理系统</a>
+			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
 			<%} else { %>
-			©<%=org.getCopyright()%>
+			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
 		<div class="footer-tools">
@@ -162,38 +162,39 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   
 <!--[if lt IE 9]>
-<script src="/pixsignage-static/global/plugins/respond.min.js"></script>
-<script src="/pixsignage-static/global/plugins/excanvas.min.js"></script> 
+<script src="${static_ctx}/global/plugins/respond.min.js"></script>
+<script src="${static_ctx}/global/plugins/excanvas.min.js"></script> 
 <![endif]-->   
-<script src="/pixsignage-static/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="/pixsignage-static/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/pixsignage-static/global/plugins/select2/select2.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="/pixsignage-static/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="../local/scripts/pix-datainit.js"></script>
-<script src="../local/scripts/pix-crashreport.js?t=0"></script>
+<script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js"></script>
+<script src="${base_ctx}/scripts/pix-crashreport.js?t=0"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

@@ -41,7 +41,6 @@ public class PixI18nInterceptor extends AbstractInterceptor {
 		 * 由LocalResolverFilter写入的locale在这里读取出来交给struts2使用.
 		 */
 		Locale locale = LocaleContextHolder.getLocale();
-		System.out.println("----------- " + locale);
 		saveLocale(invocation, locale);
 		final String result = invocation.invoke();
 		return result;

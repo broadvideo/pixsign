@@ -62,8 +62,8 @@ function refreshVchannelschedule() {
 					
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '<div class="timeline-footer">';
-					//scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-schedule-detail" data-id="'+ i + '">明细<i class="fa fa-arrow-circle-right"></i></a>';
-					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">删除<i class="fa fa-trash-o"></i></a>';
+					//scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-schedule-detail" data-id="'+ i + '">' + common.view.detail + '<i class="fa fa-arrow-circle-right"></i></a>';
+					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</li>';
@@ -115,7 +115,7 @@ function initVchannels() {
 	});
 
 	$('#PlaylistSelect').select2({
-		placeholder: '请选择对应内容',
+		placeholder: common.tips.detail_select,
 		//minimumResultsForSearch: -1,
 		minimumInputLength: 0,
 		ajax: { 
@@ -180,14 +180,14 @@ function initVchannels() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#ScheduleModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshVchannelschedule();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -223,14 +223,14 @@ function initVchannels() {
 			success : function(data, status) {
 				Metronic.stopPageLoading();
 				if (data.errorcode == 0) {
-					bootbox.alert('同步成功');
+					bootbox.alert(common.tips.success);
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});
@@ -241,7 +241,7 @@ function initVchannels() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentVchannelschedule = currentVchannelschedules[index];
-		bootbox.confirm('请确认是否删除开始时间为"' + currentVchannelschedule.starttime.substring(0, 5) + '"的计划', function(result) {
+		bootbox.confirm(common.tips.remove + currentVchannelschedule.starttime.substring(0, 5), function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -254,11 +254,11 @@ function initVchannels() {
 						if (data.errorcode == 0) {
 							refreshVchannelschedule();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}

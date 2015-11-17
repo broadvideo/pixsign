@@ -22,20 +22,20 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '计划', 'mData' : 'devicegroupid', 'bSortable' : false }, 
-						{'sTitle' : '更多操作', 'mData' : 'devicegroupid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '30%' }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '25%' }, 
+						{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '20%' }, 
+						{'sTitle' : common.view.more, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '25%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> 同步</a>';
+			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 			$('td:eq(2)', nRow).html(synchtml);
 			
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> 明细</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> 编辑</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> 删除</a>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(3)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -54,7 +54,7 @@ function initMyTable() {
 		var item = $('#MyTable').dataTable().fnGetData(index);
 		currentItem = item;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -67,11 +67,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -86,7 +86,7 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentItem = $('#MyTable').dataTable().fnGetData(index);
-		bootbox.confirm('是否同步播放计划至"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.sync + currentItem.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'GET',
@@ -103,14 +103,14 @@ function initMyTable() {
 					success : function(data, status) {
 						Metronic.stopPageLoading();
 						if (data.errorcode == 0) {
-							bootbox.alert('同步成功');
+							bootbox.alert(common.tips.success);
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
 						Metronic.stopPageLoading();
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -132,14 +132,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -204,16 +204,16 @@ function initDevicegpDtlModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'deviceid', 'bSortable' : false }],
 		'iDisplayLength' : 20,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#DeviceTable').dataTable().fnGetData(iDisplayIndex);
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegpdtl">增加</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegpdtl">' + common.view.add + '</button>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -234,16 +234,16 @@ function initDevicegpDtlModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'deviceid', 'bSortable' : false }],
 		'iDisplayLength' : 20,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#DevicegpDtlTable').dataTable().fnGetData(iDisplayIndex);
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevicegpdtl">移除</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevicegpdtl">' + common.view.remove + '</button>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -275,11 +275,11 @@ function initDevicegpDtlModal() {
 					$('#DeviceTable').dataTable()._fnAjaxUpdate();
 					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});
@@ -304,11 +304,11 @@ function initDevicegpDtlModal() {
 					$('#DeviceTable').dataTable()._fnAjaxUpdate();
 					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});

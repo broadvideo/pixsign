@@ -14,15 +14,15 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 1,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</a>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>' + common.view.edit + ' </a>';
 			$('td:eq(2)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -46,14 +46,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -81,7 +81,7 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', action);
 		
 		$("#BackupMediaSelect").select2({
-			placeholder: "请选择垫片视频",
+			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
 			ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
 				url: myurls['video.list'],
@@ -114,7 +114,9 @@ function initMyEditModal() {
 				return media.text;
 			},
 			initSelection: function(element, callback) {
-				callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name });
+				if (currentorg.backupvideo != null) {
+					callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name });
+				}
 			},
 			dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
 			escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results

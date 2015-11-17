@@ -74,20 +74,19 @@ Date.prototype.format = function(format)
 	return format;
 };
 
-
 var DataTableLanguage = {
-		"sZeroRecords" : '没有匹配的数据',
-		"sProcessing" : '<i class="fa fa-coffee"></i>　获取数据中...',
-		"sEmptyTable" : '没有匹配的数据',
-		"sLengthMenu" : "每页 _MENU_ 记录",
-		"sInfo" : "从 _START_ 到 _END_ (共 _TOTAL_ 条数据)",
-		"sInfoEmpty" : "从 0 到 0 (共 0 条数据)",
-		"sSearch" : "搜索:",
-		"oPaginate" : {
-			"sPrevious" : "前一页",
-			"sNext" : "后一页"
-		}
-	};
+	'sZeroRecords' : common.view.table_ZeroRecords,
+	'sProcessing' : common.view.table_Processing,
+	'sEmptyTable' : common.view.table_EmptyTable,
+	'sLengthMenu' : common.view.table_LengthMenu,
+	'sInfo' : common.view.table_Info,
+	'sInfoEmpty' : common.view.table_InfoEmpty,
+	'sSearch' : common.view.table_Search,
+	'oPaginate' : {
+		'sPrevious' : common.view.table_Previous,
+		'sNext' : common.view.table_Next
+	}
+};
 
 var FormValidateOption = {
 		errorElement : 'span', //default input error message container
@@ -148,15 +147,15 @@ var DataInit = function() {
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							$('#ChangePwdModal').modal('hide');
-							bootbox.alert('密码修改成功');
+							bootbox.alert(common.tips.success);
 						} else {
 							$('#ChangePwdModal').modal('hide');
-							bootbox.alert('密码修改不成功！');
+							bootbox.alert(password_success.error);
 						}
 					},
 					error : function() {
 						$('#ChangePwdModal').modal('hide');
-						bootbox.alert('密码修改不成功！');
+						bootbox.alert(password_success.error);
 					}
 				});
 			};

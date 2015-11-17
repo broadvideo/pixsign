@@ -50,7 +50,7 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">图片</h4>
+								<h4 class="modal-title"><spring:message code="global.image"/></h4>
 							</div>
 							<div class="modal-body">
 			
@@ -61,16 +61,16 @@ response.setDateHeader("Expires",0);
 											<!-- The fileinput-button span is used to style the file input field as button -->
 											<span class="btn green fileinput-button">
 											<i class="fa fa-plus"></i>
-											<span>选择文件...</span>
+											<span><spring:message code="global.resource.choose"/></span>
 											<input type="file" name="mymedia" multiple>
 											</span>
 											<button type="submit" class="btn blue start">
 											<i class="fa fa-upload"></i>
-											<span>全部上传</span>
+											<span><spring:message code="global.resource.uploadall"/></span>
 											</button>
 											<button type="reset" class="btn yellow cancel">
 											<i class="fa fa-ban"></i>
-											<span>取消上传</span>
+											<span><spring:message code="global.resource.uploadcancel"/></span>
 											</button>
 											<!-- The global file processing state -->
 											<span class="fileupload-process"></span>
@@ -93,7 +93,7 @@ response.setDateHeader("Expires",0);
 			
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn default pix-upload-close" data-dismiss="modal">关闭</button>
+								<button type="button" class="btn default pix-upload-close" data-dismiss="modal"><spring:message code="global.close"/></button>
 							</div>
 						</div>
 					</div>
@@ -104,17 +104,17 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">图片</h4>
+								<h4 class="modal-title"><spring:message code="global.image"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="image.imageid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label">图片名称<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="image.name" placeholder="请输入图片名称" />
+													<i class="fa"></i> <input type="text" class="form-control" name="image.name" />
 												</div>
 											</div>
 										</div>
@@ -122,23 +122,23 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">图片</h3>
+				<h3 class="page-title"><spring:message code="menu.image"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">素材管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">图片</a>
+						<li><a href="#"><spring:message code="menu.image"/></a>
 						</li>
 					</ul>
 				</div>
@@ -149,7 +149,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-video-camera"></i>图片</div>
+								<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.image"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -157,7 +157,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">切换部门  <i class="fa fa-angle-down"></i></a>
+										<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
 										<ul class="dropdown-menu pull-right">
 											<div class="pre-scrollable" id="SelectBranchTree">
 											</div>
@@ -167,11 +167,11 @@ response.setDateHeader("Expires",0);
 									<%
 										if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
 									%>
-										<button privilegeid="201010" class="btn green pix-full">在线上传 <i class="fa fa-plus"></i></button>
+										<button privilegeid="201010" class="btn green pix-full"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
 									<%
 										} else {
 									%>
-										<button privilegeid="201010" class="btn green pix-add">在线上传 <i class="fa fa-plus"></i></button>
+										<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
 									<%
 										}
 									%>
@@ -212,12 +212,15 @@ response.setDateHeader("Expires",0);
 	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<spring:message code="global.name" var="global_name"/>
+<spring:message code="global.resource.upload" var="global_resource_upload"/>
+<spring:message code="global.cancel" var="global_cancel"/>
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
 	<tr class="template-upload fade">
 		<td>
 			<div class="input-icon right">
-				<i class="fa"></i> <input type="text" class="form-control" name="name" placeholder="媒体名称" />
+				<i class="fa"></i> <input type="text" class="form-control" name="name" placeholder="${global_name}" />
 			</div>
 		</td>
 		<td>
@@ -235,13 +238,13 @@ response.setDateHeader("Expires",0);
 			{% if (!i && !o.options.autoUpload) { %}
 				<button class="btn blue start" disabled>
 					<i class="fa fa-upload"></i>
-					<span>上传</span>
+					<span>${global_resource_upload}</span>
 				</button>
 			{% } %}
 			{% if (!i) { %}
 				<button class="btn red cancel">
 					<i class="fa fa-ban"></i>
-					<span>取消</span>
+					<span>${global_cancel}</span>
 				</button>
 			{% } %}
 		</td>
@@ -264,7 +267,7 @@ response.setDateHeader("Expires",0);
 				{% } %}
 			</p>
 			{% if (file.error) { %}
-				<div><span class="label label-danger">错误</span>上传失败</div>
+				<div><span class="label label-danger"><spring:message code="global.error"/></span><spring:message code="global.resource.uploadfail"/></div>
 			{% } %}
 		</td>
 		<td>
@@ -313,7 +316,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

@@ -52,7 +52,7 @@ response.setDateHeader("Expires",0);
 									<div class="col-md-6">
 										<div class="portlet box blue">
 											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-reorder"></i>待选择终端</div>
+												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.selecting"/></div>
 											</div>
 											<div class="portlet-body">
 												<table id="DeviceTable" class="table table-striped table-bordered table-hover">
@@ -65,7 +65,7 @@ response.setDateHeader("Expires",0);
 									<div class="col-md-6">
 										<div class="portlet box green">
 											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-picture"></i>已加入终端</div>
+												<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
 											</div>
 											<div class="portlet-body">
 												<table id="DevicegpDtlTable" class="table table-striped table-bordered table-hover">
@@ -78,7 +78,7 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button class="btn default" data-dismiss="modal">关闭</button>
+								<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 							</div>
 						</div>
 					</div>
@@ -89,7 +89,7 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">终端组</h4>
+								<h4 class="modal-title"><spring:message code="global.devicegroup"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -97,23 +97,23 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="devicegroup.status" value="1" />
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label">终端组名称<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.name" placeholder="请输入终端组名称" />
+													<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.name" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">编码</label>
+											<label class="col-md-3 control-label"><spring:message code="global.code"/></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.code" placeholder="请输入编码" />
+													<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.code" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">描述</label>
+											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 											<div class="col-md-9">
 												<textarea class="form-control" rows="4" name="devicegroup.description"></textarea>
 											</div>
@@ -122,23 +122,23 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">终端组</h3>
+				<h3 class="page-title"><spring:message code="menu.devicegroup"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">终端管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">终端组</a>
+						<li><a href="#"><spring:message code="menu.devicegroup"/></a>
 						</li>
 					</ul>
 				</div>
@@ -149,7 +149,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>终端组</div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.devicegroup"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -157,7 +157,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<button privilegeid="101010" class="btn green pix-add">新增 <i class="fa fa-plus"></i></button>
+										<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/><i class="fa fa-plus"></i></button>
 									</div>
 								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -216,7 +216,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

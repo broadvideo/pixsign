@@ -18,20 +18,16 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '地址', 'mData' : 'url', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'streamid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.url, 'mData' : 'url', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'streamid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(3)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -50,7 +46,7 @@ function initMyTable() {
 		var item = $('#MyTable').dataTable().fnGetData(index);
 		currentItem = item;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -63,11 +59,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -81,8 +77,8 @@ function initMyEditModal() {
 	
 	FormValidateOption.rules['stream.name'] = {};
 	FormValidateOption.rules['stream.name']['required'] = true;
-	FormValidateOption.rules['stream.uri'] = {};
-	FormValidateOption.rules['stream.uri']['required'] = true;
+	FormValidateOption.rules['stream.url'] = {};
+	FormValidateOption.rules['stream.url']['required'] = true;
 	FormValidateOption.submitHandler = function(form) {
 		$.ajax({
 			type : 'POST',
@@ -91,14 +87,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了！');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};

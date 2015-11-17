@@ -1,9 +1,6 @@
 <%@page import="com.broadvideo.pixsignage.servlet.SystemInitServlet"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<%
-	SystemInitServlet.updateLicense(this.getServletContext());
-%>
+<%@include file="/common/taglibs.jsp"%> 
 
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -22,30 +19,30 @@
 <meta content="" name="author" />
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-<link href="/pixsignage-static/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN PAGE LEVEL STYLES -->
-<link href="/pixsignage-static/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/admin/pages/css/login-soft.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/pages/css/login-soft.css" rel="stylesheet" type="text/css" />
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN THEME STYLES -->
-<link href="/pixsignage-static/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/css/plugins.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-<link id="style_color" href="/pixsignage-static/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
+<link id="style_color" href="${static_ctx}/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="../favicon.ico" />
+<link rel="shortcut icon" href="${base_ctx}/favicon.ico" />
 </head>
 <!-- END HEAD -->
 
 <body class="login">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="../local/img/logo-big.png" alt="" />
+		<img src="${base_ctx}/img/logo-big.png" alt="" />
 	</div>
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->
@@ -53,24 +50,26 @@
 		<!-- BEGIN LOGIN FORM -->
 		<form id="VspLoginForm" class="login-form" method="post">
 			<input type="hidden" name="subsystem" value="1" />
-			<h3 class="form-title">运营商登录：</h3>
+			<h3 class="form-title"><spring:message code="global.login.vsphint"/></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>请输入用户名和密码</span>
 			</div>
 			<div class="form-group">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-				<label class="control-label visible-ie8 visible-ie9">用户名</label>
+				<spring:message code="global.username" var="global_username"/>
+				<label class="control-label visible-ie8 visible-ie9">${global_username}</label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
-					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="用户名" name="username"/>
+					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="${global_username}" name="username"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label visible-ie8 visible-ie9">密码</label>
+				<spring:message code="global.password" var="global_password"/>
+				<label class="control-label visible-ie8 visible-ie9">${global_password}</label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
-					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="密码" name="password"/>
+					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="${global_password}" name="password"/>
 				</div>
 			</div>
 			<!-- 
@@ -83,9 +82,11 @@
 			</div>
 			 -->
 			<div class="form-actions">
-				<label class="checkbox"><input type="checkbox" name="remember" value="1"/>记住我</label>
-				<button type="submit" class="btn blue pull-right">登录 <i class="m-icon-swapright m-icon-white"></i>
+				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
+				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
 				</button>
+	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
+	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
 			</div>
 			<br/>
 		</form>
@@ -99,30 +100,36 @@
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
-<script src="/pixsignage-static/global/plugins/respond.min.js"></script>
-<script src="/pixsignage-static/global/plugins/excanvas.min.js"></script> 
+<script src="${static_ctx}/global/plugins/respond.min.js"></script>
+<script src="${static_ctx}/global/plugins/excanvas.min.js"></script> 
 <![endif]-->
-<script src="/pixsignage-static/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/pixsignage-static/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
-<script src="/pixsignage-static/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/pixsignage-static/global/plugins/select2/select2.min.js"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="/pixsignage-static/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="../local/scripts/pix-login.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-login.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 	jQuery(document).ready(function() {
-		Metronic.init(); // init metronic core components
+		Metronic.init();
 		Login.init();
+		$('.pix-language').click(function(event){
+			event.preventDefault();
+			var language = $(event.target).attr('data-id');
+			document.location.href="index.jsp?locale=" + language;
+		});
 	});
 </script>
 <!-- END JAVASCRIPTS -->

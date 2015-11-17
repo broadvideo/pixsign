@@ -38,7 +38,7 @@ function refreshLayoutschedule() {
 					scheduleTabHtml += '<div class="timeline-content">';
 					scheduleTabHtml += '<div class="row"><div class="col-md-5 col-sm-5"><h2>' + schedule.layout.name + '</h2></div>';
 					scheduleTabHtml += '<div class="col-md-5 col-sm-5"><canvas id="LayoutCanvas-'+ schedule.layoutscheduleid + '"></canvas></div>';
-					scheduleTabHtml += '<div class="col-md-2 col-sm-2"><a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">删除<i class="fa fa-trash-o"></i></a></div>';
+					scheduleTabHtml += '<div class="col-md-2 col-sm-2"><a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a></div>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</div>';
@@ -82,8 +82,8 @@ function refreshLayoutschedule() {
 
 function refreshSelect() {
 	if (currentBindtype == 1) {
-		$("#DeviceSelect").select2({
-			placeholder: "请选择终端",
+		$('#DeviceSelect').select2({
+			placeholder: common.tips.device_select,
 			minimumInputLength: 0,
 			ajax: {
 				url: 'device!list.action',
@@ -127,8 +127,8 @@ function refreshSelect() {
 			$('#DeviceSelect').val('');
 		}
 	} else if (currentBindtype == 2) {
-		$("#DeviceSelect").select2({
-			placeholder: "请选择终端组",
+		$('#DeviceSelect').select2({
+			placeholder: common.tips.devicegroup_select,
 			minimumInputLength: 0,
 			ajax: {
 				url: 'devicegroup!list.action',
@@ -285,14 +285,14 @@ function initLayoutSchedules() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#ScheduleModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshLayoutschedule();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -328,14 +328,14 @@ function initLayoutSchedules() {
 			success : function(data, status) {
 				Metronic.stopPageLoading();
 				if (data.errorcode == 0) {
-					bootbox.alert('同步成功');
+					bootbox.alert(common.tips.success);
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});
@@ -346,7 +346,7 @@ function initLayoutSchedules() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentLayoutschedule = currentLayoutschedules[index];
-		bootbox.confirm('请确认是否删除开始时间为"' + currentLayoutschedule.starttime.substring(0, 5) + '"的计划', function(result) {
+		bootbox.confirm(common.tips.error + currentLayoutschedule.starttime.substring(0, 5), function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -359,11 +359,11 @@ function initLayoutSchedules() {
 						if (data.errorcode == 0) {
 							refreshLayoutschedule();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}

@@ -16,15 +16,15 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '配置项', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '配置值', 'mData' : 'value', 'bSortable' : false },
-						{'sTitle' : '操作', 'mData' : 'configid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.value, 'mData' : 'value', 'bSortable' : false },
+						{'sTitle' : common.view.operation, 'mData' : 'configid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</a>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>' + common.view.edit + ' </a>';
 			$('td:eq(2)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -51,14 +51,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};

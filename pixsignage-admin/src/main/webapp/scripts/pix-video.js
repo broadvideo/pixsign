@@ -30,11 +30,11 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [
-						{'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -93,7 +93,7 @@ function initMyTable() {
 		var item = $('#MyTable').dataTable().fnGetData(index);
 		currentItem = item;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -106,11 +106,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -192,12 +192,8 @@ function initMyTable() {
 		refreshMyTable();
 	});
 
-	$('body').on('click', '.pix-trans', function(event) {
-		bootbox.alert('请打开PixTrans客户端上传视频文件。');
-	});			
-
 	$('body').on('click', '.pix-full', function(event) {
-		bootbox.alert('存储已达上限，无法上传文件。');
+		bootbox.alert(common.tips.storage_full);
 	});			
 
 	function initBranchBreadcrumb(branchid) {
@@ -241,14 +237,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了！');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};

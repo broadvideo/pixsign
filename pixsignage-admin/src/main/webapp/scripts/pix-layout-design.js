@@ -18,10 +18,10 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "宽高比", "mData" : "ratio", "bSortable" : false }, 
-						{"sTitle" : "类型", "mData" : "type", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "layoutid", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.ratio, 'mData' : 'ratio', 'bSortable' : false }, 
+						{'sTitle' : common.view.type, 'mData' : 'type', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'layoutid', 'bSortable' : false }],
 		'iDisplayLength' : -1,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -30,30 +30,26 @@ function initMyTable() {
 			
 			var ratioHtml = '';
 			if (data['ratio'] == 1) {
-				ratioHtml = '宽屏 16:9';
+				ratioHtml = common.view.ratio_1;
 			} else if (data['ratio'] == 2) {
-				ratioHtml = '高屏 9:16';
+				ratioHtml = common.view.ratio_2;
 			} else if (data['ratio'] == 3) {
-				ratioHtml = '宽屏 4:3';
+				ratioHtml = common.view.ratio_3;
 			} else if (data['ratio'] == 4) {
-				ratioHtml = '高屏 3:4';
+				ratioHtml = common.view.ratio_4;
 			} 
 			$('td:eq(1)', nRow).html(ratioHtml);
 			var typeHtml = '';
 			if (data['type'] == 0) {
-				typeHtml = '普通布局';
+				typeHtml = common.view.type_0;
 			} else if (data['type'] == 1) {
-				typeHtml = '紧急布局';
+				typeHtml = common.view.type_1;
 			} 
 			$('td:eq(2)', nRow).html(typeHtml);
 			
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-layout"><i class="fa fa-stack-overflow"></i> 设计</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-layout"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(3)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -68,24 +64,24 @@ function initMyTable() {
 		currentItem = $('#MyTable').dataTable().fnGetData(index);
 		var action = myurls['common.delete'];
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
 					url : action,
 					cache: false,
 					data : {
-						'ids': currentItem['layoutid']
+						'layout.layoutid': currentItem['layoutid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -109,14 +105,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -195,7 +191,7 @@ function regionPositionUpdate(e, ui) {
 
 function regionBtnUpdate() {
 	var regionbtnhtml = '';
-	regionbtnhtml += '<a class="btn default btn-sm yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-plus"></i> 新增区域  <i class="fa fa-angle-down"></i></a>';
+	regionbtnhtml += '<a class="btn default btn-sm yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-plus"></i> ' + common.view.addregion + '  <i class="fa fa-angle-down"></i></a>';
 	regionbtnhtml += '<ul class="dropdown-menu pull-right">';
 	for (var i=0; i<tempRegions.length; i++) {
 		var region = tempRegions[i];
@@ -203,7 +199,7 @@ function regionBtnUpdate() {
 			return el.regionid == region.regionid;
 		});
 		if (layoutdtls.length > 0) {
-			regionbtnhtml += '<li><a href="javascript:;" data-id="" class="btn-sm disabled-link"><span class="disable-target">'+ region.name + ' (已添加)</span></a></li>';
+			regionbtnhtml += '<li><a href="javascript:;" data-id="" class="btn-sm disabled-link"><span class="disable-target">'+ region.name + ' </span></a></li>';
 		} else {
 			regionbtnhtml += '<li><a href="javascript:;" data-id="' + i + '" class="btn-sm pix-addregion"> '+ region.name + '</a></li>';
 		}
@@ -222,11 +218,11 @@ function initLayoutModal() {
 			if (data.errorcode == 0) {
 				tempRegions = data.aaData;
 			} else {
-				bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			bootbox.alert('出错了!');
+			bootbox.alert(common.tips.error);
 		}
 	});
 
@@ -271,8 +267,8 @@ function initLayoutModal() {
 						layoutdtlhtml += '   <span class="caret"></span>';
 						layoutdtlhtml += '  </button>';
 						layoutdtlhtml += '  <ul class="dropdown-menu">';
-						layoutdtlhtml += '   <li><a class="pix-region-update" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;" title="选项">选项</a></li>';
-						layoutdtlhtml += '   <li><a class="pix-region-delete" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;" title="删除">删除</a></li>';
+						layoutdtlhtml += '   <li><a class="pix-region-update" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;">' + common.view.option + '</a></li>';
+						layoutdtlhtml += '   <li><a class="pix-region-delete" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;">' + common.view.remove + '</a></li>';
 						layoutdtlhtml += '  </ul>';
 						layoutdtlhtml += ' </div>';
 						layoutdtlhtml += '</div>';
@@ -298,12 +294,12 @@ function initLayoutModal() {
 					
 					$('#LayoutModal').modal();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 		
@@ -349,8 +345,8 @@ function initLayoutModal() {
 		layoutdtlhtml += '   <span class="caret"></span>';
 		layoutdtlhtml += '  </button>';
 		layoutdtlhtml += '  <ul class="dropdown-menu">';
-		layoutdtlhtml += '   <li><a class="pix-region-update" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;" title="选项">选项</a></li>';
-		layoutdtlhtml += '   <li><a class="pix-region-delete" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;" title="删除">删除</a></li>';
+		layoutdtlhtml += '   <li><a class="pix-region-update" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;">' + common.view.option + '</a></li>';
+		layoutdtlhtml += '   <li><a class="pix-region-delete" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;">' + common.view.remove + '</a></li>';
 		layoutdtlhtml += '  </ul>';
 		layoutdtlhtml += ' </div>';
 		layoutdtlhtml += '</div>';
@@ -424,15 +420,15 @@ function initLayoutModal() {
 				Metronic.stopPageLoading();
 				$('#LayoutModal').modal('hide');
 				if (data.errorcode == 0) {
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					$('#MyTable').dataTable()._fnAjaxUpdate();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				$('#LayoutModal').modal('hide');
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 

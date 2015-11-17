@@ -22,27 +22,24 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '操作员姓名', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '登录名', 'mData' : 'loginname', 'bSortable' : false }, 
-						{'sTitle' : '部门', 'mData' : 'branch.name', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'staffid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' }, 
+						{'sTitle' : common.view.loginname, 'mData' : 'loginname', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : common.view.branch, 'mData' : 'branch.name', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '20%' }, 
+						{'sTitle' : common.view.operation, 'mData' : 'staffid', 'bSortable' : false, 'sWidth' : '30%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
+			var dropdownBtn = '';
 			if (data.loginname != 'admin') {
-				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
+				dropdownBtn += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
+				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+			} else {
+				dropdownBtn += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
 			}
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-password"><i class="fa fa-lock"></i> 重置密码</a></li>';
-			if (data.loginname != 'admin') {
-				dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			}
-			dropdownBtn += '</ul></div>';
 			$('td:eq(4)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -60,7 +57,7 @@ function initMyTable() {
 		}
 		currentItem = $('#MyTable').dataTable().fnGetData(index);
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -73,11 +70,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -270,7 +267,7 @@ function initMyEditModal() {
 			};
 			FormValidateOption.messages = {
 				'staff.loginname': {
-					remote: "登录名已存在"
+					remote: common.tips.loginname_repeat
 				}
 			};
 			FormValidateOption.rules['staff.password'] = {};
@@ -316,7 +313,7 @@ function initMyEditModal() {
 				};
 				FormValidateOption.messages = {
 					'staff.loginname': {
-						remote: "登录名已存在"
+						remote: common.tips.loginname_repeat
 					}
 				};
 			FormValidateOption.rules['staff.name'] = {};
@@ -390,14 +387,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -441,12 +438,12 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
-		currentEditBranchid = data.branchid;
+		currentEditBranchid = item.branchid;
 		refreshEditBranchTreeData(currentEditBranchTreeData);
 		createEditBranchTree(currentEditBranchTreeData);
 		currentRoles = {};
-		for (var i=0; i<data.roles.length; i++) {
-			currentRoles[data.roles[i].roleid] = data.roles[i];
+		for (var i=0; i<item.roles.length; i++) {
+			currentRoles[item.roles[i].roleid] = item.roles[i];
 		}
 		refreshRoleTreeData(currentRoleTreeData);
 		createRoleTree(currentRoleTreeData);

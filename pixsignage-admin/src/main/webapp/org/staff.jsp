@@ -45,51 +45,52 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title"><spring:message code="global.staff"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
 									<input type="hidden" name="staff.staffid" value="0" />
 									<div class="form-body">
 										<div class="form-group option1">
-											<label class="col-md-3 control-label">登录名<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.loginname"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="staff.loginname" placeholder="请输入登录名" />
+													<i class="fa"></i> <input type="text" class="form-control" name="staff.loginname" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group option2">
-											<label class="col-md-3 control-label">新密码<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.password"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="password" id="StaffPassword" class="form-control" name="staff.password" placeholder="请输入新密码" />
+													<i class="fa"></i> <input type="password" id="StaffPassword" class="form-control" name="staff.password" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group option2">
-											<label class="col-md-3 control-label">密码确认<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.password"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" placeholder="请确认新密码" />
+													<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group option1">
-											<label class="col-md-3 control-label">操作员姓名<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="staff.name" placeholder="请输入操作员姓名" />
+													<i class="fa"></i> <input type="text" class="form-control" name="staff.name" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group option1">
-											<label class="col-md-3 control-label">部门<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.branch"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="pre-scrollable" id="EditFormBranchTree"></div>	
 											</div>
 										</div>
 										<div class="form-group option1">
-											<label class="col-md-3 control-label">角色列表</label>
+											<label class="col-md-3 control-label"><spring:message code="global.role"/></label>
 											<div class="col-md-9">
 												<div class="col-md-9 pre-scrollable" id="RoleTree"></div>						
 											</div>
@@ -98,8 +99,8 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 						<!-- /.modal-content -->
@@ -110,15 +111,15 @@ response.setDateHeader("Expires",0);
 				<!-- END END MODAL FORM-->
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">操作员管理</h3>
+				<h3 class="page-title"><spring:message code="menu.staff"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">系统管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">操作员管理</a>
+						<li><a href="#"><spring:message code="menu.staff"/></a>
 						</li>
 					</ul>
 				</div>
@@ -129,7 +130,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cogs"></i>操作员</div>
+								<div class="caption"><i class="fa fa-cogs"></i><spring:message code="global.staff"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -137,7 +138,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<button privilegeid="101010" class="btn green pix-add">新增 <i class="fa fa-plus"></i></button>
+										<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 									</div>
 								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -196,7 +197,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

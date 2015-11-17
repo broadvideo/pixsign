@@ -45,14 +45,14 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">配置管理</h4>
+								<h4 class="modal-title"><spring:message code="global.config"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="org.orgid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label">默认垫片</label>
+											<label class="col-md-3 control-label"><spring:message code="global.backupvideo"/></label>
 											<div class="col-md-9">
 												<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 											</div>
@@ -61,8 +61,8 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 						<!-- /.modal-content -->
@@ -71,15 +71,15 @@ response.setDateHeader("Expires",0);
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">系统配置</h3>
+				<h3 class="page-title"><spring:message code="menu.config"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">系统管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">系统配置</a>
+						<li><a href="#"><spring:message code="menu.config"/></a>
 						</li>
 					</ul>
 				</div>
@@ -90,7 +90,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>配置</div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.config"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -152,7 +152,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

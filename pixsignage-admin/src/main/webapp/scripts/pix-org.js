@@ -14,39 +14,35 @@ function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ] // change per page values here
+						[ 10, 25, 50, 100 ]
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '企业名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '企业编码', 'mData' : 'code', 'bSortable' : false }, 
-						{'sTitle' : '过期时间', 'mData' : 'expiretime', 'bSortable' : false }, 
-						{'sTitle' : '终端上限', 'mData' : 'maxdevices', 'bSortable' : false }, 
-						{'sTitle' : '当前终端', 'mData' : 'currentdevices', 'bSortable' : false }, 
-						{'sTitle' : '存储上限', 'mData' : 'maxstorage', 'bSortable' : false }, 
-						{'sTitle' : '当前存储', 'mData' : 'currentstorage', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'orgid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
+						{'sTitle' : common.view.expiretime, 'mData' : 'expiretime', 'bSortable' : false }, 
+						{'sTitle' : common.view.maxdevices, 'mData' : 'maxdevices', 'bSortable' : false }, 
+						{'sTitle' : common.view.currentdevices, 'mData' : 'currentdevices', 'bSortable' : false }, 
+						{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
+						{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false, 'sWidth' : '15%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(5)', nRow).html(transferIntToComma(aData['maxstorage']) + ' MB');
 			$('td:eq(6)', nRow).html(transferIntToComma(aData['currentstorage']) + ' MB');
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(7)', nRow).html(dropdownBtn);
 			return nRow;
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); // modify table search input
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); // modify table per page dropdown
-	jQuery('#MyTable_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
+	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
 	
 	var currentItem;
@@ -59,7 +55,7 @@ function initMyTable() {
 		var action = myurls['common.delete'];
 		currentItem = item;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -72,11 +68,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -137,10 +133,10 @@ function initMyEditModal() {
 		};
 	FormValidateOption.messages = {
 		'org.name': {
-			remote: "名称已存在"
+			remote: common.tips.name_repeat
 		},
 		'org.code': {
-			remote: "编码已存在"
+			remote: common.tips.code_repeat
 		},
 	};
 	FormValidateOption.rules['org.maxdevices'] = {};
@@ -180,14 +176,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -201,7 +197,7 @@ function initMyEditModal() {
 	
 	$('body').on('click', '.pix-add', function(event) {
 		if ($('#MyTable').dataTable().fnGetData().length >= MaxOrgs) {
-			bootbox.alert('企业数量已达上限，无法新增。');
+			bootbox.alert(common.tips.maxorgs);
 			return;
 		}
 		

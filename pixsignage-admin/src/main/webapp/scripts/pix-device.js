@@ -25,14 +25,14 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '硬件码', 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
-						{'sTitle' : '分组', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '计划', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : '更多操作', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
+						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.hardkey, 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.more, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
 		'aoColumnDefs': [
 	 					{'bSortable': false, 'aTargets': [ 0 ] }
 	 				],
@@ -48,19 +48,19 @@ function initMyTable() {
 				$('td:eq(5)', nRow).html('');
 			}
 			if (data['onlineflag'] == 9) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-default">离线</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-default">' + common.view.offline + '</span>');
 			} else if (data['onlineflag'] == 1) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">在线</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (data['onlineflag'] == 0) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">空闲</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
 			}
 			
-			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> 同步</a>';
+			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 			$('td:eq(7)', nRow).html(synchtml);
 			
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> 文件</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> 编辑</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> 解绑</a>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
 			$('td:eq(8)', nRow).html(dropdownBtn);
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
@@ -81,9 +81,9 @@ function initMyTable() {
 	{
 		var aData = oTable.fnGetData( nTr );
 		var sOut = '<table>';
-		sOut += '<tr><td>IP地址:</td><td>'+aData['ip']+'</td></tr>';
-		sOut += '<tr><td>MAC地址:</td><td>'+aData['mac']+'</td></tr>';
-		sOut += '<tr><td>激活时间:</td><td>'+aData['activetime']+'</td></tr>';
+		sOut += '<tr><td>IP:</td><td>'+aData['ip']+'</td></tr>';
+		sOut += '<tr><td>MAC:</td><td>'+aData['mac']+'</td></tr>';
+		sOut += '<tr><td>' + common.view.activetime + ':</td><td>'+aData['activetime']+'</td></tr>';
 		sOut += '</table>';
 		 
 		return sOut;
@@ -114,7 +114,7 @@ function initMyTable() {
 		}
 		currentItem = $('#MyTable').dataTable().fnGetData(index);
 		
-		bootbox.confirm('请确认是否解绑"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.unbind + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -127,11 +127,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -147,7 +147,7 @@ function initMyTable() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentItem = $('#MyTable').dataTable().fnGetData(index);
-		bootbox.confirm('是否同步播放计划至"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.sync + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'GET',
@@ -164,14 +164,14 @@ function initMyTable() {
 					success : function(data, status) {
 						Metronic.stopPageLoading();
 						if (data.errorcode == 0) {
-							bootbox.alert('同步成功');
+							bootbox.alert(common.tips.success);
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
 						Metronic.stopPageLoading();
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -290,9 +290,9 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.unregisterlist'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage
@@ -411,14 +411,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了！');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -506,12 +506,12 @@ function initDeviceFileModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['devicefile.list'],
-		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
-						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -546,12 +546,12 @@ function initDeviceFileModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['devicefile.list'],
-		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
-						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,

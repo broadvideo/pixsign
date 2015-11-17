@@ -3,8 +3,12 @@ package com.broadvideo.pixsignage.quartz;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,8 +22,6 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
 import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
 import com.broadvideo.pixsignage.service.VchannelscheduleService;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 
 public class VCSSTask {
 	private static final Logger log = Logger.getLogger(VCSSTask.class);
@@ -71,7 +73,7 @@ public class VCSSTask {
 		workflag = false;
 	}
 
-	private void sendChannelMsg(Msgevent msgevent) {
+	private void sendChannelMsg(Msgevent msgevent) throws Exception {
 		JSONObject msgJson = new JSONObject();
 		JSONArray channelJsonArray = new JSONArray();
 		msgJson.put("vchannels", channelJsonArray);
@@ -90,28 +92,49 @@ public class VCSSTask {
 
 		String url = CommonConfig.CONFIG_VCSS_SERVER + "vchannels";
 		log.info("Send vchannels message to VCSS: " + msgJson.toString());
-		Client c = Client.create();
-		WebResource r = c.resource(url);
-		String s = r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).post(String.class,
-				msgJson.toString());
-		log.info("Get vchannels response from VCSS: " + s);
-
+		// Client c = Client.create();
+		// WebResource r = c.resource(url);
+		// String s =
+		// r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).post(String.class,
+		// msgJson.toString());
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.addHeader("content-type", "application/json");
+			httpPost.setEntity(new StringEntity(msgJson.toString(), "UTF-8"));
+			HttpResponse result = httpclient.execute(httpPost);
+			String s = EntityUtils.toString(result.getEntity(), "UTF-8");
+			log.info("Get vchannels response from VCSS: " + s);
+		} finally {
+			httpclient.close();
+		}
 		msgevent.setStatus(Msgevent.Status_Sent);
 		msgevent.setSendtime(Calendar.getInstance().getTime());
 		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
-	private void sendScheduleMsg(Msgevent msgevent) {
+	private void sendScheduleMsg(Msgevent msgevent) throws Exception {
 		Vchannel vchannel = vchannelMapper.selectByPrimaryKey("" + msgevent.getObjid1());
 		if (vchannel != null && vchannel.getStatus().equals("1")) {
 			JSONObject msgJson = vchannelscheduleService.generateVchannelScheduleJson("" + msgevent.getObjid1());
 			String url = CommonConfig.CONFIG_VCSS_SERVER + "schedules";
 			log.info("Send schedules message to VCSS: " + msgJson.toString());
-			Client c = Client.create();
-			WebResource r = c.resource(url);
-			String s = r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
-					.post(String.class, msgJson.toString());
-			log.info("Get schedules response from VCSS: " + s);
+			// Client c = Client.create();
+			// WebResource r = c.resource(url);
+			// String s =
+			// r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).post(String.class,
+			// msgJson.toString());
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			try {
+				HttpPost httpPost = new HttpPost(url);
+				httpPost.addHeader("content-type", "application/json");
+				httpPost.setEntity(new StringEntity(msgJson.toString(), "UTF-8"));
+				HttpResponse result = httpclient.execute(httpPost);
+				String s = EntityUtils.toString(result.getEntity(), "UTF-8");
+				log.info("Get schedules response from VCSS: " + s);
+			} finally {
+				httpclient.close();
+			}
 		}
 
 		msgevent.setStatus(Msgevent.Status_Sent);

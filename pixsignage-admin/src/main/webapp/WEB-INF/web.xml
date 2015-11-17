@@ -24,7 +24,7 @@
 		</init-param>
 		<init-param>
 			<param-name>excludeLoginURLs</param-name>
-			<param-value>/index.jsp;/org/index.jsp;/vsp/index.jsp;login!vsp.action;login!org.action</param-value>
+			<param-value>/index.jsp;/vsp.jsp;/org/index.jsp;/vsp/index.jsp;login!vsp.action;login!org.action</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

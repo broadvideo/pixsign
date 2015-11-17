@@ -37,17 +37,16 @@ function initLicense() {
 				} 
 				
 				if (data.org.expireflag == 0) {
-					$('#ExpireTime').html('使用授权：长期');
+					$('#ExpireTime').html(common.view.expiretime + ': ' + common.view.unlimited);
 				} else {
-					$('#ExpireTime').html('使用授权：' + data.org.expiretime);
+					$('#ExpireTime').html(common.view.expiretime + ': ' + data.org.expiretime);
 				}
-				
-				$('#CurrentDevices').html('当前终端数：' + data.org.currentdevices + ' (' + devicePercent + '%)');
+				$('#CurrentDevices').html(common.view.currentdevices + ': ' + data.org.currentdevices + ' (' + devicePercent + '%)');
 				$('#MaxDevices').html(data.org.maxdevices);
 				$('#CurrentDevicesProgress').attr('class', 'progress-bar ' + classDeviceProgress);
 				$('#CurrentDevicesProgress').attr('style', 'width: ' + devicePercent + '%');
 
-				$('#CurrentStorage').html('当前占用存储：' + data.org.currentstorage + ' MB (' + storagePercent + '%)');
+				$('#CurrentStorage').html(common.view.currentstorage + ': ' + data.org.currentstorage + ' MB (' + storagePercent + '%)');
 				$('#MaxStorage').html(data.org.maxstorage + ' MB');
 				$('#CurrentStorageProgress').attr('class', 'progress-bar ' + classStorageProgress);
 				$('#CurrentStorageProgress').attr('style', 'width: ' + storagePercent + '%');
@@ -63,9 +62,9 @@ function initDeviceTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false },
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '在线', 'mData' : 'onlineflag', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false },
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.online, 'mData' : 'onlineflag', 'bSortable' : false }],
 		'iDisplayLength' : 5,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -73,11 +72,11 @@ function initDeviceTable() {
 			var data = $('#DeviceTable').dataTable().fnGetData(iDisplayIndex);
 
 			if (data['onlineflag'] == 9) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">离线</span>');
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">' + common.view.offline + '</span>');
 			} else if (data['onlineflag'] == 1) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">在线</span>');
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (data['onlineflag'] == 0) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">空闲</span>');
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
 			}
 			return nRow;
 		}
@@ -91,9 +90,9 @@ function initTaskTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['video.list'],
-		'aoColumns' : [ {"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "大小", "mData" : "size", "bSortable" : false }, 
-						{"sTitle" : "上传时间", "mData" : "createtime", "bSortable" : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : common.view.uploadtime, 'mData' : 'createtime', 'bSortable' : false }],
 		'iDisplayLength' : 5,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -194,9 +193,9 @@ function initMediaChart() {
 	function onDataReceived(data, type) {
 		var series = {};
 		if (type == '1') {
-			series.label = '视频';
+			series.label = common.view.video;
 		} else if (type == '2') {
-			series.label = '图片';
+			series.label = common.view.image;
 		} 
 		series.data = [];
 		
@@ -332,7 +331,7 @@ function initFileChart() {
 
 	function onDataReceived(data) {
 		var series = {};
-		series.label = '流量';
+		series.label = common.view.downloaddata;
 		series.data = [];
 		
 		var today = new Date();

@@ -30,17 +30,17 @@ var Login = function () {
 	            },
 	            messages: {
 	                username: {
-	                    required: "必须输入用户名."
+	                    required: common.tips.username_required
 	                },
 	                password: {
-	                    required: "必须输入密码."
+	                    required: common.tips.password_required
 	                },
 	                code: {
-	                    required: "必须输入企业编码."
+	                    required: common.tips.code_required
 	                },
 	            },
 	            invalidHandler: function (event, validator) {
-	            	$('.alert-danger span', $('#OrgLoginForm')).html('请检查输入项。');
+	            	$('.alert-danger span', $('#OrgLoginForm')).html(common.tips.input_check);
 	            	$('.alert-danger', $('#OrgLoginForm')).show();
 	            },
 	            highlight: function (element) {
@@ -75,7 +75,7 @@ var Login = function () {
 							if (data.errorcode == 0) {
 								window.location.href = 'main.jsp';
 							} else {
-								$('.alert-danger span', $('#OrgLoginForm')).html('信息输入有误，登陆失败。');
+								$('.alert-danger span', $('#OrgLoginForm')).html(common.tips.login_failed);
 				            	$('.alert-danger', $('#OrgLoginForm')).show();
 							}
 						},
@@ -128,15 +128,15 @@ var Login = function () {
 
 	            messages: {
 	                username: {
-	                    required: "必须输入用户名."
+	                    required: common.tips.username_required
 	                },
 	                password: {
-	                    required: "必须输入密码."
+	                    required: common.tips.password_required
 	                }
 	            },
 
 	            invalidHandler: function (event, validator) { 
-	            	$('.alert-danger span', $('#VspLoginForm')).html('请检查输入项。');
+	            	$('.alert-danger span', $('#VspLoginForm')).html(common.tips.input_check);
 	                $('.alert-danger', $('#VspLoginForm')).show();
 	            },
 
@@ -177,7 +177,7 @@ var Login = function () {
 							if (data.errorcode == 0) {
 								window.location.href = 'main.jsp';
 							} else {
-								$('.alert-danger span', $('#VspLoginForm')).html('信息输入有误，登陆失败。');
+								$('.alert-danger span', $('#VspLoginForm')).html(common.tips.login_failed);
 				            	$('.alert-danger', $('#VspLoginForm')).show();
 							}
 						},

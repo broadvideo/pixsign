@@ -56,15 +56,15 @@ response.setDateHeader("Expires",0);
 										<input type="hidden" name="vchannelschedule.vchannelscheduleid" value="0" />
 										<input type="hidden" name="vchannelschedule.vchannelid" />
 										<div class="form-group">
-											<label class="control-label col-md-3">选项</label>
+											<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="vchannelschedule.playmode" value="2" checked> 每日播放
+													<input type="radio" name="vchannelschedule.playmode" value="2" checked> <spring:message code="global.daily"/>
 												</label>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">播放时间<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_time">                                       
 													<input type="text" size="16" readonly class="form-control" name="vchannelschedule.starttime">
@@ -75,7 +75,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">轮播列表<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.playlist"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<input type="hidden" id="PlaylistSelect" class="form-control select2" name="vchannelschedule.playlistid" />
 											</div>
@@ -84,8 +84,8 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button class="btn default" data-dismiss="modal">取消</button>
+								<button type="submit" class="btn blue button-submit"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
@@ -93,15 +93,15 @@ response.setDateHeader("Expires",0);
 			
 		
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">播出计划</h3>
+				<h3 class="page-title"><spring:message code="menu.vchannelschedule"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">数字电视台</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.vstation"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">播出计划</a>
+						<li><a href="#"><spring:message code="menu.vchannelschedule"/></a>
 						</li>
 					</ul>
 				</div>
@@ -112,7 +112,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>播出计划</div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.vchannelschedule"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="refreshVchannelschedule();" class="reload"></a>
 								</div>
@@ -126,8 +126,8 @@ response.setDateHeader("Expires",0);
 											<div class="tab-pane active">
 												<div class="row">
 													<div class="col-md12 col-sm-12">
-														<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> 同步计划</a>&nbsp;
-														<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> 创建计划</a>
+														<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> <spring:message code="global.syncschedule"/></a>&nbsp;
+														<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> <spring:message code="global.addschedule"/></a>
 													</div>
 												</div>
 												<br/>
@@ -192,7 +192,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

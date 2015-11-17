@@ -114,8 +114,8 @@ function initDevicefiles() {
 		refreshLeftTab();
 	});
 
-	$("#DevicegroupSelect").select2({
-		placeholder: "请选择终端组",
+	$('#DevicegroupSelect').select2({
+		placeholder: common.tips.devicegroup_select,
 		minimumInputLength: 0,
 		ajax: {
 			url: 'devicegroup!list.action',
@@ -149,11 +149,11 @@ function initDevicefiles() {
 		},
 		initSelection: function (element, callback) {
 		},
-		dropdownCssClass: "bigdrop",
+		dropdownCssClass: 'bigdrop',
 		escapeMarkup: function (m) { return m; }
 	});
 	
-	$("#DevicegroupSelect").on("change", function(e) {
+	$('#DevicegroupSelect').on('change', function(e) {
 		currentDevicegroupid = $(this).select2('data').id;
 		refreshLeftTab();
 	});	
@@ -163,12 +163,12 @@ function initDevicefiles() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : 'devicefile!list.action',
-		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
-						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
@@ -202,12 +202,12 @@ function initDevicefiles() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : 'devicefile!list.action',
-		'aoColumns' : [ {'sTitle' : '编号', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'devicefileid', 'bSortable' : false }, 
-						{'sTitle' : '大小', 'mData' : 'devicefileid', 'bSortable' : false }, 
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
-						{'sTitle' : '完成', 'mData' : 'progress', 'bSortable' : false },
-						{'sTitle' : '更新时间', 'mData' : 'updatetime', 'bSortable' : false }],
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

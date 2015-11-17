@@ -1,9 +1,11 @@
 package com.broadvideo.pixsignage.action;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -46,6 +48,50 @@ public class LoginAction extends BaseAction {
 	private PrivilegeService privilegeService;
 
 	public String doLogin() throws Exception {
+		if (!CommonConfig.LICENSE) {
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if (System.getProperties().getProperty("os.name").startsWith("Windows")) {
+				CommonConfig.LICENSE_HOSTID_VERIFY = true;
+				try {
+					CommonConfig.LICENSE_Expire = sf.parse("2037-01-01 00:00:00");
+				} catch (Exception e) {
+				}
+				CommonConfig.LICENSE_MaxOrgs = 10;
+				CommonConfig.LICENSE_MaxDevicesPerSigOrg = 20;
+				CommonConfig.LICENSE_MaxStoragePerSigOrg = 3000;
+				CommonConfig.LICENSE_MaxDevicesPerMovieOrg = 20;
+				CommonConfig.LICENSE_MaxStoragePerMovieOrg = 3000;
+			}
+
+			ServletContext licensecontext = getHttpServletRequest().getSession().getServletContext()
+					.getContext("/pixlicense");
+			if (licensecontext == null) {
+				log.error("License init error: context of license is null");
+			} else if (licensecontext.getAttribute("HostIDVerify") == null) {
+				log.error("License init error: HostIDVerify is null");
+			} else {
+				CommonConfig.LICENSE_HOSTID_VERIFY = (Boolean) licensecontext.getAttribute("HostIDVerify");
+				CommonConfig.LICENSE_Expire = sf.parse((String) licensecontext.getAttribute("Expire"));
+				CommonConfig.LICENSE_MaxOrgs = Integer.parseInt((String) licensecontext.getAttribute("MaxOrgs"));
+				CommonConfig.LICENSE_MaxDevicesPerSigOrg = Integer
+						.parseInt((String) licensecontext.getAttribute("MaxDevicesPerSigOrg"));
+				CommonConfig.LICENSE_MaxStoragePerSigOrg = Integer
+						.parseInt((String) licensecontext.getAttribute("MaxStoragePerSigOrg"));
+				CommonConfig.LICENSE_MaxDevicesPerMovieOrg = Integer
+						.parseInt((String) licensecontext.getAttribute("MaxDevicesPerMovieOrg"));
+				CommonConfig.LICENSE_MaxStoragePerMovieOrg = Integer
+						.parseInt((String) licensecontext.getAttribute("MaxStoragePerMovieOrg"));
+				log.info("License HostID verify: " + CommonConfig.LICENSE_HOSTID_VERIFY);
+				log.info("License Expire: " + sf.format(CommonConfig.LICENSE_Expire));
+				log.info("License MaxOrgs: " + CommonConfig.LICENSE_MaxOrgs);
+				log.info("License MaxDevicesPerSigOrg: " + CommonConfig.LICENSE_MaxDevicesPerSigOrg);
+				log.info("License MaxStoragePerSigOrg: " + CommonConfig.LICENSE_MaxStoragePerSigOrg);
+				log.info("License MaxDevicesPerMovieOrg: " + CommonConfig.LICENSE_MaxDevicesPerMovieOrg);
+				log.info("License MaxStoragePerMovieOrg: " + CommonConfig.LICENSE_MaxStoragePerMovieOrg);
+				CommonConfig.LICENSE = true;
+			}
+		}
+
 		if (!CommonConfig.LICENSE_HOSTID_VERIFY) {
 			log.error("Login failed for license HostID verified");
 			setErrorcode(-1);
@@ -137,7 +183,8 @@ public class LoginAction extends BaseAction {
 
 			session.invalidate();
 		}
-		getHttpServletResponse().sendRedirect(getHttpServletRequest().getContextPath());
+
+		getHttpServletResponse().sendRedirect(getHttpServletRequest().getRequestURI());
 		return SUCCESS;
 	}
 

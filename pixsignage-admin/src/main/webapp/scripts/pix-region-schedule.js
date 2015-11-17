@@ -101,7 +101,7 @@ function refreshRegionschedule() {
 					scheduleTabHtml += '<div class="timeline-icon"><i class="fa fa-video-camera"></i></div>';
 					scheduleTabHtml += '<div class="timeline-body">';
 					if (schedule.objtype == 1) {
-						scheduleTabHtml += '<h2>媒体列表：' + schedule.medialist.name + '</h2>';
+						scheduleTabHtml += '<h2>' + common.view.medialist + ' ' + schedule.medialist.name + '</h2>';
 						scheduleTabHtml += '<div class="timeline-content">';
 						for (var j=0; j<schedule.medialist.medialistdtls.length; j++) {
 							var medialistdtl = schedule.medialist.medialistdtls[j];
@@ -127,20 +127,20 @@ function refreshRegionschedule() {
 						}						
 						scheduleTabHtml += '</div>';
 					} else if (schedule.objtype == 2) {
-						scheduleTabHtml += '<h2>文本：' + schedule.text.name + '</h2>';
+						scheduleTabHtml += '<h2>' + common.view.text + ' ' + schedule.text.name + '</h2>';
 						scheduleTabHtml += '<div class="timeline-content">' + schedule.text.text + '</div>';
 					} else if (schedule.objtype == 3) {
-						scheduleTabHtml += '<h2>视频流：' + schedule.stream.name + '</h2>';
+						scheduleTabHtml += '<h2>' + common.view.stream + ' ' + schedule.stream.name + '</h2>';
 						scheduleTabHtml += '<div class="timeline-content">' + schedule.stream.url + '</div>';
 					} else if (schedule.objtype == 4) {
-						scheduleTabHtml += '<h2>数字频道：' + schedule.dvb.name + '</h2>';
+						scheduleTabHtml += '<h2>' + common.view.dvb + ' ' + schedule.dvb.name + '</h2>';
 						scheduleTabHtml += '<div class="timeline-content">' + schedule.dvb.frequency + 'MHz</div>';
 					} else if (schedule.objtype == 5) {
 						scheduleTabHtml += '<h2>Widget：' + schedule.widget.name + '</h2>';
 						scheduleTabHtml += '<div class="timeline-content">' + schedule.widget.url + '</div>';
 					}
 					scheduleTabHtml += '<div class="timeline-footer">';
-					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">删除<i class="fa fa-trash-o"></i></a>';
+					scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-schedule-delete" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</div>';
 					scheduleTabHtml += '</li>';
@@ -158,8 +158,8 @@ function refreshRegionschedule() {
 
 function refreshSelect() {
 	if (currentBindtype == 1) {
-		$("#DeviceSelect").select2({
-			placeholder: "请选择终端",
+		$('#DeviceSelect').select2({
+			placeholder: common.tips.device_select,
 			minimumInputLength: 0,
 			ajax: {
 				url: 'device!list.action',
@@ -203,8 +203,8 @@ function refreshSelect() {
 			$('#DeviceSelect').val('');
 		}
 	} else if (currentBindtype == 2) {
-		$("#DeviceSelect").select2({
-			placeholder: "请选择终端组",
+		$('#DeviceSelect').select2({
+			placeholder: common.tips.devicegroup_select,
 			minimumInputLength: 0,
 			ajax: {
 				url: 'devicegroup!list.action',
@@ -241,7 +241,7 @@ function refreshSelect() {
 					callback({id : currentDevicegroupData.id, text : currentDevicegroupData.text});
 				}
 			},
-			dropdownCssClass: "bigdrop",
+			dropdownCssClass: 'bigdrop',
 			escapeMarkup: function (m) { return m; }
 		});
 		if (currentDevicegroupData == null) {
@@ -264,7 +264,7 @@ function refreshRegionDtlSelect() {
 		url = 'widget!list.action';
 	}
 	$('#RegionDtlSelect').select2({
-		placeholder: '请选择对应内容',
+		placeholder: common.tips.detail_select,
 		//minimumResultsForSearch: -1,
 		minimumInputLength: 0,
 		ajax: { 
@@ -383,14 +383,14 @@ function initRegionSchedules() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#ScheduleModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshRegionschedule();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -448,14 +448,14 @@ function initRegionSchedules() {
 			success : function(data, status) {
 				Metronic.stopPageLoading();
 				if (data.errorcode == 0) {
-					bootbox.alert('同步成功');
+					bootbox.alert(common.tips.success);
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});
@@ -466,7 +466,7 @@ function initRegionSchedules() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentRegionschedule = currentRegionschedules[index];
-		bootbox.confirm('请确认是否删除开始时间为"' + currentRegionschedule.starttime.substring(0, 5) + '"的计划', function(result) {
+		bootbox.confirm(common.tips.remove + currentRegionschedule.starttime.substring(0, 5), function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -479,11 +479,11 @@ function initRegionSchedules() {
 						if (data.errorcode == 0) {
 							refreshRegionschedule();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}

@@ -45,7 +45,7 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">Text</h4>
+								<h4 class="modal-title"><spring:message code="global.text"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -53,15 +53,15 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="text.status" value="1" />
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label">文本名称<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="text.name" placeholder="请输入文本名称" />
+													<i class="fa"></i> <input type="text" class="form-control" name="text.name" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">文本内容<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.resource.text"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<textarea class="form-control" rows="10" name="text.text"></textarea>
 											</div>
@@ -70,23 +70,23 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">文本</h3>
+				<h3 class="page-title"><spring:message code="menu.text"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">素材管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">文本</a>
+						<li><a href="#"><spring:message code="menu.text"/></a>
 						</li>
 					</ul>
 				</div>
@@ -97,7 +97,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i>文本</div>
+								<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.text"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -105,7 +105,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-add">新增 <i class="fa fa-plus"></i></button>
+										<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 									</div>
 								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -164,7 +164,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

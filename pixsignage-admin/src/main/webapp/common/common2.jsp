@@ -70,26 +70,26 @@ function hasPrivilege(privilegeid) {
 						<input type="hidden" name="staff.staffid" value="<%=staff.getStaffid()%>" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label">${global_oldpassword}<span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="global.oldpassword"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" class="form-control" name="staff.oldpassword" placeholder="${global_oldpassword}" />
+										<i class="fa"></i> <input type="password" class="form-control" name="staff.oldpassword" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">${global_newpassword}<span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="global.newpassword"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" id="password" class="form-control" name="staff.password" placeholder="${global_newpassword}" />
+										<i class="fa"></i> <input type="password" id="password" class="form-control" name="staff.password" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">${global_newpassword}<span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="global.newpassword"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" placeholder="${global_newpassword}" />
+										<i class="fa"></i> <input type="password" class="form-control" name="staff.password2" />
 									</div>
 								</div>
 							</div>
@@ -97,8 +97,8 @@ function hasPrivilege(privilegeid) {
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn blue">${global_submit}</button>
-					<button type="button" class="btn default" data-dismiss="modal">${global_close}</button>
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 				</div>
 			</div>
 		</div>
@@ -132,10 +132,10 @@ function hasPrivilege(privilegeid) {
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
-							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> ${global_chanegepassword}</a></li>
+							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> <spring:message code="global.chanegepassword"/></a></li>
 							<li class="divider"></li>
-							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> ${global_fullscreen}</a></li>
-							<li><a href="logout.action"><i class="fa fa-key"></i> ${global_logout}</a></li>
+							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-arrows"></i> <spring:message code="global.fullscreen"/></a></li>
+							<li><a href="logout.action"><i class="fa fa-key"></i> <spring:message code="global.logout"/></a></li>
 						</ul>
 					</li>
 					<!-- END USER LOGIN DROPDOWN -->
@@ -164,7 +164,7 @@ function hasPrivilege(privilegeid) {
 					<li class="start <%= currentPrivilegeid.equals("")? "active" : "" %> ">
 						<a href="main.jsp">
 						<i class="fa fa-home"></i> 
-						<span class="title">${global_dashboard}</span>
+						<span class="title"><spring:message code="global.dashboard"/></span>
 						<span class="selected"></span>
 						</a>
 					</li>
@@ -209,7 +209,7 @@ function hasPrivilege(privilegeid) {
 											out.println("<li class=\"" + liClass + "\">");
 											out.println("<a href=\"" + child.getMenuurl()+"?CurrentP="+child.getPrivilegeid()+"&ParentP="+child.getParentid() + "\">" + child.getName() + "</a>");
 										} else {
-											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"${global_noprivilege}\">");
+											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"<spring:message code=\"global_noprivilege\"/>\">");
 											out.println("<a href=\"#\" class=\"disabled-link\"><span class=\"disable-target\">" + child.getName() + "</span></a>");
 										}
 										out.println("</li>");

@@ -56,7 +56,7 @@ response.setDateHeader("Expires",0);
 									<div class="col-md-9 col-sm-9" style="width:852px;">
 										<div class="portlet box purple">
 											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-calendar"></i>布局设计</div>
+												<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
 												<div class="actions">
 													<div id="RegionBtn" class="btn-group">
 													</div>
@@ -71,8 +71,8 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button class="btn default" data-dismiss="modal">取消</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
@@ -91,49 +91,49 @@ response.setDateHeader("Expires",0);
 									<div class="form-body">
 										<input type="hidden" name="regionid" />
 										<div class="form-group nontextflag">
-											<label class="col-md-3 control-label">图片切换间隔(秒)<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="intervaltime" placeholder="请输入图片切换间隔(秒)" />
+													<i class="fa"></i> <input type="text" class="form-control" name="intervaltime" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group textflag">
-											<label class="col-md-3 control-label">文字移动方向</label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="direction" value="1"> 静止
+													<input type="radio" name="direction" value="1"> <spring:message code="global.layout.region.direction_1"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="direction" value="2" > 向上
+													<input type="radio" name="direction" value="2" > <spring:message code="global.layout.region.direction_2"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="direction" value="3"> 向下
+													<input type="radio" name="direction" value="3"> <spring:message code="global.layout.region.direction_3"/>
 												</label>  
 												<label class="radio-inline">
-													<input type="radio" name="direction" value="4" checked> 向左
+													<input type="radio" name="direction" value="4" checked> <spring:message code="global.layout.region.direction_4"/>
 												</label>  
 												<label class="radio-inline">
-													<input type="radio" name="direction" value="5"> 向右
+													<input type="radio" name="direction" value="5"> <spring:message code="global.layout.region.direction_5"/>
 												</label>  
 											</div>
 										</div>
 										<div class="form-group textflag">
-											<label class="col-md-3 control-label">文字移动速度</label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="speed" value="1"> 慢
+													<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="speed" value="2" checked> 正常
+													<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="speed" value="3"> 快
+													<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
 												</label>  
 											</div>
 										</div>
 										<div class="form-group textflag">
-											<label class="col-md-3 control-label">文字颜色</label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 											<div class="col-md-9">
 												<div class="input-group colorpicker-component colorPick">
 													<input type="text" name="color" value="#FFFFFF" class="form-control" />
@@ -142,59 +142,59 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group textflag">
-											<label class="col-md-3 control-label">文字比例<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="size" placeholder="请输入文字大小" />
+													<i class="fa"></i> <input type="text" class="form-control" name="size" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group textflag">
-											<label class="col-md-3 control-label">文字不透明度<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="opacity" placeholder="请输入文字不透明度" />
+													<i class="fa"></i> <input type="text" class="form-control" name="opacity" />
 												</div>
 											</div>
 										</div>
 										
 										<div class="form-group">
-											<label class="col-md-3 control-label">区域宽度<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.width"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="width" placeholder="请输入区域宽度" />
+													<i class="fa"></i> <input type="text" class="form-control" name="width" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">区域高度<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.height"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="height" placeholder="请输入区域高度" />
+													<i class="fa"></i> <input type="text" class="form-control" name="height" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">区域左偏移<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.leftoffset"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="leftoffset" placeholder="请输入左偏移量" />
+													<i class="fa"></i> <input type="text" class="form-control" name="leftoffset" />
 												</div>
 											</div>
 										</div>														
 										<div class="form-group">
-											<label class="col-md-3 control-label">区域顶偏移<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.topoffset"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="topoffset" placeholder="请输入顶偏移量" />
+													<i class="fa"></i> <input type="text" class="form-control" name="topoffset" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">区域层叠顺序<span class="required">*</span></label>
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="zindex" placeholder="请输入层叠顺序" />
+													<i class="fa"></i> <input type="text" class="form-control" name="zindex" />
 												</div>
 											</div>
 										</div>
@@ -202,8 +202,8 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button class="btn default" data-dismiss="modal">取消</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
@@ -215,7 +215,7 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">布局</h4>
+								<h4 class="modal-title"><spring:message code="global.layout"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
@@ -223,38 +223,38 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="layout.status" value="1" />
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label">布局名称<span
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span
 												class="required">*</span>
 											</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control"
-														name="layout.name" placeholder="请输入布局名称" />
+														name="layout.name" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="control-label col-md-3">布局类型</label>
+											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 											<div class="col-md-9">
-												<select class="form-control" name="layout.type" data-placeholder="请选择..." tabindex="-1">
-													<option value="0">普通布局</option>
-													<option value="1">紧急布局</option>
+												<select class="form-control" name="layout.type" tabindex="-1">
+													<option value="0"><spring:message code="global.layout.type_1"/></option>
+													<option value="1"><spring:message code="global.layout.type_1"/></option>
 												</select>
 											</div>
 										</div>
 										<div class="form-group layout-ratio">
-											<label class="control-label col-md-3">宽高比</label>
+											<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
 											<div class="col-md-9">
-												<select class="form-control" name="layout.ratio" data-placeholder="请选择..." tabindex="-1">
-													<option value="1">宽屏 16:9</option>
-													<option value="2">高屏 9:16</option>
-													<option value="3">宽屏 4:3</option>
-													<option value="4">高屏 3:4</option>
+												<select class="form-control" name="layout.ratio" tabindex="-1">
+													<option value="1"><spring:message code="global.layout.ratio_1"/></option>
+													<option value="2"><spring:message code="global.layout.ratio_2"/></option>
+													<option value="3"><spring:message code="global.layout.ratio_3"/></option>
+													<option value="4"><spring:message code="global.layout.ratio_4"/></option>
 												</select>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">描述</label>
+											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 											<div class="col-md-9">
 												<textarea class="form-control" rows="4" name="layout.description"></textarea>
 											</div>
@@ -263,24 +263,24 @@ response.setDateHeader("Expires",0);
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="submit" class="btn blue">提交</button>
-								<button type="button" class="btn default" data-dismiss="modal">关闭</button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- END END MODAL FORM-->
 			
+		
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title">布局设计</h3>
+				<h3 class="page-title"><spring:message code="menu.layout"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">播出管理</a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#">布局设计</a>
+						<li><a href="#"><spring:message code="menu.layout"/></a>
 						</li>
 					</ul>
 				</div>
@@ -289,10 +289,9 @@ response.setDateHeader("Expires",0);
 				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
-						<!-- BEGIN TABLE PORTLET-->
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cloud"></i>布局</div>
+								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.layout"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -301,7 +300,7 @@ response.setDateHeader("Expires",0);
 								<div class="table-toolbar">
 									<div class="btn-group">
 										<button privilegeid="101010" class="btn green pix-add">
-											新增 <i class="fa fa-plus"></i>
+											<spring:message code="global.add"/> <i class="fa fa-plus"></i>
 										</button>
 									</div>
 								</div>
@@ -361,7 +360,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>

@@ -21,20 +21,16 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'playlistid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'playlistid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-detail"><i class="fa fa-list-ul"></i> 明细</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(2)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -53,7 +49,7 @@ function initMyTable() {
 		var item = $('#MyTable').dataTable().fnGetData(index);
 		currentItem = item;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -66,11 +62,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -93,14 +89,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了！');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -166,25 +162,25 @@ function initPlaylistDtlModal() {
 					for (var i=0; i<tempPlaylistdtls.length; i++) {
 						var playlistdtl = tempPlaylistdtls[i];
 						if (playlistdtl.video.type == 1) {
-							mediatype = '本地视频';
+							mediatype = common.view.intvideo;
 							medianame = playlistdtl.video.name;
 						} else if (playlistdtl.video.type == 2) {
-							mediatype = '引入视频';
+							mediatype = common.view.extvideo;
 							medianame = playlistdtl.video.name;
 						} else {
-							mediatype = '未知';
+							mediatype = common.view.unknown;
 						}
 						$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, mediatype, medianame, playlistdtl.playlistdtlid]);
 					}
 					
 					$('#PlaylistDtlModal').modal();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});
@@ -201,10 +197,10 @@ function initPlaylistDtlModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['video.list'],
-		'aoColumns' : [ {'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'videoid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'videoid', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -229,7 +225,7 @@ function initPlaylistDtlModal() {
 			intvideohtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			intvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
-			intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-playlistdtl-intvideo-add">增加</button></p>';
+			intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-playlistdtl-intvideo-add">' + common.view.add + '</button></p>';
 			intvideohtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
 				intvideohtml += '</div>';
@@ -259,10 +255,10 @@ function initPlaylistDtlModal() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['video.list'],
-		'aoColumns' : [ {'sTitle' : '视频名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '文件名', 'mData' : 'filename', 'bSortable' : false }, 
-						{'sTitle' : '文件大小', 'mData' : 'size', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'videoid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'videoid', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -287,7 +283,7 @@ function initPlaylistDtlModal() {
 			extvideohtml += '<h6>' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			extvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
-			extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-playlistdtl-extvideo-add">增加</button></p>';
+			extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-playlistdtl-extvideo-add">' + common.view.add + '</button></p>';
 			extvideohtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
 				extvideohtml += '</div>';
@@ -309,15 +305,15 @@ function initPlaylistDtlModal() {
 	$('#PlaylistDtlTable').dataTable({
 		'sDom' : 't',
 		'iDisplayLength' : -1,
-		'aoColumns' : [ {'sTitle' : '序号', 'bSortable' : false, 'sWidth' : '50px' }, 
-						{'sTitle' : '类型', 'bSortable' : false, 'sWidth' : '100px' }, 
-						{'sTitle' : '内容', 'bSortable' : false, 'sClass': 'autowrap' }, 
-						{'sTitle' : '操作', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.sequence, 'bSortable' : false, 'sWidth' : '50px' }, 
+						{'sTitle' : common.view.type, 'bSortable' : false, 'sWidth' : '100px' }, 
+						{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' }, 
+						{'sTitle' : common.view.operation, 'bSortable' : false }],
 		'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
-		'oLanguage' : { 'sZeroRecords' : '列表为空',
-						'sEmptyTable' : '列表为空' }, 
+		'oLanguage' : { 'sZeroRecords' : common.view.empty,
+						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-playlistdtl-delete">移除</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-playlistdtl-delete">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -332,7 +328,7 @@ function initPlaylistDtlModal() {
 		playlistdtl.videoid = data.videoid;
 		playlistdtl.sequence = tempPlaylistdtls.length + 1;
 		tempPlaylistdtls[tempPlaylistdtls.length] = playlistdtl;
-		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, '本地视频', data.name, playlistdtl.playlistdtlid]);
+		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.intvideo, data.name, playlistdtl.playlistdtlid]);
 	});
 
 	//增加引入视频到播放明细Table
@@ -344,7 +340,7 @@ function initPlaylistDtlModal() {
 		playlistdtl.videoid = data.videoid;
 		playlistdtl.sequence = tempPlaylistdtls.length + 1;
 		tempPlaylistdtls[tempPlaylistdtls.length] = playlistdtl;
-		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, '引入视频', data.name, playlistdtl.playlistdtlid]);
+		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.extvideo, data.name, playlistdtl.playlistdtlid]);
 	});
 
 	
@@ -377,15 +373,15 @@ function initPlaylistDtlModal() {
 				Metronic.stopPageLoading();
 				$('#PlaylistDtlModal').modal('hide');
 				if (data.errorcode == 0) {
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					$('#MyTable').dataTable()._fnAjaxUpdate();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	});

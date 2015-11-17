@@ -16,22 +16,22 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['crashreport.list'],
-		'aoColumns' : [ {'sTitle' : '硬件码', 'mData' : 'hardkey', 'bSortable' : false }, 
-						{'sTitle' : '终端号', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '设备IP', 'mData' : 'clientip', 'bSortable' : false }, 
-						{'sTitle' : '设备名称', 'mData' : 'clientname', 'bSortable' : false }, 
-						{'sTitle' : '系统版本', 'mData' : 'os', 'bSortable' : false }, 
-						{'sTitle' : '应用名称', 'mData' : 'appname', 'bSortable' : false }, 
-						{'sTitle' : '版本名', 'mData' : 'vname', 'bSortable' : false }, 
-						{'sTitle' : '版本号', 'mData' : 'vcode', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '更多', 'mData' : 'crashreportid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.hardkey, 'mData' : 'hardkey', 'bSortable' : false }, 
+						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : 'IP', 'mData' : 'clientip', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'clientname', 'bSortable' : false }, 
+						{'sTitle' : 'OS', 'mData' : 'os', 'bSortable' : false }, 
+						{'sTitle' : 'APP', 'mData' : 'appname', 'bSortable' : false }, 
+						{'sTitle' : common.view.versionname, 'mData' : 'vname', 'bSortable' : false }, 
+						{'sTitle' : common.view.versioncode, 'mData' : 'vcode', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.more, 'mData' : 'crashreportid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-credit-card"></i>&nbsp;&nbsp;更多</a>');
+			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-credit-card"></i>' + common.view.more + ' </a>');
 			return nRow;
 		}
 	});
@@ -59,11 +59,11 @@ function initMyTable() {
 					$('#CrashDtlForm').loadJSON(formdata);
 					$('#CrashDtlModal').modal();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 		

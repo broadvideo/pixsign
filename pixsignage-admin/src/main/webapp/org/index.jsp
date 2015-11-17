@@ -2,19 +2,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/common/taglibs.jsp"%> 
 
-<spring:message code="global_username" var="global_username"/>
-<spring:message code="global_password" var="global_password"/>
-<spring:message code="global_submit" var="global_submit"/>
-
-<spring:message code="global_login_hint" var="global_login_hint"/>
-<spring:message code="global_login_orgcode" var="global_login_orgcode"/>
-<spring:message code="global_login_remember" var="global_login_remember"/>
-<spring:message code="global_login_login" var="global_login_login"/>
-
-<%
-	SystemInitServlet.updateLicense(this.getServletContext());
-%>
-
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -64,13 +51,14 @@
 		<!-- BEGIN LOGIN FORM -->
 		<form id="OrgLoginForm" class="login-form" method="post">
 			<input type="hidden" name="subsystem" value="2" />
-			<h3 class="form-title">${global_login_hint}</h3>
+			<h3 class="form-title"><spring:message code="global.login.orghint"/></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>请输入用户名和密码</span>
 			</div>
 			<div class="form-group">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+				<spring:message code="global.username" var="global_username"/>
 				<label class="control-label visible-ie8 visible-ie9">${global_username}</label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
@@ -78,6 +66,7 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<spring:message code="global.password" var="global_password"/>
 				<label class="control-label visible-ie8 visible-ie9">${global_password}</label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
@@ -85,6 +74,7 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<spring:message code="global.login.orgcode" var="global_login_orgcode"/>
 				<label class="control-label visible-ie8 visible-ie9">${global_login_orgcode}</label>
 				<div class="input-icon">
 					<i class="fa fa-bookmark-o"></i> <input class="form-control placeholder-no-fix" type="text" autocomplete="off"
@@ -92,16 +82,15 @@
 				</div>
 			</div>
 			<div class="form-actions">
-				<label class="checkbox"><input type="checkbox" name="remember" value="1"/>${global_login_remember}</label>
-				<button type="submit" class="btn blue pull-right">${global_login_login}<i class="m-icon-swapright m-icon-white"></i>
+				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
+				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
 				</button>
-	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中</a>
-	            <a class="btn btn-xs purple pix-language" data-id="en_US">Eng</a>
+	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
+	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
 			</div>
 			<br/>
 		</form>
 		<!-- END LOGIN FORM -->
-
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
@@ -123,7 +112,7 @@
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_zh.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
@@ -134,14 +123,14 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 	jQuery(document).ready(function() {
-		Metronic.init(); // init metronic core components
+		Metronic.init();
 		Login.init();
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');
 			document.location.href="index.jsp?locale=" + language;
 		});
-});
+	});
 </script>
 <!-- END JAVASCRIPTS -->
 </body>

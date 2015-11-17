@@ -6,11 +6,14 @@ var myurls = {
 	'device.list' : 'device!list.action',
 	'vchannel.deviceadd' : 'vchannel!deviceadd.action',
 	'vchannel.devicedelete' : 'vchannel!devicedelete.action',
+	'video.list' : 'video!list.action',
 };
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
-}			
+}
+
+var currentVchannel = null;
 
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
@@ -21,21 +24,16 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 						{'sTitle' : 'UUID', 'mData' : 'uuid', 'bSortable' : false }, 
-						{'sTitle' : '创建时间', 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'vchannelid', 'bSortable' : false }],
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'vchannelid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<div class="btn-group">';
-			dropdownBtn += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			dropdownBtn += '<ul class="dropdown-menu pull-right">';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-detail"><i class="fa fa-list-ul"></i> 明细</a></li>';
-			dropdownBtn += '<li><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
-			dropdownBtn += '</ul></div>';
+			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			$('td:eq(3)', nRow).html(dropdownBtn);
 			return nRow;
 		}
@@ -45,33 +43,31 @@ function initMyTable() {
 	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
-	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		currentItem = item;
+		currentVchannel = $('#MyTable').dataTable().fnGetData(index);
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentVchannel.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
 					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'vchannel.vchannelid': currentItem['vchannelid']
+						'vchannel.vchannelid': currentVchannel['vchannelid']
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -80,7 +76,52 @@ function initMyTable() {
 	});
 }
 
+function refreshVideoSelect() {
+	$("#BackupMediaSelect").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+			url: myurls['video.list'],
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term, // search term
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.videoid 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function (media) {
+			return media.text;
+		},
+		formatSelection: function (media) {
+			return media.text;
+		},
+		initSelection: function(element, callback) {
+			if (currentVchannel != null && currentVchannel.backupvideo != null) {
+				callback({id: currentVchannel.backupvideoid, text: currentVchannel.backupvideo.name });
+			}
+		},
+		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	});
+}
+
 function initMyEditModal() {
+	refreshVideoSelect();
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
 	FormValidateOption.rules['vchannel.name'] = {};
@@ -94,14 +135,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了！');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};
@@ -117,6 +158,8 @@ function initMyEditModal() {
 		var action = myurls['common.add'];
 		refreshForm('MyEditForm');
 		$('#MyEditForm').attr('action', action);
+		currentVchannel = null;
+		refreshVideoSelect();
 		$('#MyEditModal').modal();
 	});			
 
@@ -126,153 +169,17 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		currentVchannel = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['vchannel.' + name] = item[name];
+		for (var name in currentVchannel) {
+			formdata['vchannel.' + name] = currentVchannel[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
+		refreshVideoSelect();
 		$('#MyEditModal').modal();
 	});
 
 }
 
-//==============================播放计划明细对话框====================================			
-function initVchannelScheduleModal() {
-	var currentDevicegroupid = 0;
-	
-	$('body').on('click', '.pix-detail', function(event) {
-		var index = $(event.target).attr('data-id');
-		if (index == undefined) {
-			index = $(event.target).parent().attr('data-id');
-		}
-		var data = $('#MyTable').dataTable().fnGetData(index);
-		currentDevicegroupid = data.vchannelid;
-		
-		$('#DeviceTable').dataTable()._fnAjaxUpdate();
-		$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
-		
-		$('#DevicegpDtlModal').modal();
-	});
-	
-	//待选择终端table初始化
-	$('#DeviceTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 20, 40, 60, 100 ],
-						[ 20, 40, 60, 100 ] 
-						],
-		'bProcessing' : true,
-		'bServerSide' : true,
-		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
-		'iDisplayLength' : 20,
-		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#DeviceTable').dataTable().fnGetData(iDisplayIndex);
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegpdtl">增加</button>');
-			return nRow;
-		},
-		'fnServerParams': function(aoData) { 
-			aoData.push( {'name':'vchannelid','value':'0' })
-		} 
-	});
-
-	jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
-	jQuery('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-	
-	
-	//已加入终端table初始化
-	$('#DevicegpDtlTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 20, 40, 60, 100 ],
-						[ 20, 40, 60, 100 ] 
-						],
-		'bProcessing' : true,
-		'bServerSide' : true,
-		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
-		'iDisplayLength' : 20,
-		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#DevicegpDtlTable').dataTable().fnGetData(iDisplayIndex);
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevicegpdtl">移除</button>');
-			return nRow;
-		},
-		'fnServerParams': function(aoData) { 
-			aoData.push( {'name':'vchannelid','value':currentDevicegroupid })
-		} 
-	});
-
-	jQuery('#DevicegpDtlTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
-	jQuery('#DevicegpDtlTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-	
-
-
-	//选择终端加入终端组
-	$('body').on('click', '.pix-adddevicegpdtl', function(event) {
-		var index = $(event.target).attr('data-id');
-		if (index == undefined) {
-			index = $(event.target).parent().attr('data-id');
-		}
-		var data = $('#DeviceTable').dataTable().fnGetData(index);
-		$.ajax({
-			type : 'POST',
-			url : myurls['vchannel.deviceadd'],
-			data : {
-				'vchannel.vchannelid' : currentDevicegroupid,
-				'device.deviceid' : data.deviceid
-			},
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					$('#DeviceTable').dataTable()._fnAjaxUpdate();
-					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
-				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
-				}
-			},
-			error : function() {
-				bootbox.alert('出错了!');
-			}
-		});
-	});
-
-	
-	//区域媒体列表选择对话框中，删除区域列表某行
-	$('body').on('click', '.pix-deletedevicegpdtl', function(event) {
-		var index = $(event.target).attr('data-id');
-		if (index == undefined) {
-			index = $(event.target).parent().attr('data-id');
-		}
-		var data = $('#DevicegpDtlTable').dataTable().fnGetData(index);
-		$.ajax({
-			type : 'POST',
-			url : myurls['vchannel.devicedelete'],
-			data : {
-				'vchannel.vchannelid' : currentDevicegroupid,
-				'device.deviceid' : data.deviceid
-			},
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					$('#DeviceTable').dataTable()._fnAjaxUpdate();
-					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
-				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
-				}
-			},
-			error : function() {
-				bootbox.alert('出错了!');
-			}
-		});
-	});
-	
-}

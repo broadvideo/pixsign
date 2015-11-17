@@ -8,11 +8,10 @@ var myurls = {
 	'branch.validate' : 'branch!validate.action',
 };
 var mytable_columns = [
-						{"sTitle" : "名称", "mData" : "name", "bSortable" : false }, 
-						{"sTitle" : "编码", "mData" : "code", "bSortable" : false }, 
-						{"sTitle" : "企业归属", "mData" : "org.name", "bSortable" : false }, 
-						{"sTitle" : "创建时间", "mData" : "createtime", "bSortable" : false }, 
-						{"sTitle" : "操作", "mData" : "branchid", "bSortable" : false }];
+	{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+	{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
+	{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+	{'sTitle' : common.view.operation, 'mData' : 'branchid', 'bSortable' : false }];
 
 function refreshMyTable() {
 	$.ajax({
@@ -49,16 +48,14 @@ function refreshMyTable() {
 			for (var j=0; j<mytable_columns.length-1; j++) {
 				tbodyhtml += '<td>' + eval('treedata[i].' + mytable_columns[j]['mData']) + '</td>';
 			}
-			tbodyhtml += '<td><div class="btn-group">';
-			tbodyhtml += '<a class="btn default btn-sm blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作  <i class="fa fa-angle-down"></i></a>';
-			tbodyhtml += '<ul class="dropdown-menu pull-right">';
-			tbodyhtml += '<li><a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn-sm pix-add"><i class="fa fa-plus"></i> 新增</a></li>';
-			tbodyhtml += '<li><a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn-sm pix-update"><i class="fa fa-edit"></i> 编辑</a></li>';
+
+			tbodyhtml += '<td>';
+			tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
+			tbodyhtml += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 			if (treedata[i].parentid != 0 && treedata[i].children.length == 0) {
-				tbodyhtml += '<li><a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn-sm pix-delete"><i class="fa fa-trash-o"></i> 删除</a></li>';
+				tbodyhtml += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			}
-			tbodyhtml += '</ul></div></td>';
-			tbodyhtml += '</tr>';
+			tbodyhtml += '</td></tr>'
 			
 			generateTreeHtml(treedata[i].children);
 		}		
@@ -84,7 +81,7 @@ function initMyTable() {
 		}
 		currentItem = currentTreeData[index];;
 		
-		bootbox.confirm('请确认是否删除"' + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
@@ -97,11 +94,11 @@ function initMyTable() {
 						if (data.errorcode == 0) {
 							refreshMyTable();
 						} else {
-							bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						bootbox.alert('出错了！');
+						bootbox.alert(common.tips.error);
 					}
 				});				
 			}
@@ -162,10 +159,10 @@ function initMyEditModal() {
 		};
 	FormValidateOption.messages = {
 		'branch.name': {
-			remote: "名称已存在"
+			remote: common.tips.name_repeat
 		},
 		'branch.code': {
-			remote: "编码已存在"
+			remote: common.tips.code_repeat
 		},
 	};
 	FormValidateOption.submitHandler = function(form) {
@@ -176,14 +173,14 @@ function initMyEditModal() {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');
-					bootbox.alert('操作成功');
+					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				bootbox.alert('出错了!');
+				bootbox.alert(common.tips.error);
 			}
 		});
 	};

@@ -74,7 +74,7 @@ function initWizard() {
 				initData3();
 			} else if (index == 2 && clickedIndex == 3) {
 				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
-					bootbox.alert('需要选择终端或者终端组。');
+					bootbox.alert(common.tips.device_missed);
 					return false;
 				} else {
 					initData4();
@@ -92,7 +92,7 @@ function initWizard() {
 				initData3();
 			} else if (index == 3) {
 				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
-					bootbox.alert('需要选择终端或者终端组。');
+					bootbox.alert(common.tips.device_missed);
 					return false;
 				} else {
 					initData4();
@@ -266,19 +266,19 @@ function initTab2() {
 			
 			var playtime;
 			if (regiondtl.playmode == 1) {
-				playtime = '单次 ' + regiondtl.playdate + ' ' + regiondtl.starttime + '~' + regiondtl.endtime;
+				playtime = common.view.once + regiondtl.playdate + ' ' + regiondtl.starttime + '~' + regiondtl.endtime;
 			} else {
-				playtime = '每日 ' + regiondtl.starttime;
+				playtime = common.view.daily + regiondtl.starttime;
 			}
 			var objtype;
 			if (regiondtl.objtype == 1) {
-				objtype = '列表';
+				objtype = common.view.medialist;
 			} else if (regiondtl.objtype == 2) {
-				objtype = '文本';
+				objtype = common.view.text;
 			} else if (regiondtl.objtype == 3) {
-				objtype = '视频流';
+				objtype = common.view.stream;
 			} else if (regiondtl.objtype == 4) {
-				objtype = '数字频道';
+				objtype = common.view.dvb;
 			} else if (regiondtl.objtype == 5) {
 				objtype = 'Widget';
 			}
@@ -335,7 +335,7 @@ function initTab2() {
 			url = myurls['widget.list']
 		}
 		$('#RegionDtlSelect').select2({
-			placeholder: '请选择对应内容',
+			placeholder: common.tips.detail_select,
 			//minimumResultsForSearch: -1,
 			minimumInputLength: 0,
 			ajax: { 
@@ -442,7 +442,7 @@ function initData2() {
 		layoutdtlhtml += '<div class="portlet box purple"><div class="portlet-title">';
 		layoutdtlhtml += '<div class="caption"><i class="fa fa-calendar"></i>' + layoutdtl.region.name + '</div>';
 		layoutdtlhtml += '<div class="actions">';
-		layoutdtlhtml += '<a href="javascript:;" region-id="'+ layoutdtl.regionid + '" region-type="' + layoutdtl.region.type + '" class="btn btn-sm yellow pix-regiondtl-add"><i class="fa fa-plus"></i> 新增明细</a>';
+		layoutdtlhtml += '<a href="javascript:;" region-id="'+ layoutdtl.regionid + '" region-type="' + layoutdtl.region.type + '" class="btn btn-sm yellow pix-regiondtl-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
 		layoutdtlhtml += '</div></div>';
 		layoutdtlhtml += '<div class="portlet-body"><div class="row"><div class="col-md-3 col-sm-3"><canvas id="LayoutCanvas-'+ layoutdtl.regionid + '"></canvas></div>';
 		layoutdtlhtml += '<div class="col-md-9 col-sm-9"><div class="table-responsive">';
@@ -482,14 +482,14 @@ function initData2() {
 		$('#RegionDtlTable-' + layoutdtl.regionid).dataTable({
 			'sDom' : 't',
 			'iDisplayLength' : -1,
-			'aoColumns' : [ {'sTitle' : '播放时间', 'bSortable' : false, 'sClass': 'autowrap' }, 
-							{'sTitle' : '类型', 'bSortable' : false, 'sClass': 'autowrap' }, 
-							{'sTitle' : '内容', 'bSortable' : false, 'sClass': 'autowrap' },
-							{'sTitle' : '操作', 'bSortable' : false, 'sWidth' : '50px' }],
-			'oLanguage' : { 'sZeroRecords' : '列表为空',
-							'sEmptyTable' : '列表为空' },
+			'aoColumns' : [ {'sTitle' : common.view.playtime, 'bSortable' : false, 'sClass': 'autowrap' }, 
+							{'sTitle' : common.view.type, 'bSortable' : false, 'sClass': 'autowrap' }, 
+							{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' },
+							{'sTitle' : common.view.operation, 'bSortable' : false, 'sWidth' : '50px' }],
+			'oLanguage' : { 'sZeroRecords' : common.view.empty,
+							'sEmptyTable' : common.view.empty },
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(3)', nRow).html('<button row-id="' + iDisplayIndex + '" region-id="' + aData[3] + '" class="btn green btn-xs pix-regiondtl-delete">移除</button>');
+				$('td:eq(3)', nRow).html('<button row-id="' + iDisplayIndex + '" region-id="' + aData[3] + '" class="btn green btn-xs pix-regiondtl-delete">' + common.view.remove + '</button>');
 				return nRow;
 			}
 		});
@@ -508,15 +508,15 @@ function initTab3() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
-		'aoColumns' : [ {'sTitle' : '终端ID', 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '位置', 'mData' : 'position', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'deviceid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'deviceid', 'bSortable' : false }],
 		'iDisplayLength' : 20,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevice">选择</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevice">' + common.view.add + '</button>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -535,13 +535,13 @@ function initTab3() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['devicegroup.list'],
-		'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'mData' : 'devicegroupid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'mData' : 'devicegroupid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(1)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegroup">选择</button>');
+			$('td:eq(1)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegroup">' + common.view.add + '</button>');
 			return nRow;
 		}
 	});
@@ -553,12 +553,12 @@ function initTab3() {
 		'sDom' : 't',
 		'iDisplayLength' : -1,
 		'aoColumns' : [ {'sTitle' : '#', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'bSortable' : false }],
-		'oLanguage' : { 'sZeroRecords' : '列表为空',
-						'sEmptyTable' : '列表为空' }, 
+						{'sTitle' : common.view.name, 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'bSortable' : false }],
+		'oLanguage' : { 'sZeroRecords' : common.view.empty,
+						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevice">移除</button>');
+			$('td:eq(2)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevice">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -568,12 +568,12 @@ function initTab3() {
 		'sDom' : 't',
 		'iDisplayLength' : -1,
 		'aoColumns' : [ {'sTitle' : '#', 'bSortable' : false }, 
-						{'sTitle' : '名称', 'bSortable' : false }, 
-						{'sTitle' : '操作', 'bSortable' : false }],
-		'oLanguage' : { 'sZeroRecords' : '列表为空',
-						'sEmptyTable' : '列表为空' }, 
+						{'sTitle' : common.view.name, 'bSortable' : false }, 
+						{'sTitle' : common.view.operation, 'bSortable' : false }],
+		'oLanguage' : { 'sZeroRecords' : common.view.empty,
+						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevicegroup">移除</button>');
+			$('td:eq(2)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-deletedevicegroup">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -665,13 +665,13 @@ function initData4() {
 	//var filesize = parseInt(currentMediaSum / 1024);
 	var html = '';
 	html += '<tr>';
-	html += '<td>布局</td><td>' + CurrentLayout.name + '</td>';
+	html += '<td>' + common.view.layout + '</td><td>' + CurrentLayout.name + '</td>';
 	html += '</tr>';
 	//html += '<tr>';
 	//html += '<td>视频总量</td><td>' + transferIntToComma(filesize) + ' KB</td>';
 	//html += '</tr>';
 	html += '<tr>';
-	html += '<td rowspan="'+ deviceRowspan + '">设备</td>';
+	html += '<td rowspan="'+ deviceRowspan + '">' + common.view.device + '</td>';
 	html += '<td>' + (SelectedDeviceList.length>0? SelectedDeviceList[0].name : '') + '</td>';
 	html += '</tr>';
 	for (var i=1; i<SelectedDeviceList.length; i++) {
@@ -680,7 +680,7 @@ function initData4() {
 		html += '</tr>';
 	}
 	html += '<tr>';
-	html += '<td rowspan="'+ devicegroupRowspan + '">设备组</td>';
+	html += '<td rowspan="'+ devicegroupRowspan + '">' + common.view.devicegroup + '</td>';
 	html += '<td>' + (SelectedDevicegroupList.length>0? SelectedDevicegroupList[0].name : '') + '</td>';
 	html += '</tr>';
 	for (var i=1; i<SelectedDevicegroupList.length; i++) {
@@ -706,7 +706,7 @@ function submitData() {
 		success : function(data, status) {
 			Metronic.stopPageLoading();
 			if (data.errorcode == 0) {
-				bootbox.alert('操作成功');
+				bootbox.alert(common.tips.success);
 				CurrentTaskid = data.dataid;
 				//$('#ScheduleTable').dataTable()._fnAjaxUpdate();
 				//$('#SchedulefileTable').dataTable()._fnAjaxUpdate();
@@ -715,12 +715,12 @@ function submitData() {
 				initData1();
 				$('#MyWizard').bootstrapWizard('first');
 			} else {
-				bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
 			Metronic.stopPageLoading();
-			bootbox.alert('出错了!');
+			bootbox.alert(common.tips.error);
 		}
 	});
 	
