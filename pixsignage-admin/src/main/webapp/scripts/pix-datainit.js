@@ -103,6 +103,7 @@ var FormValidateOption = {
             error.insertAfter(element.closest('.input-icon'));
         },
         rules: {},
+        ignore: null,
 	};
 
 
