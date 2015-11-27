@@ -128,15 +128,23 @@ public class LoginAction extends BaseAction {
 					List<Privilege> secondPrivileges = pList.get(i).getChildren();
 					for (int j = secondPrivileges.size(); j > 0; j--) {
 						Privilege privilege = secondPrivileges.get(j - 1);
-						if (privilege.getPrivilegeid() == 20102 && org.getVideoflag().equals("0")
-								|| privilege.getPrivilegeid() == 20103 && org.getVideoflag().equals("0")
-								|| privilege.getPrivilegeid() == 20104 && org.getImageflag().equals("0")
-								|| privilege.getPrivilegeid() == 20105 && org.getTextflag().equals("0")
-								|| privilege.getPrivilegeid() == 20106 && org.getStreamflag().equals("0")
-								|| privilege.getPrivilegeid() == 20107 && org.getDvbflag().equals("0")
-								|| privilege.getPrivilegeid() == 20108 && org.getWidgetflag().equals("0")) {
-							secondPrivileges.remove(j - 1);
-						}
+						/*
+						 * if (privilege.getPrivilegeid() == 20102 &&
+						 * org.getVideoflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20103 &&
+						 * org.getVideoflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20104 &&
+						 * org.getImageflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20105 &&
+						 * org.getTextflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20106 &&
+						 * org.getStreamflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20107 &&
+						 * org.getDvbflag().equals("0") ||
+						 * privilege.getPrivilegeid() == 20108 &&
+						 * org.getWidgetflag().equals("0")) {
+						 * secondPrivileges.remove(j - 1); }
+						 */
 					}
 				}
 			} else {

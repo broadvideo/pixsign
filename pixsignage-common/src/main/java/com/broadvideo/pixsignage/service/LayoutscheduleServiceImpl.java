@@ -173,13 +173,17 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 					regionJson.put("top", layoutdtl.getTopoffset());
 					regionJson.put("left", layoutdtl.getLeftoffset());
 					regionJson.put("zindex", layoutdtl.getZindex());
+					String opacity = Integer.toHexString(layoutdtl.getOpacity());
+					if (opacity.length() == 1) {
+						opacity = "0" + opacity;
+					}
+					regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
 					regionJson.put("type", layoutdtl.getRegion().getType());
 					regionJson.put("interval", layoutdtl.getIntervaltime());
 					regionJson.put("direction", "" + layoutdtl.getDirection());
 					regionJson.put("speed", "" + layoutdtl.getSpeed());
 					regionJson.put("color", "" + layoutdtl.getColor());
 					regionJson.put("size", layoutdtl.getSize());
-					regionJson.put("opacity", layoutdtl.getOpacity());
 				}
 			}
 		}

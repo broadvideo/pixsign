@@ -196,8 +196,6 @@ function initVchannels() {
 	$('[type=submit]', $('#ScheduleModal')).on('click', function(event) {
 		$('#ScheduleForm input[name="vchannelschedule.vchannelid"]').attr('value', currentVchannelid);
 		if ($('#ScheduleForm').valid()) {
-			var starttime = $('#ScheduleForm input[name="vchannelschedule.starttime"]').attr('value');
-			$('#ScheduleForm input[name="vchannelschedule.starttime"]').attr('value', '2000-01-01 ' + starttime);
 			$('#ScheduleForm').submit();
 		}
 	});

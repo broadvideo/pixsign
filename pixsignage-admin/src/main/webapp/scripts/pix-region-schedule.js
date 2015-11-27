@@ -170,6 +170,7 @@ function refreshSelect() {
 						sSearch: term,
 						iDisplayStart: (page-1)*10,
 						iDisplayLength: 10,
+						devicegroupid: 0,
 					};
 				},
 				results: function (data, page) {
@@ -401,8 +402,6 @@ function initRegionSchedules() {
 		$('#ScheduleForm input[name="regionschedule.bindid"]').attr('value', currentBindid);
 		$('#ScheduleForm input[name="regionschedule.regionid"]').attr('value', currentRegionid);
 		if ($('#ScheduleForm').valid()) {
-			var starttime = $('#ScheduleForm input[name="regionschedule.starttime"]').attr('value');
-			$('#ScheduleForm input[name="regionschedule.starttime"]').attr('value', '2000-01-01 ' + starttime);
 			$('#ScheduleForm').submit();
 		}
 	});

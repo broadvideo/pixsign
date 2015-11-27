@@ -79,7 +79,7 @@ response.setDateHeader("Expires",0);
 				
 				<!-- 区域编辑对话框  -->
 				<div id="LayoutdtlEditModal" class="modal fade modal-scroll" parent="LayoutModal" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-large">
+					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -148,7 +148,17 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group textflag">
+										<hr/>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+											<div class="col-md-9">
+												<div class="input-group colorpicker-component bgcolorPick">
+													<input type="text" name="bgcolor" value="#000000" class="form-control" />
+													<span class="input-group-addon"><i></i></span>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -156,7 +166,15 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="zindex" />
+												</div>
+											</div>
+										</div>
+										<hr/>
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.width"/><span class="required">*</span></label>
 											<div class="col-md-9">
@@ -186,14 +204,6 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="topoffset" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="zindex" />
 												</div>
 											</div>
 										</div>
@@ -236,7 +246,7 @@ response.setDateHeader("Expires",0);
 											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 											<div class="col-md-9">
 												<select class="form-control" name="layout.type" tabindex="-1">
-													<option value="0"><spring:message code="global.layout.type_1"/></option>
+													<option value="0"><spring:message code="global.layout.type_0"/></option>
 													<option value="1"><spring:message code="global.layout.type_1"/></option>
 												</select>
 											</div>
@@ -370,7 +380,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

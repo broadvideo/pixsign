@@ -17,17 +17,17 @@ public class Org {
 
 	private String orgtype;
 
-	private String videoflag = "0";
+	private String videoflag;
 
-	private String imageflag = "0";
+	private String imageflag;
 
-	private String textflag = "0";
+	private String textflag;
 
-	private String streamflag = "0";
+	private String streamflag;
 
-	private String dvbflag = "0";
+	private String dvbflag;
 
-	private String widgetflag = "0";
+	private String widgetflag;
 
 	private String expireflag;
 

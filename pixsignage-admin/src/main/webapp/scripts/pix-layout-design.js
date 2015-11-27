@@ -13,6 +13,9 @@ function refreshMyTable() {
 }
 
 function initMyTable() {
+	$("#MyTable thead").css("display", "none");
+	$("#MyTable tbody").css("display", "none");
+	var layouthtml = '';
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
 		'bProcessing' : true,
@@ -25,36 +28,72 @@ function initMyTable() {
 		'iDisplayLength' : -1,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			
-			var ratioHtml = '';
-			if (data['ratio'] == 1) {
-				ratioHtml = common.view.ratio_1;
-			} else if (data['ratio'] == 2) {
-				ratioHtml = common.view.ratio_2;
-			} else if (data['ratio'] == 3) {
-				ratioHtml = common.view.ratio_3;
-			} else if (data['ratio'] == 4) {
-				ratioHtml = common.view.ratio_4;
-			} 
-			$('td:eq(1)', nRow).html(ratioHtml);
-			var typeHtml = '';
-			if (data['type'] == 0) {
-				typeHtml = common.view.type_0;
-			} else if (data['type'] == 1) {
-				typeHtml = common.view.type_1;
-			} 
-			$('td:eq(2)', nRow).html(typeHtml);
-			
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-layout"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			$('td:eq(3)', nRow).html(dropdownBtn);
+		'fnPreDrawCallback': function (oSettings) {
+			if ($('#LayoutContainer').length < 1) {
+				$('#MyTable').append('<div id="LayoutContainer"></div>');
+			}
+			$('#LayoutContainer').html(''); 
+			return true;
+		},
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+			if (iDisplayIndex % 2 == 0) {
+				layouthtml = '';
+				layouthtml += '<div class="row" >';
+			}
+			layouthtml += '<div class="col-md-6 col-xs-6">';
+			layouthtml += '<h3>' + aData.name + '</h3>';
+			if (aData.ratio == 1) {
+				layouthtml += '<h4>' + common.view.ratio_1 + '</h4>';
+			} else if (aData.ratio == 2) {
+				layouthtml += '<h4>' + common.view.ratio_2 + '</h4>';
+			} else if (aData.ratio == 3) {
+				layouthtml += '<h4>' + common.view.ratio_3 + '</h4>';
+			} else if (aData.ratio == 4) {
+				layouthtml += '<h4>' + common.view.ratio_4 + '</h4>';
+			}
+			layouthtml += '<canvas id="LayoutCanvas-'+ aData.layoutid + '"></canvas>';
+			layouthtml += '<div privilegeid="101010">';
+			layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-layout"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+			layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
+
+			layouthtml += '</div>';
+			if ((iDisplayIndex+1) % 2 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
+				layouthtml += '</div>';
+				if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
+					layouthtml += '<hr/>';
+				}
+				$('#LayoutContainer').append(layouthtml);
+			}
+			if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
+				for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+					var layout = $('#MyTable').dataTable().fnGetData(i);
+					var canvas = document.getElementById('LayoutCanvas-' + layout.layoutid);
+					var ctx = canvas.getContext('2d');
+					var scale;
+					if (layout.width == 1920 || layout.width == 1080) {
+						scale = 1920/400;
+					} else {
+						scale = 800/400;
+					}
+					canvas.width = Math.max(layout.width/scale, 250);
+					canvas.height = Math.max(layout.height/scale, 120);
+					for (var j=0; j<layout.layoutdtls.length; j++) {
+						var width = layout.layoutdtls[j].width/scale;
+						var height = layout.layoutdtls[j].height/scale;
+						var top = layout.layoutdtls[j].topoffset/scale;
+						var left = layout.layoutdtls[j].leftoffset/scale;
+						ctx.fillStyle='#bcc2f2';
+						ctx.fillRect(left,top,width,height);
+						ctx.strokeStyle = '#000000';
+						ctx.strokeRect(left,top,width,height);
+					}
+				}
+			}
 			return nRow;
 		}
 	});
-
+	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
@@ -322,12 +361,13 @@ function initLayoutModal() {
 		layoutdtl.topoffset = 50*currentLayout.scale;
 		layoutdtl.leftoffset = 50*currentLayout.scale;
 		layoutdtl.zindex = 0;
+		layoutdtl.bgcolor = '#000000';
+		layoutdtl.opacity = 255;
 		layoutdtl.intervaltime = 10;
 		layoutdtl.direction = 4;
 		layoutdtl.speed = 2;
 		layoutdtl.color = '#FFFFFF';
 		layoutdtl.size = 50;
-		layoutdtl.opacity = 100;
 		layoutdtl.region = tempRegions[index];
 		layoutdtl.regionid = tempRegions[index].regionid;
 		tempLayoutdtls[tempLayoutdtls.length] = layoutdtl;
@@ -384,6 +424,9 @@ function initLayoutModal() {
 		}
 		$('#LayoutdtlEditForm').loadJSON(currentLayoutdtl);
 		$('.colorPick').colorpicker();
+		$('.colorPick').colorpicker('setValue', currentLayoutdtl.color);
+		$('.bgcolorPick').colorpicker();
+		$('.bgcolorPick').colorpicker('setValue', currentLayoutdtl.bgcolor);
 		$('#LayoutModal').modal('hide');
 		$('#LayoutdtlEditModal').modal();
 	});			
@@ -448,7 +491,7 @@ function initLayoutdtlEditModal() {
 	FormValidateOption.rules['opacity']['required'] = true;
 	FormValidateOption.rules['opacity']['number'] = true;
 	FormValidateOption.rules['opacity']['min'] = 0;
-	FormValidateOption.rules['opacity']['max'] = 100;
+	FormValidateOption.rules['opacity']['max'] = 255;
 	FormValidateOption.rules['width'] = {};
 	FormValidateOption.rules['width']['required'] = true;
 	FormValidateOption.rules['width']['number'] = true;
@@ -478,13 +521,15 @@ function initLayoutdtlEditModal() {
 			currentLayoutdtl.speed = $('#LayoutdtlEditModal input[name=speed]:checked').attr("value");
 			currentLayoutdtl.color = $('#LayoutdtlEditModal input[name=color]').attr("value");
 			currentLayoutdtl.size = $('#LayoutdtlEditModal input[name=size]').attr("value");
+
+			currentLayoutdtl.bgcolor = $('#LayoutdtlEditModal input[name=bgcolor]').attr("value");
 			currentLayoutdtl.opacity = $('#LayoutdtlEditModal input[name=opacity]').attr("value");
+			currentLayoutdtl.zindex = $('#LayoutdtlEditModal input[name=zindex]').attr("value");
 			
 			currentLayoutdtl.width = $('#LayoutdtlEditModal input[name=width]').attr("value");
 			currentLayoutdtl.height = $('#LayoutdtlEditModal input[name=height]').attr("value");
 			currentLayoutdtl.leftoffset = $('#LayoutdtlEditModal input[name=leftoffset]').attr("value");
 			currentLayoutdtl.topoffset = $('#LayoutdtlEditModal input[name=topoffset]').attr("value");
-			currentLayoutdtl.zindex = $('#LayoutdtlEditModal input[name=zindex]').attr("value");
 
 			var regiondiv = $('#region_' + currentLayoutdtl.layoutdtlid);
 			regiondiv.attr('width', currentLayoutdtl.width/currentLayout.scale + 'px');

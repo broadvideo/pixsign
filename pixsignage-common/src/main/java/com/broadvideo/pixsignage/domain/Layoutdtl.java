@@ -23,6 +23,10 @@ public class Layoutdtl {
 
 	private Integer zindex;
 
+	private String bgcolor;
+
+	private Integer opacity;
+
 	private Integer intervaltime;
 
 	private String direction;
@@ -32,8 +36,6 @@ public class Layoutdtl {
 	private String color;
 
 	private Integer size;
-
-	private Integer opacity;
 
 	private Date createtime;
 
@@ -105,6 +107,22 @@ public class Layoutdtl {
 		this.zindex = zindex;
 	}
 
+	public String getBgcolor() {
+		return bgcolor;
+	}
+
+	public void setBgcolor(String bgcolor) {
+		this.bgcolor = bgcolor;
+	}
+
+	public Integer getOpacity() {
+		return opacity;
+	}
+
+	public void setOpacity(Integer opacity) {
+		this.opacity = opacity;
+	}
+
 	public Integer getIntervaltime() {
 		return intervaltime;
 	}
@@ -143,14 +161,6 @@ public class Layoutdtl {
 
 	public void setSize(Integer size) {
 		this.size = size;
-	}
-
-	public Integer getOpacity() {
-		return opacity;
-	}
-
-	public void setOpacity(Integer opacity) {
-		this.opacity = opacity;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
