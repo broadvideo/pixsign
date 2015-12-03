@@ -37,7 +37,7 @@
       and branchid=${branchid}
     </if>
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
   </select>
 
@@ -51,7 +51,7 @@
       and branchid=${branchid}
     </if>
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
     order by imageid desc 
     <if test="start != null and length != null">

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.VideoService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 import com.gif4j.GifEncoder;
 import com.gif4j.GifFrame;
 import com.gif4j.GifImage;
@@ -192,6 +193,7 @@ public class VideoAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String branchid = getParameter("branchid");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String type = getParameter("type");
 
 			if (branchid == null) {

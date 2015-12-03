@@ -22,21 +22,26 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '30%' }, 
-						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '25%' }, 
-						{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '20%' }, 
-						{'sTitle' : common.view.more, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '25%' }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
+						{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '65%' },
+						{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var synchtml = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-			$('td:eq(2)', nRow).html(synchtml);
+			var listhtml = '';
+			for (var i=0; i<aData.devices.length; i++) {
+				listhtml += aData.devices[i].terminalid + ' ';
+			}
+			$('td:eq(1)', nRow).html(listhtml);
 			
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			$('td:eq(3)', nRow).html(dropdownBtn);
+			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
+			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		}
 	});
@@ -274,6 +279,7 @@ function initDevicegpDtlModal() {
 				if (data.errorcode == 0) {
 					$('#DeviceTable').dataTable()._fnAjaxUpdate();
 					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
+					refreshMyTable();
 				} else {
 					bootbox.alert(common.tips.error + data.errormsg);
 				}
@@ -303,6 +309,7 @@ function initDevicegpDtlModal() {
 				if (data.errorcode == 0) {
 					$('#DeviceTable').dataTable()._fnAjaxUpdate();
 					$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
+					refreshMyTable();
 				} else {
 					bootbox.alert(common.tips.error + data.errormsg);
 				}

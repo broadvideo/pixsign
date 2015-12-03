@@ -9,10 +9,21 @@ function refreshLayoutschedule() {
 	if (currentBindid == 0) {
 		$('.pix-addschedule').css('display', 'none');
 		$('.pix-syncschedule').css('display', 'none');
+		$('#DeviceDetail').html('');
 		$('#ScheduleDetail').html('');
 		return;
 	}
 
+	if (currentBindtype == 1) {
+		$('#DeviceDetail').html('');
+	} else if (currentBindtype == 2) {
+		var devicehtml = '';
+		for (var i=0; i<currentDevicegroupData.devices.length; i++) {
+			devicehtml += currentDevicegroupData.devices[i].terminalid + ' ';
+		}
+		$('#DeviceDetail').html(devicehtml);
+	}
+	
 	$('.pix-addschedule').css('display', 'block');
 	$('.pix-syncschedule').css('display', 'block');
 	$.ajax({
@@ -148,7 +159,8 @@ function refreshSelect() {
 						results : $.map(data.aaData, function (item) { 
 							return { 
 								text:item.name, 
-								id:item.devicegroupid 
+								id:item.devicegroupid,
+								devices: item.devices
 							};
 						}),
 						more: more
@@ -345,7 +357,7 @@ function initLayoutSchedules() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		currentLayoutschedule = currentLayoutschedules[index];
-		bootbox.confirm(common.tips.error + currentLayoutschedule.starttime.substring(0, 5), function(result) {
+		bootbox.confirm(common.tips.remove + currentLayoutschedule.starttime.substring(0, 5), function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',

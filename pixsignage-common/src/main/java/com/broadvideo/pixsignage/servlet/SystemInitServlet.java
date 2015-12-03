@@ -35,9 +35,7 @@ public class SystemInitServlet extends HttpServlet {
 			CommonConfig.CONFIG_SERVER_PORT = properties.getProperty("common.server.port");
 			CommonConfig.CONFIG_VCSS_SERVER = "http://" + properties.getProperty("common.pixsignage.vcencoder")
 					+ ":6060/";
-			CommonConfig.CONFIG_APP_VERSION_NAME = properties.getProperty("common.pixsignage.app.version.name");
-			CommonConfig.CONFIG_APP_VERSION_CODE = properties.getProperty("common.pixsignage.app.version.code");
-			CommonConfig.CONFIG_APP_VERSION_FILE = properties.getProperty("common.pixsignage.app.version.file");
+			CommonConfig.CONFIG_APK_NAME = properties.getProperty("common.pixsignage.apk");
 			is.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();

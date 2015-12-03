@@ -22,17 +22,43 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'medialistid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
+		                {'sTitle' : common.view.detail, 'mData' : 'medialistid', 'bSortable' : false, 'sWidth' : '75%' },
+						{'sTitle' : '', 'mData' : 'medialistid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'medialistid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'medialistid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			$('td:eq(2)', nRow).html(dropdownBtn);
+			var listhtml = '';
+			for (var i=0; i<aData.medialistdtls.length; i++) {
+				var medialistdtl = aData.medialistdtls[i];
+				if (i % 6 == 0) {
+					listhtml += '<div class="row" >';
+				}
+				listhtml += '<div class="col-md-2 col-xs-2">';
+				if (medialistdtl.objtype == 1) {
+					if (medialistdtl.video.thumbnail == null) {
+						listhtml += '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" width="100%" />';
+					} else {
+						listhtml += '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" width="100%" />';
+					}
+					listhtml += '<h6>' + medialistdtl.video.name + '</h6>';
+				} else if (medialistdtl.objtype == 2) {
+					listhtml += '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" width="100%" />';
+					listhtml += '<h6>' + medialistdtl.image.name + '</h6>';
+				}
+				listhtml += '</div>';
+				if ((i+1) % 6 == 0 || (i+1) == aData.medialistdtls.length) {
+					listhtml += '</div>';
+				}
+			}
+			$('td:eq(1)', nRow).html(listhtml);
+			
+			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		}
 	});
@@ -163,19 +189,28 @@ function initMedialistDtlModal() {
 					tempMedialistdtls = data.aaData;
 					for (var i=0; i<tempMedialistdtls.length; i++) {
 						var medialistdtl = tempMedialistdtls[i];
+						var thumbhtml = '';
 						if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
 							mediatype = common.view.intvideo;
-							medianame = medialistdtl.video.name;
+							if (medialistdtl.video.thumbnail == null) {
+								thumbhtml = '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+							} else {
+								thumbhtml = '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+							}
 						} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
 							mediatype = common.view.extview;
-							medianame = medialistdtl.video.name;
+							if (medialistdtl.video.thumbnail == null) {
+								thumbhtml = '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+							} else {
+								thumbhtml = '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+							}
 						} else if (medialistdtl.objtype == 2) {
 							mediatype = common.view.image;
-							medianame = medialistdtl.image.name;
+							var thumbhtml = '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
 						} else {
 							mediatype = common.view.unknown;
 						}
-						$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, medianame, medialistdtl.medialistdtlid]);
+						$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, 0, 0, 0]);
 					}
 					
 					$('#MedialistDtlModal').modal();
@@ -227,7 +262,7 @@ function initMedialistDtlModal() {
 			} else {
 				intvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
 			}
-			intvideohtml += '<h6>' + aData['name'] + '<br>';
+			intvideohtml += '<h6>' + aData['name'] + '<br/>';
 			var filesize = parseInt(aData['size'] / 1024);
 			intvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-intvideo-add">' + common.view.add + '</button></p>';
@@ -285,7 +320,7 @@ function initMedialistDtlModal() {
 			} else {
 				extvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
 			}
-			extvideohtml += '<h6>' + aData['name'] + '<br>';
+			extvideohtml += '<h6>' + aData['name'] + '<br/>';
 			var filesize = parseInt(aData['size'] / 1024);
 			extvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-extvideo-add">' + common.view.add + '</button></p>';
@@ -339,7 +374,7 @@ function initMedialistDtlModal() {
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
 			imagehtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" />';
-			imagehtml += '<h6>' + aData['name'] + '<br>';
+			imagehtml += '<h6>' + aData['name'] + '<br/>';
 			var filesize = parseInt(aData['size'] / 1024);
 			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">' + common.view.add + '</button></p>';
@@ -364,12 +399,16 @@ function initMedialistDtlModal() {
 		'aoColumns' : [ {'sTitle' : common.view.sequence, 'bSortable' : false, 'sWidth' : '50px' }, 
 						{'sTitle' : common.view.type, 'bSortable' : false, 'sWidth' : '100px' }, 
 						{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' }, 
-						{'sTitle' : common.view.operation, 'bSortable' : false }],
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
 		'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
 		'oLanguage' : { 'sZeroRecords' : common.view.empty,
 						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-medialistdtl-delete">' + common.view.remove + '</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-medialistdtl-up"><i class="fa fa-arrow-up"></i></button>');
+			$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-down"><i class="fa fa-arrow-down"></i></button>');
+			$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-medialistdtl-delete">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -385,7 +424,13 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.videoid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, data.name, medialistdtl.medialistdtlid]);
+		var thumbhtml = '';
+		if (data.thumbnail == null) {
+			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+		} else {
+			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+		}
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, thumbhtml, 0, 0, 0]);
 	});
 
 	//增加引入视频到播放明细Table
@@ -398,7 +443,13 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.videoid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, data.name, medialistdtl.medialistdtlid]);
+		var thumbhtml = '';
+		if (data.thumbnail == null) {
+			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+		} else {
+			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+		}
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, thumbhtml, 0, 0, 0]);
 	});
 
 	//增加图片到播放明细Table
@@ -411,16 +462,20 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.imageid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, data.name, medialistdtl.medialistdtlid]);
+		var thumbhtml = '<img src="/pixsigdata' + data.filepath + '" alt="' + data.name + '" height="30" />' + data.name;
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, thumbhtml, 0, 0, 0]);
 	});
 
 	
 	//删除播放明细列表某行
 	$('body').on('click', '.pix-medialistdtl-delete', function(event) {
 		var rowIndex = $(event.target).attr("data-id");
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
 		for (var i=rowIndex; i<$('#MedialistDtlTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {
 			var data = $('#MedialistDtlTable').dataTable().fnGetData(i);
-			$('#MedialistDtlTable').dataTable().fnUpdate(i, parseInt(i), 1);
+			$('#MedialistDtlTable').dataTable().fnUpdate(i, parseInt(i), 0);
 		}
 		$('#MedialistDtlTable').dataTable().fnDeleteRow(rowIndex);
 		
@@ -428,6 +483,54 @@ function initMedialistDtlModal() {
 			tempMedialistdtls[i].sequence = i;
 		}
 		tempMedialistdtls.splice(rowIndex, 1);
+	});
+
+	//上移播放明细列表某行
+	$('body').on('click', '.pix-medialistdtl-up', function(event) {
+		var rowIndex = $(event.target).attr('data-id');
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
+		if (rowIndex == 0) {
+			return;
+		}
+		rowIndex = parseInt(rowIndex);
+		var movedDta = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex).slice(0);
+		var prevData = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex-1).slice(0);
+		$('#MedialistDtlTable').dataTable().fnUpdate(prevData[1], rowIndex, 1);
+		$('#MedialistDtlTable').dataTable().fnUpdate(prevData[2], rowIndex, 2);
+		$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex-1, 1);
+		$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex-1, 2);
+		
+		var temp = tempMedialistdtls[rowIndex];
+		tempMedialistdtls[rowIndex] =  tempMedialistdtls[rowIndex-1];
+		tempMedialistdtls[rowIndex].sequence = rowIndex+1;
+		tempMedialistdtls[rowIndex-1] = temp;
+		tempMedialistdtls[rowIndex-1].sequence = rowIndex;
+	});
+
+	//下移播放明细列表某行
+	$('body').on('click', '.pix-medialistdtl-down', function(event) {
+		var rowIndex = $(event.target).attr('data-id');
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
+		if (rowIndex == $('#MedialistDtlTable').dataTable().fnSettings().fnRecordsDisplay() - 1) {
+			return;
+		}
+		rowIndex = parseInt(rowIndex);
+		var movedDta = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex).slice(0);
+		var nextData = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex+1).slice(0);
+		$('#MedialistDtlTable').dataTable().fnUpdate(nextData[1], rowIndex, 1);
+		$('#MedialistDtlTable').dataTable().fnUpdate(nextData[2], rowIndex, 2);
+		$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
+		$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
+		
+		var temp = tempMedialistdtls[rowIndex];
+		tempMedialistdtls[rowIndex] = tempMedialistdtls[rowIndex+1];
+		tempMedialistdtls[rowIndex].sequence = rowIndex+1;
+		tempMedialistdtls[rowIndex+1] = temp;
+		tempMedialistdtls[rowIndex+1].sequence = rowIndex+2;
 	});
 
 	$('[type=submit]', $('#MedialistDtlModal')).on('click', function(event) {

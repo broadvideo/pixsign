@@ -21,17 +21,38 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'playlistid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.detail, 'mData' : 'playlistid', 'bSortable' : false, 'sWidth' : '75%' },
+						{'sTitle' : '', 'mData' : 'playlistid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'playlistid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'playlistid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			$('td:eq(2)', nRow).html(dropdownBtn);
+			var listhtml = '';
+			for (var i=0; i<aData.playlistdtls.length; i++) {
+				var playlistdtl = aData.playlistdtls[i];
+				if (i % 6 == 0) {
+					listhtml += '<div class="row" >';
+				}
+				listhtml += '<div class="col-md-2 col-xs-2">';
+				if (playlistdtl.video.thumbnail == null) {
+					listhtml += '<img src="../local/img/video.jpg" alt="' + playlistdtl.video.name + '" width="100%" />';
+				} else {
+					listhtml += '<img src="/pixsigdata' + playlistdtl.video.thumbnail + '" alt="' + playlistdtl.video.name + '" width="100%" />';
+				}
+				listhtml += '<h6>' + playlistdtl.video.name + '</h6>';
+				listhtml += '</div>';
+				if ((i+1) % 6 == 0 || (i+1) == aData.playlistdtls.length) {
+					listhtml += '</div>';
+				}
+			}
+			$('td:eq(1)', nRow).html(listhtml);
+			
+			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		}
 	});
@@ -163,14 +184,18 @@ function initPlaylistDtlModal() {
 						var playlistdtl = tempPlaylistdtls[i];
 						if (playlistdtl.video.type == 1) {
 							mediatype = common.view.intvideo;
-							medianame = playlistdtl.video.name;
 						} else if (playlistdtl.video.type == 2) {
 							mediatype = common.view.extvideo;
-							medianame = playlistdtl.video.name;
 						} else {
 							mediatype = common.view.unknown;
 						}
-						$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, mediatype, medianame, playlistdtl.playlistdtlid]);
+						var thumbhtml = '';
+						if (playlistdtl.video.thumbnail == null) {
+							thumbhtml = '<img src="../local/img/video.jpg" alt="' + playlistdtl.video.name + '" height="30" />' + playlistdtl.video.name;
+						} else {
+							thumbhtml = '<img src="/pixsigdata' + playlistdtl.video.thumbnail + '" alt="' + playlistdtl.video.name + '" height="30" />' + playlistdtl.video.name;
+						}
+						$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, mediatype, thumbhtml, 0, 0, 0]);
 					}
 					
 					$('#PlaylistDtlModal').modal();
@@ -308,12 +333,16 @@ function initPlaylistDtlModal() {
 		'aoColumns' : [ {'sTitle' : common.view.sequence, 'bSortable' : false, 'sWidth' : '50px' }, 
 						{'sTitle' : common.view.type, 'bSortable' : false, 'sWidth' : '100px' }, 
 						{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' }, 
-						{'sTitle' : common.view.operation, 'bSortable' : false }],
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
 		'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
 		'oLanguage' : { 'sZeroRecords' : common.view.empty,
 						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-playlistdtl-delete">' + common.view.remove + '</button>');
+			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-playlistdtl-up"><i class="fa fa-arrow-up"></i></button>');
+			$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-playlistdtl-down"><i class="fa fa-arrow-down"></i></button>');
+			$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-playlistdtl-delete">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -328,7 +357,13 @@ function initPlaylistDtlModal() {
 		playlistdtl.videoid = data.videoid;
 		playlistdtl.sequence = tempPlaylistdtls.length + 1;
 		tempPlaylistdtls[tempPlaylistdtls.length] = playlistdtl;
-		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.intvideo, data.name, playlistdtl.playlistdtlid]);
+		var thumbhtml = '';
+		if (data.thumbnail == null) {
+			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+		} else {
+			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+		}
+		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.intvideo, thumbhtml, 0, 0, 0]);
 	});
 
 	//增加引入视频到播放明细Table
@@ -340,13 +375,22 @@ function initPlaylistDtlModal() {
 		playlistdtl.videoid = data.videoid;
 		playlistdtl.sequence = tempPlaylistdtls.length + 1;
 		tempPlaylistdtls[tempPlaylistdtls.length] = playlistdtl;
-		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.extvideo, data.name, playlistdtl.playlistdtlid]);
+		var thumbhtml = '';
+		if (data.thumbnail == null) {
+			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+		} else {
+			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+		}
+		$('#PlaylistDtlTable').dataTable().fnAddData([playlistdtl.sequence, common.view.extvideo, thumbhtml, 0, 0, 0]);
 	});
 
 	
 	//删除播放明细列表某行
 	$('body').on('click', '.pix-playlistdtl-delete', function(event) {
 		var rowIndex = $(event.target).attr("data-id");
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
 		for (var i=rowIndex; i<$('#PlaylistDtlTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {
 			var data = $('#PlaylistDtlTable').dataTable().fnGetData(i);
 			$('#PlaylistDtlTable').dataTable().fnUpdate(i, parseInt(i), 1);
@@ -357,6 +401,54 @@ function initPlaylistDtlModal() {
 			tempPlaylistdtls[i].sequence = i;
 		}
 		tempPlaylistdtls.splice(rowIndex, 1);
+	});
+
+	//上移播放明细列表某行
+	$('body').on('click', '.pix-playlistdtl-up', function(event) {
+		var rowIndex = $(event.target).attr('data-id');
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
+		if (rowIndex == 0) {
+			return;
+		}
+		rowIndex = parseInt(rowIndex);
+		var movedDta = $('#PlaylistDtlTable').dataTable().fnGetData(rowIndex).slice(0);
+		var prevData = $('#PlaylistDtlTable').dataTable().fnGetData(rowIndex-1).slice(0);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(prevData[1], rowIndex, 1);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(prevData[2], rowIndex, 2);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex-1, 1);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex-1, 2);
+		
+		var temp = tempPlaylistdtls[rowIndex];
+		tempPlaylistdtls[rowIndex] =  tempPlaylistdtls[rowIndex-1];
+		tempPlaylistdtls[rowIndex].sequence = rowIndex+1;
+		tempPlaylistdtls[rowIndex-1] = temp;
+		tempPlaylistdtls[rowIndex-1].sequence = rowIndex;
+	});
+
+	//下移播放明细列表某行
+	$('body').on('click', '.pix-playlistdtl-down', function(event) {
+		var rowIndex = $(event.target).attr('data-id');
+		if (rowIndex == undefined) {
+			rowIndex = $(event.target).parent().attr('data-id');
+		}
+		if (rowIndex == $('#PlaylistDtlTable').dataTable().fnSettings().fnRecordsDisplay() - 1) {
+			return;
+		}
+		rowIndex = parseInt(rowIndex);
+		var movedDta = $('#PlaylistDtlTable').dataTable().fnGetData(rowIndex).slice(0);
+		var nextData = $('#PlaylistDtlTable').dataTable().fnGetData(rowIndex+1).slice(0);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(nextData[1], rowIndex, 1);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(nextData[2], rowIndex, 2);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
+		$('#PlaylistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
+		
+		var temp = tempPlaylistdtls[rowIndex];
+		tempPlaylistdtls[rowIndex] = tempPlaylistdtls[rowIndex+1];
+		tempPlaylistdtls[rowIndex].sequence = rowIndex+1;
+		tempPlaylistdtls[rowIndex+1] = temp;
+		tempPlaylistdtls[rowIndex+1].sequence = rowIndex+2;
 	});
 
 	$('[type=submit]', $('#PlaylistDtlModal')).on('click', function(event) {

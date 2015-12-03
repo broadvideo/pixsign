@@ -11,11 +11,22 @@ function refreshLeftTab() {
 	$('.pix-addschedule').css('display', 'none');
 	$('.pix-syncschedule').css('display', 'none');
 	if (currentBindid == 0) {
+		$('#DeviceDetail').html('');
 		$('#LeftTab').html('');
 		$('#ScheduleDetail').html('');
 		return;
 	}
 
+	if (currentBindtype == 1) {
+		$('#DeviceDetail').html('');
+	} else if (currentBindtype == 2) {
+		var devicehtml = '';
+		for (var i=0; i<currentDevicegroupData.devices.length; i++) {
+			devicehtml += currentDevicegroupData.devices[i].terminalid + ' ';
+		}
+		$('#DeviceDetail').html(devicehtml);
+	}
+	
 	$.ajax({
 		type : 'POST',
 		url : 'layout!regionlist.action',
@@ -224,7 +235,8 @@ function refreshSelect() {
 						results : $.map(data.aaData, function (item) { 
 							return { 
 								text:item.name, 
-								id:item.devicegroupid 
+								id:item.devicegroupid, 
+								devices: item.devices
 							};
 						}),
 						more: more

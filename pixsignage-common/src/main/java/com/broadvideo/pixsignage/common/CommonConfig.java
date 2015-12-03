@@ -6,9 +6,7 @@ public class CommonConfig {
 	public static String CONFIG_SERVER_IP;
 	public static String CONFIG_SERVER_PORT;
 
-	public static String CONFIG_APP_VERSION_NAME;
-	public static String CONFIG_APP_VERSION_CODE;
-	public static String CONFIG_APP_VERSION_FILE;
+	public static String CONFIG_APK_NAME;
 
 	public static String CONFIG_PIXDATA_HOME = "/pixdata/pixsignage";
 	public static String CONFIG_TEMP_HOME = "/pixdata/pixsignage/temp";

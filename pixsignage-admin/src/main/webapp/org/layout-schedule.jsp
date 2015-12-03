@@ -131,7 +131,9 @@ response.setDateHeader("Expires",0);
 											<div class="col-md3 col-sm-3">
 												<input type="hidden" id="DeviceSelect" class="form-control select2">
 											</div>
-											<div class="col-md8 col-sm-8">
+											<div class="col-md5 col-sm-5"  id="DeviceDetail">
+											</div>
+											<div class="col-md3 col-sm-3">
 												<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> <spring:message code="global.syncschedule"/></a>&nbsp;
 												<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> <spring:message code="global.addschedule"/></a>
 											</div>
@@ -208,7 +210,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-schedule.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-layout-schedule.js?t=5"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

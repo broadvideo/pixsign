@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -22,6 +23,8 @@ public class Devicegroup {
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private List<Device> devices;
 
 	public Integer getDevicegroupid() {
 		return devicegroupid;
@@ -95,5 +98,13 @@ public class Devicegroup {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public List<Device> getDevices() {
+		return devices;
+	}
+
+	public void setDevices(List<Device> devices) {
+		this.devices = devices;
 	}
 }

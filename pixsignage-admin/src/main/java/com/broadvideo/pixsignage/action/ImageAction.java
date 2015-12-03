@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.service.ImageService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("imageAction")
@@ -113,6 +114,7 @@ public class ImageAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String branchid = getParameter("branchid");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			if (branchid == null) {
 				branchid = "" + getLoginStaff().getBranchid();

@@ -128,11 +128,23 @@ public class PixsignageService {
 	public String getversion(String request) {
 		try {
 			log.info("Pixsignage Service get_version: " + request);
+			String vname = CommonConfig.CONFIG_APK_NAME;
+			String vcode = "0";
+			if (CommonConfig.CONFIG_APK_NAME != null) {
+				String[] apks = CommonConfig.CONFIG_APK_NAME.split("-");
+				if (apks.length >= 3) {
+					vname = apks[1];
+					vcode = apks[2];
+					if (vcode.indexOf(".") > 0) {
+						vcode = vcode.substring(0, vcode.indexOf("."));
+					}
+				}
+			}
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			responseJson.put("version_name", CommonConfig.CONFIG_APP_VERSION_NAME);
-			responseJson.put("version_code", CommonConfig.CONFIG_APP_VERSION_CODE);
-			responseJson.put("name", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-					+ "/pixdata/app/" + CommonConfig.CONFIG_APP_VERSION_FILE);
+			responseJson.put("version_name", vname);
+			responseJson.put("version_code", vcode);
+			responseJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+					+ "/pixdata/app/" + CommonConfig.CONFIG_APK_NAME);
 			log.info("Pixsignage Service get_version response: " + responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {

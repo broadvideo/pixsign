@@ -18,16 +18,16 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.text, 'mData' : 'text', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'textid', 'bSortable' : false }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
+						{'sTitle' : common.view.text, 'mData' : 'text', 'bSortable' : false, 'sWidth' : '70%' },
+						{'sTitle' : '', 'mData' : 'textid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'textid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			$('td:eq(2)', nRow).html(dropdownBtn);
+			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		}
 	});
