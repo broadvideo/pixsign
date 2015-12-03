@@ -13,8 +13,8 @@ import com.broadvideo.pixsignage.service.LayoutscheduleService;
 import com.broadvideo.pixsignage.service.RegionscheduleService;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 
-public class ActivemqTask {
-	private static final Logger log = Logger.getLogger(ActivemqTask.class);
+public class ActivemqNormalTask {
+	private static final Logger log = Logger.getLogger(ActivemqNormalTask.class);
 
 	private static boolean workflag = false;
 
@@ -48,7 +48,7 @@ public class ActivemqTask {
 					null, Msgevent.Status_Wait, null, null);
 			handleMsgevent(msgeventList);
 		} catch (Exception e) {
-			log.error("ActivemqTask Quartz Task error: " + e.getMessage());
+			log.error("ActivemqNormalTask Quartz Task error: " + e.getMessage());
 		}
 		workflag = false;
 	}

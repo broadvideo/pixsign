@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.service.MedialistService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("medialistAction")
@@ -34,6 +35,7 @@ public class MedialistAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			int count = medialistService.selectCount(getLoginStaff().getOrgid(), search);
 			this.setiTotalRecords(count);

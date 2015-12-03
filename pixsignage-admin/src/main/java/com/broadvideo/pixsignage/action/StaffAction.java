@@ -12,6 +12,7 @@ import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.common.SessionConstants;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.StaffService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("staffAction")
@@ -35,6 +36,7 @@ public class StaffAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
 			String vspid = null;

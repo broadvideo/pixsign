@@ -28,7 +28,7 @@
   <select id="selectCount" resultType="Integer">
     select count(1) from playlist where type =  1 and status = 1 and orgid = ${orgid}
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
   </select>
 
@@ -36,7 +36,7 @@
     select * from playlist
     where type =  1 and status = 1 and orgid = ${orgid}
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
     order by playlistid desc 
     <if test="start != null and length != null">

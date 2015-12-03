@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Vchannel;
 import com.broadvideo.pixsignage.service.VchannelService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("vchannelAction")
@@ -33,6 +34,7 @@ public class VchannelAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			int count = vchannelService.selectCount("" + getLoginStaff().getOrgid(), search);
 			this.setiTotalRecords(count);

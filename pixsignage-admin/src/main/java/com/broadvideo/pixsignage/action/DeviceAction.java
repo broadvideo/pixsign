@@ -12,6 +12,7 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.LayoutscheduleService;
 import com.broadvideo.pixsignage.service.RegionscheduleService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("deviceAction")
@@ -39,6 +40,7 @@ public class DeviceAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
 			String devicegroupid = getParameter("devicegroupid");
 
@@ -72,10 +74,8 @@ public class DeviceAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String search = null;
-			if (getParameter("sSearch") != null) {
-				search = new String(getParameter("sSearch").trim().getBytes("ISO-8859-1"), "utf-8");
-			}
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			int count = deviceService.selectUnregisterCount("" + getLoginStaff().getOrgid(), search);
 			this.setiTotalRecords(count);

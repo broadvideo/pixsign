@@ -127,8 +127,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 			msgevent.setObjtype2(Msgevent.ObjType_2_Region);
 			msgevent.setObjid2(region.getRegionid());
 			msgevent.setStatus(Msgevent.Status_Wait);
-			msgeventMapper.deleteByDtl(Msgevent.MsgType_Region_Schedule, bindtype, "" + bindid,
-					Msgevent.ObjType_2_Region, "" + region.getRegionid(), null);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Region_Schedule, bindtype, bindid, Msgevent.ObjType_2_Region,
+					"" + region.getRegionid(), null);
 			msgeventMapper.insertSelective(msgevent);
 
 			JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "REGION");

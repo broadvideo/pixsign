@@ -71,7 +71,7 @@
 			and orgid = #{orgid}
 		</if>
 		<if test="search != null">
-			and (loginname like '%${search}%' or name like '%${search}%')
+			and (loginname like #{search} or name like #{search})
 		</if>
 	</select>
 
@@ -87,7 +87,7 @@
 			and orgid = #{orgid}
 		</if>
 		<if test="search != null">
-			and (loginname like '%${search}%' or name like '%${search}%')
+			and (loginname like #{search} or name like #{search})
 		</if>
 		order by staffid desc 
 		<if test="start != null and length != null">

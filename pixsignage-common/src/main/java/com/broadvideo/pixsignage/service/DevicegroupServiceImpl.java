@@ -19,11 +19,11 @@ public class DevicegroupServiceImpl implements DevicegroupService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 
-	public int selectCount(int orgid, int branchid, String search) {
+	public int selectCount(String orgid, String branchid, String search) {
 		return devicegroupMapper.selectCount(orgid, branchid, search);
 	}
 
-	public List<Devicegroup> selectList(int orgid, int branchid, String search, String start, String length) {
+	public List<Devicegroup> selectList(String orgid, String branchid, String search, String start, String length) {
 		return devicegroupMapper.selectList(orgid, branchid, search, start, length);
 	}
 

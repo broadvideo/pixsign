@@ -41,14 +41,14 @@ public class DevicegroupAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 
-			int count = devicegroupService.selectCount(getLoginStaff().getOrgid(), getLoginStaff().getBranchid(),
-					search);
+			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(),
+					"" + getLoginStaff().getBranchid(), search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Devicegroup> devicegroupList = devicegroupService.selectList(getLoginStaff().getOrgid(),
-					getLoginStaff().getBranchid(), search, start, length);
+			List<Devicegroup> devicegroupList = devicegroupService.selectList("" + getLoginStaff().getOrgid(),
+					"" + getLoginStaff().getBranchid(), search, start, length);
 			for (int i = 0; i < devicegroupList.size(); i++) {
 				aaData.add(devicegroupList.get(i));
 			}

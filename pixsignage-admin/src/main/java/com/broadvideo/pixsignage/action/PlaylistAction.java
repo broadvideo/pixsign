@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Playlist;
 import com.broadvideo.pixsignage.domain.Playlistdtl;
 import com.broadvideo.pixsignage.service.PlaylistService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @Scope("request")
 @Controller("playlistAction")
@@ -35,6 +36,7 @@ public class PlaylistAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			int count = playlistService.selectCount(getLoginStaff().getOrgid(), search);
 			this.setiTotalRecords(count);

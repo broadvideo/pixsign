@@ -9,10 +9,10 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 public interface DevicegroupMapper {
 	Devicegroup selectByPrimaryKey(@Param(value = "devicegroupid") String devicegroupid);
 
-	int selectCount(@Param(value = "orgid") int orgid, @Param(value = "branchid") int branchid,
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search);
 
-	List<Devicegroup> selectList(@Param(value = "orgid") int orgid, @Param(value = "branchid") int branchid,
+	List<Devicegroup> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 

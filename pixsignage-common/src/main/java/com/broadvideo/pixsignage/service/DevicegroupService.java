@@ -6,9 +6,9 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 
 public interface DevicegroupService {
-	public int selectCount(int orgid, int branchid, String search);
+	public int selectCount(String orgid, String branchid, String search);
 
-	public List<Devicegroup> selectList(int orgid, int branchid, String search, String start, String length);
+	public List<Devicegroup> selectList(String orgid, String branchid, String search, String start, String length);
 
 	public void addDevice(Devicegroup devicegroup, Device device);
 

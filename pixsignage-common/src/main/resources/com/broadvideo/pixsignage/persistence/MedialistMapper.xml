@@ -27,7 +27,7 @@
   <select id="selectCount" resultType="Integer">
     select count(1) from medialist where status = 1 and orgid = ${orgid}
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
   </select>
 
@@ -35,7 +35,7 @@
     select * from medialist
     where status = 1 and orgid = ${orgid}
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
     order by medialistid desc 
     <if test="start != null and length != null">

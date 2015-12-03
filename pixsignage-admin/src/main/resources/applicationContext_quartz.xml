@@ -10,21 +10,39 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-	<bean id="activemqTask" class="com.broadvideo.pixsignage.quartz.ActivemqTask"></bean>
-	<bean id="activemqJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="activemqNormalTask" class="com.broadvideo.pixsignage.quartz.ActivemqNormalTask"></bean>
+	<bean id="activemqNormalJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
-			<ref bean="activemqTask" />
+			<ref bean="activemqNormalTask" />
 		</property>
 		<property name="targetMethod">
 			<value>work</value>
 		</property>
 	</bean>
-	<bean id="activemqJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	<bean id="activemqNormalJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail">
-			<ref bean="activemqJob" />
+			<ref bean="activemqNormalJob" />
 		</property>
 		<property name="cronExpression">
 			<value>0/15 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="activemqDailyTask" class="com.broadvideo.pixsignage.quartz.ActivemqDailyTask"></bean>
+	<bean id="activemqDailyJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="activemqDailyTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="activemqDailyJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="activemqDailyJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 * * ?</value>
 		</property>
 	</bean>
 
@@ -85,7 +103,8 @@
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="activemqJobTrigger" />
+				<ref bean="activemqNormalJobTrigger" />
+				<ref bean="activemqDailyJobTrigger" />
 				<ref bean="deviceJobTrigger" />
 				<ref bean="vcssJobTrigger" />
 				<ref bean="pixboxJobTrigger" />
