@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,11 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.service.WidgetService;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("widgetAction")
 public class WidgetAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3894128825647516545L;
-
-	private static final Logger log = Logger.getLogger(WidgetAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Widget widget;
 

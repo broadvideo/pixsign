@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,13 +15,8 @@ import com.broadvideo.pixsignage.service.OrgService;
 @Scope("request")
 @Controller("orgAction")
 public class OrgAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8144326256812580850L;
-
-	private static final Logger log = Logger.getLogger(OrgAction.class);
+	@SuppressWarnings("unused")
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Org org;
 

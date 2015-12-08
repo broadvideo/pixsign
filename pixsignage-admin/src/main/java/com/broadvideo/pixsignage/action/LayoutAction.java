@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -16,16 +17,11 @@ import com.broadvideo.pixsignage.domain.Region;
 import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.service.RegionService;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("layoutAction")
 public class LayoutAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8023500547905441044L;
-
-	private static final Logger log = Logger.getLogger(LayoutAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Layout layout;
 	private Layoutdtl[] layoutdtls;

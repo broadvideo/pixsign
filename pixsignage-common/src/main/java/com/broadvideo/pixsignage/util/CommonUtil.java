@@ -13,12 +13,13 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.gif4j.GifEncoder;
 
 public class CommonUtil {
-	private static final Logger log = Logger.getLogger(CommonUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
 	public static String getPasswordMd5(String loginname, String password) {
 		return DigestUtils.md5Hex(loginname + "&PixSG&" + password);
@@ -42,18 +43,18 @@ public class CommonUtil {
 		InputStream fis = null;
 		BufferedReader bufferedReader = null;
 		try {
-			log.info("start to run command: " + command);
+			logger.info("start to run command: {}", command);
 			Process process = Runtime.getRuntime().exec(command);
 			fis = process.getInputStream();
 			bufferedReader = new BufferedReader(new InputStreamReader(fis));
 			result = process.waitFor();
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {
-				log.info(line);
+				logger.info(line);
 			}
 		} catch (Exception ioe) {
 			result = -1;
-			log.info(ioe.toString());
+			logger.info(ioe.toString());
 		} finally {
 			if (fis != null) {
 				try {

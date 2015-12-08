@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -23,16 +24,11 @@ import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("imageAction")
 public class ImageAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6916555378882105703L;
-
-	private static final Logger log = Logger.getLogger(ImageAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Image image;
 
@@ -45,7 +41,6 @@ public class ImageAction extends BaseDatatableAction {
 	private ImageService imageService;
 
 	public void doUpload() throws Exception {
-		log.info("Begin image upload action process.");
 		HttpServletResponse response = getHttpServletResponse();
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter writer = response.getWriter();
@@ -58,6 +53,7 @@ public class ImageAction extends BaseDatatableAction {
 			for (int i = 0; i < mymedia.length; i++) {
 				JSONObject jsonItem = new JSONObject();
 				try {
+					logger.info("Upload one image, file={}", mymediaFileName[i]);
 					if (name[i] == null || name[i].equals("")) {
 						name[i] = mymediaFileName[i];
 					}
@@ -103,8 +99,6 @@ public class ImageAction extends BaseDatatableAction {
 
 		writer.write(result.toString());
 		writer.close();
-
-		log.info("Finish image upload action process.");
 	}
 
 	public String doList() {

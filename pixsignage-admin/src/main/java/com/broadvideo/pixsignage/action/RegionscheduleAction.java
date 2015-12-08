@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,8 @@ import com.broadvideo.pixsignage.service.RegionscheduleService;
 @Scope("request")
 @Controller("regionscheduleAction")
 public class RegionscheduleAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7041066156892935918L;
-
-	private static final Logger log = Logger.getLogger(RegionscheduleAction.class);
+	@SuppressWarnings("unused")
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Regionschedule regionschedule;
 
@@ -100,11 +96,11 @@ public class RegionscheduleAction extends BaseDatatableAction {
 			String bindid = getParameter("bindid");
 			if (bindtype != null && bindid != null) {
 				regionscheduleService.syncRegionschedule(bindtype, bindid);
-				log.error("Region schedule sync success");
+				logger.error("Region schedule sync success");
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			log.error("Region schedule sync error: " + ex.getMessage());
+			logger.error("Region schedule sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

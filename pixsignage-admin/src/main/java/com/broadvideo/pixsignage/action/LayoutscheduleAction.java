@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,11 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Layoutschedule;
 import com.broadvideo.pixsignage.service.LayoutscheduleService;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("layoutscheduleAction")
 public class LayoutscheduleAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3643347555369768049L;
-
-	private static final Logger log = Logger.getLogger(LayoutscheduleAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Layoutschedule layoutschedule;
 
@@ -89,11 +85,11 @@ public class LayoutscheduleAction extends BaseDatatableAction {
 			String bindid = getParameter("bindid");
 			if (bindtype != null && bindid != null) {
 				layoutscheduleService.syncLayoutschedule(bindtype, bindid);
-				log.error("Layout schedule sync success");
+				logger.error("Layout schedule sync success");
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			log.error("Layout schedule sync error: " + ex.getMessage());
+			logger.error("Layout schedule sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

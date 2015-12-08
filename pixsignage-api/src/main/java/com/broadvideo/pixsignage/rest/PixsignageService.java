@@ -1,5 +1,8 @@
 package com.broadvideo.pixsignage.rest;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.ws.rs.Consumes;
@@ -7,9 +10,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +35,7 @@ import com.broadvideo.pixsignage.service.RegionscheduleService;
 @Produces("application/json;charset=UTF-8")
 @Path("/v1.0")
 public class PixsignageService {
-
-	private static final Logger log = Logger.getLogger(PixsignageService.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private OrgMapper orgMapper;
@@ -51,7 +55,7 @@ public class PixsignageService {
 	@Path("init")
 	public String init(String request) {
 		try {
-			log.info("Pixsignage Service init: " + request);
+			logger.info("Pixsignage Service init: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -115,7 +119,7 @@ public class PixsignageService {
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
 			}
-			log.info("Pixsignage Service init response: " + responseJson.toString());
+			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,11 +131,24 @@ public class PixsignageService {
 	@Path("get_version")
 	public String getversion(String request) {
 		try {
-			log.info("Pixsignage Service get_version: " + request);
-			String vname = CommonConfig.CONFIG_APK_NAME;
+			logger.info("Pixsignage Service get_version: {}", request);
+			File dir = new File("/opt/pixdata/app");
+			File[] files = dir.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.startsWith("DigitalBox-") && name.endsWith((".apk"));
+				}
+			});
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+
+			String vname = "";
 			String vcode = "0";
-			if (CommonConfig.CONFIG_APK_NAME != null) {
-				String[] apks = CommonConfig.CONFIG_APK_NAME.split("-");
+			String url = "";
+			if (files.length > 0) {
+				String filename = files[0].getName();
+				url = "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+						+ "/pixdata/app/" + filename;
+				String[] apks = filename.split("-");
 				if (apks.length >= 3) {
 					vname = apks[1];
 					vcode = apks[2];
@@ -140,12 +157,12 @@ public class PixsignageService {
 					}
 				}
 			}
+
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("version_name", vname);
 			responseJson.put("version_code", vcode);
-			responseJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-					+ "/pixdata/app/" + CommonConfig.CONFIG_APK_NAME);
-			log.info("Pixsignage Service get_version response: " + responseJson.toString());
+			responseJson.put("url", url);
+			logger.info("Pixsignage Service get_version response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,7 +174,7 @@ public class PixsignageService {
 	@Path("get_layout")
 	public String getlayout(String request) {
 		try {
-			log.info("Pixsignage Service get_layout: " + request);
+			logger.info("Pixsignage Service get_layout: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -181,7 +198,7 @@ public class PixsignageService {
 				responseJson = layoutscheduleService.generateLayoutScheduleJson("1", "" + device.getDeviceid());
 			}
 			responseJson.put("code", 0).put("message", "成功");
-			log.info("Pixsignage Service get_layout response: " + responseJson.toString());
+			logger.info("Pixsignage Service get_layout response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -193,7 +210,7 @@ public class PixsignageService {
 	@Path("get_region")
 	public String getregion(String request) {
 		try {
-			log.info("Pixsignage Service get_region: " + request);
+			logger.info("Pixsignage Service get_region: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -224,7 +241,7 @@ public class PixsignageService {
 			}
 			responseJson.put("code", 0).put("message", "成功");
 
-			log.info("Pixsignage Service get_region response: " + responseJson.toString());
+			logger.info("Pixsignage Service get_region response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,7 +253,7 @@ public class PixsignageService {
 	@Path("report_status")
 	public String reportstatus(String request) {
 		try {
-			log.info("Pixsignage Service report_status: " + request);
+			logger.info("Pixsignage Service report_status: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -271,7 +288,7 @@ public class PixsignageService {
 	@Path("report_file")
 	public String reportfile(String request) {
 		try {
-			log.info("Pixsignage Service report_file: " + request);
+			logger.info("Pixsignage Service report_file: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -331,7 +348,7 @@ public class PixsignageService {
 	@Path("report_crash")
 	public String reportcrash(String request) {
 		try {
-			log.info("Pixsignage Service report_crash: " + request);
+			logger.info("Pixsignage Service report_crash: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -371,7 +388,7 @@ public class PixsignageService {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("code", code);
 		responseJson.put("message", message);
-		log.info("Pixsignage Service response: " + responseJson.toString());
+		logger.info("Pixsignage Service response: {}", responseJson.toString());
 		return responseJson.toString();
 	}
 

@@ -8,7 +8,8 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -24,16 +25,11 @@ import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.service.PrivilegeService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("loginAction")
 public class LoginAction extends BaseAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -594090078526298467L;
-
-	private static final Logger log = Logger.getLogger(LoginAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String subsystem;
 	private String username;
@@ -66,9 +62,9 @@ public class LoginAction extends BaseAction {
 			ServletContext licensecontext = getHttpServletRequest().getSession().getServletContext()
 					.getContext("/pixlicense");
 			if (licensecontext == null) {
-				log.error("License init error: context of license is null");
+				logger.error("License init error: context of license is null");
 			} else if (licensecontext.getAttribute("HostIDVerify") == null) {
-				log.error("License init error: HostIDVerify is null");
+				logger.error("License init error: HostIDVerify is null");
 			} else {
 				CommonConfig.LICENSE_HOSTID_VERIFY = (Boolean) licensecontext.getAttribute("HostIDVerify");
 				CommonConfig.LICENSE_Expire = sf.parse((String) licensecontext.getAttribute("Expire"));
@@ -81,24 +77,24 @@ public class LoginAction extends BaseAction {
 						.parseInt((String) licensecontext.getAttribute("MaxDevicesPerMovieOrg"));
 				CommonConfig.LICENSE_MaxStoragePerMovieOrg = Integer
 						.parseInt((String) licensecontext.getAttribute("MaxStoragePerMovieOrg"));
-				log.info("License HostID verify: " + CommonConfig.LICENSE_HOSTID_VERIFY);
-				log.info("License Expire: " + sf.format(CommonConfig.LICENSE_Expire));
-				log.info("License MaxOrgs: " + CommonConfig.LICENSE_MaxOrgs);
-				log.info("License MaxDevicesPerSigOrg: " + CommonConfig.LICENSE_MaxDevicesPerSigOrg);
-				log.info("License MaxStoragePerSigOrg: " + CommonConfig.LICENSE_MaxStoragePerSigOrg);
-				log.info("License MaxDevicesPerMovieOrg: " + CommonConfig.LICENSE_MaxDevicesPerMovieOrg);
-				log.info("License MaxStoragePerMovieOrg: " + CommonConfig.LICENSE_MaxStoragePerMovieOrg);
+				logger.info("License HostID verify: " + CommonConfig.LICENSE_HOSTID_VERIFY);
+				logger.info("License Expire: " + sf.format(CommonConfig.LICENSE_Expire));
+				logger.info("License MaxOrgs: " + CommonConfig.LICENSE_MaxOrgs);
+				logger.info("License MaxDevicesPerSigOrg: " + CommonConfig.LICENSE_MaxDevicesPerSigOrg);
+				logger.info("License MaxStoragePerSigOrg: " + CommonConfig.LICENSE_MaxStoragePerSigOrg);
+				logger.info("License MaxDevicesPerMovieOrg: " + CommonConfig.LICENSE_MaxDevicesPerMovieOrg);
+				logger.info("License MaxStoragePerMovieOrg: " + CommonConfig.LICENSE_MaxStoragePerMovieOrg);
 				CommonConfig.LICENSE = true;
 			}
 		}
 
 		if (!CommonConfig.LICENSE_HOSTID_VERIFY) {
-			log.error("Login failed for license HostID verified");
+			logger.error("Login failed for license HostID verified");
 			setErrorcode(-1);
 			return ERROR;
 		}
 		if (CommonConfig.LICENSE_Expire.getTime() < Calendar.getInstance().getTime().getTime()) {
-			log.error("Login failed for license expired");
+			logger.error("Login failed for license expired");
 			setErrorcode(-1);
 			return ERROR;
 		}
@@ -116,7 +112,7 @@ public class LoginAction extends BaseAction {
 			if (org != null) {
 				if (org.getExpireflag().equals("1")
 						&& org.getExpiretime().getTime() < Calendar.getInstance().getTime().getTime()) {
-					log.error("Login failed for time expire, username=" + username + ", password="
+					logger.error("Login failed for time expire, username=" + username + ", password="
 							+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem="
 							+ subsystem);
 					setErrorcode(-1);
@@ -148,7 +144,7 @@ public class LoginAction extends BaseAction {
 					}
 				}
 			} else {
-				log.error("Login failed, username=" + username + ", password="
+				logger.error("Login failed, username=" + username + ", password="
 						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem="
 						+ subsystem);
 				setErrorcode(-1);
@@ -174,8 +170,8 @@ public class LoginAction extends BaseAction {
 			return SUCCESS;
 		}
 
-		log.error("Login failed, username=" + username + ", password=" + CommonUtil.getPasswordMd5(username, password)
-				+ ", code=" + code + ", subsystem=" + subsystem);
+		logger.error("Login failed, username=" + username + ", password="
+				+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem=" + subsystem);
 		setErrorcode(-1);
 		return ERROR;
 	}

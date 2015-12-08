@@ -10,19 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 
+@SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8591238992835900440L;
-
-	private static final Logger log = Logger.getLogger(SystemInitServlet.class);
-
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -35,7 +27,6 @@ public class SystemInitServlet extends HttpServlet {
 			CommonConfig.CONFIG_SERVER_PORT = properties.getProperty("common.server.port");
 			CommonConfig.CONFIG_VCSS_SERVER = "http://" + properties.getProperty("common.pixsignage.vcencoder")
 					+ ":6060/";
-			CommonConfig.CONFIG_APK_NAME = properties.getProperty("common.pixsignage.apk");
 			is.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,16 +15,11 @@ import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.StaffService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("staffAction")
 public class StaffAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1831856884812531473L;
-
-	private static final Logger log = Logger.getLogger(StaffAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Staff staff;
 

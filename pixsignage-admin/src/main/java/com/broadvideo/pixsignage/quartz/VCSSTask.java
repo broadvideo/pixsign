@@ -9,9 +9,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
@@ -24,7 +25,7 @@ import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
 import com.broadvideo.pixsignage.service.VchannelscheduleService;
 
 public class VCSSTask {
-	private static final Logger log = Logger.getLogger(VCSSTask.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static boolean workflag = false;
 
@@ -68,7 +69,7 @@ public class VCSSTask {
 				sendScheduleMsg(scheduleEvent);
 			}
 		} catch (Exception e) {
-			log.error("VCSS Quartz Task error: " + e.getMessage());
+			logger.error("VCSS Quartz Task error: {}", e.getMessage());
 		}
 		workflag = false;
 	}
@@ -91,7 +92,7 @@ public class VCSSTask {
 		}
 
 		String url = CommonConfig.CONFIG_VCSS_SERVER + "vchannels";
-		log.info("Send vchannels message to VCSS: " + msgJson.toString());
+		logger.info("Send vchannels message to VCSS: {}", msgJson.toString());
 		// Client c = Client.create();
 		// WebResource r = c.resource(url);
 		// String s =
@@ -104,7 +105,7 @@ public class VCSSTask {
 			httpPost.setEntity(new StringEntity(msgJson.toString(), "UTF-8"));
 			HttpResponse result = httpclient.execute(httpPost);
 			String s = EntityUtils.toString(result.getEntity(), "UTF-8");
-			log.info("Get vchannels response from VCSS: " + s);
+			logger.info("Get vchannels response from VCSS: {}", s);
 		} finally {
 			httpclient.close();
 		}
@@ -118,7 +119,7 @@ public class VCSSTask {
 		if (vchannel != null && vchannel.getStatus().equals("1")) {
 			JSONObject msgJson = vchannelscheduleService.generateVchannelScheduleJson("" + msgevent.getObjid1());
 			String url = CommonConfig.CONFIG_VCSS_SERVER + "schedules";
-			log.info("Send schedules message to VCSS: " + msgJson.toString());
+			logger.info("Send schedules message to VCSS: {}", msgJson.toString());
 			// Client c = Client.create();
 			// WebResource r = c.resource(url);
 			// String s =
@@ -131,7 +132,7 @@ public class VCSSTask {
 				httpPost.setEntity(new StringEntity(msgJson.toString(), "UTF-8"));
 				HttpResponse result = httpclient.execute(httpPost);
 				String s = EntityUtils.toString(result.getEntity(), "UTF-8");
-				log.info("Get schedules response from VCSS: " + s);
+				logger.info("Get schedules response from VCSS: {}", s);
 			} finally {
 				httpclient.close();
 			}

@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,11 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Vchannelschedule;
 import com.broadvideo.pixsignage.service.VchannelscheduleService;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("vchannelscheduleAction")
 public class VchannelscheduleAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4246810221399215236L;
-
-	private static final Logger log = Logger.getLogger(VchannelscheduleAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Vchannelschedule vchannelschedule;
 
@@ -87,11 +83,11 @@ public class VchannelscheduleAction extends BaseDatatableAction {
 			String vchannelid = getParameter("vchannelid");
 			if (vchannelid != null) {
 				vchannelscheduleService.syncVchannelschedule(vchannelid);
-				log.error("Vchannel schedule sync success");
+				logger.error("Vchannel schedule sync success");
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			log.error("Vchannel schedule sync error: " + ex.getMessage());
+			logger.error("Vchannel schedule sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

@@ -2,7 +2,8 @@ package com.broadvideo.pixsignage.quartz;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.domain.Device;
@@ -13,10 +14,9 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.RegionMapper;
-import com.broadvideo.pixsignage.service.RegionscheduleService;
 
 public class ActivemqDailyTask {
-	private static final Logger log = Logger.getLogger(ActivemqDailyTask.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static boolean workflag = false;
 
@@ -28,8 +28,6 @@ public class ActivemqDailyTask {
 	private DevicegroupMapper devicegroupMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
-	@Autowired
-	private RegionscheduleService regionscheduleService;
 
 	public void work() {
 		try {
@@ -42,7 +40,7 @@ public class ActivemqDailyTask {
 
 			List<Device> deviceList = deviceMapper.selectList(null, null, "0", null, null, null);
 			for (Device device : deviceList) {
-				log.info("Insert layout & region schedule msgevent for device " + device.getTerminalid());
+				logger.info("Insert layout & region schedule msgevent for device {}", device.getTerminalid());
 				insertLayoutMsgevent("1", device.getDeviceid());
 				for (Region region : regionList) {
 					insertRegionMsgevent("1", device.getDeviceid(), region.getRegionid());
@@ -51,7 +49,7 @@ public class ActivemqDailyTask {
 
 			List<Devicegroup> devicegroupList = devicegroupMapper.selectList(null, null, null, null, null);
 			for (Devicegroup devicegroup : devicegroupList) {
-				log.info("Insert layout & region schedule msgevent for devicegroup " + devicegroup.getName());
+				logger.info("Insert layout & region schedule msgevent for devicegroup {}", devicegroup.getName());
 				insertLayoutMsgevent("2", devicegroup.getDevicegroupid());
 				for (Region region : regionList) {
 					insertRegionMsgevent("2", devicegroup.getDevicegroupid(), region.getRegionid());
@@ -59,7 +57,7 @@ public class ActivemqDailyTask {
 			}
 
 		} catch (Exception e) {
-			log.error("ActivemqDailyTask Quartz Task error: " + e.getMessage());
+			logger.error("ActivemqDailyTask Quartz Task error: {}", e.getMessage());
 		}
 		workflag = false;
 	}

@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.common.SessionConstants;
 
 public class SecurityFilter implements Filter {
-
-	private static final Logger log = Logger.getLogger(SecurityFilter.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected FilterConfig filterConfig = null;
 	private String orgRedirectURL = null;
@@ -37,7 +37,7 @@ public class SecurityFilter implements Filter {
 		HttpSession session = request.getSession();
 
 		String servletPath = request.getServletPath();
-		log.debug("Servlet path: " + servletPath);
+		logger.debug("Servlet path: " + servletPath);
 		for (int i = 0; i < excludeLoginURLs.size(); i++) {
 			if (servletPath.matches(excludeLoginURLs.get(i))) {
 				chain.doFilter(request, response);

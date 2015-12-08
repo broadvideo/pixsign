@@ -6,9 +6,10 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ import com.sun.jersey.api.client.WebResource;
 
 @Service("vchannelscheduleService")
 public class VchannelscheduleServiceImpl implements VchannelscheduleService {
-	private static final Logger log = Logger.getLogger(VchannelscheduleServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private VchannelscheduleMapper vchannelscheduleMapper;
@@ -83,12 +84,12 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 
 		JSONObject msgJson = generateVchannelScheduleJson(vchannelid);
 		String url = CommonConfig.CONFIG_VCSS_SERVER + "schedules";
-		log.info("Send schedules message to VCSS: " + msgJson.toString());
+		logger.info("Send schedules message to VCSS: {}", msgJson.toString());
 		Client c = Client.create();
 		WebResource r = c.resource(url);
 		String s = r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).post(String.class,
 				msgJson.toString());
-		log.info("Get schedules response from VCSS: " + s);
+		logger.info("Get schedules response from VCSS: {}", s);
 
 		msgevent.setStatus(Msgevent.Status_Sent);
 		msgevent.setSendtime(Calendar.getInstance().getTime());

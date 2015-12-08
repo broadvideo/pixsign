@@ -3,7 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,16 +15,11 @@ import com.broadvideo.pixsignage.service.LayoutscheduleService;
 import com.broadvideo.pixsignage.service.RegionscheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("deviceAction")
 public class DeviceAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3726318006551230634L;
-
-	private static final Logger log = Logger.getLogger(DeviceAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Device device;
 
@@ -156,10 +152,10 @@ public class DeviceAction extends BaseDatatableAction {
 			String deviceid = getParameter("deviceid");
 			layoutscheduleService.syncLayoutschedule("1", deviceid);
 			regionscheduleService.syncRegionschedule("1", deviceid);
-			log.error("Device schedule sync success");
+			logger.error("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			log.error("Device schedule sync error: " + ex.getMessage());
+			logger.error("Device schedule sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

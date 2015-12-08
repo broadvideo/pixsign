@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -32,16 +33,11 @@ import com.gif4j.GifEncoder;
 import com.gif4j.GifFrame;
 import com.gif4j.GifImage;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("videoAction")
 public class VideoAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5985696994115314080L;
-
-	private static final Logger log = Logger.getLogger(VideoAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Video video;
 
@@ -54,7 +50,6 @@ public class VideoAction extends BaseDatatableAction {
 	private VideoService videoService;
 
 	public void doUpload() throws Exception {
-		log.info("Begin video upload action process.");
 		HttpServletResponse response = getHttpServletResponse();
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter writer = response.getWriter();
@@ -67,6 +62,7 @@ public class VideoAction extends BaseDatatableAction {
 			for (int i = 0; i < mymedia.length; i++) {
 				JSONObject jsonItem = new JSONObject();
 				try {
+					logger.info("Upload one video, file={}", mymediaFileName[i]);
 					if (name[i] == null || name[i].equals("")) {
 						name[i] = mymediaFileName[i];
 					}
@@ -90,13 +86,13 @@ public class VideoAction extends BaseDatatableAction {
 
 					File fileToCreate;
 
-					log.info("Upload content: " + newFileName);
+					logger.info("copy video to {}", newFileName);
 					fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload", newFileName);
 					if (fileToCreate.exists()) {
 						fileToCreate.delete();
 					}
 					FileUtils.moveFile(mymedia[i], fileToCreate);
-					log.info("Finish content upload: " + newFileName);
+					logger.info("Finish content upload: " + newFileName);
 
 					video.setFilepath("/video/upload/" + newFileName);
 					video.setFilename(newFileName);
@@ -105,7 +101,7 @@ public class VideoAction extends BaseDatatableAction {
 						String cmd = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + fileToCreate
 								+ " -r 1 -ss 1 -t 15 -f image2 " + CommonConfig.CONFIG_TEMP_HOME + "/"
 								+ video.getVideoid() + "-%03d.jpg";
-						log.info("Begin to generate preview and thumbnail: " + cmd);
+						logger.info("Begin to generate preview and thumbnail: " + cmd);
 						Process process = Runtime.getRuntime().exec(cmd);
 						InputStream fis = process.getInputStream();
 						BufferedReader br = new BufferedReader(new InputStreamReader(fis));
@@ -137,7 +133,7 @@ public class VideoAction extends BaseDatatableAction {
 							GifEncoder.encode(gifImage, new File(
 									CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif/" + video.getVideoid() + ".gif"));
 						}
-						log.info("Finish preview generating.");
+						logger.info("Finish preview generating.");
 
 						// Generate thumbnail
 						if (jpgList.size() >= 6) {
@@ -156,7 +152,7 @@ public class VideoAction extends BaseDatatableAction {
 						for (int j = 0; j < jpgList.size(); j++) {
 							new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
 						}
-						log.info("Finish thumbnail generating.");
+						logger.info("Finish thumbnail generating.");
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -182,8 +178,6 @@ public class VideoAction extends BaseDatatableAction {
 
 		writer.write(result.toString());
 		writer.close();
-
-		log.info("Finish video upload action process.");
 	}
 
 	public String doList() {

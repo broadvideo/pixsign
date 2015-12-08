@@ -3,8 +3,9 @@ package com.broadvideo.pixsignage.quartz;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.domain.Msgevent;
@@ -14,7 +15,7 @@ import com.broadvideo.pixsignage.service.RegionscheduleService;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 
 public class ActivemqNormalTask {
-	private static final Logger log = Logger.getLogger(ActivemqNormalTask.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static boolean workflag = false;
 
@@ -48,7 +49,7 @@ public class ActivemqNormalTask {
 					null, Msgevent.Status_Wait, null, null);
 			handleMsgevent(msgeventList);
 		} catch (Exception e) {
-			log.error("ActivemqNormalTask Quartz Task error: " + e.getMessage());
+			logger.error("ActivemqNormalTask Quartz Task error: {}", e.getMessage());
 		}
 		workflag = false;
 	}
@@ -80,7 +81,7 @@ public class ActivemqNormalTask {
 			msgevent.setStatus(Msgevent.Status_Sent);
 			msgevent.setSendtime(Calendar.getInstance().getTime());
 			msgeventMapper.updateByPrimaryKeySelective(msgevent);
-			log.error("ActiveMQ publish ok, topic=" + topic + ", msg=" + msgJson.toString());
+			logger.error("ActiveMQ publish ok, topic={}, msg={}", topic, msgJson.toString());
 		}
 	}
 }

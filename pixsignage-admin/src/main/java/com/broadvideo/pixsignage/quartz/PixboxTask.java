@@ -18,9 +18,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
@@ -36,7 +37,7 @@ import com.gif4j.GifFrame;
 import com.gif4j.GifImage;
 
 public class PixboxTask {
-	private static final Logger log = Logger.getLogger(PixboxTask.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static boolean workflag = false;
 
@@ -64,7 +65,7 @@ public class PixboxTask {
 			syncVideos();
 
 		} catch (Exception e) {
-			log.error("PixboxTask Quartz Task error: " + e.getMessage());
+			logger.error("PixboxTask Quartz Task error: {}", e.getMessage());
 		}
 		workflag = false;
 	}
@@ -85,7 +86,7 @@ public class PixboxTask {
 		}
 
 		String url = CommonConfig.CONFIG_PIXBOX_SERVER + "vchannels";
-		log.info("Send vchannels message to Pixbox: " + msgJson.toString());
+		logger.info("Send vchannels message to Pixbox: {}", msgJson.toString());
 		// Client c = Client.create();
 		// WebResource r = c.resource(url);
 		// String s =
@@ -98,7 +99,7 @@ public class PixboxTask {
 			HttpResponse result = httpclient.execute(httpPost);
 			String s = EntityUtils.toString(result.getEntity(), "UTF-8");
 			httpclient.close();
-			log.info("Get vchannels response from Pixbox: " + s);
+			logger.info("Get vchannels response from Pixbox: {}", s);
 		} finally {
 			httpclient.close();
 		}
@@ -110,7 +111,7 @@ public class PixboxTask {
 
 	private void syncVideos() throws Exception {
 		String url = CommonConfig.CONFIG_PIXBOX_SERVER + "medias";
-		log.info("Send medias message to Pixbox");
+		logger.info("Send medias message to Pixbox");
 		// Client c = Client.create();
 		// WebResource r = c.resource(url);
 		// MultivaluedMap<String, String> params = new MultivaluedMapImpl();
@@ -123,7 +124,7 @@ public class PixboxTask {
 			HttpResponse result = httpclient.execute(httpGet);
 			String s = EntityUtils.toString(result.getEntity(), "UTF-8");
 			httpclient.close();
-			log.info("Get medias response from Pixbox: " + s);
+			// logger.info("Get medias response from Pixbox: {}", s);
 			JSONObject responseJson = new JSONObject(s);
 			JSONArray mediaJsonArray = responseJson.getJSONArray("medias");
 			if (mediaJsonArray != null) {
@@ -149,8 +150,8 @@ public class PixboxTask {
 						// if (video != null && !video.getStatus().equals("1"))
 						// {
 						try {
-							log.info("Begin handle external video: videoid=" + video.getVideoid() + ",uuid="
-									+ video.getUuid() + ",name=" + video.getName());
+							logger.info("Begin handle external video: videoid={}, uuid={}, name={}, filepath={}",
+									video.getVideoid(), video.getUuid(), video.getName(), oldFilePath);
 							// Generate new mp4
 							String newFileName = "" + video.getVideoid() + ".mp4";
 							String newFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/video/external/" + newFileName;
@@ -160,10 +161,10 @@ public class PixboxTask {
 							if (oldFilePath.endsWith(".m3u8")) {
 								String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + oldFilePath
 										+ " -c copy " + newFilePath;
-								log.info("Begin to convert m3u8 to mp4: " + command);
+								logger.info("Begin to convert m3u8 to mp4: {}", command);
 								int commandResult = CommonUtil.execCommand(command);
 								if (commandResult > 0) {
-									log.error("Convert command error, result=" + commandResult);
+									logger.error("Convert command error, result={}", commandResult);
 									continue;
 								}
 							} else {
@@ -174,7 +175,7 @@ public class PixboxTask {
 							String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + newFilePath
 									+ " -r 1 -ss 1 -t 15 -f image2 " + CommonConfig.CONFIG_TEMP_HOME + "/"
 									+ video.getVideoid() + "-%03d.jpg";
-							log.info("Begin to generate preview and thumbnail: " + command);
+							logger.info("Begin to generate preview and thumbnail: {}", command);
 							CommonUtil.execCommand(command);
 
 							List<String> jpgList = new ArrayList<String>();
@@ -198,7 +199,7 @@ public class PixboxTask {
 								GifEncoder.encode(gifImage, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif/"
 										+ video.getVideoid() + ".gif"));
 							}
-							log.info("Finish preview generating.");
+							logger.info("Finish preview generating.");
 
 							// Generate thumbnail
 							if (jpgList.size() >= 6) {
@@ -217,7 +218,7 @@ public class PixboxTask {
 							for (int j = 0; j < jpgList.size(); j++) {
 								new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
 							}
-							log.info("Finish thumbnail generating.");
+							logger.info("Finish thumbnail generating.");
 
 							video.setFilepath("/video/external/" + newFileName);
 							video.setFilename(newFileName);
@@ -228,11 +229,10 @@ public class PixboxTask {
 							video.setStatus("1");
 							video.setProgress(100);
 							videoMapper.updateByPrimaryKeySelective(video);
-							log.info("Finish external video: videoid=" + video.getVideoid() + ",uuid=" + video.getUuid()
-									+ ",name=" + video.getName());
+							logger.info("Finish external video: videoid={}, uuid={}, name={}", video.getVideoid(),
+									video.getUuid(), video.getName());
 						} catch (Exception ex) {
-							log.error("Handle external video error: " + ex);
-							ex.printStackTrace();
+							logger.error("Handle external video error ", ex);
 						}
 					}
 				}

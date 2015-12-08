@@ -4,23 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.service.StatService;
 
+@SuppressWarnings("serial")
 @Scope("request")
 @Controller("statAction")
 public class StatAction extends BaseDatatableAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6787078292757444608L;
-
-	private static final Logger log = Logger.getLogger(StatAction.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String stattype;
 
