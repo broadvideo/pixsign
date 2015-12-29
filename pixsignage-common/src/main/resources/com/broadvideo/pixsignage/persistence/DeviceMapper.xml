@@ -38,12 +38,15 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from device 
-    where status = 1
+    where 1 = 1
     <if test="orgid != null">
       and orgid = '${orgid}'
     </if>
     <if test="branchid != null">
       and branchid = '${branchid}'
+    </if>
+    <if test="status != null">
+      and status = '${status}'
     </if>
     <if test="devicegroupid != null">
       and devicegroupid = '${devicegroupid}'
@@ -55,12 +58,15 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from device
-    where status = 1
+    where 1 = 1
     <if test="orgid != null">
       and orgid = '${orgid}'
     </if>
     <if test="branchid != null">
       and branchid = '${branchid}'
+    </if>
+    <if test="status != null">
+      and status = '${status}'
     </if>
     <if test="devicegroupid != null">
       and devicegroupid = '${devicegroupid}'

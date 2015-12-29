@@ -34,6 +34,7 @@ public class CommonUtil {
 		try {
 			date = format.parse(s);
 		} catch (Exception e) {
+			logger.error("parseDate " + s + " exception: ", e);
 		}
 		return date;
 	}

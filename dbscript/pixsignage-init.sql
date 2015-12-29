@@ -618,11 +618,11 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20903,2,209,'menu.branch','branch.jsp','',1,3,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20909,2,209,'menu.config','config.jsp','',1,9,'1');
 
-insert into region(regionid,name,code,type) values(1,'主区域','main','0');
-insert into region(regionid,name,code,type) values(2,'文本区域','text','1');
-insert into region(regionid,name,code,type) values(3,'附加区域1','extra-1','0');
-insert into region(regionid,name,code,type) values(4,'附加区域2','extra-2','0');
-insert into region(regionid,name,code,type) values(5,'附加区域3','extra-3','0');
+insert into region(regionid,name,code,type) values(1,'region.main','main','0');
+insert into region(regionid,name,code,type) values(2,'region.text','text','1');
+insert into region(regionid,name,code,type) values(3,'region.extra_1','extra-1','0');
+insert into region(regionid,name,code,type) values(4,'region.extra_2','extra-2','0');
+insert into region(regionid,name,code,type) values(5,'region.extra_3','extra-3','0');
 
 insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;

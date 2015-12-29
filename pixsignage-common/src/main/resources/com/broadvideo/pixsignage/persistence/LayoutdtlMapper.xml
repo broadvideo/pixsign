@@ -12,18 +12,21 @@
     <result column="zindex" property="zindex" jdbcType="INTEGER" />
     <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
     <result column="opacity" property="opacity" jdbcType="INTEGER" />
+    <result column="bgimageid" property="bgimageid" jdbcType="INTEGER" />
     <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
     <result column="direction" property="direction" jdbcType="CHAR" />
     <result column="speed" property="speed" jdbcType="CHAR" />
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="INTEGER" />
+    <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="region" column="{regionid=regionid}" select="com.broadvideo.pixsignage.persistence.RegionMapper.selectByPrimaryKey" />
+    <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, intervaltime, 
-    direction, speed, color, size, createtime
+    layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, intervaltime, 
+    direction, speed, color, size, dateformat, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -51,15 +54,15 @@
     insert into layoutdtl (layoutid, regionid, height, 
       width, topoffset, leftoffset, 
       zindex, bgcolor, opacity, 
-      intervaltime, direction, 
+      bgimageid, intervaltime, direction, 
       speed, color, size, 
-      createtime)
+      dateformat, createtime)
     values (#{layoutid,jdbcType=INTEGER}, #{regionid,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{opacity,jdbcType=INTEGER}, 
-      #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
+      #{bgimageid,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
       #{speed,jdbcType=CHAR}, #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP})
+      #{dateformat,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layoutdtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="layoutdtlid" order="AFTER" >
@@ -94,6 +97,9 @@
       <if test="opacity != null" >
         opacity,
       </if>
+      <if test="bgimageid != null" >
+        bgimageid,
+      </if>
       <if test="intervaltime != null" >
         intervaltime,
       </if>
@@ -108,6 +114,9 @@
       </if>
       <if test="size != null" >
         size,
+      </if>
+      <if test="dateformat != null" >
+        dateformat,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -141,6 +150,9 @@
       <if test="opacity != null" >
         #{opacity,jdbcType=INTEGER},
       </if>
+      <if test="bgimageid != null" >
+        #{bgimageid,jdbcType=INTEGER},
+      </if>
       <if test="intervaltime != null" >
         #{intervaltime,jdbcType=INTEGER},
       </if>
@@ -155,6 +167,9 @@
       </if>
       <if test="size != null" >
         #{size,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        #{dateformat,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -191,6 +206,9 @@
       <if test="opacity != null" >
         opacity = #{opacity,jdbcType=INTEGER},
       </if>
+      <if test="bgimageid != null" >
+        bgimageid = #{bgimageid,jdbcType=INTEGER},
+      </if>
       <if test="intervaltime != null" >
         intervaltime = #{intervaltime,jdbcType=INTEGER},
       </if>
@@ -205,6 +223,9 @@
       </if>
       <if test="size != null" >
         size = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -223,11 +244,13 @@
       zindex = #{zindex,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
       opacity = #{opacity,jdbcType=INTEGER},
+      bgimageid = #{bgimageid,jdbcType=INTEGER},
       intervaltime = #{intervaltime,jdbcType=INTEGER},
       direction = #{direction,jdbcType=CHAR},
       speed = #{speed,jdbcType=CHAR},
       color = #{color,jdbcType=VARCHAR},
       size = #{size,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where layoutdtlid = #{layoutdtlid,jdbcType=INTEGER}
   </update>

@@ -41,7 +41,7 @@
 <body class="login">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/logo-big.png" alt="" />
+		<img src="${base_ctx}/img/logo-big.png" height="120" alt="" />
 	</div>
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->

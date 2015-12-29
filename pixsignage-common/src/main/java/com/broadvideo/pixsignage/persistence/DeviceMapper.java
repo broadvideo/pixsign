@@ -10,11 +10,13 @@ public interface DeviceMapper {
 	Device selectByPrimaryKey(@Param(value = "deviceid") String deviceid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "search") String search);
+			@Param(value = "status") String status, @Param(value = "devicegroupid") String devicegroupid,
+			@Param(value = "search") String search);
 
 	List<Device> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "status") String status, @Param(value = "devicegroupid") String devicegroupid,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	int selectUnregisterCount(@Param(value = "orgid") String orgid, @Param(value = "search") String search);
 

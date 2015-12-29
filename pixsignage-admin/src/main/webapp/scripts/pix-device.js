@@ -69,6 +69,7 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'status','value':'1' });
 		}
 	});
 

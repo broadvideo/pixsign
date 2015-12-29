@@ -131,7 +131,7 @@ response.setDateHeader("Expires",0);
 												</label>  
 											</div>
 										</div>
-										<div class="form-group textflag">
+										<div class="form-group textflag dateflag">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 											<div class="col-md-9">
 												<div class="input-group colorpicker-component colorPick">
@@ -140,7 +140,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group textflag">
+										<div class="form-group textflag dateflag">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -148,7 +148,23 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
+										<div class="form-group dateflag">
+											<label class="control-label col-md-3"><spring:message code="global.layout.region.dateformat"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<select class="form-control" name="dateformat" tabindex="-1">
+													<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
+													<option value="yyyy-MM-dd">yyyy-MM-dd</option>
+													<option value="HH:mm">HH:mm</option>
+												</select>
+											</div>
+										</div>
 										<hr/>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 											<div class="col-md-9">
@@ -260,6 +276,12 @@ response.setDateHeader("Expires",0);
 													<option value="3"><spring:message code="global.layout.ratio_3"/></option>
 													<option value="4"><spring:message code="global.layout.ratio_4"/></option>
 												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="LayoutBgImageSelect" class="form-control select2" name="layout.bgimageid">
 											</div>
 										</div>
 										<div class="form-group">
@@ -380,16 +402,12 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=4"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initMyTable();
-	initMyEditModal();
-	initLayoutModal();
-	initLayoutdtlEditModal();
 });
 
 </script>

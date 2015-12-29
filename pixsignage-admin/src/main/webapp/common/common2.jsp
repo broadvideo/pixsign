@@ -111,7 +111,7 @@ function hasPrivilege(privilegeid) {
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
 				<a href="main.jsp">
-				<img src="${base_ctx}/img/logo.png" alt="logo" class="logo-default"/>
+				<img src="${base_ctx}/img/logo-big.png?t=0" height="20" alt="logo" class="logo-default"/>
 				</a>
 				<div class="menu-toggler sidebar-toggler hide">
 				</div>

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Layout;
@@ -162,6 +163,21 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 				layoutJson.put("width", layout.getWidth());
 				layoutJson.put("height", layout.getHeight());
 				layoutJson.put("bg_color", "#000000");
+				JSONObject layoutBgImageJson = new JSONObject();
+				layoutJson.put("bg_image", layoutBgImageJson);
+				if (layout.getBgimage() != null) {
+					layoutBgImageJson.put("id", layout.getBgimageid());
+					layoutBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
+							+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layout.getBgimage().getFilepath());
+					layoutBgImageJson.put("file", layout.getBgimage().getFilename());
+					layoutBgImageJson.put("size", layout.getBgimage().getSize());
+				} else {
+					layoutBgImageJson.put("id", 0);
+					layoutBgImageJson.put("url", "");
+					layoutBgImageJson.put("file", "");
+					layoutBgImageJson.put("size", 0);
+				}
+
 				JSONArray regionJsonArray = new JSONArray();
 				layoutJson.put("regions", regionJsonArray);
 				for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
@@ -180,10 +196,42 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 					regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
 					regionJson.put("type", layoutdtl.getRegion().getType());
 					regionJson.put("interval", layoutdtl.getIntervaltime());
-					regionJson.put("direction", "" + layoutdtl.getDirection());
+					if (layoutdtl.getDirection().equals("1")) {
+						regionJson.put("direction", "none");
+					} else if (layoutdtl.getDirection().equals("2")) {
+						regionJson.put("direction", "up");
+					} else if (layoutdtl.getDirection().equals("3")) {
+						regionJson.put("direction", "down");
+					} else if (layoutdtl.getDirection().equals("4")) {
+						regionJson.put("direction", "left");
+					} else if (layoutdtl.getDirection().equals("5")) {
+						regionJson.put("direction", "right");
+					}
 					regionJson.put("speed", "" + layoutdtl.getSpeed());
 					regionJson.put("color", "" + layoutdtl.getColor());
 					regionJson.put("size", layoutdtl.getSize());
+					if (layoutdtl.getDateformat() == null) {
+						regionJson.put("date_format", "yyyy-MM-dd");
+					} else {
+						regionJson.put("date_format", layoutdtl.getDateformat());
+					}
+					regionJson.put("volume", 50);
+
+					JSONObject regionBgImageJson = new JSONObject();
+					regionJson.put("bg_image", regionBgImageJson);
+					if (layoutdtl.getBgimage() != null) {
+						regionBgImageJson.put("id", layoutdtl.getBgimageid());
+						regionBgImageJson.put("url",
+								"http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+										+ "/pixsigdata" + layoutdtl.getBgimage().getFilepath());
+						regionBgImageJson.put("file", layoutdtl.getBgimage().getFilename());
+						regionBgImageJson.put("size", layoutdtl.getBgimage().getSize());
+					} else {
+						regionBgImageJson.put("id", 0);
+						regionBgImageJson.put("url", "");
+						regionBgImageJson.put("file", "");
+						regionBgImageJson.put("size", 0);
+					}
 				}
 			}
 		}

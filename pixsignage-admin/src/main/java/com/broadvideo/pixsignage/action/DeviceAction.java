@@ -38,19 +38,21 @@ public class DeviceAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
+			String status = getParameter("status");
 			String devicegroupid = getParameter("devicegroupid");
 
 			if (branchid == null) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			int count = deviceService.selectCount("" + getLoginStaff().getOrgid(), branchid, devicegroupid, search);
+			int count = deviceService.selectCount("" + getLoginStaff().getOrgid(), branchid, status, devicegroupid,
+					search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectList("" + getLoginStaff().getOrgid(), branchid, devicegroupid,
-					search, start, length);
+			List<Device> deviceList = deviceService.selectList("" + getLoginStaff().getOrgid(), branchid, status,
+					devicegroupid, search, start, length);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}

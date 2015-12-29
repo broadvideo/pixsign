@@ -11,14 +11,16 @@
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="bgimageid" property="bgimageid" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
     <collection property="layoutdtls" ofType="com.broadvideo.pixsignage.domain.Layoutdtl" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutdtlMapper.selectList" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutid, orgid, name, type, status, ratio, height, width, bgcolor, description, 
+    layoutid, orgid, name, type, status, ratio, height, width, bgcolor, bgimageid, description, 
     createtime, createstaffid
   </sql>
   
@@ -51,11 +53,11 @@
     </selectKey>
     insert into layout (orgid, name, type, 
       status, ratio, height, width, 
-      bgcolor, description, createtime, 
+      bgcolor, bgimageid, description, createtime, 
       createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{status,jdbcType=CHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
-      #{bgcolor,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{bgcolor,jdbcType=VARCHAR}, #{bgimageid,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layout" >
@@ -87,6 +89,9 @@
       </if>
       <if test="bgcolor != null" >
         bgcolor,
+      </if>
+      <if test="bgimageid != null" >
+        bgimageid,
       </if>
       <if test="description != null" >
         description,
@@ -122,6 +127,9 @@
       </if>
       <if test="bgcolor != null" >
         #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgimageid != null" >
+        #{bgimageid,jdbcType=INTEGER},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -161,6 +169,9 @@
       <if test="bgcolor != null" >
         bgcolor = #{bgcolor,jdbcType=VARCHAR},
       </if>
+      <if test="bgimageid != null" >
+        bgimageid = #{bgimageid,jdbcType=INTEGER},
+      </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -183,6 +194,7 @@
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgimageid = #{bgimageid,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}

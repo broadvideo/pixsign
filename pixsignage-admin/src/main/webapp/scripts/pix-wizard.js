@@ -130,7 +130,7 @@ function initTab1() {
 				var layoutTableHtml = '';
 				layoutTableHtml += '<tr>';
 				for (var i=0; i<Layouts.length; i++) {
-					layoutTableHtml += '<td><canvas id="LayoutCanvas' + Layouts[i].layoutid + '"></canvas></td>';
+					layoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><canvas id="LayoutCanvas' + Layouts[i].layoutid + '"></canvas></td>';
 				}
 				layoutTableHtml += '</tr>';
 				layoutTableHtml += '<tr>';
@@ -160,6 +160,37 @@ function initTab1() {
 	});
 	
 	function initLayoutCanvas(layout) {
+		var RegionColors = [];
+		RegionColors[0] = '#BCC2F2';
+		RegionColors[1] = '#99CCFF';
+		RegionColors[2] = '#CCCC99';
+		RegionColors[3] = '#CCCC99';
+		RegionColors[4] = '#FFCCCC';
+		RegionColors[5] = '#FF99CC';
+		RegionColors[6] = '#CC99CC';
+		RegionColors[7] = '#FFFF99';
+		RegionColors[8] = '#CC9966';
+		RegionColors[9] = '#CC9966';
+		function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
+			if (layoutdtl.bgimage != null) {
+				var region_bgimage = new Image();
+				region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.filepath;
+				region_bgimage.onload = function(img, ctx, left, top, width, height) {
+					return function() {
+						ctx.drawImage(img, left, top, width, height);
+					}
+				}(region_bgimage, ctx, left, top, width, height);
+			} else {
+				if (fill) {
+					ctx.fillStyle = RegionColors[layoutdtl.regionid];
+					ctx.fillRect(left,top,width,height);
+				}
+			}
+			ctx.strokeStyle = '#000000';
+			ctx.lineWidth = 2;
+			ctx.strokeRect(left,top,width,height);
+		};
+
 		var canvas = document.getElementById('LayoutCanvas' + layout.layoutid);
 		var ctx = canvas.getContext('2d');
 		var scale;
@@ -168,17 +199,35 @@ function initTab1() {
 		} else {
 			scale = 800/200;
 		}
-		canvas.width = Math.max(layout.width/scale, 250);
-		canvas.height = Math.max(layout.height/scale, 120);
-		for (var i=0; i<layout.layoutdtls.length; i++) {
-			var width = layout.layoutdtls[i].width/scale;
-			var height = layout.layoutdtls[i].height/scale;
-			var top = layout.layoutdtls[i].topoffset/scale;
-			var left = layout.layoutdtls[i].leftoffset/scale;
-			ctx.fillStyle='#bcc2f2';
-			ctx.fillRect(left,top,width,height);
-			ctx.strokeStyle = '#000000';
-			ctx.strokeRect(left,top,width,height);
+		canvas.width = layout.width/scale;
+		canvas.height = layout.height/scale;
+
+		if (layout.bgimage != null) {
+			var layout_bgimage = new Image();
+			layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
+			layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
+				return function() {
+					//ctx.globalAlpha = 0.2;
+					ctx.drawImage(img, 0, 0, canvaswidth, canvasheight);
+					for (var j=0; j<layout.layoutdtls.length; j++) {
+						var layoutdtl = layout.layoutdtls[j];
+						var width = layoutdtl.width/scale;
+						var height = layoutdtl.height/scale;
+						var top = layoutdtl.topoffset/scale;
+						var left = layoutdtl.leftoffset/scale;
+						drawCanvasRegion(ctx, layoutdtl, left, top, width, height, false);
+					}
+				}
+			}(layout_bgimage, layout, ctx, canvas.width, canvas.height);
+		} else {
+			for (var j=0; j<layout.layoutdtls.length; j++) {
+				var layoutdtl = layout.layoutdtls[j];
+				var width = layoutdtl.width/scale;
+				var height = layoutdtl.height/scale;
+				var top = layoutdtl.topoffset/scale;
+				var left = layoutdtl.leftoffset/scale;
+				drawCanvasRegion(ctx, layoutdtl, left, top, width, height, true);
+			}
 		}
 	}
 }

@@ -15,13 +15,13 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 
-	public int selectCount(String orgid, String branchid, String devicegroupid, String search) {
-		return deviceMapper.selectCount(orgid, branchid, devicegroupid, search);
+	public int selectCount(String orgid, String branchid, String status, String devicegroupid, String search) {
+		return deviceMapper.selectCount(orgid, branchid, status, devicegroupid, search);
 	}
 
-	public List<Device> selectList(String orgid, String branchid, String devicegroupid, String search, String start,
-			String length) {
-		return deviceMapper.selectList(orgid, branchid, devicegroupid, search, start, length);
+	public List<Device> selectList(String orgid, String branchid, String status, String devicegroupid, String search,
+			String start, String length) {
+		return deviceMapper.selectList(orgid, branchid, status, devicegroupid, search, start, length);
 	}
 
 	public int selectUnregisterCount(String orgid, String search) {

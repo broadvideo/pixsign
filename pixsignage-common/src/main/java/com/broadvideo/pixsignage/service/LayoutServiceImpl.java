@@ -97,7 +97,11 @@ public class LayoutServiceImpl implements LayoutService {
 		layoutdtl.setTopoffset(0);
 		layoutdtl.setLeftoffset(0);
 		layoutdtl.setBgcolor("#000000");
-		layoutdtl.setOpacity(255);
+		if (layoutdtl.getBgimageid() != null && layoutdtl.getBgimageid() > 0) {
+			layoutdtl.setOpacity(0);
+		} else {
+			layoutdtl.setOpacity(255);
+		}
 		layoutdtl.setZindex(0);
 		layoutdtl.setIntervaltime(10);
 		layoutdtl.setDirection("4");

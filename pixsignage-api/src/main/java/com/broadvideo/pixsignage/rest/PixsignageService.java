@@ -112,13 +112,17 @@ public class PixsignageService {
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();
-				backupvideoJson.put("type", "video");
+				// backupvideoJson.put("type", "video");
 				backupvideoJson.put("id", org.getBackupvideoid());
 				backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilepath());
+				backupvideoJson.put("file", org.getBackupvideo().getFilename());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
 			}
+
+			responseJson.put("power_flag", 0);
+
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {

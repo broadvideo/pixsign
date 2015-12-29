@@ -38,6 +38,11 @@
 							<resourceBase>../pixsignage-res/</resourceBase>
 							<handler implementation="org.eclipse.jetty.server.handler.ResourceHandler" />
 						</contextHandler>
+						<contextHandler implementation="org.eclipse.jetty.server.handler.ContextHandler">
+							<contextPath>/pixsigdata</contextPath>
+							<resourceBase>/pixdata/pixsignage/</resourceBase>
+							<handler implementation="org.eclipse.jetty.server.handler.ResourceHandler" />
+						</contextHandler>
 					</contextHandlers>
 				</configuration>
 			</plugin>

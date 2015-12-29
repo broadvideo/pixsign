@@ -132,7 +132,7 @@ html[dir="rtl"] .select2-container .select2-choice > .select2-chosen {
     height: auto;
     width: auto;
     opacity: 0;
-    z-index: 9998;
+    z-index: 25000;
     /* styles required for IE to work */
     background-color: #fff;
     filter: alpha(opacity=0);
@@ -142,7 +142,7 @@ html[dir="rtl"] .select2-container .select2-choice > .select2-chosen {
     width: 100%;
     margin-top: -1px;
     position: absolute;
-    z-index: 9999;
+    z-index: 25000;
     top: 100%;
 
     background: #fff;
@@ -237,7 +237,7 @@ html[dir="rtl"] .select2-container .select2-choice .select2-arrow b {
     padding-right: 4px;
 
     position: relative;
-    z-index: 10000;
+    z-index: 25000;
 
     white-space: nowrap;
 }

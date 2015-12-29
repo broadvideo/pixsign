@@ -27,6 +27,8 @@ public class Layoutdtl {
 
 	private Integer opacity;
 
+	private Integer bgimageid;
+
 	private Integer intervaltime;
 
 	private String direction;
@@ -37,9 +39,13 @@ public class Layoutdtl {
 
 	private Integer size;
 
+	private String dateformat;
+
 	private Date createtime;
 
 	private Region region;
+
+	private Image bgimage;
 
 	private List<HashMap<String, String>> regiondtls;
 
@@ -123,6 +129,14 @@ public class Layoutdtl {
 		this.opacity = opacity;
 	}
 
+	public Integer getBgimageid() {
+		return bgimageid;
+	}
+
+	public void setBgimageid(Integer bgimageid) {
+		this.bgimageid = bgimageid;
+	}
+
 	public Integer getIntervaltime() {
 		return intervaltime;
 	}
@@ -163,6 +177,14 @@ public class Layoutdtl {
 		this.size = size;
 	}
 
+	public String getDateformat() {
+		return dateformat;
+	}
+
+	public void setDateformat(String dateformat) {
+		this.dateformat = dateformat;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -179,6 +201,14 @@ public class Layoutdtl {
 
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	public Image getBgimage() {
+		return bgimage;
+	}
+
+	public void setBgimage(Image bgimage) {
+		this.bgimage = bgimage;
 	}
 
 	public List<HashMap<String, String>> getRegiondtls() {

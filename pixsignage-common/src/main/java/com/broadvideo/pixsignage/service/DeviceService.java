@@ -5,10 +5,10 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Device;
 
 public interface DeviceService {
-	public int selectCount(String orgid, String branchid, String devicegroupid, String search);
+	public int selectCount(String orgid, String branchid, String status, String devicegroupid, String search);
 
-	public List<Device> selectList(String orgid, String branchid, String devicegroupid, String search, String start,
-			String length);
+	public List<Device> selectList(String orgid, String branchid, String status, String devicegroupid, String search,
+			String start, String length);
 
 	public int selectUnregisterCount(String orgid, String search);
 

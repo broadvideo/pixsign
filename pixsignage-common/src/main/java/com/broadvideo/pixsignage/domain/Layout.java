@@ -24,11 +24,15 @@ public class Layout {
 
 	private String bgcolor;
 
+	private Integer bgimageid;
+
 	private String description;
 
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private Image bgimage;
 
 	private List<Layoutdtl> layoutdtls;
 
@@ -104,6 +108,14 @@ public class Layout {
 		this.bgcolor = bgcolor == null ? null : bgcolor.trim();
 	}
 
+	public Integer getBgimageid() {
+		return bgimageid;
+	}
+
+	public void setBgimageid(Integer bgimageid) {
+		this.bgimageid = bgimageid;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -128,6 +140,14 @@ public class Layout {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Image getBgimage() {
+		return bgimage;
+	}
+
+	public void setBgimage(Image bgimage) {
+		this.bgimage = bgimage;
 	}
 
 	public List<Layoutdtl> getLayoutdtls() {
