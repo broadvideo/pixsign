@@ -1,43 +1,55 @@
 package com.broadvideo.pixsignage.domain;
 
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
 public class Region {
-    private Integer regionid;
+	private Integer regionid;
 
-    private String name;
+	private String name;
 
-    private String code;
+	private String code;
 
-    private String type;
+	private String type;
 
-    public Integer getRegionid() {
-        return regionid;
-    }
+	private boolean translated = false;
 
-    public void setRegionid(Integer regionid) {
-        this.regionid = regionid;
-    }
+	public Integer getRegionid() {
+		return regionid;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setRegionid(Integer regionid) {
+		this.regionid = regionid;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setCode(String code) {
+		this.code = code == null ? null : code.trim();
+	}
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
+	}
+
+	public void translate(ResourceBundleMessageSource messageSource) {
+		if (!translated) {
+			name = messageSource.getMessage(name, null, LocaleContextHolder.getLocale());
+			translated = true;
+		}
+	}
 }

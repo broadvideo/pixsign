@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +53,17 @@ public class LayoutServiceImpl implements LayoutService {
 	}
 
 	public List<Layout> selectList(String orgid, String type) {
-		return layoutMapper.selectList(orgid, type);
+		List<Layout> layoutList = layoutMapper.selectList(orgid, type);
+		for (Layout layout : layoutList) {
+			for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
+				Region region = layoutdtl.getRegion();
+				if (region != null) {
+					System.out.println(region.getName());
+					region.translate(messageSource);
+				}
+			}
+		}
+		return layoutList;
 	}
 
 	public List<Layoutdtl> selectLayoutdtlList(String layoutid) {
@@ -62,7 +71,7 @@ public class LayoutServiceImpl implements LayoutService {
 		for (Layoutdtl layoutdtl : layoutdtlList) {
 			Region region = layoutdtl.getRegion();
 			if (region != null) {
-				region.setName(messageSource.getMessage(region.getName(), null, LocaleContextHolder.getLocale()));
+				region.translate(messageSource);
 			}
 		}
 		return layoutdtlList;

@@ -3,7 +3,6 @@ package com.broadvideo.pixsignage.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class RegionServiceImpl implements RegionService {
 	public List<Region> selectList() {
 		List<Region> regionList = regionMapper.selectList();
 		for (Region region : regionList) {
-			region.setName(messageSource.getMessage(region.getName(), null, LocaleContextHolder.getLocale()));
+			region.translate(messageSource);
 		}
 		return regionList;
 	}
@@ -29,7 +28,7 @@ public class RegionServiceImpl implements RegionService {
 	public List<Region> selectActiveList() {
 		List<Region> regionList = regionMapper.selectActiveList();
 		for (Region region : regionList) {
-			region.setName(messageSource.getMessage(region.getName(), null, LocaleContextHolder.getLocale()));
+			region.translate(messageSource);
 		}
 		return regionList;
 	}
