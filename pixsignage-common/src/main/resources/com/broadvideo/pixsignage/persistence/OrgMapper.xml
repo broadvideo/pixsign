@@ -24,6 +24,9 @@
     <result column="copyright" property="copyright" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="backupvideoid" property="backupvideoid" jdbcType="INTEGER" />
+    <result column="powerflag" property="powerflag" jdbcType="CHAR" />
+    <result column="poweron" property="poweron" jdbcType="TIME" />
+    <result column="poweroff" property="poweroff" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
@@ -32,8 +35,8 @@
   <sql id="Base_Column_List" >
     orgid, vspid, name, code, status, orgtype, videoflag, imageflag, textflag, streamflag, 
     dvbflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
-    currentstorage, currentdeviceidx, copyright, description, backupvideoid, createtime, 
-    createstaffid
+    currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
+    powerflag, poweron, poweroff, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -92,6 +95,7 @@
       expiretime, maxdevices, maxstorage, 
       currentdevices, currentstorage, currentdeviceidx, 
       copyright, description, backupvideoid, 
+      powerflag, poweron, poweroff, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
@@ -100,6 +104,7 @@
       #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{currentdeviceidx,jdbcType=INTEGER}, 
       #{copyright,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{backupvideoid,jdbcType=INTEGER}, 
+      #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
@@ -171,6 +176,15 @@
       <if test="backupvideoid != null" >
         backupvideoid,
       </if>
+      <if test="powerflag != null" >
+        powerflag,
+      </if>
+      <if test="poweron != null" >
+        poweron,
+      </if>
+      <if test="poweroff != null" >
+        poweroff,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -241,6 +255,15 @@
       </if>
       <if test="backupvideoid != null" >
         #{backupvideoid,jdbcType=INTEGER},
+      </if>
+      <if test="powerflag != null" >
+        #{powerflag,jdbcType=CHAR},
+      </if>
+      <if test="poweron != null" >
+        #{poweron,jdbcType=TIME},
+      </if>
+      <if test="poweroff != null" >
+        #{poweroff,jdbcType=TIME},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -316,6 +339,15 @@
       <if test="backupvideoid != null" >
         backupvideoid = #{backupvideoid,jdbcType=INTEGER},
       </if>
+      <if test="powerflag != null" >
+        powerflag = #{powerflag,jdbcType=CHAR},
+      </if>
+      <if test="poweron != null" >
+        poweron = #{poweron,jdbcType=TIME},
+      </if>
+      <if test="poweroff != null" >
+        poweroff = #{poweroff,jdbcType=TIME},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -348,6 +380,9 @@
       copyright = #{copyright,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       backupvideoid = #{backupvideoid,jdbcType=INTEGER},
+      powerflag = #{powerflag,jdbcType=CHAR},
+      poweron = #{poweron,jdbcType=TIME},
+      poweroff = #{poweroff,jdbcType=TIME},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where orgid = #{orgid,jdbcType=INTEGER}

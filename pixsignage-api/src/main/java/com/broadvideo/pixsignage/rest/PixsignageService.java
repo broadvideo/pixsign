@@ -2,6 +2,7 @@ package com.broadvideo.pixsignage.rest;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
@@ -121,7 +123,13 @@ public class PixsignageService {
 				responseJson.put("backup_media", backupvideoJson);
 			}
 
-			responseJson.put("power_flag", 0);
+			responseJson.put("power_flag", org.getPowerflag());
+			if (org.getPowerflag().equals("1")) {
+				responseJson.put("power_on_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+				responseJson.put("power_off_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+			}
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();

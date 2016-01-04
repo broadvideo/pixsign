@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.action;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -12,11 +13,11 @@ public class DateTypeConverter extends StrutsTypeConverter {
 	public Object convertFromString(Map context, String[] values, Class toClass) {
 		try {
 			if (values[0].length() == 19) {
-				return CommonConstants.DateFormat_Full.parse(values[0]);
+				return new SimpleDateFormat(CommonConstants.DateFormat_Full).parse(values[0]);
 			} else if (values[0].length() == 10) {
-				return CommonConstants.DateFormat_Date.parse(values[0]);
+				return new SimpleDateFormat(CommonConstants.DateFormat_Date).parse(values[0]);
 			} else if (values[0].length() == 8) {
-				return CommonConstants.DateFormat_Time.parse(values[0]);
+				return new SimpleDateFormat(CommonConstants.DateFormat_Time).parse(values[0]);
 			} else {
 				return null;
 			}
@@ -27,7 +28,7 @@ public class DateTypeConverter extends StrutsTypeConverter {
 
 	@Override
 	public String convertToString(Map context, Object o) {
-		return CommonConstants.DateFormat_Full.format((Date) o);
+		return new SimpleDateFormat(CommonConstants.DateFormat_Full).format((Date) o);
 	}
 
 }

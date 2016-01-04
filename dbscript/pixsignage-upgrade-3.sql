@@ -13,6 +13,10 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table org add powerflag char(1) default '0';
+alter table org add poweron time;
+alter table org add poweroff time;
+
 alter table layout add bgimageid int default 0;
 alter table layoutdtl add bgimageid int default 0;
 alter table layoutdtl add dateformat varchar(32);

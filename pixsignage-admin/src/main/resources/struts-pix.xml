@@ -496,6 +496,18 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!config" method="doConfig" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="device!reboot" method="doReboot" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="devicegroup!list" method="doList" class="devicegroupAction">
 			<result name="success" type="json">

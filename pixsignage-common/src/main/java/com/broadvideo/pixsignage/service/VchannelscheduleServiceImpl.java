@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,11 +47,12 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 	public void addVchannelschedule(Vchannelschedule vchannelschedule) {
 		if (vchannelschedule.getPlaydate() == null) {
 			vchannelscheduleMapper.deleteByDtl("" + vchannelschedule.getVchannelid(), vchannelschedule.getPlaymode(),
-					null, CommonConstants.DateFormat_Time.format(vchannelschedule.getStarttime()));
+					null,
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(vchannelschedule.getStarttime()));
 		} else {
 			vchannelscheduleMapper.deleteByDtl("" + vchannelschedule.getVchannelid(), vchannelschedule.getPlaymode(),
-					CommonConstants.DateFormat_Date.format(vchannelschedule.getPlaydate()),
-					CommonConstants.DateFormat_Time.format(vchannelschedule.getStarttime()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(vchannelschedule.getPlaydate()),
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(vchannelschedule.getStarttime()));
 		}
 		vchannelscheduleMapper.insertSelective(vchannelschedule);
 	}
@@ -103,14 +105,14 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 		JSONArray scheduleJsonArray = new JSONArray();
 		msgJson.put("schedules", scheduleJsonArray);
 
-		String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-		String tomorrow = CommonConstants.DateFormat_Date
+		String today = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(Calendar.getInstance().getTime());
+		String tomorrow = new SimpleDateFormat(CommonConstants.DateFormat_Date)
 				.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
 		List<Vchannelschedule> scheduleList = vchannelscheduleMapper.selectList("" + vchannel.getVchannelid());
 
 		// Add the first schedule from 00:00
-		if (scheduleList.size() > 0
-				&& !CommonConstants.DateFormat_Time.format(scheduleList.get(0).getStarttime()).equals("00:00:00")) {
+		if (scheduleList.size() > 0 && !new SimpleDateFormat(CommonConstants.DateFormat_Time)
+				.format(scheduleList.get(0).getStarttime()).equals("00:00:00")) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJsonArray.put(scheduleJson);
 			String s = today + " 00:00:00";
@@ -131,7 +133,8 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 		for (Vchannelschedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJsonArray.put(scheduleJson);
-			String s = today + " " + CommonConstants.DateFormat_Time.format(schedule.getStarttime());
+			String s = today + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime());
 			Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
 			scheduleJson.put("start_time", s);
 			scheduleJson.put("start_time_seconds", (long) (starttime.getTime() / 1000));
@@ -149,7 +152,8 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 		for (Vchannelschedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJsonArray.put(scheduleJson);
-			String s = tomorrow + " " + CommonConstants.DateFormat_Time.format(schedule.getStarttime());
+			String s = tomorrow + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime());
 			Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
 			scheduleJson.put("start_time", s);
 			scheduleJson.put("start_time_seconds", (long) (starttime.getTime() / 1000));

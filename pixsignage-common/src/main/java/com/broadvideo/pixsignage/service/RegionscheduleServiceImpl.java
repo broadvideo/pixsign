@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,12 +77,12 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 		if (regionschedule.getPlaydate() == null) {
 			regionscheduleMapper.deleteByDtl(regionschedule.getBindtype(), "" + regionschedule.getBindid(),
 					"" + regionschedule.getRegionid(), regionschedule.getPlaymode(), null,
-					CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime()));
 		} else {
 			regionscheduleMapper.deleteByDtl(regionschedule.getBindtype(), "" + regionschedule.getBindid(),
 					"" + regionschedule.getRegionid(), regionschedule.getPlaymode(),
-					CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()),
-					CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(regionschedule.getPlaydate()),
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime()));
 		}
 		regionscheduleMapper.insertSelective(regionschedule);
 		if (regionschedule.getBindtype().equals("1")) {
@@ -189,8 +190,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 		responseJson.put("schedules", scheduleJsonArray);
 
 		List<Regionschedule> finalscheduleList = new ArrayList<Regionschedule>();
-		String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-		String tomorrow = CommonConstants.DateFormat_Date
+		String today = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(Calendar.getInstance().getTime());
+		String tomorrow = new SimpleDateFormat(CommonConstants.DateFormat_Date)
 				.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
 		List<Regionschedule> regionscheduleList1 = regionscheduleMapper.selectList(bindtype, bindid, regionid, "2",
 				null, null);
@@ -198,7 +199,7 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 				today, tomorrow);
 
 		// Add the first schedule from 00:00
-		if (regionscheduleList1.size() > 0 && !CommonConstants.DateFormat_Time
+		if (regionscheduleList1.size() > 0 && !new SimpleDateFormat(CommonConstants.DateFormat_Time)
 				.format(regionscheduleList1.get(0).getStarttime()).equals("00:00:00")) {
 			Regionschedule newschedule = new Regionschedule();
 			newschedule.setObjtype(regionscheduleList1.get(regionscheduleList1.size() - 1).getObjtype());
@@ -214,7 +215,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 			Regionschedule newschedule = new Regionschedule();
 			newschedule.setObjtype(regionschedule.getObjtype());
 			newschedule.setObjid(regionschedule.getObjid());
-			String s = today + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime());
+			String s = today + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime());
 			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
 			logger.info("Regionschedule Debug 2: bindid {}, bindtype {}, regionid {}, starttime {}, object {}", bindid,
 					bindtype, regionid, s, newschedule.getTempstarttime());
@@ -225,7 +227,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 			Regionschedule newschedule = new Regionschedule();
 			newschedule.setObjtype(regionschedule.getObjtype());
 			newschedule.setObjid(regionschedule.getObjid());
-			String s = tomorrow + " " + CommonConstants.DateFormat_Time.format(regionschedule.getStarttime());
+			String s = tomorrow + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime());
 			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
 			logger.info("Regionschedule Debug 3: bindid {}, bindtype {}, regionid {}, starttime {}, object {}", bindid,
 					bindtype, regionid, s, newschedule.getTempstarttime());
@@ -235,20 +238,18 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 		// merge
 		for (Regionschedule regionschedule : regionscheduleList2) {
 			logger.info("Regionschedule Debug 4: enter regionscheduleList2");
-			Date starttime = CommonUtil.parseDate(
-					CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-							+ CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()),
-					CommonConstants.DateFormat_Full);
-			Date endtime = CommonUtil.parseDate(
-					CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-							+ CommonConstants.DateFormat_Time.format(regionschedule.getEndtime()),
-					CommonConstants.DateFormat_Full);
+			String s = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(regionschedule.getPlaydate()) + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime());
+			Date starttime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
+			s = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(regionschedule.getPlaydate()) + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getEndtime());
+			Date endtime = CommonUtil.parseDate(s, CommonConstants.DateFormat_Full);
 			Regionschedule newschedule = new Regionschedule();
 			newschedule.setObjtype(regionschedule.getObjtype());
 			newschedule.setObjid(regionschedule.getObjid());
 			logger.info("Regionschedule Debug 5: newschedule starttime "
-					+ CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-					+ CommonConstants.DateFormat_Time.format(regionschedule.getStarttime()));
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Date).format(regionschedule.getPlaydate()) + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime()));
 			newschedule.setTempstarttime(starttime);
 
 			Iterator<Regionschedule> it = finalscheduleList.iterator();
@@ -268,9 +269,12 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 				}
 			}
 			if (lastRemoveSchedule != null) {
-				logger.info("Regionschedule Debug 6: lastRemoveSchedule starttime "
-						+ CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-						+ CommonConstants.DateFormat_Time.format(regionschedule.getEndtime()));
+				logger.info(
+						"Regionschedule Debug 6: lastRemoveSchedule starttime "
+								+ new SimpleDateFormat(CommonConstants.DateFormat_Date)
+										.format(regionschedule.getPlaydate())
+								+ " " + new SimpleDateFormat(CommonConstants.DateFormat_Time)
+										.format(regionschedule.getEndtime()));
 				lastRemoveSchedule.setTempstarttime(endtime);
 				finalscheduleList.add(index, newschedule);
 				finalscheduleList.add(index + 1, lastRemoveSchedule);
@@ -278,9 +282,12 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 				lastRemoveSchedule = new Regionschedule();
 				lastRemoveSchedule.setObjtype(lastClosedSchedule.getObjtype());
 				lastRemoveSchedule.setObjid(lastClosedSchedule.getObjid());
-				logger.info("Regionschedule Debug 7: lastRemoveSchedule starttime "
-						+ CommonConstants.DateFormat_Date.format(regionschedule.getPlaydate()) + " "
-						+ CommonConstants.DateFormat_Time.format(regionschedule.getEndtime()));
+				logger.info(
+						"Regionschedule Debug 7: lastRemoveSchedule starttime "
+								+ new SimpleDateFormat(CommonConstants.DateFormat_Date)
+										.format(regionschedule.getPlaydate())
+								+ " " + new SimpleDateFormat(CommonConstants.DateFormat_Time)
+										.format(regionschedule.getEndtime()));
 				lastRemoveSchedule.setTempstarttime(endtime);
 				finalscheduleList.add(index, newschedule);
 				finalscheduleList.add(index + 1, lastRemoveSchedule);
@@ -294,7 +301,8 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 			JSONObject scheduleJson = new JSONObject();
 			logger.info("Regionschedule Debug 8: bindid {}, bindtype {}, regionid {}, object {}", bindid, bindtype,
 					regionid, regionschedule.getTempstarttime());
-			scheduleJson.put("start_time", CommonConstants.DateFormat_Full.format(regionschedule.getTempstarttime()));
+			scheduleJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Full).format(regionschedule.getTempstarttime()));
 			scheduleJson.put("start_time_seconds", (long) (regionschedule.getTempstarttime().getTime() / 1000));
 			if (regionschedule.getObjtype().equals("1")) {
 				scheduleJson.put("type", "list");

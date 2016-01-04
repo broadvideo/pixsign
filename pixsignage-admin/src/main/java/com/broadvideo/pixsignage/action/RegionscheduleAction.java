@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -35,7 +36,8 @@ public class RegionscheduleAction extends BaseDatatableAction {
 			if (playmode == null) {
 				playmode = "2";
 			} else if (playmode.equals("1")) {
-				fromdate = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
+				fromdate = new SimpleDateFormat(CommonConstants.DateFormat_Date)
+						.format(Calendar.getInstance().getTime());
 			}
 			List<Object> aaData = new ArrayList<Object>();
 			List<Regionschedule> regionscheduleList = regionscheduleService.selectList(bindtype, bindid, regionid,

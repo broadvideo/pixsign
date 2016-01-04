@@ -27,6 +27,7 @@ import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.TaskMapper;
+import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("layoutService")
 public class LayoutServiceImpl implements LayoutService {
@@ -154,9 +155,6 @@ public class LayoutServiceImpl implements LayoutService {
 
 	@Transactional
 	public String handleWizard(Staff staff, Layout layout, Device[] devices, Devicegroup[] devicegroups) {
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
-
 		Task task = new Task();
 		task.setOrgid(staff.getOrgid());
 		task.setBranchid(staff.getBranchid());
@@ -176,10 +174,7 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutschedule.setBindid(device.getDeviceid());
 			layoutschedule.setLayoutid(layout.getLayoutid());
 			layoutschedule.setPlaymode("2");
-			try {
-				layoutschedule.setStarttime(CommonConstants.DateFormat_Time.parse("00:00:00"));
-			} catch (Exception e) {
-			}
+			layoutschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
 			layoutscheduleMapper.insertSelective(layoutschedule);
 
 			Msgevent msgevent = new Msgevent();
@@ -203,22 +198,16 @@ public class LayoutServiceImpl implements LayoutService {
 					regionschedule.setRegionid(layoutdtl.getRegionid());
 					regionschedule.setPlaymode(regiondtl.get("playmode"));
 					if (regiondtl.get("playdate") != null) {
-						try {
-							regionschedule.setPlaydate(dateformat.parse(regiondtl.get("playdate")));
-						} catch (Exception e) {
-						}
+						regionschedule.setPlaydate(
+								CommonUtil.parseDate(regiondtl.get("playdate"), CommonConstants.DateFormat_Date));
 					}
 					if (regiondtl.get("starttime") != null) {
-						try {
-							regionschedule.setStarttime(timeformat.parse(regiondtl.get("starttime")));
-						} catch (Exception e) {
-						}
+						regionschedule.setStarttime(
+								CommonUtil.parseDate(regiondtl.get("starttime"), CommonConstants.DateFormat_Time));
 					}
 					if (regiondtl.get("endtime") != null) {
-						try {
-							regionschedule.setEndtime(timeformat.parse(regiondtl.get("endtime")));
-						} catch (Exception e) {
-						}
+						regionschedule.setEndtime(
+								CommonUtil.parseDate(regiondtl.get("endtime"), CommonConstants.DateFormat_Time));
 					}
 					regionschedule.setObjtype(regiondtl.get("objtype"));
 					regionschedule.setObjid(Integer.parseInt(regiondtl.get("objid")));
@@ -252,10 +241,7 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutschedule.setBindid(devicegroup.getDevicegroupid());
 			layoutschedule.setLayoutid(layout.getLayoutid());
 			layoutschedule.setPlaymode("2");
-			try {
-				layoutschedule.setStarttime(CommonConstants.DateFormat_Time.parse("00:00:00"));
-			} catch (Exception e) {
-			}
+			layoutschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
 			layoutscheduleMapper.insertSelective(layoutschedule);
 
 			Msgevent msgevent = new Msgevent();
@@ -279,22 +265,16 @@ public class LayoutServiceImpl implements LayoutService {
 					regionschedule.setRegionid(layoutdtl.getRegionid());
 					regionschedule.setPlaymode(regiondtl.get("playmode"));
 					if (regiondtl.get("playdate") != null) {
-						try {
-							regionschedule.setPlaydate(dateformat.parse(regiondtl.get("playdate")));
-						} catch (Exception e) {
-						}
+						regionschedule.setPlaydate(
+								CommonUtil.parseDate(regiondtl.get("playdate"), CommonConstants.DateFormat_Date));
 					}
 					if (regiondtl.get("starttime") != null) {
-						try {
-							regionschedule.setStarttime(timeformat.parse(regiondtl.get("starttime")));
-						} catch (Exception e) {
-						}
+						regionschedule.setStarttime(
+								CommonUtil.parseDate(regiondtl.get("starttime"), CommonConstants.DateFormat_Time));
 					}
 					if (regiondtl.get("endtime") != null) {
-						try {
-							regionschedule.setEndtime(timeformat.parse(regiondtl.get("endtime")));
-						} catch (Exception e) {
-						}
+						regionschedule.setEndtime(
+								CommonUtil.parseDate(regiondtl.get("endtime"), CommonConstants.DateFormat_Time));
 					}
 					regionschedule.setObjtype(regiondtl.get("objtype"));
 					regionschedule.setObjid(Integer.parseInt(regiondtl.get("objid")));

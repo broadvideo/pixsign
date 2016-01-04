@@ -29,10 +29,10 @@ public class CommonUtil {
 		return DigestUtils.md5Hex(source + salt);
 	}
 
-	public static Date parseDate(String s, SimpleDateFormat format) {
+	public static Date parseDate(String s, String format) {
 		Date date = null;
 		try {
-			date = format.parse(s);
+			date = new SimpleDateFormat(format).parse(s);
 		} catch (Exception e) {
 			logger.error("parseDate " + s + " exception: ", e);
 		}

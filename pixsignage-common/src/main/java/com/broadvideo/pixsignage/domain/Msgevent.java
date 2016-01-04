@@ -10,6 +10,8 @@ public class Msgevent {
 	public final static String MsgType_VChannel_Info_VCSS = "3";
 	public final static String MsgType_VChannel_Schedule_VCSS = "4";
 	public final static String MsgType_VChannel_Info_PixBox = "5";
+	public final static String MsgType_Device_Config = "6";
+	public final static String MsgType_Device_Reboot = "7";
 
 	public final static String ObjType_1_None = "0";
 	public final static String ObjType_1_Device = "1";

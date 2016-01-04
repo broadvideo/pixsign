@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,11 +47,12 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 		if (layoutschedule.getPlaydate() == null) {
 			layoutscheduleMapper.deleteByDtl(layoutschedule.getBindtype(), "" + layoutschedule.getBindid(),
 					layoutschedule.getPlaymode(), null,
-					CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(layoutschedule.getStarttime()));
 		} else {
 			layoutscheduleMapper.deleteByDtl(layoutschedule.getBindtype(), "" + layoutschedule.getBindid(),
-					layoutschedule.getPlaymode(), CommonConstants.DateFormat_Date.format(layoutschedule.getPlaydate()),
-					CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime()));
+					layoutschedule.getPlaymode(),
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(layoutschedule.getPlaydate()),
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(layoutschedule.getStarttime()));
 		}
 		layoutscheduleMapper.insertSelective(layoutschedule);
 	}
@@ -114,12 +116,12 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 
 		List<Layoutschedule> finalscheduleList = new ArrayList<Layoutschedule>();
 		List<Layoutschedule> layoutscheduleList = layoutscheduleMapper.selectList(bindtype, bindid, "2", null, null);
-		String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
-		String tomorrow = CommonConstants.DateFormat_Date
+		String today = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(Calendar.getInstance().getTime());
+		String tomorrow = new SimpleDateFormat(CommonConstants.DateFormat_Date)
 				.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
 
 		// Add the first schedule from 00:00
-		if (layoutscheduleList.size() > 0 && !CommonConstants.DateFormat_Time
+		if (layoutscheduleList.size() > 0 && !new SimpleDateFormat(CommonConstants.DateFormat_Time)
 				.format(layoutscheduleList.get(0).getStarttime()).equals("00:00:00")) {
 			Layoutschedule newschedule = new Layoutschedule();
 			newschedule.setLayoutid(layoutscheduleList.get(layoutscheduleList.size() - 1).getLayoutid());
@@ -131,7 +133,8 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 		for (Layoutschedule layoutschedule : layoutscheduleList) {
 			Layoutschedule newschedule = new Layoutschedule();
 			newschedule.setLayoutid(layoutschedule.getLayoutid());
-			String s = today + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime());
+			String s = today + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(layoutschedule.getStarttime());
 			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
 			finalscheduleList.add(newschedule);
 		}
@@ -139,7 +142,8 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 		for (Layoutschedule layoutschedule : layoutscheduleList) {
 			Layoutschedule newschedule = new Layoutschedule();
 			newschedule.setLayoutid(layoutschedule.getLayoutid());
-			String s = tomorrow + " " + CommonConstants.DateFormat_Time.format(layoutschedule.getStarttime());
+			String s = tomorrow + " "
+					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(layoutschedule.getStarttime());
 			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
 			finalscheduleList.add(newschedule);
 		}
@@ -148,7 +152,8 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 		for (Layoutschedule layoutschedule : finalscheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJson.put("layout_id", layoutschedule.getLayoutid());
-			scheduleJson.put("start_time", CommonConstants.DateFormat_Full.format(layoutschedule.getTempstarttime()));
+			scheduleJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Full).format(layoutschedule.getTempstarttime()));
 			scheduleJson.put("start_time_seconds", (long) (layoutschedule.getTempstarttime().getTime() / 1000));
 			scheduleJsonArray.put(scheduleJson);
 

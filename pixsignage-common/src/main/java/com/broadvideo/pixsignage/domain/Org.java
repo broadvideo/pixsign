@@ -49,6 +49,12 @@ public class Org {
 
 	private Integer backupvideoid;
 
+	private String powerflag;
+
+	private Date poweron;
+
+	private Date poweroff;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -231,6 +237,34 @@ public class Org {
 
 	public void setBackupvideoid(Integer backupvideoid) {
 		this.backupvideoid = backupvideoid;
+	}
+
+	public String getPowerflag() {
+		return powerflag;
+	}
+
+	public void setPowerflag(String powerflag) {
+		this.powerflag = powerflag;
+	}
+
+	@JSON(format = "HH:mm:ss")
+	public Date getPoweron() {
+		return poweron;
+	}
+
+	@JSON(format = "HH:mm:ss")
+	public void setPoweron(Date poweron) {
+		this.poweron = poweron;
+	}
+
+	@JSON(format = "HH:mm:ss")
+	public Date getPoweroff() {
+		return poweroff;
+	}
+
+	@JSON(format = "HH:mm:ss")
+	public void setPoweroff(Date poweroff) {
+		this.poweroff = poweroff;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

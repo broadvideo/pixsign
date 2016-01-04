@@ -154,10 +154,42 @@ public class DeviceAction extends BaseDatatableAction {
 			String deviceid = getParameter("deviceid");
 			layoutscheduleService.syncLayoutschedule("1", deviceid);
 			regionscheduleService.syncRegionschedule("1", deviceid);
-			logger.error("Device schedule sync success");
+			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device schedule sync error: " + ex.getMessage());
+			logger.error("Device schedule sync error", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doConfig() {
+		try {
+			String deviceid = getParameter("deviceid");
+			if (deviceid != null && deviceid.length() > 0) {
+				deviceService.config(deviceid);
+			} else {
+				deviceService.configall("" + getLoginStaff().getOrgid());
+			}
+			logger.info("Device push config success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device push config error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doReboot() {
+		try {
+			String deviceid = getParameter("deviceid");
+			deviceService.reboot(deviceid);
+			logger.info("Device reboot success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device reboot error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

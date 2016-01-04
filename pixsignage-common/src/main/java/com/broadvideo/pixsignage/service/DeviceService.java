@@ -32,4 +32,10 @@ public interface DeviceService {
 
 	public void updateOnlineflag();
 
+	public void configall(String orgid) throws Exception;
+
+	public void config(String deviceid) throws Exception;
+
+	public void reboot(String deviceid) throws Exception;
+
 }

@@ -33,6 +33,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
@@ -54,6 +55,39 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.backupvideo"/></label>
 											<div class="col-md-9">
 												<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.powerflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.powerflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.powerflag" value="1" > <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group powerflag">
+											<label class="col-md-3 control-label"><spring:message code="global.poweron"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-group date form_time">                                       
+													<input type="text" size="16" readonly class="form-control" name="org.poweron">
+													<span class="input-group-btn">
+													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="form-group powerflag">
+											<label class="col-md-3 control-label"><spring:message code="global.poweroff"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-group date form_time">                                       
+													<input type="text" size="16" readonly class="form-control" name="org.poweroff">
+													<span class="input-group-btn">
+													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -95,6 +129,11 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="portlet-body">
+								<div class="table-toolbar">
+									<div class="btn-group">
+										<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-push"><spring:message code="global.pushall"/> <i class="fa fa-cogs"></i></button>
+									</div>
+								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
 									<thead></thead>
 									<tbody></tbody>
@@ -151,10 +190,12 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=0" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -168,8 +209,6 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initMyTable();
-	initMyEditModal();
 });
 
 </script>

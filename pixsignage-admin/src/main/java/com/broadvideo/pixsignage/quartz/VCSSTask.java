@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.quartz;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Vchannel;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
-import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
 import com.broadvideo.pixsignage.service.VchannelscheduleService;
 
 public class VCSSTask {
@@ -34,8 +34,6 @@ public class VCSSTask {
 	@Autowired
 	private VchannelMapper vchannelMapper;
 	@Autowired
-	private VchannelscheduleMapper vchannelscheduleMapper;
-	@Autowired
 	private VchannelscheduleService vchannelscheduleService;
 
 	public void work() {
@@ -47,9 +45,11 @@ public class VCSSTask {
 
 			List<Msgevent> msgeventList = msgeventMapper.selectList(Msgevent.MsgType_VChannel_Schedule_VCSS,
 					Msgevent.ObjType_1_VChannel, null, Msgevent.Status_Sent, null, null);
-			String today = CommonConstants.DateFormat_Date.format(Calendar.getInstance().getTime());
+			String today = new SimpleDateFormat(CommonConstants.DateFormat_Date)
+					.format(Calendar.getInstance().getTime());
 			for (Msgevent scheduleEvent : msgeventList) {
-				if (!CommonConstants.DateFormat_Date.format(scheduleEvent.getSendtime()).equals(today)) {
+				if (!new SimpleDateFormat(CommonConstants.DateFormat_Date).format(scheduleEvent.getSendtime())
+						.equals(today)) {
 					// Resend schedule message as a new day
 					scheduleEvent.setStatus(Msgevent.Status_Wait);
 					msgeventMapper.updateByPrimaryKeySelective(scheduleEvent);

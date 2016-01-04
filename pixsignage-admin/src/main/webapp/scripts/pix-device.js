@@ -5,6 +5,8 @@ var myurls = {
 	'common.delete' : 'device!delete.action',
 	'device.unregisterlist' : 'device!unregisterlist.action',
 	'device.sync' : 'device!sync.action',
+	'device.config' : 'device!config.action',
+	'device.reboot' : 'device!reboot.action',
 	'devicefile.list' : 'devicefile!list.action',
 	'branch.list' : 'branch!list.action'
 };
@@ -26,12 +28,14 @@ function initMyTable() {
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : common.view.hardkey, 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '15%' }, 
+						{'sTitle' : common.view.hardkey, 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '20%' }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
+						{'sTitle' : common.view.config, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
+						{'sTitle' : common.view.control, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
@@ -58,9 +62,11 @@ function initMyTable() {
 			}
 			
 			$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-			$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
-			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(10)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
+			$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
+			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>');
+			$('td:eq(10)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
+			$('td:eq(11)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(12)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
@@ -77,8 +83,7 @@ function initMyTable() {
 	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	jQuery('#MyTable_wrapper .dataTables_length select').select2();
 	
-	function fnFormatDetails ( oTable, nTr )
-	{
+	function fnFormatDetails ( oTable, nTr ) {
 		var aData = oTable.fnGetData( nTr );
 		var sOut = '<table>';
 		sOut += '<tr><td>IP:</td><td>'+aData['ip']+'</td></tr>';
@@ -92,14 +97,11 @@ function initMyTable() {
 
 	$('#MyTable').on('click', ' tbody td .row-details', function () {
 		var nTr = $(this).parents('tr')[0];
-		if ( oTable.fnIsOpen(nTr) )
-		{
+		if ( oTable.fnIsOpen(nTr) ) {
 			/* This row is already open - close it */
 			$(this).addClass('row-details-close').removeClass('row-details-open');
 			oTable.fnClose( nTr );
-		}
-		else
-		{
+		} else {
 			/* Open this row */				
 			$(this).addClass('row-details-open').removeClass('row-details-close');
 			oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
@@ -152,6 +154,84 @@ function initMyTable() {
 				$.ajax({
 					type : 'GET',
 					url : myurls['device.sync'],
+					cache: false,
+					data : {
+						deviceid: currentItem.deviceid,
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						Metronic.stopPageLoading();
+						bootbox.alert(common.tips.error);
+					}
+				});				
+			}
+		});
+	});
+
+	$('body').on('click', '.pix-config', function(event) {
+		var target = $(event.target);
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			target = $(event.target).parent();
+			index = $(event.target).parent().attr('data-id');
+		}
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.config + currentItem.name, function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'GET',
+					url : myurls['device.config'],
+					cache: false,
+					data : {
+						deviceid: currentItem.deviceid,
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						Metronic.stopPageLoading();
+						bootbox.alert(common.tips.error);
+					}
+				});				
+			}
+		});
+	});
+
+	$('body').on('click', '.pix-reboot', function(event) {
+		var target = $(event.target);
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			target = $(event.target).parent();
+			index = $(event.target).parent().attr('data-id');
+		}
+		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.reboot + currentItem.name, function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'GET',
+					url : myurls['device.reboot'],
 					cache: false,
 					data : {
 						deviceid: currentItem.deviceid,
