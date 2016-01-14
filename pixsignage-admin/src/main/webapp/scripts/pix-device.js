@@ -214,7 +214,7 @@ function initMyTable() {
 						Metronic.stopPageLoading();
 						bootbox.alert(common.tips.error);
 					}
-				});				
+				});
 			}
 		});
 	});

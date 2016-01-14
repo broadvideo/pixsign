@@ -201,6 +201,7 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 					regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
 					regionJson.put("type", layoutdtl.getRegion().getType());
 					regionJson.put("interval", layoutdtl.getIntervaltime());
+					regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
 					if (layoutdtl.getDirection().equals("1")) {
 						regionJson.put("direction", "none");
 					} else if (layoutdtl.getDirection().equals("2")) {
@@ -220,7 +221,7 @@ public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 					} else {
 						regionJson.put("date_format", layoutdtl.getDateformat());
 					}
-					regionJson.put("volume", 50);
+					regionJson.put("volume", layoutdtl.getVolume());
 
 					JSONObject regionBgImageJson = new JSONObject();
 					regionJson.put("bg_image", regionBgImageJson);

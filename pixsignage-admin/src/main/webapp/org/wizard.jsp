@@ -443,15 +443,15 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-wizard.js?t=1"></script>
 <script>
-var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
-var myUser = '<%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getLoginname() %>';
+var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';
 
-var videoflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getVideoflag() %>;
-var imageflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getImageflag() %>;
-var textflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getTextflag() %>;
-var streamflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getStreamflag() %>;
-var dvbflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getDvbflag() %>;
-var widgetflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getWidgetflag() %>;
+var videoflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getVideoflag() %>;
+var imageflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getImageflag() %>;
+var textflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getTextflag() %>;
+var streamflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getStreamflag() %>;
+var dvbflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getDvbflag() %>;
+var widgetflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getWidgetflag() %>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

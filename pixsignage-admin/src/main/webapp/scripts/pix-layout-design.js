@@ -548,6 +548,8 @@ $('body').on('click', '.pix-addregion', function(event) {
 		layoutdtl.opacity = 255;
 	}
 	layoutdtl.intervaltime = 10;
+	layoutdtl.fitflag = 1;
+	layoutdtl.volume = 50;
 	layoutdtl.direction = 4;
 	layoutdtl.speed = 2;
 	layoutdtl.color = '#FFFFFF';
@@ -653,6 +655,11 @@ $('[type=submit]', $('#LayoutModal')).on('click', function(event) {
 
 
 //==============================修改区域选项对话框====================================			
+FormValidateOption.rules['volume'] = {};
+FormValidateOption.rules['volume']['required'] = true;
+FormValidateOption.rules['volume']['number'] = true;
+FormValidateOption.rules['volume']['min'] = 0;
+FormValidateOption.rules['volume']['max'] = 100;
 FormValidateOption.rules['size'] = {};
 FormValidateOption.rules['size']['required'] = true;
 FormValidateOption.rules['size']['number'] = true;
@@ -688,6 +695,8 @@ $('[type=submit]', $('#LayoutdtlEditModal')).on('click', function(event) {
 		$('.help-block').remove();
 
 		currentLayoutdtl.intervaltime = $('#LayoutdtlEditModal input[name=intervaltime]').attr("value");
+		currentLayoutdtl.fitflag = $('#LayoutdtlEditModal input[name=fitflag]:checked').attr("value");
+		currentLayoutdtl.volume = $('#LayoutdtlEditModal input[name=volume]').attr("value");
 		currentLayoutdtl.direction = $('#LayoutdtlEditModal input[name=direction]:checked').attr("value");
 		currentLayoutdtl.speed = $('#LayoutdtlEditModal input[name=speed]:checked').attr("value");
 		currentLayoutdtl.color = $('#LayoutdtlEditModal input[name=color]').attr("value");

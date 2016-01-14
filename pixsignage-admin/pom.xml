@@ -34,8 +34,8 @@
 					</webAppConfig>
 					<contextHandlers>
 						<contextHandler implementation="org.eclipse.jetty.server.handler.ContextHandler">
-							<contextPath>/pixsignage-static</contextPath>
-							<resourceBase>../pixsignage-res/</resourceBase>
+							<contextPath>/pixres</contextPath>
+							<resourceBase>../../pixres/src/web</resourceBase>
 							<handler implementation="org.eclipse.jetty.server.handler.ResourceHandler" />
 						</contextHandler>
 						<contextHandler implementation="org.eclipse.jetty.server.handler.ContextHandler">

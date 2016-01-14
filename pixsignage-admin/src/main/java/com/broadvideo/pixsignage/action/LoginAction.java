@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.SessionConstants;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
@@ -158,14 +158,14 @@ public class LoginAction extends BaseAction {
 		if (staff != null) {
 			HttpSession session = super.getSession();
 			String token = UUID.randomUUID().toString().replaceAll("-", "");
-			session.setAttribute(SessionConstants.SESSION_TOKEN, token);
-			session.setAttribute(SessionConstants.SESSION_STAFF, staff);
-			session.setAttribute(SessionConstants.SESSION_PRIVILEGES, pList);
-			session.setAttribute(SessionConstants.SESSION_SUBSYSTEM, subsystem);
+			session.setAttribute(CommonConstants.SESSION_TOKEN, token);
+			session.setAttribute(CommonConstants.SESSION_STAFF, staff);
+			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
+			session.setAttribute(CommonConstants.SESSION_SUBSYSTEM, subsystem);
 
 			Org org = orgMapper.selectByPrimaryKey("" + staff.getOrgid());
 			if (org != null) {
-				session.setAttribute(SessionConstants.SESSION_ORG, org);
+				session.setAttribute(CommonConstants.SESSION_ORG, org);
 			}
 			return SUCCESS;
 		}
@@ -179,11 +179,11 @@ public class LoginAction extends BaseAction {
 	public String doLogout() throws Exception {
 		HttpSession session = super.getSession();
 		if (session != null) {
-			session.removeAttribute(SessionConstants.SESSION_TOKEN);
-			session.removeAttribute(SessionConstants.SESSION_STAFF);
-			session.removeAttribute(SessionConstants.SESSION_ORG);
-			session.removeAttribute(SessionConstants.SESSION_PRIVILEGES);
-			session.removeAttribute(SessionConstants.SESSION_SUBSYSTEM);
+			session.removeAttribute(CommonConstants.SESSION_TOKEN);
+			session.removeAttribute(CommonConstants.SESSION_STAFF);
+			session.removeAttribute(CommonConstants.SESSION_ORG);
+			session.removeAttribute(CommonConstants.SESSION_PRIVILEGES);
+			session.removeAttribute(CommonConstants.SESSION_SUBSYSTEM);
 
 			session.invalidate();
 		}

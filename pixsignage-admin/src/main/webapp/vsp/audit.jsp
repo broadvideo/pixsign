@@ -227,9 +227,9 @@
 <script src="../local/scripts/pix-datainit.js"></script>
 <script src="../local/scripts/pix-audit.js?t=1"></script>
 <script>
-var MaxOrgs = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxOrgs%>;
-var MaxDevicesPerSigOrg = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
-var MaxStoragePerSigOrg = <%=com.broadvideo.signage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
+var MaxOrgs = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxOrgs%>;
+var MaxDevicesPerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
+var MaxStoragePerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
 
 jQuery(document).ready(function() {
 	App.init(); // initlayout and core plugins

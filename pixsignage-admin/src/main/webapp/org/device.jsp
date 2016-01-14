@@ -268,9 +268,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-device.js?t=8"></script>
 <script>
-var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
-var videoflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getVideoflag() %>;
-var imageflag = <%=((Org)session.getAttribute(SessionConstants.SESSION_ORG)).getImageflag() %>;
+var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+var videoflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getVideoflag() %>;
+var imageflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getImageflag() %>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

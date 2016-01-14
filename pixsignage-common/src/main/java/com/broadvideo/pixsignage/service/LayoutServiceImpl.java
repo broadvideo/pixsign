@@ -59,7 +59,6 @@ public class LayoutServiceImpl implements LayoutService {
 			for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
 				Region region = layoutdtl.getRegion();
 				if (region != null) {
-					System.out.println(region.getName());
 					region.translate(messageSource);
 				}
 			}

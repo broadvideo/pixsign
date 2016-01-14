@@ -52,6 +52,14 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="org.orgid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.devicepass"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="org.devicepass" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.backupvideo"/></label>
 											<div class="col-md-9">
 												<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
@@ -110,7 +118,7 @@ response.setDateHeader("Expires",0);
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
 						<li><a href="#"><spring:message code="menu.config"/></a>
 						</li>

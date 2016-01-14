@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.SessionConstants;
+import com.broadvideo.pixsignage.common.CommonConstants;
 
 public class SecurityFilter implements Filter {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -45,8 +45,8 @@ public class SecurityFilter implements Filter {
 			}
 		}
 
-		if (session.getAttribute(SessionConstants.SESSION_TOKEN) == null
-				|| session.getAttribute(SessionConstants.SESSION_SUBSYSTEM) == null) {
+		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
+				|| session.getAttribute(CommonConstants.SESSION_SUBSYSTEM) == null) {
 			if (servletPath.startsWith("/vsp/")) {
 				response.sendRedirect(request.getContextPath() + vspRedirectURL);
 			} else {
@@ -55,12 +55,12 @@ public class SecurityFilter implements Filter {
 			return;
 		}
 
-		if (session.getAttribute(SessionConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
+		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
 				&& servletPath.startsWith("/vsp/")) {
 			response.sendRedirect(request.getContextPath() + vspRedirectURL);
 			return;
 		}
-		if (session.getAttribute(SessionConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_VSP)
+		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_VSP)
 				&& servletPath.startsWith("/org/")) {
 			response.sendRedirect(request.getContextPath() + orgRedirectURL);
 			return;

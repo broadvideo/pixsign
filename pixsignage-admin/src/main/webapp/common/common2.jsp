@@ -3,7 +3,7 @@
 <%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Privilege"%>
 <%@page import="com.broadvideo.pixsignage.domain.Org"%> 
-<%@page import="com.broadvideo.pixsignage.common.SessionConstants"%> 
+<%@page import="com.broadvideo.pixsignage.common.CommonConstants"%> 
 
 <%
 	String currentPrivilegeid = request.getParameter("CurrentP");
@@ -15,9 +15,9 @@
 		parentPrivilegeid = "";
 	}
 
-	List<Privilege> pList = (List<Privilege>)session.getAttribute(SessionConstants.SESSION_PRIVILEGES);
+	List<Privilege> pList = (List<Privilege>)session.getAttribute(CommonConstants.SESSION_PRIVILEGES);
 	
-	Staff staff = (Staff)session.getAttribute(SessionConstants.SESSION_STAFF);
+	Staff staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
 	List<Privilege> myPrivilegeList = staff.getPrivileges();
 	boolean superFlag = false;
 	List<Integer> myPrivilegeidList = new ArrayList<Integer>();
@@ -28,17 +28,30 @@
 		}
 	}
 	
-	Org session_org = (Org)session.getAttribute(SessionConstants.SESSION_ORG);
+	Org session_org = (Org)session.getAttribute(CommonConstants.SESSION_ORG);
 %>
 
 <!-- BEGIN THEME STYLES -->
-<link href="/pixsignage-static/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/global/css/plugins.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-<link id="style_color" href="/pixsignage-static/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
-<link href="/pixsignage-static/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color" />
+<link href="${static_ctx}/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
-	<link rel="shortcut icon" href="../favicon.ico" />
+<link rel="shortcut icon" href="../favicon.ico" />
+
+<style type="text/css">
+.hide-orgtype-1 { 
+<% if (session_org != null && session_org.getOrgtype().equals("1")) {%>
+  display: none !important; 
+<% } %>  
+} 
+.hide-orgtype-2 {
+<% if (session_org != null && session_org.getOrgtype().equals("2")) {%>
+  display: none !important; 
+<% } %>  
+} 
+</style>
 
 <script>
 function hasPrivilege(privilegeid) {

@@ -57,7 +57,7 @@ response.setDateHeader("Expires",0);
 											<li id="nav_tab3" class="imageflag">
 												<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
 											</li>
-											<li id="nav_tab2" class="videoflag">
+											<li id="nav_tab2" class="hide-orgtype-2">
 												<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
 											</li>
 											<li id="nav_tab1" class="videoflag active">

@@ -123,13 +123,15 @@ public class PixsignageService {
 				responseJson.put("backup_media", backupvideoJson);
 			}
 
-			responseJson.put("power_flag", org.getPowerflag());
+			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 			if (org.getPowerflag().equals("1")) {
 				responseJson.put("power_on_time",
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
 				responseJson.put("power_off_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 			}
+
+			responseJson.put("password", org.getDevicepass());
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();

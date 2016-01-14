@@ -1,6 +1,12 @@
 package com.broadvideo.pixsignage.common;
 
 public class CommonConstants {
+	public static final String SESSION_TOKEN = "SESSION_TOKEN";
+	public static final String SESSION_STAFF = "SESSION_STAFF";
+	public static final String SESSION_ORG = "SESSION_ORG";
+	public static final String SESSION_PRIVILEGES = "SESSION_PRIVILEGES";
+	public static final String SESSION_SUBSYSTEM = "SESSION_SUBSYSTEM";
+
 	public static final String SUBSYSTEM_VSP = "1";
 	public static final String SUBSYSTEM_ORG = "2";
 

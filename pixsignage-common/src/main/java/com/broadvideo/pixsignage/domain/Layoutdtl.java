@@ -41,6 +41,10 @@ public class Layoutdtl {
 
 	private String dateformat;
 
+	private String fitflag;
+
+	private Integer volume;
+
 	private Date createtime;
 
 	private Region region;
@@ -183,6 +187,22 @@ public class Layoutdtl {
 
 	public void setDateformat(String dateformat) {
 		this.dateformat = dateformat;
+	}
+
+	public String getFitflag() {
+		return fitflag;
+	}
+
+	public void setFitflag(String fitflag) {
+		this.fitflag = fitflag;
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.SessionConstants;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.StaffService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -34,7 +34,7 @@ public class StaffAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 
-			String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+			String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
 			String vspid = null;
 			String orgid = null;
 			if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
@@ -66,7 +66,7 @@ public class StaffAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			staff.setCreatestaffid(getLoginStaff().getStaffid());
-			staff.setSubsystem((String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM));
+			staff.setSubsystem((String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM));
 			staff.setVspid(getLoginStaff().getVspid());
 			staff.setOrgid(getLoginStaff().getOrgid());
 			staffService.addStaff(staff);
@@ -134,7 +134,7 @@ public class StaffAction extends BaseDatatableAction {
 	public String doValidate() {
 		try {
 			if (staff.getLoginname() != null) {
-				String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+				String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
 				String vspid = null;
 				String orgid = null;
 				if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {

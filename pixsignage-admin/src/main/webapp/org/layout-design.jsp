@@ -97,6 +97,25 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
+										<div class="form-group nontextflag">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="fitflag" value="0"> <spring:message code="global.layout.region.fitflag_0"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="fitflag" value="1" checked> <spring:message code="global.layout.region.fitflag_1"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group nontextflag">
+											<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="volume" />
+												</div>
+											</div>
+										</div>
 										<div class="form-group textflag">
 											<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
 											<div class="col-md-9 radio-list">
@@ -402,7 +421,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=6"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

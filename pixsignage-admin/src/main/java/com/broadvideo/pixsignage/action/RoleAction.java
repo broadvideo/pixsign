@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.SessionConstants;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Role;
@@ -29,7 +29,7 @@ public class RoleAction extends BaseDatatableAction {
 
 	public String doList() {
 		try {
-			String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+			String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
 			String vspid = null;
 			String orgid = null;
 			if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
@@ -57,11 +57,11 @@ public class RoleAction extends BaseDatatableAction {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
 			List<Privilege> privilegeList = null;
-			String subsystem = (String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM);
+			String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
 			if (subsystem != null && subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
 				privilegeList = roleService.selectVspPrivilegeTreeList();
 			} else if (subsystem != null && subsystem.equals(CommonConstants.SUBSYSTEM_ORG)) {
-				Org org = (Org) getSession().getAttribute(SessionConstants.SESSION_ORG);
+				Org org = (Org) getSession().getAttribute(CommonConstants.SESSION_ORG);
 				privilegeList = roleService.selectOrgPrivilegeTreeList(org);
 			}
 
@@ -82,7 +82,7 @@ public class RoleAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			role.setCreatestaffid(getLoginStaff().getStaffid());
-			role.setSubsystem((String) getSession().getAttribute(SessionConstants.SESSION_SUBSYSTEM));
+			role.setSubsystem((String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM));
 			role.setVspid(getLoginStaff().getVspid());
 			role.setOrgid(getLoginStaff().getOrgid());
 			roleService.addRole(role);

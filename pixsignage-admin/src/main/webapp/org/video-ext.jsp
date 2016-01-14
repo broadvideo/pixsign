@@ -180,7 +180,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-video.js?t=6"></script>
 <script>
 //上传文件的后缀
-var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
+var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myType = 2;
 
 jQuery(document).ready(function() {

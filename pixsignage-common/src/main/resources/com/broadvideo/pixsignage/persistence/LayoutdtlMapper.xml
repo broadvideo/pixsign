@@ -19,6 +19,8 @@
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="INTEGER" />
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="fitflag" property="fitflag" jdbcType="CHAR" />
+    <result column="volume" property="volume" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="region" column="{regionid=regionid}" select="com.broadvideo.pixsignage.persistence.RegionMapper.selectByPrimaryKey" />
     <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
@@ -26,7 +28,7 @@
   
   <sql id="Base_Column_List" >
     layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, intervaltime, 
-    direction, speed, color, size, dateformat, createtime
+    direction, speed, color, size, dateformat, fitflag, volume, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -56,13 +58,13 @@
       zindex, bgcolor, opacity, 
       bgimageid, intervaltime, direction, 
       speed, color, size, 
-      dateformat, createtime)
+      dateformat, fitflag, volume, createtime)
     values (#{layoutid,jdbcType=INTEGER}, #{regionid,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{opacity,jdbcType=INTEGER}, 
       #{bgimageid,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
       #{speed,jdbcType=CHAR}, #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+      #{dateformat,jdbcType=VARCHAR}, #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layoutdtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="layoutdtlid" order="AFTER" >
@@ -118,6 +120,12 @@
       <if test="dateformat != null" >
         dateformat,
       </if>
+      <if test="fitflag != null" >
+        fitflag,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -170,6 +178,12 @@
       </if>
       <if test="dateformat != null" >
         #{dateformat,jdbcType=VARCHAR},
+      </if>
+      <if test="fitflag != null" >
+        #{fitflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=INTEGER},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -227,6 +241,12 @@
       <if test="dateformat != null" >
         dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="fitflag != null" >
+        fitflag = #{fitflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -251,6 +271,8 @@
       color = #{color,jdbcType=VARCHAR},
       size = #{size,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
+      fitflag = #{fitflag,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where layoutdtlid = #{layoutdtlid,jdbcType=INTEGER}
   </update>

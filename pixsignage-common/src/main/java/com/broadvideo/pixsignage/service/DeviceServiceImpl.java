@@ -126,13 +126,15 @@ public class DeviceServiceImpl implements DeviceService {
 				msgBodyJson.put("backup_media", backupvideoJson);
 			}
 
-			msgBodyJson.put("power_flag", org.getPowerflag());
+			msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 			if (org.getPowerflag().equals("1")) {
 				msgBodyJson.put("power_on_time",
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
 				msgBodyJson.put("power_off_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 			}
+
+			msgBodyJson.put("password", org.getDevicepass());
 
 			String topic = "device-" + device.getDeviceid();
 			ActiveMQUtil.publish(topic, msgJson.toString());
@@ -179,13 +181,15 @@ public class DeviceServiceImpl implements DeviceService {
 			msgBodyJson.put("backup_media", backupvideoJson);
 		}
 
-		msgBodyJson.put("power_flag", org.getPowerflag());
+		msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 		if (org.getPowerflag().equals("1")) {
 			msgBodyJson.put("power_on_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
 			msgBodyJson.put("power_off_time",
-					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 		}
+
+		msgBodyJson.put("password", org.getDevicepass());
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());

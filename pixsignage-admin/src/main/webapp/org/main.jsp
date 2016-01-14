@@ -215,8 +215,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-main.js?t=4"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-var videoflag = <%=((Org) session.getAttribute(SessionConstants.SESSION_ORG)).getVideoflag()%>;
-var imageflag = <%=((Org) session.getAttribute(SessionConstants.SESSION_ORG)).getImageflag()%>;
+var videoflag = <%=((Org) session.getAttribute(CommonConstants.SESSION_ORG)).getVideoflag()%>;
+var imageflag = <%=((Org) session.getAttribute(CommonConstants.SESSION_ORG)).getImageflag()%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

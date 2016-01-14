@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.broadvideo.pixsignage.common.SessionConstants;
+import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -95,6 +95,6 @@ public class BaseAction extends ActionSupport {
 	 * @return
 	 */
 	public final Staff getLoginStaff() {
-		return (Staff) getSession().getAttribute(SessionConstants.SESSION_STAFF);
+		return (Staff) getSession().getAttribute(CommonConstants.SESSION_STAFF);
 	}
 }

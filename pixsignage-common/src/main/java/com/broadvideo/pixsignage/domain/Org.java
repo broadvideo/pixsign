@@ -55,6 +55,8 @@ public class Org {
 
 	private Date poweroff;
 
+	private String devicepass;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -265,6 +267,14 @@ public class Org {
 	@JSON(format = "HH:mm:ss")
 	public void setPoweroff(Date poweroff) {
 		this.poweroff = poweroff;
+	}
+
+	public String getDevicepass() {
+		return devicepass;
+	}
+
+	public void setDevicepass(String devicepass) {
+		this.devicepass = devicepass;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

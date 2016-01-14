@@ -366,7 +366,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-image.js?t=2"></script>
 <script>
 //上传文件的后缀
-var myBranchid = <%=((Staff)session.getAttribute(SessionConstants.SESSION_STAFF)).getBranchid() %>;
+var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

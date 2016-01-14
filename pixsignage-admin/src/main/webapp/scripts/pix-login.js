@@ -1,13 +1,13 @@
 var Login = function () {
 
 	var handleOrgLogin = function() {
-		$('input[name=username]', $('#OrgLoginForm')).attr('value', $.cookie("org.username"));
-		$('input[name=code]', $('#OrgLoginForm')).attr('value', $.cookie("org.code"));
+		$('input[name=username]', $('#OrgLoginForm')).attr('value', $.cookie('org.username'));
+		$('input[name=code]', $('#OrgLoginForm')).attr('value', $.cookie('org.code'));
 		$('input[name=password]', $('#OrgLoginForm')).attr('value', '');
 
-		if ($.cookie("org.remember") == 'true') {
-			$('input[name=remember]', $('#OrgLoginForm')).attr("checked", true);
-			$('input[name=remember]', $('#OrgLoginForm')).parent().addClass("checked");
+		if ($.cookie('org.remember') == 'true') {
+			$('input[name=remember]', $('#OrgLoginForm')).attr('checked', true);
+			$('input[name=remember]', $('#OrgLoginForm')).parent().addClass('checked');
 		}
 
 		$('#OrgLoginForm').validate({
@@ -55,16 +55,16 @@ var Login = function () {
 	            },
 	            submitHandler: function (form) {
 	            	if ($('input[name=remember]', $('#OrgLoginForm')).prop('checked')) {
-		            	$.cookie("org.username", $('input[name=username]', $('#OrgLoginForm')).attr('value'), {expires:10});
-		            	$.cookie("org.code", $('input[name=code]', $('#OrgLoginForm')).attr('value'), {expires:10});
-		            	$.cookie("org.remember", true, {expires:10});
+		            	$.cookie('org.username', $('input[name=username]', $('#OrgLoginForm')).attr('value'), {expires:10});
+		            	$.cookie('org.code', $('input[name=code]', $('#OrgLoginForm')).attr('value'), {expires:10});
+		            	$.cookie('org.remember', true, {expires:10});
 	            	} else {
-		            	$.removeCookie("org.username");
-		            	$.removeCookie("org.code");
-		            	$.cookie("org.remember", false);
+		            	$.removeCookie('org.username');
+		            	$.removeCookie('org.code');
+		            	$.cookie('org.remember', false);
 	            	}
 					$.ajax({
-						type : "POST",
+						type : 'POST',
 						url : 'org/login!org',
 						data : $('#OrgLoginForm').serialize(),
 						beforeSend: function ( xhr ) {
@@ -98,13 +98,13 @@ var Login = function () {
 	};
 
 	var handleVspLogin = function() {
-		$('input[name=username]', $('#VspLoginForm')).attr('value', $.cookie("vsp.username"));
-		$('input[name=code]', $('#VspLoginForm')).attr('value', $.cookie("vsp.code"));
+		$('input[name=username]', $('#VspLoginForm')).attr('value', $.cookie('vsp.username'));
+		$('input[name=code]', $('#VspLoginForm')).attr('value', $.cookie('vsp.code'));
 		$('input[name=password]', $('#VspLoginForm')).attr('value', '');
 
-		if ($.cookie("vsp.remember") == 'true') {
-			$('input[name=remember]', $('#VspLoginForm')).attr("checked", true);
-			$('input[name=remember]', $('#VspLoginForm')).parent().addClass("checked");
+		if ($.cookie('vsp.remember') == 'true') {
+			$('input[name=remember]', $('#VspLoginForm')).attr('checked', true);
+			$('input[name=remember]', $('#VspLoginForm')).parent().addClass('checked');
 		}
 		
 		$('#VspLoginForm').validate({
@@ -156,17 +156,17 @@ var Login = function () {
 
 	            submitHandler: function (form) {
 	            	if ($('input[name=remember]', $('#VspLoginForm')).prop('checked')) {
-		            	$.cookie("vsp.username", $('input[name=username]', $('#VspLoginForm')).attr('value'), {expires:10});
-		            	$.cookie("vsp.code", $('input[name=code]', $('#VspLoginForm')).attr('value'), {expires:10});
-		            	$.cookie("vsp.remember", true, {expires:10});
+		            	$.cookie('vsp.username', $('input[name=username]', $('#VspLoginForm')).attr('value'), {expires:10});
+		            	$.cookie('vsp.code', $('input[name=code]', $('#VspLoginForm')).attr('value'), {expires:10});
+		            	$.cookie('vsp.remember', true, {expires:10});
 	            	} else {
-		            	$.removeCookie("vsp.username");
-		            	$.removeCookie("vsp.code");
-		            	$.cookie("vsp.remember", false);
+		            	$.removeCookie('vsp.username');
+		            	$.removeCookie('vsp.code');
+		            	$.cookie('vsp.remember', false);
 	            	}
 
 					$.ajax({
-						type : "POST",
+						type : 'POST',
 						url : 'vsp/login!vsp',
 						data : $('#VspLoginForm').serialize(),
 						beforeSend: function ( xhr ) {
@@ -207,10 +207,10 @@ var Login = function () {
             handleVspLogin();     
             
 	       	$.backstretch([
-		        "/pixsignage-static/admin/pages/media/bg/1.jpg",
-		        "/pixsignage-static/admin/pages/media/bg/2.jpg",
-		        "/pixsignage-static/admin/pages/media/bg/3.jpg",
-		        "/pixsignage-static/admin/pages/media/bg/4.jpg"
+		        '/pixres/admin/pages/media/bg/1.jpg',
+		        '/pixres/admin/pages/media/bg/2.jpg',
+		        '/pixres/admin/pages/media/bg/3.jpg',
+		        '/pixres/admin/pages/media/bg/4.jpg'
 		        ], {
 		          fade: 1000,
 		          duration: 8000

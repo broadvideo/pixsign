@@ -28,6 +28,11 @@ jQuery('#MyTable_wrapper .dataTables_length select').select2();
 var currentConfig;
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
+FormValidateOption.rules = {};
+FormValidateOption.rules['org.devicepass'] = {};
+FormValidateOption.rules['org.devicepass']['required'] = true;
+FormValidateOption.rules['org.devicepass']['number'] = true;
+FormValidateOption.rules['org.devicepass']['minlength'] = 6;
 FormValidateOption.submitHandler = function(form) {
 	$.ajax({
 		type : 'POST',

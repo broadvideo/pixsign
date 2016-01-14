@@ -16,10 +16,13 @@ select last_insert_id() into @dbversionid;
 alter table org add powerflag char(1) default '0';
 alter table org add poweron time;
 alter table org add poweroff time;
+alter table org add devicepass varchar(32) default '123456';
 
 alter table layout add bgimageid int default 0;
 alter table layoutdtl add bgimageid int default 0;
 alter table layoutdtl add dateformat varchar(32);
+alter table layoutdtl add fitflag char(1) default 1;
+alter table layoutdtl add volume int default 50;
 
 alter table layoutdtl drop foreign key layoutdtl_ibfk_2;
 alter table regionschedule drop foreign key regionschedule_ibfk_1;
