@@ -54,7 +54,7 @@ function initMyTable() {
 				$('td:eq(5)', nRow).html('');
 			}
 			if (data['onlineflag'] == 9) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-default">' + common.view.offline + '</span>');
+				$('td:eq(6)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			} else if (data['onlineflag'] == 1) {
 				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (data['onlineflag'] == 0) {

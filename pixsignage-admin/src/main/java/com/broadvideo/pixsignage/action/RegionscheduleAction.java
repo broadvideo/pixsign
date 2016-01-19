@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Regionschedule;
+import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.service.RegionscheduleService;
 
 @Scope("request")
@@ -25,6 +26,8 @@ public class RegionscheduleAction extends BaseDatatableAction {
 
 	@Autowired
 	private RegionscheduleService regionscheduleService;
+	@Autowired
+	private LayoutService layoutService;
 
 	public String doList() {
 		try {
@@ -97,7 +100,7 @@ public class RegionscheduleAction extends BaseDatatableAction {
 			String bindtype = getParameter("bindtype");
 			String bindid = getParameter("bindid");
 			if (bindtype != null && bindid != null) {
-				regionscheduleService.syncRegionschedule(bindtype, bindid);
+				layoutService.syncRegionschedule(bindtype, bindid);
 				logger.error("Region schedule sync success");
 			}
 			return SUCCESS;

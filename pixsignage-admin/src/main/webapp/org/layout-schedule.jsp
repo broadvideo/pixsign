@@ -40,9 +40,6 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div class="page-content-wrapper">
-			<div class="page-content">
-			
 				<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 					<div class="modal-dialog">
 						<div class="modal-content">
@@ -90,6 +87,10 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 				</div>
+
+		<div class="page-content-wrapper">
+			<div class="page-content">
+			
 			
 		
 				<!-- BEGIN PAGE HEADER-->

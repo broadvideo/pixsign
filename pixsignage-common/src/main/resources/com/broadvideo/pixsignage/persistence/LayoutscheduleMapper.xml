@@ -14,6 +14,11 @@
     <association property="layout" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutMapper.selectByPrimaryKey" />
   </resultMap>
   
+  <resultMap id="BindResultMap" type="java.util.HashMap" >
+    <result column="bindtype" property="bindtype" jdbcType="CHAR" />
+    <result column="bindid" property="bindid" jdbcType="INTEGER" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     layoutscheduleid, bindtype, bindid, layoutid, playmode, playdate, starttime, endtime, 
     createtime
@@ -41,6 +46,13 @@
       and playdate &lt;= '${todate}'
     </if>
     order by playdate, starttime
+  </select>
+  
+  <select id="selectBindListByLayout" resultMap="BindResultMap" >
+    select 
+    distinct bindtype, bindid
+    from layoutschedule
+    where layoutid = '${layoutid}'
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

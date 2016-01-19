@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +13,8 @@ public interface LayoutscheduleMapper {
 	List<Layoutschedule> selectList(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,
 			@Param(value = "playmode") String playmode, @Param(value = "fromdate") String fromdate,
 			@Param(value = "todate") String todate);
+
+	List<HashMap<String, Object>> selectBindListByLayout(@Param(value = "layoutid") String layoutid);
 
 	int deleteByPrimaryKey(@Param(value = "layoutscheduleid") String layoutscheduleid);
 

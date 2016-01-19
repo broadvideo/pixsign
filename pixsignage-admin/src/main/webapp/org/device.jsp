@@ -37,115 +37,113 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div class="page-content-wrapper">
-			<div class="page-content">
-			
-				<!-- 终端文件列表对话框  -->
-				<div id="DeviceFileModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<!-- 终端文件列表对话框  -->
+		<div id="DeviceFileModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+	
+						<div class="portlet box blue tabbable">
+							<div class="portlet-title">
+								<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.devicefile"/></div>
+								<div class="tools">
+									<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
+								</div>
+								<ul class="nav nav-tabs" style="margin-right: 30px;">
+									<li id="nav_tab2" class="imageflag"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
+									<li id="nav_tab1" class="videoflag"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
+								</ul>
 							</div>
-							<div class="modal-body">
-						<div class="row">
-							<div class="col-md-12">
-			
-								<div class="portlet box blue tabbable">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.devicefile"/></div>
-										<div class="tools">
-											<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
-										</div>
-										<ul class="nav nav-tabs" style="margin-right: 30px;">
-											<li id="nav_tab2" class="imageflag"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
-											<li id="nav_tab1" class="videoflag"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
-										</ul>
+							<div class="portlet-body">
+								<div class="tab-content">
+									<div class="tab-pane" id="portlet_tab1">
+										<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
-									<div class="portlet-body">
-										<div class="tab-content">
-											<div class="tab-pane" id="portlet_tab1">
-												<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
-											</div>
-											<div class="tab-pane" id="portlet_tab2">
-												<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
-											</div>
-										</div>
+									<div class="tab-pane" id="portlet_tab2">
+										<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
-							</div>
-							<div class="modal-footer">
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
-							</div>
-						</div>
 					</div>
 				</div>
-			
-				<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title"><spring:message code="global.device"/></h4>
-							</div>
-							<div class="modal-body">
-								<form id="MyEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
-									<input type="hidden" name="device.deviceid" value="0" />
-									<input type="hidden" name="device.branchid" value="0" />
-									<input type="hidden" name="device.status" value="1" />
-									<div class="form-body">
-										<div class="form-group">
-											<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
-											<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="device.name" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.position"/></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="device.position" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group option1">
-											<label class="col-md-3 control-label"><spring:message code="global.branch"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="pre-scrollable" id="EditFormBranchTree"></div>
-											</div>	
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
-											<div class="col-md-9">
-												<textarea class="form-control" rows="2" name="device.description"></textarea>
-											</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="MyEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+							<input type="hidden" name="device.deviceid" value="0" />
+							<input type="hidden" name="device.branchid" value="0" />
+							<input type="hidden" name="device.status" value="1" />
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
+									<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="device.name" />
 										</div>
 									</div>
-								</form>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.position"/></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="device.position" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group option1">
+									<label class="col-md-3 control-label"><spring:message code="global.branch"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="pre-scrollable" id="EditFormBranchTree"></div>
+									</div>	
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="2" name="device.description"></textarea>
+									</div>
+								</div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
-						</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 					</div>
 				</div>
-			
-				<!-- BEGIN PAGE HEADER-->
+			</div>
+		</div>
+
+		<div class="page-content-wrapper">
+			<div class="page-content">
 				<h3 class="page-title"><spring:message code="menu.device"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
@@ -158,9 +156,7 @@ response.setDateHeader("Expires",0);
 						</li>
 					</ul>
 				</div>
-				<!-- END PAGE HEADER-->
 			
-				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet box blue tabbable">
@@ -205,12 +201,10 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 				</div>
-				<!-- END PAGE CONTENT -->
 			</div>
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
 	
 	<!-- BEGIN FOOTER -->
 	<div class="footer">

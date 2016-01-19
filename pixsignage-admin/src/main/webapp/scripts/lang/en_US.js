@@ -19,6 +19,8 @@ var common={
 		layout: 'Layout',
 
 		schedule: 'Schedule',
+		layoutschedule: 'Layout Schedule',
+		regionschedule: 'Region Schedule',
 		sequence: 'Sequence',
 		terminalid: 'Terminal ID',
 		hardkey: 'Hardkey',
@@ -49,6 +51,7 @@ var common={
 		activetime: 'Active Time',
 		playtime: 'Play TIme',
 
+		unregister: 'Unregister',
 		online: 'Online',
 		offline: 'Offline',
 		idle: 'Idle',
@@ -96,6 +99,7 @@ var common={
 		remove: 'Please confirm whether to delete ',
 		unbind: 'Please confirm whether to unbind ',
 		sync: 'Please confirm whether to sync schedules to ',
+		synclayout: 'Please confirm whether to sync the layout',
 		config: 'Please confirm whether to push config to ',
 		pushall: 'Please confirm whether to push config to all devices',
 		reboot: 'Please confirm whether to reboot ',

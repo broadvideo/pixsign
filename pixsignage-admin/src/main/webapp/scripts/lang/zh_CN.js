@@ -19,6 +19,8 @@ var common = {
 		layout: '布局',
 
 		schedule: '计划',
+		layoutschedule: '布局计划',
+		regionschedule: '播出计划',
 		sequence: '序号',
 		terminalid: '终端ID',
 		hardkey: '硬件码',
@@ -49,6 +51,7 @@ var common = {
 		activetime: '激活时间',
 		playtime: '播放时间',
 
+		unregister: '未注册',
 		online: '在线',
 		offline: '离线',
 		idle: '空闲',
@@ -75,10 +78,10 @@ var common = {
 		unlimited: '无限制',
 		downloaddata: '流量',
 
-		ratio_1: '宽屏 16:9',
-		ratio_2: '高屏 9:16',
-		ratio_3: '宽屏 4:3',
-		ratio_4: '高屏 3:4',
+		ratio_1: '横屏 16:9',
+		ratio_2: '竖屏 9:16',
+		ratio_3: '横屏 4:3',
+		ratio_4: '竖屏 3:4',
 		type_0: '普通布局',
 		type_1: '紧急布局',
 
@@ -96,6 +99,7 @@ var common = {
 		remove: '请确认是否删除 ',
 		unbind: '请确认是否解绑 ',
 		sync: '是否同步播放计划至 ',
+		synclayout: '是否同步此布局至相关联的终端和终端组',
 		config: '是否重新推送配置至 ',
 		pushall: '是否推送配置至所有终端 ',
 		reboot: '是否重启',
@@ -107,6 +111,10 @@ var common = {
 		detail_select: '请选择对应内容',
 
 		device_missed: '需要选择终端或者终端组',
+		
+		device_layoutschedule_zero: '当前终端没有布局计划，请新增计划',
+		devicegp_layoutschedule_zero: '当前终端组没有布局计划，请新增计划',
+		regionschedule_zero: '当前区域没有播放计划，请新增计划',
 		
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',

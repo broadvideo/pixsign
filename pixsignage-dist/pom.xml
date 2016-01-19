@@ -47,19 +47,6 @@
 							</descriptors>
 						</configuration>
 					</execution>
-					<execution>
-						<id>make-res-bundles</id>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<finalName>pixsignage-res-${pixsignage-res.version}</finalName>
-							<descriptors>
-								<descriptor>src/assembly/assembly-res.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>

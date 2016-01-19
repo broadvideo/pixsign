@@ -36,291 +36,275 @@ response.setDateHeader("Expires",0);
 
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
+
+<style type="text/css">
+.modal-layout1 { 
+  width: 99%;
+} 
+.modal-layout2 { 
+  width: 1100px;
+} 
+</style>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div class="page-content-wrapper">
-			<div class="page-content">
-				<!-- 布局设计对话框  -->
-				<div id="LayoutModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<!-- 布局模板新增修改对话框  -->
+		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.layout"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
+							<input type="hidden" name="layout.layoutid" value="0" />
+							<input type="hidden" name="layout.status" value="1" />
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.name"/><span
+										class="required">*</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control"
+												name="layout.name" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3"><spring:message code="global.type"/></label>
+									<div class="col-md-9">
+										<select class="form-control" name="layout.type" tabindex="-1">
+											<option value="0"><spring:message code="global.layout.type_0"/></option>
+											<option value="1"><spring:message code="global.layout.type_1"/></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group layout-ratio">
+									<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
+									<div class="col-md-9">
+										<select class="form-control" name="layout.ratio" tabindex="-1">
+											<option value="1"><spring:message code="global.layout.ratio_1"/></option>
+											<option value="2"><spring:message code="global.layout.ratio_2"/></option>
+											<option value="3"><spring:message code="global.layout.ratio_3"/></option>
+											<option value="4"><spring:message code="global.layout.ratio_4"/></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+									<div class="col-md-9">
+										<input type="hidden" id="LayoutBgImageSelect1" class="form-control select2" name="layout.bgimageid">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="4" name="layout.description"></textarea>
+									</div>
+								</div>
 							</div>
-							<div class="modal-body">
-								<div class="row">
-									<div class="col-md-9 col-sm-9" style="width:852px;">
-										<div class="portlet box purple">
-											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
-												<div class="actions">
-													<div id="RegionBtn" class="btn-group">
-													</div>
-												</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 布局设计对话框  -->
+		<div id="LayoutModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="portlet box purple">
+									<div class="portlet-title">
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
+										<div class="actions">
+											<div id="RegionBtn" class="btn-group">
 											</div>
-											<div class="portlet-body">
-												<div id="LayoutDiv" layoutid="0" style="position:relative; width:802px; height:602px; border: 1px solid #000; background:#000000;">
-												</div>
+										</div>
+									</div>
+									<div class="portlet-body form">
+										<div class="row">
+											<div id="LayoutCol1" class="col-md-8 col-sm-8">
+												<div id="LayoutDiv" layoutid="0"></div>
+											</div>
+											<div id="LayoutCol2" class="col-md-4 col-sm-4">
+												<form id="LayoutEditForm" class="form-horizontal form-bordered">
+													<input type="hidden" name="layout.layoutid" value="0" />
+													<input type="hidden" name="layout.status" value="1" />
+													<div class="form-body">
+														<label class="page-title layout-title"></label>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.name"/><span
+																class="required">*</span>
+															</label>
+															<div class="col-md-9">
+																<div class="input-icon right">
+																	<i class="fa"></i> <input type="text" class="form-control"
+																		name="name" />
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+															<div class="col-md-9">
+																<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+															<div class="col-md-9">
+																<textarea class="form-control" rows="4" name="description"></textarea>
+															</div>
+														</div>
+													</div>
+												</form>
+												
+												<form id="LayoutdtlEditForm" class="form-horizontal form-bordered">
+													<input type="hidden" name="regionid" value="0" />
+													<div class="form-body">
+														<label class="page-title font-red-sunglo region-title"></label>
+														<div class="form-group nontextflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.intervaltime"/><span class="required">*</span></label>
+															<div class="col-md-8">
+																<input class="intervalRange" type="text" name="intervaltime" value="10"/>
+															</div>
+														</div>
+														<div class="form-group nontextflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.fitflag"/></label>
+															<div class="col-md-8 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="fitflag" value="0"> <spring:message code="global.layout.region.fitflag_0"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="fitflag" value="1" checked> <spring:message code="global.layout.region.fitflag_1"/>
+																</label>
+															</div>
+														</div>
+														<div class="form-group nontextflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.volume"/><span class="required">*</span></label>
+															<div class="col-md-8">
+																<input class="volumeRange" type="text" name="volume" value="50"/>
+															</div>
+														</div>
+														<div class="form-group textflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.direction"/></label>
+															<div class="col-md-8 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="direction" value="1"> <spring:message code="global.layout.region.direction_1"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="direction" value="4" checked> <spring:message code="global.layout.region.direction_4"/>
+																</label>  
+															</div>
+														</div>
+														<div class="form-group textflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.speed"/></label>
+															<div class="col-md-8 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
+																</label>  
+															</div>
+														</div>
+														<div class="form-group textflag dateflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.color"/></label>
+															<div class="col-md-8">
+																<div class="input-group colorpicker-component colorPick">
+																	<input type="text" name="color" value="#FFFFFF" class="form-control" />
+																	<span class="input-group-addon"><i></i></span>
+																</div>
+															</div>
+														</div>
+														<div class="form-group textflag dateflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.size"/><span class="required">*</span></label>
+															<div class="col-md-8">
+																<input class="sizeRange" type="text" name="size" value="50"/>
+															</div>
+														</div>
+														<div class="form-group dateflag">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.dateformat"/><span class="required">*</span></label>
+															<div class="col-md-8">
+																<select class="form-control" name="dateformat" tabindex="-1">
+																	<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
+																	<option value="yyyy-MM-dd">yyyy-MM-dd</option>
+																	<option value="HH:mm">HH:mm</option>
+																</select>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.bgimage"/></label>
+															<div class="col-md-8">
+																<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+															<div class="col-md-8">
+																<div class="input-group colorpicker-component bgcolorPick">
+																	<input type="text" name="bgcolor" value="#000000" class="form-control" />
+																	<span class="input-group-addon"><i></i></span>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.opacity"/><span class="required">*</span></label>
+															<div class="col-md-8">
+																<input class="opacityRange" type="text" name="opacity" value=""/>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-4 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
+															<div class="col-md-8 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="zindex" value="0"> <spring:message code="global.layout.region.zindex_0"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="zindex" value="1" checked> <spring:message code="global.layout.region.zindex_1"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="zindex" value="2"> <spring:message code="global.layout.region.zindex_2"/>
+																</label>  
+															</div>
+														</div>
+													</div>
+												</form>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
 						</div>
 					</div>
-				</div>
-				
-				<!-- 区域编辑对话框  -->
-				<div id="LayoutdtlEditModal" class="modal fade modal-scroll" parent="LayoutModal" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</div>
-							<div class="modal-body">
-								<form id="LayoutdtlEditForm" class="form-horizontal">
-									<input type="hidden" name="regionid" value="0" />
-									<div class="form-body">
-										<input type="hidden" name="regionid" />
-										<div class="form-group nontextflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="intervaltime" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group nontextflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="fitflag" value="0"> <spring:message code="global.layout.region.fitflag_0"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="fitflag" value="1" checked> <spring:message code="global.layout.region.fitflag_1"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group nontextflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="volume" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group textflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="direction" value="1"> <spring:message code="global.layout.region.direction_1"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="direction" value="2" > <spring:message code="global.layout.region.direction_2"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="direction" value="3"> <spring:message code="global.layout.region.direction_3"/>
-												</label>  
-												<label class="radio-inline">
-													<input type="radio" name="direction" value="4" checked> <spring:message code="global.layout.region.direction_4"/>
-												</label>  
-												<label class="radio-inline">
-													<input type="radio" name="direction" value="5"> <spring:message code="global.layout.region.direction_5"/>
-												</label>  
-											</div>
-										</div>
-										<div class="form-group textflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
-												</label>  
-											</div>
-										</div>
-										<div class="form-group textflag dateflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
-											<div class="col-md-9">
-												<div class="input-group colorpicker-component colorPick">
-													<input type="text" name="color" value="#FFFFFF" class="form-control" />
-													<span class="input-group-addon"><i></i></span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group textflag dateflag">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="size" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group dateflag">
-											<label class="control-label col-md-3"><spring:message code="global.layout.region.dateformat"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<select class="form-control" name="dateformat" tabindex="-1">
-													<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
-													<option value="yyyy-MM-dd">yyyy-MM-dd</option>
-													<option value="HH:mm">HH:mm</option>
-												</select>
-											</div>
-										</div>
-										<hr/>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
-											<div class="col-md-9">
-												<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
-											<div class="col-md-9">
-												<div class="input-group colorpicker-component bgcolorPick">
-													<input type="text" name="bgcolor" value="#000000" class="form-control" />
-													<span class="input-group-addon"><i></i></span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="opacity" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="zindex" />
-												</div>
-											</div>
-										</div>
-										<hr/>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.width"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="width" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.height"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="height" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.leftoffset"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="leftoffset" />
-												</div>
-											</div>
-										</div>														
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.region.topoffset"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="topoffset" />
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
-						</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 					</div>
 				</div>
-				
-				<!-- 布局模板新增修改对话框  -->
-				<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title"><spring:message code="global.layout"/></h4>
-							</div>
-							<div class="modal-body">
-								<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
-									<input type="hidden" name="layout.layoutid" value="0" />
-									<input type="hidden" name="layout.status" value="1" />
-									<div class="form-body">
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.name"/><span
-												class="required">*</span>
-											</label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control"
-														name="layout.name" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
-											<div class="col-md-9">
-												<select class="form-control" name="layout.type" tabindex="-1">
-													<option value="0"><spring:message code="global.layout.type_0"/></option>
-													<option value="1"><spring:message code="global.layout.type_1"/></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group layout-ratio">
-											<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
-											<div class="col-md-9">
-												<select class="form-control" name="layout.ratio" tabindex="-1">
-													<option value="1"><spring:message code="global.layout.ratio_1"/></option>
-													<option value="2"><spring:message code="global.layout.ratio_2"/></option>
-													<option value="3"><spring:message code="global.layout.ratio_3"/></option>
-													<option value="4"><spring:message code="global.layout.ratio_4"/></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
-											<div class="col-md-9">
-												<input type="hidden" id="LayoutBgImageSelect" class="form-control select2" name="layout.bgimageid">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
-											<div class="col-md-9">
-												<textarea class="form-control" rows="4" name="layout.description"></textarea>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
-							</div>
-						</div>
-					</div>
-				</div>
-			
+			</div>
+		</div>
 		
+		<div class="page-content-wrapper">
+			<div class="page-content">
 				<!-- BEGIN PAGE HEADER-->
 				<h3 class="page-title"><spring:message code="menu.layout"/></h3>
 				<div class="page-bar">
@@ -415,13 +399,14 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=9"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

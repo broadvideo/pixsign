@@ -13,7 +13,9 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Layout;
 import com.broadvideo.pixsignage.domain.Layoutdtl;
+import com.broadvideo.pixsignage.domain.Layoutschedule;
 import com.broadvideo.pixsignage.domain.Region;
+import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.service.RegionService;
 
@@ -25,8 +27,11 @@ public class LayoutAction extends BaseDatatableAction {
 
 	private Layout layout;
 	private Layoutdtl[] layoutdtls;
+
 	private Device[] devices;
 	private Devicegroup[] devicegroups;
+	private Layoutschedule[] layoutschedules;
+	private Regionschedule[] regionschedules;
 
 	@Autowired
 	private LayoutService layoutService;
@@ -93,6 +98,20 @@ public class LayoutAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doSync() {
+		try {
+			String layoutid = getParameter("layoutid");
+			layoutService.syncLayoutscheduleByLayout(layoutid);
+			logger.info("Layout schedule sync success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device schedule sync error", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDtlList() {
 		try {
 			String layoutid = getParameter("layoutid");
@@ -111,9 +130,9 @@ public class LayoutAction extends BaseDatatableAction {
 		}
 	}
 
-	public String doDtlSync() {
+	public String doDesign() {
 		try {
-			layoutService.syncLayoutdtlList(layout, layoutdtls);
+			layoutService.design(layout, layoutdtls);
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -159,6 +178,40 @@ public class LayoutAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doLayoutschedulesAdd() {
+		try {
+			if (devices != null) {
+				layoutService.addLayoutschedules(layoutschedules, devices);
+			}
+			if (devicegroups != null) {
+				layoutService.addLayoutschedules(layoutschedules, devicegroups);
+			}
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doRegionschedulesAdd() {
+		try {
+			if (devices != null) {
+				layoutService.addRegionschedules(regionschedules, devices);
+			}
+			if (devicegroups != null) {
+				layoutService.addRegionschedules(regionschedules, devicegroups);
+			}
+			return SUCCESS;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Layout getLayout() {
 		return layout;
 	}
@@ -189,5 +242,21 @@ public class LayoutAction extends BaseDatatableAction {
 
 	public void setDevicegroups(Devicegroup[] devicegroups) {
 		this.devicegroups = devicegroups;
+	}
+
+	public Layoutschedule[] getLayoutschedules() {
+		return layoutschedules;
+	}
+
+	public void setLayoutschedules(Layoutschedule[] layoutschedules) {
+		this.layoutschedules = layoutschedules;
+	}
+
+	public Regionschedule[] getRegionschedules() {
+		return regionschedules;
+	}
+
+	public void setRegionschedules(Regionschedule[] regionschedules) {
+		this.regionschedules = regionschedules;
 	}
 }
