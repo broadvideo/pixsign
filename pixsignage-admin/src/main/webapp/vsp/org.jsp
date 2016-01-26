@@ -78,7 +78,7 @@ response.setDateHeader("Expires",0);
 													<input type="radio" name="org.orgtype" value="1" checked> <spring:message code="global.org.orgtype_1"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="2" checked> <spring:message code="global.org.orgtype_2"/>
+													<input type="radio" name="org.orgtype" value="2" > <spring:message code="global.org.orgtype_2"/>
 												</label>
 												<label class="radio-inline">
 													<input type="radio" name="org.orgtype" value="3" > PIDS

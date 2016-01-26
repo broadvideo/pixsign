@@ -45,8 +45,26 @@ response.setDateHeader("Expires",0);
   width: 99%;
 } 
 .modal-layout2 { 
-  width: 1100px;
-} 
+  width: 1000px;
+}
+
+.form .pix-bordered .form-group {
+  margin: 0;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.form .pix-bordered .form-group.last {
+  border-bottom: 1px solid;
+}
+.form .pix-bordered .form-group .control-label {
+  padding-top: 10px;
+}
+.form .pix-bordered .form-group > div {
+  padding: 10px;
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+
 </style>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -143,29 +161,31 @@ response.setDateHeader("Expires",0);
 												<div id="LayoutDiv" layoutid="0"></div>
 											</div>
 											<div id="LayoutCol2" class="col-md-4 col-sm-4">
-												<form id="LayoutEditForm" class="form-horizontal form-bordered">
+												<form id="LayoutEditForm" class="form-horizontal pix-bordered">
 													<input type="hidden" name="layout.layoutid" value="0" />
 													<input type="hidden" name="layout.status" value="1" />
 													<div class="form-body">
 														<label class="page-title layout-title"></label>
 														<div class="form-group">
-															<label class="col-md-3 control-label"><spring:message code="global.name"/><span
-																class="required">*</span>
-															</label>
+															<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
 															<div class="col-md-9">
 																<div class="input-icon right">
-																	<i class="fa"></i> <input type="text" class="form-control"
-																		name="name" />
+																	<i class="fa"></i> <input type="text" class="form-control" name="name" />
 																</div>
 															</div>
 														</div>
 														<div class="form-group">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 															<div class="col-md-9">
-																<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
+																<div class="input-group">
+																	<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
+																	<span class="input-group-btn">
+																	<button class="btn default" type="button" id="LayoutBgImageRemove"><i class="fa fa-trash-o"/></i></button>
+																	</span>
+																</div>
 															</div>
 														</div>
-														<div class="form-group">
+														<div class="form-group last">
 															<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 															<div class="col-md-9">
 																<textarea class="form-control" rows="4" name="description"></textarea>
@@ -174,19 +194,19 @@ response.setDateHeader("Expires",0);
 													</div>
 												</form>
 												
-												<form id="LayoutdtlEditForm" class="form-horizontal form-bordered">
+												<form id="LayoutdtlEditForm" class="form-horizontal pix-bordered">
 													<input type="hidden" name="regionid" value="0" />
 													<div class="form-body">
 														<label class="page-title font-red-sunglo region-title"></label>
 														<div class="form-group nontextflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.intervaltime"/><span class="required">*</span></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
+															<div class="col-md-9">
 																<input class="intervalRange" type="text" name="intervaltime" value="10"/>
 															</div>
 														</div>
 														<div class="form-group nontextflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.fitflag"/></label>
-															<div class="col-md-8 radio-list">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
+															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
 																	<input type="radio" name="fitflag" value="0"> <spring:message code="global.layout.region.fitflag_0"/>
 																</label>
@@ -196,14 +216,14 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group nontextflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.volume"/><span class="required">*</span></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/></label>
+															<div class="col-md-9">
 																<input class="volumeRange" type="text" name="volume" value="50"/>
 															</div>
 														</div>
 														<div class="form-group textflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.direction"/></label>
-															<div class="col-md-8 radio-list">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
+															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
 																	<input type="radio" name="direction" value="1"> <spring:message code="global.layout.region.direction_1"/>
 																</label>
@@ -213,8 +233,8 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group textflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.speed"/></label>
-															<div class="col-md-8 radio-list">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
+															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
 																	<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
 																</label>
@@ -227,8 +247,8 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group textflag dateflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.color"/></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
+															<div class="col-md-9">
 																<div class="input-group colorpicker-component colorPick">
 																	<input type="text" name="color" value="#FFFFFF" class="form-control" />
 																	<span class="input-group-addon"><i></i></span>
@@ -236,14 +256,14 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group textflag dateflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.size"/><span class="required">*</span></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
+															<div class="col-md-9">
 																<input class="sizeRange" type="text" name="size" value="50"/>
 															</div>
 														</div>
 														<div class="form-group dateflag">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.dateformat"/><span class="required">*</span></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
+															<div class="col-md-9">
 																<select class="form-control" name="dateformat" tabindex="-1">
 																	<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
 																	<option value="yyyy-MM-dd">yyyy-MM-dd</option>
@@ -252,14 +272,19 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.bgimage"/></label>
-															<div class="col-md-8">
-																<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
+															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+															<div class="col-md-9">
+																<div class="input-group">
+																	<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
+																	<span class="input-group-btn">
+																	<button class="btn default" type="button" id="RegionBgImageRemove"><i class="fa fa-trash-o"/></i></button>
+																	</span>
+																</div>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+															<div class="col-md-9">
 																<div class="input-group colorpicker-component bgcolorPick">
 																	<input type="text" name="bgcolor" value="#000000" class="form-control" />
 																	<span class="input-group-addon"><i></i></span>
@@ -267,14 +292,14 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.opacity"/><span class="required">*</span></label>
-															<div class="col-md-8">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
+															<div class="col-md-9">
 																<input class="opacityRange" type="text" name="opacity" value=""/>
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-4 control-label"><spring:message code="global.layout.region.zindex"/><span class="required">*</span></label>
-															<div class="col-md-8 radio-list">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/></label>
+															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
 																	<input type="radio" name="zindex" value="0"> <spring:message code="global.layout.region.zindex_0"/>
 																</label>
@@ -284,6 +309,74 @@ response.setDateHeader("Expires",0);
 																<label class="radio-inline">
 																	<input type="radio" name="zindex" value="2"> <spring:message code="global.layout.region.zindex_2"/>
 																</label>  
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-1 control-label">X</label>
+															<div class="col-md-5">
+																<div id="spinner-x">
+																	<div class="input-group input-small">
+																		<input type="text" class="spinner-input form-control" readonly name="leftoffset" >
+																		<div class="spinner-buttons input-group-btn btn-group-vertical">
+																			<button type="button" class="btn spinner-up btn-xs blue">
+																			<i class="fa fa-angle-up"></i>
+																			</button>
+																			<button type="button" class="btn spinner-down btn-xs blue">
+																			<i class="fa fa-angle-down"></i>
+																			</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<label class="col-md-1 control-label">Y</label>
+															<div class="col-md-5">
+																<div id="spinner-y">
+																	<div class="input-group input-small">
+																		<input type="text" class="spinner-input form-control" readonly name="topoffset" >
+																		<div class="spinner-buttons input-group-btn btn-group-vertical">
+																			<button type="button" class="btn spinner-up btn-xs blue">
+																			<i class="fa fa-angle-up"></i>
+																			</button>
+																			<button type="button" class="btn spinner-down btn-xs blue">
+																			<i class="fa fa-angle-down"></i>
+																			</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>														
+														<div class="form-group last">
+															<label class="col-md-1 control-label">W</label>
+															<div class="col-md-5">
+																<div id="spinner-w">
+																	<div class="input-group input-small">
+																		<input type="text" class="spinner-input form-control" readonly name="width" >
+																		<div class="spinner-buttons input-group-btn btn-group-vertical">
+																			<button type="button" class="btn spinner-up btn-xs blue">
+																			<i class="fa fa-angle-up"></i>
+																			</button>
+																			<button type="button" class="btn spinner-down btn-xs blue">
+																			<i class="fa fa-angle-down"></i>
+																			</button>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<label class="col-md-1 control-label">H</label>
+															<div class="col-md-5">
+																<div id="spinner-h">
+																	<div class="input-group input-small">
+																		<input type="text" class="spinner-input form-control" readonly name="height" >
+																		<div class="spinner-buttons input-group-btn btn-group-vertical">
+																			<button type="button" class="btn spinner-up btn-xs blue">
+																			<i class="fa fa-angle-up"></i>
+																			</button>
+																			<button type="button" class="btn spinner-down btn-xs blue">
+																			<i class="fa fa-angle-down"></i>
+																			</button>
+																		</div>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -399,14 +492,15 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
+<script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=9"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=10"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();
