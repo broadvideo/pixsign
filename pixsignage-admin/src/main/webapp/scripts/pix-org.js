@@ -196,10 +196,10 @@ function initMyEditModal() {
 	});
 	
 	$('body').on('click', '.pix-add', function(event) {
-		if ($('#MyTable').dataTable().fnGetData().length >= MaxOrgs) {
-			bootbox.alert(common.tips.maxorgs);
-			return;
-		}
+		//if ($('#MyTable').dataTable().fnGetData().length >= MaxOrgs) {
+		//	bootbox.alert(common.tips.maxorgs);
+		//	return;
+		//}
 		
 		var action = myurls['common.add'];
 		refreshForm('MyEditForm');
