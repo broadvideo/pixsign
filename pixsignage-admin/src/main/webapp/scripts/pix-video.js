@@ -11,16 +11,16 @@ function refreshMyTable() {
 }			
 
 function initMyTable() {
-	$(".fancybox").fancybox({
-		openEffect	: 'none',
-		closeEffect	: 'none'
-	});
+	//$(".fancybox").fancybox({
+	//	openEffect	: 'none',
+	//	closeEffect	: 'none'
+	//});
 
 	$("#MyTable thead").css("display", "none");
 	$("#MyTable tbody").css("display", "none");
 	
 	var currentSelectBranchid = myBranchid;
-	var thumbmailhtml = '';
+	var videohtml = '';
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
@@ -47,31 +47,60 @@ function initMyTable() {
 		},
 		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 			if (iDisplayIndex % 6 == 0) {
-				thumbmailhtml = '';
-				thumbmailhtml += '<div class="row" >';
+				videohtml = '';
+				videohtml += '<div class="row" >';
 			}
-			thumbmailhtml += '<div class="col-md-2 col-xs-2">';
-			if (aData['thumbnail'] == null) {
-				thumbmailhtml += '<img src="../local/img/video.jpg' + '" alt="' + aData['name'] + '" width="100%" />';
+			videohtml += '<div class="col-md-2 col-xs-2">';
+			var imageurl = '/pixsigdata' + aData.thumbnail;
+			if (aData.thumbnail == null) {
+				imageurl = '../local/img/video.jpg';
+			}
+			var videourl = '/pixsigdata' + aData.filepath;
+			if (aData.filepath == null) {
+				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" />';
 			} else {
-				thumbmailhtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
-				thumbmailhtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
+				//videohtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
+				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData['name'] + '">';
+				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" /> </a>';
 			}
-			thumbmailhtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
+			videohtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
-			thumbmailhtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+			videohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			if (currentSelectBranchid == myBranchid) {
-				thumbmailhtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
-				thumbmailhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
+				videohtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
+				videohtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
 			}
-			thumbmailhtml += '</div>';
+			videohtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
-				thumbmailhtml += '</div>';
+				videohtml += '</div>';
 				if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
-					thumbmailhtml += '<hr/>';
+					videohtml += '<hr/>';
 				}
-				$('#MediaContainer').append(thumbmailhtml);
+				$('#MediaContainer').append(videohtml);
 			}
+			$('.fancybox').click(function() {
+				var myVideo = this.href;
+				$.fancybox({
+		            padding : 0,
+		            content: '<div id="video_container">Loading the player ... </div>',
+		            afterShow: function(){
+		            	jwplayer.key='rMF5t+PiENAlr4SobpLajtNkDjTaqzQToz13+5sNGLI=';
+		                jwplayer('video_container').setup({ 
+		                	stretching: 'fill',
+		                	image: '/pixres/global/plugins/jwplayer/preview.jpg',
+		                    file: myVideo,
+		                    width: 760,
+		                    height: 428,
+		                    autostart: true,
+		                    primary: 'flash', 
+		                    bufferlength:10,
+		                    flashplayer: '/pixres/global/plugins/jwplayer/jwplayer.flash.swf'
+		                });
+		            }
+		        });
+		        return false;
+			});
+
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

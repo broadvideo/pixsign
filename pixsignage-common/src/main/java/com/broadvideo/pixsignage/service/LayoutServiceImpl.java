@@ -330,6 +330,10 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		for (int i = 0; i < regionschedules.length; i++) {
 			regionscheduleMapper.insertSelective(regionschedules[i]);
+			devicefileMapper.deleteDeviceVideoFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.deleteDeviceImageFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.insertDeviceVideoFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.insertDeviceImageFiles("" + regionschedules[i].getBindid());
 		}
 	}
 
@@ -340,6 +344,10 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		for (int i = 0; i < regionschedules.length; i++) {
 			regionscheduleMapper.insertSelective(regionschedules[i]);
+			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedules[i].getBindid());
+			devicefileMapper.insertDevicegroupImageFiles("" + regionschedules[i].getBindid());
 		}
 	}
 

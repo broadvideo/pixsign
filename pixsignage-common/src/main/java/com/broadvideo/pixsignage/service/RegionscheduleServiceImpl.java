@@ -47,7 +47,6 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedule.getBindid());
 			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedule.getBindid());
 			devicefileMapper.insertDevicegroupImageFiles("" + regionschedule.getBindid());
-
 		}
 	}
 
