@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Layoutschedule;
-import com.broadvideo.pixsignage.service.LayoutService;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.LayoutscheduleService;
 
 @SuppressWarnings("serial")
@@ -24,7 +24,7 @@ public class LayoutscheduleAction extends BaseDatatableAction {
 	@Autowired
 	private LayoutscheduleService layoutscheduleService;
 	@Autowired
-	private LayoutService layoutService;
+	private BundleService bundleService;
 
 	public String doList() {
 		try {
@@ -87,7 +87,7 @@ public class LayoutscheduleAction extends BaseDatatableAction {
 			String bindtype = getParameter("bindtype");
 			String bindid = getParameter("bindid");
 			if (bindtype != null && bindid != null) {
-				layoutService.syncLayoutschedule(bindtype, bindid);
+				bundleService.syncBundleLayout(bindtype, bindid);
 				logger.error("Layout schedule sync success");
 			}
 			return SUCCESS;

@@ -5,6 +5,7 @@
     <id column="medialistid" property="medialistid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -14,7 +15,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    medialistid, orgid, name, status, description, createtime, createstaffid
+    medialistid, orgid, name, type, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -25,7 +26,8 @@
   </select>
   
   <select id="selectCount" resultType="Integer">
-    select count(1) from medialist where status = 1 and orgid = ${orgid}
+    select count(1) from medialist 
+    where type = 1 and status = 1 and orgid = ${orgid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -33,7 +35,7 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from medialist
-    where status = 1 and orgid = ${orgid}
+    where type = 1 and status = 1 and orgid = ${orgid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -52,10 +54,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="medialistid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into medialist (orgid, name, 
+    insert into medialist (orgid, name, type, 
       status, description, createtime, 
       createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -70,6 +72,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="status != null" >
         status,
@@ -90,6 +95,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -114,6 +122,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -133,6 +144,7 @@
     update medialist
     set orgid = #{orgid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

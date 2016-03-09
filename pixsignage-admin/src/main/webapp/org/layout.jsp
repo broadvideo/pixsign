@@ -81,6 +81,7 @@ response.setDateHeader("Expires",0);
 					<div class="modal-body">
 						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 							<input type="hidden" name="layout.layoutid" value="0" />
+							<input type="hidden" name="layout.type" value="0" />
 							<input type="hidden" name="layout.status" value="1" />
 							<div class="form-body">
 								<div class="form-group">
@@ -94,6 +95,7 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 								</div>
+								<!-- 
 								<div class="form-group">
 									<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 									<div class="col-md-9">
@@ -103,6 +105,7 @@ response.setDateHeader("Expires",0);
 										</select>
 									</div>
 								</div>
+								 -->
 								<div class="form-group layout-ratio">
 									<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
 									<div class="col-md-9">
@@ -197,7 +200,7 @@ response.setDateHeader("Expires",0);
 												<form id="LayoutdtlEditForm" class="form-horizontal pix-bordered">
 													<input type="hidden" name="regionid" value="0" />
 													<div class="form-body">
-														<label class="page-title font-red-sunglo region-title"></label>
+														<label class="page-title font-red-sunglo layoutdtl-title"></label>
 														<div class="form-group nontextflag">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 															<div class="col-md-9">
@@ -500,7 +503,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

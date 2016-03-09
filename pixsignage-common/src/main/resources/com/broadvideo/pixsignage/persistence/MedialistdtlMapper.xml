@@ -43,6 +43,11 @@
     where medialistdtlid = '${medialistdtlid}'
   </delete>
   
+  <delete id="deleteByMedialist" >
+    delete from medialistdtl
+    where medialistid = '${medialistid}'
+  </delete>
+
   <delete id="deleteByObj" >
     delete from medialistdtl
     where objtype = '${objtype}' and objid = '${objid}'

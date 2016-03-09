@@ -5,6 +5,7 @@ var currentDeviceid;
 var currentRegion;
 var currentLayoutschedules;
 var currentRegionschedules;
+var currentBundleschedules;
 
 var RegionColors = [];
 RegionColors[0] = '#BCC2F2';
@@ -28,10 +29,11 @@ $('#MyTable').dataTable({
 	'sAjaxSource' : 'device!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
-					{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
+					{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '25%' }, 
 					{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
-					{'sTitle' : common.view.layoutschedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
-					{'sTitle' : common.view.regionschedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
+					//{'sTitle' : common.view.layoutschedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
+					//{'sTitle' : common.view.regionschedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
+					{'sTitle' : common.view.bundleschedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.sync, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
@@ -47,9 +49,10 @@ $('#MyTable').dataTable({
 			$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
 		}
 		
-		$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-layoutschedule"><i class="fa fa-calendar-o"></i> ' + common.view.layoutschedule + '</a>');
-		$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-regionschedule"><i class="fa fa-calendar"></i> ' + common.view.regionschedule + '</a>');
-		$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+		//$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-layoutschedule"><i class="fa fa-calendar-o"></i> ' + common.view.layoutschedule + '</a>');
+		//$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-regionschedule"><i class="fa fa-calendar"></i> ' + common.view.regionschedule + '</a>');
+		$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundleschedule"><i class="fa fa-calendar-o"></i> ' + common.view.bundleschedule + '</a>');
+		$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
 
 		return nRow;
 	},
@@ -62,6 +65,7 @@ jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input
 jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 jQuery('#MyTable_wrapper .dataTables_length select').select2();
 
+/*
 $.ajax({
 	type : 'POST',
 	url : 'layout!list.action',
@@ -157,6 +161,7 @@ $.ajax({
 		alert('failure');
 	}
 });
+*/
 
 $('body').on('click', '.pix-sync', function(event) {
 	var target = $(event.target);
@@ -197,6 +202,7 @@ $('body').on('click', '.pix-sync', function(event) {
 	});
 });
 
+/*
 //LayoutSchedule Edit
 function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
 	if (layoutdtl.bgimage != null) {
@@ -810,6 +816,284 @@ $('[type=submit]', $('#RegionScheduleModal')).on('click', function(event) {
 		},
 		error : function() {
 			$('#RegionScheduleModal').modal('hide');
+			bootbox.alert(common.tips.error);
+		}
+	});
+
+	event.preventDefault();
+});	
+*/
+
+//BundleSchedule Edit
+function redrawBundlePreview(div, bundle) {
+	div.empty();
+	div.attr('bundleid', bundle.bundleid);
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
+	if (bundle.layout.bgimage != null) {
+		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	}
+	for (var i=0; i<bundle.bundledtls.length; i++) {
+		div.append(generateBundledtlPreviewHtml(bundle, bundle.bundledtls[i]));
+	}
+}
+
+function generateBundledtlPreviewHtml(bundle, bundledtl) {
+	var bgimage = null;
+	if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
+		var medialistdtl = bundledtl.medialist.medialistdtls[0];
+		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
+			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
+		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
+			bgimage = '/pixsigdata' + medialistdtl.image.filepath;
+		}
+	}
+	var bundledtlhtml = '';
+	bundledtlhtml += '<div style="position: absolute; width:' + 100*bundledtl.layoutdtl.width/bundle.layout.width;
+	bundledtlhtml += '%; height:' + 100*bundledtl.layoutdtl.height/bundle.layout.height;
+	bundledtlhtml += '%; top: ' + 100*bundledtl.layoutdtl.topoffset/bundle.layout.height;
+	bundledtlhtml += '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/bundle.layout.width;
+	bundledtlhtml += '%; border: 1px solid #000; background:' + bundledtl.layoutdtl.bgcolor;
+	if (bundledtl.layoutdtl.region.type != 0) {
+		bundledtlhtml += '; opacity:.' + bundledtl.layoutdtl.opacity + '; ">';
+	} else {
+		bundledtlhtml += '; ">';
+	}
+	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
+	if (bgimage != null) {
+		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (bundledtl.layoutdtl.bgimage != null) {
+		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	}
+	bundledtlhtml += '</div>';
+	bundledtlhtml += '</div>';
+	return bundledtlhtml;
+}
+
+function refreshBundleScheduleDetail() {
+	$('#BundleScheduleDetail').empty();
+	if (currentBundleschedules.length > 0) {
+		var scheduleTabHtml = '<h3></h3><ul class="timeline">';
+		for (var i=0; i<currentBundleschedules.length; i++) {
+			var schedule = currentBundleschedules[i];
+			scheduleTabHtml += '<li class="timeline-grey">';
+			scheduleTabHtml += '<div class="timeline-time">';
+			scheduleTabHtml += '<span class="time">' + schedule.starttime.substring(0,5) + ' </span>';
+			scheduleTabHtml += '</div>';
+			scheduleTabHtml += '<div class="timeline-icon"><i class="fa fa-video-camera"></i></div>';
+			scheduleTabHtml += '<div class="timeline-body">';
+			scheduleTabHtml += '<div class="timeline-content">';
+			scheduleTabHtml += '<div class="row"><div class="col-md-5 col-sm-5"><h2>' + schedule.bundle.name + '</h2></div>';
+			scheduleTabHtml += '<div class="col-md-5 col-sm-5"><div id="BundlescheduleDiv-'+ schedule.bundlescheduleid + '"></div></div>';
+			scheduleTabHtml += '<div class="col-md-2 col-sm-2"><a href="javascript:;" class="btn btn-sm red pull-right pix-del-bundleschedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a></div>';
+			scheduleTabHtml += '</div>';
+			scheduleTabHtml += '</div>';
+			scheduleTabHtml += '</div>';
+			scheduleTabHtml += '</li>';
+		}
+		scheduleTabHtml += '</ul>';
+	} else {
+		var scheduleTabHtml = '<h3>' + common.tips.device_bundleschedule_zero + '</h3>';
+	}
+	$('#BundleScheduleDetail').html(scheduleTabHtml);
+
+	for (var i=0; i<currentBundleschedules.length; i++) {
+		var schedule = currentBundleschedules[i];
+		var bundle = schedule.bundle;
+		redrawBundlePreview($('#BundlescheduleDiv-'+ schedule.bundlescheduleid), bundle);
+		var scale;
+		if (bundle.layout.width == 1920 || bundle.layout.width == 1080) {
+			scale = 1920/250;
+		} else {
+			scale = 800/250;
+		}
+		var width = bundle.layout.width/scale;
+		var height = bundle.layout.height/scale;
+		$('#BundlescheduleDiv-'+ schedule.bundlescheduleid).css("width" , width);
+		$('#BundlescheduleDiv-'+ schedule.bundlescheduleid).css("height" , height);
+	}
+}
+
+$.ajax({
+	type : 'POST',
+	url : 'bundle!list.action',
+	data : {},
+	success : function(data, status) {
+		if (data.errorcode == 0) {
+			Bundles = data.aaData;
+			var bundleTableHtml = '';
+			bundleTableHtml += '<tr>';
+			for (var i=0; i<Bundles.length; i++) {
+				bundleTableHtml += '<td style="padding: 0px 20px 0px 0px;"><div id="BundleDiv-' + Bundles[i].bundleid + '"></div></td>';
+			}
+			bundleTableHtml += '</tr>';
+			bundleTableHtml += '<tr>';
+			for (var i=0; i<Bundles.length; i++) {
+				bundleTableHtml += '<td>';
+				bundleTableHtml += '<label class="radio-inline">';
+				if (i == 0) {
+					bundleTableHtml += '<input type="radio" name="bundleid" value="' + Bundles[i].bundleid + '" checked>';
+				} else {
+					bundleTableHtml += '<input type="radio" name="bundleid" value="' +Bundles[i].bundleid + '">';
+				}
+				bundleTableHtml += Bundles[i].name + '</label>';
+				bundleTableHtml += '</td>';
+			}
+			bundleTableHtml += '</tr>';
+			$('#BundleTable').html(bundleTableHtml);
+			
+			for (var i=0; i<Bundles.length; i++) {
+				var bundle = Bundles[i];
+				redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle);
+				var scale;
+				if (bundle.layout.width == 1920 || bundle.layout.width == 1080) {
+					scale = 1920/200;
+				} else {
+					scale = 800/200;
+				}
+				var width = bundle.layout.width/scale;
+				var height = bundle.layout.height/scale;
+				$('#BundleDiv-' + bundle.bundleid).css("width" , width);
+				$('#BundleDiv-' + bundle.bundleid).css("height" , height);
+			}
+		} else {
+			alert(data.errorcode + ": " + data.errormsg);
+		}
+	},
+	error : function() {
+		alert('failure');
+	}
+});
+
+$('body').on('click', '.pix-bundleschedule', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	currentDevice = $('#MyTable').dataTable().fnGetData(index);
+	currentDeviceid = currentDevice.deviceid;
+	
+	$.ajax({
+		type : 'GET',
+		url : 'bundleschedule!list.action',
+		data : {
+			bindtype: '1',
+			bindid: currentDeviceid
+		},
+		beforeSend: function ( xhr ) {
+			Metronic.startPageLoading({animate: true});
+		},
+		success : function(data, status) {
+			Metronic.stopPageLoading();
+			if (data.errorcode == 0) {
+				$('.bundle-edit').css('display', 'none');
+				$('.bundle-view').css('display', 'block');				
+				currentBundleschedules = data.aaData;
+				refreshBundleScheduleDetail();
+				$('#BundleScheduleModal').modal();
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
+			}
+		},
+		error : function() {
+			Metronic.stopPageLoading();
+			bootbox.alert(common.tips.error);
+		}
+	});
+});
+
+$('body').on('click', '.pix-add-bundleschedule', function(event) {
+	$('.bundle-edit').css('display', 'block');
+	$('.bundle-view').css('display', 'none');				
+	$('.form-group').removeClass('has-error');
+	$('.help-block').remove();
+	$('#BundleScheduleForm input[name="starttime"]').attr('value', '');
+});
+
+FormValidateOption.rules = {};
+FormValidateOption.rules['starttime'] = {};
+FormValidateOption.rules['starttime']['required'] = true;
+FormValidateOption.rules['bundleid'] = {};
+FormValidateOption.rules['bundleid']['required'] = true;
+$('#BundleScheduleForm').validate(FormValidateOption);
+$.extend($('#BundleScheduleForm').validate().settings, {
+	rules: FormValidateOption.rules
+});
+$('#BundleScheduleForm .pix-ok').on('click', function(event) {
+	if ($('#BundleScheduleForm').valid()) {
+		$('.bundle-edit').css('display', 'none');
+		$('.bundle-view').css('display', 'block');
+		
+		var starttime = $('#BundleScheduleForm input[name=starttime]').val();
+		var bundleschedules = currentBundleschedules.filter(function (el) {
+			return (el.starttime == starttime);
+		});
+		var bundleid = $('#BundleScheduleForm input[name=bundleid]:checked').attr("value");
+		var bundlesels = Bundles.filter(function (el) {
+			return (el.bundleid == bundleid);
+		});
+		if (bundleschedules.length > 0) {
+			bundleschedules[0].playmode = $('#BundleScheduleForm input[name=playmode]:checked').attr("value");
+			bundleschedules[0].bundleid = bundleid;
+			bundleschedules[0].bundle = bundlesels[0];
+		} else {
+			var bundleschedule = {};
+			bundleschedule.bundlescheduleid = 'B' + Math.round(Math.random()*100000000);
+			bundleschedule.bindtype = 1;
+			bundleschedule.bindid = currentDeviceid;
+			bundleschedule.bundleid = bundleid;
+			bundleschedule.playmode = $('#BundleScheduleForm input[name=playmode]:checked').attr("value");
+			bundleschedule.starttime = $('#BundleScheduleForm input[name=starttime]').val();
+			bundleschedule.bundle = bundlesels[0];
+			currentBundleschedules[currentBundleschedules.length] = bundleschedule;
+
+			currentBundleschedules.sort(function(a, b) {
+				return (a.starttime > b.starttime);
+			});
+		}
+		refreshBundleScheduleDetail();
+	}
+});
+$('#BundleScheduleForm .pix-cancel').on('click', function(event) {
+	$('.bundle-edit').css('display', 'none');
+	$('.bundle-view').css('display', 'block');				
+});
+
+$('body').on('click', '.pix-del-bundleschedule', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	currentBundleschedules.splice(index, 1);
+	refreshBundleScheduleDetail();
+});
+
+$('[type=submit]', $('#BundleScheduleModal')).on('click', function(event) {
+	for (var i=0; i<currentBundleschedules.length; i++) {
+		if (('' + currentBundleschedules[i].bundlescheduleid).indexOf('B') == 0) {
+			currentBundleschedules[i].bundlescheduleid = '0';
+		}
+	}
+	$.ajax({
+		type : 'POST',
+		url : 'bundle!addbundleschedules',
+		data : '{"devices":[' + $.toJSON(currentDevice) + '], "bundleschedules":' + $.toJSON(currentBundleschedules) + '}',
+		dataType : 'json',
+		contentType : 'application/json;charset=utf-8',
+		beforeSend: function ( xhr ) {
+			Metronic.startPageLoading({animate: true});
+		},
+		success : function(data, status) {
+			Metronic.stopPageLoading();
+			$('#BundleScheduleModal').modal('hide');
+			if (data.errorcode == 0) {
+				bootbox.alert(common.tips.success);
+				$('#MyTable').dataTable()._fnAjaxUpdate();
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
+			}
+		},
+		error : function() {
+			$('#BundleScheduleModal').modal('hide');
 			bootbox.alert(common.tips.error);
 		}
 	});

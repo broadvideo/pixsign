@@ -2,9 +2,9 @@
 ## pre script  #############################################
 ############################################################
 
-set @version = 4;
+set @version = 5;
 set @module = 'pixsignage';
-set @dbscript=concat(@module , '-upgrade-3.sql');
+set @dbscript=concat(@module , '-upgrade-4.sql');
 insert into dbversion(version, dbscript, type, status) values(@version, @dbscript, '2', '0');
 select last_insert_id() into @dbversionid;
 
@@ -13,35 +13,52 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
-alter table org add powerflag char(1) default '0';
-alter table org add poweron time;
-alter table org add poweroff time;
-alter table org add devicepass varchar(32) default '123456';
+alter table text add type char(1) default 1;
+alter table text modify text longtext not null default '';
+alter table stream add type char(1) default 1;
+alter table dvb add type char(1) default 1;
+alter table widget add type char(1) default 1;
+alter table medialist add type char(1) default 1;
 
-alter table video modify filename varchar(128);
-alter table image modify filename varchar(128);
+create table bundle( 
+   bundleid int not null auto_increment,
+   orgid int not null,
+   layoutid int not null,
+   name varchar(64) not null,
+   status char(1) default '1',
+   createtime timestamp not null default current_timestamp,
+   createstaffid int,
+   primary key (bundleid),
+   foreign key (orgid) references org(orgid)
+ )engine = innodb
+default character set utf8;
 
-alter table layout add bgimageid int default 0;
-alter table layoutdtl add bgimageid int default 0;
-alter table layoutdtl add dateformat varchar(32);
-alter table layoutdtl add fitflag char(1) default 1;
-alter table layoutdtl add volume int default 50;
+create table bundledtl( 
+   bundledtlid int not null auto_increment,
+   bundleid int not null,
+   regionid int not null,
+   type char(1) not null,
+   objtype char(1) not null,
+   objid int not null,
+   createtime timestamp not null default current_timestamp,
+   primary key (bundledtlid)
+ )engine = innodb
+default character set utf8;
 
-alter table layoutdtl drop foreign key layoutdtl_ibfk_2;
-alter table regionschedule drop foreign key regionschedule_ibfk_1;
-delete from region;
-insert into region(regionid,name,code,type) values(1,'region.main','main','0');
-insert into region(regionid,name,code,type) values(2,'region.text_1','text-1','1');
-insert into region(regionid,name,code,type) values(3,'region.text_2','text-2','1');
-insert into region(regionid,name,code,type) values(4,'region.extra_1','extra-1','0');
-insert into region(regionid,name,code,type) values(5,'region.extra_2','extra-2','0');
-insert into region(regionid,name,code,type) values(6,'region.extra_3','extra-3','0');
-insert into region(regionid,name,code,type) values(7,'region.extra_4','extra-4','0');
-insert into region(regionid,name,code,type) values(8,'region.date_1','date-1','2');
-insert into region(regionid,name,code,type) values(9,'region.date_2','date-2','2');
-
-update layoutdtl set regionid=regionid+1 where regionid>2;
-update regionschedule set regionid=regionid+1 where regionid>2;
+create table bundleschedule( 
+   bundlescheduleid int not null auto_increment,
+   bindtype char(1) not null,
+   bindid int not null,
+   bundleid int not null,
+   playmode char(1) not null,
+   playdate date,
+   starttime time,
+   endtime time,
+   createtime timestamp not null default current_timestamp,
+   primary key (bundlescheduleid),
+   foreign key (bundleid) references bundle(bundleid)
+ )engine = innodb
+default character set utf8;
 
 delete from privilege where privilegeid>0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,1,0,'menu.opmanage','','fa-cloud',1,1,'0');
@@ -68,9 +85,10 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20203,2,202,'menu.devicefile','devicefile.jsp','',1,3,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20204,2,202,'menu.config','config.jsp','',1,4,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(203,2,0,'menu.schedulemanage','','fa-calendar',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20301,2,203,'menu.layout','layout-design.jsp','',1,1,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20302,2,203,'menu.deviceschedule','device-schedule.jsp','',1,2,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20303,2,203,'menu.devicegpschedule','devicegp-schedule.jsp','',1,3,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20301,2,203,'menu.layout','layout.jsp','',1,1,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20302,2,203,'menu.bundle','bundle.jsp','',1,2,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20303,2,203,'menu.deviceschedule','device-schedule.jsp','',1,3,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20304,2,203,'menu.devicegpschedule','devicegp-schedule.jsp','',1,4,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(204,2,0,'menu.vstation','','fa-video-camera',1,5,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20401,2,204,'menu.vchannel','vchannel.jsp','',1,1,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(20402,2,204,'menu.playlist','vchannel-playlist.jsp','',1,2,'1');

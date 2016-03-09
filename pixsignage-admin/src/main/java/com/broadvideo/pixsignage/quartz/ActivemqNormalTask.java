@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
-import com.broadvideo.pixsignage.service.LayoutService;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 
 public class ActivemqNormalTask {
@@ -21,7 +21,7 @@ public class ActivemqNormalTask {
 	@Autowired
 	private MsgeventMapper msgeventMapper;
 	@Autowired
-	private LayoutService layoutService;
+	private BundleService bundleService;
 
 	public void work() {
 		try {
@@ -56,12 +56,12 @@ public class ActivemqNormalTask {
 			JSONObject msgJson;
 			if (msgevent.getMsgtype().equals(Msgevent.MsgType_Layout_Schedule)) {
 				msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "LAYOUT");
-				JSONObject msgBodyJson = layoutService.generateLayoutScheduleJson(msgevent.getObjtype1(),
+				JSONObject msgBodyJson = bundleService.generateBundleLayoutJson(msgevent.getObjtype1(),
 						"" + msgevent.getObjid1());
 				msgJson.put("msg_body", msgBodyJson);
 			} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Region_Schedule)) {
 				msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "REGION");
-				JSONObject msgBodyJson = layoutService.generateRegionScheduleJson(msgevent.getObjtype1(),
+				JSONObject msgBodyJson = bundleService.generateBundleRegionJson(msgevent.getObjtype1(),
 						"" + msgevent.getObjid1(), "" + msgevent.getObjid2());
 				msgJson.put("msg_body", msgBodyJson);
 			} else {

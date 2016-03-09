@@ -5,6 +5,9 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Widget {
+	public final static String Type_Private = "0";
+	public final static String Type_Public = "1";
+
 	private Integer widgetid;
 
 	private Integer orgid;
@@ -12,6 +15,8 @@ public class Widget {
 	private String name;
 
 	private String url;
+
+	private String type;
 
 	private String status;
 
@@ -51,6 +56,14 @@ public class Widget {
 
 	public void setUrl(String url) {
 		this.url = url == null ? null : url.trim();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
 	}
 
 	public String getStatus() {

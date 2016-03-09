@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
-import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -25,7 +25,7 @@ public class DeviceAction extends BaseDatatableAction {
 	@Autowired
 	private DeviceService deviceService;
 	@Autowired
-	private LayoutService layoutService;
+	private BundleService bundleService;
 
 	public String doList() {
 		try {
@@ -149,8 +149,8 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");
-			layoutService.syncLayoutschedule("1", deviceid);
-			layoutService.syncRegionschedule("1", deviceid);
+			bundleService.syncBundleLayout("1", deviceid);
+			bundleService.syncBundleRegions("1", deviceid);
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

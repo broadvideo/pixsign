@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.BundlescheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundleschedule" >
+    <id column="bundlescheduleid" property="bundlescheduleid" jdbcType="INTEGER" />
+    <result column="bindtype" property="bindtype" jdbcType="CHAR" />
+    <result column="bindid" property="bindid" jdbcType="INTEGER" />
+    <result column="bundleid" property="bundleid" jdbcType="INTEGER" />
+    <result column="playmode" property="playmode" jdbcType="CHAR" />
+    <result column="playdate" property="playdate" jdbcType="DATE" />
+    <result column="starttime" property="starttime" jdbcType="TIME" />
+    <result column="endtime" property="endtime" jdbcType="TIME" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="bundle" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <resultMap id="BindResultMap" type="java.util.HashMap" >
+    <result column="bindtype" property="bindtype" jdbcType="CHAR" />
+    <result column="bindid" property="bindid" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    bundlescheduleid, bindtype, bindid, bundleid, playmode, playdate, starttime, endtime, 
+    createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundleschedule
+    where bundlescheduleid = '${bundlescheduleid}'
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundleschedule
+    where bindtype = '${bindtype}' and bindid = '${bindid}'
+    <if test="playmode != null">
+      and playmode = '${playmode}'
+    </if>
+    <if test="fromdate != null">
+      and playdate &gt;= '${fromdate}'
+    </if>
+    <if test="todate != null">
+      and playdate &lt;= '${todate}'
+    </if>
+    order by playdate, starttime
+  </select>
+  
+  <select id="selectBindListByBundle" resultMap="BindResultMap" >
+    select 
+    distinct bindtype, bindid
+    from bundleschedule
+    where bundleid = '${bundleid}'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bundleschedule
+    where bundlescheduleid = '${bundlescheduleid}'
+  </delete>
+  
+    <delete id="deleteByDtl" >
+    delete from bundleschedule
+    where bindtype = '${bindtype}' and bindid = '${bindid}'
+    <if test="playmode != null">
+      and playmode = '${playmode}'
+    </if>
+    <if test="playdate != null">
+      and playdate = '${playdate}'
+    </if>
+    <if test="starttime != null">
+      and starttime = '${starttime}'
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Bundleschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="bundlescheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bundleschedule (bindtype, bindid, bundleid, 
+      playmode, playdate, starttime, 
+      endtime, createtime)
+    values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, #{bundleid,jdbcType=INTEGER}, 
+      #{playmode,jdbcType=CHAR}, #{playdate,jdbcType=DATE}, #{starttime,jdbcType=TIME}, 
+      #{endtime,jdbcType=TIME}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Bundleschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="bundlescheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bundleschedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bindtype != null" >
+        bindtype,
+      </if>
+      <if test="bindid != null" >
+        bindid,
+      </if>
+      <if test="bundleid != null" >
+        bundleid,
+      </if>
+      <if test="playmode != null" >
+        playmode,
+      </if>
+      <if test="playdate != null" >
+        playdate,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bindtype != null" >
+        #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        #{bindid,jdbcType=INTEGER},
+      </if>
+      <if test="bundleid != null" >
+        #{bundleid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIME},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Bundleschedule" >
+    update bundleschedule
+    <set >
+      <if test="bindtype != null" >
+        bindtype = #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        bindid = #{bindid,jdbcType=INTEGER},
+      </if>
+      <if test="bundleid != null" >
+        bundleid = #{bundleid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        playmode = #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        playdate = #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIME},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where bundlescheduleid = #{bundlescheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Bundleschedule" >
+    update bundleschedule
+    set bindtype = #{bindtype,jdbcType=CHAR},
+      bindid = #{bindid,jdbcType=INTEGER},
+      bundleid = #{bundleid,jdbcType=INTEGER},
+      playmode = #{playmode,jdbcType=CHAR},
+      playdate = #{playdate,jdbcType=DATE},
+      starttime = #{starttime,jdbcType=TIME},
+      endtime = #{endtime,jdbcType=TIME},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where bundlescheduleid = #{bundlescheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

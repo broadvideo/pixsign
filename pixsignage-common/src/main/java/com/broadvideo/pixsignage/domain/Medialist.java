@@ -1,16 +1,22 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
 public class Medialist {
+	public final static String Type_Private = "0";
+	public final static String Type_Public = "1";
+
 	private Integer medialistid;
 
 	private Integer orgid;
 
 	private String name;
+
+	private String type;
 
 	private String status;
 
@@ -44,6 +50,14 @@ public class Medialist {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
 	}
 
 	public String getStatus() {
@@ -85,6 +99,6 @@ public class Medialist {
 	}
 
 	public void setMedialistdtls(List<Medialistdtl> medialistdtls) {
-		this.medialistdtls = medialistdtls;
+		this.medialistdtls = medialistdtls == null ? new ArrayList<Medialistdtl>() : medialistdtls;
 	}
 }

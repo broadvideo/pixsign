@@ -1,4 +1,4 @@
-var common={
+var common = {
 	view: {
 		id: 'ID',
 		name: 'Name',
@@ -21,6 +21,7 @@ var common={
 		schedule: 'Schedule',
 		layoutschedule: 'Layout Schedule',
 		regionschedule: 'Region Schedule',
+		bundleschedule: 'Bundle Schedule',
 		sequence: 'Sequence',
 		terminalid: 'Terminal ID',
 		hardkey: 'Hardkey',
@@ -111,6 +112,12 @@ var common={
 		detail_select: 'Please select',
 		device_missed: 'Device or device group should be selected',
 			
+		device_layoutschedule_zero: 'Current device has no layout schedules',
+		device_bundleschedule_zero: 'Current device has no bundle schedules',
+		devicegp_layoutschedule_zero: 'Current device group has no layout schedules',
+		devicegp_bundleschedule_zero: 'Current device group has no bundle schedules',
+		regionschedule_zero: 'Current region has no schedules',
+		
 		username_required: 'Username required',
 		password_required: 'Password required',
 		code_required: 'ORG code required',

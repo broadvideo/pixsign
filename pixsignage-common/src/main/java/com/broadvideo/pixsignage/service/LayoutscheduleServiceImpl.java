@@ -9,21 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Layoutschedule;
-import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
-import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 
 @Service("layoutscheduleService")
 public class LayoutscheduleServiceImpl implements LayoutscheduleService {
 	@Autowired
 	private LayoutscheduleMapper layoutscheduleMapper;
-	@Autowired
-	private LayoutMapper layoutMapper;
-	@Autowired
-	private DeviceMapper deviceMapper;
-	@Autowired
-	private MsgeventMapper msgeventMapper;
 
 	public List<Layoutschedule> selectList(String bindtype, String bindid) {
 		return layoutscheduleMapper.selectList(bindtype, bindid, null, null, null);

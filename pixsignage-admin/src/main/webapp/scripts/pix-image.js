@@ -274,7 +274,7 @@ function initUploadModal() {
 		disableImageResize: false,
 		autoUpload: false,
 		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-		maxFileSize: 10240000,
+		maxFileSize: 20480000,
 		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				

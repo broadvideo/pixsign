@@ -11,6 +11,8 @@ public interface LayoutdtlMapper {
 
 	List<Layoutdtl> selectList(@Param(value = "layoutid") String layoutid);
 
+	Layoutdtl selectByBundledtlid(@Param(value = "bundledtlid") String bundledtlid);
+
 	int deleteByPrimaryKey(@Param(value = "layoutdtlid") String layoutdtlid);
 
 	// int insert(Layoutdtl record);

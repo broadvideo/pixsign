@@ -214,7 +214,7 @@ create table text(
    textid int not null auto_increment,
    orgid int not null,
    name varchar(256) not null,
-   text longtext not null,
+   text longtext not null default '',
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,

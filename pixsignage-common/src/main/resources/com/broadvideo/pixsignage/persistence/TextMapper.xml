@@ -5,6 +5,7 @@
     <id column="textid" property="textid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -15,7 +16,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    textid, orgid, name, status, description, createtime, createstaffid
+    textid, orgid, name, type, status, description, createtime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
     text
@@ -32,7 +33,7 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from text
-    where status='1' and orgid=#{orgid}
+    where type='1' and status='1' and orgid=#{orgid}
   </select>
 
   <select id="selectList" resultMap="ResultMapWithBLOBs">
@@ -41,7 +42,7 @@
     ,
     <include refid="Blob_Column_List" />
     from text
-    where status='1' and  orgid=#{orgid}
+    where type='1' and status='1' and orgid=#{orgid}
     order by textid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -49,8 +50,7 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update text
-    set status='9'
+    delete from text
     where textid = '${textid}'
   </delete>
     
@@ -58,10 +58,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="textid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into text (orgid, name, status, 
+    insert into text (orgid, name, type, status, 
       description, createtime, createstaffid, 
       text)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
       #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
       #{text,jdbcType=LONGVARCHAR})
   </insert>
@@ -76,6 +76,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="status != null" >
         status,
@@ -99,6 +102,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -126,6 +132,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -148,6 +157,7 @@
     update text
     set orgid = #{orgid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -159,6 +169,7 @@
     update text
     set orgid = #{orgid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

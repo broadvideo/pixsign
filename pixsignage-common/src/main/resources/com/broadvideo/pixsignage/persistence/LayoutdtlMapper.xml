@@ -41,7 +41,15 @@
   <select id="selectList" resultMap="BaseResultMap">
     select * from layoutdtl
     where layoutid = '${layoutid}'
-    order by layoutdtlid
+    order by zindex, layoutdtlid
+  </select>
+
+  <select id="selectByBundledtlid" resultMap="BaseResultMap">
+    select ld.* from layoutdtl ld, bundle b, bundledtl bd
+    where bd.bundledtlid = '${bundledtlid}' 
+    and ld.layoutid = b.layoutid
+    and ld.regionid = bd.regionid
+    and b.bundleid = bd.bundleid
   </select>
 
   <delete id="deleteByPrimaryKey" >

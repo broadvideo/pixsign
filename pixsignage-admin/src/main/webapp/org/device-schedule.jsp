@@ -40,6 +40,80 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
+		<div id="BundleScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="portlet box purple">
+									<div class="portlet-title">
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.bundleschedule"/></div>
+										<div class="actions">
+											<a class="btn default btn-sm yellow pix-add-bundleschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
+										</div>
+									</div>
+									<div class="portlet-body form bundle-edit">
+										<div class="row">
+											<div class="col-md-12 col-sm-12">
+												<form id="BundleScheduleForm" class="form-horizontal">
+													<div class="form-body">
+														<div class="form-group">
+															<label class="control-label col-md-3"><spring:message code="global.option"/></label>
+															<div class="col-md-9 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="playmode" value="2" checked> <spring:message code="global.daily"/>
+																</label>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
+															<div class="col-md-9">
+																<div class="input-group date form_time">                                       
+																	<input type="text" size="16" readonly class="form-control" name="starttime">
+																	<span class="input-group-btn">
+																	<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+																	</span>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.bundle"/><span class="required">*</span></label>
+															<div class="col-md-9 pre-scrollable">
+																<table id="BundleTable" class="table-striped"></table>
+															</div>
+														</div>
+													</div>
+													<div class="form-actions right">
+														<a class="btn green pix-ok"><spring:message code="global.ok"/></a>
+														<a class="btn default pix-cancel"><spring:message code="global.cancel"/></a>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									<div class="portlet-body bundle-view">
+										<div class="row">
+											<div class="col-md12 col-sm-12" id="BundleScheduleDetail">
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer bundle-view">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div id="LayoutScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -297,7 +371,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=1" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=2" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
@@ -310,7 +384,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-device-schedule.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-device-schedule.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

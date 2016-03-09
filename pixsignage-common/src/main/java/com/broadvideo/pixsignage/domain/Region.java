@@ -4,6 +4,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 public class Region {
+	public final static String Type_NONTEXT = "0";
+	public final static String Type_TEXT = "1";
+	public final static String Type_DATE = "2";
+
 	private Integer regionid;
 
 	private String name;

@@ -7,6 +7,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="frequency" property="frequency" jdbcType="VARCHAR" />
     <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -14,7 +15,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    dvbid, orgid, name, frequency, number, status, description, createtime, createstaffid
+    dvbid, orgid, name, frequency, number, type, status, description, createtime, createstaffid
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -26,12 +27,12 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from dvb
-    where status='1' and orgid=#{orgid}
+    where type='1' and status='1' and orgid=#{orgid}
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from dvb
-    where status='1' and  orgid=#{orgid}
+    where type='1' and status='1' and orgid=#{orgid}
     order by dvbid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -49,10 +50,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into dvb (orgid, name, frequency, 
-      number, status, description, 
+      number, type, status, description, 
       createtime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{frequency,jdbcType=VARCHAR}, 
-      #{number,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Dvb" >
@@ -72,6 +73,9 @@
       </if>
       <if test="number != null" >
         number,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="status != null" >
         status,
@@ -98,6 +102,9 @@
       </if>
       <if test="number != null" >
         #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -128,6 +135,9 @@
       <if test="number != null" >
         number = #{number,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -149,6 +159,7 @@
       name = #{name,jdbcType=VARCHAR},
       frequency = #{frequency,jdbcType=VARCHAR},
       number = #{number,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

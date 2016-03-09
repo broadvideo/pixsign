@@ -47,64 +47,64 @@ response.setDateHeader("Expires",0);
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 							</div>
 							<div class="modal-body">
-						<div class="row">
-							<div class="col-md-7">
-			
-								<div class="portlet box blue">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
-										<ul class="nav nav-tabs">
-											<li id="nav_tab3" class="imageflag">
-												<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
-											</li>
-											<li id="nav_tab2" class="hide-orgtype-2">
-												<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
-											</li>
-											<li id="nav_tab1" class="videoflag active">
-												<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
-											</li>
-										</ul>
+								<div class="row">
+									<div class="col-md-7">
+					
+										<div class="portlet box blue">
+											<div class="portlet-title">
+												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+												<ul class="nav nav-tabs">
+													<li id="nav_tab3" class="imageflag">
+														<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
+													</li>
+													<li id="nav_tab2" class="hide-orgtype-2">
+														<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+													</li>
+													<li id="nav_tab1" class="videoflag active">
+														<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+													</li>
+												</ul>
+											</div>
+											<div class="portlet-body">
+												<div class="tab-content">
+													<div class="tab-pane active" id="portlet_tab1">
+														<table id="IntVideoTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+													<div class="tab-pane" id="portlet_tab2">
+														<table id="ExtVideoTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+													<div class="tab-pane" id="portlet_tab3">
+														<table id="ImageTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
-									<div class="portlet-body">
-										<div class="tab-content">
-											<div class="tab-pane active" id="portlet_tab1">
-												<table id="IntVideoTable" class="table table-condensed table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
+									<div class="col-md-5">
+										<div class="portlet box green">
+											<div class="portlet-title">
+												<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
 											</div>
-											<div class="tab-pane" id="portlet_tab2">
-												<table id="ExtVideoTable" class="table table-condensed table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
-											</div>
-											<div class="tab-pane" id="portlet_tab3">
-												<table id="ImageTable" class="table table-condensed table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
+											<div class="portlet-body">
+												<div class="table-responsive">
+													<table id="MedialistDtlTable" class="table table-condensed table-hover">
+														<thead></thead>
+														<tbody></tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="col-md-5">
-								<div class="portlet box green">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
-									</div>
-									<div class="portlet-body">
-										<div class="table-responsive">
-											<table id="MedialistDtlTable" class="table table-condensed table-hover">
-												<thead></thead>
-												<tbody></tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 							</div>
 							<div class="modal-footer">
 								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>

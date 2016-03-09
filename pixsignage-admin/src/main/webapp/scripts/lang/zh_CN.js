@@ -21,6 +21,7 @@ var common = {
 		schedule: '计划',
 		layoutschedule: '布局计划',
 		regionschedule: '播出计划',
+		bundleschedule: '节目包计划',
 		sequence: '序号',
 		terminalid: '终端ID',
 		hardkey: '硬件码',
@@ -109,11 +110,12 @@ var common = {
 		device_select: '请选择终端',
 		devicegroup_select: '请选择终端组',
 		detail_select: '请选择对应内容',
-
 		device_missed: '需要选择终端或者终端组',
 		
 		device_layoutschedule_zero: '当前终端没有布局计划，请新增计划',
+		device_bundleschedule_zero: '当前终端没有节目包计划，请新增计划',
 		devicegp_layoutschedule_zero: '当前终端组没有布局计划，请新增计划',
+		devicegp_bundleschedule_zero: '当前终端组没有节目包计划，请新增计划',
 		regionschedule_zero: '当前区域没有播放计划，请新增计划',
 		
 		username_required: '必须输入用户名',

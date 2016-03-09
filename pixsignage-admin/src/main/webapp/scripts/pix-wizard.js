@@ -1,32 +1,43 @@
 var myurls = {
 	'layout.list' : 'layout!list.action',
-	'medialist.list' : 'medialist!list.action',
-	'text.list' : 'text!list.action',
-	'stream.list' : 'stream!list.action',
-	'dvb.list' : 'dvb!list.action',
-	'widget.list' : 'widget!list.action',
+	'image.list' : 'image!list.action',
 	'device.list' : 'device!list.action',
 	'devicegroup.list' : 'devicegroup!list.action',
 	
-	'layout.get' : 'layout!get.action',
-	'tpllayout.get' : 'tpllayout!get.action',
-	'layout.wizard' : 'layout!wizard.action',
-	'branch.list' : 'branch!list.action',
-	'schedule.listbytask' : 'schedule!listbytask.action',
+	'bundle.wizard' : 'bundle!wizard.action',
 	'schedulefile.list' : 'schedulefile!list.action',
 };
 
 var Layouts;
-var CurrentLayout;
 var CurrentTaskid;
 var SelectedDeviceList = [];
 var SelectedDevicegroupList = [];
+
+$(window).resize(function(e) {
+	if (e.target == this) {
+		var width1 = Math.floor($("#LayoutDiv").parent().width());
+		var width2 = Math.floor($("#BundleDiv").parent().width());
+		var width = width1;
+		if (width < width2) {
+			width = width2;
+		}
+		if (CurrentLayout != null) {
+			var scale = CurrentLayout.width / width;
+			var height = CurrentLayout.height / scale;
+			$("#LayoutDiv").css("width" , width);
+			$("#LayoutDiv").css("height" , height);
+			$("#BundleDiv").css("width" , width);
+			$("#BundleDiv").css("height" , height);
+		}
+	}
+});
 
 function initWizard() {
 	initTab1();
 	initTab2();
 	initTab3();
 	initTab4();
+	initTab5();
 	initData1();
 	
 	var handleTitle = function(tab, navigation, index) {
@@ -65,37 +76,57 @@ function initWizard() {
 				return false;
 			}
 			if (index == 0 && clickedIndex == 1) {
-				if ($('#LayoutOptionForm').valid() == false) {
-					return false;
-				} else {
+				if ($('#BundleOptionForm').valid()) {
 					initData2();
+				} else {
+					return false;
 				}
 			} else if (index == 1 && clickedIndex == 2) {
-				initData3();
+				if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+					initData3();
+				} else {
+					return false;
+				}
 			} else if (index == 2 && clickedIndex == 3) {
+				if (CurrentBundledtl != null && leaveBundledtlFocus(CurrentBundledtl)) {
+					initData4();
+				} else {
+					return false;
+				}
+			} else if (index == 3 && clickedIndex == 4) {
 				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
 					bootbox.alert(common.tips.device_missed);
 					return false;
 				} else {
-					initData4();
+					initData5();
 				}
 			}
 		},
 		onNext: function (tab, navigation, index) {
 			if (index == 1) {
-				if ($('#LayoutOptionForm').valid() == false) {
-					return false;
-				} else {
+				if ($('#BundleOptionForm').valid()) {
 					initData2();
+				} else {
+					return false;
 				}
 			} else if (index == 2) {
-				initData3();
+				if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+					initData3();
+				} else {
+					return false;
+				}
 			} else if (index == 3) {
+				if (CurrentBundledtl != null && leaveBundledtlFocus(CurrentBundledtl)) {
+					initData4();
+				} else {
+					return false;
+				}
+			} else if (index == 4) {
 				if (SelectedDeviceList.length == 0 && SelectedDevicegroupList.length == 0) {
 					bootbox.alert(common.tips.device_missed);
 					return false;
 				} else {
-					initData4();
+					initData5();
 				}
 			}
 		},
@@ -109,6 +140,20 @@ function initWizard() {
 				width: $percent + '%'
 			});
 			handleTitle(tab, navigation, index);
+			
+			if (index == 1) {
+				var width = Math.floor($("#LayoutDiv").parent().width());
+				var scale = CurrentLayout.width / width;
+				var height = CurrentLayout.height / scale;
+				$("#LayoutDiv").css("width" , width);
+				$("#LayoutDiv").css("height" , height);
+			} else if (index == 2) {
+				var width = Math.floor($("#BundleDiv").parent().width());
+				var scale = CurrentLayout.width / width;
+				var height = CurrentLayout.height / scale;
+				$("#BundleDiv").css("width" , width);
+				$("#BundleDiv").css("height" , height);
+			}
 		}
 	});
 
@@ -120,7 +165,7 @@ function initWizard() {
 }
 
 function initTab1() {
-	$.ajax({
+    $.ajax({
 		type : 'POST',
 		url : 'layout!list.action',
 		data : {},
@@ -160,17 +205,6 @@ function initTab1() {
 	});
 	
 	function initLayoutCanvas(layout) {
-		var RegionColors = [];
-		RegionColors[0] = '#BCC2F2';
-		RegionColors[1] = '#99CCFF';
-		RegionColors[2] = '#CCCC99';
-		RegionColors[3] = '#CCCC99';
-		RegionColors[4] = '#FFCCCC';
-		RegionColors[5] = '#FF99CC';
-		RegionColors[6] = '#CC99CC';
-		RegionColors[7] = '#FFFF99';
-		RegionColors[8] = '#CC9966';
-		RegionColors[9] = '#CC9966';
 		function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
 			if (layoutdtl.bgimage != null) {
 				var region_bgimage = new Image();
@@ -233,247 +267,20 @@ function initTab1() {
 }
 
 function initData1() {
-	FormValidateOption.rules = {};
-	$('#LayoutOptionForm').validate(FormValidateOption);
-	$.extend($('#LayoutOptionForm').validate().settings, {
+    FormValidateOption.rules = {};
+	FormValidateOption.rules['bundle.name'] = {};
+	FormValidateOption.rules['bundle.name']['required'] = true;
+	$('#BundleOptionForm').validate(FormValidateOption);
+    $.extend($("#BundleOptionForm").validate().settings, {
 		rules: FormValidateOption.rules
 	});
+
+	var d = new Date().format('yyyyMMdd-hhmmss');
+	$('input[name="bundle.name"]').val(myUser + '-' + d);
 }
 
-
 function initTab2() {
-	$('input[name="regiondtl.playmode"]').click(function(e) {
-		refreshRegionDtlPlaymode();
-	});
-	refreshRegionDtlPlaymode();
 	
-	$('input[name="regiondtl.objtype"]').click(function(e) {
-		refreshRegionDtlSelect();
-	});
-	refreshRegionDtlSelect();
-
-	$('body').on('click', '.pix-regiondtl-add', function(event) {
-		var regionid = $(event.target).attr('region-id');
-		if (regionid == undefined) {
-			regionid = $(event.target).parent().attr('region-id');
-		}
-		$('#RegionDtlForm input[name="regiondtl.regionid"]').attr('value', regionid);
-		$('#RegionDtlForm input[name="regiondtl.playdate"]').attr('value', '');
-		$('#RegionDtlForm input[name="regiondtl.starttime"]').attr('value', '');
-		$('#RegionDtlForm input[name="regiondtl.endtime"]').attr('value', '');
-
-		var regiontype = $(event.target).attr('region-type');
-		if (regiontype == undefined) {
-			regiontype = $(event.target).parent().attr('region-type');
-		}
-		
-		var objtype = $('input[name="regiondtl.objtype"]:checked').val();
-		if (regiontype == 0) {
-			$('.objtype-0').css('display', 'block');
-			$('.objtype-1').css('display', 'none');
-			if (objtype == 2) {
-				$('input[name="regiondtl.objtype"][value="1"]').attr('checked', true);
-				$('input[name="regiondtl.objtype"][value="1"]').parent().addClass('checked');
-				$('input[name="regiondtl.objtype"][value="2"]').attr('checked', false);
-				$('input[name="regiondtl.objtype"][value="2"]').parent().removeClass('checked');
-			}
-		} else if (regiontype == 1) {
-			$('.objtype-0').css('display', 'none');
-			$('.objtype-1').css('display', 'block');
-			if (objtype != 2) {
-				$('input[name="regiondtl.objtype"][value="2"]').attr('checked', true);
-				$('input[name="regiondtl.objtype"][value="2"]').parent().addClass('checked');
-				$('input[name="regiondtl.objtype"][value="' + objtype + '"]').attr('checked', false);
-				$('input[name="regiondtl.objtype"][value="' + objtype + '"]').parent().removeClass('checked');
-			}
-		}
-		refreshRegionDtlSelect();
-
-		$('#RegionDtlModal').modal();
-	});
-
-	$('[type=submit]', $('#RegionDtlModal')).on('click', function(event) {
-		if ($('#RegionDtlForm').valid()) {
-			$('#RegionDtlForm .form-group').removeClass('has-error');
-			$('#RegionDtlForm .help-block').remove();
-			$('#RegionDtlModal').modal('hide');
-			
-			var regiondtl = {};
-			regiondtl.regionid = $('#RegionDtlForm input[name="regiondtl.regionid"]').attr('value');
-			regiondtl.playmode = $('#RegionDtlForm input[name="regiondtl.playmode"]:checked').val();
-			regiondtl.playdate = $('#RegionDtlForm input[name="regiondtl.playdate"]').attr('value');
-			regiondtl.starttime = $('#RegionDtlForm input[name="regiondtl.starttime"]').attr('value');
-			regiondtl.endtime = $('#RegionDtlForm input[name="regiondtl.endtime"]').attr('value');
-			regiondtl.objtype = $('#RegionDtlForm input[name="regiondtl.objtype"]:checked').val();
-			regiondtl.objid = $('#RegionDtlSelect').select2('data').id;
-
-			var results = CurrentLayout.layoutdtls.filter(function (el) {
-				return el.regionid == regiondtl.regionid;
-			});
-			var layoutdtl = results[0];
-			layoutdtl.regiondtls[layoutdtl.regiondtls.length] = regiondtl;
-			
-			var playtime;
-			if (regiondtl.playmode == 1) {
-				playtime = common.view.once + regiondtl.playdate + ' ' + regiondtl.starttime + '~' + regiondtl.endtime;
-			} else {
-				playtime = common.view.daily + regiondtl.starttime;
-			}
-			var objtype;
-			if (regiondtl.objtype == 1) {
-				objtype = common.view.medialist;
-			} else if (regiondtl.objtype == 2) {
-				objtype = common.view.text;
-			} else if (regiondtl.objtype == 3) {
-				objtype = common.view.stream;
-			} else if (regiondtl.objtype == 4) {
-				objtype = common.view.dvb;
-			} else if (regiondtl.objtype == 5) {
-				objtype = 'Widget';
-			}
-			var objname = $('#RegionDtlSelect').select2('data').text;
-			$('#RegionDtlTable-' + regiondtl.regionid).dataTable().fnAddData([playtime, objtype, objname, regiondtl.regionid]);
-		}
-	});
-
-	$('body').on('click', '.pix-regiondtl-delete', function(event) {
-		var rowid = $(event.target).attr('row-id');
-		var regionid = $(event.target).attr('region-id');
-		$('#RegionDtlTable-' + regionid).dataTable().fnDeleteRow(rowid);
-		var results = CurrentLayout.layoutdtls.filter(function (el) {
-			return el.regionid == regionid;
-		});
-		var layoutdtl = results[0];
-		layoutdtl.regiondtls.splice(rowid, 1);
-	});
-
-	function refreshRegionDtlPlaymode() {
-		if ($('input[name="regiondtl.playmode"]:checked').val() == 1) {
-			$('.playmode-1').css('display', 'block');
-			FormValidateOption.rules = {};
-			FormValidateOption.rules['regiondtl.playdate'] = {};
-			FormValidateOption.rules['regiondtl.playdate']['required'] = true;
-			FormValidateOption.rules['regiondtl.endtime'] = {};
-			FormValidateOption.rules['regiondtl.endtime']['required'] = true;
-		} else {
-			$('.playmode-1').css('display', 'none');
-			FormValidateOption.rules = {};
-		}
-		FormValidateOption.rules['regiondtl.starttime'] = {};
-		FormValidateOption.rules['regiondtl.starttime']['required'] = true;
-		FormValidateOption.rules['regiondtl.objid'] = {};
-		FormValidateOption.rules['regiondtl.objid']['required'] = true;
-		FormValidateOption.ignore = null;
-		$('#RegionDtlForm').validate(FormValidateOption);
-		$.extend($('#RegionDtlForm').validate().settings, {
-			rules: FormValidateOption.rules
-		});
-	}
-	
-	function refreshRegionDtlSelect() {
-		var url;
-		if ($('input[name="regiondtl.objtype"]:checked').val() == 1) {
-			url = myurls['medialist.list']
-		} else if ($('input[name="regiondtl.objtype"]:checked').val() == 2) {
-			url = myurls['text.list']
-		} else if ($('input[name="regiondtl.objtype"]:checked').val() == 3) {
-			url = myurls['stream.list']
-		} else if ($('input[name="regiondtl.objtype"]:checked').val() == 4) {
-			url = myurls['dvb.list']
-		} else if ($('input[name="regiondtl.objtype"]:checked').val() == 5) {
-			url = myurls['widget.list']
-		}
-		$('#RegionDtlSelect').select2({
-			placeholder: common.tips.detail_select,
-			//minimumResultsForSearch: -1,
-			minimumInputLength: 0,
-			ajax: { 
-				url: url,
-				type: 'GET',
-				dataType: 'json',
-				data: function (term, page) {
-					return {
-						sSearch: term, // search term
-						iDisplayStart: (page-1)*10,
-						iDisplayLength: 10,
-					};
-				},
-				results: function (data, page) {
-					var more = (page * 10) < data.iTotalRecords; 
-					return {
-						results : $.map(data.aaData, function (item) {
-							if (item.medialistid) {
-								return {
-									text:item.name, 
-									id:item.medialistid,
-									item:item
-								};
-							} else if (item.textid) {
-								return {
-									text:item.name, 
-									id:item.textid,
-									item:item
-								};
-							} else if (item.streamid) {
-								return {
-									text:item.name + '(' + item.url + ')', 
-									id:item.streamid,
-									item:item
-								};
-							} else if (item.dvbid) {
-								return {
-									text:item.name, 
-									id:item.dvbid,
-									item:item
-								};
-							} else if (item.widgetid) {
-								return {
-									text:item.name + '(' + item.url + ')', 
-									id:item.widgetid,
-									item:item
-								};
-							}
-						}),
-						more: more
-					};
-				}
-			},
-			formatResult: function (item) {
-				return item.text;
-			},
-			formatSelection: function (item) {
-				return item.text;
-			},
-			initSelection: function(element, callback) {
-			},
-			dropdownCssClass: 'bigdrop', 
-			escapeMarkup: function (m) { return m; } 
-		});
-		$('#RegionDtlSelect').val('');
-	}
-
-	$('.form_date').datetimepicker({
-		autoclose: true,
-		isRTL: Metronic.isRTL(),
-		format: 'yyyy-mm-dd',
-		pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
-		language: 'zh-CN',
-		minuteStep: 5,
-		startView: 2,
-		minView: 2
-	});
-
-	$('.form_time').datetimepicker({
-		autoclose: true,
-		isRTL: Metronic.isRTL(),
-		format: 'hh:ii:ss',
-		pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
-		language: 'zh-CN',
-		minuteStep: 5,
-		startView: 1,
-		maxView: 1,
-		formatViewType: 'time'
-	});
 }
 
 function initData2() {
@@ -481,73 +288,164 @@ function initData2() {
 		return el.layoutid == $('input[name="layoutid"]:checked').val();
 	});
 	CurrentLayout = results[0];
+
+	CurrentLayoutid = CurrentLayout.layoutid;
+	CurrentLayoutdtl = null;
 	
-	$('#tab2').empty();
-	for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
-		layoutdtl = CurrentLayout.layoutdtls[i];
-		layoutdtl.regiondtls = [];
-		var layoutdtlhtml = '';
-		layoutdtlhtml += '<div class="row"><div class="col-md-12 col-sm-12">';
-		layoutdtlhtml += '<div class="portlet box purple"><div class="portlet-title">';
-		layoutdtlhtml += '<div class="caption"><i class="fa fa-calendar"></i>' + layoutdtl.region.name + '</div>';
-		layoutdtlhtml += '<div class="actions">';
-		layoutdtlhtml += '<a href="javascript:;" region-id="'+ layoutdtl.regionid + '" region-type="' + layoutdtl.region.type + '" class="btn btn-sm yellow pix-regiondtl-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
-		layoutdtlhtml += '</div></div>';
-		layoutdtlhtml += '<div class="portlet-body"><div class="row"><div class="col-md-3 col-sm-3"><canvas id="LayoutCanvas-'+ layoutdtl.regionid + '"></canvas></div>';
-		layoutdtlhtml += '<div class="col-md-9 col-sm-9"><div class="table-responsive">';
-		layoutdtlhtml += '<table id="RegionDtlTable-' + layoutdtl.regionid + '" class="table table-condensed table-hover">';
-		layoutdtlhtml += '<thead></thead><tbody></tbody></table>';
-		layoutdtlhtml += '</div></div></div></div></div></div></div>';
-		$('#tab2').append(layoutdtlhtml);
+	$('#LayoutEditForm').loadJSON(CurrentLayout);
+	$('#LayoutEditForm .layout-title').html(CurrentLayout.name);
+	$("#LayoutBgImageSelect2").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		ajax: {
+			url: myurls['image.list'],
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term,
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.imageid, 
+							filepath:item.filepath, 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function (media) {
+			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			return html;
+		},
+		formatSelection: function (media) {
+			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			return html;
+		},
+		initSelection: function(element, callback) {
+			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filepath: CurrentLayout.bgimage.filepath });
+			}
+		},
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
+	});
+
+	$('#LayoutdtlEditForm').css('display' , 'none');
+	$('#LayoutEditForm').css('display' , 'block');
+	$('.form-group').removeClass('has-error');
+	$('.help-block').remove();
+	if (CurrentLayout.width > CurrentLayout.height) {
+		$('#LayoutCol1').removeClass('col-md-5');
+		$('#LayoutCol1').removeClass('col-sm-5');
+		$('#LayoutCol1').addClass('col-md-7');
+		$('#LayoutCol1').addClass('col-sm-7');
+		$('#LayoutCol2').removeClass('col-md-7');
+		$('#LayoutCol2').removeClass('col-sm-7');
+		$('#LayoutCol2').addClass('col-md-5');
+		$('#LayoutCol2').addClass('col-sm-5');
+	} else {
+		$('#LayoutCol1').removeClass('col-md-7');
+		$('#LayoutCol1').removeClass('col-sm-7');
+		$('#LayoutCol1').addClass('col-md-5');
+		$('#LayoutCol1').addClass('col-sm-5');
+		$('#LayoutCol2').removeClass('col-md-5');
+		$('#LayoutCol2').removeClass('col-sm-5');
+		$('#LayoutCol2').addClass('col-md-7');
+		$('#LayoutCol2').addClass('col-sm-7');
 	}
 	
+	$('#LayoutDiv').attr('layoutid', CurrentLayout.layoutid);
+	$('#LayoutDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
+	redrawLayout();
+}
+
+function initTab3() {
+}
+
+function initData3() {
+	CurrentBundle = {};
+	CurrentBundle.name = $('#BundleOptionForm input[name="bundle.name"]').val();
+	CurrentBundle.bundleid = 0;
+	CurrentBundle.layoutid = CurrentLayout.layoutid;
+	CurrentBundle.status = 1;
+	CurrentBundle.layout = CurrentLayout;
+	CurrentBundle.bundledtls = [];
 	for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
 		layoutdtl = CurrentLayout.layoutdtls[i];
-		var canvas = document.getElementById('LayoutCanvas-' + layoutdtl.regionid);
-		var ctx = canvas.getContext('2d');
-		var scale;
-		if (CurrentLayout.width == 1920 || CurrentLayout.width == 1080) {
-			scale = 1920/200;
+		var bundledtl = {};
+		bundledtl.bundledtlid = 'B' + Math.round(Math.random()*100000000);
+		bundledtl.bundleid = CurrentBundle.bundleid;
+		bundledtl.regionid = layoutdtl.regionid;
+		if (layoutdtl.region.type == 0) {
+			bundledtl.objtype = 1;
+			bundledtl.medialist = {};
+			bundledtl.medialist.medialistid = 0;
+			bundledtl.medialist.medialistdtls = [];
+			bundledtl.medialist.name = '';
+			bundledtl.stream = {};
+			bundledtl.stream.streamid = 0;
+			bundledtl.stream.name = '';
+			bundledtl.stream.url = '';
+			bundledtl.widget = {};
+			bundledtl.widget.widgetid = 0;
+			bundledtl.widget.name = '';
+			bundledtl.widget.url = '';
+		} else if (layoutdtl.region.type == 1) {
+			bundledtl.objtype = 2;
+			bundledtl.text = {};
+			bundledtl.text.textid = 0;
+			bundledtl.text.name = '';
+			bundledtl.text.text = '';
 		} else {
-			scale = 800/200;
+			bundledtl.objtype = 0;
 		}
-		canvas.width = Math.max(CurrentLayout.width/scale, 250);
-		canvas.height = Math.max(CurrentLayout.height/scale, 120);
-		for (var j=0; j<CurrentLayout.layoutdtls.length; j++) {
-			var width = CurrentLayout.layoutdtls[j].width/scale;
-			var height = CurrentLayout.layoutdtls[j].height/scale;
-			var top = CurrentLayout.layoutdtls[j].topoffset/scale;
-			var left = CurrentLayout.layoutdtls[j].leftoffset/scale;
-			if (CurrentLayout.layoutdtls[j].regionid == layoutdtl.regionid) {
-				ctx.fillStyle='#4537ef';
-			} else {
-				ctx.fillStyle='#bcc2f2';
-			}
-			ctx.fillRect(left,top,width,height);
-			ctx.strokeStyle = '#000000';
-			ctx.strokeRect(left,top,width,height);
-		}
-		
-		$('#RegionDtlTable-' + layoutdtl.regionid).dataTable({
-			'sDom' : 't',
-			'iDisplayLength' : -1,
-			'aoColumns' : [ {'sTitle' : common.view.playtime, 'bSortable' : false, 'sClass': 'autowrap' }, 
-							{'sTitle' : common.view.type, 'bSortable' : false, 'sClass': 'autowrap' }, 
-							{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' },
-							{'sTitle' : common.view.operation, 'bSortable' : false, 'sWidth' : '50px' }],
-			'oLanguage' : { 'sZeroRecords' : common.view.empty,
-							'sEmptyTable' : common.view.empty },
-			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(3)', nRow).html('<button row-id="' + iDisplayIndex + '" region-id="' + aData[3] + '" class="btn green btn-xs pix-regiondtl-delete">' + common.view.remove + '</button>');
-				return nRow;
-			}
-		});
+		bundledtl.objid = 0;
+		bundledtl.type = 0;
+		bundledtl.layoutdtl = CurrentLayout.layoutdtls[i];
+		CurrentBundle.bundledtls[i] = bundledtl;
+	}
+
+	$('.form-group').removeClass('has-error');
+	$('.help-block').remove();
+	if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
+		$('#BundleCol1').removeClass('col-md-2');
+		$('#BundleCol1').removeClass('col-sm-2');
+		$('#BundleCol1').addClass('col-md-3');
+		$('#BundleCol1').addClass('col-sm-3');
+		$('#BundleCol2').removeClass('col-md-10');
+		$('#BundleCol2').removeClass('col-sm-10');
+		$('#BundleCol2').addClass('col-md-9');
+		$('#BundleCol2').addClass('col-sm-9');
+	} else {
+		$('#BundleCol1').removeClass('col-md-3');
+		$('#BundleCol1').removeClass('col-sm-3');
+		$('#BundleCol1').addClass('col-md-2');
+		$('#BundleCol1').addClass('col-sm-2');
+		$('#BundleCol2').removeClass('col-md-9');
+		$('#BundleCol2').removeClass('col-sm-9');
+		$('#BundleCol2').addClass('col-md-10');
+		$('#BundleCol2').addClass('col-sm-10');
 	}
 	
+	$('#BundleDiv').attr('bundleid', CurrentBundle.bundleid);
+	$('#BundleDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
+	redrawBundle();
+	
+	CurrentBundledtl = CurrentBundle.bundledtls[0];
+	enterBundledtlFocus(CurrentBundledtl);
 }
 
 
-function initTab3() {
+function initTab4() {
 	//编制计划对话框中的设备table初始化
 	$('#DeviceTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -695,7 +593,7 @@ function initTab3() {
 	});
 }
 
-function initData3() {
+function initData4() {
 	$('#SelectedDeviceTable').dataTable().fnClearTable();
 	$('#SelectedDevicegroupTable').dataTable().fnClearTable();
 	SelectedDeviceList = [];
@@ -703,11 +601,11 @@ function initData3() {
 }
 
 
-function initTab4() {
+function initTab5() {
 	
 }
 
-function initData4() {
+function initData5() {
 	var deviceRowspan = SelectedDeviceList.length>1 ? SelectedDeviceList.length : 1;
 	var devicegroupRowspan = SelectedDevicegroupList.length>1 ? SelectedDevicegroupList.length : 1;
 	//var currentMediaSum = 0;
@@ -743,10 +641,20 @@ function initData4() {
 }
 
 function submitData() {
+	for (var i=0; i<CurrentBundle.layout.layoutdtls.length; i++) {
+		if (('' + CurrentBundle.layout.layoutdtls[i].layoutdtlid).indexOf('R') == 0) {
+			CurrentBundle.layout.layoutdtls[i].layoutdtlid = '0';
+		}
+	}
+	for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
+		if (('' + CurrentBundle.bundledtls[i].bundledtlid).indexOf('B') == 0) {
+			CurrentBundle.bundledtls[i].bundledtlid = '0';
+		}
+	}
 	$.ajax({
 		type : 'POST',
-		url : myurls['layout.wizard'],
-		data : '{"layout":' + $.toJSON(CurrentLayout) + ', "devices":' + $.toJSON(SelectedDeviceList) + ', "devicegroups":' + $.toJSON(SelectedDevicegroupList) + '}',
+		url : myurls['bundle.wizard'],
+		data : '{"bundle":' + $.toJSON(CurrentBundle) + ', "devices":' + $.toJSON(SelectedDeviceList) + ', "devicegroups":' + $.toJSON(SelectedDevicegroupList) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		beforeSend: function ( xhr ) {
@@ -756,15 +664,16 @@ function submitData() {
 			Metronic.stopPageLoading();
 			if (data.errorcode == 0) {
 				bootbox.alert(common.tips.success);
-				CurrentTaskid = data.dataid;
+				//CurrentTaskid = data.dataid;
 				//$('#ScheduleTable').dataTable()._fnAjaxUpdate();
 				//$('#SchedulefileTable').dataTable()._fnAjaxUpdate();
 				//$('#ScheduleModal').modal();
-				
 				initData1();
 				$('#MyWizard').bootstrapWizard('first');
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);
+				initData1();
+				$('#MyWizard').bootstrapWizard('first');
 			}
 		},
 		error : function() {

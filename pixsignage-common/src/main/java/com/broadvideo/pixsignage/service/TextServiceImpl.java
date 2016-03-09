@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.domain.Text;
+import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.TextMapper;
 
@@ -16,6 +18,8 @@ public class TextServiceImpl implements TextService {
 
 	@Autowired
 	private TextMapper textMapper;
+	@Autowired
+	private BundledtlMapper bundledtlMapper;
 	@Autowired
 	private RegionscheduleMapper regionscheduleMapper;
 
@@ -43,6 +47,7 @@ public class TextServiceImpl implements TextService {
 
 	@Transactional
 	public void deleteText(String textid) {
+		bundledtlMapper.clearByObj(Bundledtl.ObjType_Text, textid);
 		regionscheduleMapper.deleteByObj(Regionschedule.ObjType_Text, textid);
 		textMapper.deleteByPrimaryKey(textid);
 	}

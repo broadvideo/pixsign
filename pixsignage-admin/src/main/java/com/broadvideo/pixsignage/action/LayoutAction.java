@@ -16,6 +16,7 @@ import com.broadvideo.pixsignage.domain.Layoutdtl;
 import com.broadvideo.pixsignage.domain.Layoutschedule;
 import com.broadvideo.pixsignage.domain.Region;
 import com.broadvideo.pixsignage.domain.Regionschedule;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.service.RegionService;
 
@@ -26,7 +27,6 @@ public class LayoutAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Layout layout;
-	private Layoutdtl[] layoutdtls;
 
 	private Device[] devices;
 	private Devicegroup[] devicegroups;
@@ -37,6 +37,8 @@ public class LayoutAction extends BaseDatatableAction {
 	private LayoutService layoutService;
 	@Autowired
 	private RegionService regionService;
+	@Autowired
+	private BundleService bundleService;
 
 	public String doList() {
 		try {
@@ -101,7 +103,7 @@ public class LayoutAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String layoutid = getParameter("layoutid");
-			layoutService.syncLayoutscheduleByLayout(layoutid);
+			bundleService.syncBundleLayoutByLayout(layoutid);
 			logger.info("Layout schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -132,7 +134,7 @@ public class LayoutAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
-			layoutService.design(layout, layoutdtls);
+			layoutService.design(layout);
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -218,14 +220,6 @@ public class LayoutAction extends BaseDatatableAction {
 
 	public void setLayout(Layout layout) {
 		this.layout = layout;
-	}
-
-	public Layoutdtl[] getLayoutdtls() {
-		return layoutdtls;
-	}
-
-	public void setLayoutdtls(Layoutdtl[] layoutdtls) {
-		this.layoutdtls = layoutdtls;
 	}
 
 	public Device[] getDevices() {
