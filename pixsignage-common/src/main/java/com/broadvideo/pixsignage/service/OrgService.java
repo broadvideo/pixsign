@@ -5,7 +5,7 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Org;
 
 public interface OrgService {
-	public List<Org> selectList();
+	public List<Org> selectList(String vspid);
 
 	public Org selectByCode(String code);
 

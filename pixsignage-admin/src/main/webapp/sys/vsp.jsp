@@ -34,9 +34,6 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 
-<link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
-
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -49,18 +46,18 @@ response.setDateHeader("Expires",0);
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title"><spring:message code="global.org"/></h4>
+								<h4 class="modal-title"><spring:message code="global.vsp"/></h4>
 							</div>
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
-									<input type="hidden" name="org.orgid" value="0" />
-									<input type="hidden" name="org.status" value="1" />
+									<input type="hidden" name="vsp.vspid" value="0" />
+									<input type="hidden" name="vsp.status" value="1" />
 									<div class="form-body">
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.name" />
+													<i class="fa"></i> <input type="text" class="form-control" name="vsp.name" />
 												</div>
 											</div>
 										</div>
@@ -68,97 +65,14 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.code"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.code" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group pix-control">
-											<label class="col-md-3 control-label"><spring:message code="global.type"/><span class="required">*</span></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="1" checked> <spring:message code="global.org.orgtype_1"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="2" > <spring:message code="global.org.orgtype_2"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="3" > PIDS
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.org.media"/></label>
-											<div class="col-md-9 checkbox-list">
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.videoflag" value="1" checked><spring:message code="global.video"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.imageflag" value="1" checked><spring:message code="global.image"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.textflag" value="1" checked><spring:message code="global.text"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.streamflag" value="1" checked><spring:message code="global.stream"/>
-												</label>
-												<label class="checkbox-inline pix-control">
-													<input type="checkbox" name="org.dvbflag" value="1"><spring:message code="global.dvb"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.widgetflag" value="1" checked><spring:message code="global.widget"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.org.expiretime"/><span class="required">*</span></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="org.expireflag" value="0" checked> <spring:message code="global.org.unlimited"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.expireflag" value="1" > <spring:message code="global.org.expire"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group expiretime">
-											<label class="col-md-3 control-label"></label>
-											<div class="col-md-9">
-												<div class="input-group date form_datetime">                                       
-													<input type="text" size="16" readonly class="form-control" name="org.expiretime" value="2037-01-01">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.org.maxdevices"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.org.storage"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group pix-control">
-											<label class="col-md-3 control-label"><spring:message code="global.org.copyright"/></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.copyright" />
+													<i class="fa"></i> <input type="text" class="form-control" name="vsp.code" />
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 											<div class="col-md-9">
-												<textarea class="form-control" rows="4" name="org.description"></textarea>
+												<textarea class="form-control" rows="4" name="vsp.description"></textarea>
 											</div>
 										</div>
 									</div>
@@ -173,7 +87,7 @@ response.setDateHeader("Expires",0);
 				</div>
 			
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title"><spring:message code="menu.org"/></h3>
+				<h3 class="page-title"><spring:message code="menu.vsp"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -181,7 +95,7 @@ response.setDateHeader("Expires",0);
 						</li>
 						<li><a href="#"><spring:message code="menu.opmanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.org"/></a>
+						<li><a href="#"><spring:message code="menu.vsp"/></a>
 						</li>
 					</ul>
 				</div>
@@ -192,7 +106,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.org"/></div>
+								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.vsp"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -221,11 +135,7 @@ response.setDateHeader("Expires",0);
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
 			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<spring:message code="global.copyright"/>
-			<%} else { %>
-			©<%=session_org.getCopyright()%>
-			<%} %>
 		</div>
 		<div class="footer-tools">
 			<span class="go-top">
@@ -263,24 +173,14 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-org.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-vsp.js?t=0"></script>
 <script>
-var PixContral = 0;
-<% if (session_vsp != null && session_vsp.getCode().equals("default")) {%>
-PixContral = 1;
-<% } %>  
-var MaxOrgs = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxOrgs%>;
-var MaxDevicesPerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
-var MaxStoragePerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
-
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

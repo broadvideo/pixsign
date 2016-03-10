@@ -10,10 +10,6 @@ public interface StaffService {
 	public List<Staff> selectList(String subsystem, String vspid, String orgid, String search, String start,
 			String length);
 
-	List<Staff> selectByLoginname(String loginname, String subsystem, String vspid, String orgid);
-
-	List<Staff> selectByOrgLogin(String loginname, String password, String orgcode);
-
 	public void addStaff(Staff staff);
 
 	public void updateStaff(Staff staff);
@@ -24,5 +20,5 @@ public interface StaffService {
 
 	public void deleteStaff(String staffid);
 
-	public boolean validateLoginname(Staff staff, String subsystem, String vspid, String orgid);
+	public boolean validateLoginname(Staff staff);
 }

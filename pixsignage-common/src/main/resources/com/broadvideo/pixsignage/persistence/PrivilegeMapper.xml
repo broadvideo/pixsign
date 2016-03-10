@@ -17,6 +17,12 @@
     <collection property="children" ofType="com.broadvideo.pixsignage.domain.Privilege" column="{id=privilegeid,orgtype=temporgtype}" select="selectChild" />
   </resultMap>
 
+  <select id="selectSysTreeList" resultMap="BaseResultMap" >
+    select *, 0 as temporgtype
+    from privilege
+    where privilegeid > 0 and parentid = 0 and subsystem = 0 order by sequence
+  </select>
+  
   <select id="selectVspTreeList" resultMap="BaseResultMap" >
     select *, 0 as temporgtype
     from privilege

@@ -55,7 +55,7 @@ public class LayoutAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -69,7 +69,7 @@ public class LayoutAction extends BaseDatatableAction {
 			layoutService.addLayout(layout);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -81,7 +81,7 @@ public class LayoutAction extends BaseDatatableAction {
 			layoutService.updateLayout(layout);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -93,7 +93,7 @@ public class LayoutAction extends BaseDatatableAction {
 			layoutService.deleteLayout("" + layout.getLayoutid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -104,10 +104,10 @@ public class LayoutAction extends BaseDatatableAction {
 		try {
 			String layoutid = getParameter("layoutid");
 			bundleService.syncBundleLayoutByLayout(layoutid);
-			logger.info("Layout schedule sync success");
+			logger.info("Layout sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device schedule sync error", ex);
+			logger.error("LayoutAction doSync exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -125,7 +125,7 @@ public class LayoutAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doDtlList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -137,7 +137,7 @@ public class LayoutAction extends BaseDatatableAction {
 			layoutService.design(layout);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doDesign exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -160,7 +160,7 @@ public class LayoutAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doRegionList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -173,7 +173,7 @@ public class LayoutAction extends BaseDatatableAction {
 			setDataid(taskid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doWizard exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -190,7 +190,7 @@ public class LayoutAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doLayoutschedulesAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -207,7 +207,7 @@ public class LayoutAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("LayoutAction doRegionschedulesAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

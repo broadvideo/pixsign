@@ -2,7 +2,6 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,20 +25,11 @@ public class StaffServiceImpl implements StaffService {
 		return staffMapper.selectList(subsystem, vspid, orgid, search, start, length);
 	}
 
-	public List<Staff> selectByLoginname(String loginname, String subsystem, String vspid, String orgid) {
-		return staffMapper.selectByLoginname(loginname, subsystem, vspid, orgid);
-	}
-
-	public List<Staff> selectByOrgLogin(String loginname, String password, String orgcode) {
-		return staffMapper.selectByOrgLogin(loginname, password, orgcode);
-	}
-
 	@Transactional
 	public void addStaff(Staff staff) {
 		String loginname = staff.getLoginname();
 		staff.setPassword(CommonUtil.getPasswordMd5(loginname, staff.getPassword()));
 		staffMapper.insertSelective(staff);
-		staff.setToken(loginname + "_" + DigestUtils.md5Hex(loginname + "&uploadkey&" + staff.getStaffid()));
 		staffMapper.updateByPrimaryKeySelective(staff);
 		if (staff.getRoles().size() > 0) {
 			staffMapper.assignStaffRoles(staff, staff.getRoles());
@@ -89,8 +79,8 @@ public class StaffServiceImpl implements StaffService {
 		staffMapper.deleteByPrimaryKey(staffid);
 	}
 
-	public boolean validateLoginname(Staff staff, String subsystem, String vspid, String orgid) {
-		List<Staff> list = staffMapper.selectByLoginname(staff.getLoginname(), subsystem, vspid, orgid);
+	public boolean validateLoginname(Staff staff) {
+		List<Staff> list = staffMapper.selectByLoginname(staff.getLoginname());
 		if (list.size() == 0) {
 			return true;
 		} else {

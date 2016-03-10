@@ -3,7 +3,6 @@ package com.broadvideo.pixsignage.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +34,8 @@ public class OrgServiceImpl implements OrgService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 
-	public List<Org> selectList() {
-		return orgMapper.selectList();
+	public List<Org> selectList(String vspid) {
+		return orgMapper.selectList(vspid);
 	}
 
 	public Org selectByCode(String code) {
@@ -65,16 +64,14 @@ public class OrgServiceImpl implements OrgService {
 		Staff staff = new Staff();
 		staff.setOrgid(org.getOrgid());
 		staff.setBranchid(branch.getBranchid());
-		staff.setLoginname("admin");
-		staff.setPassword(CommonUtil.getPasswordMd5("admin", "admin"));
-		staff.setName("管理员");
+		staff.setLoginname("admin@" + org.getCode());
+		staff.setPassword(CommonUtil.getPasswordMd5("admin@" + org.getCode(), "admin@" + org.getCode()));
+		staff.setName(org.getName() + "管理员");
 		staff.setStatus("1");
 		staff.setDescription(org.getName() + "管理员");
 		staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
 		staff.setCreatestaffid(org.getCreatestaffid());
 		staffMapper.insertSelective(staff);
-		staff.setToken("admin_" + DigestUtils.md5Hex("admin&uploadkey&" + staff.getStaffid()));
-		staffMapper.updateByPrimaryKeySelective(staff);
 		Privilege privilege = privilegeMapper.selectByPrimaryKey(CommonConstants.PRIVILEGE_SUPER);
 		ArrayList<Privilege> privileges = new ArrayList<Privilege>();
 		privileges.add(privilege);
@@ -110,7 +107,9 @@ public class OrgServiceImpl implements OrgService {
 				for (int j = 0; j < k; j++) {
 					terminalid = "0" + terminalid;
 				}
-				terminalid = org.getCode() + terminalid;
+				if (!org.getCode().equals("default")) {
+					terminalid = org.getCode() + terminalid;
+				}
 				List<Branch> branches = branchMapper.selectRoot(org.getOrgid());
 				Device device = new Device();
 				device.setOrgid(org.getOrgid());

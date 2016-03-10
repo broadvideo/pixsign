@@ -88,7 +88,21 @@ public class BundleAction extends BaseDatatableAction {
 			bundleService.deleteBundle("" + bundle.getBundleid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("BundleAction doDelete exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doSync() {
+		try {
+			String bundleid = getParameter("bundleid");
+			bundleService.syncBundle(bundleid);
+			logger.info("Bundle sync success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("BundleAction doSync exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

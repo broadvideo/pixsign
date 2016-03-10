@@ -1309,4 +1309,11 @@ public class BundleServiceImpl implements BundleService {
 			syncLayoutschedule1(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
+
+	public void syncBundle(String bundleid) throws Exception {
+		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle(bundleid);
+		for (HashMap<String, Object> bindObj : bindList) {
+			syncLayoutschedule1(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+		}
+	}
 }

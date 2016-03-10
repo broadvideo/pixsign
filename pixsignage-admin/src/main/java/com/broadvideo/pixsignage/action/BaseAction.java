@@ -20,7 +20,7 @@ public class BaseAction extends ActionSupport {
 	private String dataid = "";
 	private int errorcode = 0;
 	private String errormsg = "";
-	private String data = "";
+	private Object data = "";
 
 	public String getDataid() {
 		return dataid;
@@ -30,11 +30,11 @@ public class BaseAction extends ActionSupport {
 		this.dataid = dataid;
 	}
 
-	public String getData() {
+	public Object getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 

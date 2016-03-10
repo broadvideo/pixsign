@@ -33,7 +33,7 @@ function initMyTable() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
 			var dropdownBtn = '';
-			if (data.loginname != 'admin') {
+			if (data.loginname != 'admin@' + data.org.code) {
 				dropdownBtn += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
 				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';

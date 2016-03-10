@@ -18,9 +18,7 @@ public interface StaffMapper {
 			@Param(value = "orgid") String orgid, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
-	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname,
-			@Param(value = "subsystem") String subsystem, @Param(value = "vspid") String vspid,
-			@Param(value = "orgid") String orgid);
+	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname);
 
 	List<Staff> selectByUploadkey(@Param(value = "uploadkey") String uploadkey);
 
@@ -28,6 +26,8 @@ public interface StaffMapper {
 			@Param(value = "password") String password, @Param(value = "orgcode") String orgcode);
 
 	List<Staff> selectByOrg(@Param(value = "loginname") String loginname, @Param(value = "orgcode") String orgcode);
+
+	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
 
 	Staff loginWithVsp(@Param(value = "loginname") String loginname, @Param(value = "password") String password,
 			@Param(value = "vspcode") String vspcode);

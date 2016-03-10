@@ -25,8 +25,7 @@ public class SecurityFilter implements Filter {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected FilterConfig filterConfig = null;
-	private String orgRedirectURL = null;
-	private String vspRedirectURL = null;
+	private String redirectURL = null;
 	private List<String> excludeLoginURLs = new ArrayList<String>();
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -37,7 +36,6 @@ public class SecurityFilter implements Filter {
 		HttpSession session = request.getSession();
 
 		String servletPath = request.getServletPath();
-		logger.debug("Servlet path: " + servletPath);
 		for (int i = 0; i < excludeLoginURLs.size(); i++) {
 			if (servletPath.matches(excludeLoginURLs.get(i))) {
 				chain.doFilter(request, response);
@@ -47,22 +45,23 @@ public class SecurityFilter implements Filter {
 
 		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
 				|| session.getAttribute(CommonConstants.SESSION_SUBSYSTEM) == null) {
-			if (servletPath.startsWith("/vsp/")) {
-				response.sendRedirect(request.getContextPath() + vspRedirectURL);
-			} else {
-				response.sendRedirect(request.getContextPath() + orgRedirectURL);
-			}
+			response.sendRedirect(request.getContextPath() + redirectURL);
 			return;
 		}
 
-		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
-				&& servletPath.startsWith("/vsp/")) {
-			response.sendRedirect(request.getContextPath() + vspRedirectURL);
+		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_SYS)
+				&& !servletPath.startsWith("/sys/")) {
+			response.sendRedirect(request.getContextPath() + redirectURL);
 			return;
 		}
 		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_VSP)
-				&& servletPath.startsWith("/org/")) {
-			response.sendRedirect(request.getContextPath() + orgRedirectURL);
+				&& !servletPath.startsWith("/vsp/")) {
+			response.sendRedirect(request.getContextPath() + redirectURL);
+			return;
+		}
+		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
+				&& !servletPath.startsWith("/org/")) {
+			response.sendRedirect(request.getContextPath() + redirectURL);
 			return;
 		}
 
@@ -75,8 +74,7 @@ public class SecurityFilter implements Filter {
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		orgRedirectURL = filterConfig.getInitParameter("orgRedirectURL");
-		vspRedirectURL = filterConfig.getInitParameter("vspRedirectURL");
+		redirectURL = filterConfig.getInitParameter("redirectURL");
 
 		String s = filterConfig.getInitParameter("excludeLoginURLs");
 		if (excludeLoginURLs != null) {

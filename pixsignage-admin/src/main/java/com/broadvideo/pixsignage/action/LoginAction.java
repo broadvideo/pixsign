@@ -17,11 +17,16 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
+import com.broadvideo.pixsignage.domain.Vsp;
+import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
+import com.broadvideo.pixsignage.persistence.VspMapper;
+import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PrivilegeService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
@@ -31,17 +36,23 @@ import com.broadvideo.pixsignage.util.CommonUtil;
 public class LoginAction extends BaseAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String subsystem;
 	private String username;
 	private String password;
 	private String code;
+	private Staff staff;
 
 	@Autowired
+	private VspMapper vspMapper;
+	@Autowired
 	private OrgMapper orgMapper;
+	@Autowired
+	private BranchMapper branchMapper;
 	@Autowired
 	private StaffMapper staffMapper;
 	@Autowired
 	private PrivilegeService privilegeService;
+	@Autowired
+	private OrgService orgService;
 
 	public String doLogin() throws Exception {
 		if (!CommonConfig.LICENSE) {
@@ -53,7 +64,7 @@ public class LoginAction extends BaseAction {
 				} catch (Exception e) {
 				}
 				CommonConfig.LICENSE_MaxOrgs = 10;
-				CommonConfig.LICENSE_MaxDevicesPerSigOrg = 20;
+				CommonConfig.LICENSE_MaxDevicesPerSigOrg = 25;
 				CommonConfig.LICENSE_MaxStoragePerSigOrg = 3000;
 				CommonConfig.LICENSE_MaxDevicesPerMovieOrg = 20;
 				CommonConfig.LICENSE_MaxStoragePerMovieOrg = 3000;
@@ -86,6 +97,13 @@ public class LoginAction extends BaseAction {
 				logger.info("License MaxStoragePerMovieOrg: " + CommonConfig.LICENSE_MaxStoragePerMovieOrg);
 				CommonConfig.LICENSE = true;
 			}
+
+			Org org = orgService.selectByCode("default");
+			if (org.getMaxdevices() < CommonConfig.LICENSE_MaxDevicesPerSigOrg) {
+				org.setMaxdevices(CommonConfig.LICENSE_MaxDevicesPerSigOrg);
+				org.setMaxstorage((long) CommonConfig.LICENSE_MaxStoragePerSigOrg);
+				orgService.updateOrg(org);
+			}
 		}
 
 		if (!CommonConfig.LICENSE_HOSTID_VERIFY) {
@@ -99,81 +117,76 @@ public class LoginAction extends BaseAction {
 			return ERROR;
 		}
 
-		Staff staff;
-		List<Privilege> pList;
-		if (subsystem != null && subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
-			if (code == null || code.equals("")) {
-				code = "root";
-			}
-			staff = staffMapper.loginWithVsp(username, CommonUtil.getPasswordMd5(username, password), code);
-			pList = privilegeService.selectVspTreeList();
-		} else if (subsystem != null && subsystem.equals(CommonConstants.SUBSYSTEM_ORG)) {
-			Org org = orgMapper.selectByCode(code);
-			if (org != null) {
-				if (org.getExpireflag().equals("1")
-						&& org.getExpiretime().getTime() < Calendar.getInstance().getTime().getTime()) {
-					logger.error("Login failed for time expire, username=" + username + ", password="
-							+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem="
-							+ subsystem);
-					setErrorcode(-1);
-					return ERROR;
-				}
-				staff = staffMapper.loginWithOrg(username, CommonUtil.getPasswordMd5(username, password), code);
-				pList = privilegeService.selectOrgTreeList(org.getOrgtype());
-				for (int i = 0; i < pList.size(); i++) {
-					List<Privilege> secondPrivileges = pList.get(i).getChildren();
-					for (int j = secondPrivileges.size(); j > 0; j--) {
-						Privilege privilege = secondPrivileges.get(j - 1);
-						/*
-						 * if (privilege.getPrivilegeid() == 20102 &&
-						 * org.getVideoflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20103 &&
-						 * org.getVideoflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20104 &&
-						 * org.getImageflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20105 &&
-						 * org.getTextflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20106 &&
-						 * org.getStreamflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20107 &&
-						 * org.getDvbflag().equals("0") ||
-						 * privilege.getPrivilegeid() == 20108 &&
-						 * org.getWidgetflag().equals("0")) {
-						 * secondPrivileges.remove(j - 1); }
-						 */
-					}
-				}
-			} else {
-				logger.error("Login failed, username=" + username + ", password="
-						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem="
-						+ subsystem);
-				setErrorcode(-1);
-				return ERROR;
-			}
-		} else {
+		staff = staffMapper.login(username, CommonUtil.getPasswordMd5(username, password));
+		if (staff == null) {
+			logger.error("Login failed for staff not found, username=" + username + ", password="
+					+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
 			setErrorcode(-1);
 			return ERROR;
 		}
 
-		if (staff != null) {
-			HttpSession session = super.getSession();
-			String token = UUID.randomUUID().toString().replaceAll("-", "");
-			session.setAttribute(CommonConstants.SESSION_TOKEN, token);
-			session.setAttribute(CommonConstants.SESSION_STAFF, staff);
-			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
-			session.setAttribute(CommonConstants.SESSION_SUBSYSTEM, subsystem);
-
-			Org org = orgMapper.selectByPrimaryKey("" + staff.getOrgid());
-			if (org != null) {
-				session.setAttribute(CommonConstants.SESSION_ORG, org);
+		if (code == null || code.equals("")) {
+			code = "default";
+		}
+		if (username.equals("root")) {
+			// SYS super user
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_SYS);
+		} else if (username.equals("super")) {
+			// VSP super user
+			Vsp vsp = vspMapper.selectByCode(code);
+			if (vsp == null) {
+				logger.error("Login failed for vsp not found, username=" + username + ", password="
+						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+				setErrorcode(-1);
+				return ERROR;
 			}
-			return SUCCESS;
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_VSP);
+			staff.setVspid(vsp.getVspid());
+			staff.setVsp(vsp);
+		} else if (username.equals("admin")) {
+			// ORG super user
+			Org org = orgMapper.selectByCode(code);
+			if (org == null) {
+				logger.error("Login failed for org not found, username=" + username + ", password="
+						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+				setErrorcode(-1);
+				return ERROR;
+			}
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
+			staff.setOrgid(org.getOrgid());
+			staff.setOrg(org);
+			List<Branch> branchRoot = branchMapper.selectRoot(org.getOrgid());
+			staff.setBranchid(branchRoot.get(0).getBranchid());
+			staff.setBranch(branchRoot.get(0));
 		}
 
-		logger.error("Login failed, username=" + username + ", password="
-				+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code + ", subsystem=" + subsystem);
-		setErrorcode(-1);
-		return ERROR;
+		if (staff.getOrg() != null && staff.getOrg().getExpireflag().equals("1")
+				&& staff.getOrg().getExpiretime().getTime() < Calendar.getInstance().getTime().getTime()) {
+			logger.error("Login failed for time expire, username=" + username + ", password="
+					+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+			setErrorcode(-1);
+			return ERROR;
+		}
+
+		HttpSession session = super.getSession();
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		session.setAttribute(CommonConstants.SESSION_TOKEN, token);
+		session.setAttribute(CommonConstants.SESSION_STAFF, staff);
+		session.setAttribute(CommonConstants.SESSION_SUBSYSTEM, staff.getSubsystem());
+		if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_SYS)) {
+			List<Privilege> pList = privilegeService.selectSysTreeList();
+			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
+		} else if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_VSP)) {
+			List<Privilege> pList = privilegeService.selectVspTreeList();
+			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
+			session.setAttribute(CommonConstants.SESSION_VSP, staff.getVsp());
+		} else if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_ORG)) {
+			List<Privilege> pList = privilegeService.selectOrgTreeList(staff.getOrg().getOrgtype());
+			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
+			session.setAttribute(CommonConstants.SESSION_ORG, staff.getOrg());
+		}
+
+		return SUCCESS;
 	}
 
 	public String doLogout() throws Exception {
@@ -181,23 +194,14 @@ public class LoginAction extends BaseAction {
 		if (session != null) {
 			session.removeAttribute(CommonConstants.SESSION_TOKEN);
 			session.removeAttribute(CommonConstants.SESSION_STAFF);
+			session.removeAttribute(CommonConstants.SESSION_VSP);
 			session.removeAttribute(CommonConstants.SESSION_ORG);
 			session.removeAttribute(CommonConstants.SESSION_PRIVILEGES);
 			session.removeAttribute(CommonConstants.SESSION_SUBSYSTEM);
-
 			session.invalidate();
 		}
-
 		getHttpServletResponse().sendRedirect(getHttpServletRequest().getRequestURI());
 		return SUCCESS;
-	}
-
-	public String getSubsystem() {
-		return subsystem;
-	}
-
-	public void setSubsystem(String subsystem) {
-		this.subsystem = subsystem;
 	}
 
 	public String getUsername() {
@@ -222,5 +226,13 @@ public class LoginAction extends BaseAction {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Staff getStaff() {
+		return staff;
+	}
+
+	public void setStaff(Staff staff) {
+		this.staff = staff;
 	}
 }

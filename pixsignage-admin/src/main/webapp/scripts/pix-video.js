@@ -309,7 +309,7 @@ function initUploadModal() {
 		autoUpload: false,
 		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 		maxFileSize: 2147483648,
-		acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv)$/i,
+		acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv|avi|wmv|mpg|flv)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				
 	});

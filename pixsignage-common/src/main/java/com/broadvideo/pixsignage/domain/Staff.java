@@ -36,6 +36,8 @@ public class Staff {
 
 	private Date logintime;
 
+	private Vsp vsp;
+
 	private Org org;
 
 	private Branch branch;
@@ -168,6 +170,14 @@ public class Staff {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setLogintime(Date logintime) {
 		this.logintime = logintime;
+	}
+
+	public Vsp getVsp() {
+		return vsp;
+	}
+
+	public void setVsp(Vsp vsp) {
+		this.vsp = vsp;
 	}
 
 	public Org getOrg() {

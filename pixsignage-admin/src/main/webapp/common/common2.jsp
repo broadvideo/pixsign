@@ -2,10 +2,15 @@
 <%@page import="java.util.ArrayList"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Privilege"%>
+<%@page import="com.broadvideo.pixsignage.domain.Vsp"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Org"%> 
 <%@page import="com.broadvideo.pixsignage.common.CommonConstants"%> 
 
 <%
+	Vsp session_vsp = (Vsp)session.getAttribute(CommonConstants.SESSION_VSP);
+	Org session_org = (Org)session.getAttribute(CommonConstants.SESSION_ORG);
+	Staff session_staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
+	
 	String currentPrivilegeid = request.getParameter("CurrentP");
 	if (currentPrivilegeid == null) {
 		currentPrivilegeid = "";
@@ -17,8 +22,7 @@
 
 	List<Privilege> pList = (List<Privilege>)session.getAttribute(CommonConstants.SESSION_PRIVILEGES);
 	
-	Staff staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
-	List<Privilege> myPrivilegeList = staff.getPrivileges();
+	List<Privilege> myPrivilegeList = session_staff.getPrivileges();
 	boolean superFlag = false;
 	List<Integer> myPrivilegeidList = new ArrayList<Integer>();
 	for (int i=0; i<myPrivilegeList.size(); i++) {
@@ -27,8 +31,6 @@
 			superFlag = true; 
 		}
 	}
-	
-	Org session_org = (Org)session.getAttribute(CommonConstants.SESSION_ORG);
 %>
 
 <!-- BEGIN THEME STYLES -->
@@ -80,7 +82,7 @@ function hasPrivilege(privilegeid) {
 				</div>
 				<div class="modal-body">
 					<form id="ChangePwdForm" class="form-horizontal form-bordered form-row-stripped">
-						<input type="hidden" name="staff.staffid" value="<%=staff.getStaffid()%>" />
+						<input type="hidden" name="staff.staffid" value="<%=session_staff.getStaffid()%>" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="global.oldpassword"/><span class="required">*</span></label>
@@ -141,7 +143,7 @@ function hasPrivilege(privilegeid) {
 					<li class="dropdown dropdown-user">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 						<img alt="" class="img-circle" src="${base_ctx}/img/anonymous.jpg"/>
-						<span class="username username-hide-on-mobile"><%=staff.getName()%></span>
+						<span class="username username-hide-on-mobile"><%=session_staff.getName()%></span>
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">

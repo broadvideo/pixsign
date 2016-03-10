@@ -50,8 +50,8 @@
     <include refid="Base_Column_List" />
     from org
     where status=1
-    <if test="type != null">
-      and type = '${type}'
+    <if test="vspid != null" >
+      and vspid = #{vspid}
     </if>
     order by orgid desc 
   </select>

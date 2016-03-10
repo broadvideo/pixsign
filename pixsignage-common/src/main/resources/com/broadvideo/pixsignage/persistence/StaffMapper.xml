@@ -34,6 +34,7 @@
 		<result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
 		<result column="loginflag" property="loginflag" jdbcType="CHAR" />
 		<result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
+		<association property="vsp" column="{vspid=vspid}" select="com.broadvideo.pixsignage.persistence.VspMapper.selectByPrimaryKey" />
 		<association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
 		<association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectNameByPrimaryKey" />
 		<collection property="privileges" ofType="com.broadvideo.pixsignage.domain.Privilege"
@@ -99,13 +100,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from staff
-		where status='1' and loginname = #{loginname} and subsystem = #{subsystem}
-		<if test="vspid != null" >
-			and vspid = #{vspid}
-		</if>
-		<if test="orgid != null" >
-			and orgid = #{orgid}
-		</if>
+		where status='1' and loginname = #{loginname}
 	</select>
 
 	<select id="selectByOrgLogin" resultMap="BaseResultMap">
@@ -129,6 +124,14 @@
 		<include refid="Base_Column_List" />
 		from staff
 		where status='1' and token = #{token}
+	</select>
+
+	<select id="login" resultMap="BaseResultMap">
+		select *
+		from staff
+		where loginname=#{loginname} 
+		and password=#{password}
+		and status='1'
 	</select>
 
 	<select id="loginWithVsp" resultMap="BaseResultMap">

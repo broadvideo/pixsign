@@ -18,6 +18,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	@Autowired
 	protected ResourceBundleMessageSource messageSource;
 
+	public List<Privilege> selectSysTreeList() {
+		List<Privilege> privilegeList = privilegeMapper.selectSysTreeList();
+		buildTree(privilegeList);
+		return privilegeList;
+	}
+
 	public List<Privilege> selectVspTreeList() {
 		List<Privilege> privilegeList = privilegeMapper.selectVspTreeList();
 		buildTree(privilegeList);

@@ -9,26 +9,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.service.OrgService;
+import com.broadvideo.pixsignage.domain.Vsp;
+import com.broadvideo.pixsignage.service.VspService;
 
 @Scope("request")
-@Controller("orgAction")
-public class OrgAction extends BaseDatatableAction {
+@Controller("vspAction")
+public class VspAction extends BaseDatatableAction {
 	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Org org;
+	private Vsp vsp;
 
 	@Autowired
-	private OrgService orgService;
+	private VspService vspService;
 
 	public String doList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			List<Org> orgList = orgService.selectList("" + getLoginStaff().getVspid());
-			for (int i = 0; i < orgList.size(); i++) {
-				aaData.add(orgList.get(i));
+			List<Vsp> vspList = vspService.selectList();
+			for (int i = 0; i < vspList.size(); i++) {
+				aaData.add(vspList.get(i));
 			}
 			this.setAaData(aaData);
 			return SUCCESS;
@@ -42,11 +42,8 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doAdd() {
 		try {
-			org.setCreatestaffid(getLoginStaff().getStaffid());
-			org.setVspid(getLoginStaff().getVspid());
-			org.setCurrentdevices(0);
-			org.setCurrentstorage((long) 0);
-			orgService.addOrg(org);
+			vsp.setCreatestaffid(getLoginStaff().getStaffid());
+			vspService.addVsp(vsp);
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -58,7 +55,7 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
-			orgService.updateOrg(org);
+			vspService.updateVsp(vsp);
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -70,7 +67,7 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			orgService.deleteOrg("" + org.getOrgid());
+			vspService.deleteVsp("" + vsp.getVspid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -82,8 +79,8 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doValidate() {
 		try {
-			if (org.getName() != null) {
-				if (orgService.validateName(org)) {
+			if (vsp.getName() != null) {
+				if (vspService.validateName(vsp)) {
 					return SUCCESS;
 				} else {
 					setErrorcode(-1);
@@ -91,8 +88,8 @@ public class OrgAction extends BaseDatatableAction {
 					return ERROR;
 				}
 			}
-			if (org.getCode() != null) {
-				if (orgService.validateCode(org)) {
+			if (vsp.getCode() != null) {
+				if (vspService.validateCode(vsp)) {
 					return SUCCESS;
 				} else {
 					setErrorcode(-1);
@@ -111,7 +108,7 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doGet() {
 		try {
-			org = orgService.selectByPrimaryKey("" + getLoginStaff().getOrgid());
+			vsp = vspService.selectByPrimaryKey("" + getLoginStaff().getVspid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -121,11 +118,11 @@ public class OrgAction extends BaseDatatableAction {
 		}
 	}
 
-	public Org getOrg() {
-		return org;
+	public Vsp getVsp() {
+		return vsp;
 	}
 
-	public void setOrg(Org org) {
-		this.org = org;
+	public void setVsp(Vsp vsp) {
+		this.vsp = vsp;
 	}
 }

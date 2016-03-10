@@ -40,4 +40,6 @@ public interface BundleService {
 	public JSONObject generateBundleRegionJson(String bindtype, String bindid, String regionid);
 
 	public void syncBundleLayoutByLayout(String layoutid) throws Exception;
+
+	public void syncBundle(String bundleid) throws Exception;
 }

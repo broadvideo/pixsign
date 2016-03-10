@@ -134,15 +134,7 @@ public class StaffAction extends BaseDatatableAction {
 	public String doValidate() {
 		try {
 			if (staff.getLoginname() != null) {
-				String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
-				String vspid = null;
-				String orgid = null;
-				if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
-					vspid = "" + getLoginStaff().getVspid();
-				} else {
-					orgid = "" + getLoginStaff().getOrgid();
-				}
-				if (staffService.validateLoginname(staff, subsystem, vspid, orgid)) {
+				if (staffService.validateLoginname(staff)) {
 					return SUCCESS;
 				} else {
 					setErrorcode(-1);

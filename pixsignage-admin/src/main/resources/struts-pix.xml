@@ -29,22 +29,57 @@
 			</result>
 		</global-results>
 
-		<action name="login!vsp" method="doLogin" class="loginAction">
+		<action name="login" method="doLogin" class="loginAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="login!org" method="doLogin" class="loginAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
+				<param name="includeProperties">errorcode,errormsg,staff.*</param>
 			</result>
 		</action>
 		<action name="logout" method="doLogout" class="loginAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="vsp!list" method="doList" class="vspAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vsp!validate" method="doValidate" class="vspAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vsp!add" method="doAdd" class="vspAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vsp!update" method="doUpdate" class="vspAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vsp!delete" method="doDelete" class="vspAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="vsp!get" method="doGet" class="vspAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">vsp.*,errorcode,errormsg</param>
 			</result>
 		</action>
 
