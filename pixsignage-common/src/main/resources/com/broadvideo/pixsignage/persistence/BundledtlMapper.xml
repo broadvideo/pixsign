@@ -69,11 +69,31 @@
     where bundledtlid = '${bundledtlid}'
   </delete>
   
+  <delete id="deleteByLayoutdtl" >
+    delete bd from bundledtl bd, bundle b, layoutdtl ld
+    where ld.layoutdtlid = '${layoutdtlid}' 
+    and ld.layoutid = b.layoutid
+    and ld.regionid = bd.regionid
+    and b.bundleid = bd.bundleid
+  </delete>
+  
   <update id="clearByObj" >
     update bundledtl set objid = 0
     where objtype = '${objtype}' and objid = '${objid}'
   </update>
 
+  <insert id="insertList">
+    insert into bundledtl(bundleid, objtype, objid, regionid, type) 
+    values 
+    <foreach collection="bundledtls" item="item"  separator=",">
+      (#{item.bundleid}, 
+      #{item.objtype}, 
+      #{item.objid}, 
+      #{item.regionid}, 
+      #{item.type})
+    </foreach>
+  </insert>
+  
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Bundledtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="bundledtlid" order="AFTER" >
       SELECT LAST_INSERT_ID()

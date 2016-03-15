@@ -350,7 +350,12 @@ response.setDateHeader("Expires",0);
 																	<form id="LayoutdtlEditForm" class="form-horizontal pix-bordered">
 																		<input type="hidden" name="regionid" value="0" />
 																		<div class="form-body">
-																			<label class="page-title font-red-sunglo layoutdtl-title"></label>
+																			<div class="row">
+																				<h3 class="col-md-6 page-title font-red-sunglo layoutdtl-title"></h3>
+																				<div class="col-md-6">
+																					<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
+																				</div>
+																			</div>
 																			<div class="form-group nontextflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 																				<div class="col-md-9">
@@ -418,9 +423,11 @@ response.setDateHeader("Expires",0);
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
 																				<div class="col-md-9">
 																					<select class="form-control" name="dateformat" tabindex="-1">
-																						<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
-																						<option value="yyyy-MM-dd">yyyy-MM-dd</option>
-																						<option value="HH:mm">HH:mm</option>
+																						<option value="yyyy-MM-dd">2016-01-01</option>
+																						<option value="HH:mm">12:00</option>
+																						<option value="ww">星期五</option>
+																						<option value="yyyy-MM-dd HH:mm">2016-01-01 12:00</option>
+																						<option value="yyyy-MM-dd ww">2016-01-01 星期五</option>
 																					</select>
 																				</div>
 																			</div>
@@ -824,10 +831,11 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

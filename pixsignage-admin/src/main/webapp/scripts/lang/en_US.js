@@ -124,6 +124,8 @@ var common = {
 		input_check: 'Please check the input items',
 		login_failed: 'Input error, login failed',
 
+		region_remove_failed: 'Cannot remove this region',
+
 		loginname_repeat: 'Login name conflicted',
 		name_repeat: 'Name conflicted',
 		code_repeat: 'Code conflicted',

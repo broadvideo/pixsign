@@ -14,6 +14,8 @@ public interface BundleMapper {
 	List<Bundle> selectList(@Param(value = "orgid") String orgid, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
+	List<Bundle> selectByLayout(@Param(value = "layoutid") String layoutid);
+
 	int deleteByPrimaryKey(@Param(value = "bundleid") String bundleid);
 
 	// int insert(Bundle record);

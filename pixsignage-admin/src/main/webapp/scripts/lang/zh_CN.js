@@ -124,6 +124,8 @@ var common = {
 		input_check: '请检查输入项',
 		login_failed: '信息输入有误，登陆失败',
 
+		region_remove_failed: '无法删除这个区域',
+
 		loginname_repeat: '登录名已存在',
 		name_repeat: '名称已存在',
 		code_repeat: '编码已存在',

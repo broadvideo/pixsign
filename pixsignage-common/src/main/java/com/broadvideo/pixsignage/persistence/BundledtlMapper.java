@@ -15,11 +15,15 @@ public interface BundledtlMapper {
 
 	int deleteByPrimaryKey(@Param(value = "bundledtlid") String bundledtlid);
 
+	int deleteByLayoutdtl(@Param(value = "layoutdtlid") String layoutdtlid);
+
 	int clearByObj(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
 
 	// int insert(Bundledtl record);
 
 	int insertSelective(Bundledtl record);
+
+	int insertList(@Param(value = "bundledtls") List<Bundledtl> bundledtls);
 
 	int updateByPrimaryKeySelective(Bundledtl record);
 

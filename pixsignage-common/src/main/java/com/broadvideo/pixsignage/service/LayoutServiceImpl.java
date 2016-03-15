@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,21 +11,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Bundle;
+import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Layout;
 import com.broadvideo.pixsignage.domain.Layoutdtl;
 import com.broadvideo.pixsignage.domain.Layoutschedule;
+import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Region;
 import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Task;
+import com.broadvideo.pixsignage.domain.Text;
+import com.broadvideo.pixsignage.persistence.BundleMapper;
+import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutdtlMapper;
 import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
+import com.broadvideo.pixsignage.persistence.MedialistMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.TaskMapper;
+import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("layoutService")
@@ -35,6 +44,10 @@ public class LayoutServiceImpl implements LayoutService {
 	@Autowired
 	private LayoutdtlMapper layoutdtlMapper;
 	@Autowired
+	private BundleMapper bundleMapper;
+	@Autowired
+	private BundledtlMapper bundledtlMapper;
+	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
 	private LayoutscheduleMapper layoutscheduleMapper;
@@ -42,6 +55,11 @@ public class LayoutServiceImpl implements LayoutService {
 	private RegionscheduleMapper regionscheduleMapper;
 	@Autowired
 	private DevicefileMapper devicefileMapper;
+	@Autowired
+	private MedialistMapper medialistMapper;
+	@Autowired
+	private TextMapper textMapper;
+
 	@Autowired
 	protected ResourceBundleMessageSource messageSource;
 	@Autowired
@@ -129,6 +147,51 @@ public class LayoutServiceImpl implements LayoutService {
 	}
 
 	@Transactional
+	public void addLayoutdtl(Layoutdtl layoutdtl) {
+		layoutdtlMapper.insertSelective(layoutdtl);
+		List<Bundledtl> bundledtls = new ArrayList<Bundledtl>();
+		List<Bundle> bundles = bundleMapper.selectByLayout("" + layoutdtl.getLayoutid());
+		for (Bundle bundle : bundles) {
+			Bundledtl bundledtl = new Bundledtl();
+			bundledtl.setBundleid(bundle.getBundleid());
+			bundledtl.setRegionid(layoutdtl.getRegionid());
+			bundledtl.setType(Bundledtl.Type_Private);
+			if (layoutdtl.getRegion().getType().equals(Region.Type_NONTEXT)) {
+				Medialist medialist = new Medialist();
+				medialist.setOrgid(bundle.getOrgid());
+				medialist.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
+				medialist.setType(Medialist.Type_Private);
+				medialist.setCreatestaffid(bundle.getCreatestaffid());
+				medialistMapper.insertSelective(medialist);
+				bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
+				bundledtl.setObjid(medialist.getMedialistid());
+			} else if (layoutdtl.getRegion().getType().equals(Region.Type_TEXT)) {
+				Text text = new Text();
+				text.setOrgid(bundle.getOrgid());
+				text.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
+				text.setType(Medialist.Type_Private);
+				text.setCreatestaffid(bundle.getCreatestaffid());
+				textMapper.insertSelective(text);
+				bundledtl.setObjtype(Bundledtl.ObjType_Text);
+				bundledtl.setObjid(text.getTextid());
+			} else {
+				bundledtl.setObjtype(Bundledtl.ObjType_NONE);
+				bundledtl.setObjid(0);
+			}
+			bundledtls.add(bundledtl);
+		}
+		if (bundledtls.size() > 0) {
+			bundledtlMapper.insertList(bundledtls);
+		}
+	}
+
+	@Transactional
+	public void deleteLayoutdtl(String layoutdtlid) {
+		bundledtlMapper.deleteByLayoutdtl(layoutdtlid);
+		layoutdtlMapper.deleteByPrimaryKey(layoutdtlid);
+	}
+
+	@Transactional
 	public void design(Layout layout) {
 		layoutMapper.updateByPrimaryKeySelective(layout);
 
@@ -138,7 +201,7 @@ public class LayoutServiceImpl implements LayoutService {
 		for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
 			if (layoutdtl.getLayoutdtlid() == 0) {
 				layoutdtl.setLayoutid(layoutid);
-				layoutdtlMapper.insertSelective(layoutdtl);
+				addLayoutdtl(layoutdtl);
 			} else {
 				layoutdtlMapper.updateByPrimaryKeySelective(layoutdtl);
 				hash.put(layoutdtl.getLayoutdtlid(), layoutdtl);
@@ -146,7 +209,7 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		for (int i = 0; i < oldlayoutdtls.size(); i++) {
 			if (hash.get(oldlayoutdtls.get(i).getLayoutdtlid()) == null) {
-				layoutdtlMapper.deleteByPrimaryKey("" + oldlayoutdtls.get(i).getLayoutdtlid());
+				deleteLayoutdtl("" + oldlayoutdtls.get(i).getLayoutdtlid());
 			}
 		}
 	}

@@ -105,6 +105,8 @@ public class BundleServiceImpl implements BundleService {
 	private StreamService streamService;
 	@Autowired
 	private WidgetService widgetService;
+	@Autowired
+	private LayoutService layoutService;
 
 	public int selectCount(String orgid, String search) {
 		return bundleMapper.selectCount(orgid, search);
@@ -400,7 +402,7 @@ public class BundleServiceImpl implements BundleService {
 		for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
 			if (layoutdtl.getLayoutdtlid() == 0) {
 				layoutdtl.setLayoutid(layoutid);
-				layoutdtlMapper.insertSelective(layoutdtl);
+				layoutService.addLayoutdtl(layoutdtl);
 			} else {
 				layoutdtlMapper.updateByPrimaryKeySelective(layoutdtl);
 				hash.put(layoutdtl.getLayoutdtlid(), layoutdtl);
@@ -408,7 +410,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 		for (int i = 0; i < oldlayoutdtls.size(); i++) {
 			if (hash.get(oldlayoutdtls.get(i).getLayoutdtlid()) == null) {
-				layoutdtlMapper.deleteByPrimaryKey("" + oldlayoutdtls.get(i).getLayoutdtlid());
+				layoutService.deleteLayoutdtl("" + oldlayoutdtls.get(i).getLayoutdtlid());
 			}
 		}
 
@@ -1313,7 +1315,8 @@ public class BundleServiceImpl implements BundleService {
 	public void syncBundle(String bundleid) throws Exception {
 		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle(bundleid);
 		for (HashMap<String, Object> bindObj : bindList) {
-			syncLayoutschedule1(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			syncBundleLayout(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			syncBundleRegions(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 }

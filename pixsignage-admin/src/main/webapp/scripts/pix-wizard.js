@@ -82,13 +82,13 @@ function initWizard() {
 					return false;
 				}
 			} else if (index == 1 && clickedIndex == 2) {
-				if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+				if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
 					initData3();
 				} else {
 					return false;
 				}
 			} else if (index == 2 && clickedIndex == 3) {
-				if (CurrentBundledtl != null && leaveBundledtlFocus(CurrentBundledtl)) {
+				if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
 					initData4();
 				} else {
 					return false;
@@ -110,13 +110,13 @@ function initWizard() {
 					return false;
 				}
 			} else if (index == 2) {
-				if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+				if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
 					initData3();
 				} else {
 					return false;
 				}
 			} else if (index == 3) {
-				if (CurrentBundledtl != null && leaveBundledtlFocus(CurrentBundledtl)) {
+				if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
 					initData4();
 				} else {
 					return false;
@@ -142,17 +142,9 @@ function initWizard() {
 			handleTitle(tab, navigation, index);
 			
 			if (index == 1) {
-				var width = Math.floor($("#LayoutDiv").parent().width());
-				var scale = CurrentLayout.width / width;
-				var height = CurrentLayout.height / scale;
-				$("#LayoutDiv").css("width" , width);
-				$("#LayoutDiv").css("height" , height);
+				redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 			} else if (index == 2) {
-				var width = Math.floor($("#BundleDiv").parent().width());
-				var scale = CurrentLayout.width / width;
-				var height = CurrentLayout.height / scale;
-				$("#BundleDiv").css("width" , width);
-				$("#BundleDiv").css("height" , height);
+				enterBundledtlFocus(CurrentBundledtl);
 			}
 		}
 	});
@@ -175,7 +167,7 @@ function initTab1() {
 				var layoutTableHtml = '';
 				layoutTableHtml += '<tr>';
 				for (var i=0; i<Layouts.length; i++) {
-					layoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><canvas id="LayoutCanvas' + Layouts[i].layoutid + '"></canvas></td>';
+					layoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><div id="LayoutDiv-' + Layouts[i].layoutid + '"></div></td>';
 				}
 				layoutTableHtml += '</tr>';
 				layoutTableHtml += '<tr>';
@@ -193,7 +185,8 @@ function initTab1() {
 				layoutTableHtml += '</tr>';
 				$('#LayoutTable').html(layoutTableHtml);
 				for (var i=0; i<Layouts.length; i++) {
-					initLayoutCanvas(Layouts[i]);
+					var layout = Layouts[i];
+					redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, 200);
 				}
 			} else {
 				alert(data.errorcode + ": " + data.errormsg);
@@ -203,67 +196,6 @@ function initTab1() {
 			alert('failure');
 		}
 	});
-	
-	function initLayoutCanvas(layout) {
-		function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
-			if (layoutdtl.bgimage != null) {
-				var region_bgimage = new Image();
-				region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.filepath;
-				region_bgimage.onload = function(img, ctx, left, top, width, height) {
-					return function() {
-						ctx.drawImage(img, left, top, width, height);
-					}
-				}(region_bgimage, ctx, left, top, width, height);
-			} else {
-				if (fill) {
-					ctx.fillStyle = RegionColors[layoutdtl.regionid];
-					ctx.fillRect(left,top,width,height);
-				}
-			}
-			ctx.strokeStyle = '#000000';
-			ctx.lineWidth = 2;
-			ctx.strokeRect(left,top,width,height);
-		};
-
-		var canvas = document.getElementById('LayoutCanvas' + layout.layoutid);
-		var ctx = canvas.getContext('2d');
-		var scale;
-		if (layout.width == 1920 || layout.width == 1080) {
-			scale = 1920/200;
-		} else {
-			scale = 800/200;
-		}
-		canvas.width = layout.width/scale;
-		canvas.height = layout.height/scale;
-
-		if (layout.bgimage != null) {
-			var layout_bgimage = new Image();
-			layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
-			layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
-				return function() {
-					//ctx.globalAlpha = 0.2;
-					ctx.drawImage(img, 0, 0, canvaswidth, canvasheight);
-					for (var j=0; j<layout.layoutdtls.length; j++) {
-						var layoutdtl = layout.layoutdtls[j];
-						var width = layoutdtl.width/scale;
-						var height = layoutdtl.height/scale;
-						var top = layoutdtl.topoffset/scale;
-						var left = layoutdtl.leftoffset/scale;
-						drawCanvasRegion(ctx, layoutdtl, left, top, width, height, false);
-					}
-				}
-			}(layout_bgimage, layout, ctx, canvas.width, canvas.height);
-		} else {
-			for (var j=0; j<layout.layoutdtls.length; j++) {
-				var layoutdtl = layout.layoutdtls[j];
-				var width = layoutdtl.width/scale;
-				var height = layoutdtl.height/scale;
-				var top = layoutdtl.topoffset/scale;
-				var left = layoutdtl.leftoffset/scale;
-				drawCanvasRegion(ctx, layoutdtl, left, top, width, height, true);
-			}
-		}
-	}
 }
 
 function initData1() {
@@ -344,28 +276,12 @@ function initData2() {
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
 	if (CurrentLayout.width > CurrentLayout.height) {
-		$('#LayoutCol1').removeClass('col-md-5');
-		$('#LayoutCol1').removeClass('col-sm-5');
-		$('#LayoutCol1').addClass('col-md-7');
-		$('#LayoutCol1').addClass('col-sm-7');
-		$('#LayoutCol2').removeClass('col-md-7');
-		$('#LayoutCol2').removeClass('col-sm-7');
-		$('#LayoutCol2').addClass('col-md-5');
-		$('#LayoutCol2').addClass('col-sm-5');
+		$('#LayoutCol1').attr('class', 'col-md-7 col-sm-7');
+		$('#LayoutCol2').attr('class', 'col-md-5 col-sm-5');
 	} else {
-		$('#LayoutCol1').removeClass('col-md-7');
-		$('#LayoutCol1').removeClass('col-sm-7');
-		$('#LayoutCol1').addClass('col-md-5');
-		$('#LayoutCol1').addClass('col-sm-5');
-		$('#LayoutCol2').removeClass('col-md-5');
-		$('#LayoutCol2').removeClass('col-sm-5');
-		$('#LayoutCol2').addClass('col-md-7');
-		$('#LayoutCol2').addClass('col-sm-7');
+		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
+		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
-	
-	$('#LayoutDiv').attr('layoutid', CurrentLayout.layoutid);
-	$('#LayoutDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
-	redrawLayout();
 }
 
 function initTab3() {
@@ -385,6 +301,20 @@ function initData3() {
 		bundledtl.bundledtlid = 'B' + Math.round(Math.random()*100000000);
 		bundledtl.bundleid = CurrentBundle.bundleid;
 		bundledtl.regionid = layoutdtl.regionid;
+		bundledtl.medialist0 = {};
+		bundledtl.medialist0.medialistid = 0;
+		bundledtl.medialist0.medialistdtls = [];
+		bundledtl.medialist0.type = 0;
+		bundledtl.text0 = {};
+		bundledtl.text0.textid = 0;
+		bundledtl.text0.text = '';
+		bundledtl.text0.type = 0;
+		bundledtl.stream0 = {};
+		bundledtl.stream0.streamid = 0;
+		bundledtl.stream0.type = 0;
+		bundledtl.widget0 = {};
+		bundledtl.widget0.widgetid = 0;
+		bundledtl.widget0.type = 0;
 		if (layoutdtl.region.type == 0) {
 			bundledtl.objtype = 1;
 			bundledtl.medialist = {};
@@ -413,35 +343,17 @@ function initData3() {
 		bundledtl.layoutdtl = CurrentLayout.layoutdtls[i];
 		CurrentBundle.bundledtls[i] = bundledtl;
 	}
+	CurrentBundledtl = CurrentBundle.bundledtls[0];
 
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
 	if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
-		$('#BundleCol1').removeClass('col-md-2');
-		$('#BundleCol1').removeClass('col-sm-2');
-		$('#BundleCol1').addClass('col-md-3');
-		$('#BundleCol1').addClass('col-sm-3');
-		$('#BundleCol2').removeClass('col-md-10');
-		$('#BundleCol2').removeClass('col-sm-10');
-		$('#BundleCol2').addClass('col-md-9');
-		$('#BundleCol2').addClass('col-sm-9');
+		$('#BundleCol1').attr('class', 'col-md-3 col-sm-3');
+		$('#BundleCol2').attr('class', 'col-md-9 col-sm-9');
 	} else {
-		$('#BundleCol1').removeClass('col-md-3');
-		$('#BundleCol1').removeClass('col-sm-3');
-		$('#BundleCol1').addClass('col-md-2');
-		$('#BundleCol1').addClass('col-sm-2');
-		$('#BundleCol2').removeClass('col-md-9');
-		$('#BundleCol2').removeClass('col-sm-9');
-		$('#BundleCol2').addClass('col-md-10');
-		$('#BundleCol2').addClass('col-sm-10');
+		$('#BundleCol1').attr('class', 'col-md-2 col-sm-2');
+		$('#BundleCol2').attr('class', 'col-md-10 col-sm-10');
 	}
-	
-	$('#BundleDiv').attr('bundleid', CurrentBundle.bundleid);
-	$('#BundleDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
-	redrawBundle();
-	
-	CurrentBundledtl = CurrentBundle.bundledtls[0];
-	enterBundledtlFocus(CurrentBundledtl);
 }
 
 

@@ -384,6 +384,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-device-schedule.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {

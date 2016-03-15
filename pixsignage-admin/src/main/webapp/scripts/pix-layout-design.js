@@ -27,6 +27,136 @@ var CurrentLayout;
 var CurrentLayoutdtl;
 var TempRegions;
 
+function redrawLayout(div, layout, layoutdtl) {
+	div.empty();
+	div.css('position', 'relative');
+	div.css('margin-left', 'auto');
+	div.css('margin-right', 'auto');
+	div.css('border', '1px solid #000');
+	if (layout.bgimage != null) {
+		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	}
+	for (var i=0; i<layout.layoutdtls.length; i++) {
+		div.append('<div id="LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid + '"></div>');
+		if (layoutdtl != null && layoutdtl.layoutdtlid == layout.layoutdtls[i].layoutdtlid) {
+			redrawLayoutdtl($('#LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid), layout, layout.layoutdtls[i], true);
+		} else {
+			redrawLayoutdtl($('#LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid), layout, layout.layoutdtls[i], false);
+		}
+	}
+	var width = Math.floor(div.parent().width());
+	var scale = layout.width / width;
+	var height = layout.height / scale;
+	div.css('width' , width);
+	div.css('height' , height);
+	$(div).find('.layout-font').each(function() {
+		var layoutdtl = layout.layoutdtls[$(this).attr('layoutdtlindex')];
+		var fontsize = layoutdtl.size * layoutdtl.height / 100 / scale;
+		var text = $(this).html();
+		$(this).css('font-size', fontsize + 'px');
+		$(this).css('line-height', layoutdtl.height / scale + 'px');
+		if (fontsize < 9) {
+			$(this).html('');
+		}
+	});
+}
+
+function redrawLayoutdtl(div, layout, layoutdtl, selected) {
+	div.empty();
+	div.attr("class", "region ui-draggable ui-resizable");
+	div.attr('layoutdtlid', layoutdtl.layoutdtlid);
+	div.css('position', 'absolute');
+	div.css('width', 100*layoutdtl.width/layout.width + '%');
+	div.css('height', 100*layoutdtl.height/layout.height + '%');
+	div.css('top', 100*layoutdtl.topoffset/layout.height + '%');
+	div.css('left', 100*layoutdtl.leftoffset/layout.width + '%');
+	var layoutdtlhtml = '';
+	var border = '1px solid #000000';
+	if (selected) {
+		border = '3px solid #FF0000';
+	}
+	var bgcolor = layoutdtl.bgcolor;
+	if (layoutdtl.region.regionid == 1) {
+		bgcolor = '#6Fa8DC';
+	} else if (layoutdtl.region.type == 0) {
+		bgcolor = '#FFF2CC';
+	}
+	var layoutdtlindex = layout.layoutdtls.indexOf(layoutdtl);
+	if (layoutdtl.region.type == 0) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (layoutdtl.bgimage != null) {
+			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 1) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (layoutdtl.direction == 4) {
+			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
+			layoutdtlhtml += '滚动文本';
+			layoutdtlhtml += '</marquee>';
+		} else {
+			layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+			layoutdtlhtml += '静止文本';
+			layoutdtlhtml += '</p>';
+		}
+		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 2) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
+		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '</div>';
+	}
+
+	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
+	layoutdtlhtml += ' <label class="btn btn-circle btn-default btn-xs">';
+	layoutdtlhtml += ' <i class="fa ' + RegionIcons[layoutdtl.regionid] + '"></i> ' +  layoutdtl.region.name;
+	layoutdtlhtml += ' </label>';
+	layoutdtlhtml += '</div>';
+	div.html(layoutdtlhtml);
+
+	div.draggable({
+		containment: div.parent(),
+		stop: regionPositionUpdate,
+		drag: regionPositionUpdate
+	}).resizable({
+		containment: div.parent(),
+		minWidth: 25,
+		minHeight: 25,
+		stop: function(e, ui) {
+			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+		},
+		resize: regionPositionUpdate
+	});
+}
+
+function generateRegionHtml(layoutdtl) {
+	var layoutdtlhtml = '';
+	layoutdtlhtml += '<div id="region_' + layoutdtl.layoutdtlid + '" regionenabled="1" layoutdtlid="' + layoutdtl.layoutdtlid + '" name="' + layoutdtl.region.name + '"';
+	layoutdtlhtml += 'ondblclick="" ';
+	layoutdtlhtml += 'class="region ui-draggable ui-resizable" ';
+	layoutdtlhtml += 'style="position: absolute; width:' + 100*layoutdtl.width/CurrentLayout.width + '%; height:' + 100*layoutdtl.height/CurrentLayout.height + '%; top: ' + 100*layoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*layoutdtl.leftoffset/CurrentLayout.width + '%;">';
+	layoutdtlhtml += ' <div id="region_bg_' + layoutdtl.layoutdtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[layoutdtl.regionid] + '; opacity:.80; filter:alpha(opacity=80);">';
+	if (layoutdtl.bgimage != null) {
+		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	}
+	layoutdtlhtml += '<div id="region_selected_' + layoutdtl.layoutdtlid + '" width="100%" height="100%" style="display:none;position:absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0; background-color:#696969; opacity:.80; filter:alpha(opacity=80);" />';
+	layoutdtlhtml += '</div>';
+
+	layoutdtlhtml += '<div class="btn-group" style="z-index:50;">';
+	layoutdtlhtml += ' <label class="btn btn-circle btn-default btn-xs">';
+	layoutdtlhtml += ' <i class="fa ' + RegionIcons[layoutdtl.regionid] + '"></i> ' +  layoutdtl.region.name;
+	layoutdtlhtml += ' </label>';
+	layoutdtlhtml += '</div>';
+	
+	layoutdtlhtml += '</div>';
+
+	return layoutdtlhtml;
+}
+
 function refreshLayoutBgImageSelect1() {
 	$("#LayoutBgImageSelect1").select2({
 		placeholder: common.tips.detail_select,
@@ -182,59 +312,6 @@ function regionBtnUpdate() {
 	$('#RegionBtn').append(regionbtnhtml);
 }
 
-function generateRegionHtml(layoutdtl) {
-	var layoutdtlhtml = '';
-	layoutdtlhtml += '<div id="region_' + layoutdtl.layoutdtlid + '" regionenabled="1" layoutdtlid="' + layoutdtl.layoutdtlid + '" name="' + layoutdtl.region.name + '"';
-	layoutdtlhtml += 'ondblclick="" ';
-	layoutdtlhtml += 'class="region ui-draggable ui-resizable" ';
-	layoutdtlhtml += 'style="position: absolute; width:' + 100*layoutdtl.width/CurrentLayout.width + '%; height:' + 100*layoutdtl.height/CurrentLayout.height + '%; top: ' + 100*layoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*layoutdtl.leftoffset/CurrentLayout.width + '%;">';
-	layoutdtlhtml += ' <div id="region_bg_' + layoutdtl.layoutdtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[layoutdtl.regionid] + '; opacity:.80; filter:alpha(opacity=80);">';
-	if (layoutdtl.bgimage != null) {
-		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	}
-	layoutdtlhtml += '<div id="region_selected_' + layoutdtl.layoutdtlid + '" width="100%" height="100%" style="display:none;position:absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0; background-color:#696969; opacity:.80; filter:alpha(opacity=80);" />';
-	layoutdtlhtml += '</div>';
-
-	layoutdtlhtml += '<div class="btn-group" style="z-index:50;">';
-	layoutdtlhtml += ' <label class="btn btn-circle btn-default btn-xs">';
-	layoutdtlhtml += ' <i class="fa ' + RegionIcons[layoutdtl.regionid] + '"></i> ' +  layoutdtl.region.name;
-	layoutdtlhtml += ' </label>';
-	layoutdtlhtml += ' <a class="btn btn-circle btn-default btn-xs pix-region-delete" data-id="' + layoutdtl.layoutdtlid + '" href="javascript:;">';
-	layoutdtlhtml += ' <i class="fa fa-trash-o"></i> ';
-	layoutdtlhtml += ' </a>';
-	layoutdtlhtml += '</div>';
-	
-	layoutdtlhtml += '</div>';
-
-	return layoutdtlhtml;
-}
-
-function redrawLayout() {
-	$('#LayoutDiv').empty();
-	if (CurrentLayout.bgimage != null) {
-		$('#LayoutDiv').append('<img class="layout-bg" src="/pixsigdata' + CurrentLayout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
-	}
-	for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
-		$('#LayoutDiv').append(generateRegionHtml(CurrentLayout.layoutdtls[i]));
-	}
-	$('#LayoutDiv').each(function(){
-		$(this).find(".region")
-			.draggable({
-				containment: $('#LayoutDiv'),
-				stop: regionPositionUpdate,
-				drag: regionPositionUpdate
-			})
-			.resizable({
-				containment: $('#LayoutDiv'),
-				minWidth: 25,
-				minHeight: 25,
-				stop: regionPositionUpdate,
-				resize: regionPositionUpdate
-			});
-		});
-	regionBtnUpdate();
-}
-
 function refreshSpinners() {
 	$('#spinner-x').spinner();
 	$('#spinner-y').spinner();
@@ -253,7 +330,7 @@ FormValidateOption.rules['name']['required'] = true;
 FormValidateOption.rules['name']['minlength'] = 2;
 $('#LayoutEditForm').validate(FormValidateOption);
 
-function leaveLayoutFocus(layout) {
+function validLayout(layout) {
 	if ($('#LayoutEditForm').valid()) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
@@ -272,7 +349,7 @@ function leaveLayoutFocus(layout) {
 	return false;
 }
 
-function leaveLayoutdtlFocus(layoutdtl) {
+function validLayoutdtl(layoutdtl) {
 	if ($('#LayoutdtlEditForm').valid()) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
@@ -296,31 +373,16 @@ function leaveLayoutdtlFocus(layoutdtl) {
 		layoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
 		layoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
 		layoutdtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
-		
-		//layoutdtl.leftoffset = $('#LayoutdtlEditForm input[name=leftoffset]').attr('value');
-		//layoutdtl.topoffset = $('#LayoutdtlEditForm input[name=topoffset]').attr('value');
-		//layoutdtl.width = $('#LayoutdtlEditForm input[name=width]').attr('value');
-		//layoutdtl.height = $('#LayoutdtlEditForm input[name=height]').attr('value');
 
-		var regiondiv = $('#region_' + layoutdtl.layoutdtlid);
-		regiondiv.attr('style', 'position:absolute; width:' + 100*layoutdtl.width/CurrentLayout.width + '%; height:' + 100*layoutdtl.height/CurrentLayout.height + '%; top: ' + 100*layoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*layoutdtl.leftoffset/CurrentLayout.width + '%;');
-		if (layoutdtl.bgimage != null) {
-			var regionbgdiv = $('#region_bg_' + layoutdtl.layoutdtlid);
-			regionbgdiv.empty();
-			regionbgdiv.append('<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
-			regionbgdiv.append('<div id="region_selected_' + layoutdtl.layoutdtlid + '" width="100%" height="100%" style="display:none;position:absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0; background-color:#696969; opacity:.80; filter:alpha(opacity=80);" />');
-		}
-
-		$('#region_selected_' + layoutdtl.layoutdtlid).css('display' , 'none');
 		return true;
 	}
 	return false;
 }
 
 function enterLayoutdtlFocus(layoutdtl) {
+	redrawLayout($('#LayoutDiv'), CurrentLayout, layoutdtl);
 	$('#LayoutEditForm').css('display' , 'none');
 	$('#LayoutdtlEditForm').css('display' , 'block');
-	$('#region_selected_' + layoutdtl.layoutdtlid).css('display' , 'block');
 	$('.layoutdtl-title').html(layoutdtl.region.name);
 	if (layoutdtl.region.type == 0) {
 		$('.textflag').css("display", "none");
@@ -357,7 +419,11 @@ function enterLayoutdtlFocus(layoutdtl) {
 		from: 50,
 		type: 'single',
 		step: 10,
-		hasGrid: false
+		hasGrid: false,
+		onChange: function(data) {
+			CurrentLayoutdtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
+			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+		}
 	});
 	$(".sizeRange").ionRangeSlider("update", {
 		from: layoutdtl.size
@@ -379,7 +445,11 @@ function enterLayoutdtlFocus(layoutdtl) {
 		from: 255,
 		type: 'single',
 		step: 5,
-		hasGrid: false
+		hasGrid: false,
+		onChange: function(data) {
+			CurrentLayoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
+			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+		}
 	});
 	$(".opacityRange").ionRangeSlider("update", {
 		from: layoutdtl.opacity
@@ -419,7 +489,7 @@ $('#LayoutDiv').click(function(e){
 			CurrentLayoutdtl = layoutdtls[index+1];
 		}*/
 
-		if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+		if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
 			CurrentLayoutdtl = layoutdtls[0];
 			enterLayoutdtlFocus(CurrentLayoutdtl);
 		}
@@ -434,20 +504,13 @@ $('#RegionBgImageSelect').on('change', function(e) {
 		CurrentLayoutdtl.bgimage.name = $('#RegionBgImageSelect').select2('data').text;
 		CurrentLayoutdtl.bgimage.filepath = $('#RegionBgImageSelect').select2('data').filepath;
 	}
-	var regiondiv = $('#region_' + CurrentLayoutdtl.layoutdtlid);
-	regiondiv.attr('style', 'position:absolute; width:' + 100*CurrentLayoutdtl.width/CurrentLayout.width + '%; height:' + 100*CurrentLayoutdtl.height/CurrentLayout.height + '%; top: ' + 100*CurrentLayoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*CurrentLayoutdtl.leftoffset/CurrentLayout.width + '%;');
-	if (CurrentLayoutdtl.bgimage != null) {
-		var regionbgdiv = $('#region_bg_' + CurrentLayoutdtl.layoutdtlid);
-		regionbgdiv.empty();
-		regionbgdiv.append('<img src="/pixsigdata' + CurrentLayoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
-	}
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
 $('#RegionBgImageRemove').on('click', function(e) {
 	$('#RegionBgImageSelect').select2('val', '');
 	CurrentLayoutdtl.bgimageid = 0;
 	CurrentLayoutdtl.bgimage = null;
-	redrawLayout();
-	$('#region_selected_' + CurrentLayoutdtl.layoutdtlid).css('display' , 'block');
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
 
 $('#LayoutBgImageSelect2').on('change', function(e) {
@@ -458,17 +521,13 @@ $('#LayoutBgImageSelect2').on('change', function(e) {
 		CurrentLayout.bgimage.name = $('#LayoutBgImageSelect2').select2('data').text;
 		CurrentLayout.bgimage.filepath = $('#LayoutBgImageSelect2').select2('data').filepath;
 	}
-	if ($('#LayoutDiv .layout-bg').length == 0) {
-		redrawLayout();
-	} else {
-		$('#LayoutDiv .layout-bg').attr('src', '/pixsigdata' + CurrentLayout.bgimage.filepath);
-	}
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
 $('#LayoutBgImageRemove').on('click', function(e) {
 	$('#LayoutBgImageSelect2').select2('val', '');
 	CurrentLayout.bgimageid = 0;
 	CurrentLayout.bgimage = null;
-	redrawLayout();
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
 
 $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
@@ -476,11 +535,24 @@ $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
 	CurrentLayoutdtl.topoffset = $('#spinner-y').spinner('value');
 	CurrentLayoutdtl.width = $('#spinner-w').spinner('value');
 	CurrentLayoutdtl.height = $('#spinner-h').spinner('value');
-	var regiondiv = $('#region_' + CurrentLayoutdtl.layoutdtlid);
-	regiondiv.attr('style', 'position:absolute; width:' + 100*CurrentLayoutdtl.width/CurrentLayout.width + '%; height:' + 100*CurrentLayoutdtl.height/CurrentLayout.height + '%; top: ' + 100*CurrentLayoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*CurrentLayoutdtl.leftoffset/CurrentLayout.width + '%;');
-
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 	refreshSpinners();
 });	
+
+$("#LayoutdtlEditForm input,select").on("change", function(e) {
+	CurrentLayoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
+	CurrentLayoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
+	CurrentLayoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
+	CurrentLayoutdtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
+	CurrentLayoutdtl.speed = $('#LayoutdtlEditForm input[name=speed]:checked').attr('value');
+	CurrentLayoutdtl.color = $('#LayoutdtlEditForm input[name=color]').attr('value');
+	CurrentLayoutdtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
+	CurrentLayoutdtl.dateformat = $('#LayoutdtlEditForm select[name=dateformat]').val();
+	CurrentLayoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
+	CurrentLayoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
+	CurrentLayoutdtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+});
 
 //================================设计对话框=========================================
 //在设计对话框中新增区域
@@ -521,47 +593,21 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.dateformat = 'yyyy-MM-dd HH:mm';
 	CurrentLayout.layoutdtls[CurrentLayout.layoutdtls.length] = layoutdtl;
 	
-	$('#LayoutDiv').append(generateRegionHtml(layoutdtl));
-	
-	$('#LayoutDiv').each(function(){
-	$('#region_'+layoutdtl.layoutdtlid)
-		.draggable({
-			containment: $('#LayoutDiv'),
-			stop: regionPositionUpdate,
-			drag: regionPositionUpdate
-		})
-		.resizable({
-			containment: $('#LayoutDiv'),
-			minWidth: 25,
-			minHeight: 25,
-			stop: regionPositionUpdate,
-			resize: regionPositionUpdate
-		});
-	});
+	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 	regionBtnUpdate();
 });
 
 $('body').on('click', '.pix-region-delete', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
+	if (CurrentLayoutdtl.region.regionid == 1) {
+		bootbox.alert(common.tips.region_remove_failed);
+		return;
 	}
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-		return el.layoutdtlid == index;
-	});
-	bootbox.confirm(common.tips.remove + layoutdtls[0].region.name, function(result) {
+	bootbox.confirm(common.tips.remove + CurrentLayoutdtl.region.name, function(result) {
 		if (result == true) {
-			if (CurrentLayoutdtl != null && CurrentLayoutdtl.layoutdtlid == layoutdtls[0].layoutdtlid) {
-				CurrentLayoutdtl = null;
-				$('#LayoutdtlEditForm').css('display' , 'none');
-				$('#LayoutEditForm .layout-title').html(CurrentLayout.name);
-				$('#LayoutEditForm').css('display' , 'block');
-				$('.form-group').removeClass('has-error');
-				$('.help-block').remove();
-			}
-			$('#region_' + layoutdtls[0].layoutdtlid).remove();
-			CurrentLayout.layoutdtls.splice(CurrentLayout.layoutdtls.indexOf(layoutdtls[0]), 1);
+			CurrentLayout.layoutdtls.splice(CurrentLayout.layoutdtls.indexOf(CurrentLayoutdtl), 1);
+			CurrentLayoutdtl = CurrentLayout.layoutdtls[0];
 			regionBtnUpdate();
+			enterLayoutdtlFocus(CurrentLayoutdtl);
 		}
 	 });
 });

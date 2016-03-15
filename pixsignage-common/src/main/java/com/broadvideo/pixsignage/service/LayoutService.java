@@ -23,6 +23,10 @@ public interface LayoutService {
 
 	public void deleteLayout(String layoutid);
 
+	public void addLayoutdtl(Layoutdtl layoutdtl);
+
+	public void deleteLayoutdtl(String layoutdtlid);
+
 	public void design(Layout layout);
 
 	public String handleWizard(Staff staff, Layout layout, Device[] devices, Devicegroup[] devicegroups)

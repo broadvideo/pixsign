@@ -548,39 +548,23 @@ default character set utf8;
 ## init data  ##############################################
 ############################################################
 
-insert into vsp(name,code) values('PIX','root');
-insert into staff(subsystem,vspid,loginname,password,name,token) values(1,1,'admin','9c6e77902e2a6feca343509566af87ff','admin','admin_5926b1fafa508d17ff6e7a1c41e17b0f');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(0,'',0,'SUPER','','',2,1,'0');
-insert into staffprivilege(staffid,privilegeid) values(1,0);
 
-insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(1,'pix','pix',0,'2037-01-01 00:00:00',20,30000,20,'Default Org',1);
+insert into staff(subsystem,loginname,password,name) values(0,'root','965f91221572c93b065bff68ae291c50','root');
+select last_insert_id() into @staffid1;
+insert into staff(subsystem,loginname,password,name) values(0,'super','6b848c0a3a448dae8d480ac6902214bb','super');
+select last_insert_id() into @staffid2;
+insert into staff(subsystem,loginname,password,name) values(0,'admin','9c6e77902e2a6feca343509566af87ff','admin');
+select last_insert_id() into @staffid3;
+insert into staffprivilege(staffid,privilegeid) values(@staffid1,0);
+insert into staffprivilege(staffid,privilegeid) values(@staffid2,0);
+insert into staffprivilege(staffid,privilegeid) values(@staffid3,0);
+
+insert into vsp(name,code,createstaffid) values('default','default',@staffid1);
+select last_insert_id() into @vspid;
+insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(@vspid,'default','default',0,'2037-01-01 00:00:00',20,30000,20,'Default Org',@staffid2);
 select last_insert_id() into @orgid;
-insert into branch(orgid,parentid,name,code,description,createstaffid) values(@orgid,0,'super','pix-root','Pix Root Branch',1);
-select last_insert_id() into @branchid;
-insert into staff(subsystem,orgid,branchid,loginname,password,name,token,description,createstaffid) values(2,@orgid,@branchid,'admin','9c6e77902e2a6feca343509566af87ff','admin','admin_d40f5160587a54029b2f7740de40dfa6','Pix admin',1);
-select last_insert_id() into @staffid;
-insert into staffprivilege(staffid,privilegeid) values(@staffid,0);
-
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0001','pix0001');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0002','pix0002');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0003','pix0003');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0004','pix0004');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0005','pix0005');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0006','pix0006');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0007','pix0007');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0008','pix0008');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0009','pix0009');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0010','pix0010');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0011','pix0011');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0012','pix0012');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0013','pix0013');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0014','pix0014');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0015','pix0015');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0016','pix0016');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0017','pix0017');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0018','pix0018');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0019','pix0019');
-insert into device(orgid,branchid,terminalid,name) values(@orgid,@branchid,'pix0020','pix0020');
+insert into branch(orgid,parentid,name,code,description,createstaffid) values(@orgid,0,'super','root','Default Root Branch',@staffid3);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');

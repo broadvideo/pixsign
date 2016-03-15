@@ -47,6 +47,13 @@
     </if>
   </select>
 
+  <select id="selectByLayout" resultMap="BaseResultMap">
+    select * from bundle
+    where status=1
+    and layoutid = '${layoutid}'
+  </select>
+  
+
   <delete id="deleteByPrimaryKey" >
     update bundle set status = '9'
     where bundleid = '${bundleid}'

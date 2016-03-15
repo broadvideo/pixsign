@@ -12,115 +12,17 @@ var myurls = {
 
 $(window).resize(function(e) {
 	if (CurrentBundle != null && e.target == this) {
-		var width = Math.floor($("#BundleDiv").parent().width());
+		var width = Math.floor($('#BundleDiv').parent().width());
 		var scale = CurrentBundle.width / width;
 		var height = CurrentBundle.height / scale;
-		$("#BundleDiv").css("width" , width);
-		$("#BundleDiv").css("height" , height);
+		$('#BundleDiv').css('width', width);
+		$('#BundleDiv').css('height', height);
 	}
 	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 		var bundle = $('#MyTable').dataTable().fnGetData(i);
-		if (bundle.layout.width > bundle.layout.height ) {
-			var width = Math.floor($('#BundleDiv-' + bundle.bundleid).parent().width());
-			var scale = bundle.layout.width / width;
-			var height = bundle.layout.height / scale;
-			$('#BundleDiv-' + bundle.bundleid).css("width" , width);
-			$('#BundleDiv-' + bundle.bundleid).css("height" , height);
-		} else {
-			var height = Math.floor($('#BundleDiv-' + bundle.bundleid).parent().width());
-			var scale = bundle.layout.height / height;
-			var width = bundle.layout.width / scale;
-			$('#BundleDiv-' + bundle.bundleid).css("width" , width);
-			$('#BundleDiv-' + bundle.bundleid).css("height" , height);
-		}
+		redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
 	}
 });
-
-function redrawBundlePreview(div, bundle) {
-	div.empty();
-	div.attr('bundleid', bundle.bundleid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
-	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
-	}
-	for (var i=0; i<bundle.bundledtls.length; i++) {
-		div.append(generateBundledtlPreviewHtml(bundle, bundle.bundledtls[i]));
-	}
-}
-
-function generateBundledtlPreviewHtml(bundle, bundledtl) {
-	var bgimage = null;
-	if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
-		var medialistdtl = bundledtl.medialist.medialistdtls[0];
-		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
-			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-			bgimage = '/pixsigdata' + medialistdtl.image.filepath;
-		}
-	}
-	var bundledtlhtml = '';
-	bundledtlhtml += '<div style="position: absolute; width:' + 100*bundledtl.layoutdtl.width/bundle.layout.width;
-	bundledtlhtml += '%; height:' + 100*bundledtl.layoutdtl.height/bundle.layout.height;
-	bundledtlhtml += '%; top: ' + 100*bundledtl.layoutdtl.topoffset/bundle.layout.height;
-	bundledtlhtml += '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/bundle.layout.width;
-	bundledtlhtml += '%; border: 1px solid #000; background:' + bundledtl.layoutdtl.bgcolor;
-	if (bundledtl.layoutdtl.region.type != 0) {
-		bundledtlhtml += '; opacity:.' + bundledtl.layoutdtl.opacity + '; ">';
-	} else {
-		bundledtlhtml += '; ">';
-	}
-	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (bgimage != null) {
-		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (bundledtl.layoutdtl.bgimage != null) {
-		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	}
-	bundledtlhtml += '</div>';
-	bundledtlhtml += '</div>';
-	return bundledtlhtml;
-}
-
-function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill) {
-	var bgimage = null;
-	if (bundle != null) {
-		for (var i=0; i<bundle.bundledtls.length; i++) {
-			var bundledtl = bundle.bundledtls[i];
-			if (bundledtl.regionid == layoutdtl.regionid && bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
-				var medialistdtl = bundledtl.medialist.medialistdtls[0];
-				if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
-					bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-				} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-					bgimage = '/pixsigdata' + medialistdtl.image.filepath;
-				}
-			}
-		}
-	}
-	if (bgimage != null) {
-		var region_bgimage = new Image();
-		region_bgimage.src = bgimage;
-		region_bgimage.onload = function(img, ctx, left, top, width, height) {
-			return function() {
-				ctx.drawImage(img, left, top, width, height);
-			}
-		}(region_bgimage, ctx, left, top, width, height);
-	} else if (layoutdtl.bgimage != null) {
-		var region_bgimage = new Image();
-		region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.filepath;
-		region_bgimage.onload = function(img, ctx, left, top, width, height) {
-			return function() {
-				ctx.drawImage(img, left, top, width, height);
-			}
-		}(region_bgimage, ctx, left, top, width, height);
-	} else {
-		if (fill) {
-			ctx.fillStyle = RegionColors[layoutdtl.regionid];
-			ctx.fillRect(left,top,width,height);
-		}
-	}
-	ctx.strokeStyle = '#000000';
-	ctx.lineWidth = 2;
-	ctx.strokeRect(left,top,width,height);
-};
 
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
@@ -152,7 +54,8 @@ var oTable = $('#MyTable').dataTable({
 		}
 		bundlehtml += '<div class="col-md-3 col-xs-3">';
 		bundlehtml += '<h3>' + aData.name + '</h3>';
-		bundlehtml += '<div id="BundleDiv-'+ aData.bundleid + '"></div>';
+		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
+		bundlehtml += '<div id="BundleDiv-'+ aData.bundleid + '"></div></a>';
 		bundlehtml += '<div privilegeid="101010">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
@@ -170,21 +73,20 @@ var oTable = $('#MyTable').dataTable({
 		if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 			for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 				var bundle = $('#MyTable').dataTable().fnGetData(i);
-				redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle);
-				if (bundle.layout.width > bundle.layout.height ) {
-					var width = Math.floor($('#BundleDiv-' + bundle.bundleid).parent().width());
-					var scale = bundle.layout.width / width;
-					var height = bundle.layout.height / scale;
-					$('#BundleDiv-' + bundle.bundleid).css("width" , width);
-					$('#BundleDiv-' + bundle.bundleid).css("height" , height);
-				} else {
-					var height = Math.floor($('#BundleDiv-' + bundle.bundleid).parent().width());
-					var scale = bundle.layout.height / height;
-					var width = bundle.layout.width / scale;
-					$('#BundleDiv-' + bundle.bundleid).css("width" , width);
-					$('#BundleDiv-' + bundle.bundleid).css("height" , height);
-				}
+				redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
 			}
+			$('.fancybox').each(function(index,item) {
+				$(this).click(function() {
+					var index = $(this).attr('data-id');
+					var bundle = $('#MyTable').dataTable().fnGetData(index);
+					$.fancybox({
+				        padding : 0,
+				        content: '<div id="BundlePreview"></div>',
+				    });
+					redrawBundlePreview($('#BundlePreview'), bundle, 800);
+				    return false;
+				})
+			});
 		}
 		return nRow;
 	}
@@ -203,7 +105,7 @@ $.ajax({
 			var layoutTableHtml = '';
 			layoutTableHtml += '<tr>';
 			for (var i=0; i<layouts.length; i++) {
-				layoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><canvas id="LayoutCanvas' + layouts[i].layoutid + '"></canvas></td>';
+				layoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><div id="LayoutDiv-' + layouts[i].layoutid + '"></div></td>';
 			}
 			layoutTableHtml += '</tr>';
 			layoutTableHtml += '<tr>';
@@ -220,47 +122,9 @@ $.ajax({
 			}
 			layoutTableHtml += '</tr>';
 			$('#LayoutTable').html(layoutTableHtml);
-			
 			for (var i=0; i<layouts.length; i++) {
 				var layout = layouts[i];
-				var canvas = document.getElementById('LayoutCanvas' + layout.layoutid);
-				var ctx = canvas.getContext('2d');
-				var scale;
-				if (layout.width == 1920 || layout.width == 1080) {
-					scale = 1920/160;
-				} else {
-					scale = 800/160;
-				}
-				canvas.width = layout.width/scale;
-				canvas.height = layout.height/scale;
-
-				if (layout.bgimage != null) {
-					var layout_bgimage = new Image();
-					layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
-					layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
-						return function() {
-							//ctx.globalAlpha = 0.2;
-							ctx.drawImage(img, 0, 0, canvaswidth, canvasheight);
-							for (var j=0; j<layout.layoutdtls.length; j++) {
-								var layoutdtl = layout.layoutdtls[j];
-								var width = layoutdtl.width/scale;
-								var height = layoutdtl.height/scale;
-								var top = layoutdtl.topoffset/scale;
-								var left = layoutdtl.leftoffset/scale;
-								drawCanvasRegion(ctx, null, layoutdtl, left, top, width, height, false);
-							}
-						}
-					}(layout_bgimage, layout, ctx, canvas.width, canvas.height);
-				} else {
-					for (var j=0; j<layout.layoutdtls.length; j++) {
-						var layoutdtl = layout.layoutdtls[j];
-						var width = layoutdtl.width/scale;
-						var height = layoutdtl.height/scale;
-						var top = layoutdtl.topoffset/scale;
-						var left = layoutdtl.leftoffset/scale;
-						drawCanvasRegion(ctx, null, layoutdtl, left, top, width, height, true);
-					}
-				}
+				redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, 200);
 			}
 		} else {
 			alert(data.errorcode + ": " + data.errormsg);
@@ -414,54 +278,70 @@ $('body').on('click', '.pix-bundle', function(event) {
 		index = $(event.target).parent().attr('data-id');
 	}
 	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
+	for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
+		var bundledtl = CurrentBundle.bundledtls[i];
+		bundledtl.medialist0 = {};
+		bundledtl.medialist0.medialistid = 0;
+		bundledtl.medialist0.medialistdtls = [];
+		bundledtl.medialist0.type = 0;
+		bundledtl.text0 = {};
+		bundledtl.text0.textid = 0;
+		bundledtl.text0.type = 0;
+		bundledtl.stream0 = {};
+		bundledtl.stream0.streamid = 0;
+		bundledtl.stream0.type = 0;
+		bundledtl.widget0 = {};
+		bundledtl.widget0.widgetid = 0;
+		bundledtl.widget0.type = 0;
+		if (bundledtl.type == 0 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
+			bundledtl.medialist0 = bundledtl.medialist;
+		}
+		if (bundledtl.type == 1 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
+			bundledtl.medialist1 = bundledtl.medialist;
+		}
+		if (bundledtl.type == 0 && bundledtl.objtype == 2 &&  bundledtl.text != null) {
+			bundledtl.text0 = bundledtl.text;
+		}
+		if (bundledtl.type == 1 && bundledtl.objtype == 2 && bundledtl.text != null) {
+			bundledtl.text1 = bundledtl.text;
+		}
+		if (bundledtl.type == 0 && bundledtl.objtype == 3 &&  bundledtl.stream != null) {
+			bundledtl.stream0 = bundledtl.stream;
+		}
+		if (bundledtl.type == 1 && bundledtl.objtype == 3 && bundledtl.stream != null) {
+			bundledtl.stream1 = bundledtl.stream;
+		}
+		if (bundledtl.type == 0 && bundledtl.objtype == 5 &&  bundledtl.widget != null) {
+			bundledtl.widget0 = bundledtl.widget;
+		}
+		if (bundledtl.type == 1 && bundledtl.objtype == 5 && bundledtl.widget != null) {
+			bundledtl.widget1 = bundledtl.widget;
+		}
+	}
 	CurrentBundleid = CurrentBundle.bundleid;
+	CurrentBundledtl = CurrentBundle.bundledtls[0];
 	
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
 	if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
-		$('#BundleCol1').removeClass('col-md-2');
-		$('#BundleCol1').removeClass('col-sm-2');
-		$('#BundleCol1').addClass('col-md-3');
-		$('#BundleCol1').addClass('col-sm-3');
-		$('#BundleCol2').removeClass('col-md-10');
-		$('#BundleCol2').removeClass('col-sm-10');
-		$('#BundleCol2').addClass('col-md-9');
-		$('#BundleCol2').addClass('col-sm-9');
+		$('#BundleCol1').attr('class', 'col-md-3 col-sm-3');
+		$('#BundleCol2').attr('class', 'col-md-9 col-sm-9');
 	} else {
-		$('#BundleCol1').removeClass('col-md-3');
-		$('#BundleCol1').removeClass('col-sm-3');
-		$('#BundleCol1').addClass('col-md-2');
-		$('#BundleCol1').addClass('col-sm-2');
-		$('#BundleCol2').removeClass('col-md-9');
-		$('#BundleCol2').removeClass('col-sm-9');
-		$('#BundleCol2').addClass('col-md-10');
-		$('#BundleCol2').addClass('col-sm-10');
+		$('#BundleCol1').attr('class', 'col-md-2 col-sm-2');
+		$('#BundleCol2').attr('class', 'col-md-10 col-sm-10');
 	}
-	
-	$('#BundleDiv').attr('bundleid', CurrentBundle.bundleid);
-	$('#BundleDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
-	redrawBundle();
-	
-	CurrentBundledtl = CurrentBundle.bundledtls[0];
-	enterBundledtlFocus(CurrentBundledtl);
 	
 	$('#BundleModal').modal();
 });
 
 $('#BundleModal').on('shown.bs.modal', function (e) {
-	if (CurrentBundle != null) {
-		var width = Math.floor($("#BundleDiv").parent().width());
-		var scale = CurrentBundle.layout.width / width;
-		var height = CurrentBundle.layout.height / scale;
-		$("#BundleDiv").css("width" , width);
-		$("#BundleDiv").css("height" , height);
-	}
+	enterBundledtlFocus(CurrentBundledtl);
 })
 
 
 //在设计对话框中进行提交
 $('[type=submit]', $('#BundleModal')).on('click', function(event) {
-	if (CurrentBundledtl != null && leaveBundledtlFocus(CurrentBundledtl)) {
+	if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
 		$.ajax({
 			type : 'POST',
 			url : myurls['bundle.design'],

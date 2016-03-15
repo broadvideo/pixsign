@@ -17,6 +17,10 @@ $(window).resize(function(e) {
 		$("#LayoutDiv").css("width" , width);
 		$("#LayoutDiv").css("height" , height);
 	}
+	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+		var layout = $('#MyTable').dataTable().fnGetData(i);
+		redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, Math.floor($('#LayoutDiv-' + layout.layoutid).parent().parent().width()));
+	}
 });
 
 function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
@@ -77,7 +81,8 @@ var oTable = $('#MyTable').dataTable({
 		} else if (aData.ratio == 4) {
 			layouthtml += '<h4>' + common.view.ratio_4 + '</h4>';
 		}
-		layouthtml += '<canvas id="LayoutCanvas-'+ aData.layoutid + '"></canvas>';
+		layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
+		layouthtml += '<div id="LayoutDiv-'+ aData.layoutid + '"></div></a>';
 		layouthtml += '<div privilegeid="101010">';
 		layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-layout"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 		layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
@@ -94,45 +99,19 @@ var oTable = $('#MyTable').dataTable({
 		if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 			for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 				var layout = $('#MyTable').dataTable().fnGetData(i);
-				var canvas = document.getElementById('LayoutCanvas-' + layout.layoutid);
-				var ctx = canvas.getContext('2d');
-				var scale;
-				if (layout.width == 1920 || layout.width == 1080) {
-					scale = 1920/250;
-				} else {
-					scale = 800/250;
-				}
-				canvas.width = layout.width/scale;
-				canvas.height = layout.height/scale;
-				
-				if (layout.bgimage != null) {
-					var layout_bgimage = new Image();
-					layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
-					layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
-						return function() {
-							//ctx.globalAlpha = 0.2;
-							ctx.drawImage(img, 0, 0, canvaswidth, canvasheight);
-							for (var j=0; j<layout.layoutdtls.length; j++) {
-								var layoutdtl = layout.layoutdtls[j];
-								var width = layoutdtl.width/scale;
-								var height = layoutdtl.height/scale;
-								var top = layoutdtl.topoffset/scale;
-								var left = layoutdtl.leftoffset/scale;
-								drawCanvasRegion(ctx, layoutdtl, left, top, width, height, false);
-							}
-						}
-					}(layout_bgimage, layout, ctx, canvas.width, canvas.height);
-				} else {
-					for (var j=0; j<layout.layoutdtls.length; j++) {
-						var layoutdtl = layout.layoutdtls[j];
-						var left = layoutdtl.leftoffset/scale;
-						var top = layoutdtl.topoffset/scale;
-						var width = layoutdtl.width/scale;
-						var height = layoutdtl.height/scale;
-						drawCanvasRegion(ctx, layoutdtl, left, top, width, height, true);
-					}
-				}
-
+				redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, Math.floor($('#LayoutDiv-' + layout.layoutid).parent().parent().width()));
+				$('.fancybox').each(function(index,item) {
+					$(this).click(function() {
+						var index = $(this).attr('data-id');
+						var layout = $('#MyTable').dataTable().fnGetData(index);
+						$.fancybox({
+					        padding : 0,
+					        content: '<div id="LayoutPreview"></div>',
+					    });
+						redrawLayoutPreview($('#LayoutPreview'), layout, 800);
+					    return false;
+					})
+				});
 			}
 		}
 		return nRow;
@@ -336,6 +315,10 @@ $('body').on('click', '.pix-layout', function(event) {
 		escapeMarkup: function (m) { return m; } 
 	});
 
+	$('select[name="dateformat"] option').each(function() {
+		$(this).html(new Date().pattern($(this).attr('value')));
+	});
+
 	$('#LayoutdtlEditForm').css('display' , 'none');
 	$('#LayoutEditForm').css('display' , 'block');
 	$('.form-group').removeClass('has-error');
@@ -343,48 +326,27 @@ $('body').on('click', '.pix-layout', function(event) {
 	if (CurrentLayout.width > CurrentLayout.height) {
 		$('#LayoutModal .modal-dialog').removeClass('modal-layout2');
 		$('#LayoutModal .modal-dialog').addClass('modal-layout1');
-		$('#LayoutCol1').removeClass('col-md-6');
-		$('#LayoutCol1').removeClass('col-sm-6');
-		$('#LayoutCol1').addClass('col-md-8');
-		$('#LayoutCol1').addClass('col-sm-8');
-		$('#LayoutCol2').removeClass('col-md-6');
-		$('#LayoutCol2').removeClass('col-sm-6');
-		$('#LayoutCol2').addClass('col-md-4');
-		$('#LayoutCol2').addClass('col-sm-4');
+		$('#LayoutCol1').attr('class', 'col-md-8 col-sm-8');
+		$('#LayoutCol2').attr('class', 'col-md-4 col-sm-4');
 	} else {
 		$('#LayoutModal .modal-dialog').removeClass('modal-layout1');
 		$('#LayoutModal .modal-dialog').addClass('modal-layout2');
-		$('#LayoutCol1').removeClass('col-md-8');
-		$('#LayoutCol1').removeClass('col-sm-8');
-		$('#LayoutCol1').addClass('col-md-6');
-		$('#LayoutCol1').addClass('col-sm-6');
-		$('#LayoutCol2').removeClass('col-md-4');
-		$('#LayoutCol2').removeClass('col-sm-4');
-		$('#LayoutCol2').addClass('col-md-6');
-		$('#LayoutCol2').addClass('col-sm-6');
+		$('#LayoutCol1').attr('class', 'col-md-6 col-sm-6');
+		$('#LayoutCol2').attr('class', 'col-md-6 col-sm-6');
 	}
 	
-	$('#LayoutDiv').attr('layoutid', CurrentLayout.layoutid);
-	$('#LayoutDiv').attr('style', 'position:relative; margin-left:auto; margin-right:auto; border: 1px solid #000; background:#000000;');
-	redrawLayout();
 	$('#LayoutModal').modal();
-	
 });
 
 $('#LayoutModal').on('shown.bs.modal', function (e) {
-	if (CurrentLayout != null) {
-		var width = Math.floor($("#LayoutDiv").parent().width());
-		var scale = CurrentLayout.width / width;
-		var height = CurrentLayout.height / scale;
-		$("#LayoutDiv").css("width" , width);
-		$("#LayoutDiv").css("height" , height);
-	}
+	redrawLayout($('#LayoutDiv'), CurrentLayout, null);
+	regionBtnUpdate();
 })
 
 
 //在设计对话框中进行提交
 $('[type=submit]', $('#LayoutModal')).on('click', function(event) {
-	if (CurrentLayoutdtl == null && leaveLayoutFocus(CurrentLayout) || CurrentLayoutdtl != null && leaveLayoutdtlFocus(CurrentLayoutdtl)) {
+	if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
 		for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
 			if (('' + CurrentLayout.layoutdtls[i].layoutdtlid).indexOf('R') == 0) {
 				CurrentLayout.layoutdtls[i].layoutdtlid = '0';

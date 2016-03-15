@@ -38,6 +38,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 
 <style type="text/css">
@@ -200,7 +201,12 @@ response.setDateHeader("Expires",0);
 												<form id="LayoutdtlEditForm" class="form-horizontal pix-bordered">
 													<input type="hidden" name="regionid" value="0" />
 													<div class="form-body">
-														<label class="page-title font-red-sunglo layoutdtl-title"></label>
+														<div class="row">
+															<h3 class="col-md-6 page-title font-red-sunglo layoutdtl-title"></h3>
+															<div class="col-md-6">
+																<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
+															</div>
+														</div>
 														<div class="form-group nontextflag">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 															<div class="col-md-9">
@@ -268,9 +274,11 @@ response.setDateHeader("Expires",0);
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
 															<div class="col-md-9">
 																<select class="form-control" name="dateformat" tabindex="-1">
-																	<option value="yyyy-MM-dd HH:mm">yyyy-MM-dd HH:mm</option>
-																	<option value="yyyy-MM-dd">yyyy-MM-dd</option>
-																	<option value="HH:mm">HH:mm</option>
+																	<option value="yyyy-MM-dd">2016-01-01</option>
+																	<option value="HH:mm">12:00</option>
+																	<option value="ww">星期五</option>
+																	<option value="yyyy-MM-dd HH:mm">2016-01-01 12:00</option>
+																	<option value="yyyy-MM-dd ww">2016-01-01 星期五</option>
 																</select>
 															</div>
 														</div>
@@ -497,14 +505,16 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-layout.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=5"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

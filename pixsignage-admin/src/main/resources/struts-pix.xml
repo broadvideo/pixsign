@@ -286,7 +286,7 @@
 		</action>
 		<action name="image!upload" method="doUpload" class="imageAction">
 			<interceptor-ref name="fileUpload">
-				<param name="maximumSize">10240000</param>
+				<param name="maximumSize">20480000</param>
 				<!-- <param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg</param> -->
 			</interceptor-ref>
 			<interceptor-ref name="defaultStack"></interceptor-ref>
