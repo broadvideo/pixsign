@@ -543,7 +543,7 @@ public class JSONObject {
 		if (object instanceof JSONArray) {
 			return (JSONArray) object;
 		}
-		throw new JSONException("JSONObject[" + quote(key) + "] is not a JSONArray.");
+		return null;
 	}
 
 	/**
@@ -560,7 +560,7 @@ public class JSONObject {
 		if (object instanceof JSONObject) {
 			return (JSONObject) object;
 		}
-		throw new JSONException("JSONObject[" + quote(key) + "] is not a JSONObject.");
+		return null;
 	}
 
 	/**

@@ -19,6 +19,11 @@
     <result column="version" property="version" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
+    <result column="lontitude" property="lontitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="addr1" property="addr1" jdbcType="VARCHAR" />
+    <result column="addr2" property="addr2" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="activetime" property="activetime" jdbcType="TIMESTAMP" />
     <result column="refreshtime" property="refreshtime" jdbcType="TIMESTAMP" />
@@ -27,8 +32,8 @@
   
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, mac, schedulestatus, 
-    filestatus, status, description, onlineflag, version, type, devicegroupid, createtime, 
-    activetime, refreshtime
+    filestatus, status, description, onlineflag, version, type, devicegroupid, lontitude, latitude, 
+    city, addr1, addr2, createtime, activetime, refreshtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -102,8 +107,7 @@
 
   <select id="selectByDeviceGroup" resultMap="BaseResultMap">
     select * from device
-    where status = 1
-    and devicegroupid = '${devicegroupid}'
+    where devicegroupid = '${devicegroupid}'
     order by deviceid
   </select>
 
@@ -156,15 +160,17 @@
       ip, mac, schedulestatus, 
       filestatus, status, description, 
       onlineflag, version, type, 
-      devicegroupid, createtime, activetime, 
-      refreshtime)
+      devicegroupid, lontitude, latitude, 
+      city, addr1, addr2, 
+      createtime, activetime, refreshtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
       #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{onlineflag,jdbcType=CHAR}, #{version,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{devicegroupid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, 
-      #{refreshtime,jdbcType=TIMESTAMP})
+      #{devicegroupid,jdbcType=INTEGER}, #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, #{refreshtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -219,6 +225,21 @@
       </if>
       <if test="devicegroupid != null" >
         devicegroupid,
+      </if>
+      <if test="lontitude != null" >
+        lontitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="addr1 != null" >
+        addr1,
+      </if>
+      <if test="addr2 != null" >
+        addr2,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -278,6 +299,21 @@
       </if>
       <if test="devicegroupid != null" >
         #{devicegroupid,jdbcType=INTEGER},
+      </if>
+      <if test="lontitude != null" >
+        #{lontitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="addr1 != null" >
+        #{addr1,jdbcType=VARCHAR},
+      </if>
+      <if test="addr2 != null" >
+        #{addr2,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -341,6 +377,21 @@
       <if test="devicegroupid != null" >
         devicegroupid = #{devicegroupid,jdbcType=INTEGER},
       </if>
+      <if test="lontitude != null" >
+        lontitude = #{lontitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="addr1 != null" >
+        addr1 = #{addr1,jdbcType=VARCHAR},
+      </if>
+      <if test="addr2 != null" >
+        addr2 = #{addr2,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -371,6 +422,11 @@
       version = #{version,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      lontitude = #{lontitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      addr1 = #{addr1,jdbcType=VARCHAR},
+      addr2 = #{addr2,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       activetime = #{activetime,jdbcType=TIMESTAMP},
       refreshtime = #{refreshtime,jdbcType=TIMESTAMP}

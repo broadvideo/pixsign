@@ -10,18 +10,6 @@ RegionColors[7] = '#FFFF99';
 RegionColors[8] = '#CC9966';
 RegionColors[9] = '#CC9966';
 
-var RegionIcons = [];
-RegionIcons[0] = 'fa-bank';
-RegionIcons[1] = 'fa-bank';
-RegionIcons[2] = 'fa-file-text-o';
-RegionIcons[3] = 'fa-file-text-o';
-RegionIcons[4] = 'fa-delicious';
-RegionIcons[5] = 'fa-delicious';
-RegionIcons[6] = 'fa-delicious';
-RegionIcons[7] = 'fa-delicious';
-RegionIcons[8] = 'fa-calendar-o';
-RegionIcons[9] = 'fa-calendar-o';
-
 var CurrentLayoutid = 0;
 var CurrentLayout;
 var CurrentLayoutdtl;
@@ -57,6 +45,14 @@ function redrawLayout(div, layout, layoutdtl) {
 		$(this).css('line-height', layoutdtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
+			$(this).find('img').each(function() {
+				$(this).css('display', 'none');
+			});
+		} else {
+			$(this).find('img').each(function() {
+				$(this).css('height', fontsize + 'px');
+				$(this).css('display', 'inline');
+			});
 		}
 	});
 }
@@ -86,7 +82,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (layoutdtl.bgimage != null) {
-			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.region.type == 1) {
@@ -109,12 +105,19 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 3) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
+		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		layoutdtlhtml += '</div>';
+		layoutdtlhtml += '</div>';
 	}
 
 	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
-	layoutdtlhtml += ' <label class="btn btn-circle btn-default btn-xs">';
-	layoutdtlhtml += ' <i class="fa ' + RegionIcons[layoutdtl.regionid] + '"></i> ' +  layoutdtl.region.name;
-	layoutdtlhtml += ' </label>';
+	layoutdtlhtml += '<label class="btn btn-circle btn-default btn-xs">' + layoutdtl.region.name + '</label>';
 	layoutdtlhtml += '</div>';
 	div.html(layoutdtlhtml);
 
@@ -131,30 +134,6 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		},
 		resize: regionPositionUpdate
 	});
-}
-
-function generateRegionHtml(layoutdtl) {
-	var layoutdtlhtml = '';
-	layoutdtlhtml += '<div id="region_' + layoutdtl.layoutdtlid + '" regionenabled="1" layoutdtlid="' + layoutdtl.layoutdtlid + '" name="' + layoutdtl.region.name + '"';
-	layoutdtlhtml += 'ondblclick="" ';
-	layoutdtlhtml += 'class="region ui-draggable ui-resizable" ';
-	layoutdtlhtml += 'style="position: absolute; width:' + 100*layoutdtl.width/CurrentLayout.width + '%; height:' + 100*layoutdtl.height/CurrentLayout.height + '%; top: ' + 100*layoutdtl.topoffset/CurrentLayout.height + '%; left: ' + 100*layoutdtl.leftoffset/CurrentLayout.width + '%;">';
-	layoutdtlhtml += ' <div id="region_bg_' + layoutdtl.layoutdtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[layoutdtl.regionid] + '; opacity:.80; filter:alpha(opacity=80);">';
-	if (layoutdtl.bgimage != null) {
-		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	}
-	layoutdtlhtml += '<div id="region_selected_' + layoutdtl.layoutdtlid + '" width="100%" height="100%" style="display:none;position:absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0; background-color:#696969; opacity:.80; filter:alpha(opacity=80);" />';
-	layoutdtlhtml += '</div>';
-
-	layoutdtlhtml += '<div class="btn-group" style="z-index:50;">';
-	layoutdtlhtml += ' <label class="btn btn-circle btn-default btn-xs">';
-	layoutdtlhtml += ' <i class="fa ' + RegionIcons[layoutdtl.regionid] + '"></i> ' +  layoutdtl.region.name;
-	layoutdtlhtml += ' </label>';
-	layoutdtlhtml += '</div>';
-	
-	layoutdtlhtml += '</div>';
-
-	return layoutdtlhtml;
 }
 
 function refreshLayoutBgImageSelect1() {
@@ -387,15 +366,23 @@ function enterLayoutdtlFocus(layoutdtl) {
 	if (layoutdtl.region.type == 0) {
 		$('.textflag').css("display", "none");
 		$('.dateflag').css("display", "none");
+		$('.weatherflag').css("display", "none");
 		$('.nontextflag').css("display", "block");
 	} else if (layoutdtl.region.type == 1) {
 		$('.nontextflag').css("display", "none");
 		$('.dateflag').css("display", "none");
+		$('.weatherflag').css("display", "none");
 		$('.textflag').css("display", "block");
 	} else if (layoutdtl.region.type == 2) {
 		$('.nontextflag').css("display", "none");
 		$('.textflag').css("display", "none");
+		$('.weatherflag').css("display", "none");
 		$('.dateflag').css("display", "block");
+	} else if (layoutdtl.region.type == 3) {
+		$('.nontextflag').css("display", "none");
+		$('.textflag').css("display", "none");
+		$('.dateflag').css("display", "none");
+		$('.weatherflag').css("display", "block");
 	}
 	$('#LayoutdtlEditForm').loadJSON(layoutdtl);
 	$('.colorPick').colorpicker();
@@ -572,9 +559,9 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.width = CurrentLayout.width * 0.2;
 	layoutdtl.height = CurrentLayout.height * 0.2;
 	if (layoutdtl.region.type == 0) {
-		layoutdtl.zindex = 0;
-	} else {
 		layoutdtl.zindex = 1;
+	} else {
+		layoutdtl.zindex = 2;
 	}
 	layoutdtl.bgimageid = 0;
 	layoutdtl.bgcolor = '#000000';

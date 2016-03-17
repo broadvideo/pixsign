@@ -100,6 +100,24 @@
 		</property>
 	</bean>
 
+	<bean id="weatherTask" class="com.broadvideo.pixsignage.quartz.WeatherTask"></bean>
+	<bean id="weatherJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="weatherTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="weatherJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="weatherJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 30 8-19 * * ?</value>
+		</property>
+	</bean>
+
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -108,6 +126,7 @@
 				<ref bean="deviceJobTrigger" />
 				<ref bean="vcssJobTrigger" />
 				<ref bean="pixboxJobTrigger" />
+				<ref bean="weatherJobTrigger" />
 			</list>
 		</property>
 	</bean>

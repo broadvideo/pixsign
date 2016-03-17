@@ -6,10 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.json.JSONArray;
@@ -25,11 +29,14 @@ import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.BundleService;
+import com.broadvideo.pixsignage.service.WeatherService;
+import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 
 @Component
 @Consumes("application/json;charset=UTF-8")
@@ -49,18 +56,20 @@ public class PixsignageService {
 
 	@Autowired
 	private BundleService bundleService;
+	@Autowired
+	private WeatherService weatherService;
 
 	@POST
 	@Path("init")
-	public String init(String request) {
+	public String init(String request, @Context HttpServletRequest req) {
 		try {
-			logger.info("Pixsignage Service init: {}", request);
+			logger.info("Pixsignage Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
-			String ip = requestJson.getString("ip");
 			String mac = requestJson.getString("mac");
 			String version = requestJson.getString("version");
+			String ip = req.getRemoteAddr();
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -83,6 +92,21 @@ public class PixsignageService {
 					&& !device.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			}
+
+			IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
+			String location = ipseeker.getArea(ip);
+			int index1 = location.indexOf("省");
+			int index2 = location.indexOf("市");
+			if (index2 < 0) {
+				index2 = location.length();
+			}
+			if (index1 >= 0 && index1 < index2) {
+				index1 = index1 + "省".length();
+			} else {
+				index1 = 0;
+			}
+			String city = location.substring(index1, index2);
+			device.setCity(city);
 
 			if (!device.getStatus().equals("1")) {
 				device.setActivetime(Calendar.getInstance().getTime());
@@ -133,7 +157,7 @@ public class PixsignageService {
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service init exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -176,7 +200,7 @@ public class PixsignageService {
 			logger.info("Pixsignage Service get_version response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service get_version exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -212,7 +236,7 @@ public class PixsignageService {
 			logger.info("Pixsignage Service get_layout response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service get_layout exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -254,7 +278,7 @@ public class PixsignageService {
 			logger.info("Pixsignage Service get_region response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service get_region exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -268,6 +292,7 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			String status = requestJson.getString("status");
+			JSONObject locationJson = requestJson.getJSONObject("location");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -282,6 +307,17 @@ public class PixsignageService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
+			if (locationJson != null) {
+				String latitude = locationJson.getString("latitude");
+				String lontitude = locationJson.getString("lontitude");
+				String addr1 = locationJson.getString("addr");
+				String addr2 = locationJson.getString("desc");
+				device.setLatitude(latitude);
+				device.setLontitude(lontitude);
+				device.setAddr1(addr1);
+				device.setAddr2(addr2);
+			}
+
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
@@ -289,7 +325,7 @@ public class PixsignageService {
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service report_status exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -349,7 +385,7 @@ public class PixsignageService {
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service report_file exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -389,7 +425,36 @@ public class PixsignageService {
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Pixsignage Service report_crash exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("get_weather")
+	@Produces("application/json;charset=UTF-8")
+	public String get_weather(@QueryParam("hardkey") String hardkey, @QueryParam("terminal_id") String terminalid,
+			@QueryParam("city") String city) {
+		try {
+			logger.info("Pixsignage Service get_weather: hardkey={},terminal_id={},city={}", hardkey, terminalid, city);
+
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null || !device.getStatus().equals("1")) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			}
+			if (city == null || city.length() == 0) {
+				city = device.getCity();
+			}
+			if (city == null || city.length() == 0) {
+				return handleResult(1008, "无效城市");
+			}
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			Weather weather = weatherService.selectByCity(city);
+			responseJson.put("weather", new JSONObject(weather.getWeather()));
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_weather exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

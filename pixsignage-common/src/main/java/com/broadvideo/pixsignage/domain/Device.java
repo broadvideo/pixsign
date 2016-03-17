@@ -39,6 +39,16 @@ public class Device {
 
 	private Integer devicegroupid;
 
+	private String lontitude;
+
+	private String latitude;
+
+	private String city;
+
+	private String addr1;
+
+	private String addr2;
+
 	private Date createtime;
 
 	private Date activetime;
@@ -181,6 +191,46 @@ public class Device {
 
 	public void setDevicegroupid(Integer devicegroupid) {
 		this.devicegroupid = devicegroupid;
+	}
+
+	public String getLontitude() {
+		return lontitude;
+	}
+
+	public void setLontitude(String lontitude) {
+		this.lontitude = lontitude == null ? null : lontitude.trim();
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude == null ? null : latitude.trim();
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city == null ? null : city.trim();
+	}
+
+	public String getAddr1() {
+		return addr1;
+	}
+
+	public void setAddr1(String addr1) {
+		this.addr1 = addr1 == null ? null : addr1.trim();
+	}
+
+	public String getAddr2() {
+		return addr2;
+	}
+
+	public void setAddr2(String addr2) {
+		this.addr2 = addr2 == null ? null : addr2.trim();
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

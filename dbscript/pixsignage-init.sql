@@ -73,6 +73,10 @@ create table org(
    copyright varchar(512),
    description varchar(512),
    backupvideoid int,
+   powerflag char(1) default '0',
+   poweron time,
+   poweroff time,
+   devicepass varchar(32) default '123456',
    createtime timestamp not null default current_timestamp,
    createstaffid int,
    primary key (orgid),
@@ -174,7 +178,7 @@ create table image(
    branchid int not null,
    name varchar(256) not null,
    filepath varchar(32),
-   filename varchar(32),
+   filename varchar(128),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
@@ -195,7 +199,7 @@ create table video(
    uuid varchar(64) not null,
    type char(1) default '1',
    filepath varchar(32),
-   filename varchar(32),
+   filename varchar(128),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
@@ -215,6 +219,7 @@ create table text(
    orgid int not null,
    name varchar(256) not null,
    text longtext not null default '',
+   type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -229,6 +234,7 @@ create table stream(
    orgid int not null,
    name varchar(256) not null,
    url varchar(1024) not null,
+   type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -244,6 +250,7 @@ create table dvb(
    name varchar(256) not null,
    frequency varchar(32) not null,
    number varchar(16) not null,
+   type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -258,6 +265,7 @@ create table widget(
    orgid int not null,
    name varchar(256) not null,
    url varchar(1024) not null,
+   type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -271,6 +279,7 @@ create table medialist(
    medialistid int not null auto_increment,
    orgid int not null,
    name varchar(256) not null,
+   type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -308,6 +317,11 @@ create table device(
    version varchar(32),
    type char(1) default '1',
    devicegroupid int default 0,
+   lontitude varchar(32),
+   latitude varchar(32),
+   city varchar(64),
+   addr1 varchar(128),
+   addr2 varchar(128),
    createtime timestamp not null default current_timestamp,
    activetime datetime,
    refreshtime datetime,
@@ -352,6 +366,7 @@ create table layout(
    height int not null,
    width int not null,
    bgcolor varchar(8) default '#000000',
+   bgimageid int default 0,
    description varchar(512),
    createtime timestamp not null default current_timestamp,
    createstaffid int,
@@ -369,16 +384,61 @@ create table layoutdtl(
    topoffset int not null,
    leftoffset int not null,
    zindex int not null default 0,
+   bgcolor varchar(8) default '#000000',
+   opacity int default 255,
+   bgimageid int default 0,
    intervaltime int default 10,
    direction char(1) default '4',
    speed char(1) default '2',
    color varchar(8) default '#FFFFFF',
    size int default 30,
-   opacity int default 100,
+   dateformat varchar(32),
+   fitflag char(1) default 1,
+   volume int default 50,
    createtime timestamp not null default current_timestamp,
    primary key (layoutdtlid),
    foreign key (layoutid) references layout(layoutid),
    foreign key (regionid) references region(regionid)
+ )engine = innodb
+default character set utf8;
+
+create table bundle( 
+   bundleid int not null auto_increment,
+   orgid int not null,
+   layoutid int not null,
+   name varchar(64) not null,
+   status char(1) default '1',
+   createtime timestamp not null default current_timestamp,
+   createstaffid int,
+   primary key (bundleid),
+   foreign key (orgid) references org(orgid)
+ )engine = innodb
+default character set utf8;
+
+create table bundledtl( 
+   bundledtlid int not null auto_increment,
+   bundleid int not null,
+   regionid int not null,
+   type char(1) not null,
+   objtype char(1) not null,
+   objid int not null,
+   createtime timestamp not null default current_timestamp,
+   primary key (bundledtlid)
+ )engine = innodb
+default character set utf8;
+
+create table bundleschedule( 
+   bundlescheduleid int not null auto_increment,
+   bindtype char(1) not null,
+   bindid int not null,
+   bundleid int not null,
+   playmode char(1) not null,
+   playdate date,
+   starttime time,
+   endtime time,
+   createtime timestamp not null default current_timestamp,
+   primary key (bundlescheduleid),
+   foreign key (bundleid) references bundle(bundleid)
  )engine = innodb
 default character set utf8;
 
@@ -510,6 +570,16 @@ create table msgevent(
  )engine = innodb
 default character set utf8;
 
+create table weather( 
+   weatherid int not null auto_increment,
+   city varchar(64) not null unique,
+   weather longtext not null default '',
+   status char(1) default '1',
+   refreshtime datetime,
+   primary key (weatherid)
+ )engine = innodb
+default character set utf8;
+
 create table crashreport( 
    crashreportid int not null auto_increment,
    hardkey varchar(64),
@@ -604,10 +674,27 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30903,2,309,'menu.branch','branch.jsp','',1,3,'12');
 
 insert into region(regionid,name,code,type) values(1,'region.main','main','0');
-insert into region(regionid,name,code,type) values(2,'region.text','text','1');
-insert into region(regionid,name,code,type) values(3,'region.extra_1','extra-1','0');
-insert into region(regionid,name,code,type) values(4,'region.extra_2','extra-2','0');
-insert into region(regionid,name,code,type) values(5,'region.extra_3','extra-3','0');
+insert into region(regionid,name,code,type) values(2,'region.text_1','text-1','1');
+insert into region(regionid,name,code,type) values(3,'region.text_2','text-2','1');
+insert into region(regionid,name,code,type) values(4,'region.extra_1','extra-1','0');
+insert into region(regionid,name,code,type) values(5,'region.extra_2','extra-2','0');
+insert into region(regionid,name,code,type) values(6,'region.extra_3','extra-3','0');
+insert into region(regionid,name,code,type) values(7,'region.extra_4','extra-4','0');
+insert into region(regionid,name,code,type) values(8,'region.date_1','date-1','2');
+insert into region(regionid,name,code,type) values(9,'region.date_2','date-2','2');
+
+insert into region(regionid,name,code,type) values(1,'region.main','main','0');
+insert into region(regionid,name,code,type) values(10,'region.play_1','play-1','0');
+insert into region(regionid,name,code,type) values(11,'region.play_2','play-2','0');
+insert into region(regionid,name,code,type) values(12,'region.play_3','play-3','0');
+insert into region(regionid,name,code,type) values(13,'region.play_4','play-4','0');
+insert into region(regionid,name,code,type) values(14,'region.play_5','play-5','0');
+insert into region(regionid,name,code,type) values(20,'region.text_1','text-1','1');
+insert into region(regionid,name,code,type) values(21,'region.text_2','text-2','1');
+insert into region(regionid,name,code,type) values(22,'region.text_3','text-3','1');
+insert into region(regionid,name,code,type) values(30,'region.date_1','date-1','2');
+insert into region(regionid,name,code,type) values(31,'region.date_2','date-2','2');
+insert into region(regionid,name,code,type) values(35,'region.weather','weather','3');
 
 insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;

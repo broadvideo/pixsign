@@ -404,7 +404,7 @@ response.setDateHeader("Expires",0);
 																					</label>  
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag">
+																			<div class="form-group textflag dateflag weatherflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component colorPick">
@@ -413,7 +413,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag">
+																			<div class="form-group textflag dateflag weatherflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
 																				<div class="col-md-9">
 																					<input class="sizeRange" type="text" name="size" value="50"/>
@@ -442,7 +442,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group">
+																			<div class="form-group textflag dateflag weatherflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
@@ -451,7 +451,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group">
+																			<div class="form-group textflag dateflag weatherflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 																				<div class="col-md-9">
 																					<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -832,9 +832,9 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=2"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=5"></script>
 <script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;

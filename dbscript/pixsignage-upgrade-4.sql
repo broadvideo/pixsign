@@ -60,6 +60,23 @@ create table bundleschedule(
  )engine = innodb
 default character set utf8;
 
+alter table device add lontitude varchar(32);
+alter table device add latitude varchar(32);
+alter table device add city varchar(64);
+alter table device add addr1 varchar(128);
+alter table device add addr2 varchar(128);
+create table weather( 
+   weatherid int not null auto_increment,
+   city varchar(64) not null unique,
+   weather longtext not null default '',
+   status char(1) default '1',
+   refreshtime datetime,
+   primary key (weatherid)
+ )engine = innodb
+default character set utf8;
+
+
+
 delete from privilege where privilegeid>0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');

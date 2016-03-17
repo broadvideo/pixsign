@@ -44,6 +44,14 @@ function redrawBundle(div, bundle, bundledtl) {
 		$(this).css('line-height', bundledtl.layoutdtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
+			$(this).find('img').each(function() {
+				$(this).css('display', 'none');
+			});
+		} else {
+			$(this).find('img').each(function() {
+				$(this).css('height', fontsize + 'px');
+				$(this).css('display', 'inline');
+			});
 		}
 	});
 }
@@ -120,6 +128,15 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.region.type == 3) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		bundledtlhtml += '</div>';
 		bundledtlhtml += '</div>';
 	}
 	div.html(bundledtlhtml);

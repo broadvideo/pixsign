@@ -31,6 +31,11 @@ function redrawLayoutPreview(div, layout, maxsize) {
 		$(this).css('line-height', layoutdtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
+		} else {
+			$(this).find('img').each(function() {
+				$(this).css('height', fontsize + 'px');
+				$(this).css('display', 'inline');
+			});
 		}
 	});
 }
@@ -65,6 +70,12 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
+	} else if (layoutdtl.region.type == 3) {
+		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
+		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.bgimage != null) {
 		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
@@ -106,6 +117,14 @@ function redrawBundlePreview(div, bundle, maxsize) {
 		$(this).css('line-height', bundledtl.layoutdtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
+			$(this).find('img').each(function() {
+				$(this).css('display', 'none');
+			});
+		} else {
+			$(this).find('img').each(function() {
+				$(this).css('height', fontsize + 'px');
+				$(this).css('display', 'inline');
+			});
 		}
 	});
 }
@@ -157,6 +176,12 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
+	} else if (bundledtl.layoutdtl.region.type == 3) {
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		bundledtlhtml += '</div>';
 	} else if (bgimage != null) {
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.bgimage != null) {

@@ -76,17 +76,14 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.type"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="1" checked> <spring:message code="global.org.orgtype_1"/>
+													<input type="radio" name="org.orgtype" value="1"> <spring:message code="global.org.orgtype_1"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="2" > <spring:message code="global.org.orgtype_2"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="3" > PIDS
+													<input type="radio" name="org.orgtype" value="2" checked> <spring:message code="global.org.orgtype_2"/>
 												</label>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group pix-control">
 											<label class="col-md-3 control-label"><spring:message code="global.org.media"/></label>
 											<div class="col-md-9 checkbox-list">
 												<label class="checkbox-inline">
