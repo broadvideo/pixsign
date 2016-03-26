@@ -51,10 +51,10 @@ function initMyTable() {
 				thumbmailhtml += '<div class="row" >';
 			}
 			thumbmailhtml += '<div class="col-md-2 col-xs-2">';
-			thumbmailhtml += '<a class="fancybox" href="/pixsigdata' + aData['filepath'] + '" title="' + aData['name'] + '">';
-			thumbmailhtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" /> </a>';
-			thumbmailhtml += '<h6>' + aData['imageid'] + '：' + aData['name'] + '<br>';
-			var filesize = parseInt(aData['size'] / 1024);
+			thumbmailhtml += '<a class="fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '">';
+			thumbmailhtml += '<img src="/pixsigdata/image/preview/' + aData.filename + '" alt="' + aData.name + '" width="100%" /> </a>';
+			thumbmailhtml += '<h6>' + aData.imageid + '：' + aData.name + '<br>';
+			var filesize = parseInt(aData.size / 1024);
 			thumbmailhtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			if (currentSelectBranchid == myBranchid) {
 				thumbmailhtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';

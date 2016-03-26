@@ -20,7 +20,7 @@ function redrawBundle(div, bundle, bundledtl) {
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
 	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + bundle.layout.bgimage.filename+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
 		div.append('<div id="BundledtlDiv' + bundle.bundledtls[i].bundledtlid + '"></div>');
@@ -72,15 +72,15 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		var medialistdtl = bundledtl.medialist0.medialistdtls[0];
 		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-			bgimage = '/pixsigdata' + medialistdtl.image.filepath;
+		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+			bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
 		}
 	} else if (bundledtl.objtype == 1 && bundledtl.type == 1 && bundledtl.medialist1.medialistdtls.length > 0) {
 		var medialistdtl = bundledtl.medialist1.medialistdtls[0];
 		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-			bgimage = '/pixsigdata' + medialistdtl.image.filepath;
+		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+			bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
 		}
 	} else if (bundledtl.objtype == 2 && bundledtl.type == 0) {
 		text = bundledtl.text0.text;
@@ -106,7 +106,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		if (bgimage != null) {
 			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		} else if (bundledtl.layoutdtl.bgimage != null) {
-			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+			bundledtlhtml += '<img src="/pixsigdata/image/preview/' + bundledtl.layoutdtl.bgimage.filename+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.layoutdtl.region.type == 1) {
@@ -150,7 +150,7 @@ function generateBundledtlHtml(bundledtl) {
 	bundledtlhtml += 'style="position: absolute; width:' + 100*bundledtl.layoutdtl.width/CurrentBundle.layout.width + '%; height:' + 100*bundledtl.layoutdtl.height/CurrentBundle.layout.height + '%; top: ' + 100*bundledtl.layoutdtl.topoffset/CurrentBundle.layout.height + '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/CurrentBundle.layout.width + '%;">';
 	bundledtlhtml += ' <div id="bundledtl_bg_' + bundledtl.bundledtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[bundledtl.layoutdtl.regionid] + '; opacity:.80; filter:alpha(opacity=80);">';
 	if (bundledtl.layoutdtl.bgimage != null) {
-		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		bundledtlhtml += '<img src="/pixsigdata/image/preview/' + bundledtl.layoutdtl.bgimage.filename+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
 	bundledtlhtml += '<div id="bundledtl_selected_' + bundledtl.bundledtlid + '" width="100%" height="100%" style="display:none;position:absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0; background-color:#696969; opacity:.80; filter:alpha(opacity=80);" />';
 	bundledtlhtml += '</div>';
@@ -389,7 +389,7 @@ function refreshBundledtlSelect() {
 							html += '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" width="100%" />';
 						}
 					} else if (medialistdtl.objtype == 2) {
-						html += '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" width="100%" />';
+						html += '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" width="100%" />';
 					}
 					html += '</div>';
 				}						
@@ -446,7 +446,7 @@ function refreshMedialistDtl() {
 				}
 			} else if (medialistdtl.objtype == 2) {
 				mediatype = common.view.image;
-				var thumbhtml = '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
+				var thumbhtml = '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
 			} else {
 				mediatype = common.view.unknown;
 			}
@@ -648,8 +648,8 @@ $('#ImageTable').dataTable({
 			imagehtml += '<div class="row" >';
 		}
 		imagehtml += '<div class="col-md-3 col-xs-3">';
-		imagehtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" />';
-		imagehtml += '<h6>' + aData['name'] + '</h6>';
+		imagehtml += '<img src="/pixsigdata/image/preview/' + aData.filename + '" alt="' + aData.name + '" width="100%" />';
+		imagehtml += '<h6>' + aData.name + '</h6>';
 		imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">' + common.view.add + '</button></p>';
 		imagehtml += '</div>';
 		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
@@ -739,7 +739,7 @@ $('body').on('click', '.pix-medialistdtl-image-add', function(event) {
 	medialistdtl.sequence = CurrentBundledtl.medialist0.medialistdtls.length + 1;
 	medialistdtl.image = data;
 	CurrentBundledtl.medialist0.medialistdtls[CurrentBundledtl.medialist0.medialistdtls.length] = medialistdtl;
-	var thumbhtml = '<img src="/pixsigdata' + data.filepath + '" alt="' + data.name + '" height="30" />' + data.name;
+	var thumbhtml = '<img src="/pixsigdata/image/preview/' + data.filename + '" alt="' + data.name + '" height="30" />' + data.name;
 	$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, thumbhtml, 0, 0, 0]);
 	redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
 });

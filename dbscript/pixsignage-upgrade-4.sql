@@ -75,7 +75,7 @@ create table weather(
  )engine = innodb
 default character set utf8;
 
-
+alter table video add previewflag char(1) default '0';
 
 delete from privilege where privilegeid>0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');

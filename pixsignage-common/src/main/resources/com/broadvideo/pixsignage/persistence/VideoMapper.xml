@@ -12,6 +12,7 @@
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="previewflag" property="previewflag" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="progress" property="progress" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
@@ -21,7 +22,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, name, uuid, type, filepath, filename, size, md5, status, progress, description, 
+    videoid, orgid, branchid, name, uuid, type, filepath, filename, size, md5, previewflag, status, progress, description, 
     thumbnail, createtime, createstaffid
   </sql>
   
@@ -43,6 +44,9 @@
     <if test="type != null">
       and type=${type}
     </if>
+    <if test="previewflag != null">
+      and previewflag=${previewflag}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -59,6 +63,9 @@
     </if>
     <if test="type != null">
       and type=${type}
+    </if>
+    <if test="previewflag != null">
+      and previewflag=${previewflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -86,12 +93,12 @@
     </selectKey>
     insert into video (orgid, branchid, name, uuid, 
       type, filepath, filename, size, md5, 
-      status, progress, description, 
+      previewflag, status, progress, description, 
       thumbnail, createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{thumbnail,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
@@ -127,6 +134,9 @@
       </if>
       <if test="md5 != null" >
         md5,
+      </if>
+      <if test="previewflag != null" >
+        previewflag,
       </if>
       <if test="status != null" >
         status,
@@ -174,6 +184,9 @@
       </if>
       <if test="md5 != null" >
         #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="previewflag != null" >
+        #{previewflag,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -225,6 +238,9 @@
       <if test="md5 != null" >
         md5 = #{md5,jdbcType=VARCHAR},
       </if>
+      <if test="previewflag != null" >
+        previewflag = #{previewflag,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -257,6 +273,7 @@
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},
       md5 = #{md5,jdbcType=VARCHAR},
+      previewflag = #{previewflag,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       progress = #{progress,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},

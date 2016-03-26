@@ -22,7 +22,7 @@ function redrawLayout(div, layout, layoutdtl) {
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
 	if (layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<layout.layoutdtls.length; i++) {
 		div.append('<div id="LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid + '"></div>');
@@ -82,7 +82,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (layoutdtl.bgimage != null) {
-			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+			layoutdtlhtml += '<img src="/pixsigdata/image/preview/' + layoutdtl.bgimage.filename + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.region.type == 1) {
@@ -158,7 +158,7 @@ function refreshLayoutBgImageSelect1() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filepath:item.filepath, 
+							filename:item.filename, 
 						};
 					}),
 					more: more
@@ -166,16 +166,16 @@ function refreshLayoutBgImageSelect1() {
 			}
 		},
 		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filepath: CurrentLayout.bgimage.filepath });
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filename: CurrentLayout.bgimage.filename });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -205,7 +205,7 @@ function refreshRegionBgImageSelect() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filepath:item.filepath, 
+							filename:item.filename, 
 						};
 					}),
 					more: more
@@ -213,16 +213,16 @@ function refreshRegionBgImageSelect() {
 			}
 		},
 		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayoutdtl != null && CurrentLayoutdtl.bgimage != null) {
-				callback({id: CurrentLayoutdtl.bgimage.imageid, text: CurrentLayoutdtl.bgimage.name, filepath: CurrentLayoutdtl.bgimage.filepath });
+				callback({id: CurrentLayoutdtl.bgimage.imageid, text: CurrentLayoutdtl.bgimage.name, filename: CurrentLayoutdtl.bgimage.filename });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -320,7 +320,7 @@ function validLayout(layout) {
 			layout.bgimage = {};
 			layout.bgimage.imageid = $('#LayoutBgImageSelect2').select2('data').id;
 			layout.bgimage.name = $('#LayoutBgImageSelect2').select2('data').text;
-			layout.bgimage.filepath = $('#LayoutBgImageSelect2').select2('data').filepath;
+			layout.bgimage.filename = $('#LayoutBgImageSelect2').select2('data').filename;
 		}
 		layout.description = $('#LayoutEditForm textarea').val();
 		return true;
@@ -347,7 +347,7 @@ function validLayoutdtl(layoutdtl) {
 			layoutdtl.bgimage = {};
 			layoutdtl.bgimage.imageid = $('#RegionBgImageSelect').select2('data').id;
 			layoutdtl.bgimage.name = $('#RegionBgImageSelect').select2('data').text;
-			layoutdtl.bgimage.filepath = $('#RegionBgImageSelect').select2('data').filepath;
+			layoutdtl.bgimage.filename = $('#RegionBgImageSelect').select2('data').filename;
 		}
 		layoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
 		layoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
@@ -489,7 +489,7 @@ $('#RegionBgImageSelect').on('change', function(e) {
 		CurrentLayoutdtl.bgimage = {};
 		CurrentLayoutdtl.bgimage.imageid = $('#RegionBgImageSelect').select2('data').id;
 		CurrentLayoutdtl.bgimage.name = $('#RegionBgImageSelect').select2('data').text;
-		CurrentLayoutdtl.bgimage.filepath = $('#RegionBgImageSelect').select2('data').filepath;
+		CurrentLayoutdtl.bgimage.filename = $('#RegionBgImageSelect').select2('data').filename;
 	}
 	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
@@ -506,7 +506,7 @@ $('#LayoutBgImageSelect2').on('change', function(e) {
 		CurrentLayout.bgimage = {};
 		CurrentLayout.bgimage.imageid = $('#LayoutBgImageSelect2').select2('data').id;
 		CurrentLayout.bgimage.name = $('#LayoutBgImageSelect2').select2('data').text;
-		CurrentLayout.bgimage.filepath = $('#LayoutBgImageSelect2').select2('data').filepath;
+		CurrentLayout.bgimage.filename = $('#LayoutBgImageSelect2').select2('data').filename;
 	}
 	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	

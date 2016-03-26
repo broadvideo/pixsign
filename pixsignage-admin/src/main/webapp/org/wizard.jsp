@@ -832,10 +832,10 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=4"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=5"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

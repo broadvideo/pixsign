@@ -114,7 +114,25 @@
 			<ref bean="weatherJob" />
 		</property>
 		<property name="cronExpression">
-			<value>0 30 8-19 * * ?</value>
+			<value>0 30 7-19 * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="videoTask" class="com.broadvideo.pixsignage.quartz.VideoTask"></bean>
+	<bean id="videoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="videoTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="videoJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="videoJob" />
+		</property>
+		<property name="cronExpression">
+			<value>30 * * * * ?</value>
 		</property>
 	</bean>
 
@@ -127,6 +145,7 @@
 				<ref bean="vcssJobTrigger" />
 				<ref bean="pixboxJobTrigger" />
 				<ref bean="weatherJobTrigger" />
+				<ref bean="videoJobTrigger" />
 			</list>
 		</property>
 	</bean>

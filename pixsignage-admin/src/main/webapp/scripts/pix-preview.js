@@ -4,7 +4,7 @@ function redrawLayoutPreview(div, layout, maxsize) {
 	div.attr('layoutid', layout.layoutid);
 	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
 	if (layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<layout.layoutdtls.length; i++) {
 		div.append(getLayoutdtlPreviewHtml(layout, i));
@@ -77,7 +77,7 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.bgimage != null) {
-		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		layoutdtlhtml += '<img src="/pixsigdata/image/preview/' + layoutdtl.bgimage.filename + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
 	layoutdtlhtml += '</div>';
 	layoutdtlhtml += '</div>';
@@ -90,7 +90,7 @@ function redrawBundlePreview(div, bundle, maxsize) {
 	div.attr('bundleid', bundle.bundleid);
 	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
 	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.filepath+ '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + bundle.layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
 		div.append(getBundledtlPreviewHtml(bundle, i));
@@ -136,8 +136,8 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 		var medialistdtl = bundledtl.medialist.medialistdtls[0];
 		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-			bgimage = '/pixsigdata' + medialistdtl.image.filepath;
+		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+			bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
 		}
 	}
 	
@@ -185,7 +185,7 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 	} else if (bgimage != null) {
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.bgimage != null) {
-		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.filepath+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		bundledtlhtml += '<img src="/pixsigdata/image/preview/' + bundledtl.layoutdtl.bgimage.filename+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
 	bundledtlhtml += '</div>';
 	bundledtlhtml += '</div>';
@@ -206,7 +206,7 @@ function redrawLayoutCanvasPreview(canvas, layout) {
 
 	if (layout.bgimage != null) {
 		var layout_bgimage = new Image();
-		layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
+		layout_bgimage.src = '/pixsigdata/image/preview/' + layout.bgimage.filename;
 		layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
 			return function() {
 				//ctx.globalAlpha = 0.2;
@@ -242,8 +242,8 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 				var medialistdtl = bundledtl.medialist.medialistdtls[0];
 				if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 					bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-				} else if (medialistdtl.objtype == 2 && medialistdtl.image.filepath != null) {
-					bgimage = '/pixsigdata' + medialistdtl.image.filepath;
+				} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+					bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
 				}
 			}
 		}
@@ -258,7 +258,7 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 		}(region_bgimage, ctx, left, top, width, height);
 	} else if (layoutdtl.bgimage != null) {
 		var region_bgimage = new Image();
-		region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.filepath;
+		region_bgimage.src = '/pixsigdata/image/preview/' + layoutdtl.bgimage.filename;
 		region_bgimage.onload = function(img, ctx, left, top, width, height) {
 			return function() {
 				ctx.drawImage(img, left, top, width, height);

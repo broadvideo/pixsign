@@ -194,13 +194,13 @@ public class VideoAction extends BaseDatatableAction {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, search);
+			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, null, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, type, search,
-					start, length);
+			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, type, null,
+					search, start, length);
 			for (int i = 0; i < videoList.size(); i++) {
 				aaData.add(videoList.get(i));
 			}

@@ -34,8 +34,8 @@ public class OrgServiceImpl implements OrgService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 
-	public List<Org> selectList(String vspid) {
-		return orgMapper.selectList(vspid);
+	public List<Org> selectList(String vspid, String orgid) {
+		return orgMapper.selectList(vspid, orgid);
 	}
 
 	public Org selectByCode(String code) {

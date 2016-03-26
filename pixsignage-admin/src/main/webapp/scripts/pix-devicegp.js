@@ -34,7 +34,7 @@ function initMyTable() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			var listhtml = '';
 			for (var i=0; i<aData.devices.length; i++) {
-				listhtml += aData.devices[i].terminalid + ' ';
+				listhtml += aData.devices[i].name + ' ';
 			}
 			$('td:eq(1)', nRow).html(listhtml);
 			

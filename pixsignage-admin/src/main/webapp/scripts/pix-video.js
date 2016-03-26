@@ -55,11 +55,11 @@ function initMyTable() {
 			if (aData.thumbnail == null) {
 				imageurl = '../local/img/video.jpg';
 			}
-			var videourl = '/pixsigdata' + aData.filepath;
-			if (aData.filepath == null) {
+			if (aData.filepath == null || aData.previewflag != 1) {
 				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" />';
 			} else {
 				//videohtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
+				var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
 				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData['name'] + '">';
 				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" /> </a>';
 			}

@@ -247,7 +247,7 @@ function initData2() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filepath:item.filepath, 
+							filename:item.filename, 
 						};
 					}),
 					more: more
@@ -255,16 +255,16 @@ function initData2() {
 			}
 		},
 		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata' + media.filepath + '" height="25" /> ' + media.text + '</span>'
+			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filepath: CurrentLayout.bgimage.filepath });
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filename: CurrentLayout.bgimage.filename });
 			}
 		},
 		dropdownCssClass: "bigdrop", 

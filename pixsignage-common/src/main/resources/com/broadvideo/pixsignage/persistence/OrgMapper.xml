@@ -53,6 +53,9 @@
     <if test="vspid != null" >
       and vspid = #{vspid}
     </if>
+    <if test="orgid != null" >
+      and orgid = #{orgid}
+    </if>
     order by orgid desc 
   </select>
 

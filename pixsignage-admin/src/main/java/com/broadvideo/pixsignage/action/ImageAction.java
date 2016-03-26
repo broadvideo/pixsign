@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.service.ImageService;
+import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -77,6 +78,9 @@ public class ImageAction extends BaseDatatableAction {
 						fileToCreate.delete();
 					}
 					FileUtils.moveFile(mymedia[i], fileToCreate);
+					File previewFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/preview/" + newFileName);
+					FileUtils.writeByteArrayToFile(previewFile, CommonUtil.generateThumbnail(fileToCreate, 640));
+
 					image.setFilepath("/image/upload/" + newFileName);
 					image.setFilename(newFileName);
 					image.setSize(FileUtils.sizeOf(fileToCreate));
@@ -125,7 +129,6 @@ public class ImageAction extends BaseDatatableAction {
 				aaData.add(imageList.get(i));
 			}
 			this.setAaData(aaData);
-
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();

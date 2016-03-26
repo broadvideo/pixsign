@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,34 +42,17 @@ public class CommonUtil {
 
 	public static int execCommand(String command) {
 		int result = 0;
-		InputStream fis = null;
-		BufferedReader bufferedReader = null;
 		try {
 			logger.info("start to run command: {}", command);
 			Process process = Runtime.getRuntime().exec(command);
-			fis = process.getInputStream();
-			bufferedReader = new BufferedReader(new InputStreamReader(fis));
+			StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR");
+			errorGobbler.start();
+			StreamGobbler outGobbler = new StreamGobbler(process.getInputStream(), "STDOUT");
+			outGobbler.start();
 			result = process.waitFor();
-			String line = null;
-			while ((line = bufferedReader.readLine()) != null) {
-				logger.info(line);
-			}
 		} catch (Exception ioe) {
 			result = -1;
 			logger.info(ioe.toString());
-		} finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (Exception e) {
-				}
-			}
-			if (bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				} catch (Exception e) {
-				}
-			}
 		}
 		return result;
 	}
@@ -98,4 +82,43 @@ public class CommonUtil {
 		return thumbnail;
 	}
 
+}
+
+class StreamGobbler extends Thread {
+	private static Logger logger = LoggerFactory.getLogger(StreamGobbler.class);
+	InputStream is;
+	String type;
+	OutputStream os;
+
+	StreamGobbler(InputStream is, String type) {
+		this(is, type, null);
+	}
+
+	StreamGobbler(InputStream is, String type, OutputStream redirect) {
+		this.is = is;
+		this.type = type;
+		this.os = redirect;
+	}
+
+	public void run() {
+		InputStreamReader isr = null;
+		BufferedReader br = null;
+		try {
+			isr = new InputStreamReader(is);
+			br = new BufferedReader(isr);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				logger.info("{}> {}", type, line);
+			}
+		} catch (IOException ioe) {
+			logger.error("", ioe);
+		} finally {
+			try {
+				br.close();
+				isr.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
+		}
+	}
 }

@@ -28,6 +28,8 @@ public class Video {
 
 	private String md5;
 
+	private String previewflag;
+
 	private String status;
 
 	private Integer progress;
@@ -118,6 +120,14 @@ public class Video {
 
 	public void setMd5(String md5) {
 		this.md5 = md5 == null ? null : md5.trim();
+	}
+
+	public String getPreviewflag() {
+		return previewflag;
+	}
+
+	public void setPreviewflag(String previewflag) {
+		this.previewflag = previewflag;
 	}
 
 	public String getStatus() {

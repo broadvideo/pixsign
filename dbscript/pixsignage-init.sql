@@ -201,7 +201,8 @@ create table video(
    filepath varchar(32),
    filename varchar(128),
    size bigint,
-   md5 varchar(64),
+   md5 varchar(64),0
+   previewflag char(1) default '0';
    status char(1) default '1',
    progress int,
    description varchar(1024),

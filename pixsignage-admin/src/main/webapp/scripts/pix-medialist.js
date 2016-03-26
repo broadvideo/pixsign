@@ -46,7 +46,7 @@ function initMyTable() {
 					}
 					listhtml += '<h6>' + medialistdtl.video.name + '</h6>';
 				} else if (medialistdtl.objtype == 2) {
-					listhtml += '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" width="100%" />';
+					listhtml += '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" width="100%" />';
 					listhtml += '<h6>' + medialistdtl.image.name + '</h6>';
 				}
 				listhtml += '</div>';
@@ -206,7 +206,7 @@ function initMedialistDtlModal() {
 							}
 						} else if (medialistdtl.objtype == 2) {
 							mediatype = common.view.image;
-							var thumbhtml = '<img src="/pixsigdata' + medialistdtl.image.filepath + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
+							var thumbhtml = '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
 						} else {
 							mediatype = common.view.unknown;
 						}
@@ -373,9 +373,9 @@ function initMedialistDtlModal() {
 				imagehtml += '<div class="row" >';
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
-			imagehtml += '<img src="/pixsigdata' + aData['filepath'] + '" alt="' + aData['name'] + '" width="100%" />';
-			imagehtml += '<h6>' + aData['name'] + '<br/>';
-			var filesize = parseInt(aData['size'] / 1024);
+			imagehtml += '<img src="/pixsigdata/image/preview/' + aData.filename + '" alt="' + aData.name + '" width="100%" />';
+			imagehtml += '<h6>' + aData.name + '<br/>';
+			var filesize = parseInt(aData.size / 1024);
 			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
 			imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">' + common.view.add + '</button></p>';
 			imagehtml += '</div>';
@@ -462,7 +462,7 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.imageid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		var thumbhtml = '<img src="/pixsigdata' + data.filepath + '" alt="' + data.name + '" height="30" />' + data.name;
+		var thumbhtml = '<img src="/pixsigdata/image/preview/' + data.filename + '" alt="' + data.name + '" height="30" />' + data.name;
 		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, thumbhtml, 0, 0, 0]);
 	});
 
