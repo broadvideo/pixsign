@@ -26,7 +26,10 @@
   </select>
   
   <select id="selectCount" resultType="Integer">
-    select count(1) from playlist where type =  1 and status = 1 and orgid = ${orgid}
+    select count(1) from playlist 
+    where type =  1 
+    and status = 1 
+    and orgid = #{orgid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -34,7 +37,9 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from playlist
-    where type =  1 and status = 1 and orgid = ${orgid}
+    where type =  1 
+    and status = 1 
+    and orgid = #{orgid}
     <if test="search != null">
       and name like #{search}
     </if>

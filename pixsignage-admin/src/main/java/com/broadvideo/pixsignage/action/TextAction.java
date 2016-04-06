@@ -28,11 +28,16 @@ public class TextAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
 			List<Object> aaData = new ArrayList<Object>();
-			int count = textService.selectCount("" + getLoginStaff().getOrgid());
+			int count = textService.selectCount("" + getLoginStaff().getOrgid(), branchid);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Text> textList = textService.selectList("" + getLoginStaff().getOrgid(), start, length);
+			List<Text> textList = textService.selectList("" + getLoginStaff().getOrgid(), branchid, start, length);
 			for (int i = 0; i < textList.size(); i++) {
 				aaData.add(textList.get(i));
 			}
@@ -50,6 +55,7 @@ public class TextAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			text.setOrgid(getLoginStaff().getOrgid());
+			text.setBranchid(getLoginStaff().getBranchid());
 			text.setCreatestaffid(getLoginStaff().getStaffid());
 			textService.addText(text);
 			return SUCCESS;

@@ -18,11 +18,6 @@ public interface DeviceMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
-	int selectUnregisterCount(@Param(value = "orgid") String orgid, @Param(value = "search") String search);
-
-	List<Device> selectUnregisterList(@Param(value = "orgid") String orgid, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
-
 	Device selectByHardkey(@Param(value = "hardkey") String hardkey);
 
 	Device selectByTerminalid(@Param(value = "terminalid") String terminalid);
@@ -40,6 +35,8 @@ public interface DeviceMapper {
 	int updateByPrimaryKeySelective(Device record);
 
 	int updateByPrimaryKey(Device record);
+
+	int updateDevicegroup();
 
 	int updateOnlineflag();
 }

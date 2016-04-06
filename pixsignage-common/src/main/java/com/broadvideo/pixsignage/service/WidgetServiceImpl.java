@@ -27,12 +27,12 @@ public class WidgetServiceImpl implements WidgetService {
 		return widgetMapper.selectByPrimaryKey(widgetid);
 	}
 
-	public int selectCount(String orgid) {
-		return widgetMapper.selectCount(orgid);
+	public int selectCount(String orgid, String branchid) {
+		return widgetMapper.selectCount(orgid, branchid);
 	}
 
-	public List<Widget> selectList(String orgid, String start, String length) {
-		return widgetMapper.selectList(orgid, start, length);
+	public List<Widget> selectList(String orgid, String branchid, String start, String length) {
+		return widgetMapper.selectList(orgid, branchid, start, length);
 	}
 
 	@Transactional

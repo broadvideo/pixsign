@@ -37,13 +37,18 @@ public class BundleAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
-			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), search);
+			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Bundle> bundleList = bundleService.selectList("" + getLoginStaff().getOrgid(), search, start, length);
+			List<Bundle> bundleList = bundleService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
+					length);
 			for (int i = 0; i < bundleList.size(); i++) {
 				aaData.add(bundleList.get(i));
 			}
@@ -61,6 +66,8 @@ public class BundleAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			bundle.setOrgid(getLoginStaff().getOrgid());
+			bundle.setBranchid(getLoginStaff().getBranchid());
+			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.addBundle(bundle);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -137,6 +144,8 @@ public class BundleAction extends BaseDatatableAction {
 	public String doWizard() {
 		try {
 			bundle.setOrgid(getLoginStaff().getOrgid());
+			bundle.setBranchid(getLoginStaff().getBranchid());
+			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.handleWizard(getLoginStaff(), bundle, devices, devicegroups);
 			return SUCCESS;
 		} catch (Exception ex) {

@@ -62,14 +62,6 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.code"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="branch.code" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 											<div class="col-md-9">
 												<textarea class="form-control" rows="4" name="branch.description"></textarea>
@@ -83,14 +75,9 @@ response.setDateHeader("Expires",0);
 								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
-						<!-- /.modal-content -->
 					</div>
-					<!-- /.modal-dialog -->
 				</div>
-				<!-- /.modal -->
-				<!-- END END MODAL FORM-->
 			
-				<!-- BEGIN PAGE HEADER-->
 				<h3 class="page-title"><spring:message code="menu.branch"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
@@ -103,9 +90,7 @@ response.setDateHeader("Expires",0);
 						</li>
 					</ul>
 				</div>
-				<!-- END PAGE HEADER-->
 			
-				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet box blue">
@@ -124,14 +109,11 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 				</div>
-				<!-- END PAGE CONTENT -->
 			</div>
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
 	
-	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
@@ -146,7 +128,6 @@ response.setDateHeader("Expires",0);
 			</span>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   
@@ -184,7 +165,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-branch.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-branch.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

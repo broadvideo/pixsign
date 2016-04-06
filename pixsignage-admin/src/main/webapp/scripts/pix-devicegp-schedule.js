@@ -19,6 +19,10 @@ RegionColors[7] = '#FFFF99';
 RegionColors[8] = '#CC9966';
 RegionColors[9] = '#CC9966';
 
+function refreshMyTable() {
+	$('#MyTable').dataTable()._fnAjaxUpdate();
+}			
+
 $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 10, 25, 50, 100 ],
@@ -49,12 +53,16 @@ $('#MyTable').dataTable({
 		$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
 
 		return nRow;
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':CurBranchid });
 	}
 });
 
-jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-jQuery('#MyTable_wrapper .dataTables_length select').select2();
+$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+$('#MyTable_wrapper .dataTables_length select').select2();
+$('#MyTable').css('width', '100%');
 
 /*
 $.ajax({

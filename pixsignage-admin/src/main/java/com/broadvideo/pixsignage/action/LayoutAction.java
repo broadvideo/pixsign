@@ -44,8 +44,13 @@ public class LayoutAction extends BaseDatatableAction {
 		try {
 			this.setsEcho(getParameter("sEcho"));
 			String type = getParameter("type");
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
 			List<Object> aaData = new ArrayList<Object>();
-			List<Layout> layoutList = layoutService.selectList("" + getLoginStaff().getOrgid(), type);
+			List<Layout> layoutList = layoutService.selectList("" + getLoginStaff().getOrgid(), branchid, type);
 			for (int i = 0; i < layoutList.size(); i++) {
 				aaData.add(layoutList.get(i));
 			}
@@ -65,6 +70,7 @@ public class LayoutAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			layout.setOrgid(getLoginStaff().getOrgid());
+			layout.setBranchid(getLoginStaff().getBranchid());
 			layout.setCreatestaffid(getLoginStaff().getStaffid());
 			layoutService.addLayout(layout);
 			return SUCCESS;

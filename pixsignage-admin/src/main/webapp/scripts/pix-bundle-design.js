@@ -13,6 +13,12 @@ RegionColors[9] = '#CC9966';
 var CurrentBundle;
 var CurrentBundledtl;
 
+function refreshTableFromBranchDropdown() {
+	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+	$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
+	$('#ImageTable').dataTable()._fnAjaxUpdate();
+}
+
 function redrawBundle(div, bundle, bundledtl) {
 	div.empty();
 	div.css('position', 'relative');
@@ -554,11 +560,13 @@ $('#IntVideoTable').dataTable({
 		return nRow;
 	},
 	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':DropdownBranchid });
 		aoData.push({'name':'type','value':1 });
 	}
 });
-jQuery('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-jQuery('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#IntVideoTable').css('width', '100%');
 
 //引入视频table初始化
 $('#ExtVideoTable thead').css('display', 'none');
@@ -610,11 +618,13 @@ $('#ExtVideoTable').dataTable({
 		return nRow;
 	},
 	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':DropdownBranchid });
 		aoData.push({'name':'type','value':2 });
 	}
 });
-jQuery('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-jQuery('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#ExtVideoTable').css('width', '100%');
 
 //图片table初始化
 $('#ImageTable thead').css('display', 'none');
@@ -660,10 +670,14 @@ $('#ImageTable').dataTable({
 			$('#ImageContainer').append(imagehtml);
 		}
 		return nRow;
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':DropdownBranchid });
 	}
 });
-jQuery('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-jQuery('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#ImageTable').css('width', '100%');
 
 //播放明细Table初始化
 $('#MedialistDtlTable').dataTable({

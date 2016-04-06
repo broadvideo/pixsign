@@ -43,13 +43,17 @@ function initMyTable() {
 			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 			$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
-	
+	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable').css('width', '100%');
+
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
@@ -160,6 +164,7 @@ function initMyEditModal() {
 		var action = myurls['common.add'];
 		refreshForm('MyEditForm');
 		$('#MyEditForm').attr('action', action);
+		$('#MyEditForm input[name="devicegroup.branchid"]').val(CurBranchid);
 		$('#MyEditModal').modal();
 	});			
 
@@ -222,7 +227,8 @@ function initDevicegpDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push( {'name':'devicegroupid','value':'0' })
+			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'devicegroupid','value':'0' })
 		} 
 	});
 
@@ -252,6 +258,7 @@ function initDevicegpDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push( {'name':'devicegroupid','value':currentDevicegroupid })
 		} 
 	});

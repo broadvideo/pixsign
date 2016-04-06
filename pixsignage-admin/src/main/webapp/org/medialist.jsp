@@ -53,7 +53,7 @@ response.setDateHeader("Expires",0);
 										<div class="portlet box blue">
 											<div class="portlet-title">
 												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
-												<ul class="nav nav-tabs">
+												<ul class="nav nav-tabs" style="margin-left: 10px;">
 													<li id="nav_tab3" class="imageflag">
 														<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
 													</li>
@@ -64,6 +64,15 @@ response.setDateHeader("Expires",0);
 														<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
 													</li>
 												</ul>
+												<div class="actions">
+													<div class="btn-group" id="BranchTreeDropdown">
+														<a id="BranchTitle" class="btn default yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
+														<ul class="dropdown-menu pull-right">
+															<div class="pre-scrollable">
+															</div>
+														</ul>
+													</div>
+												</div>
 											</div>
 											<div class="portlet-body">
 												<div class="tab-content">
@@ -152,7 +161,6 @@ response.setDateHeader("Expires",0);
 					</div>
 				</div>
 			
-				<!-- BEGIN PAGE HEADER-->
 				<h3 class="page-title"><spring:message code="menu.medialist"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
@@ -165,9 +173,7 @@ response.setDateHeader("Expires",0);
 						</li>
 					</ul>
 				</div>
-				<!-- END PAGE HEADER-->
 			
-				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet box blue">
@@ -178,25 +184,29 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="portlet-body">
-								<div class="table-toolbar">
-									<div class="btn-group">
-										<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+								<div class="row">
+									<div class="col-md-2" id="BranchTreeDiv">
+									</div>
+									<div class="col-md-10" id="BranchContentDiv">
+										<div class="table-toolbar">
+											<div class="btn-group">
+												<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+											</div>
+										</div>
+										<table id="MyTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
 								</div>
-								<table id="MyTable" class="table table-striped table-bordered table-hover">
-									<thead></thead>
-									<tbody></tbody>
-								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- END PAGE CONTENT -->
 			</div>
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
 	
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
@@ -243,6 +253,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+
+<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -250,12 +262,16 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-medialist.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-medialist.js?t=5"></script>
 <script>
+var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
+	initBranchTree();
 	initMyTable();
 	initMyEditModal();
 	initMedialistDtlModal();

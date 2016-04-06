@@ -10,10 +10,6 @@ public interface DeviceService {
 	public List<Device> selectList(String orgid, String branchid, String status, String devicegroupid, String search,
 			String start, String length);
 
-	public int selectUnregisterCount(String orgid, String search);
-
-	public List<Device> selectUnregisterList(String orgid, String search, String start, String length);
-
 	public Device selectByPrimaryKey(String deviceid);
 
 	public Device selectByHardkey(String hardkey);

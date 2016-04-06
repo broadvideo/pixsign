@@ -5,13 +5,9 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Branch;
 
 public interface BranchService {
-	public int selectCount(int orgid);
+	public Branch selectByPrimaryKey(String branchid);
 
-	public List<Branch> selectList(int orgid);
-
-	public List<Branch> selectByCode(String code, String orgid);
-
-	public List<Branch> selectRoot(int orgid);
+	public List<Branch> selectRoot(String orgid);
 
 	public void addBranch(Branch branch);
 
@@ -20,6 +16,4 @@ public interface BranchService {
 	public void deleteBranch(String branchid);
 
 	public boolean validateName(Branch branch, String orgid);
-
-	public boolean validateCode(Branch branch, String orgid);
 }

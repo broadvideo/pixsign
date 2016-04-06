@@ -106,7 +106,9 @@ public class PixsignageService {
 				index1 = 0;
 			}
 			String city = location.substring(index1, index2);
-			device.setCity(city);
+			if (!city.equals("对方和您在同一内部网")) {
+				device.setCity(city);
+			}
 
 			if (!device.getStatus().equals("1")) {
 				device.setActivetime(Calendar.getInstance().getTime());
@@ -310,10 +312,18 @@ public class PixsignageService {
 			if (locationJson != null) {
 				String latitude = locationJson.getString("latitude");
 				String lontitude = locationJson.getString("lontitude");
+				String city = locationJson.getString("city");
 				String addr1 = locationJson.getString("addr");
 				String addr2 = locationJson.getString("desc");
 				device.setLatitude(latitude);
 				device.setLontitude(lontitude);
+				if (city != null && city.length() > 0) {
+					int index = city.indexOf("市");
+					if (index > 0) {
+						city = city.substring(0, index);
+					}
+					device.setCity(city);
+				}
 				device.setAddr1(addr1);
 				device.setAddr2(addr2);
 			}

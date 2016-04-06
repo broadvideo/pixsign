@@ -33,14 +33,18 @@ public class MedialistAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
-			int count = medialistService.selectCount(getLoginStaff().getOrgid(), search);
+			int count = medialistService.selectCount(getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Medialist> medialistList = medialistService.selectList(getLoginStaff().getOrgid(), search, start,
-					length);
+			List<Medialist> medialistList = medialistService.selectList(getLoginStaff().getOrgid(), branchid, search,
+					start, length);
 			for (int i = 0; i < medialistList.size(); i++) {
 				aaData.add(medialistList.get(i));
 			}
@@ -58,6 +62,7 @@ public class MedialistAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			medialist.setOrgid(getLoginStaff().getOrgid());
+			medialist.setBranchid(getLoginStaff().getBranchid());
 			medialist.setCreatestaffid(getLoginStaff().getStaffid());
 			medialistService.addMedialist(medialist);
 			return SUCCESS;

@@ -6,7 +6,6 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -18,25 +17,15 @@
   <resultMap id="NameResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
     <id column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    branchid, orgid, parentid, name, code, status, description, createtime, createstaffid
+    branchid, orgid, parentid, name, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select * from branch
-    where branchid = '${branchid}'
-  </select>
-
-  <select id="selectCount" resultType="Integer">
-    select count(1) from branch where status = 1 and orgid = ${orgid}
-  </select>
-
-  <select id="selectList" resultMap="BaseResultMap">
-    select * from branch where status=1 and orgid = ${orgid}
-    order by branchid 
+    where branchid = #{branchid}
   </select>
 
   <select id="selectChild" resultMap="BaseResultMap" >
@@ -50,12 +39,15 @@
   </select>
 
   <select id="selectNameByPrimaryKey" resultMap="NameResultMap" >
-    select branchid,name,code from branch
+    select branchid,name from branch
     where branchid = #{branchid}
   </select>
   
   <select id="selectRoot" resultMap="BaseResultMap">
-    select * from branch where status=1 and parentid=0 and orgid = ${orgid}
+    select * from branch 
+    where status=1 
+    and parentid=0 
+    and orgid = #{orgid}
     order by branchid 
   </select>
 
@@ -67,14 +59,6 @@
     </if>
   </select>
 
-  <select id="selectByCode" resultMap="BaseResultMap" >
-    select * from branch
-    where status = '1' and code = #{code}
-    <if test="orgid != null" >
-      and orgid = #{orgid}
-    </if>
-  </select>
-  
   <delete id="deleteByPrimaryKey">
     update branch set status='9'
     where branchid = '${branchid}'
@@ -85,10 +69,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into branch (orgid, parentid, name, 
-      code, status, description, 
+      status, description, 
       createtime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Branch" >
@@ -105,9 +89,6 @@
       </if>
       <if test="name != null" >
         name,
-      </if>
-      <if test="code != null" >
-        code,
       </if>
       <if test="status != null" >
         status,
@@ -131,9 +112,6 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="code != null" >
-        #{code,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -161,9 +139,6 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="code != null" >
-        code = #{code,jdbcType=VARCHAR},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -184,7 +159,6 @@
     set orgid = #{orgid,jdbcType=INTEGER},
       parentid = #{parentid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
-      code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

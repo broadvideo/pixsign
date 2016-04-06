@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Widget" >
     <id column="widgetid" property="widgetid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
@@ -14,7 +15,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    widgetid, orgid, name, url, type, status, description, createtime, createstaffid
+    widgetid, orgid, branchid, name, url, type, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -26,12 +27,18 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from widget
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from widget
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     order by widgetid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -48,10 +55,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="widgetid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into widget (orgid, name, url, type, 
+    insert into widget (orgid, branchid, name, url, type, 
       status, description, createtime, 
       createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -63,6 +70,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="name != null" >
         name,
@@ -89,6 +99,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -119,6 +132,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -146,6 +162,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Widget" >
     update widget
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},

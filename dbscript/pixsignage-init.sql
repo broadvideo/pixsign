@@ -89,7 +89,6 @@ create table branch(
    orgid int not null,
    parentid int,
    name varchar(64) not null,
-   code varchar(16) not null,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -218,6 +217,7 @@ default character set utf8;
 create table text( 
    textid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(256) not null,
    text longtext not null default '',
    type char(1) default 1,
@@ -233,6 +233,7 @@ default character set utf8;
 create table stream( 
    streamid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(256) not null,
    url varchar(1024) not null,
    type char(1) default 1,
@@ -248,6 +249,7 @@ default character set utf8;
 create table dvb( 
    dvbid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(256) not null,
    frequency varchar(32) not null,
    number varchar(16) not null,
@@ -264,6 +266,7 @@ default character set utf8;
 create table widget( 
    widgetid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(256) not null,
    url varchar(1024) not null,
    type char(1) default 1,
@@ -279,6 +282,7 @@ default character set utf8;
 create table medialist( 
    medialistid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(256) not null,
    type char(1) default 1,
    status char(1) default '1',
@@ -337,7 +341,6 @@ create table devicegroup(
    orgid int not null,
    branchid int not null,
    name varchar(64) not null,
-   code varchar(32) not null,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -360,6 +363,7 @@ default character set utf8;
 create table layout( 
    layoutid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    name varchar(64) not null,
    type char(1) default '0',
    status char(1) default '1',
@@ -406,6 +410,7 @@ default character set utf8;
 create table bundle( 
    bundleid int not null auto_increment,
    orgid int not null,
+   branchid int not null,
    layoutid int not null,
    name varchar(64) not null,
    status char(1) default '1',

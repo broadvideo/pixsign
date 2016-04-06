@@ -69,8 +69,8 @@ public class LayoutServiceImpl implements LayoutService {
 		return layoutMapper.selectByPrimaryKey(layoutid);
 	}
 
-	public List<Layout> selectList(String orgid, String type) {
-		List<Layout> layoutList = layoutMapper.selectList(orgid, type);
+	public List<Layout> selectList(String orgid, String branchid, String type) {
+		List<Layout> layoutList = layoutMapper.selectList(orgid, branchid, type);
 		for (Layout layout : layoutList) {
 			for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
 				Region region = layoutdtl.getRegion();
@@ -159,6 +159,7 @@ public class LayoutServiceImpl implements LayoutService {
 			if (layoutdtl.getRegion().getType().equals(Region.Type_NONTEXT)) {
 				Medialist medialist = new Medialist();
 				medialist.setOrgid(bundle.getOrgid());
+				medialist.setBranchid(bundle.getBranchid());
 				medialist.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
 				medialist.setType(Medialist.Type_Private);
 				medialist.setCreatestaffid(bundle.getCreatestaffid());
@@ -168,6 +169,7 @@ public class LayoutServiceImpl implements LayoutService {
 			} else if (layoutdtl.getRegion().getType().equals(Region.Type_TEXT)) {
 				Text text = new Text();
 				text.setOrgid(bundle.getOrgid());
+				text.setBranchid(bundle.getBranchid());
 				text.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
 				text.setType(Medialist.Type_Private);
 				text.setCreatestaffid(bundle.getCreatestaffid());

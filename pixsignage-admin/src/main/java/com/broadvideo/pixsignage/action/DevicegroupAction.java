@@ -13,6 +13,7 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicegroupService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -34,15 +35,19 @@ public class DevicegroupAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
-			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(),
-					"" + getLoginStaff().getBranchid(), search);
+			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Devicegroup> devicegroupList = devicegroupService.selectList("" + getLoginStaff().getOrgid(),
-					"" + getLoginStaff().getBranchid(), search, start, length);
+			List<Devicegroup> devicegroupList = devicegroupService.selectList("" + getLoginStaff().getOrgid(), branchid,
+					search, start, length);
 			for (int i = 0; i < devicegroupList.size(); i++) {
 				aaData.add(devicegroupList.get(i));
 			}
@@ -60,9 +65,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			devicegroup.setOrgid(getLoginStaff().getOrgid());
-			devicegroup.setBranchid(getLoginStaff().getBranchid());
 			devicegroup.setCreatestaffid(getLoginStaff().getStaffid());
-
 			devicegroupService.addDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {

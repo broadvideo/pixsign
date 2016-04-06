@@ -26,12 +26,9 @@ public class BranchAction extends BaseDatatableAction {
 	public String doList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			List<Branch> branchList = branchService.selectRoot(getLoginStaff().getOrgid());
-			for (int i = 0; i < branchList.size(); i++) {
-				aaData.add(branchList.get(i));
-			}
+			Branch branch = branchService.selectByPrimaryKey("" + getLoginStaff().getBranchid());
+			aaData.add(branch);
 			this.setAaData(aaData);
-
 			return SUCCESS;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -88,16 +85,6 @@ public class BranchAction extends BaseDatatableAction {
 				} else {
 					setErrorcode(-1);
 					setErrormsg("名称已存在");
-					return ERROR;
-				}
-			}
-			if (branch.getCode() != null) {
-				String orgid = "" + getLoginStaff().getOrgid();
-				if (branchService.validateCode(branch, orgid)) {
-					return SUCCESS;
-				} else {
-					setErrorcode(-1);
-					setErrormsg("编码已存在");
 					return ERROR;
 				}
 			}

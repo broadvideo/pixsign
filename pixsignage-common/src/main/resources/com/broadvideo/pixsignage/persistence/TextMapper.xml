@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Text" >
     <id column="textid" property="textid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -16,7 +17,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    textid, orgid, name, type, status, description, createtime, createstaffid
+    textid, orgid, branchid, name, type, status, description, createtime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
     text
@@ -33,7 +34,10 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from text
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
   </select>
 
   <select id="selectList" resultMap="ResultMapWithBLOBs">
@@ -42,7 +46,10 @@
     ,
     <include refid="Blob_Column_List" />
     from text
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     order by textid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -58,10 +65,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="textid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into text (orgid, name, type, status, 
+    insert into text (orgid, branchid, name, type, status, 
       description, createtime, createstaffid, 
       text)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
       #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
       #{text,jdbcType=LONGVARCHAR})
   </insert>
@@ -73,6 +80,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="name != null" >
         name,
@@ -99,6 +109,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -129,6 +142,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -156,6 +172,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Text" >
     update text
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
@@ -168,6 +185,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Text" >
     update text
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},

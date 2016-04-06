@@ -27,12 +27,12 @@ public class TextServiceImpl implements TextService {
 		return textMapper.selectByPrimaryKey(textid);
 	}
 
-	public int selectCount(String orgid) {
-		return textMapper.selectCount(orgid);
+	public int selectCount(String orgid, String branchid) {
+		return textMapper.selectCount(orgid, branchid);
 	}
 
-	public List<Text> selectList(String orgid, String start, String length) {
-		return textMapper.selectList(orgid, start, length);
+	public List<Text> selectList(String orgid, String branchid, String start, String length) {
+		return textMapper.selectList(orgid, branchid, start, length);
 	}
 
 	@Transactional

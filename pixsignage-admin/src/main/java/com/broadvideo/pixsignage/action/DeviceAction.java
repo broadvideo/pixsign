@@ -35,12 +35,11 @@ public class DeviceAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
-			String status = getParameter("status");
-			String devicegroupid = getParameter("devicegroupid");
-
-			if (branchid == null) {
+			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String status = getParameter("status");
+			String devicegroupid = getParameter("devicegroupid");
 
 			int count = deviceService.selectCount("" + getLoginStaff().getOrgid(), branchid, status, devicegroupid,
 					search);
@@ -64,41 +63,10 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
-	public String doUnregisterList() {
-		try {
-			this.setsEcho(getParameter("sEcho"));
-			String start = getParameter("iDisplayStart");
-			String length = getParameter("iDisplayLength");
-			String search = getParameter("sSearch");
-			search = SqlUtil.likeEscapeH(search);
-
-			int count = deviceService.selectUnregisterCount("" + getLoginStaff().getOrgid(), search);
-			this.setiTotalRecords(count);
-			this.setiTotalDisplayRecords(count);
-
-			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectUnregisterList("" + getLoginStaff().getOrgid(), search, start,
-					length);
-			for (int i = 0; i < deviceList.size(); i++) {
-				aaData.add(deviceList.get(i));
-			}
-			this.setAaData(aaData);
-
-			return SUCCESS;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
 	public String doAdd() {
 		try {
 			device.setOrgid(getLoginStaff().getOrgid());
 			device.setBranchid(getLoginStaff().getBranchid());
-
-			device.setHardkey(device.getName());
 			deviceService.addDevice(device);
 			return SUCCESS;
 		} catch (Exception ex) {

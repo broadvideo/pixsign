@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Dvb" >
     <id column="dvbid" property="dvbid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="frequency" property="frequency" jdbcType="VARCHAR" />
     <result column="number" property="number" jdbcType="VARCHAR" />
@@ -15,7 +16,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    dvbid, orgid, name, frequency, number, type, status, description, createtime, createstaffid
+    dvbid, orgid, branchid, name, frequency, number, type, status, description, createtime, createstaffid
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -27,12 +28,18 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from dvb
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from dvb
-    where type='1' and status='1' and orgid=#{orgid}
+    where type = '1' 
+    and status = '1' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     order by dvbid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -49,10 +56,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="dvbid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into dvb (orgid, name, frequency, 
+    insert into dvb (orgid, branchid, name, frequency, 
       number, type, status, description, 
       createtime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{frequency,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{frequency,jdbcType=VARCHAR}, 
       #{number,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -64,6 +71,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="name != null" >
         name,
@@ -93,6 +103,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -126,6 +139,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -156,6 +172,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Dvb" >
     update dvb
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       frequency = #{frequency,jdbcType=VARCHAR},
       number = #{number,jdbcType=VARCHAR},

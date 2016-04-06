@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Layout" >
     <id column="layoutid" property="layoutid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -20,7 +21,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutid, orgid, name, type, status, ratio, height, width, bgcolor, bgimageid, description, 
+    layoutid, orgid, branchid, name, type, status, ratio, height, width, bgcolor, bgimageid, description, 
     createtime, createstaffid
   </sql>
   
@@ -35,7 +36,9 @@
     select
     <include refid="Base_Column_List" />
     from layout
-    where status = 1 and orgid = #{orgid}
+    where status = 1 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     <if test="type != null">
       and type = '${type}'
     </if>
@@ -51,11 +54,11 @@
     <selectKey resultType="java.lang.Integer" keyProperty="layoutid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into layout (orgid, name, type, 
+    insert into layout (orgid, branchid, name, type, 
       status, ratio, height, width, 
       bgcolor, bgimageid, description, createtime, 
       createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{status,jdbcType=CHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
       #{bgcolor,jdbcType=VARCHAR}, #{bgimageid,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
@@ -68,6 +71,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="name != null" >
         name,
@@ -106,6 +112,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -148,6 +157,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -187,6 +199,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Layout" >
     update layout
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},

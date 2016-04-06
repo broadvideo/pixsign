@@ -115,6 +115,32 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30902,2,309,'menu.role','role.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30903,2,309,'menu.branch','branch.jsp','',1,3,'12');
 
+alter table branch drop code;
+
+alter table text add branchid int;
+alter table stream add branchid int;
+alter table dvb add branchid int;
+alter table widget add branchid int;
+alter table medialist add branchid int;
+alter table layout add branchid int;
+alter table bundle add branchid int;
+update text a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update stream a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update dvb a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update widget a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update medialist a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update layout a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+update bundle a, branch b set a.branchid=b.branchid where a.orgid=b.orgid and b.parentid=0;
+alter table text modify branchid int not null;
+alter table stream modify branchid int not null;
+alter table dvb modify branchid int not null;
+alter table widget modify branchid int not null;
+alter table medialist modify branchid int not null;
+alter table layout modify branchid int not null;
+alter table bundle modify branchid int not null;
+
+alter table devicegroup drop code;
+
 ############################################################
 ## post script  ############################################
 ############################################################

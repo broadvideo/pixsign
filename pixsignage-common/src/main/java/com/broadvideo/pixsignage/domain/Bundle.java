@@ -10,6 +10,8 @@ public class Bundle {
 
 	private Integer orgid;
 
+	private Integer branchid;
+
 	private Integer layoutid;
 
 	private String name;
@@ -49,6 +51,14 @@ public class Bundle {
 
 	public void setOrgid(Integer orgid) {
 		this.orgid = orgid;
+	}
+
+	public Integer getBranchid() {
+		return branchid;
+	}
+
+	public void setBranchid(Integer branchid) {
+		this.branchid = branchid;
 	}
 
 	public Integer getLayoutid() {

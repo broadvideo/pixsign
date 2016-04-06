@@ -28,11 +28,16 @@ public class DvbAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
 			List<Object> aaData = new ArrayList<Object>();
-			int count = dvbService.selectCount("" + getLoginStaff().getOrgid());
+			int count = dvbService.selectCount("" + getLoginStaff().getOrgid(), branchid);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Dvb> dvbList = dvbService.selectList("" + getLoginStaff().getOrgid(), start, length);
+			List<Dvb> dvbList = dvbService.selectList("" + getLoginStaff().getOrgid(), branchid, start, length);
 			for (int i = 0; i < dvbList.size(); i++) {
 				aaData.add(dvbList.get(i));
 			}
@@ -50,6 +55,7 @@ public class DvbAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			dvb.setOrgid(getLoginStaff().getOrgid());
+			dvb.setBranchid(getLoginStaff().getBranchid());
 			dvb.setCreatestaffid(getLoginStaff().getStaffid());
 			dvbService.addDvb(dvb);
 			return SUCCESS;

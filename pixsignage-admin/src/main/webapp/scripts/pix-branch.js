@@ -9,9 +9,11 @@ var myurls = {
 };
 var mytable_columns = [
 	{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-	{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
 	{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
-	{'sTitle' : common.view.operation, 'mData' : 'branchid', 'bSortable' : false }];
+	{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
+	{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
+	{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
+	{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }];
 
 function refreshMyTable() {
 	$.ajax({
@@ -40,20 +42,24 @@ function refreshMyTable() {
 	function generateTreeHtml(treedata) {
 		for (var i=0; i<treedata.length; i++) {
 			currentTreeData.push(treedata[i]);
-			if (treedata[i]['parentid'] == 0) {
+			if (tbodyhtml == '') {
 				tbodyhtml += '<tr class="odd treegrid-' + treedata[i]['branchid'] + '">';
 			} else {
 				tbodyhtml += '<tr class="odd treegrid-' + treedata[i]['branchid'] + ' treegrid-parent-' + treedata[i]['parentid'] + '">';
 			}
-			for (var j=0; j<mytable_columns.length-1; j++) {
+			for (var j=0; j<mytable_columns.length-4; j++) {
 				tbodyhtml += '<td>' + eval('treedata[i].' + mytable_columns[j]['mData']) + '</td>';
 			}
 
 			tbodyhtml += '<td>';
+			tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs green pix-device"><i class="fa fa-list-ul"></i> ' + common.view.device + '</a>';
+			tbodyhtml += '</td><td>'
 			tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
-			tbodyhtml += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			tbodyhtml += '</td><td>'
+			tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			tbodyhtml += '</td><td>'
 			if (treedata[i].parentid != 0 && treedata[i].children.length == 0) {
-				tbodyhtml += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			}
 			tbodyhtml += '</td></tr>'
 			
@@ -134,35 +140,9 @@ function initMyEditModal() {
 			}
 		}
 	};
-	FormValidateOption.rules['branch.code'] = {
-			required: true,
-			minlength: 2,
-			remote: {
-				url: myurls['branch.validate'],
-				type: 'post',
-				data: {
-					'branch.branchid': function() {
-						return $('#MyEditForm input[name="branch.branchid"]').val();
-					},
-					'branch.code': function() {
-						return $('#MyEditForm input[name="branch.code"]').val();
-					}
-				},
-				dataFilter: function(responseString) {
-					var response = $.parseJSON(responseString);
-					if (response.errorcode == 0) {
-						return true;
-					}
-					return false;
-				}
-			}
-		};
 	FormValidateOption.messages = {
 		'branch.name': {
 			remote: common.tips.name_repeat
-		},
-		'branch.code': {
-			remote: common.tips.code_repeat
 		},
 	};
 	FormValidateOption.submitHandler = function(form) {

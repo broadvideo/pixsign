@@ -12,6 +12,8 @@ public class Dvb {
 
 	private Integer orgid;
 
+	private Integer branchid;
+
 	private String name;
 
 	private String frequency;
@@ -42,6 +44,14 @@ public class Dvb {
 
 	public void setOrgid(Integer orgid) {
 		this.orgid = orgid;
+	}
+
+	public Integer getBranchid() {
+		return branchid;
+	}
+
+	public void setBranchid(Integer branchid) {
+		this.branchid = branchid;
 	}
 
 	public String getName() {

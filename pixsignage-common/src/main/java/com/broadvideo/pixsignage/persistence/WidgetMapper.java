@@ -9,10 +9,10 @@ import com.broadvideo.pixsignage.domain.Widget;
 public interface WidgetMapper {
 	Widget selectByPrimaryKey(@Param(value = "widgetid") String widgetid);
 
-	int selectCount(@Param(value = "orgid") String orgid);
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid);
 
-	List<Widget> selectList(@Param(value = "orgid") String orgid, @Param(value = "start") String start,
-			@Param(value = "length") String length);
+	List<Widget> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "start") String start, @Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "widgetid") String widgetid);
 	// int insert(Widget record);

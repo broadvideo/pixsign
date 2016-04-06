@@ -14,6 +14,8 @@ public class Medialist {
 
 	private Integer orgid;
 
+	private Integer branchid;
+
 	private String name;
 
 	private String type;
@@ -42,6 +44,14 @@ public class Medialist {
 
 	public void setOrgid(Integer orgid) {
 		this.orgid = orgid;
+	}
+
+	public Integer getBranchid() {
+		return branchid;
+	}
+
+	public void setBranchid(Integer branchid) {
+		this.branchid = branchid;
 	}
 
 	public String getName() {

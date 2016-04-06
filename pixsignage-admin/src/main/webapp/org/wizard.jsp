@@ -640,6 +640,15 @@ response.setDateHeader("Expires",0);
 																			<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
 																		</li>
 																	</ul>
+																	<div class="actions">
+																		<div class="btn-group" id="BranchTreeDropdown">
+																			<a id="BranchTitle" class="btn default yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
+																			<ul class="dropdown-menu pull-right">
+																				<div class="pre-scrollable">
+																				</div>
+																			</ul>
+																		</div>
+																	</div>
 																</div>
 																<div class="portlet-body">
 																	<div class="tab-content">
@@ -826,12 +835,14 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
 <script src="${base_ctx}/scripts/pix-layout-design.js?t=6"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=6"></script>
@@ -851,6 +862,7 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
+	initBranchTree();
 	initWizard();
 });
 

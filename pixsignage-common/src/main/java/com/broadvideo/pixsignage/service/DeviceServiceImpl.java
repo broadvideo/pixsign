@@ -39,14 +39,6 @@ public class DeviceServiceImpl implements DeviceService {
 		return deviceMapper.selectList(orgid, branchid, status, devicegroupid, search, start, length);
 	}
 
-	public int selectUnregisterCount(String orgid, String search) {
-		return deviceMapper.selectUnregisterCount(orgid, search);
-	}
-
-	public List<Device> selectUnregisterList(String orgid, String search, String start, String length) {
-		return deviceMapper.selectUnregisterList(orgid, search, start, length);
-	}
-
 	public Device selectByPrimaryKey(String deviceid) {
 		return deviceMapper.selectByPrimaryKey(deviceid);
 	}
@@ -76,6 +68,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void updateDeviceSelective(Device device) {
 		deviceMapper.updateByPrimaryKeySelective(device);
+		deviceMapper.updateDevicegroup();
 	}
 
 	@Transactional

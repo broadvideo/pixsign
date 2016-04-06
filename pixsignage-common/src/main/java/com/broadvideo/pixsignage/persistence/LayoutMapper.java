@@ -9,7 +9,8 @@ import com.broadvideo.pixsignage.domain.Layout;
 public interface LayoutMapper {
 	Layout selectByPrimaryKey(@Param(value = "layoutid") String layoutid);
 
-	List<Layout> selectList(@Param(value = "orgid") String orgid, @Param(value = "type") String type);
+	List<Layout> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "type") String type);
 
 	int deleteByPrimaryKey(@Param(value = "layoutid") String layoutid);
 

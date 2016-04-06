@@ -11,9 +11,9 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Staff;
 
 public interface BundleService {
-	public int selectCount(String orgid, String search);
+	public int selectCount(String orgid, String branchid, String search);
 
-	public List<Bundle> selectList(String orgid, String search, String start, String length);
+	public List<Bundle> selectList(String orgid, String branchid, String search, String start, String length);
 
 	public void addBundle(Bundle bundle);
 

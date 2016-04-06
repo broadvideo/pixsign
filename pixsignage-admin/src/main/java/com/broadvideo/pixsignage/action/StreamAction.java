@@ -28,11 +28,17 @@ public class StreamAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
 			List<Object> aaData = new ArrayList<Object>();
-			int count = streamService.selectCount("" + getLoginStaff().getOrgid());
+			int count = streamService.selectCount("" + getLoginStaff().getOrgid(), branchid);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Stream> streamList = streamService.selectList("" + getLoginStaff().getOrgid(), start, length);
+			List<Stream> streamList = streamService.selectList("" + getLoginStaff().getOrgid(), branchid, start,
+					length);
 			for (int i = 0; i < streamList.size(); i++) {
 				aaData.add(streamList.get(i));
 			}
@@ -50,6 +56,7 @@ public class StreamAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			stream.setOrgid(getLoginStaff().getOrgid());
+			stream.setBranchid(getLoginStaff().getBranchid());
 			stream.setCreatestaffid(getLoginStaff().getStaffid());
 			streamService.addStream(stream);
 			return SUCCESS;

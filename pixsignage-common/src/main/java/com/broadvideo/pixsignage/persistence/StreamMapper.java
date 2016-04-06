@@ -9,10 +9,10 @@ import com.broadvideo.pixsignage.domain.Stream;
 public interface StreamMapper {
 	Stream selectByPrimaryKey(@Param(value = "streamid") String streamid);
 
-	int selectCount(@Param(value = "orgid") String orgid);
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid);
 
-	List<Stream> selectList(@Param(value = "orgid") String orgid, @Param(value = "start") String start,
-			@Param(value = "length") String length);
+	List<Stream> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "start") String start, @Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "streamid") String streamid);
 

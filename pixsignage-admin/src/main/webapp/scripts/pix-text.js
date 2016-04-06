@@ -7,6 +7,11 @@ var myurls = {
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
+	if (CurBranchid == MyBranchid) {
+		$('#BranchContentDiv .table-toolbar').css('display', 'block');
+	} else {
+		$('#BranchContentDiv .table-toolbar').css('display', 'none');
+	}
 }			
 
 function initMyTable() {
@@ -26,15 +31,24 @@ function initMyTable() {
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			if (CurBranchid == MyBranchid) {
+				$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			} else {
+				$('td:eq(2)', nRow).html('');
+				$('td:eq(3)', nRow).html('');
+			}
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable').css('width', '100%');
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -125,6 +139,7 @@ function initMyEditModal() {
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
+		$('#MyEditForm textarea[name="text.text"]').val(item.text);
 		$('#MyEditForm').attr('action', myurls['common.update']);
 		$('#MyEditModal').modal();
 	});

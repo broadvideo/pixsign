@@ -11,7 +11,18 @@ var myurls = {
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
-}			
+	if (CurBranchid == MyBranchid) {
+		$('#BranchContentDiv .table-toolbar').css('display', 'block');
+	} else {
+		$('#BranchContentDiv .table-toolbar').css('display', 'none');
+	}
+}
+
+function refreshTableFromBranchDropdown() {
+	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+	$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
+	$('#ImageTable').dataTable()._fnAjaxUpdate();
+}
 
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
@@ -56,16 +67,26 @@ function initMyTable() {
 			}
 			$('td:eq(1)', nRow).html(listhtml);
 			
-			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
-			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			if (CurBranchid == MyBranchid) {
+				$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
+				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			} else {
+				$('td:eq(2)', nRow).html('');
+				$('td:eq(3)', nRow).html('');
+				$('td:eq(4)', nRow).html('');
+			}
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable').css('width', '100%');
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -161,7 +182,7 @@ function initMyEditModal() {
 
 }
 
-//==============================播放列表明细对话框====================================			
+		
 function initMedialistDtlModal() {
 	var currentMedialistid = 0;
 	var currentMedialist;
@@ -225,7 +246,7 @@ function initMedialistDtlModal() {
 		});
 	});
 	
-	//本地视频table初始化
+	
 	$('#IntVideoTable thead').css('display', 'none');
 	$('#IntVideoTable tbody').css('display', 'none');	
 	var intvideohtml = '';
@@ -277,13 +298,15 @@ function initMedialistDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':DropdownBranchid });
 			aoData.push({'name':'type','value':1 });
 		}
 	});
-	jQuery('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-	jQuery('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-	
-	//引入视频table初始化
+	$('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+	$('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#IntVideoTable').css('width', '100%');
+
+
 	$('#ExtVideoTable thead').css('display', 'none');
 	$('#ExtVideoTable tbody').css('display', 'none');	
 	var extvideohtml = '';
@@ -335,13 +358,15 @@ function initMedialistDtlModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':DropdownBranchid });
 			aoData.push({'name':'type','value':2 });
 		}
 	});
-	jQuery('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-	jQuery('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+	$('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#IntVideoTable').css('width', '100%');
 	
-	//图片table初始化
+	
 	$('#ImageTable thead').css('display', 'none');
 	$('#ImageTable tbody').css('display', 'none');	
 	var imagehtml = '';
@@ -387,12 +412,16 @@ function initMedialistDtlModal() {
 				$('#ImageContainer').append(imagehtml);
 			}
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':DropdownBranchid });
 		}
 	});
-	jQuery('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-	jQuery('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+	$('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#IntVideoTable').css('width', '100%');
 	
-	//播放明细Table初始化
+	
 	$('#MedialistDtlTable').dataTable({
 		'sDom' : 't',
 		'iDisplayLength' : -1,
@@ -414,7 +443,6 @@ function initMedialistDtlModal() {
 	});
 	
 	
-	//增加本地视频到播放明细Table
 	$('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
 		var data = $('#IntVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
 		var medialistdtl = {};
@@ -433,7 +461,7 @@ function initMedialistDtlModal() {
 		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, thumbhtml, 0, 0, 0]);
 	});
 
-	//增加引入视频到播放明细Table
+	
 	$('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
 		var data = $('#ExtVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
 		var medialistdtl = {};
@@ -452,7 +480,7 @@ function initMedialistDtlModal() {
 		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, thumbhtml, 0, 0, 0]);
 	});
 
-	//增加图片到播放明细Table
+	
 	$('body').on('click', '.pix-medialistdtl-image-add', function(event) {
 		var data = $('#ImageTable').dataTable().fnGetData($(event.target).attr("data-id"));
 		var medialistdtl = {};
@@ -467,7 +495,7 @@ function initMedialistDtlModal() {
 	});
 
 	
-	//删除播放明细列表某行
+	
 	$('body').on('click', '.pix-medialistdtl-delete', function(event) {
 		var rowIndex = $(event.target).attr("data-id");
 		if (rowIndex == undefined) {
@@ -485,7 +513,7 @@ function initMedialistDtlModal() {
 		tempMedialistdtls.splice(rowIndex, 1);
 	});
 
-	//上移播放明细列表某行
+	
 	$('body').on('click', '.pix-medialistdtl-up', function(event) {
 		var rowIndex = $(event.target).attr('data-id');
 		if (rowIndex == undefined) {
@@ -509,7 +537,7 @@ function initMedialistDtlModal() {
 		tempMedialistdtls[rowIndex-1].sequence = rowIndex;
 	});
 
-	//下移播放明细列表某行
+	
 	$('body').on('click', '.pix-medialistdtl-down', function(event) {
 		var rowIndex = $(event.target).attr('data-id');
 		if (rowIndex == undefined) {

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
     <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -14,7 +15,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    bundleid, orgid, layoutid, name, status, createtime, createstaffid
+    bundleid, orgid, branchid, layoutid, name, status, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -26,7 +27,9 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from bundle
-    where status = 1 and orgid=${orgid}
+    where status = 1 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -35,9 +38,8 @@
   <select id="selectList" resultMap="BaseResultMap">
     select * from bundle
     where status=1
-    <if test="orgid != null">
-      and orgid = ${orgid}
-    </if>
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -63,10 +65,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="bundleid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bundle (orgid, layoutid, name, 
+    insert into bundle (orgid, branchid, layoutid, name, 
       status, createtime, createstaffid
       )
-    values (#{orgid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
@@ -78,6 +80,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="layoutid != null" >
         layoutid,
@@ -98,6 +103,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="layoutid != null" >
         #{layoutid,jdbcType=INTEGER},
@@ -122,6 +130,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="layoutid != null" >
         layoutid = #{layoutid,jdbcType=INTEGER},
       </if>
@@ -143,6 +154,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
     update bundle
     set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
       layoutid = #{layoutid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},

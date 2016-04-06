@@ -13,7 +13,7 @@ import com.broadvideo.pixsignage.domain.Staff;
 public interface LayoutService {
 	public Layout selectByPrimaryKey(String layoutid);
 
-	public List<Layout> selectList(String orgid, String type);
+	public List<Layout> selectList(String orgid, String branchid, String type);
 
 	public List<Layoutdtl> selectLayoutdtlList(String layoutid);
 

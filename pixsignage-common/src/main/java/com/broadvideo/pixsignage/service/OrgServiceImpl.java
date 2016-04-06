@@ -55,7 +55,6 @@ public class OrgServiceImpl implements OrgService {
 		branch.setOrgid(org.getOrgid());
 		branch.setParentid(0);
 		branch.setName("总部");
-		branch.setCode(org.getCode() + "_TOP");
 		branch.setStatus("1");
 		branch.setDescription(org.getName() + "总部");
 		branch.setCreatestaffid(org.getCreatestaffid());
@@ -110,7 +109,7 @@ public class OrgServiceImpl implements OrgService {
 				if (!org.getCode().equals("default")) {
 					terminalid = org.getCode() + terminalid;
 				}
-				List<Branch> branches = branchMapper.selectRoot(org.getOrgid());
+				List<Branch> branches = branchMapper.selectRoot("" + org.getOrgid());
 				Device device = new Device();
 				device.setOrgid(org.getOrgid());
 				device.setBranchid(branches.get(0).getBranchid());

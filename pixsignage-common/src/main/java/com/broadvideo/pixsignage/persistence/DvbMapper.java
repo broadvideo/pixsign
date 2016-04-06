@@ -9,10 +9,10 @@ import com.broadvideo.pixsignage.domain.Dvb;
 public interface DvbMapper {
 	Dvb selectByPrimaryKey(@Param(value = "dvbid") String dvbid);
 
-	int selectCount(@Param(value = "orgid") String orgid);
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid);
 
-	List<Dvb> selectList(@Param(value = "orgid") String orgid, @Param(value = "start") String start,
-			@Param(value = "length") String length);
+	List<Dvb> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "start") String start, @Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "dvbid") String dvbid);
 

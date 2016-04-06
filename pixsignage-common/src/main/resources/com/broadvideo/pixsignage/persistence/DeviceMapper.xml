@@ -85,26 +85,6 @@
     </if>
   </select>
 
-  <select id="selectUnregisterCount" resultType="Integer">
-    select count(1) from device 
-    where status != 1 and orgid = #{orgid}
-    <if test="search != null">
-      and terminalid like #{search}
-    </if>
-  </select>
-
-  <select id="selectUnregisterList" resultMap="BaseResultMap">
-    select * from device
-    where status != 1 and orgid = #{orgid}
-    <if test="search != null">
-      and terminalid like #{search}
-    </if>
-    order by terminalid 
-    <if test="start != null and length != null">
-      limit ${start}, ${length}
-    </if>
-  </select>
-
   <select id="selectByDeviceGroup" resultMap="BaseResultMap">
     select * from device
     where devicegroupid = '${devicegroupid}'
@@ -113,18 +93,21 @@
 
   <select id="selectByHardkey" resultMap="BaseResultMap">
     select * from device
-    where status=1 and hardkey='${hardkey}'
+    where status=1 
+    and hardkey='${hardkey}'
   </select>
 
   <select id="selectByTerminalid" resultMap="BaseResultMap">
     select * from device
-    where terminalid='${terminalid}'
+    where terminalid = '${terminalid}'
     order by deviceid
   </select>
 
   <select id="selectByOrgtype" resultMap="BaseResultMap">
     select d.* from device d, org o
-    where d.orgid=o.orgid and o.orgtype='${orgtype}' and d.status='1'
+    where d.orgid = o.orgid 
+    and o.orgtype = '${orgtype}' 
+    and d.status = '1'
     order by deviceid
   </select>
 
@@ -133,10 +116,19 @@
     where deviceid = '${deviceid}'
   </delete>
 
+  <update id="updateDevicegroup" >
+    update device d, devicegroup dg
+    set d.devicegroupid = 0 
+    where d.devicegroupid = dg.devicegroupid 
+    and d.branchid != dg.branchid
+  </update>
+
   <update id="updateOnlineflag" >
     update device d, org o
-    set d.onlineflag=9 
-    where d.orgid=o.orgid and d.refreshtime is null or (unix_timestamp()-unix_timestamp(d.refreshtime)>300)
+    set d.onlineflag = 9 
+    where d.orgid = o.orgid 
+    and d.refreshtime is null 
+    or (unix_timestamp()-unix_timestamp(d.refreshtime) > 300)
   </update>
 
   <insert id="insertList">

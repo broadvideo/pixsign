@@ -155,7 +155,7 @@ public class LoginAction extends BaseAction {
 			staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
 			staff.setOrgid(org.getOrgid());
 			staff.setOrg(org);
-			List<Branch> branchRoot = branchMapper.selectRoot(org.getOrgid());
+			List<Branch> branchRoot = branchMapper.selectRoot("" + org.getOrgid());
 			staff.setBranchid(branchRoot.get(0).getBranchid());
 			staff.setBranch(branchRoot.get(0));
 		}

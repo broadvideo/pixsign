@@ -28,11 +28,17 @@ public class WidgetAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
 			List<Object> aaData = new ArrayList<Object>();
-			int count = widgetService.selectCount("" + getLoginStaff().getOrgid());
+			int count = widgetService.selectCount("" + getLoginStaff().getOrgid(), branchid);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Widget> widgetList = widgetService.selectList("" + getLoginStaff().getOrgid(), start, length);
+			List<Widget> widgetList = widgetService.selectList("" + getLoginStaff().getOrgid(), branchid, start,
+					length);
 			for (int i = 0; i < widgetList.size(); i++) {
 				aaData.add(widgetList.get(i));
 			}
@@ -50,6 +56,7 @@ public class WidgetAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			widget.setOrgid(getLoginStaff().getOrgid());
+			widget.setBranchid(getLoginStaff().getBranchid());
 			widget.setCreatestaffid(getLoginStaff().getStaffid());
 			widgetService.addWidget(widget);
 			return SUCCESS;

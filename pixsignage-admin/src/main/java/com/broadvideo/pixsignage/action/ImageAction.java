@@ -110,11 +110,10 @@ public class ImageAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
-			String branchid = getParameter("branchid");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
-
-			if (branchid == null) {
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 

@@ -2,12 +2,16 @@ var myurls = {
 	'common.list' : 'video!list.action',
 	'common.add' : 'video!add.action',
 	'common.update' : 'video!update.action',
-	'common.delete' : 'video!delete.action',
-	'branch.list' : 'branch!list.action'
+	'common.delete' : 'video!delete.action'
 };
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
+	if (CurBranchid == MyBranchid) {
+		$('#BranchContentDiv .table-toolbar').css('display', 'block');
+	} else {
+		$('#BranchContentDiv .table-toolbar').css('display', 'none');
+	}
 }			
 
 function initMyTable() {
@@ -19,7 +23,6 @@ function initMyTable() {
 	$("#MyTable thead").css("display", "none");
 	$("#MyTable tbody").css("display", "none");
 	
-	var currentSelectBranchid = myBranchid;
 	var videohtml = '';
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -66,7 +69,7 @@ function initMyTable() {
 			videohtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			videohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
-			if (currentSelectBranchid == myBranchid) {
+			if (CurBranchid == MyBranchid) {
 				videohtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
 				videohtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
 			}
@@ -104,14 +107,14 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push({'name':'type','value':myType });
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').select2();
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -147,109 +150,9 @@ function initMyTable() {
 	});
 
 
-	$.ajax({
-		type : 'POST',
-		url : myurls['branch.list'],
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var currentBranchTreeData = [];
-				createBranchTreeData(data.aaData, currentBranchTreeData);
-				createSelectBranchTree(currentBranchTreeData);
-			} else {
-				alert(data.errorcode + ": " + data.errormsg);
-			}
-		},
-		error : function() {
-			alert('failure');
-		}
-	});
-	function createBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == currentSelectBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
-			}
-			treeData[i]['children'] = [];
-			createBranchTreeData(branches[i].children, treeData[i]['children']);
-		}
-	}
-	function createSelectBranchTree(treeData) {
-		$('#SelectBranchTree').jstree('destroy');
-		$('#SelectBranchTree').jstree({
-			'json_data' : {
-				'data' : treeData
-			},
-			'plugins' : [ 'themes', 'json_data', 'ui' ],
-			'core' : {
-				'animation' : 100
-			},
-			'ui' : {
-				'select_limit' : 1,
-				'initially_select' : currentSelectBranchid,
-			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
-		});
-		$('#SelectBranchTree').on('loaded.jstree', function() {
-			$('#SelectBranchTree').jstree('open_all');
-		});
-	}
-	
-	var BranchidList = [];
-	var BranchnameList = [];
-	$("#SelectBranchTree").on("select_node.jstree", function(event, data) {
-		currentSelectBranchid = data.rslt.obj.attr('id');
-		BranchidList = data.inst.get_path('#' + data.rslt.obj.attr('id'), true);
-		BranchnameList = data.inst.get_path('#' + data.rslt.obj.attr('id'), false); 
-		initBranchBreadcrumb(currentSelectBranchid);
-		refreshMyTable();
-	});
-	
-	$('body').on('click', '.pix-branch', function(event) {
-		currentSelectBranchid = $(event.target).attr('data-id');
-		initBranchBreadcrumb(currentSelectBranchid);
-		refreshMyTable();
-	});
-
 	$('body').on('click', '.pix-full', function(event) {
 		bootbox.alert(common.tips.storage_full);
 	});			
-
-	function initBranchBreadcrumb(branchid) {
-		var html = '';
-		var active = '';
-		for (var i=0; i<BranchidList.length; i++) {
-			if (BranchidList[i] == branchid) {
-				active = 'active';
-			} else {
-				active = '';
-			}
-			html += '<li class="' + active + '">';
-			if (i == 0) {
-				html += '<i class="fa fa-home"></i>';
-			}
-			if (BranchidList[i] == branchid) {
-				html += BranchnameList[i];
-			} else {
-				html += '<a href="javascript:;" data-id="' + BranchidList[i] + '" class="pix-branch">' + BranchnameList[i] + '</a>';
-			}
-			if (i < BranchidList.length-1) {
-				html += '<i class="fa fa-angle-right"></i>';
-			}
-			html += '</li>';
-		}
-		$('#BranchBreadcrumb').html(html);
-	}
 }
 
 function initMyEditModal() {

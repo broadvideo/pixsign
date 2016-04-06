@@ -6,7 +6,6 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -16,7 +15,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    devicegroupid, orgid, branchid, name, code, status, description, createtime, createstaffid
+    devicegroupid, orgid, branchid, name, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -68,10 +67,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into devicegroup (orgid, branchid, name, 
-      code, status, description, 
+      status, description, 
       createtime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Devicegroup" >
@@ -88,9 +87,6 @@
       </if>
       <if test="name != null" >
         name,
-      </if>
-      <if test="code != null" >
-        code,
       </if>
       <if test="status != null" >
         status,
@@ -114,9 +110,6 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="code != null" >
-        #{code,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -144,9 +137,6 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="code != null" >
-        code = #{code,jdbcType=VARCHAR},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -167,7 +157,6 @@
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
-      code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

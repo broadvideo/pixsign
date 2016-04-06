@@ -1,34 +1,30 @@
 var myurls = {
-	'common.list' : 'device!list.action',
-	'common.add' : 'device!add.action',
-	'common.update' : 'device!update.action',
-	'common.delete' : 'device!delete.action',
-	'device.unregisterlist' : 'device!unregisterlist.action',
+	'device.list' : 'device!list.action',
+	'device.add' : 'device!add.action',
+	'device.update' : 'device!update.action',
+	'device.delete' : 'device!delete.action',
 	'device.sync' : 'device!sync.action',
 	'device.config' : 'device!config.action',
 	'device.reboot' : 'device!reboot.action',
-	'devicefile.list' : 'devicefile!list.action',
-	'branch.list' : 'branch!list.action'
+	'devicefile.list' : 'devicefile!list.action'
 };
 
 function refreshMyTable() {
-	$('#MyTable').dataTable()._fnAjaxUpdate();
+	$('#DeviceTable').dataTable()._fnAjaxUpdate();
+	$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
 }			
 
 function initMyTable() {
-	var currentSelectBranchid = myBranchid;
-	
-	var oTable = $('#MyTable').dataTable({
+	var oTable = $('#DeviceTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : myurls['common.list'],
+		'sAjaxSource' : myurls['device.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : common.view.hardkey, 'mData' : 'hardkey', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
@@ -46,27 +42,25 @@ function initMyTable() {
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-
-			if (data.devicegroupid > 0) {
-				$('td:eq(5)', nRow).html(data.devicegroup.name);
+			if (aData.devicegroupid > 0) {
+				$('td:eq(4)', nRow).html(aData.devicegroup.name);
 			} else {
-				$('td:eq(5)', nRow).html('');
+				$('td:eq(4)', nRow).html('');
 			}
-			if (data['onlineflag'] == 9) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
-			} else if (data['onlineflag'] == 1) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
-			} else if (data['onlineflag'] == 0) {
-				$('td:eq(6)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+			if (aData['onlineflag'] == 9) {
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+			} else if (aData['onlineflag'] == 1) {
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
+			} else if (aData['onlineflag'] == 0) {
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
 			}
 			
-			$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-			$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
-			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>');
-			$('td:eq(10)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
-			$('td:eq(11)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(12)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
+			$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+			$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
+			$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>');
+			$('td:eq(9)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
+			$('td:eq(10)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(11)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
@@ -74,28 +68,66 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'branchid','value':currentSelectBranchid });
+			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push({'name':'status','value':'1' });
 		}
 	});
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
+	$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#DeviceTable_wrapper .dataTables_length select').select2();
+	$('#DeviceTable').css('width', '100%');
 	
+	$('#UnDeviceTable').dataTable({
+		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+						[ 10, 25, 50, 100 ]
+						],
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['device.list'],
+		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
+						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false }, 
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }],
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+			if (aData.devicegroupid > 0) {
+				$('td:eq(2)', nRow).html(aData.devicegroup.name);
+			} else {
+				$('td:eq(2)', nRow).html('');
+			}
+			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'status','value':'0' });
+		}
+	});
+
+	$('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
+	$('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	$('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
+	$('#UnDeviceTable').css('width', '100%');
+
 	function fnFormatDetails ( oTable, nTr ) {
 		var aData = oTable.fnGetData( nTr );
 		var sOut = '<table>';
-		sOut += '<tr><td>IP:</td><td>'+aData['ip']+'</td></tr>';
-		sOut += '<tr><td>MAC:</td><td>'+aData['mac']+'</td></tr>';
-		sOut += '<tr><td>' + common.view.activetime + ':</td><td>'+aData['activetime']+'</td></tr>';
+		sOut += '<tr><td>' + common.view.hardkey + ':</td><td>' + aData.hardkey + '</td></tr>';
+		sOut += '<tr><td>IP:</td><td>'+aData.ip + '</td></tr>';
+		sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
+		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
+		sOut += '<tr><td>' + common.view.refreshtime + ':</td><td>' + aData.refreshtime + '</td></tr>';
+		sOut += '<tr><td>' + common.view.activetime + ':</td><td>' + aData.activetime + '</td></tr>';
 		sOut += '</table>';
 		 
 		return sOut;
 	}
 
 
-	$('#MyTable').on('click', ' tbody td .row-details', function () {
+	$('#DeviceTable').on('click', ' tbody td .row-details', function () {
 		var nTr = $(this).parents('tr')[0];
 		if ( oTable.fnIsOpen(nTr) ) {
 			/* This row is already open - close it */
@@ -114,13 +146,13 @@ function initMyTable() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		currentItem = $('#DeviceTable').dataTable().fnGetData(index);
 		
 		bootbox.confirm(common.tips.unbind + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : myurls['common.delete'],
+					url : myurls['device.delete'],
 					cache: false,
 					data : {
 						'device.deviceid': currentItem['deviceid']
@@ -148,7 +180,7 @@ function initMyTable() {
 			target = $(event.target).parent();
 			index = $(event.target).parent().attr('data-id');
 		}
-		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		currentItem = $('#DeviceTable').dataTable().fnGetData(index);
 		bootbox.confirm(common.tips.sync + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
@@ -187,7 +219,7 @@ function initMyTable() {
 			target = $(event.target).parent();
 			index = $(event.target).parent().attr('data-id');
 		}
-		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		currentItem = $('#DeviceTable').dataTable().fnGetData(index);
 		bootbox.confirm(common.tips.config + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
@@ -226,7 +258,7 @@ function initMyTable() {
 			target = $(event.target).parent();
 			index = $(event.target).parent().attr('data-id');
 		}
-		currentItem = $('#MyTable').dataTable().fnGetData(index);
+		currentItem = $('#DeviceTable').dataTable().fnGetData(index);
 		bootbox.confirm(common.tips.reboot + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
@@ -258,146 +290,10 @@ function initMyTable() {
 		});
 	});
 
-	$.ajax({
-		type : 'POST',
-		url : myurls['branch.list'],
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var currentSelectBranchTreeData = [];
-				createSelectBranchTreeData(data.aaData, currentSelectBranchTreeData);
-				createSelectBranchTree(currentSelectBranchTreeData);
-			} else {
-				alert(data.errorcode + ": " + data.errormsg);
-			}
-		},
-		error : function() {
-			alert('failure');
-		}
-	});
-	function createSelectBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == currentSelectBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
-			}
-			treeData[i]['children'] = [];
-			createSelectBranchTreeData(branches[i].children, treeData[i]['children']);
-		}
-	}
-	function createSelectBranchTree(treeData) {
-		$('#SelectBranchTree').jstree('destroy');
-		$('#SelectBranchTree').jstree({
-			'json_data' : {
-				'data' : treeData
-			},
-			'plugins' : [ 'themes', 'json_data', 'ui' ],
-			'core' : {
-				'animation' : 100
-			},
-			'ui' : {
-				'select_limit' : 1,
-				'initially_select' : currentSelectBranchid,
-			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
-		});
-		$('#SelectBranchTree').on('loaded.jstree', function() {
-			$('#SelectBranchTree').jstree('open_all');
-		});
-	}
-	
-	var BranchidList = [];
-	var BranchnameList = [];
-	$("#SelectBranchTree").on("select_node.jstree", function(event, data) {
-		currentSelectBranchid = data.rslt.obj.attr('id');
-		BranchidList = data.inst.get_path('#' + data.rslt.obj.attr('id'), true);
-		BranchnameList = data.inst.get_path('#' + data.rslt.obj.attr('id'), false); 
-		initBranchBreadcrumb(currentSelectBranchid);
-		refreshMyTable();
-	});
-	
-	$('body').on('click', '.pix-branch', function(event) {
-		var index = $(event.target).attr('data-id');
-		if (index == undefined) {
-			index = $(event.target).parent().attr('data-id');
-		}
-		currentSelectBranchid = index;
-		initBranchBreadcrumb(currentSelectBranchid);
-		refreshMyTable();
-	});
-
-	function initBranchBreadcrumb(branchid) {
-		var html = '';
-		var active = '';
-		for (var i=0; i<BranchidList.length; i++) {
-			if (BranchidList[i] == branchid) {
-				active = 'active';
-			} else {
-				active = '';
-			}
-			html += '<li class="' + active + '">';
-			if (i == 0) {
-				html += '<i class="fa fa-home"></i>';
-			}
-			if (BranchidList[i] == branchid) {
-				html += BranchnameList[i];
-			} else {
-				html += '<a href="javascript:;" data-id="' + BranchidList[i] + '" class="pix-branch">' + BranchnameList[i] + '</a>';
-			}
-			if (i < BranchidList.length-1) {
-				html += '<i class="fa fa-angle-right"></i>';
-			}
-			html += '</li>';
-		}
-		$('#BranchBreadcrumb').html(html);
-	}
-	
-	$('#UnDeviceTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ]
-						],
-		'bProcessing' : true,
-		'bServerSide' : true,
-		'sAjaxSource' : myurls['device.unregisterlist'],
-		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
-						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }],
-		'iDisplayLength' : 10,
-		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage
-	});
-
-	jQuery('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-	jQuery('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-	jQuery('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
-
 	$('body').on('click', '.pix-DeviceReload', function(event) {
-		if ($('#portlet_device1').hasClass('active')) {
-			$('#MyTable').dataTable()._fnAjaxUpdate();
-		} else if ($('#portlet_device2').hasClass('active')) {
-			$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
-		}
+		refreshMyTable();
 	});			
 
-	$('body').on('click', '#DeviceTab', function(event) {
-		$('#MyTable').dataTable()._fnAjaxUpdate();
-	});
-
-	$('body').on('click', '#UnDeviceTab', function(event) {
-		$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
-	});
-	
 }
 
 function initMyEditModal() {
@@ -405,7 +301,7 @@ function initMyEditModal() {
 	var currentEditBranchid = 0;
 	$.ajax({
 		type : 'POST',
-		url : myurls['branch.list'],
+		url : 'branch!list.action',
 		data : {},
 		success : function(data, status) {
 			if (data.errorcode == 0) {
@@ -512,7 +408,7 @@ function initMyEditModal() {
 	
 	$('body').on('click', '.pix-add', function(event) {
 		refreshForm('MyEditForm');
-		$('#MyEditForm').attr('action', myurls['common.add']);
+		$('#MyEditForm').attr('action', myurls['device.add']);
 		currentEditBranchid = currentEditBranchTreeData[0].attr.id;
 		refreshEditBranchTreeData(currentEditBranchTreeData);
 		createEditBranchTree(currentEditBranchTreeData);
@@ -525,14 +421,14 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#DeviceTable').dataTable().fnGetData(index);
 		var formdata = new Object();
 		for (var name in item) {
 			formdata['device.' + name] = item[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
-		$('#MyEditForm').attr('action', myurls['common.update']);
+		$('#MyEditForm').attr('action', myurls['device.update']);
 		currentEditBranchid = item.branchid;
 		refreshEditBranchTreeData(currentEditBranchTreeData);
 		createEditBranchTree(currentEditBranchTreeData);
@@ -569,7 +465,7 @@ function initDeviceFileModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		var item = $('#DeviceTable').dataTable().fnGetData(index);
 		currentDeviceid = item.deviceid;
 		
 		$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();

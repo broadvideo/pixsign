@@ -108,12 +108,12 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private LayoutService layoutService;
 
-	public int selectCount(String orgid, String search) {
-		return bundleMapper.selectCount(orgid, search);
+	public int selectCount(String orgid, String branchid, String search) {
+		return bundleMapper.selectCount(orgid, branchid, search);
 	}
 
-	public List<Bundle> selectList(String orgid, String search, String start, String length) {
-		List<Bundle> bundleList = bundleMapper.selectList(orgid, search, start, length);
+	public List<Bundle> selectList(String orgid, String branchid, String search, String start, String length) {
+		List<Bundle> bundleList = bundleMapper.selectList(orgid, branchid, search, start, length);
 		for (Bundle bundle : bundleList) {
 			for (Layoutdtl layoutdtl : bundle.getLayout().getLayoutdtls()) {
 				Region region = layoutdtl.getRegion();
@@ -138,6 +138,7 @@ public class BundleServiceImpl implements BundleService {
 			if (layoutdtl.getRegion().getType().equals(Region.Type_NONTEXT)) {
 				Medialist medialist = new Medialist();
 				medialist.setOrgid(bundle.getOrgid());
+				medialist.setBranchid(bundle.getBranchid());
 				medialist.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
 				medialist.setType(Medialist.Type_Private);
 				medialist.setCreatestaffid(bundle.getCreatestaffid());
@@ -147,6 +148,7 @@ public class BundleServiceImpl implements BundleService {
 			} else if (layoutdtl.getRegion().getType().equals(Region.Type_TEXT)) {
 				Text text = new Text();
 				text.setOrgid(bundle.getOrgid());
+				text.setBranchid(bundle.getBranchid());
 				text.setName(bundle.getName() + "-" + layoutdtl.getRegionid());
 				text.setType(Medialist.Type_Private);
 				text.setCreatestaffid(bundle.getCreatestaffid());
@@ -198,6 +200,7 @@ public class BundleServiceImpl implements BundleService {
 					List<Medialistdtl> oldmedialistdtls;
 					if (oldMedialist == null) {
 						medialist.setOrgid(bundle.getOrgid());
+						medialist.setBranchid(bundle.getBranchid());
 						medialist.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 						medialist.setType(Medialist.Type_Private);
 						medialist.setCreatestaffid(bundle.getCreatestaffid());
@@ -229,6 +232,7 @@ public class BundleServiceImpl implements BundleService {
 					Text oldText = textMapper.selectByPrimaryKey("" + bundledtl.getObjid());
 					if (oldText == null) {
 						text.setOrgid(bundle.getOrgid());
+						text.setBranchid(bundle.getBranchid());
 						text.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 						text.setType(Medialist.Type_Private);
 						text.setCreatestaffid(bundle.getCreatestaffid());
@@ -243,6 +247,7 @@ public class BundleServiceImpl implements BundleService {
 					Stream oldStream = streamMapper.selectByPrimaryKey("" + bundledtl.getObjid());
 					if (oldStream == null) {
 						stream.setOrgid(bundle.getOrgid());
+						stream.setBranchid(bundle.getBranchid());
 						stream.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 						stream.setType(Medialist.Type_Private);
 						stream.setCreatestaffid(bundle.getCreatestaffid());
@@ -257,6 +262,7 @@ public class BundleServiceImpl implements BundleService {
 					Widget oldWidget = widgetMapper.selectByPrimaryKey("" + bundledtl.getObjid());
 					if (oldWidget == null) {
 						widget.setOrgid(bundle.getOrgid());
+						widget.setBranchid(bundle.getBranchid());
 						widget.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 						widget.setType(Medialist.Type_Private);
 						widget.setCreatestaffid(bundle.getCreatestaffid());
@@ -422,6 +428,7 @@ public class BundleServiceImpl implements BundleService {
 				if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
 					Medialist medialist = bundledtl.getMedialist();
 					medialist.setOrgid(bundle.getOrgid());
+					medialist.setBranchid(bundle.getBranchid());
 					medialist.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 					medialist.setType(Medialist.Type_Private);
 					medialist.setCreatestaffid(staff.getStaffid());
@@ -434,6 +441,7 @@ public class BundleServiceImpl implements BundleService {
 				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Text)) {
 					Text text = bundledtl.getText();
 					text.setOrgid(bundle.getOrgid());
+					text.setBranchid(bundle.getBranchid());
 					text.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 					text.setType(Medialist.Type_Private);
 					text.setCreatestaffid(staff.getStaffid());
@@ -442,6 +450,7 @@ public class BundleServiceImpl implements BundleService {
 				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Stream)) {
 					Stream stream = bundledtl.getStream();
 					stream.setOrgid(bundle.getOrgid());
+					stream.setBranchid(bundle.getBranchid());
 					stream.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 					stream.setType(Medialist.Type_Private);
 					stream.setCreatestaffid(staff.getStaffid());
@@ -450,6 +459,7 @@ public class BundleServiceImpl implements BundleService {
 				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
 					Widget widget = bundledtl.getWidget();
 					widget.setOrgid(bundle.getOrgid());
+					widget.setBranchid(bundle.getBranchid());
 					widget.setName(bundle.getName() + "-" + bundledtl.getRegionid());
 					widget.setType(Medialist.Type_Private);
 					widget.setCreatestaffid(staff.getStaffid());

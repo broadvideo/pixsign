@@ -154,34 +154,44 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="portlet-body">
-								<div class="table-toolbar">
-									<div class="btn-group">
-										<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
-										<ul class="dropdown-menu pull-right">
-											<div class="pre-scrollable" id="SelectBranchTree">
+								<div class="row">
+									<div class="col-md-2" id="BranchTreeDiv">
+									</div>
+									<div class="col-md-10" id="BranchContentDiv">
+										<div class="table-toolbar">
+											<!-- 
+											<div class="btn-group">
+												<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
+												<ul class="dropdown-menu pull-right">
+													<div class="pre-scrollable" id="SelectBranchTree">
+													</div>
+												</ul>
 											</div>
-										</ul>
-									</div>
-									<div class="btn-group">
-									<%
-										if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
-									%>
-										<button privilegeid="201010" class="btn green pix-full"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
-									<%
-										} else {
-									%>
-										<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
-									<%
-										}
-									%>
-									</div>
-									<div id="BranchBreadcrumb" class="page-breadcrumb breadcrumb">
+											-->
+											<div class="btn-group">
+											<%
+												if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
+											%>
+												<button privilegeid="201010" class="btn green pix-full"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
+											<%
+												} else {
+											%>
+												<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
+											<%
+												}
+											%>
+											</div>
+											<!-- 
+											<div id="BranchBreadcrumb" class="page-breadcrumb breadcrumb">
+											</div>
+											-->
+										</div>
+										<table id="MyTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
 								</div>
-								<table id="MyTable" class="table table-striped table-bordered table-hover">
-									<thead></thead>
-									<tbody></tbody>
-								</table>
 							</div>
 						</div>
 					</div>
@@ -363,15 +373,17 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-image.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-image.js?t=4"></script>
 <script>
 //上传文件的后缀
-var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
+	initBranchTree();
 	initMyTable();
 	initMyEditModal();
 	initUploadModal();
