@@ -36,7 +36,8 @@ response.setDateHeader("Expires",0);
 
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet"/>
+<!-- <link href="${static_ctx}/global/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet"/>  -->
+<link href="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
@@ -408,8 +409,8 @@ response.setDateHeader("Expires",0);
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component colorPick">
-																						<input type="text" name="color" value="#FFFFFF" class="form-control" />
-																						<span class="input-group-addon"><i></i></span>
+																						<input type="text" name="color" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
+																						<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
 																					</div>
 																				</div>
 																			</div>
@@ -446,8 +447,8 @@ response.setDateHeader("Expires",0);
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
-																						<input type="text" name="bgcolor" value="#000000" class="form-control" />
-																						<span class="input-group-addon"><i></i></span>
+																						<input type="text" name="bgcolor" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
+																						<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
 																					</div>
 																				</div>
 																			</div>
@@ -828,10 +829,10 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" type="text/javascript"></script>
+<!-- <script src="${static_ctx}/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" type="text/javascript"></script> -->
+<script src="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>
-
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
@@ -844,7 +845,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=7"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=6"></script>
 <script src="${base_ctx}/scripts/pix-wizard.js?t=5"></script>
 <script>

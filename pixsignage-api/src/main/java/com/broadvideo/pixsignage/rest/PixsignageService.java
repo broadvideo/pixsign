@@ -34,6 +34,7 @@ import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
@@ -49,6 +50,8 @@ public class PixsignageService {
 	private OrgMapper orgMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private VideoMapper videoMapper;
 	@Autowired
 	private DevicefileMapper devicefileMapper;
 	@Autowired
@@ -144,6 +147,19 @@ public class PixsignageService {
 				backupvideoJson.put("file", org.getBackupvideo().getFilename());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
+			} else {
+				Org defaultOrg = orgMapper.selectByPrimaryKey("1");
+				if (defaultOrg.getBackupvideo() != null) {
+					JSONObject backupvideoJson = new JSONObject();
+					// backupvideoJson.put("type", "video");
+					backupvideoJson.put("id", defaultOrg.getBackupvideoid());
+					backupvideoJson.put("url",
+							"http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+									+ "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
+					backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
+					backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
+					responseJson.put("backup_media", backupvideoJson);
+				}
 			}
 
 			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));

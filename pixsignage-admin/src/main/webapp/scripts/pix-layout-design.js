@@ -385,10 +385,62 @@ function enterLayoutdtlFocus(layoutdtl) {
 		$('.weatherflag').css("display", "block");
 	}
 	$('#LayoutdtlEditForm').loadJSON(layoutdtl);
-	$('.colorPick').colorpicker();
-	$('.colorPick').colorpicker('setValue', layoutdtl.color);
-	$('.bgcolorPick').colorpicker();
-	$('.bgcolorPick').colorpicker('setValue', layoutdtl.bgcolor);
+	//$('.colorPick').colorpicker();
+	//$('.colorPick').colorpicker('setValue', layoutdtl.color);
+	//$('.bgcolorPick').colorpicker();
+	//$('.bgcolorPick').colorpicker('setValue', layoutdtl.bgcolor);
+	
+	$('.colorPick').wColorPicker({
+	    theme           : 'classic',  // set theme
+	    opacity         : 0.8,        // opacity level
+	    color           : layoutdtl.color,  // set init color
+	    mode            : 'click',     // mode for palette (flat, hover, click)
+	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
+	    generateButton  : false,       // if mode not flat generate button or not
+	    dropperButton   : false,      // optional dropper button to use in other apps
+	    effect          : 'slide',    // only used when not in flat mode (none, slide, fade)
+	    showSpeed       : 200,        // show speed for effects
+	    hideSpeed       : 200,        // hide speed for effects
+	    onMouseover     : null,       // callback for color mouseover
+	    onMouseout      : null,       // callback for color mouseout
+	    onSelect        : function(color){
+	    	if (color.indexOf('#') == 0) {
+		        $(".colorPick i").css('background', color);
+		        $(".colorPick input").val(color);
+		        CurrentLayoutdtl.color = color;
+		        redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	    	}
+	    },
+	    onDropper       : null        // callback when dropper is clicked
+	});
+    $(".colorPick i").css('background', layoutdtl.color);
+    $(".colorPick input").val(layoutdtl.color);
+	$('.bgcolorPick').wColorPicker({
+	    theme           : 'classic',  // set theme
+	    opacity         : 0.8,        // opacity level
+	    color           : layoutdtl.bgcolor,  // set init color
+	    mode            : 'click',     // mode for palette (flat, hover, click)
+	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
+	    generateButton  : false,       // if mode not flat generate button or not
+	    dropperButton   : false,      // optional dropper button to use in other apps
+	    effect          : 'slide',    // only used when not in flat mode (none, slide, fade)
+	    showSpeed       : 200,        // show speed for effects
+	    hideSpeed       : 200,        // hide speed for effects
+	    onMouseover     : null,       // callback for color mouseover
+	    onMouseout      : null,       // callback for color mouseout
+	    onSelect        : function(color){
+	    	if (color.indexOf('#') == 0) {
+		        $(".bgcolorPick i").css('background', color);
+		        $(".bgcolorPick input").val(color);
+		        CurrentLayoutdtl.bgcolor = color;
+		        redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	    	}
+	    },
+	    onDropper       : null        // callback when dropper is clicked
+	});
+    $(".bgcolorPick i").css('background', layoutdtl.bgcolor);
+    $(".bgcolorPick input").val(layoutdtl.bgcolor);
+	
 	$(".intervalRange").ionRangeSlider({
 		min: 5,
 		max: 60,
@@ -526,7 +578,7 @@ $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
 	refreshSpinners();
 });	
 
-$("#LayoutdtlEditForm input,select").on("change", function(e) {
+$('#LayoutdtlEditForm input,select').on('change', function(e) {
 	CurrentLayoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 	CurrentLayoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
 	CurrentLayoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');

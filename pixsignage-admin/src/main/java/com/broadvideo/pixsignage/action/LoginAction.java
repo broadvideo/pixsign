@@ -117,10 +117,12 @@ public class LoginAction extends BaseAction {
 			return ERROR;
 		}
 
+		logger.info("Login start, username={}, password={}, md5={}, code={}", username, password,
+				CommonUtil.getPasswordMd5(username, password), code);
 		staff = staffMapper.login(username, CommonUtil.getPasswordMd5(username, password));
 		if (staff == null) {
-			logger.error("Login failed for staff not found, username=" + username + ", password="
-					+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+			logger.error("Login failed for username & password not match, username={}, password={}, md5={}, code={}",
+					username, password, CommonUtil.getPasswordMd5(username, password), code);
 			setErrorcode(-1);
 			return ERROR;
 		}
@@ -135,8 +137,8 @@ public class LoginAction extends BaseAction {
 			// VSP super user
 			Vsp vsp = vspMapper.selectByCode(code);
 			if (vsp == null) {
-				logger.error("Login failed for vsp not found, username=" + username + ", password="
-						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+				logger.error("Login failed for vsp not found, username={}, password={}, md5={}, code={}", username,
+						password, CommonUtil.getPasswordMd5(username, password), code);
 				setErrorcode(-1);
 				return ERROR;
 			}
@@ -147,8 +149,8 @@ public class LoginAction extends BaseAction {
 			// ORG super user
 			Org org = orgMapper.selectByCode(code);
 			if (org == null) {
-				logger.error("Login failed for org not found, username=" + username + ", password="
-						+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+				logger.error("Login failed for org not found, username={}, password={}, md5={}, code={}", username,
+						password, CommonUtil.getPasswordMd5(username, password), code);
 				setErrorcode(-1);
 				return ERROR;
 			}
@@ -162,8 +164,8 @@ public class LoginAction extends BaseAction {
 
 		if (staff.getOrg() != null && staff.getOrg().getExpireflag().equals("1")
 				&& staff.getOrg().getExpiretime().getTime() < Calendar.getInstance().getTime().getTime()) {
-			logger.error("Login failed for time expire, username=" + username + ", password="
-					+ CommonUtil.getPasswordMd5(username, password) + ", code=" + code);
+			logger.error("Login failed for time expire, username={}, password={}, md5={}, code={}", username, password,
+					CommonUtil.getPasswordMd5(username, password), code);
 			setErrorcode(-1);
 			return ERROR;
 		}
