@@ -26,7 +26,6 @@ import com.broadvideo.pixsignage.domain.Task;
 import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
-import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutdtlMapper;
 import com.broadvideo.pixsignage.persistence.LayoutscheduleMapper;
@@ -54,8 +53,6 @@ public class LayoutServiceImpl implements LayoutService {
 	@Autowired
 	private RegionscheduleMapper regionscheduleMapper;
 	@Autowired
-	private DevicefileMapper devicefileMapper;
-	@Autowired
 	private MedialistMapper medialistMapper;
 	@Autowired
 	private TextMapper textMapper;
@@ -64,6 +61,8 @@ public class LayoutServiceImpl implements LayoutService {
 	protected ResourceBundleMessageSource messageSource;
 	@Autowired
 	private BundleService bundleService;
+	@Autowired
+	private DevicefileService devicefileService;
 
 	public Layout selectByPrimaryKey(String layoutid) {
 		return layoutMapper.selectByPrimaryKey(layoutid);
@@ -269,11 +268,7 @@ public class LayoutServiceImpl implements LayoutService {
 				}
 			}
 
-			devicefileMapper.deleteDeviceVideoFiles("" + device.getDeviceid());
-			devicefileMapper.deleteDeviceImageFiles("" + device.getDeviceid());
-			devicefileMapper.insertDeviceVideoFiles("" + device.getDeviceid());
-			devicefileMapper.insertDeviceImageFiles("" + device.getDeviceid());
-
+			devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
 			bundleService.syncBundleLayout("1", "" + device.getDeviceid());
 			bundleService.syncBundleRegions("1", "" + device.getDeviceid());
 		}
@@ -317,11 +312,7 @@ public class LayoutServiceImpl implements LayoutService {
 				}
 			}
 
-			devicefileMapper.deleteDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.insertDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
-
+			devicefileService.refreshDevicefiles("2", "" + devicegroup.getDevicegroupid());
 			bundleService.syncBundleLayout("2", "" + devicegroup.getDevicegroupid());
 			bundleService.syncBundleRegions("2", "" + devicegroup.getDevicegroupid());
 		}
@@ -356,10 +347,7 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		for (int i = 0; i < regionschedules.length; i++) {
 			regionscheduleMapper.insertSelective(regionschedules[i]);
-			devicefileMapper.deleteDeviceVideoFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.deleteDeviceImageFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.insertDeviceVideoFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.insertDeviceImageFiles("" + regionschedules[i].getBindid());
+			devicefileService.refreshDevicefiles(regionschedules[i].getBindtype(), "" + regionschedules[i].getBindid());
 		}
 	}
 
@@ -370,10 +358,7 @@ public class LayoutServiceImpl implements LayoutService {
 		}
 		for (int i = 0; i < regionschedules.length; i++) {
 			regionscheduleMapper.insertSelective(regionschedules[i]);
-			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedules[i].getBindid());
-			devicefileMapper.insertDevicegroupImageFiles("" + regionschedules[i].getBindid());
+			devicefileService.refreshDevicefiles(regionschedules[i].getBindtype(), "" + regionschedules[i].getBindid());
 		}
 	}
 

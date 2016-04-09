@@ -41,7 +41,6 @@ import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.BundlescheduleMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutdtlMapper;
@@ -77,8 +76,6 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 	@Autowired
-	private DevicefileMapper devicefileMapper;
-	@Autowired
 	private RegionMapper regionMapper;
 	@Autowired
 	private MedialistMapper medialistMapper;
@@ -107,6 +104,8 @@ public class BundleServiceImpl implements BundleService {
 	private WidgetService widgetService;
 	@Autowired
 	private LayoutService layoutService;
+	@Autowired
+	private DevicefileService devicefileService;
 
 	public int selectCount(String orgid, String branchid, String search) {
 		return bundleMapper.selectCount(orgid, branchid, search);
@@ -281,6 +280,11 @@ public class BundleServiceImpl implements BundleService {
 				bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
 			}
 		}
+
+		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getBundleid());
+		for (HashMap<String, Object> bindObj : bindList) {
+			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+		}
 	}
 
 	@Transactional
@@ -327,10 +331,7 @@ public class BundleServiceImpl implements BundleService {
 			 * regionscheduleMapper.insertSelective(regionschedule); }
 			 */
 
-			devicefileMapper.deleteDeviceVideoFiles("" + device.getDeviceid());
-			devicefileMapper.deleteDeviceImageFiles("" + device.getDeviceid());
-			devicefileMapper.insertDeviceVideoFiles("" + device.getDeviceid());
-			devicefileMapper.insertDeviceImageFiles("" + device.getDeviceid());
+			devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
 		}
 
 		// Handle devicegroup bundleschedule
@@ -377,10 +378,7 @@ public class BundleServiceImpl implements BundleService {
 			 * regionscheduleMapper.insertSelective(regionschedule); }
 			 */
 
-			devicefileMapper.deleteDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + devicegroup.getDevicegroupid());
-			devicefileMapper.insertDevicegroupImageFiles("" + devicegroup.getDevicegroupid());
+			devicefileService.refreshDevicefiles("2", "" + devicegroup.getDevicegroupid());
 		}
 
 		// Handle sync
@@ -474,16 +472,15 @@ public class BundleServiceImpl implements BundleService {
 	}
 
 	@Transactional
-	public void addBundleschedules(Bundleschedule[] bundleschedules, Device[] devices) {
-		for (int i = 0; i < devices.length; i++) {
-			bundlescheduleMapper.deleteByDtl("1", "" + devices[i].getDeviceid(), null, null, null);
-		}
-		for (int i = 0; i < bundleschedules.length; i++) {
-			bundlescheduleMapper.insertSelective(bundleschedules[i]);
-			devicefileMapper.deleteDeviceVideoFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.deleteDeviceImageFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.insertDeviceVideoFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.insertDeviceImageFiles("" + bundleschedules[i].getBindid());
+	public void addBundleschedules(Bundleschedule[] bundleschedules) {
+		if (bundleschedules.length > 0) {
+			String bindtype = bundleschedules[0].getBindtype();
+			String bindid = "" + bundleschedules[0].getBindid();
+			bundlescheduleMapper.deleteByDtl(bindtype, bindid, null, null, null);
+			for (int i = 0; i < bundleschedules.length; i++) {
+				bundlescheduleMapper.insertSelective(bundleschedules[i]);
+			}
+			devicefileService.refreshDevicefiles(bindtype, bindid);
 		}
 	}
 
@@ -494,10 +491,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 		for (int i = 0; i < bundleschedules.length; i++) {
 			bundlescheduleMapper.insertSelective(bundleschedules[i]);
-			devicefileMapper.deleteDevicegroupVideoFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + bundleschedules[i].getBindid());
-			devicefileMapper.insertDevicegroupImageFiles("" + bundleschedules[i].getBindid());
+			devicefileService.refreshDevicefiles(bundleschedules[i].getBindtype(), "" + bundleschedules[i].getBindid());
 		}
 	}
 

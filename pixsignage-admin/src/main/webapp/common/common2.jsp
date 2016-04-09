@@ -37,7 +37,17 @@
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
+<%
+if (request.getServerName().startsWith("hyyp.")) {
+%>
+<link href="${static_ctx}/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
+<%
+} else {
+%>
 <link href="${static_ctx}/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color" />
+<%
+}
+%>
 <link href="${static_ctx}/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="../favicon.ico" />
@@ -126,7 +136,17 @@ function hasPrivilege(privilegeid) {
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
 				<a href="main.jsp">
-				<img src="${base_ctx}/img/logo-big.png?t=0" height="20" alt="logo" class="logo-default"/>
+<%
+if (request.getServerName().startsWith("hyyp.")) {
+%>
+				<img src="${base_ctx}/img/hyyp/logo.png?t=0" height="40" alt="logo"/>
+<%
+} else {
+%>
+				<img src="${base_ctx}/img/default/logo.png?t=0" height="40" alt="logo"/>
+<%
+}
+%>
 				</a>
 				<div class="menu-toggler sidebar-toggler hide">
 				</div>

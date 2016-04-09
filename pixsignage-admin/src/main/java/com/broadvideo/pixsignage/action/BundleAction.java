@@ -158,12 +158,7 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doBundleschedulesAdd() {
 		try {
-			if (devices != null) {
-				bundleService.addBundleschedules(bundleschedules, devices);
-			}
-			if (devicegroups != null) {
-				bundleService.addBundleschedules(bundleschedules, devicegroups);
-			}
+			bundleService.addBundleschedules(bundleschedules);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doBundleschedulesAdd exception, ", ex);

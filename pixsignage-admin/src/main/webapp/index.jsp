@@ -84,7 +84,7 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by VideoExpress</div>
+	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1</div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

@@ -37,7 +37,6 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<!-- 终端文件列表对话框  -->
 		<div id="DeviceFileModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -210,22 +209,18 @@ response.setDateHeader("Expires",0);
 
 	</div>
 	
-	<!-- BEGIN FOOTER -->
-	<div class="footer">
-		<div class="footer-inner">
+	<div class="page-footer">
+		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
-		<div class="footer-tools">
-			<span class="go-top">
-			<i class="fa fa-angle-up"></i>
-			</span>
+		<div class="scroll-to-top">
+			<i class="icon-arrow-up"></i>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   

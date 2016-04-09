@@ -3,7 +3,6 @@ package com.broadvideo.pixsignage.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -43,6 +42,12 @@ public class SecurityFilter implements Filter {
 			}
 		}
 
+		if (request.getServerName().startsWith("hyyp.")) {
+			redirectURL = "/hyyp.jsp";
+		} else {
+			redirectURL = "/index.jsp";
+		}
+
 		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
 				|| session.getAttribute(CommonConstants.SESSION_SUBSYSTEM) == null) {
 			response.sendRedirect(request.getContextPath() + redirectURL);
@@ -76,13 +81,8 @@ public class SecurityFilter implements Filter {
 		this.filterConfig = filterConfig;
 		redirectURL = filterConfig.getInitParameter("redirectURL");
 
-		String s = filterConfig.getInitParameter("excludeLoginURLs");
-		if (excludeLoginURLs != null) {
-			StringTokenizer st = new StringTokenizer(s, ";");
-			excludeLoginURLs.clear();
-			while (st.hasMoreTokens()) {
-				excludeLoginURLs.add(st.nextToken());
-			}
-		}
+		excludeLoginURLs.add("/index.jsp");
+		excludeLoginURLs.add("/hyyp.jsp");
+		excludeLoginURLs.add("/login.action");
 	}
 }

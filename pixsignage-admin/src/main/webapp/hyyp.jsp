@@ -25,7 +25,7 @@
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/pages/css/login-soft.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/pages/css/login3.css" rel="stylesheet" type="text/css" />
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN THEME STYLES -->
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
@@ -38,19 +38,18 @@
 </head>
 <!-- END HEAD -->
 
-<body class="login">
+<body class="login" style="background-color: #E1E1E1 !important;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/logo-big.png?t=0" height="120" alt="" />
+		<img src="${base_ctx}/img/hyyp/logo.png?t=0" alt="" />
 	</div>
 	
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-		<form id="OrgLoginForm" class="login-form" method="post">
-			<input type="hidden" name="subsystem" value="2" />
-			<h3 class="form-title"><spring:message code="global.login.orghint"/></h3>
+		<form id="LoginForm" class="login-form" method="post">
+			<h3 class="form-title"><spring:message code="global.login.hint"/></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>请输入用户名和密码</span>
@@ -72,20 +71,10 @@
 					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="${global_password}" name="password"/>
 				</div>
 			</div>
-			<div class="form-group">
-				<spring:message code="global.login.orgcode" var="global_login_orgcode"/>
-				<label class="control-label visible-ie8 visible-ie9">${global_login_orgcode}</label>
-				<div class="input-icon">
-					<i class="fa fa-bookmark-o"></i> <input class="form-control placeholder-no-fix" type="text" autocomplete="off"
-						placeholder="${global_login_orgcode}" name="code" />
-				</div>
-			</div>
 			<div class="form-actions">
 				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
-				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
+				<button type="submit" class="btn green-haze pull-right"><spring:message code="global.login.login"/> <i class="m-icon-swapright m-icon-white"></i></button>
 				</button>
-	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
-	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
 			</div>
 			<br/>
 		</form>
@@ -93,7 +82,7 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by VideoExpress&nbsp;&nbsp;粤ICP备14037592号-1</div>
+	<div class="copyright">Powered by EzTrade & BroadVideo 粤ICP备14037592号-1</div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

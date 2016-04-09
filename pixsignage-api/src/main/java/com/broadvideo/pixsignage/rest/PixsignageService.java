@@ -32,10 +32,9 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.service.BundleService;
+import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 
@@ -51,14 +50,12 @@ public class PixsignageService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 	@Autowired
-	private VideoMapper videoMapper;
-	@Autowired
-	private DevicefileMapper devicefileMapper;
-	@Autowired
 	private CrashreportMapper crashreportMapper;
 
 	@Autowired
 	private BundleService bundleService;
+	@Autowired
+	private DevicefileService devicefileService;
 	@Autowired
 	private WeatherService weatherService;
 
@@ -247,8 +244,10 @@ public class PixsignageService {
 			JSONObject responseJson;
 			if (device.getDevicegroupid() > 0) {
 				responseJson = bundleService.generateBundleLayoutJson("2", "" + device.getDevicegroupid());
+				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
 			} else {
 				responseJson = bundleService.generateBundleLayoutJson("1", "" + device.getDeviceid());
+				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
 			}
 			responseJson.put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service get_layout response: {}", responseJson.toString());
@@ -386,24 +385,24 @@ public class PixsignageService {
 				String status = fileJson.getString("status");
 				String desc = fileJson.getString("desc");
 				if (type.equals("video")) {
-					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "1",
+					Devicefile devicefile = devicefileService.selectByDeviceMedia("" + device.getDeviceid(), "1",
 							"" + id);
 					if (devicefile != null) {
 						devicefile.setProgress(progress);
 						devicefile.setStatus(status);
 						devicefile.setDescription(desc);
 						devicefile.setUpdatetime(Calendar.getInstance().getTime());
-						devicefileMapper.updateByPrimaryKeySelective(devicefile);
+						devicefileService.updateDevicefile(devicefile);
 					}
 				} else if (type.equals("image")) {
-					Devicefile devicefile = devicefileMapper.selectByDeviceMedia("" + device.getDeviceid(), "2",
+					Devicefile devicefile = devicefileService.selectByDeviceMedia("" + device.getDeviceid(), "2",
 							"" + id);
 					if (devicefile != null) {
 						devicefile.setProgress(progress);
 						devicefile.setStatus(status);
 						devicefile.setDescription(desc);
 						devicefile.setUpdatetime(Calendar.getInstance().getTime());
-						devicefileMapper.updateByPrimaryKeySelective(devicefile);
+						devicefileService.updateDevicefile(devicefile);
 					}
 				}
 			}

@@ -158,23 +158,19 @@ response.setDateHeader("Expires",0);
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
-	<!-- BEGIN FOOTER -->
-	<div class="footer">
-		<div class="footer-inner">
+	
+	<div class="page-footer">
+		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<spring:message code="global.copyright"/>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
-		<div class="footer-tools">
-			<span class="go-top">
-			<i class="fa fa-angle-up"></i>
-			</span>
+		<div class="scroll-to-top">
+			<i class="icon-arrow-up"></i>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   

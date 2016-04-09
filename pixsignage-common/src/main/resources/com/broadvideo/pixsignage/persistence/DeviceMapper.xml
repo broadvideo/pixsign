@@ -112,7 +112,7 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update device set status='9'
+    update device set status='0'
     where deviceid = '${deviceid}'
   </delete>
 

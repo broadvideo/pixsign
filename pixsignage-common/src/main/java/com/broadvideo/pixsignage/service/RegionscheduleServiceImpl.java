@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Regionschedule;
-import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 
 @Service("regionscheduleService")
@@ -17,7 +16,7 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 	@Autowired
 	private RegionscheduleMapper regionscheduleMapper;
 	@Autowired
-	private DevicefileMapper devicefileMapper;
+	private DevicefileService devicefileService;
 
 	public List<Regionschedule> selectList(String bindtype, String bindid, String regionid, String playmode,
 			String fromdate, String todate) {
@@ -37,17 +36,7 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(regionschedule.getStarttime()));
 		}
 		regionscheduleMapper.insertSelective(regionschedule);
-		if (regionschedule.getBindtype().equals("1")) {
-			devicefileMapper.deleteDeviceVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.deleteDeviceImageFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDeviceVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDeviceImageFiles("" + regionschedule.getBindid());
-		} else if (regionschedule.getBindtype().equals("2")) {
-			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDevicegroupImageFiles("" + regionschedule.getBindid());
-		}
+		devicefileService.refreshDevicefiles(regionschedule.getBindtype(), "" + regionschedule.getBindid());
 	}
 
 	@Transactional
@@ -59,17 +48,7 @@ public class RegionscheduleServiceImpl implements RegionscheduleService {
 	public void deleteRegionschedule(String regionscheduleid) {
 		Regionschedule regionschedule = regionscheduleMapper.selectByPrimaryKey(regionscheduleid);
 		regionscheduleMapper.deleteByPrimaryKey(regionscheduleid);
-		if (regionschedule.getBindtype().equals("1")) {
-			devicefileMapper.deleteDeviceVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.deleteDeviceImageFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDeviceVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDeviceImageFiles("" + regionschedule.getBindid());
-		} else if (regionschedule.getBindtype().equals("2")) {
-			devicefileMapper.deleteDevicegroupVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.deleteDevicegroupImageFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDevicegroupVideoFiles("" + regionschedule.getBindid());
-			devicefileMapper.insertDevicegroupImageFiles("" + regionschedule.getBindid());
-		}
+		devicefileService.refreshDevicefiles(regionschedule.getBindtype(), "" + regionschedule.getBindid());
 	}
 
 }

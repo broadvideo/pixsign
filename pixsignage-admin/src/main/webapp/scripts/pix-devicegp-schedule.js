@@ -1011,7 +1011,7 @@ $('[type=submit]', $('#BundleScheduleModal')).on('click', function(event) {
 	$.ajax({
 		type : 'POST',
 		url : 'bundle!addbundleschedules',
-		data : '{"devicegroups":[' + $.toJSON(currentDevicegroup) + '], "bundleschedules":' + $.toJSON(currentBundleschedules) + '}',
+		data : '{"bundleschedules":' + $.toJSON(currentBundleschedules) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		beforeSend: function ( xhr ) {

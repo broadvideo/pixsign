@@ -27,9 +27,7 @@ public interface BundleService {
 
 	public void handleWizard(Staff staff, Bundle bundle, Device[] devices, Devicegroup[] devicegroups) throws Exception;
 
-	public void addBundleschedules(Bundleschedule[] bundleschedules, Device[] devices);
-
-	public void addBundleschedules(Bundleschedule[] bundleschedules, Devicegroup[] devicegroups);
+	public void addBundleschedules(Bundleschedule[] bundleschedules);
 
 	public void syncBundleLayout(String bindtype, String bindid) throws Exception;
 

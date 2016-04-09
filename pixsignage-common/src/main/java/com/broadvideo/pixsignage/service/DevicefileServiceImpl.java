@@ -46,10 +46,17 @@ public class DevicefileServiceImpl implements DevicefileService {
 	}
 
 	@Transactional
-	public void updateDevicefileByDevice(String deviceid) {
-		List<Devicefile> imagefiles = devicefileMapper.selectList(deviceid, "1", null, null, null);
-		List<Devicefile> videofiles = devicefileMapper.selectList(deviceid, "2", null, null, null);
-
+	public void refreshDevicefiles(String bindtype, String bindid) {
+		if (bindtype.equals("1")) {
+			devicefileMapper.deleteDeviceVideoFiles(bindid);
+			devicefileMapper.deleteDeviceImageFiles(bindid);
+			devicefileMapper.insertDeviceVideoFiles(bindid);
+			devicefileMapper.insertDeviceImageFiles(bindid);
+		} else if (bindtype.equals("2")) {
+			devicefileMapper.deleteDevicegroupVideoFiles(bindid);
+			devicefileMapper.deleteDevicegroupImageFiles(bindid);
+			devicefileMapper.insertDevicegroupVideoFiles(bindid);
+			devicefileMapper.insertDevicegroupImageFiles(bindid);
+		}
 	}
-
 }
