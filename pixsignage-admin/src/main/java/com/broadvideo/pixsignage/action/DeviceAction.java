@@ -40,6 +40,10 @@ public class DeviceAction extends BaseDatatableAction {
 			}
 			String status = getParameter("status");
 			String devicegroupid = getParameter("devicegroupid");
+			String order = getParameter("order");
+			if (order == null || order.equals("")) {
+				order = "deviceid";
+			}
 
 			int count = deviceService.selectCount("" + getLoginStaff().getOrgid(), branchid, status, devicegroupid,
 					search);
@@ -48,7 +52,7 @@ public class DeviceAction extends BaseDatatableAction {
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Device> deviceList = deviceService.selectList("" + getLoginStaff().getOrgid(), branchid, status,
-					devicegroupid, search, start, length);
+					devicegroupid, search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}

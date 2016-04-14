@@ -65,44 +65,77 @@ function initDeviceTable() {
 		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false },
 						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 						{'sTitle' : common.view.online, 'mData' : 'onlineflag', 'bSortable' : false }],
-		'iDisplayLength' : 5,
+		'iDisplayLength' : 7,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#DeviceTable').dataTable().fnGetData(iDisplayIndex);
-
-			if (data['onlineflag'] == 9) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">' + common.view.offline + '</span>');
-			} else if (data['onlineflag'] == 1) {
+			if (aData.status == 0) {
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
+			} else if (aData.onlineflag == 1) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
-			} else if (data['onlineflag'] == 0) {
+			} else if (aData.onlineflag == 0) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+			} else if (aData.onlineflag == 9) {
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'order','value':'onlineflag' });
 		}
 	});
 	
 }
 
-function initTaskTable() {
-	var oTable = $('#VideoTable').dataTable({
-		'sDom' : 'rt',
-		'bProcessing' : true,
-		'bServerSide' : true,
-		'sAjaxSource' : myurls['video.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
-						{'sTitle' : common.view.uploadtime, 'mData' : 'createtime', 'bSortable' : false }],
-		'iDisplayLength' : 5,
-		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(1)', nRow).html(transferIntToComma(parseInt(aData['size'] / 1024)) + ' KB');
-			return nRow;
+function initDeviceChart() {
+	$.ajax({
+		url: 'stat!devices.action',
+		type : 'POST',
+		data : {},
+		dataType: "json",
+		success : function(data, status) {
+			if (data.errorcode == 0 && data.aaData.length > 0) {
+				var statdata = [];
+				for (var i=0; i<data.aaData.length; i++) {
+					statdata[i] = {};
+					if (data.aaData[i].label == '1-1') {
+						statdata[i].label = common.view.online + '(' + data.aaData[i].value + ')';
+					} else if (data.aaData[i].label == '1-9') {
+						statdata[i].label = common.view.offline + '(' + data.aaData[i].value + ')';
+					} else if (data.aaData[i].label == '0-9') {
+						statdata[i].label = common.view.unregister + '(' + data.aaData[i].value + ')';
+					} else {
+						statdata[i].label = common.view.unknown + '(' + data.aaData[i].value + ')';
+					}
+					statdata[i].data = data.aaData[i].value;
+				}
+
+			    $.plot($("#DeviceChart"), statdata, {
+			        series: {
+			            pie: {
+			                show: true,
+			                radius: 1,
+			                label: {
+			                    show: true,
+			                    radius: 3 / 4,
+			                    formatter: function(label, series) {
+		                            return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+			                    },
+			                    background: {
+			                        opacity: 0.5
+			                    }
+			                }
+			            }
+			        },
+			        legend: {
+			            show: true
+			        }
+			    });
+			}
 		}
 	});
-	
 }
+
 
 function initMediaChart() {
 	if (!jQuery.plot) {
@@ -163,32 +196,28 @@ function initMediaChart() {
 
 	$.plot("#MediaStatPlot", statdata, options);
 	
-	if (imageflag == 1) {
-		$.ajax({
-			url: myurls['stat'],
-			type : 'POST',
-			data : {'stattype': '1'},
-			dataType: "json",
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					onDataReceived(data.aaData, '1');
-				}
+	$.ajax({
+		url: myurls['stat'],
+		type : 'POST',
+		data : {'stattype': '1'},
+		dataType: "json",
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				onDataReceived(data.aaData, '1');
 			}
-		});
-	}
-	if (videoflag == 1) {
-		$.ajax({
-			url: myurls['stat'],
-			type : 'POST',
-			data : {'stattype': '2'},
-			dataType: "json",
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					onDataReceived(data.aaData, '2');
-				}
+		}
+	});
+	$.ajax({
+		url: myurls['stat'],
+		type : 'POST',
+		data : {'stattype': '2'},
+		dataType: "json",
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				onDataReceived(data.aaData, '2');
 			}
-		});
-	}
+		}
+	});
 	
 	function onDataReceived(data, type) {
 		var series = {};

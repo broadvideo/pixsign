@@ -3,32 +3,53 @@
 <mapper namespace="com.broadvideo.pixsignage.persistence.StatMapper" >
   <resultMap id="BaseResultMap" type="java.util.HashMap" >
     <result column="sequence" property="sequence" jdbcType="INTEGER" />
-    <result column="label" property="label" jdbcType="CHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
     <result column="value" property="value" jdbcType="BIGINT" />
   </resultMap>
 
-  <select id="selectVideoCount" resultMap="BaseResultMap" >
-    select count(1) as value, date(createtime) as label, DATEDIFF(DATE(NOW()),DATE(createtime)) AS sequence
+  <select id="statDevices" resultMap="BaseResultMap" >
+    select concat(status, '-', onlineflag) as label, count(*) as value
+    from device
+    where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    group by status, onlineflag
+    order by onlineflag, status desc
+  </select>
+
+  <select id="statVideoCount" resultMap="BaseResultMap" >
+    select count(1) as value, 
+    date(createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(createtime)) as sequence
     from video 
-    where orgid='${orgid}' and status='1'
+    where orgid = #{orgid} 
+    and status='1'
     group by date(createtime)
     having sequence &lt; 30
     order by label
   </select>
 
-  <select id="selectImageCount" resultMap="BaseResultMap" >
-    select count(1) as value, date(createtime) as label, DATEDIFF(DATE(NOW()),DATE(createtime)) AS sequence
+  <select id="statImageCount" resultMap="BaseResultMap" >
+    select count(1) as value, 
+    date(createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(createtime)) as sequence
     from image 
-    where orgid='${orgid}' and status='1'
+    where orgid = #{orgid} 
+    and status='1'
     group by date(createtime)
     having sequence &lt; 30
     order by label
   </select>
 
-  <select id="selectFilesizeSum" resultMap="BaseResultMap" >
-    select sum(df.size) as value, date(df.updatetime) as label, DATEDIFF(DATE(NOW()),DATE(df.updatetime)) AS sequence
+  <select id="statFilesizeSum" resultMap="BaseResultMap" >
+    select sum(df.size) as value, 
+    date(df.updatetime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(df.updatetime)) as sequence
     from devicefile df, device d
-    where d.orgid='${orgid}' and df.progress='100' and df.deviceid=d.deviceid
+    where d.orgid = #{orgid} 
+    and df.progress='100' 
+    and df.deviceid=d.deviceid
     group by date(df.updatetime)
     having sequence &lt; 30
     order by label

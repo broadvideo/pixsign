@@ -14,14 +14,6 @@
 	<filter>
 		<filter-name>securityFilter</filter-name>
 		<filter-class>com.broadvideo.pixsignage.filter.SecurityFilter</filter-class>
-		<init-param>
-			<param-name>redirectURL</param-name>
-			<param-value>/index.jsp</param-value>
-		</init-param>
-		<init-param>
-			<param-name>excludeLoginURLs</param-name>
-			<param-value>/index.jsp;/login.action</param-value>
-		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>securityFilter</filter-name>

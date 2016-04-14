@@ -989,6 +989,12 @@
 			</result>
 		</action>
 
+		<action name="stat!devices" method="statDevices" class="statAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="stat" method="doStat" class="statAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

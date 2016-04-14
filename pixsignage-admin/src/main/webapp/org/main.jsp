@@ -78,7 +78,7 @@ response.setDateHeader("Expires",0);
 									<i class="fa fa-bell-o"></i><spring:message code="global.main.title1"/>
 								</div>
 								<div class="actions">
-									<a href="device.jsp?CurrentP=20201&ParentP=202" class="btn btn-sm default easy-pie-chart-reload"><i
+									<a href="device.jsp?CurrentP=30201&ParentP=302" class="btn btn-sm default easy-pie-chart-reload"><i
 										class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
 								</div>
 							</div>
@@ -89,28 +89,19 @@ response.setDateHeader("Expires",0);
 								</table>
 							</div>
 						</div>
-						<!-- END TABLE PORTLET-->
 					</div>
 		
 					<div class="col-md-6 col-sm-6">
-						<div class="portlet box blue">
+						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bell-o"></i><spring:message code="global.main.title2"/>
-								</div>
-								<div class="actions">
-									<a href="video-int.jsp?CurrentP=20102&ParentP=201" class="btn btn-sm default easy-pie-chart-reload"><i
-										class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
+									<i class="fa fa-bar-chart-o"></i>终端统计
 								</div>
 							</div>
 							<div class="portlet-body">
-								<table id="VideoTable" class="table table-striped">
-									<thead></thead>
-									<tbody></tbody>
-								</table>
+								<div id="DeviceChart" class="chart"></div>
 							</div>
 						</div>
-						<!-- END TABLE PORTLET-->
 					</div>
 		
 				</div>
@@ -203,6 +194,7 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/flot/jquery.flot.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/flot/jquery.flot.resize.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -210,19 +202,16 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-main.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-main.js?t=5"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-var videoflag = <%=((Org) session.getAttribute(CommonConstants.SESSION_ORG)).getVideoflag()%>;
-var imageflag = <%=((Org) session.getAttribute(CommonConstants.SESSION_ORG)).getImageflag()%>;
-
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
 	initLicense();
 	initDeviceTable();
-	initTaskTable();
+	initDeviceChart();
 	initMediaChart();
 	initFileChart();
 });

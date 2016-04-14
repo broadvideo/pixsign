@@ -35,8 +35,8 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	public List<Device> selectList(String orgid, String branchid, String status, String devicegroupid, String search,
-			String start, String length) {
-		return deviceMapper.selectList(orgid, branchid, status, devicegroupid, search, start, length);
+			String start, String length, String order) {
+		return deviceMapper.selectList(orgid, branchid, status, devicegroupid, search, start, length, order);
 	}
 
 	public Device selectByPrimaryKey(String deviceid) {
@@ -84,7 +84,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void configall(String orgid) throws Exception {
 		Org org = orgMapper.selectByPrimaryKey(orgid);
-		List<Device> devices = deviceMapper.selectList(orgid, null, "1", null, null, null, null);
+		List<Device> devices = deviceMapper.selectList(orgid, null, "1", null, null, null, null, "deviceid");
 		for (Device device : devices) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);

@@ -79,7 +79,12 @@
     <if test="search != null">
       and (terminalid like #{search} or name like #{search} or position like #{search})
     </if>
-    order by deviceid
+    <if test="order != null and order == 'deviceid'">
+      order by deviceid
+    </if>
+    <if test="order != null and order == 'onlineflag'">
+      order by onlineflag, status desc, deviceid
+    </if>
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>

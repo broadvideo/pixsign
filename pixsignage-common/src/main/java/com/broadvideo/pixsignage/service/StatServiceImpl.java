@@ -14,15 +14,19 @@ public class StatServiceImpl implements StatService {
 	@Autowired
 	private StatMapper statMapper;
 
-	public List<HashMap<String, String>> selectVideoCount(String orgid) {
-		return statMapper.selectVideoCount(orgid);
+	public List<HashMap<String, String>> statDevices(String orgid, String branchid) {
+		return statMapper.statDevices(orgid, branchid);
 	}
 
-	public List<HashMap<String, String>> selectImageCount(String orgid) {
-		return statMapper.selectImageCount(orgid);
+	public List<HashMap<String, String>> statVideoCount(String orgid) {
+		return statMapper.statVideoCount(orgid);
 	}
 
-	public List<HashMap<String, String>> selectFilesizeSum(String orgid) {
-		return statMapper.selectFilesizeSum(orgid);
+	public List<HashMap<String, String>> statImageCount(String orgid) {
+		return statMapper.statImageCount(orgid);
+	}
+
+	public List<HashMap<String, String>> statFilesizeSum(String orgid) {
+		return statMapper.statFilesizeSum(orgid);
 	}
 }

@@ -16,6 +16,7 @@
   </resultMap>
   <resultMap id="NameResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
     <id column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   
@@ -39,7 +40,7 @@
   </select>
 
   <select id="selectNameByPrimaryKey" resultMap="NameResultMap" >
-    select branchid,name from branch
+    select branchid,name,parentid from branch
     where branchid = #{branchid}
   </select>
   

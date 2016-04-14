@@ -42,6 +42,10 @@ if (request.getServerName().startsWith("hyyp.")) {
 %>
 <link href="${static_ctx}/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
 <%
+} else if (request.getServerName().startsWith("pftx.")) {
+%>
+<link href="${static_ctx}/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
+<%
 } else {
 %>
 <link href="${static_ctx}/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color" />
@@ -141,6 +145,10 @@ if (request.getServerName().startsWith("hyyp.")) {
 %>
 				<img src="${base_ctx}/img/hyyp/logo.png?t=0" height="40" alt="logo"/>
 <%
+} else if (request.getServerName().startsWith("pftx.")) {
+%>
+				<img src="${base_ctx}/img/pftx/logo.png?t=0" height="40" alt="logo"/>
+<%
 } else {
 %>
 				<img src="${base_ctx}/img/default/logo.png?t=0" height="40" alt="logo"/>
@@ -159,6 +167,11 @@ if (request.getServerName().startsWith("hyyp.")) {
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
+					<li class="dropdown dropdown-user">
+						<div class="dropdown-toggle" style="color:#ffffff;">
+						<%=session_staff.getOrg().getName()%> - <%=session_staff.getBranch().getName()%>
+						</div>
+					</li>
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<li class="dropdown dropdown-user">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">

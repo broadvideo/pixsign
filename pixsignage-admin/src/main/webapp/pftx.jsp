@@ -11,7 +11,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>环宇优品数字标牌</title>
+<title>屏分天下数字标牌</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -41,7 +41,7 @@
 <body class="login" style="background-color: #E1E1E1 !important;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/hyyp/logo.png?t=0" alt="" />
+		<img src="${base_ctx}/img/pftx/logo.png?t=0" height="120" alt="" />
 	</div>
 	
 	<!-- END LOGO -->
@@ -82,7 +82,7 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by EzTrade & BroadVideo 粤ICP备14037592号-1</div>
+	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1</div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

@@ -43,7 +43,7 @@ $('#MyTable').dataTable({
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		if (aData.status == 9) {
+		if (aData.status == 0) {
 			$('td:eq(3)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
 		} else if (aData.onlineflag == 9) {
 			$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');

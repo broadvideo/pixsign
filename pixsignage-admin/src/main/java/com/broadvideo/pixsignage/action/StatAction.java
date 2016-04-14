@@ -23,6 +23,31 @@ public class StatAction extends BaseDatatableAction {
 	@Autowired
 	private StatService statService;
 
+	public String statDevices() {
+		try {
+			String branchid = null;
+			if (getLoginStaff().getBranch().getParentid().intValue() > 0) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
+			System.out.println(branchid);
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<HashMap<String, String>> statList = statService.statDevices("" + getLoginStaff().getOrgid(), branchid);
+			for (int i = 0; i < statList.size(); i++) {
+				aaData.add(statList.get(i));
+			}
+			this.setAaData(aaData);
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("statDevices exception ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doStat() {
 		try {
 			String orgid = "" + getLoginStaff().getOrgid();
@@ -30,11 +55,11 @@ public class StatAction extends BaseDatatableAction {
 			List<Object> aaData = new ArrayList<Object>();
 			List<HashMap<String, String>> statList = new ArrayList<HashMap<String, String>>();
 			if (stattype.equals("0")) {
-				statList = statService.selectFilesizeSum(orgid);
+				statList = statService.statFilesizeSum(orgid);
 			} else if (stattype.equals("1")) {
-				statList = statService.selectVideoCount(orgid);
+				statList = statService.statVideoCount(orgid);
 			} else if (stattype.equals("2")) {
-				statList = statService.selectImageCount(orgid);
+				statList = statService.statImageCount(orgid);
 			}
 			for (int i = 0; i < statList.size(); i++) {
 				aaData.add(statList.get(i));
@@ -43,7 +68,7 @@ public class StatAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doStat exception ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

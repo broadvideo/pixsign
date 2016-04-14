@@ -47,12 +47,14 @@ function initMyTable() {
 			} else {
 				$('td:eq(4)', nRow).html('');
 			}
-			if (aData['onlineflag'] == 9) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
-			} else if (aData['onlineflag'] == 1) {
+			if (aData.status == 0) {
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
+			} else if (aData.onlineflag == 1) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
-			} else if (aData['onlineflag'] == 0) {
+			} else if (aData.onlineflag == 0) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+			} else if (aData.onlineflag == 9) {
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}
 			
 			$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');

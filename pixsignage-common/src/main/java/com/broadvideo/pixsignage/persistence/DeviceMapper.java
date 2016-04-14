@@ -16,7 +16,7 @@ public interface DeviceMapper {
 	List<Device> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "status") String status, @Param(value = "devicegroupid") String devicegroupid,
 			@Param(value = "search") String search, @Param(value = "start") String start,
-			@Param(value = "length") String length);
+			@Param(value = "length") String length, @Param(value = "order") String order);
 
 	Device selectByHardkey(@Param(value = "hardkey") String hardkey);
 

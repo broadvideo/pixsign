@@ -48,9 +48,8 @@
 	<!-- BEGIN LOGIN -->
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-		<form id="OrgLoginForm" class="login-form" method="post">
-			<input type="hidden" name="subsystem" value="2" />
-			<h3 class="form-title"><spring:message code="global.login.orghint"/></h3>
+		<form id="LoginForm" class="login-form" method="post">
+			<h3 class="form-title"><spring:message code="global.login.hint"/></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>请输入用户名和密码</span>
@@ -73,11 +72,11 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<spring:message code="global.login.orgcode" var="global_login_orgcode"/>
-				<label class="control-label visible-ie8 visible-ie9">${global_login_orgcode}</label>
+				<spring:message code="global.code" var="global_code"/>
+				<label class="control-label visible-ie8 visible-ie9">${global_login_code}</label>
 				<div class="input-icon">
 					<i class="fa fa-bookmark-o"></i> <input class="form-control placeholder-no-fix" type="text" autocomplete="off"
-						placeholder="${global_login_orgcode}" name="code" />
+						placeholder="${global_code}" name="code" />
 				</div>
 			</div>
 			<div class="form-actions">
@@ -93,7 +92,7 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by VideoExpress&nbsp;&nbsp;粤ICP备14037592号-1</div>
+	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1</div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
