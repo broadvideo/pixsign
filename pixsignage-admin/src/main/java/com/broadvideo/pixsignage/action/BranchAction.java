@@ -19,6 +19,7 @@ public class BranchAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Branch branch;
+	private String[] deviceids;
 
 	@Autowired
 	private BranchService branchService;
@@ -31,7 +32,7 @@ public class BranchAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doList exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -45,7 +46,7 @@ public class BranchAction extends BaseDatatableAction {
 			branchService.addBranch(branch);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doAdd exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -57,7 +58,7 @@ public class BranchAction extends BaseDatatableAction {
 			branchService.updateBranch(branch);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doUpdate exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -69,7 +70,7 @@ public class BranchAction extends BaseDatatableAction {
 			branchService.deleteBranch("" + branch.getBranchid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doDelete exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -90,7 +91,19 @@ public class BranchAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doValidate exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doAddDevices() {
+		try {
+			branchService.addDevices(branch, deviceids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doAddDevices exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -103,5 +116,13 @@ public class BranchAction extends BaseDatatableAction {
 
 	public void setBranch(Branch branch) {
 		this.branch = branch;
+	}
+
+	public String[] getDeviceids() {
+		return deviceids;
+	}
+
+	public void setDeviceids(String[] deviceids) {
+		this.deviceids = deviceids;
 	}
 }

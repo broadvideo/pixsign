@@ -68,7 +68,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void updateDeviceSelective(Device device) {
 		deviceMapper.updateByPrimaryKeySelective(device);
-		deviceMapper.updateDevicegroup();
+		deviceMapper.checkDevicegroup();
 	}
 
 	@Transactional

@@ -9,6 +9,8 @@ public interface BranchService {
 
 	public List<Branch> selectRoot(String orgid);
 
+	public void addDevices(Branch branch, String[] deviceids);
+
 	public void addBranch(Branch branch);
 
 	public void updateBranch(Branch branch);

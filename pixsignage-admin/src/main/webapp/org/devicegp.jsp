@@ -54,6 +54,11 @@ response.setDateHeader("Expires",0);
 												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.selecting"/></div>
 											</div>
 											<div class="portlet-body">
+												<div class="table-toolbar">
+													<div class="btn-group pull-right">
+														<button class="btn btn-sm blue pix-adddevicegpdtl"><spring:message code="global.add"/> <i class="fa fa-arrow-right"></i></button>
+													</div>
+												</div>
 												<table id="DeviceTable" class="table table-striped table-bordered table-hover">
 													<thead></thead>
 													<tbody></tbody>
@@ -67,6 +72,11 @@ response.setDateHeader("Expires",0);
 												<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
 											</div>
 											<div class="portlet-body">
+												<div class="table-toolbar">
+													<div class="btn-group">
+														<button class="btn btn-sm red pix-deletedevicegpdtl"><i class="fa fa-arrow-left"></i> <spring:message code="global.remove"/></button>
+													</div>
+												</div>
 												<table id="DevicegpDtlTable" class="table table-striped table-bordered table-hover">
 													<thead></thead>
 													<tbody></tbody>
@@ -219,7 +229,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-devicegp.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-devicegp.js?t=7"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
@@ -28,15 +27,17 @@ public class DevicegroupServiceImpl implements DevicegroupService {
 	}
 
 	@Transactional
-	public void addDevice(Devicegroup devicegroup, Device device) {
-		device.setDevicegroupid(devicegroup.getDevicegroupid());
-		deviceMapper.updateByPrimaryKeySelective(device);
+	public void addDevices(Devicegroup devicegroup, String[] deviceids) {
+		for (int i = 0; i < deviceids.length; i++) {
+			deviceMapper.updateDevicegroup(deviceids[i], "" + devicegroup.getDevicegroupid());
+		}
 	}
 
 	@Transactional
-	public void deleteDevice(Devicegroup devicegroup, Device device) {
-		device.setDevicegroupid(0);
-		deviceMapper.updateByPrimaryKeySelective(device);
+	public void deleteDevices(Devicegroup devicegroup, String[] deviceids) {
+		for (int i = 0; i < deviceids.length; i++) {
+			deviceMapper.updateDevicegroup(deviceids[i], "0");
+		}
 	}
 
 	@Transactional

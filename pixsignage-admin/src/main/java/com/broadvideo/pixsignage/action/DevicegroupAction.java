@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicegroupService;
@@ -22,7 +21,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Devicegroup devicegroup;
-	private Device device;
+	private String[] deviceids;
 
 	@Autowired
 	private DevicegroupService devicegroupService;
@@ -55,7 +54,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doList exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -69,7 +68,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroupService.addDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doAdd exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -81,7 +80,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroupService.updateDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doUpdate exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -93,31 +92,31 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroupService.deleteDevicegroup("" + devicegroup.getDevicegroupid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doDelete exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
 		}
 	}
 
-	public String doDeviceAdd() {
+	public String doAddDevices() {
 		try {
-			devicegroupService.addDevice(devicegroup, device);
+			devicegroupService.addDevices(devicegroup, deviceids);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doAddDevices exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
 		}
 	}
 
-	public String doDeviceDelete() {
+	public String doDeleteDevices() {
 		try {
-			devicegroupService.deleteDevice(devicegroup, device);
+			devicegroupService.deleteDevices(devicegroup, deviceids);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("doDeleteDevices exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -147,11 +146,11 @@ public class DevicegroupAction extends BaseDatatableAction {
 		this.devicegroup = devicegroup;
 	}
 
-	public Device getDevice() {
-		return device;
+	public String[] getDeviceids() {
+		return deviceids;
 	}
 
-	public void setDevice(Device device) {
-		this.device = device;
+	public void setDeviceids(String[] deviceids) {
+		this.deviceids = deviceids;
 	}
 }

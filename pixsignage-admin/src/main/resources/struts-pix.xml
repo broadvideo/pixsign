@@ -276,6 +276,16 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="branch!adddevices" method="doAddDevices" class="branchAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 
 		<action name="image!list" method="doList" class="imageAction">
@@ -568,15 +578,21 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicegroup!deviceadd" method="doDeviceAdd"
-			class="devicegroupAction">
+		<action name="devicegroup!adddevices" method="doAddDevices" class="devicegroupAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicegroup!devicedelete" method="doDeviceDelete"
-			class="devicegroupAction">
+		<action name="devicegroup!deletedevices" method="doDeleteDevices" class="devicegroupAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

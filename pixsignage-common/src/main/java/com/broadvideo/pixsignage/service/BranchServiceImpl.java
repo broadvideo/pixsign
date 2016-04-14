@@ -8,12 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 
 @Service("branchService")
 public class BranchServiceImpl implements BranchService {
 
 	@Autowired
 	private BranchMapper branchMapper;
+	@Autowired
+	private DeviceMapper deviceMapper;
 
 	public Branch selectByPrimaryKey(String branchid) {
 		return branchMapper.selectByPrimaryKey(branchid);
@@ -21,6 +24,14 @@ public class BranchServiceImpl implements BranchService {
 
 	public List<Branch> selectRoot(String orgid) {
 		return branchMapper.selectRoot(orgid);
+	}
+
+	@Transactional
+	public void addDevices(Branch branch, String[] deviceids) {
+		for (int i = 0; i < deviceids.length; i++) {
+			deviceMapper.updateBranch(deviceids[i], "" + branch.getBranchid());
+		}
+		deviceMapper.checkDevicegroup();
 	}
 
 	@Transactional

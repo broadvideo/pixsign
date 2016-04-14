@@ -38,7 +38,7 @@ public class ActivemqDailyTask {
 
 			List<Region> regionList = regionMapper.selectActiveList();
 
-			List<Device> deviceList = deviceMapper.selectList(null, null, "1", "0", null, null, null);
+			List<Device> deviceList = deviceMapper.selectList(null, null, "1", "0", null, null, null, "deviceid");
 			for (Device device : deviceList) {
 				logger.info("Insert layout & region schedule msgevent for device {}", device.getTerminalid());
 				insertLayoutMsgevent("1", device.getDeviceid());

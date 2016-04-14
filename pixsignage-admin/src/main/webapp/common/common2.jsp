@@ -169,7 +169,20 @@ if (request.getServerName().startsWith("hyyp.")) {
 				<ul class="nav navbar-nav pull-right">
 					<li class="dropdown dropdown-user">
 						<div class="dropdown-toggle" style="color:#ffffff;">
+						<% 
+						if (session_staff.getSubsystem().equals("0")) {
+						%>
+						<%
+						} else if (session_staff.getSubsystem().equals("1")) {
+						%>
+						<%=session_staff.getVsp().getName()%>
+						<%
+						} else if (session_staff.getSubsystem().equals("2")) {
+						%>
 						<%=session_staff.getOrg().getName()%> - <%=session_staff.getBranch().getName()%>
+						<%
+						}
+						%>
 						</div>
 					</li>
 					<!-- BEGIN USER LOGIN DROPDOWN -->

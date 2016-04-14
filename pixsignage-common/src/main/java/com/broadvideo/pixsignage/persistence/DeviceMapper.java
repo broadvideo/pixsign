@@ -36,7 +36,12 @@ public interface DeviceMapper {
 
 	int updateByPrimaryKey(Device record);
 
-	int updateDevicegroup();
+	int updateDevicegroup(@Param(value = "deviceid") String deviceid,
+			@Param(value = "devicegroupid") String devicegroupid);
+
+	int updateBranch(@Param(value = "deviceid") String deviceid, @Param(value = "branchid") String branchid);
+
+	int checkDevicegroup();
 
 	int updateOnlineflag();
 }

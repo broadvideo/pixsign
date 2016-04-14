@@ -122,6 +122,18 @@
   </delete>
 
   <update id="updateDevicegroup" >
+    update device
+    set devicegroupid = #{devicegroupid} 
+    where deviceid = #{deviceid}
+  </update>
+
+  <update id="updateBranch" >
+    update device
+    set branchid = #{branchid} 
+    where deviceid = #{deviceid}
+  </update>
+
+  <update id="checkDevicegroup" >
     update device d, devicegroup dg
     set d.devicegroupid = 0 
     where d.devicegroupid = dg.devicegroupid 
