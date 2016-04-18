@@ -97,7 +97,7 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 								</div>
-								<!-- 
+								<% if (((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranch().getParentid().intValue() == 0) { %>
 								<div class="form-group">
 									<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 									<div class="col-md-9">
@@ -107,7 +107,7 @@ response.setDateHeader("Expires",0);
 										</select>
 									</div>
 								</div>
-								 -->
+								<% } %>
 								<div class="form-group layout-ratio">
 									<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
 									<div class="col-md-9">
@@ -179,6 +179,19 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
+														<% if (((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranch().getParentid().intValue() == 0) { %>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.type"/></label>
+															<div class="col-md-9 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="type" value="0" checked> <spring:message code="global.layout.type_0"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="type" value="1"> <spring:message code="global.layout.type_1"/>
+																</label>  
+															</div>
+														</div>
+														<% } %>
 														<div class="form-group">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 															<div class="col-md-9">
@@ -491,7 +504,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=5" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
@@ -507,8 +520,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=7"></script>
-<script src="${base_ctx}/scripts/pix-layout.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=8"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=7"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

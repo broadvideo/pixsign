@@ -1,5 +1,4 @@
 var myurls = {
-	'layout.list' : 'layout!list.action',
 	'image.list' : 'image!list.action',
 	'device.list' : 'device!list.action',
 	'devicegroup.list' : 'devicegroup!list.action',
@@ -159,7 +158,7 @@ function initWizard() {
 function initTab1() {
     $.ajax({
 		type : 'POST',
-		url : 'layout!list.action',
+		url : 'layout!publiclist.action',
 		data : {},
 		success : function(data, status) {
 			if (data.errorcode == 0) {
@@ -281,6 +280,32 @@ function initData2() {
 	} else {
 		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
+	}
+	
+	if (myBranchid == CurrentLayout.branchid) {
+		$('#LayoutCol1').parent().unblock({
+            onUnblock: function() {
+            	$('#LayoutCol1').parent().css('position', '');
+            	$('#LayoutCol1').parent().css('zoom', '');
+            }
+        });
+	} else {
+		$('#LayoutCol1').parent().block({
+	        message: '',
+	        baseZ: 1000,
+	        centerY: false,
+	        css: {
+	            top: '10%',
+	            border: '0',
+	            padding: '0',
+	            backgroundColor: 'none'
+	        },
+	        overlayCSS: {
+	            backgroundColor: 'none',
+	            opacity: 0,
+	            cursor: 'not-allowed'
+	        }
+	    });
 	}
 }
 

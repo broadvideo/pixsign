@@ -82,12 +82,12 @@ var common = {
 		unlimited: '无限制',
 		downloaddata: '流量',
 
-		ratio_1: '横屏 16:9',
-		ratio_2: '竖屏 9:16',
-		ratio_3: '横屏 4:3',
-		ratio_4: '竖屏 3:4',
-		type_0: '普通布局',
-		type_1: '紧急布局',
+		ratio_1: '横屏16:9',
+		ratio_2: '竖屏9:16',
+		ratio_3: '横屏4:3',
+		ratio_4: '竖屏3:4',
+		type_0: '内部布局',
+		type_1: '公共布局',
 
 		table_ZeroRecords : '没有匹配的数据',
 		table_Processing : '<i class="fa fa-coffee"></i>　获取数据中...',

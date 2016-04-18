@@ -86,8 +86,8 @@ var common = {
 		ratio_2: '9:16',
 		ratio_3: '4:3',
 		ratio_4: '3:4',
-		type_0: 'Common Layout',
-		type_1: 'Urgent Layout',
+		type_0: 'Private',
+		type_1: 'Public',
 
 		table_ZeroRecords : 'No data available in table',
 		table_Processing : '<i class="fa fa-coffee"></i>　Processing...',

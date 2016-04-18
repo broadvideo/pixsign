@@ -742,6 +742,12 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="layout!publiclist" method="doPublicList" class="layoutAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="layout!add" method="doAdd" class="layoutAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

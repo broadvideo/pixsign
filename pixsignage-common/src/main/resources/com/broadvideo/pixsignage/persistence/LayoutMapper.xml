@@ -39,10 +39,17 @@
     where status = 1 
     and orgid = #{orgid}
     and branchid = #{branchid}
-    <if test="type != null">
-      and type = '${type}'
-    </if>
     order by layoutid desc 
+  </select>
+
+  <select id="selectPublicList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from layout
+    where status = 1 
+    and orgid = #{orgid}
+    and (branchid = #{branchid} or type = 1)
+    order by branchid desc, layoutid desc 
   </select>
 
   <delete id="deleteByPrimaryKey" >

@@ -68,8 +68,21 @@ public class LayoutServiceImpl implements LayoutService {
 		return layoutMapper.selectByPrimaryKey(layoutid);
 	}
 
-	public List<Layout> selectList(String orgid, String branchid, String type) {
-		List<Layout> layoutList = layoutMapper.selectList(orgid, branchid, type);
+	public List<Layout> selectList(String orgid, String branchid) {
+		List<Layout> layoutList = layoutMapper.selectList(orgid, branchid);
+		for (Layout layout : layoutList) {
+			for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
+				Region region = layoutdtl.getRegion();
+				if (region != null) {
+					region.translate(messageSource);
+				}
+			}
+		}
+		return layoutList;
+	}
+
+	public List<Layout> selectPublicList(String orgid, String branchid) {
+		List<Layout> layoutList = layoutMapper.selectPublicList(orgid, branchid);
 		for (Layout layout : layoutList) {
 			for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
 				Region region = layoutdtl.getRegion();

@@ -43,7 +43,7 @@ public class VideoTask {
 		logger.info("Begin to convert to preview mp4: {}", command);
 		int commandResult = CommonUtil.execCommand(command);
 		if (commandResult == 0) {
-			logger.error("Convert command success, result={}", commandResult);
+			logger.info("Convert command success, result={}", commandResult);
 			video.setPreviewflag("1");
 		} else {
 			logger.error("Convert command error, result={}", commandResult);

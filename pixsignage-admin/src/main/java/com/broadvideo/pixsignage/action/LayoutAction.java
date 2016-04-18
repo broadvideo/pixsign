@@ -43,14 +43,39 @@ public class LayoutAction extends BaseDatatableAction {
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
-			String type = getParameter("type");
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Layout> layoutList = layoutService.selectList("" + getLoginStaff().getOrgid(), branchid, type);
+			List<Layout> layoutList = layoutService.selectList("" + getLoginStaff().getOrgid(), branchid);
+			for (int i = 0; i < layoutList.size(); i++) {
+				aaData.add(layoutList.get(i));
+			}
+			this.setAaData(aaData);
+			this.setiTotalRecords(layoutList.size());
+			this.setiTotalDisplayRecords(layoutList.size());
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("LayoutAction doList exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doPublicList() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<Layout> layoutList = layoutService.selectPublicList("" + getLoginStaff().getOrgid(), branchid);
 			for (int i = 0; i < layoutList.size(); i++) {
 				aaData.add(layoutList.get(i));
 			}

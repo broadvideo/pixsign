@@ -315,6 +315,7 @@ function validLayout(layout) {
 		$('.help-block').remove();
 
 		layout.name = $('#LayoutEditForm input[name=name]').attr('value');
+		layout.type = $('#LayoutEditForm input[name=type]:checked').attr('value');
 		if ($('#LayoutBgImageSelect2').select2('data') != null) {
 			layout.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
 			layout.bgimage = {};

@@ -97,7 +97,7 @@ jQuery('#MyTable_wrapper .dataTables_length select').select2();
 
 $.ajax({
 	type : 'POST',
-	url : 'layout!list.action',
+	url : 'layout!publiclist.action',
 	data : {},
 	success : function(data, status) {
 		if (data.errorcode == 0) {

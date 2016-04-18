@@ -52,7 +52,7 @@ public class CommonUtil {
 			result = process.waitFor();
 		} catch (Exception ioe) {
 			result = -1;
-			logger.info(ioe.toString());
+			logger.error(ioe.toString());
 		}
 		return result;
 	}

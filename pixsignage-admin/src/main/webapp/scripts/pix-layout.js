@@ -73,13 +73,20 @@ var oTable = $('#MyTable').dataTable({
 		layouthtml += '<div class="col-md-4 col-xs-4">';
 		layouthtml += '<h3>' + aData.name + '</h3>';
 		if (aData.ratio == 1) {
-			layouthtml += '<h4>' + common.view.ratio_1 + '</h4>';
+			layouthtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span>';
 		} else if (aData.ratio == 2) {
-			layouthtml += '<h4>' + common.view.ratio_2 + '</h4>';
+			layouthtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span>';
 		} else if (aData.ratio == 3) {
-			layouthtml += '<h4>' + common.view.ratio_3 + '</h4>';
+			layouthtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_3 + '</span>';
 		} else if (aData.ratio == 4) {
-			layouthtml += '<h4>' + common.view.ratio_4 + '</h4>';
+			layouthtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_4 + '</span>';
+		}
+		if (aData.type == 0) {
+			layouthtml += ' <span class="label label-sm label-default">' + common.view.type_0 + '</span></h6>';
+		} else if (aData.type == 1) {
+			layouthtml += ' <span class="label label-sm label-warning">' + common.view.type_1 + '</span></h6>';
+		} else {
+			layouthtml += ' <span class="label label-sm label-default">' + common.view.ratio_3 + '</span></h6>';
 		}
 		layouthtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
 		layouthtml += '<div id="LayoutDiv-'+ aData.layoutid + '"></div></a>';

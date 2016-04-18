@@ -328,6 +328,19 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
+																			<% if (((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranch().getParentid().intValue() == 0) { %>
+																			<div class="form-group">
+																				<label class="col-md-3 control-label"><spring:message code="global.type"/></label>
+																				<div class="col-md-9 radio-list">
+																					<label class="radio-inline">
+																						<input type="radio" name="type" value="0" checked> <spring:message code="global.layout.type_0"/>
+																					</label>
+																					<label class="radio-inline">
+																						<input type="radio" name="type" value="1"> <spring:message code="global.layout.type_1"/>
+																					</label>  
+																				</div>
+																			</div>
+																			<% } %>
 																			<div class="form-group">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 																				<div class="col-md-9">
@@ -838,9 +851,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=8"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=6"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=6"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';
