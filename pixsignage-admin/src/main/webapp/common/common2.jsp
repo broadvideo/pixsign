@@ -151,7 +151,7 @@ if (request.getServerName().startsWith("hyyp.")) {
 <%
 } else {
 %>
-				<img src="${base_ctx}/img/default/logo.png?t=0" height="40" alt="logo"/>
+				<img src="${base_ctx}/img/default/logo.png?t=1" height="40" alt="logo"/>
 <%
 }
 %>

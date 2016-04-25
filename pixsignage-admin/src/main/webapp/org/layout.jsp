@@ -83,7 +83,6 @@ response.setDateHeader("Expires",0);
 					<div class="modal-body">
 						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 							<input type="hidden" name="layout.layoutid" value="0" />
-							<input type="hidden" name="layout.type" value="0" />
 							<input type="hidden" name="layout.status" value="1" />
 							<div class="form-body">
 								<div class="form-group">

@@ -11,7 +11,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Pix Signage</title>
+<title>Digital Signage</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -41,7 +41,7 @@
 <body class="login">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/logo-big.png?t=0" height="120" alt="" />
+		<img src="${base_ctx}/img/default/logo.png?t=1" height="120" alt="" />
 	</div>
 	
 	<!-- END LOGO -->
