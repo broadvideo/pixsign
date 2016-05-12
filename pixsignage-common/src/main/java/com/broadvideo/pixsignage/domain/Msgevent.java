@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Msgevent {
+	public final static String MsgType_Bundle_Schedule = "0";
 	public final static String MsgType_Layout_Schedule = "1";
 	public final static String MsgType_Region_Schedule = "2";
 	public final static String MsgType_VChannel_Info_VCSS = "3";

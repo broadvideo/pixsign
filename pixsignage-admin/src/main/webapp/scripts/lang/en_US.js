@@ -73,6 +73,7 @@ var common = {
 		unbind: 'Unbind',
 		design: 'Design',
 		option: 'Option',
+		export: 'Export',
 		addregion: 'Add Region',
 		password_reset: 'Reset Password',
 		unknown: 'Unknown',

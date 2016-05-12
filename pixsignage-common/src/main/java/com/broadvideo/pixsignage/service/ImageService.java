@@ -5,9 +5,10 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Image;
 
 public interface ImageService {
-	public int selectCount(String orgid, String branchid, String search);
+	public int selectCount(String orgid, String branchid, String objtype, String objid, String search);
 
-	public List<Image> selectList(String orgid, String branchid, String search, String start, String length);
+	public List<Image> selectList(String orgid, String branchid, String objtype, String objid, String search,
+			String start, String length);
 
 	public Image selectByPrimaryKey(String imageid);
 

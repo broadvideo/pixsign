@@ -15,19 +15,14 @@ function refreshMyTable() {
 }			
 
 function initMyTable() {
-	$(".fancybox").fancybox({
-		openEffect	: 'none',
-		closeEffect	: 'none'
-	});
-
 	$("#MyTable thead").css("display", "none");
 	$("#MyTable tbody").css("display", "none");
 	
 	var imagehtml = '';
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
-						[ 12, 24, 48, 96 ] 
+		'aLengthMenu' : [ [ 24, 48, 72, 96 ],
+						[ 24, 48, 72, 96 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
@@ -38,7 +33,7 @@ function initMyTable() {
 						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
 						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
 						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false }],
-		'iDisplayLength' : 12,
+		'iDisplayLength' : 24,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnPreDrawCallback': function (oSettings) {
@@ -55,10 +50,14 @@ function initMyTable() {
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
 			imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '">';
-			imagehtml += '<img src="/pixsigdata/image/preview/' + aData.filename + '" alt="' + aData.name + '" width="100%" /> </a>';
-			imagehtml += '<h6>' + aData.imageid + '：' + aData.name + '<br>';
-			var filesize = parseInt(aData.size / 1024);
-			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+			imagehtml += '<div class="thumbs">';
+			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+			imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+			
+			imagehtml += '</div></a>';
+			imagehtml += '<h6 class="pixtitle">' + aData.name + '<br>';
+			var filesize = '(' + aData.imageid + ') ' + parseInt(aData.size / 1024);
+			imagehtml += '' + transferIntToComma(filesize) + ' KB</h6>';
 			if (CurBranchid == MyBranchid) {
 				imagehtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
 				imagehtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
@@ -70,7 +69,16 @@ function initMyTable() {
 					imagehtml += '<hr/>';
 				}
 				$('#MediaContainer').append(imagehtml);
+				$('.thumbs').each(function(i) {
+					$(this).height($(this).parent().closest('div').width());
+				});
 			}
+			$(".fancybox").fancybox({
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				closeBtn : false,
+			});
+
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

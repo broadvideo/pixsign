@@ -89,6 +89,7 @@ public class BundlescheduleAction extends BaseDatatableAction {
 			if (bindtype != null && bindid != null) {
 				bundleService.syncBundleLayout(bindtype, bindid);
 				bundleService.syncBundleRegions(bindtype, bindid);
+				bundleService.syncBundleSchedule(bindtype, bindid);
 				logger.error("Bundle schedule sync success");
 			}
 			return SUCCESS;

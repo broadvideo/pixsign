@@ -587,13 +587,13 @@ public class BundleServiceImpl implements BundleService {
 		List<Bundleschedule> finalscheduleList = getBundlescheduleList48Hours(bindtype, bindid);
 		for (Bundleschedule bundleschedule : finalscheduleList) {
 			JSONObject scheduleJson = new JSONObject();
-			scheduleJson.put("layout_id", bundleschedule.getBundleid());
+			scheduleJson.put("layout_id", bundleschedule.getBundle().getLayoutid());
 			scheduleJson.put("start_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Full).format(bundleschedule.getTempstarttime()));
 			scheduleJson.put("start_time_seconds", (long) (bundleschedule.getTempstarttime().getTime() / 1000));
 			scheduleJsonArray.put(scheduleJson);
 
-			if (layoutHash.get(bundleschedule.getBundleid()) == null) {
+			if (layoutHash.get(bundleschedule.getBundle().getLayoutid()) == null) {
 				Layout layout = layoutMapper.selectByPrimaryKey("" + bundleschedule.getBundle().getLayoutid());
 				JSONObject layoutJson = new JSONObject();
 				layoutJsonArray.put(layoutJson);
@@ -649,7 +649,7 @@ public class BundleServiceImpl implements BundleService {
 					} else if (layoutdtl.getDirection().equals("5")) {
 						regionJson.put("direction", "right");
 					}
-					regionJson.put("speed", "" + layoutdtl.getSpeed());
+					regionJson.put("speed", Integer.parseInt(layoutdtl.getSpeed()));
 					regionJson.put("color", "" + layoutdtl.getColor());
 					regionJson.put("size", layoutdtl.getSize());
 					if (layoutdtl.getDateformat() == null) {
@@ -750,6 +750,7 @@ public class BundleServiceImpl implements BundleService {
 		JSONArray scheduleJsonArray = new JSONArray();
 		responseJson.put("schedules", scheduleJsonArray);
 
+		List<Video> videoList = new ArrayList<Video>();
 		// generate final json
 		List<Bundleschedule> finalscheduleList = getBundlescheduleList48Hours(bindtype, bindid);
 		for (Bundleschedule bundleschedule : finalscheduleList) {
@@ -790,8 +791,14 @@ public class BundleServiceImpl implements BundleService {
 									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
+							if (video.getRelate() != null) {
+								videoJson.put("relate_id", video.getRelateid());
+							} else {
+								videoJson.put("relate_id", 0);
+							}
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.put(videoJson);
+							videoList.add(video);
 						}
 					} else if (medialistdtl.getImage() != null) {
 						Image image = medialistdtl.getImage();
@@ -859,6 +866,20 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 
+		for (Video video : videoList) {
+			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", video.getRelateid());
+				videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+						+ "/pixsigdata" + video.getRelate().getFilepath());
+				videoJson.put("file", video.getRelate().getFilename());
+				videoJson.put("size", video.getRelate().getSize());
+				videoJson.put("relate_id", 0);
+				videoHash.put(video.getRelateid(), videoJson);
+				videoJsonArray.put(videoJson);
+			}
+		}
+
 		return responseJson;
 	}
 
@@ -866,10 +887,309 @@ public class BundleServiceImpl implements BundleService {
 		List<HashMap<String, Object>> bindList = layoutscheduleMapper.selectBindListByLayout(layoutid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			this.syncBundleLayout(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			this.syncBundleRegions(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			this.syncBundleSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 
+	public void syncBundle(String bundleid) throws Exception {
+		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle(bundleid);
+		for (HashMap<String, Object> bindObj : bindList) {
+			syncBundleLayout(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			syncBundleRegions(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			syncBundleSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+		}
+	}
+
+	public JSONObject generateBundleJson(String bundleid) {
+		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
+
+		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> textHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> dvbHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> widgetHash = new HashMap<Integer, JSONObject>();
+
+		JSONObject responseJson = new JSONObject();
+		responseJson.put("bundle_id", bundle.getBundleid());
+
+		JSONArray videoJsonArray = new JSONArray();
+		responseJson.put("videos", videoJsonArray);
+		JSONArray imageJsonArray = new JSONArray();
+		responseJson.put("images", imageJsonArray);
+		JSONArray textJsonArray = new JSONArray();
+		responseJson.put("texts", textJsonArray);
+		JSONArray streamJsonArray = new JSONArray();
+		responseJson.put("streams", streamJsonArray);
+		JSONArray dvbJsonArray = new JSONArray();
+		responseJson.put("dvbs", dvbJsonArray);
+		JSONArray widgetJsonArray = new JSONArray();
+		responseJson.put("widgets", widgetJsonArray);
+
+		Layout layout = bundle.getLayout();
+		responseJson.put("layout_id", layout.getLayoutid());
+		responseJson.put("width", layout.getWidth());
+		responseJson.put("height", layout.getHeight());
+		responseJson.put("bg_color", "#000000");
+		JSONObject layoutBgImageJson = new JSONObject();
+		responseJson.put("bg_image", layoutBgImageJson);
+		if (layout.getBgimage() != null) {
+			layoutBgImageJson.put("id", layout.getBgimageid());
+			layoutBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
+					+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layout.getBgimage().getFilepath());
+			layoutBgImageJson.put("file", layout.getBgimage().getFilename());
+			layoutBgImageJson.put("size", layout.getBgimage().getSize());
+			if (imageHash.get(layout.getBgimageid()) == null) {
+				imageHash.put(layout.getBgimageid(), layoutBgImageJson);
+				imageJsonArray.put(layoutBgImageJson);
+			}
+		} else {
+			layoutBgImageJson.put("id", 0);
+			layoutBgImageJson.put("url", "");
+			layoutBgImageJson.put("file", "");
+			layoutBgImageJson.put("size", 0);
+		}
+
+		List<Video> videoList = new ArrayList<Video>();
+		JSONArray regionJsonArray = new JSONArray();
+		responseJson.put("regions", regionJsonArray);
+		for (Bundledtl bundledtl : bundle.getBundledtls()) {
+			Layoutdtl layoutdtl = bundledtl.getLayoutdtl();
+			JSONObject regionJson = new JSONObject();
+			regionJsonArray.put(regionJson);
+			regionJson.put("region_id", layoutdtl.getRegionid());
+			regionJson.put("width", layoutdtl.getWidth());
+			regionJson.put("height", layoutdtl.getHeight());
+			regionJson.put("top", layoutdtl.getTopoffset());
+			regionJson.put("left", layoutdtl.getLeftoffset());
+			regionJson.put("zindex", layoutdtl.getZindex());
+			String opacity = Integer.toHexString(layoutdtl.getOpacity());
+			if (opacity.length() == 1) {
+				opacity = "0" + opacity;
+			}
+			regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
+			regionJson.put("type", layoutdtl.getRegion().getType());
+			regionJson.put("interval", layoutdtl.getIntervaltime());
+			regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
+			if (layoutdtl.getDirection().equals("1")) {
+				regionJson.put("direction", "none");
+			} else if (layoutdtl.getDirection().equals("2")) {
+				regionJson.put("direction", "up");
+			} else if (layoutdtl.getDirection().equals("3")) {
+				regionJson.put("direction", "down");
+			} else if (layoutdtl.getDirection().equals("4")) {
+				regionJson.put("direction", "left");
+			} else if (layoutdtl.getDirection().equals("5")) {
+				regionJson.put("direction", "right");
+			}
+			regionJson.put("speed", Integer.parseInt(layoutdtl.getSpeed()));
+			regionJson.put("color", "" + layoutdtl.getColor());
+			regionJson.put("size", layoutdtl.getSize());
+			if (layoutdtl.getDateformat() == null) {
+				regionJson.put("date_format", "yyyy-MM-dd");
+			} else {
+				regionJson.put("date_format", layoutdtl.getDateformat());
+			}
+			regionJson.put("volume", layoutdtl.getVolume());
+
+			JSONObject regionBgImageJson = new JSONObject();
+			regionJson.put("bg_image", regionBgImageJson);
+			if (layoutdtl.getBgimage() != null) {
+				regionBgImageJson.put("id", layoutdtl.getBgimageid());
+				regionBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
+						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layoutdtl.getBgimage().getFilepath());
+				regionBgImageJson.put("file", layoutdtl.getBgimage().getFilename());
+				regionBgImageJson.put("size", layoutdtl.getBgimage().getSize());
+				if (imageHash.get(layoutdtl.getBgimageid()) == null) {
+					imageHash.put(layoutdtl.getBgimageid(), regionBgImageJson);
+					imageJsonArray.put(regionBgImageJson);
+				}
+			} else {
+				regionBgImageJson.put("id", 0);
+				regionBgImageJson.put("url", "");
+				regionBgImageJson.put("file", "");
+				regionBgImageJson.put("size", 0);
+			}
+
+			JSONArray playlistJsonArray = new JSONArray();
+			regionJson.put("playlist", playlistJsonArray);
+
+			String objtype = bundledtl.getObjtype();
+			if (objtype.equals(Bundledtl.ObjType_Medialist)) {
+				List<Medialistdtl> medialistdtls = bundledtl.getMedialist().getMedialistdtls();
+				for (Medialistdtl medialistdtl : medialistdtls) {
+					if (medialistdtl.getVideo() != null) {
+						Video video = medialistdtl.getVideo();
+						playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
+						if (videoHash.get(medialistdtl.getObjid()) == null) {
+							JSONObject videoJson = new JSONObject();
+							videoJson.put("id", video.getVideoid());
+							videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
+									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
+							videoJson.put("file", video.getFilename());
+							videoJson.put("size", video.getSize());
+							if (video.getRelate() != null) {
+								videoJson.put("relate_id", video.getRelateid());
+							} else {
+								videoJson.put("relate_id", 0);
+							}
+							videoHash.put(video.getVideoid(), videoJson);
+							videoJsonArray.put(videoJson);
+							videoList.add(video);
+						}
+					} else if (medialistdtl.getImage() != null) {
+						Image image = medialistdtl.getImage();
+						playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
+						if (imageHash.get(medialistdtl.getObjid()) == null) {
+							JSONObject imageJson = new JSONObject();
+							imageJson.put("id", image.getImageid());
+							imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
+									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilepath());
+							imageJson.put("file", image.getFilename());
+							imageJson.put("size", image.getSize());
+							imageHash.put(image.getImageid(), imageJson);
+							imageJsonArray.put(imageJson);
+						}
+					}
+				}
+			} else if (objtype.equals(Bundledtl.ObjType_Text)) {
+				Text text = bundledtl.getText();
+				if (text != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "text").put("id", text.getTextid()));
+					if (textHash.get(text.getTextid()) == null) {
+						JSONObject textJson = new JSONObject();
+						textJson.put("id", text.getTextid());
+						textJson.put("text", text.getText());
+						textHash.put(text.getTextid(), textJson);
+						textJsonArray.put(textJson);
+					}
+				}
+			} else if (objtype.equals(Bundledtl.ObjType_Stream)) {
+				Stream stream = bundledtl.getStream();
+				if (stream != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
+					if (streamHash.get(stream.getStreamid()) == null) {
+						JSONObject streamJson = new JSONObject();
+						streamJson.put("id", stream.getStreamid());
+						streamJson.put("url", stream.getUrl());
+						streamHash.put(stream.getStreamid(), streamJson);
+						streamJsonArray.put(streamJson);
+					}
+				}
+			} else if (objtype.equals(Bundledtl.ObjType_Dvb)) {
+				Dvb dvb = bundledtl.getDvb();
+				if (dvb != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
+					if (dvbHash.get(dvb.getDvbid()) == null) {
+						JSONObject dvbJson = new JSONObject();
+						dvbJson.put("id", dvb.getDvbid());
+						dvbJson.put("frequency", dvb.getFrequency());
+						dvbHash.put(dvb.getDvbid(), dvbJson);
+						dvbJsonArray.put(dvbJson);
+					}
+				}
+			} else if (objtype.equals(Bundledtl.ObjType_Widget)) {
+				Widget widget = bundledtl.getWidget();
+				if (widget != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", widget.getWidgetid()));
+					if (widgetHash.get(widget.getWidgetid()) == null) {
+						JSONObject widgetJson = new JSONObject();
+						widgetJson.put("id", widget.getWidgetid());
+						widgetJson.put("url", widget.getUrl());
+						widgetHash.put(widget.getWidgetid(), widgetJson);
+						widgetJsonArray.put(widgetJson);
+					}
+				}
+			}
+
+		}
+
+		for (Video video : videoList) {
+			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", video.getRelateid());
+				videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+						+ "/pixsigdata" + video.getRelate().getFilepath());
+				videoJson.put("file", video.getRelate().getFilename());
+				videoJson.put("size", video.getRelate().getSize());
+				videoJson.put("relate_id", 0);
+				videoHash.put(video.getRelateid(), videoJson);
+				videoJsonArray.put(videoJson);
+			}
+		}
+
+		return responseJson;
+	}
+
+	@Transactional
+	public void syncBundleSchedule(String bindtype, String bindid) throws Exception {
+		Msgevent msgevent = new Msgevent();
+		msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
+		msgevent.setObjtype1(bindtype);
+		msgevent.setObjid1(Integer.parseInt(bindid));
+		msgevent.setObjtype2(Msgevent.ObjType_2_None);
+		msgevent.setObjid2(0);
+		msgevent.setStatus(Msgevent.Status_Wait);
+		msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, bindtype, bindid, null, null, null);
+		msgeventMapper.insertSelective(msgevent);
+
+		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "BUNDLE");
+		JSONObject msgBodyJson = generateBundleScheduleJson(msgevent.getObjtype1(), "" + msgevent.getObjid1());
+		msgJson.put("msg_body", msgBodyJson);
+
+		String topic = "";
+		if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Device)) {
+			topic = "device-" + msgevent.getObjid1();
+		} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_DeviceGroup)) {
+			topic = "group-" + msgevent.getObjid1();
+		}
+
+		ActiveMQUtil.publish(topic, msgJson.toString());
+		msgevent.setStatus(Msgevent.Status_Sent);
+		msgevent.setSendtime(Calendar.getInstance().getTime());
+		msgeventMapper.updateByPrimaryKeySelective(msgevent);
+	}
+
+	public JSONObject generateBundleScheduleJson(String bindtype, String bindid) {
+		// bindtype: 1-device 2-devicegroup
+		if (bindtype.equals("1")) {
+			Device device = deviceMapper.selectByPrimaryKey(bindid);
+			if (device.getDevicegroup() != null) {
+				bindtype = "2";
+				bindid = "" + device.getDevicegroupid();
+			}
+		}
+
+		HashMap<Integer, JSONObject> bundleHash = new HashMap<Integer, JSONObject>();
+
+		JSONObject responseJson = new JSONObject();
+		JSONArray bundleJsonArray = new JSONArray();
+		responseJson.put("bundles", bundleJsonArray);
+		JSONArray scheduleJsonArray = new JSONArray();
+		responseJson.put("bundle_schedules", scheduleJsonArray);
+
+		// generate final json
+		List<Bundleschedule> bundlescheduleList = bundlescheduleMapper.selectList(bindtype, bindid, "2", null, null);
+		for (Bundleschedule bundleschedule : bundlescheduleList) {
+			JSONObject scheduleJson = new JSONObject();
+			scheduleJson.put("bundle_id", bundleschedule.getBundle().getBundleid());
+			scheduleJson.put("playmode", "daily");
+			scheduleJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(bundleschedule.getStarttime()));
+			scheduleJsonArray.put(scheduleJson);
+			if (bundleHash.get(bundleschedule.getBundleid()) == null) {
+				JSONObject bundleJson = generateBundleJson("" + bundleschedule.getBundleid());
+				bundleJsonArray.put(bundleJson);
+				bundleHash.put(bundleschedule.getBundleid(), bundleJson);
+			}
+		}
+
+		return responseJson;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////
+	// Begin of backup
 	@Transactional
 	public void syncLayoutschedule1(String bindtype, String bindid) throws Exception {
 		Msgevent msgevent = new Msgevent();
@@ -1016,7 +1336,7 @@ public class BundleServiceImpl implements BundleService {
 					} else if (layoutdtl.getDirection().equals("5")) {
 						regionJson.put("direction", "right");
 					}
-					regionJson.put("speed", "" + layoutdtl.getSpeed());
+					regionJson.put("speed", Integer.parseInt(layoutdtl.getSpeed()));
 					regionJson.put("color", "" + layoutdtl.getColor());
 					regionJson.put("size", layoutdtl.getSize());
 					if (layoutdtl.getDateformat() == null) {
@@ -1201,6 +1521,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 
+		List<Video> videoList = new ArrayList<Video>();
 		// generate final json
 		for (Regionschedule regionschedule : finalscheduleList) {
 			JSONObject scheduleJson = new JSONObject();
@@ -1237,8 +1558,14 @@ public class BundleServiceImpl implements BundleService {
 									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
+							if (video.getRelate() != null) {
+								videoJson.put("relate_id", video.getRelateid());
+							} else {
+								videoJson.put("relate_id", 0);
+							}
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.put(videoJson);
+							videoList.add(video);
 						}
 					} else if (medialistdtl.getImage() != null) {
 						Image image = medialistdtl.getImage();
@@ -1306,6 +1633,20 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 
+		for (Video video : videoList) {
+			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", video.getRelateid());
+				videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+						+ "/pixsigdata" + video.getRelate().getFilepath());
+				videoJson.put("file", video.getRelate().getFilename());
+				videoJson.put("size", video.getRelate().getSize());
+				videoJson.put("relate_id", 0);
+				videoHash.put(video.getRelateid(), videoJson);
+				videoJsonArray.put(videoJson);
+			}
+		}
+
 		return responseJson;
 	}
 
@@ -1315,12 +1656,5 @@ public class BundleServiceImpl implements BundleService {
 			syncLayoutschedule1(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
-
-	public void syncBundle(String bundleid) throws Exception {
-		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle(bundleid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncBundleLayout(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-			syncBundleRegions(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-		}
-	}
+	// End of backup
 }

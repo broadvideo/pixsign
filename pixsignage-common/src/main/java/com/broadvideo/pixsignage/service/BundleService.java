@@ -40,4 +40,10 @@ public interface BundleService {
 	public void syncBundleLayoutByLayout(String layoutid) throws Exception;
 
 	public void syncBundle(String bundleid) throws Exception;
+
+	public JSONObject generateBundleJson(String bundleid);
+
+	public void syncBundleSchedule(String bindtype, String bindid) throws Exception;
+
+	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
 }

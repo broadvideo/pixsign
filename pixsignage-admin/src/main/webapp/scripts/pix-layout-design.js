@@ -22,7 +22,7 @@ function redrawLayout(div, layout, layoutdtl) {
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
 	if (layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<layout.layoutdtls.length; i++) {
 		div.append('<div id="LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid + '"></div>');
@@ -82,7 +82,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (layoutdtl.bgimage != null) {
-			layoutdtlhtml += '<img src="/pixsigdata/image/preview/' + layoutdtl.bgimage.filename + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.region.type == 1) {
@@ -113,6 +113,13 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
+		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 4) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'Video-In';
+		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
 	}
 
@@ -158,24 +165,36 @@ function refreshLayoutBgImageSelect1() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filename:item.filename, 
+							image:item, 
 						};
 					}),
 					more: more
 				};
 			}
 		},
-		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.image.height / data.image.width;
+			if (data.image.width < data.image.height) {
+				height = 40;
+				width = 40 * data.image.width / data.image.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
-		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.image.width < data.image.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filename: CurrentLayout.bgimage.filename });
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -205,24 +224,36 @@ function refreshRegionBgImageSelect() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filename:item.filename, 
+							image:item, 
 						};
 					}),
 					more: more
 				};
 			}
 		},
-		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.image.height / data.image.width;
+			if (data.image.width < data.image.height) {
+				height = 40;
+				width = 40 * data.image.width / data.image.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
-		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.image.width < data.image.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayoutdtl != null && CurrentLayoutdtl.bgimage != null) {
-				callback({id: CurrentLayoutdtl.bgimage.imageid, text: CurrentLayoutdtl.bgimage.name, filename: CurrentLayoutdtl.bgimage.filename });
+				callback({id: CurrentLayoutdtl.bgimage.imageid, text: CurrentLayoutdtl.bgimage.name, image: CurrentLayoutdtl.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -318,10 +349,7 @@ function validLayout(layout) {
 		layout.type = $('#LayoutEditForm input[name=type]:checked').attr('value');
 		if ($('#LayoutBgImageSelect2').select2('data') != null) {
 			layout.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
-			layout.bgimage = {};
-			layout.bgimage.imageid = $('#LayoutBgImageSelect2').select2('data').id;
-			layout.bgimage.name = $('#LayoutBgImageSelect2').select2('data').text;
-			layout.bgimage.filename = $('#LayoutBgImageSelect2').select2('data').filename;
+			layout.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
 		}
 		layout.description = $('#LayoutEditForm textarea').val();
 		return true;
@@ -345,10 +373,7 @@ function validLayoutdtl(layoutdtl) {
 
 		if ($('#RegionBgImageSelect').select2('data') != null) {
 			layoutdtl.bgimageid =  $('#RegionBgImageSelect').select2('data').id;
-			layoutdtl.bgimage = {};
-			layoutdtl.bgimage.imageid = $('#RegionBgImageSelect').select2('data').id;
-			layoutdtl.bgimage.name = $('#RegionBgImageSelect').select2('data').text;
-			layoutdtl.bgimage.filename = $('#RegionBgImageSelect').select2('data').filename;
+			layoutdtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
 		}
 		layoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
 		layoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
@@ -384,6 +409,11 @@ function enterLayoutdtlFocus(layoutdtl) {
 		$('.textflag').css("display", "none");
 		$('.dateflag').css("display", "none");
 		$('.weatherflag').css("display", "block");
+	} else {
+		$('.nontextflag').css("display", "none");
+		$('.textflag').css("display", "none");
+		$('.dateflag').css("display", "none");
+		$('.weatherflag').css("display", "none");
 	}
 	$('#LayoutdtlEditForm').loadJSON(layoutdtl);
 	//$('.colorPick').colorpicker();
@@ -539,10 +569,7 @@ $('#LayoutDiv').click(function(e){
 $('#RegionBgImageSelect').on('change', function(e) {
 	if ($('#RegionBgImageSelect').select2('data') != null) {
 		CurrentLayoutdtl.bgimageid = $('#RegionBgImageSelect').select2('data').id;
-		CurrentLayoutdtl.bgimage = {};
-		CurrentLayoutdtl.bgimage.imageid = $('#RegionBgImageSelect').select2('data').id;
-		CurrentLayoutdtl.bgimage.name = $('#RegionBgImageSelect').select2('data').text;
-		CurrentLayoutdtl.bgimage.filename = $('#RegionBgImageSelect').select2('data').filename;
+		CurrentLayoutdtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
 	}
 	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
@@ -556,10 +583,7 @@ $('#RegionBgImageRemove').on('click', function(e) {
 $('#LayoutBgImageSelect2').on('change', function(e) {
 	if ($('#LayoutBgImageSelect2').select2('data') != null) {
 		CurrentLayout.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
-		CurrentLayout.bgimage = {};
-		CurrentLayout.bgimage.imageid = $('#LayoutBgImageSelect2').select2('data').id;
-		CurrentLayout.bgimage.name = $('#LayoutBgImageSelect2').select2('data').text;
-		CurrentLayout.bgimage.filename = $('#LayoutBgImageSelect2').select2('data').filename;
+		CurrentLayout.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
 	}
 	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 });	
@@ -629,7 +653,11 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.direction = 4;
 	layoutdtl.speed = 2;
 	layoutdtl.color = '#FFFFFF';
-	layoutdtl.size = 50;
+	if (layoutdtl.region.type == 4) {
+		layoutdtl.size = 30;
+	} else {
+		layoutdtl.size = 50;
+	}
 	layoutdtl.dateformat = 'yyyy-MM-dd HH:mm';
 	CurrentLayout.layoutdtls[CurrentLayout.layoutdtls.length] = layoutdtl;
 	

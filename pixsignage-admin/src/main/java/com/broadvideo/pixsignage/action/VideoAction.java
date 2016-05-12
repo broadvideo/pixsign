@@ -131,22 +131,22 @@ public class VideoAction extends BaseDatatableAction {
 								gifImage.addGifFrame(new GifFrame(img));
 							}
 							GifEncoder.encode(gifImage, new File(
-									CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif/" + video.getVideoid() + ".gif"));
+									CommonConfig.CONFIG_PIXDATA_HOME + "/video/gif/" + video.getVideoid() + ".gif"));
 						}
 						logger.info("Finish preview generating.");
 
 						// Generate thumbnail
 						if (jpgList.size() >= 6) {
 							FileUtils.copyFile(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5)),
-									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot/" + video.getVideoid()
+									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid()
 											+ ".jpg"));
-							video.setThumbnail("/image/snapshot/" + video.getVideoid() + ".jpg");
+							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
 						} else if (jpgList.size() >= 1) {
 							FileUtils.copyFile(
 									new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1)),
-									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot/" + video.getVideoid()
+									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid()
 											+ ".jpg"));
-							video.setThumbnail("/image/snapshot/" + video.getVideoid() + ".jpg");
+							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
 						}
 
 						for (int j = 0; j < jpgList.size(); j++) {

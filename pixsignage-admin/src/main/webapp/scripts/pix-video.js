@@ -14,20 +14,16 @@ function refreshMyTable() {
 	}
 }			
 
+var CurrentVideo;
 function initMyTable() {
-	//$(".fancybox").fancybox({
-	//	openEffect	: 'none',
-	//	closeEffect	: 'none'
-	//});
-
 	$("#MyTable thead").css("display", "none");
 	$("#MyTable tbody").css("display", "none");
 	
 	var videohtml = '';
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 12, 24, 48, 96 ],
-						[ 12, 24, 48, 96 ] 
+		'aLengthMenu' : [ [ 24, 48, 72, 96 ],
+						[ 24, 48, 72, 96 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
@@ -38,7 +34,7 @@ function initMyTable() {
 						{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
 						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
 						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false }],
-		'iDisplayLength' : 12,
+		'iDisplayLength' : 24,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnPreDrawCallback': function (oSettings) {
@@ -54,21 +50,49 @@ function initMyTable() {
 				videohtml += '<div class="row" >';
 			}
 			videohtml += '<div class="col-md-2 col-xs-2">';
-			var imageurl = '/pixsigdata' + aData.thumbnail;
+			
+			videohtml += '<div id="ThumbContainer" style="position:relative">';
+			var thumbnail = '/pixsigdata' + aData.thumbnail;
 			if (aData.thumbnail == null) {
-				imageurl = '../local/img/video.jpg';
+				thumbnail = '../img/video.jpg';
 			}
 			if (aData.filepath == null || aData.previewflag != 1) {
-				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" />';
+				videohtml += '<div id="VideoThumb" class="thumbs">';
+				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+				videohtml += '</div>';
 			} else {
-				//videohtml += '<a class="fancybox" href="/pixsigdata/image/gif/' + aData['videoid'] + '.gif" title="' + aData['name'] + '">';
 				var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
-				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData['name'] + '">';
-				videohtml += '<img src="' + imageurl + '" alt="' + aData['name'] + '" width="100%" /> </a>';
+				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.name + '">';
+				videohtml += '<div id="VideoThumb" class="thumbs">';
+				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+				videohtml += '</div>';
+				videohtml += '</a>';
 			}
-			videohtml += '<h6>' + aData['videoid'] + '：' + aData['name'] + '<br>';
+			
+			if (aData.relate != null) {
+				var relate_thumbnail = '/pixsigdata' + aData.relate.thumbnail;
+				if (aData.relate.thumbnail == null) {
+					relate_thumbnail = '../img/video.jpg';
+				}
+				if (aData.relate.filepath == null || aData.relate.previewflag != 1) {
+					videohtml += '<div id="RelateThumb" class="thumbs">';
+					videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" />';
+					videohtml += '</div>';
+				} else {
+					var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
+					videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.relate.name + '">';
+					videohtml += '<div id="RelateThumb" class="thumbs">';
+					videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="50px" alt="' + aData.relate.name + '" />';
+					videohtml += '</div>';
+					videohtml += '</a>';
+				}
+			}
+			videohtml += '</div>';
+			
+			videohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
-			videohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+			videohtml += '(' + aData.videoid + ') ' + transferIntToComma(filesize) + ' KB</h6>';
+
 			if (CurBranchid == MyBranchid) {
 				videohtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
 				videohtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
@@ -84,6 +108,9 @@ function initMyTable() {
 			$('.fancybox').click(function() {
 				var myVideo = this.href;
 				$.fancybox({
+					openEffect	: 'none',
+					closeEffect	: 'none',
+					closeBtn : false,
 		            padding : 0,
 		            content: '<div id="video_container">Loading the player ... </div>',
 		            afterShow: function(){
@@ -106,6 +133,20 @@ function initMyTable() {
 
 			return nRow;
 		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('#MyTable #VideoThumb').each(function(i) {
+				var height = $(this).closest('#ThumbContainer').parent().width();
+				console.log(height);
+				$(this).height(height);
+				$(this).closest('#ThumbContainer').height(height);
+			});
+			$('#MyTable #RelateThumb').each(function(i) {
+				$(this).css('position', 'absolute');
+				$(this).css('left', '50%');
+				$(this).css('top', '0');
+				$(this).css('width', '50%');
+			});
+		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push({'name':'type','value':myType });
@@ -116,23 +157,20 @@ function initMyTable() {
 	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').select2();
 	
-	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		currentItem = item;
-		
-		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
+		CurrentVideo = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.remove + CurrentVideo.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
 					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'video.videoid': currentItem['videoid']
+						'video.videoid': CurrentVideo.videoid
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -193,14 +231,60 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		CurrentVideo = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['video.' + name] = item[name];
+		for (var name in CurrentVideo) {
+			formdata['video.' + name] = CurrentVideo[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
+
+		$("#RelateVideoSelect").select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: { 
+				url: 'video!list.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term, 
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.name, 
+								id:item.videoid,
+								thumbnail:item.thumbnail
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function (video) {
+				var html = '<span><img src="/pixsigdata' + video.thumbnail + '" height="25" /> ' + video.text + '</span>'
+				return html;
+			},
+			formatSelection: function (video) {
+				var html = '<span><img src="/pixsigdata' + video.thumbnail + '" height="25" /> ' + video.text + '</span>'
+				return html;
+			},
+			initSelection: function(element, callback) {
+				if (CurrentVideo.relate != null) {
+					callback({id: CurrentVideo.relateid, text: CurrentVideo.relate.name, thumbnail: CurrentVideo.relate.thumbnail });
+				}
+			},
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
+
 		$('#MyEditModal').modal();
 	});
 

@@ -37,6 +37,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
@@ -115,6 +116,12 @@ response.setDateHeader("Expires",0);
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="video.name" />
 												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.relatevideo"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="RelateVideoSelect" class="form-control select2" name="video.relateid">
 											</div>
 										</div>
 									</div>
@@ -367,7 +374,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-video.js?t=9"></script>
+<script src="${base_ctx}/scripts/pix-video.js?t=0"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myType = 1;

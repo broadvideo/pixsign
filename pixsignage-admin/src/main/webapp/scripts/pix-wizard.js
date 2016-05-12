@@ -144,6 +144,7 @@ function initWizard() {
 				redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
 			} else if (index == 2) {
 				enterBundledtlFocus(CurrentBundledtl);
+				$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 			}
 		}
 	});
@@ -246,24 +247,36 @@ function initData2() {
 						return { 
 							text:item.name, 
 							id:item.imageid, 
-							filename:item.filename, 
+							image:item, 
 						};
 					}),
 					more: more
 				};
 			}
 		},
-		formatResult: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatResult: function (data) {
+			var width = 40;
+			var height = 40 * data.image.height / data.image.width;
+			if (data.image.width < data.image.height) {
+				height = 40;
+				width = 40 * data.image.width / data.image.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
-		formatSelection: function (media) {
-			var html = '<span><img src="/pixsigdata/image/preview/' + media.filename + '" height="25" /> ' + media.text + '</span>'
+		formatSelection: function (data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.image.width < data.image.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
 			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, filename: CurrentLayout.bgimage.filename });
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 

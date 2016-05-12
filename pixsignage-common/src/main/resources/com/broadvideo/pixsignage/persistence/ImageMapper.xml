@@ -6,19 +6,24 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
     <result column="filepath" property="filepath" jdbcType="VARCHAR" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="md5" property="md5" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="objtype" property="objtype" jdbcType="CHAR" />
+    <result column="objid" property="objid" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    imageid, orgid, branchid, name, filepath, filename, size, md5, status, description, createtime, 
-    createstaffid
+    imageid, orgid, branchid, name, width, height, filepath, filename, size, md5, status, objtype, objid, 
+    description, thumbnail, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -31,10 +36,16 @@
   <select id="selectCount" resultType="Integer">
     select count(1) from image where status = 1
     <if test="orgid != null">
-      and orgid=${orgid}
+      and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid=${branchid}
+      and branchid = #{branchid}
+    </if>
+    <if test="objtype != null">
+      and objtype = #{objtype}
+    </if>
+    <if test="objid != null">
+      and objid = #{objid}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -45,10 +56,16 @@
     select <include refid="Base_Column_List" /> from image
     where status=1 
     <if test="orgid != null">
-      and orgid=${orgid}
+      and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid=${branchid}
+      and branchid = #{branchid}
+    </if>
+    <if test="objtype != null">
+      and objtype = #{objtype}
+    </if>
+    <if test="objid != null">
+      and objid = #{objid}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -70,13 +87,17 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into image (orgid, branchid, name, 
-      filepath, filename, size, md5, 
-      status, description, createtime, 
-      createstaffid)
+      width, height, 
+      filepath, filename, size, 
+      md5, status, objtype, objid, 
+      description, thumbnail, createtime, createstaffid
+      )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER})
+      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+      #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, 
+      #{md5,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Image" >
     <selectKey resultType="java.lang.Integer" keyProperty="imageid" order="AFTER" >
@@ -93,6 +114,12 @@
       <if test="name != null" >
         name,
       </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
       <if test="filepath != null" >
         filepath,
       </if>
@@ -108,8 +135,17 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="objtype != null" >
+        objtype,
+      </if>
+      <if test="objid != null" >
+        objid,
+      </if>
       <if test="description != null" >
         description,
+      </if>
+      <if test="thumbnail != null" >
+        thumbnail,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -128,6 +164,12 @@
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
       <if test="filepath != null" >
         #{filepath,jdbcType=VARCHAR},
       </if>
@@ -143,8 +185,17 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
+      <if test="objtype != null" >
+        #{objtype,jdbcType=CHAR},
+      </if>
+      <if test="objid != null" >
+        #{objid,jdbcType=INTEGER},
+      </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null" >
+        #{thumbnail,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -166,6 +217,12 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
       <if test="filepath != null" >
         filepath = #{filepath,jdbcType=VARCHAR},
       </if>
@@ -181,8 +238,17 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="objtype != null" >
+        objtype = #{objtype,jdbcType=CHAR},
+      </if>
+      <if test="objid != null" >
+        objid = #{objid,jdbcType=INTEGER},
+      </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null" >
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -198,12 +264,17 @@
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      width = #{width,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
       filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},
       md5 = #{md5,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
+      objtype = #{objtype,jdbcType=CHAR},
+      objid = #{objid,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where imageid = #{imageid,jdbcType=INTEGER}

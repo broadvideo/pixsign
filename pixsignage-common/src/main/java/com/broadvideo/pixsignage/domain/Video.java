@@ -38,9 +38,13 @@ public class Video {
 
 	private String thumbnail;
 
+	private Integer relateid;
+
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private Video relate;
 
 	public Integer getVideoid() {
 		return videoid;
@@ -162,6 +166,14 @@ public class Video {
 		this.thumbnail = thumbnail == null ? null : thumbnail.trim();
 	}
 
+	public Integer getRelateid() {
+		return relateid;
+	}
+
+	public void setRelateid(Integer relateid) {
+		this.relateid = relateid;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -178,5 +190,13 @@ public class Video {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Video getRelate() {
+		return relate;
+	}
+
+	public void setRelate(Video relate) {
+		this.relate = relate;
 	}
 }

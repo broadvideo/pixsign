@@ -29,19 +29,6 @@ alter table layoutdtl add volume int default 50;
 
 alter table layoutdtl drop foreign key layoutdtl_ibfk_2;
 alter table regionschedule drop foreign key regionschedule_ibfk_1;
-delete from region;
-insert into region(regionid,name,code,type) values(1,'region.main','main','0');
-insert into region(regionid,name,code,type) values(2,'region.text_1','text-1','1');
-insert into region(regionid,name,code,type) values(3,'region.text_2','text-2','1');
-insert into region(regionid,name,code,type) values(4,'region.extra_1','extra-1','0');
-insert into region(regionid,name,code,type) values(5,'region.extra_2','extra-2','0');
-insert into region(regionid,name,code,type) values(6,'region.extra_3','extra-3','0');
-insert into region(regionid,name,code,type) values(7,'region.extra_4','extra-4','0');
-insert into region(regionid,name,code,type) values(8,'region.date_1','date-1','2');
-insert into region(regionid,name,code,type) values(9,'region.date_2','date-2','2');
-
-update layoutdtl set regionid=regionid+1 where regionid>2;
-update regionschedule set regionid=regionid+1 where regionid>2;
 
 ############################################################
 ## post script  ############################################

@@ -95,7 +95,7 @@ $('body').on('click', '.pix-update', function(event) {
 	}
 	$('#MyEditForm').attr('action', 'org!update.action');
 	
-	$("#BackupMediaSelect").select2({
+	$('#BackupMediaSelect').select2({
 		placeholder: common.tips.detail_select,
 		minimumInputLength: 0,
 		ajax: { 
@@ -115,26 +115,35 @@ $('body').on('click', '.pix-update', function(event) {
 					results : $.map(data.aaData, function (item) { 
 						return { 
 							text:item.name, 
-							id:item.videoid 
+							id:item.videoid,
+							video:item,
 						};
 					}),
 					more: more
 				};
 			}
 		},
-		formatResult: function (media) {
-			return media.text;
+		formatResult: function (data) {
+			if (data.video == null || data.video.thumbnail == null) {
+				return '<span><img src="../img/video.jpg" height="25" /> ' + data.text + '</span>';
+			} else {
+				return '<span><img src="/pixsigdata' + data.video.thumbnail + '" height="25" /> ' + data.text + '</span>';
+			}
 		},
-		formatSelection: function (media) {
-			return media.text;
+		formatSelection: function (data) {
+			if (data.video == null || data.video.thumbnail == null) {
+				return '<span><img src="../img/video.jpg" height="25" /> ' + data.text + '</span>';
+			} else {
+				return '<span><img src="/pixsigdata' + data.video.thumbnail + '" height="25" /> ' + data.text + '</span>';
+			}
 		},
 		initSelection: function(element, callback) {
 			if (currentorg.backupvideo != null) {
-				callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name });
+				callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name, video: currentorg.backupvideo });
 			}
 		},
-		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
 	});
 
 	$('#MyEditModal').modal();

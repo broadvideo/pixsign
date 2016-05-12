@@ -123,6 +123,7 @@ public class DeviceAction extends BaseDatatableAction {
 			String deviceid = getParameter("deviceid");
 			bundleService.syncBundleLayout("1", deviceid);
 			bundleService.syncBundleRegions("1", deviceid);
+			bundleService.syncBundleSchedule("1", deviceid);
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

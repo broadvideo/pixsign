@@ -73,6 +73,7 @@ var common = {
 		unbind: '解绑',
 		design: '设计',
 		option: '选项',
+		export: '导出',
 		addregion: '新增区域',
 		password_reset: '重置密码',
 		unknown: '未知',

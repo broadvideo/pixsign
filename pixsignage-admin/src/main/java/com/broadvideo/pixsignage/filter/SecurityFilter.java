@@ -46,6 +46,8 @@ public class SecurityFilter implements Filter {
 			redirectURL = "/hyyp.jsp";
 		} else if (request.getServerName().startsWith("pftx.")) {
 			redirectURL = "/pftx.jsp";
+		} else if (request.getServerName().startsWith("hlym.")) {
+			redirectURL = "/hlym.jsp";
 		} else {
 			redirectURL = "/index.jsp";
 		}
@@ -87,6 +89,7 @@ public class SecurityFilter implements Filter {
 		excludeLoginURLs.add("/admin.jsp");
 		excludeLoginURLs.add("/hyyp.jsp");
 		excludeLoginURLs.add("/pftx.jsp");
+		excludeLoginURLs.add("/hlym.jsp");
 		excludeLoginURLs.add("/login.action");
 	}
 }

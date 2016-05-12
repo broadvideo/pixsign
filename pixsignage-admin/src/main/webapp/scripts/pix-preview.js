@@ -2,9 +2,9 @@
 function redrawLayoutPreview(div, layout, maxsize) {
 	div.empty();
 	div.attr('layoutid', layout.layoutid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
 	if (layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<layout.layoutdtls.length; i++) {
 		div.append(getLayoutdtlPreviewHtml(layout, i));
@@ -48,11 +48,17 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 	layoutdtlhtml += '%; top: ' + 100*layoutdtl.topoffset/layout.height;
 	layoutdtlhtml += '%; left: ' + 100*layoutdtl.leftoffset/layout.width;
 	layoutdtlhtml += '%; border: 1px solid #000; ">';
+	var bgcolor = layoutdtl.bgcolor;
+	if (layoutdtl.region.regionid == 1) {
+		bgcolor = '#6Fa8DC';
+	} else if (layoutdtl.region.type == 0) {
+		bgcolor = '#FFF2CC';
+	}
 	if (layoutdtl.region.type != 0) {
-		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + layoutdtl.bgcolor;
+		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bgcolor;
 		layoutdtlhtml += '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 	} else {
-		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + RegionColors[layoutdtl.regionid];
+		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bgcolor;
 		layoutdtlhtml += '; "></div>';
 	}
 	layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
@@ -76,8 +82,12 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 4) {
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'Video-In';
+		layoutdtlhtml += '</p>';
 	} else if (layoutdtl.bgimage != null) {
-		layoutdtlhtml += '<img src="/pixsigdata/image/preview/' + layoutdtl.bgimage.filename + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
 	layoutdtlhtml += '</div>';
 	layoutdtlhtml += '</div>';
@@ -88,9 +98,9 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 function redrawBundlePreview(div, bundle, maxsize) {
 	div.empty();
 	div.attr('bundleid', bundle.bundleid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#000000;');
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
 	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata/image/preview/' + bundle.layout.bgimage.filename + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
 		div.append(getBundledtlPreviewHtml(bundle, i));
@@ -137,7 +147,7 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
 		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
-			bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
+			bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 		}
 	}
 	
@@ -182,10 +192,14 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.region.type == 4) {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += 'Video-In';
+		bundledtlhtml += '</p>';
 	} else if (bgimage != null) {
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.bgimage != null) {
-		bundledtlhtml += '<img src="/pixsigdata/image/preview/' + bundledtl.layoutdtl.bgimage.filename+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
 	bundledtlhtml += '</div>';
 	bundledtlhtml += '</div>';
@@ -206,7 +220,7 @@ function redrawLayoutCanvasPreview(canvas, layout) {
 
 	if (layout.bgimage != null) {
 		var layout_bgimage = new Image();
-		layout_bgimage.src = '/pixsigdata/image/preview/' + layout.bgimage.filename;
+		layout_bgimage.src = '/pixsigdata' + layout.bgimage.thumbnail;
 		layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
 			return function() {
 				//ctx.globalAlpha = 0.2;
@@ -243,7 +257,7 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 				if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
 					bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
 				} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
-					bgimage = '/pixsigdata/image/preview/' + medialistdtl.image.filename;
+					bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 				}
 			}
 		}
@@ -258,7 +272,7 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 		}(region_bgimage, ctx, left, top, width, height);
 	} else if (layoutdtl.bgimage != null) {
 		var region_bgimage = new Image();
-		region_bgimage.src = '/pixsigdata/image/preview/' + layoutdtl.bgimage.filename;
+		region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
 		region_bgimage.onload = function(img, ctx, left, top, width, height) {
 			return function() {
 				ctx.drawImage(img, left, top, width, height);

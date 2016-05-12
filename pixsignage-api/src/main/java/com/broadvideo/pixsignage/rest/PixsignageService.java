@@ -221,6 +221,44 @@ public class PixsignageService {
 	}
 
 	@POST
+	@Path("get_bundle")
+	public String getbundle(String request) {
+		try {
+			logger.info("Pixsignage Service get_bundle: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson;
+			if (device.getDevicegroupid() > 0) {
+				responseJson = bundleService.generateBundleScheduleJson("2", "" + device.getDevicegroupid());
+				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
+			} else {
+				responseJson = bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid());
+				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
+			}
+			responseJson.put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_bundle exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
 	@Path("get_layout")
 	public String getlayout(String request) {
 		try {

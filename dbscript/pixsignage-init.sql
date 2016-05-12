@@ -176,12 +176,17 @@ create table image(
    orgid int not null,
    branchid int not null,
    name varchar(256) not null,
+   width int default 0,
+   height int default 0,
    filepath varchar(32),
    filename varchar(128),
    size bigint,
    md5 varchar(64),
    status char(1) default '1',
+   objtype char(1) not null default '0',
+   objid int default 0,
    description varchar(512),
+   thumbnail varchar(128),
    createtime timestamp not null default current_timestamp,
    createstaffid int,
    primary key (imageid),
@@ -206,6 +211,7 @@ create table video(
    progress int,
    description varchar(1024),
    thumbnail varchar(128),
+   relateid int default 0,
    createtime timestamp not null default current_timestamp,
    createstaffid int,
    primary key (videoid),
@@ -670,10 +676,13 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30302,2,303,'menu.bundle','bundle.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30303,2,303,'menu.deviceschedule','device-schedule.jsp','',1,3,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30304,2,303,'menu.devicegpschedule','devicegp-schedule.jsp','',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(304,2,0,'menu.vstation','','fa-video-camera',1,5,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30401,2,304,'menu.vchannel','vchannel.jsp','',1,1,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30402,2,304,'menu.playlist','vchannel-playlist.jsp','',1,2,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30403,2,304,'menu.vchannelschedule','vchannel-schedule.jsp','',1,3,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(304,2,0,'menu.page','','fa-video-camera',1,5,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30401,2,304,'menu.template','template.jsp','',1,1,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30402,2,304,'menu.pagepkg','pagepkg.jsp','',1,2,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(305,2,0,'menu.vstation','','fa-video-camera',1,6,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30501,2,305,'menu.vchannel','vchannel.jsp','',1,1,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30502,2,305,'menu.playlist','vchannel-playlist.jsp','',1,2,'1');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30503,2,305,'menu.vchannelschedule','vchannel-schedule.jsp','',1,3,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(309,2,0,'menu.systemmanage','','fa-cogs',1,10,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30901,2,309,'menu.staff','staff.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30902,2,309,'menu.role','role.jsp','',1,2,'12');
@@ -701,6 +710,7 @@ insert into region(regionid,name,code,type) values(22,'region.text_3','text-3','
 insert into region(regionid,name,code,type) values(30,'region.date_1','date-1','2');
 insert into region(regionid,name,code,type) values(31,'region.date_2','date-2','2');
 insert into region(regionid,name,code,type) values(35,'region.weather','weather','3');
+insert into region(regionid,name,code,type) values(40,'region.videoin','videoin','4');
 
 insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;

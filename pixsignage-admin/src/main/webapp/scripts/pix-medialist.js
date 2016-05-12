@@ -50,15 +50,20 @@ function initMyTable() {
 				}
 				listhtml += '<div class="col-md-2 col-xs-2">';
 				if (medialistdtl.objtype == 1) {
+					listhtml += '<div class="thumbs">';
 					if (medialistdtl.video.thumbnail == null) {
-						listhtml += '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" width="100%" />';
+						listhtml += '<img src="../img/video.jpg" class="imgthumb" width="100%" alt="' + medialistdtl.video.name + '" />';
 					} else {
-						listhtml += '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" width="100%" />';
+						listhtml += '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" class="imgthumb" width="100%" alt="' + medialistdtl.video.name + '" />';
 					}
-					listhtml += '<h6>' + medialistdtl.video.name + '</h6>';
+					listhtml += '</div>';
+					listhtml += '<h6 class="pixtitle">' + medialistdtl.video.name + '</h6>';
 				} else if (medialistdtl.objtype == 2) {
-					listhtml += '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" width="100%" />';
-					listhtml += '<h6>' + medialistdtl.image.name + '</h6>';
+					var thumbwidth = medialistdtl.image.width > medialistdtl.image.height? 100 : 100*medialistdtl.image.width/medialistdtl.image.height;
+					listhtml += '<div class="thumbs">';
+					listhtml += '<img src="/pixsigdata' + medialistdtl.image.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medialistdtl.image.name + '" />';
+					listhtml += '</div>';
+					listhtml += '<h6 class="pixtitle">' + medialistdtl.image.name + '</h6>';
 				}
 				listhtml += '</div>';
 				if ((i+1) % 6 == 0 || (i+1) == aData.medialistdtls.length) {
@@ -77,6 +82,12 @@ function initMyTable() {
 				$('td:eq(4)', nRow).html('');
 			}
 			return nRow;
+		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('#MyTable .thumbs').each(function(i) {
+				console.log($(this).parent().width());
+				$(this).height($(this).parent().width());
+			});
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
@@ -210,28 +221,38 @@ function initMedialistDtlModal() {
 					tempMedialistdtls = data.aaData;
 					for (var i=0; i<tempMedialistdtls.length; i++) {
 						var medialistdtl = tempMedialistdtls[i];
+						var thumbwidth = 100;
+						var thumbnail = '';
 						var thumbhtml = '';
+						var medianame = '';
 						if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
 							mediatype = common.view.intvideo;
+							medianame = medialistdtl.video.name;
 							if (medialistdtl.video.thumbnail == null) {
-								thumbhtml = '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+								thumbnail = '../img/video.jpg';
 							} else {
-								thumbhtml = '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+								thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
 							}
 						} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
-							mediatype = common.view.extview;
+							mediatype = common.view.extvideo;
+							medianame = medialistdtl.video.name;
 							if (medialistdtl.video.thumbnail == null) {
-								thumbhtml = '<img src="../local/img/video.jpg" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+								thumbnail = '../img/video.jpg';
 							} else {
-								thumbhtml = '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" height="30" />' + medialistdtl.video.name;
+								thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
 							}
 						} else if (medialistdtl.objtype == 2) {
 							mediatype = common.view.image;
-							var thumbhtml = '<img src="/pixsigdata/image/preview/' + medialistdtl.image.filename + '" alt="' + medialistdtl.image.name + '" height="30" />' + medialistdtl.image.name;
+							medianame = medialistdtl.image.name;
+							thumbwidth = medialistdtl.image.width > medialistdtl.image.height? 100 : 100*medialistdtl.image.width/medialistdtl.image.height;
+							thumbnail = '/pixsigdata' + medialistdtl.image.thumbnail;
 						} else {
 							mediatype = common.view.unknown;
 						}
-						$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, 0, 0, 0]);
+						if (thumbnail != '') {
+							thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';
+						}
+						$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, medianame, 0, 0, 0]);
 					}
 					
 					$('#MedialistDtlModal').modal();
@@ -278,14 +299,17 @@ function initMedialistDtlModal() {
 				intvideohtml += '<div class="row" >';
 			}
 			intvideohtml += '<div class="col-md-2 col-xs-2">';
-			if (aData['thumbnail'] == null) {
-				intvideohtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width="100%" />';
-			} else {
-				intvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
+
+			var imageurl = '/pixsigdata' + aData.thumbnail;
+			if (aData.thumbnail == null) {
+				imageurl = '../img/video.jpg';
 			}
-			intvideohtml += '<h6>' + aData['name'] + '<br/>';
-			var filesize = parseInt(aData['size'] / 1024);
-			intvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+			intvideohtml += '<div class="thumbs">';
+			intvideohtml += '<img src="' + imageurl + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+			intvideohtml += '</div>';
+			intvideohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
+			intvideohtml += '' + transferIntToComma(parseInt(aData.size / 1024)) + ' KB</h6>';
+			
 			intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-intvideo-add">' + common.view.add + '</button></p>';
 			intvideohtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
@@ -296,6 +320,11 @@ function initMedialistDtlModal() {
 				$('#IntVideoContainer').append(intvideohtml);
 			}
 			return nRow;
+		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('#IntVideoContainer .thumbs').each(function(i) {
+				$(this).height($(this).parent().width());
+			});
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':DropdownBranchid });
@@ -338,14 +367,17 @@ function initMedialistDtlModal() {
 				extvideohtml += '<div class="row" >';
 			}
 			extvideohtml += '<div class="col-md-2 col-xs-2">';
-			if (aData['thumbnail'] == null) {
-				extvideohtml += '<img src="../local/img/video.jpg" alt="' + aData['name'] + '" width="100%" />';
-			} else {
-				extvideohtml += '<img src="/pixsigdata' + aData['thumbnail'] + '" alt="' + aData['name'] + '" width="100%" />';
+
+			var imageurl = '/pixsigdata' + aData.thumbnail;
+			if (aData.thumbnail == null) {
+				imageurl = '../img/video.jpg';
 			}
-			extvideohtml += '<h6>' + aData['name'] + '<br/>';
-			var filesize = parseInt(aData['size'] / 1024);
-			extvideohtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+			extvideohtml += '<div class="thumbs">';
+			extvideohtml += '<img src="' + imageurl + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+			extvideohtml += '</div>';
+			extvideohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
+			extvideohtml += '' + transferIntToComma(parseInt(aData.size / 1024)) + ' KB</h6>';
+			
 			extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-extvideo-add">' + common.view.add + '</button></p>';
 			extvideohtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
@@ -357,6 +389,11 @@ function initMedialistDtlModal() {
 			}
 			return nRow;
 		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('#ExtVideoContainer .thumbs').each(function(i) {
+				$(this).height($(this).parent().width());
+			});
+		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':DropdownBranchid });
 			aoData.push({'name':'type','value':2 });
@@ -364,7 +401,7 @@ function initMedialistDtlModal() {
 	});
 	$('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 	$('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-	$('#IntVideoTable').css('width', '100%');
+	$('#ExtVideoTable').css('width', '100%');
 	
 	
 	$('#ImageTable thead').css('display', 'none');
@@ -398,10 +435,17 @@ function initMedialistDtlModal() {
 				imagehtml += '<div class="row" >';
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
-			imagehtml += '<img src="/pixsigdata/image/preview/' + aData.filename + '" alt="' + aData.name + '" width="100%" />';
-			imagehtml += '<h6>' + aData.name + '<br/>';
-			var filesize = parseInt(aData.size / 1024);
-			imagehtml += '' + transferIntToComma(filesize) + 'KB</h6>';
+
+			imagehtml += '<div class="thumbs">';
+			var new_width = 100;
+			if (aData.width < aData.height) {
+				new_width = 100*aData.width/aData.height;
+			}
+			imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + new_width + '%" alt="' + aData.name + '" />';
+			imagehtml += '</div>';
+			imagehtml += '<h6 class="pixtitle">' + aData.name + '<br>';
+			imagehtml += '' + transferIntToComma(parseInt(aData.size / 1024)) + ' KB</h6>';
+
 			imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">' + common.view.add + '</button></p>';
 			imagehtml += '</div>';
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
@@ -413,21 +457,38 @@ function initMedialistDtlModal() {
 			}
 			return nRow;
 		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('#ImageContainer .thumbs').each(function(i) {
+				$(this).height($(this).parent().width());
+			});
+		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':DropdownBranchid });
 		}
 	});
 	$('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 	$('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-	$('#IntVideoTable').css('width', '100%');
+	$('#ImageTable').css('width', '100%');
+
 	
+	$('#nav_tab1').click(function(event) {
+		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+	});
+	$('#nav_tab2').click(function(event) {
+		$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
+	});
+	$('#nav_tab3').click(function(event) {
+		$('#ImageTable').dataTable()._fnAjaxUpdate();
+	});
+
 	
 	$('#MedialistDtlTable').dataTable({
 		'sDom' : 't',
 		'iDisplayLength' : -1,
-		'aoColumns' : [ {'sTitle' : common.view.sequence, 'bSortable' : false, 'sWidth' : '50px' }, 
-						{'sTitle' : common.view.type, 'bSortable' : false, 'sWidth' : '100px' }, 
-						{'sTitle' : common.view.detail, 'bSortable' : false, 'sClass': 'autowrap' }, 
+		'aoColumns' : [ {'sTitle' : '', 'bSortable' : false, 'sWidth' : '40px' }, 
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '60px' }, 
+						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '60px' }, 
+						{'sTitle' : '', 'bSortable' : false, 'sClass': 'autowrap' }, 
 						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
@@ -435,9 +496,9 @@ function initMedialistDtlModal() {
 		'oLanguage' : { 'sZeroRecords' : common.view.empty,
 						'sEmptyTable' : common.view.empty }, 
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-medialistdtl-up"><i class="fa fa-arrow-up"></i></button>');
-			$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-down"><i class="fa fa-arrow-down"></i></button>');
-			$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-medialistdtl-delete">' + common.view.remove + '</button>');
+			$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-medialistdtl-up"><i class="fa fa-arrow-up"></i></button>');
+			$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-down"><i class="fa fa-arrow-down"></i></button>');
+			$('td:eq(6)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-medialistdtl-delete">' + common.view.remove + '</button>');
 			return nRow;
 		}
 	});
@@ -452,13 +513,15 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.videoid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		var thumbhtml = '';
+
+		var thumbnail = '';
 		if (data.thumbnail == null) {
-			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+			thumbnail = '../img/video.jpg';
 		} else {
-			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+			thumbnail = '/pixsigdata' + data.thumbnail;
 		}
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, thumbhtml, 0, 0, 0]);
+		var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + data.name + '"></div>';
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, thumbhtml, data.name, 0, 0, 0]);
 	});
 
 	
@@ -471,13 +534,15 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.videoid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		var thumbhtml = '';
+
+		var thumbnail = '';
 		if (data.thumbnail == null) {
-			thumbhtml = '<img src="../local/img/video.jpg" alt="' + data.name + '" height="30" />' + data.name;
+			thumbnail = '../img/video.jpg';
 		} else {
-			thumbhtml = '<img src="/pixsigdata' + data.thumbnail + '" alt="' + data.name + '" height="30" />' + data.name;
+			thumbnail = '/pixsigdata' + data.thumbnail;
 		}
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, thumbhtml, 0, 0, 0]);
+		var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + data.name + '"></div>';
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, thumbhtml, data.name, 0, 0, 0]);
 	});
 
 	
@@ -490,8 +555,10 @@ function initMedialistDtlModal() {
 		medialistdtl.objid = data.imageid;
 		medialistdtl.sequence = tempMedialistdtls.length + 1;
 		tempMedialistdtls[tempMedialistdtls.length] = medialistdtl;
-		var thumbhtml = '<img src="/pixsigdata/image/preview/' + data.filename + '" alt="' + data.name + '" height="30" />' + data.name;
-		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, thumbhtml, 0, 0, 0]);
+
+		var thumbwidth = data.width > data.height? 100 : 100*data.width/data.height;
+		var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + data.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + data.name + '"></div>';
+		$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.image, thumbhtml, data.name, 0, 0, 0]);
 	});
 
 	

@@ -20,7 +20,7 @@ RegionColors[9] = '#CC9966';
 function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
 	if (layoutdtl.bgimage != null) {
 		var region_bgimage = new Image();
-		region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.filepath;
+		region_bgimage.src = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
 		region_bgimage.onload = function(img, ctx, left, top, width, height) {
 			return function() {
 				ctx.drawImage(img, left, top, width, height);
@@ -105,7 +105,7 @@ function refreshLayoutschedule() {
 					
 					if (layout.bgimage != null) {
 						var layout_bgimage = new Image();
-						layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
+						layout_bgimage.src = '/pixsigdata' + layout.bgimage.thumbnail;
 						layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
 							return function() {
 								//ctx.globalAlpha = 0.2;
@@ -317,7 +317,7 @@ function initLayoutSchedules() {
 
 					if (layout.bgimage != null) {
 						var layout_bgimage = new Image();
-						layout_bgimage.src = '/pixsigdata' + layout.bgimage.filepath;
+						layout_bgimage.src = '/pixsigdata' + layout.bgimage.thumbnail;
 						layout_bgimage.onload = function(img, layout, ctx, canvaswidth, canvasheight) {
 							return function() {
 								//ctx.globalAlpha = 0.2;

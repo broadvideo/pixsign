@@ -1,11 +1,13 @@
 package com.broadvideo.pixsignage.action;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -62,29 +64,41 @@ public class ImageAction extends BaseDatatableAction {
 					jsonItem.put("filename", mymediaFileName[i]);
 					jsonItem.put("size", FileUtils.sizeOf(mymedia[i]));
 
+					BufferedImage img = ImageIO.read(mymedia[i]);
 					Image image = new Image();
 					image.setOrgid(getLoginStaff().getOrgid());
 					image.setBranchid(getLoginStaff().getBranchid());
 					image.setName(name[i]);
+					image.setWidth(img.getWidth());
+					image.setHeight(img.getHeight());
 					image.setFilename(mymediaFileName[i]);
 					image.setStatus("9");
+					image.setObjtype("0");
+					image.setObjid(0);
 					image.setDescription(mymediaFileName[i]);
 					image.setCreatestaffid(getLoginStaff().getStaffid());
 					imageService.addImage(image);
 
 					String newFileName = "" + image.getImageid() + "." + FilenameUtils.getExtension(mymediaFileName[i]);
-					File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload", newFileName);
-					if (fileToCreate.exists()) {
-						fileToCreate.delete();
+					String imageFilePath, thumbFilePath;
+					imageFilePath = "/image/upload/" + newFileName;
+					thumbFilePath = "/image/thumb/" + newFileName;
+					File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+					File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+					if (imageFile.exists()) {
+						imageFile.delete();
 					}
-					FileUtils.moveFile(mymedia[i], fileToCreate);
-					File previewFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/preview/" + newFileName);
-					FileUtils.writeByteArrayToFile(previewFile, CommonUtil.generateThumbnail(fileToCreate, 640));
+					if (thumbFile.exists()) {
+						thumbFile.delete();
+					}
+					FileUtils.moveFile(mymedia[i], imageFile);
+					FileUtils.writeByteArrayToFile(thumbFile, CommonUtil.generateThumbnail(imageFile, 640));
 
-					image.setFilepath("/image/upload/" + newFileName);
+					image.setFilepath(imageFilePath);
+					image.setThumbnail(thumbFilePath);
 					image.setFilename(newFileName);
-					image.setSize(FileUtils.sizeOf(fileToCreate));
-					FileInputStream fis = new FileInputStream(fileToCreate);
+					image.setSize(FileUtils.sizeOf(imageFile));
+					FileInputStream fis = new FileInputStream(imageFile);
 					image.setMd5(DigestUtils.md5Hex(fis));
 					fis.close();
 					image.setStatus("1");
@@ -93,7 +107,7 @@ public class ImageAction extends BaseDatatableAction {
 					jsonItem.put("name", name[i]);
 					jsonItem.put("filename", newFileName);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.info("Image parse error, file={}", mymediaFileName[i], e);
 					addActionError(e.getMessage());
 					jsonItem.put("error", e.getMessage());
 				}
@@ -116,16 +130,24 @@ public class ImageAction extends BaseDatatableAction {
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String objtype = getParameter("objtype");
+			String objid = getParameter("objid");
 
-			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, objtype, objid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
-					length);
-			for (int i = 0; i < imageList.size(); i++) {
-				aaData.add(imageList.get(i));
+			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, objtype, objid,
+					search, start, length);
+			for (Image image : imageList) {
+				if (image.getWidth().intValue() == 0 || image.getHeight().intValue() == 0) {
+					BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath()));
+					image.setWidth(img.getWidth());
+					image.setHeight(img.getHeight());
+					imageService.updateImage(image);
+				}
+				aaData.add(image);
 			}
 			this.setAaData(aaData);
 			return SUCCESS;

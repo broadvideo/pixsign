@@ -1,3 +1,21 @@
+.thumbs{
+    border: 1px solid #D3D3D3;
+    display:table-cell; 
+    vertical-align:middle; 
+    text-align:center;
+}
+.thumbs:hover{
+    border: 1px solid #000000; 
+}
+.imgthumb{
+    box-shadow: 1px 1px 2px rgb(172, 172, 172);
+}
+.pixtitle {
+	overflow: hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis;
+}
+
 .form-signin {
     max-width: 300px;
     padding: 19px 29px 29px;

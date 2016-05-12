@@ -38,11 +38,7 @@
 <link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
 <%
-if (request.getServerName().startsWith("hyyp.")) {
-%>
-<link href="${static_ctx}/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
-<%
-} else if (request.getServerName().startsWith("pftx.")) {
+if (request.getServerName().startsWith("hyyp.") || request.getServerName().startsWith("pftx.") || request.getServerName().startsWith("hlym.")) {
 %>
 <link href="${static_ctx}/admin/layout/css/themes/light.css" rel="stylesheet" type="text/css" id="style_color" />
 <%
@@ -148,6 +144,10 @@ if (request.getServerName().startsWith("hyyp.")) {
 } else if (request.getServerName().startsWith("pftx.")) {
 %>
 				<img src="${base_ctx}/img/pftx/logo.png?t=0" height="40" alt="logo"/>
+<%
+} else if (request.getServerName().startsWith("hlym.")) {
+%>
+				<img src="${base_ctx}/img/hlym/logo.png?t=0" height="40" alt="logo"/>
 <%
 } else {
 %>

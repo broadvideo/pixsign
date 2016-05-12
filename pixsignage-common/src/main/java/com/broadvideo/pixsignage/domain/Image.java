@@ -13,6 +13,10 @@ public class Image {
 
 	private String name;
 
+	private Integer width;
+
+	private Integer height;
+
 	private String filepath;
 
 	private String filename;
@@ -23,7 +27,13 @@ public class Image {
 
 	private String status;
 
+	private String objtype;
+
+	private Integer objid;
+
 	private String description;
+
+	private String thumbnail;
 
 	private Date createtime;
 
@@ -61,12 +71,28 @@ public class Image {
 		this.name = name == null ? null : name.trim();
 	}
 
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
 	public String getFilepath() {
 		return filepath;
 	}
 
 	public void setFilepath(String filepath) {
-		this.filepath = filepath;
+		this.filepath = filepath == null ? null : filepath.trim();
 	}
 
 	public String getFilename() {
@@ -101,12 +127,36 @@ public class Image {
 		this.status = status == null ? null : status.trim();
 	}
 
+	public String getObjtype() {
+		return objtype;
+	}
+
+	public void setObjtype(String objtype) {
+		this.objtype = objtype == null ? null : objtype.trim();
+	}
+
+	public Integer getObjid() {
+		return objid;
+	}
+
+	public void setObjid(Integer objid) {
+		this.objid = objid;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description == null ? null : description.trim();
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail == null ? null : thumbnail.trim();
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
