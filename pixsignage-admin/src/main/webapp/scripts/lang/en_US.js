@@ -65,7 +65,7 @@ var common = {
 		operation: 'Operation',
 		add: 'Add',
 		edit: 'Edit',
-		remove: 'Delete',
+		remove: 'Remove',
 		detail: 'Detail',
 		sync: 'Sync',
 		push: 'Push',
@@ -80,6 +80,10 @@ var common = {
 		more: 'More',
 		empty: 'No data available in table',
 
+		page_add: 'Add Page',
+		pagepkg_edit: 'Edit Package',
+		pagepkg_remove: 'Remove Package',
+
 		unlimited: 'Unlimited',
 		downloaddata: 'Data Flow',
 
@@ -89,6 +93,11 @@ var common = {
 		ratio_4: '3:4',
 		type_0: 'Private',
 		type_1: 'Public',
+
+		template_ratio_1: '1920x1080',
+		template_ratio_2: '1080x1920',
+		template_type_0: 'Private',
+		template_type_1: 'Public',
 
 		table_ZeroRecords : 'No data available in table',
 		table_Processing : '<i class="fa fa-coffee"></i>　Processing...',

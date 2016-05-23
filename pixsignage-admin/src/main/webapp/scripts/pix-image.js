@@ -72,12 +72,12 @@ function initMyTable() {
 				$('.thumbs').each(function(i) {
 					$(this).height($(this).parent().closest('div').width());
 				});
+				$(".fancybox").fancybox({
+					openEffect	: 'none',
+					closeEffect	: 'none',
+					closeBtn : false,
+				});
 			}
-			$(".fancybox").fancybox({
-				openEffect	: 'none',
-				closeEffect	: 'none',
-				closeBtn : false,
-			});
 
 			return nRow;
 		},

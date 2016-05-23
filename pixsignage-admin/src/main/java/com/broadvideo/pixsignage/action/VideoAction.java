@@ -132,27 +132,28 @@ public class VideoAction extends BaseDatatableAction {
 							}
 							GifEncoder.encode(gifImage, new File(
 									CommonConfig.CONFIG_PIXDATA_HOME + "/video/gif/" + video.getVideoid() + ".gif"));
-						}
-						logger.info("Finish preview generating.");
+							logger.info("Finish preview generating.");
 
-						// Generate thumbnail
-						if (jpgList.size() >= 6) {
-							FileUtils.copyFile(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5)),
-									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid()
-											+ ".jpg"));
+							// Generate thumbnail
+							File srcFile = new File(
+									CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1));
+							File destFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/"
+									+ video.getVideoid() + ".jpg");
+							if (jpgList.size() >= 6) {
+								srcFile = new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5));
+							}
+							FileUtils.copyFile(srcFile, destFile);
+							BufferedImage img = ImageIO.read(destFile);
+							video.setWidth(img.getWidth());
+							video.setHeight(img.getHeight());
 							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
-						} else if (jpgList.size() >= 1) {
-							FileUtils.copyFile(
-									new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1)),
-									new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid()
-											+ ".jpg"));
-							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
+
+							for (int j = 0; j < jpgList.size(); j++) {
+								new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
+							}
+							logger.info("Finish thumbnail generating.");
 						}
 
-						for (int j = 0; j < jpgList.size(); j++) {
-							new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
-						}
-						logger.info("Finish thumbnail generating.");
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -200,8 +201,14 @@ public class VideoAction extends BaseDatatableAction {
 			List<Object> aaData = new ArrayList<Object>();
 			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, type, null,
 					search, start, length);
-			for (int i = 0; i < videoList.size(); i++) {
-				aaData.add(videoList.get(i));
+			for (Video video : videoList) {
+				if (video.getWidth().intValue() == 0 || video.getHeight().intValue() == 0) {
+					BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail()));
+					video.setWidth(img.getWidth());
+					video.setHeight(img.getHeight());
+					videoService.updateVideo(video);
+				}
+				aaData.add(video);
 			}
 			this.setAaData(aaData);
 

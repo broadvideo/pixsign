@@ -20,6 +20,10 @@ public class Video {
 
 	private String type;
 
+	private Integer width;
+
+	private Integer height;
+
 	private String filepath;
 
 	private String filename;
@@ -92,6 +96,22 @@ public class Video {
 
 	public void setType(String type) {
 		this.type = type == null ? null : type.trim();
+	}
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 
 	public String getFilepath() {

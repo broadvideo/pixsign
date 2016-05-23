@@ -35,7 +35,7 @@ public class CommonUtil {
 		try {
 			date = new SimpleDateFormat(format).parse(s);
 		} catch (Exception e) {
-			logger.error("parseDate " + s + " exception: ", e);
+			logger.error("parseDate {} exception: {}", s, e.getMessage());
 		}
 		return date;
 	}

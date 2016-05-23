@@ -202,6 +202,8 @@ create table video(
    name varchar(256) not null,
    uuid varchar(64) not null,
    type char(1) default '1',
+   width int default 0,
+   height int default 0,
    filepath varchar(32),
    filename varchar(128),
    size bigint,

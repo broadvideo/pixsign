@@ -233,7 +233,7 @@ response.setDateHeader("Expires",0);
 		<td>
 			<p class="name">{%=file.name%}</p>
 			<div><span class="label label-danger error"></span></div>
-			<span class="preview"></span>
+			<span></span>
 		</td>
 		<td>
 			<p class="size">Processing...</p>

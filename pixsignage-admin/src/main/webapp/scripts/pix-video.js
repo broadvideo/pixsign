@@ -64,7 +64,8 @@ function initMyTable() {
 				var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
 				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.name + '">';
 				videohtml += '<div id="VideoThumb" class="thumbs">';
-				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+				var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				videohtml += '</div>';
 				videohtml += '</a>';
 			}

@@ -79,6 +79,10 @@ var common = {
 		unknown: '未知',
 		more: '更多',
 		empty: '列表为空',
+		
+		page_add: '新增页面',
+		pagepkg_edit: '编辑包',
+		pagepkg_remove: '删除包',
 
 		unlimited: '无限制',
 		downloaddata: '流量',
@@ -89,6 +93,11 @@ var common = {
 		ratio_4: '竖屏3:4',
 		type_0: '内部布局',
 		type_1: '公共布局',
+
+		template_ratio_1: '1920x1080',
+		template_ratio_2: '1080x1920',
+		template_type_0: '内部模板',
+		template_type_1: '公共模板',
 
 		table_ZeroRecords : '没有匹配的数据',
 		table_Processing : '<i class="fa fa-coffee"></i>　获取数据中...',

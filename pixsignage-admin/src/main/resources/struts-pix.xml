@@ -903,7 +903,7 @@
 			</result>
 		</action>
 
-		<action name="page!list" method="doList" class="pageAction">
+		<action name="page!templatelist" method="doTemplateList" class="pageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
@@ -921,6 +921,30 @@
 				<param name="includeProperties">page.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="page!templateadd" method="doTemplateAdd" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="page!commonadd" method="doCommonAdd" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="page!update" method="doUpdate" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="page!delete" method="doDelete" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="page!imgupload" method="doImageUpload" class="pageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -935,6 +959,31 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">dataid,errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="pagepkg!list" method="doList" class="pagepkgAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="pagepkg!add" method="doAdd" class="pagepkgAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="pagepkg!update" method="doUpdate" class="pagepkgAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="pagepkg!delete" method="doDelete" class="pagepkgAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 
