@@ -134,7 +134,10 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									<div class="btn-group">
-										<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-push"><spring:message code="global.pushall"/> <i class="fa fa-cogs"></i></button>
+										<button privilegeid="101010" class="btn blue pix-update"><spring:message code="global.update"/> <i class="fa fa-edit"></i></button>
+									</div>
+									<div class="btn-group">
+										<button privilegeid="101010" class="btn green pix-push"><spring:message code="global.pushall"/> <i class="fa fa-cogs"></i></button>
 									</div>
 								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -198,9 +201,9 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-orgconfig.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-orgconfig.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

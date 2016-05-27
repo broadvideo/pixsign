@@ -99,6 +99,12 @@ var common = {
 		template_type_0: 'Private',
 		template_type_1: 'Public',
 
+		devicepass: 'Maintain Password',
+		backupvideo: 'Backup Video',
+		powerflag: 'Power Control Flag',
+		poweron: 'Power on',
+		poweroff: 'Power off',
+		
 		table_ZeroRecords : 'No data available in table',
 		table_Processing : '<i class="fa fa-coffee"></i>　Processing...',
 		table_EmptyTable : 'No data available in table',

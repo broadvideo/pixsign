@@ -107,6 +107,22 @@ var FormValidateOption = {
 	};
 
 
+function startPingTimer(){
+	$.ajax({
+		type : 'POST',
+		url : 'ping.action',
+		data : '{}',
+		dataType : 'json',
+		contentType : 'application/json;charset=utf-8',
+		success : function(data, status) {
+			setTimeout('startPingTimer()',10000); 
+		},
+		error : function() {
+			window.location.reload();
+		}
+	});
+}
+
 var DataInit = function() {
 	return {
 		init : function() {
@@ -174,6 +190,8 @@ var DataInit = function() {
 				$('#ChangePwdForm input[name="staff.password2"]').attr('value', '');
 				$('#ChangePwdModal').modal();
 			});
+			
+			startPingTimer();
 		}
 
 	};

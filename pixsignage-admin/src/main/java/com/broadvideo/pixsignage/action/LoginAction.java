@@ -54,6 +54,10 @@ public class LoginAction extends BaseAction {
 	@Autowired
 	private OrgService orgService;
 
+	public String doPing() {
+		return SUCCESS;
+	}
+
 	public String doLogin() throws Exception {
 		if (!CommonConfig.LICENSE) {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

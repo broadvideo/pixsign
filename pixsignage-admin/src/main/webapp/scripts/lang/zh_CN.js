@@ -99,6 +99,12 @@ var common = {
 		template_type_0: '内部模板',
 		template_type_1: '公共模板',
 
+		devicepass: '终端维护密码',
+		backupvideo: '默认垫片',
+		powerflag: '自动开关机',
+		poweron: '开机时间',
+		poweroff: '关机时间',
+		
 		table_ZeroRecords : '没有匹配的数据',
 		table_Processing : '<i class="fa fa-coffee"></i>　获取数据中...',
 		table_EmptyTable : '没有匹配的数据',

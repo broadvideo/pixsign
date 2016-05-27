@@ -1,33 +1,59 @@
+var CurrentOrg = null;
 function refreshMyTable() {
-	$('#MyTable').dataTable()._fnAjaxUpdate();
+	$.ajax({
+		type : 'GET',
+		url : 'org!get.action',
+		data : '',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				CurrentOrg = data.org;
+				$('#MyTable').dataTable().fnClearTable();
+				$('#MyTable').dataTable().fnAddData([common.view.devicepass, CurrentOrg.devicepass]);
+				if (CurrentOrg.backupvideo != null) {
+					var backupvideohtml = '';
+					if (CurrentOrg.backupvideo.thumbnail == null) {
+						backupvideohtml = '<span><img src="../img/video.jpg" height="25" /> ' + CurrentOrg.backupvideo.name + '</span>';
+					} else {
+						backupvideohtml = '<span><img src="/pixsigdata' + CurrentOrg.backupvideo.thumbnail + '" height="25" /> ' + CurrentOrg.backupvideo.name + '</span>';
+					}
+					$('#MyTable').dataTable().fnAddData([common.view.backupvideo, backupvideohtml]);
+				} else {
+					$('#MyTable').dataTable().fnAddData([common.view.backupvideo, '']);
+				}
+				if (CurrentOrg.powerflag == 1) {
+					var powerhtml = '<span class="label label-xs label-success">打开</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
+					$('#MyTable').dataTable().fnAddData([common.view.poweron, CurrentOrg.poweron]);
+					$('#MyTable').dataTable().fnAddData([common.view.poweroff, CurrentOrg.poweroff]);
+				} else {
+					var powerhtml = '<span class="label label-xs label-warning">关闭</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
+				}
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
+			}
+		},
+		error : function() {
+			bootbox.alert(common.tips.error);
+		}
+	});
 }			
 
-var oTable = $('#MyTable').dataTable({
-	'sDom' : 'rt',
-	'bProcessing' : true,
-	'bServerSide' : true,
-	'sAjaxSource' : 'org!list.action',
-	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
-					{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false }],
-	'iDisplayLength' : 1,
-	'sPaginationType' : 'bootstrap',
-	'oLanguage' : DataTableLanguage,
+$('#MyTable').dataTable({
+	'sDom' : 't',
+	'iDisplayLength' : -1,
+	'bSort' : false,
+	'aoColumns' : [ {'sTitle' : common.view.name, 'bSortable' : false, 'sWidth' : '25%' },
+					{'sTitle' : common.view.value, 'bSortable' : false, 'sWidth' : '75%' }],
+	'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
+	'oLanguage' : { 'sZeroRecords' : common.view.empty,
+					'sEmptyTable' : common.view.empty }, 
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-		var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>' + common.view.edit + ' </a>';
-		$('td:eq(2)', nRow).html(dropdownBtn);
-		return nRow;
 	}
 });
-
-jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
-jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
-jQuery('#MyTable_wrapper .dataTables_length select').select2(); 
+refreshMyTable();
 
 var currentConfig;
-OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
-
 FormValidateOption.rules = {};
 FormValidateOption.rules['org.devicepass'] = {};
 FormValidateOption.rules['org.devicepass']['required'] = true;
@@ -61,17 +87,15 @@ $('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 });
 
 $('body').on('click', '.pix-update', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
+	if (CurrentOrg == null) {
+		return;
 	}
-	currentorg = $('#MyTable').dataTable().fnGetData(index);
 	var formdata = new Object();
-	for (var name in currentorg) {
-		formdata['org.' + name] = currentorg[name];
+	for (var name in CurrentOrg) {
+		formdata['org.' + name] = CurrentOrg[name];
 	}
-	refreshForm('MyEditForm');
 	$('#MyEditForm').loadJSON(formdata);
+	
 	var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 	$.each( checkboxes, function( index, checkbox ) {
 		if (formdata[$(checkbox).attr('name')] == 0) {
@@ -104,7 +128,7 @@ $('body').on('click', '.pix-update', function(event) {
 			dataType: 'json',
 			data: function (term, page) {
 				return {
-					sSearch: term, // search term
+					sSearch: term, 
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
 				};
@@ -138,8 +162,8 @@ $('body').on('click', '.pix-update', function(event) {
 			}
 		},
 		initSelection: function(element, callback) {
-			if (currentorg.backupvideo != null) {
-				callback({id: currentorg.backupvideoid, text: currentorg.backupvideo.name, video: currentorg.backupvideo });
+			if (CurrentOrg.backupvideo != null) {
+				callback({id: CurrentOrg.backupvideoid, text: CurrentOrg.backupvideo.name, video: CurrentOrg.backupvideo });
 			}
 		},
 		dropdownCssClass: "bigdrop", 

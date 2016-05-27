@@ -29,6 +29,12 @@
 			</result>
 		</global-results>
 
+		<action name="ping" method="doPing" class="loginAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="login" method="doLogin" class="loginAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
