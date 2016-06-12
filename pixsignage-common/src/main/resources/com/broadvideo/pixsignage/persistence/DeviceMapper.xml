@@ -28,6 +28,8 @@
     <result column="activetime" property="activetime" jdbcType="TIMESTAMP" />
     <result column="refreshtime" property="refreshtime" jdbcType="TIMESTAMP" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
+	<collection property="bundleschedules" ofType="com.broadvideo.pixsignage.domain.Bundleschedule"
+		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.BundlescheduleMapper.selectListByDevice" />
   </resultMap>
   
   <sql id="Base_Column_List" >

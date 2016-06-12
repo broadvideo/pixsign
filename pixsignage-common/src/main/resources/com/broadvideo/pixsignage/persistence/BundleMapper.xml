@@ -7,6 +7,9 @@
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -15,7 +18,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    bundleid, orgid, branchid, layoutid, name, status, createtime, createstaffid
+    bundleid, orgid, branchid, layoutid, name, snapshot, height, width, status, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -66,9 +69,12 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into bundle (orgid, branchid, layoutid, name, 
+      snapshot, height, width, 
       status, createtime, createstaffid
       )
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{layoutid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, 
+      #{layoutid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{snapshot,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
@@ -89,6 +95,15 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="snapshot != null" >
+        snapshot,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
       </if>
       <if test="status != null" >
         status,
@@ -112,6 +127,15 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -139,6 +163,15 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -157,6 +190,9 @@
       branchid = #{branchid,jdbcType=INTEGER},
       layoutid = #{layoutid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}

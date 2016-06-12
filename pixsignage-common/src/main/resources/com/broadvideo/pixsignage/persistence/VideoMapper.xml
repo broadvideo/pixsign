@@ -31,7 +31,7 @@
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
-    select videoid, orgid, branchid, name, uuid, type, filepath, filename, size, md5, previewflag, status, progress, description, 
+    select videoid, orgid, branchid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
     thumbnail, 0 as relateid, createtime, createstaffid from video
     where videoid = #{videoid}
     and status != '9'

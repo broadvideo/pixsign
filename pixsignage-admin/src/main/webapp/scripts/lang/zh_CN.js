@@ -91,6 +91,7 @@ var common = {
 		ratio_2: '竖屏9:16',
 		ratio_3: '横屏4:3',
 		ratio_4: '竖屏3:4',
+		ratio_5: '条形屏32:9',
 		type_0: '内部布局',
 		type_1: '公共布局',
 

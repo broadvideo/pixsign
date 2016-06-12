@@ -421,6 +421,9 @@ create table bundle(
    branchid int not null,
    layoutid int not null,
    name varchar(64) not null,
+   snapshot varchar(128),
+   height int not null,
+   width int not null,
    status char(1) default '1',
    createtime timestamp not null default current_timestamp,
    createstaffid int,
@@ -453,6 +456,15 @@ create table bundleschedule(
    createtime timestamp not null default current_timestamp,
    primary key (bundlescheduleid),
    foreign key (bundleid) references bundle(bundleid)
+ )engine = innodb
+default character set utf8;
+
+create table bundlescheduledtl( 
+   bundlescheduledtlid int not null auto_increment,
+   bundlescheduleid int not null,
+   bundleid int not null,
+   sequence int not null,
+   primary key (bundlescheduledtlid)
  )engine = innodb
 default character set utf8;
 

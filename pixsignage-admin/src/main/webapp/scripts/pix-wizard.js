@@ -601,38 +601,47 @@ function submitData() {
 			CurrentBundle.bundledtls[i].bundledtlid = '0';
 		}
 	}
-	$.ajax({
-		type : 'POST',
-		url : myurls['bundle.wizard'],
-		data : '{"bundle":' + $.toJSON(CurrentBundle) + ', "devices":' + $.toJSON(SelectedDeviceList) + ', "devicegroups":' + $.toJSON(SelectedDevicegroupList) + '}',
-		dataType : 'json',
-		contentType : 'application/json;charset=utf-8',
-		beforeSend: function ( xhr ) {
-			Metronic.startPageLoading({animate: true});
-		},
-		success : function(data, status) {
-			Metronic.stopPageLoading();
-			if (data.errorcode == 0) {
-				bootbox.alert(common.tips.success);
-				//CurrentTaskid = data.dataid;
-				//$('#ScheduleTable').dataTable()._fnAjaxUpdate();
-				//$('#SchedulefileTable').dataTable()._fnAjaxUpdate();
-				//$('#ScheduleModal').modal();
-				initData1();
-				$('#MyWizard').bootstrapWizard('first');
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-				initData1();
-				$('#MyWizard').bootstrapWizard('first');
-			}
-		},
-		error : function() {
-			Metronic.stopPageLoading();
-			bootbox.alert(common.tips.error);
+	
+	$('#snapshot_div').show();
+	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 1024, 0);
+	html2canvas($('#snapshot_div'), {
+		onrendered: function(canvas) {
+			console.log(canvas.toDataURL());
+			CurrentBundle.snapshotdtl = canvas.toDataURL();
+			$('#snapshot_div').hide();
+
+			$.ajax({
+				type : 'POST',
+				url : myurls['bundle.wizard'],
+				data : '{"bundle":' + $.toJSON(CurrentBundle) + ', "devices":' + $.toJSON(SelectedDeviceList) + ', "devicegroups":' + $.toJSON(SelectedDevicegroupList) + '}',
+				dataType : 'json',
+				contentType : 'application/json;charset=utf-8',
+				beforeSend: function ( xhr ) {
+					Metronic.startPageLoading({animate: true});
+				},
+				success : function(data, status) {
+					Metronic.stopPageLoading();
+					if (data.errorcode == 0) {
+						bootbox.alert(common.tips.success);
+						//CurrentTaskid = data.dataid;
+						//$('#ScheduleTable').dataTable()._fnAjaxUpdate();
+						//$('#SchedulefileTable').dataTable()._fnAjaxUpdate();
+						//$('#ScheduleModal').modal();
+						initData1();
+						$('#MyWizard').bootstrapWizard('first');
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+						initData1();
+						$('#MyWizard').bootstrapWizard('first');
+					}
+				},
+				error : function() {
+					Metronic.stopPageLoading();
+					bootbox.alert(common.tips.error);
+				}
+			});
 		}
 	});
-	
-	event.preventDefault();
 }
 
 

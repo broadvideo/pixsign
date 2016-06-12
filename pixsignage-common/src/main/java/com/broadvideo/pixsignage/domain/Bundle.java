@@ -16,11 +16,19 @@ public class Bundle {
 
 	private String name;
 
+	private String snapshot;
+
+	private Integer height;
+
+	private Integer width;
+
 	private String status;
 
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private String snapshotdtl;
 
 	private Layout layout;
 
@@ -77,6 +85,30 @@ public class Bundle {
 		this.name = name == null ? null : name.trim();
 	}
 
+	public String getSnapshot() {
+		return snapshot;
+	}
+
+	public void setSnapshot(String snapshot) {
+		this.snapshot = snapshot;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -101,6 +133,14 @@ public class Bundle {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public String getSnapshotdtl() {
+		return snapshotdtl;
+	}
+
+	public void setSnapshotdtl(String snapshotdtl) {
+		this.snapshotdtl = snapshotdtl;
 	}
 
 	public Layout getLayout() {

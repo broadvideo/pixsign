@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -139,8 +140,18 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
+			String snapshotdtl = bundle.getSnapshotdtl();
+			System.out.println("snapshotdtl: " + snapshotdtl);
+			if (snapshotdtl.startsWith("data:image/png;base64,")) {
+				snapshotdtl = snapshotdtl.substring(22);
+			}
+			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+			bundle.setSnapshot(snapshotFilePath);
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.design(bundle);
+			bundleService.updateBundle(bundle);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doDesign exception, ", ex);
@@ -168,6 +179,16 @@ public class BundleAction extends BaseDatatableAction {
 			bundle.setBranchid(getLoginStaff().getBranchid());
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.handleWizard(getLoginStaff(), bundle, devices, devicegroups);
+
+			String snapshotdtl = bundle.getSnapshotdtl();
+			if (snapshotdtl.startsWith("data:image/png;base64,")) {
+				snapshotdtl = snapshotdtl.substring(22);
+			}
+			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+			bundle.setSnapshot(snapshotFilePath);
+			bundleService.updateBundle(bundle);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doWizard exception, ", ex);

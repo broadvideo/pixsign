@@ -12,6 +12,8 @@
     <result column="endtime" property="endtime" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="bundle" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectByPrimaryKey" />
+	<collection property="bundlescheduledtls" ofType="com.broadvideo.pixsignage.domain.Bundlescheduledtl"
+		column="{bundlescheduleid=bundlescheduleid}" select="com.broadvideo.pixsignage.persistence.BundlescheduledtlMapper.selectList" />
   </resultMap>
   
   <resultMap id="BindResultMap" type="java.util.HashMap" >
@@ -31,6 +33,22 @@
     where bundlescheduleid = '${bundlescheduleid}'
   </select>
   
+  <select id="selectListByDevice" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundleschedule
+    where bindtype = 1 and bindid = #{deviceid}
+    order by playdate, starttime
+  </select>
+
+  <select id="selectListByDevicegroup" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundleschedule
+    where bindtype = 2 and bindid = #{devicegroupid}
+    order by playdate, starttime
+  </select>
+
   <select id="selectList" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />

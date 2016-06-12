@@ -113,8 +113,7 @@ response.setDateHeader("Expires",0);
 										<select class="form-control" name="layout.ratio" tabindex="-1">
 											<option value="1"><spring:message code="global.layout.ratio_1"/></option>
 											<option value="2"><spring:message code="global.layout.ratio_2"/></option>
-											<option value="3"><spring:message code="global.layout.ratio_3"/></option>
-											<option value="4"><spring:message code="global.layout.ratio_4"/></option>
+											<option value="5"><spring:message code="global.layout.ratio_5"/></option>
 										</select>
 									</div>
 								</div>
@@ -516,11 +515,11 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -263,6 +263,7 @@ function refreshBundledtlEdit() {
 	if (CurrentBundledtl.layoutdtl.region.type < 2) {
 		if (CurrentBundledtl.layoutdtl.region.type == 0) {
 			$('.regiontype-0').css("display", "block");
+			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 		} else if (CurrentBundledtl.layoutdtl.region.type == 1) {
 			$('.regiontype-1').css("display", "block");
 		}
@@ -496,7 +497,20 @@ $('#BundleDiv').click(function(e){
 			return (a.layoutdtl.width + a.layoutdtl.height - b.layoutdtl.width - b.layoutdtl.height);
 		});
 		if (CurrentBundledtl == null || CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
-			CurrentBundledtl = bundledtls[0];
+			//CurrentBundledtl = bundledtls[0];
+			var index = 10000;
+			for (var i=0; i<bundledtls.length; i++) {
+				if (CurrentBundledtl != null && CurrentBundledtl.layoutdtl.regionid == bundledtls[i].layoutdtl.regionid) {
+					index = i;
+					break;
+				}
+			}
+			var oldBundledtl = CurrentBundledtl;
+			if (index >= (bundledtls.length -1)) {
+				CurrentBundledtl = bundledtls[0];
+			} else {
+				CurrentBundledtl = bundledtls[index+1];
+			}
 			enterBundledtlFocus(CurrentBundledtl);
 		}
 	}
@@ -554,24 +568,48 @@ $('#IntVideoTable').dataTable({
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 3 == 0) {
+		if (iDisplayIndex % 4 == 0) {
 			intvideohtml = '';
 			intvideohtml += '<div class="row" >';
 		}
-		intvideohtml += '<div class="col-md-4 col-xs-4">';
+		intvideohtml += '<div class="col-md-3 col-xs-3">';
 
-		var imageurl = '/pixsigdata' + aData.thumbnail;
-		if (aData.thumbnail == null) {
-			imageurl = '../img/video.jpg';
+		intvideohtml += '<div id="ThumbContainer" style="position:relative">';
+		var thumbnail = '../img/video.jpg';
+		var thumbwidth = 100;
+		if (aData.thumbnail != null) {
+			thumbnail = '/pixsigdata' + aData.thumbnail;
+			thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 		}
-		intvideohtml += '<div class="thumbs">';
-		intvideohtml += '<img src="' + imageurl + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+		intvideohtml += '<div id="VideoThumb" class="thumbs">';
+		intvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		if (aData.relate != null) {
+			var thumbnail = '../img/video.jpg';
+			var thumbwidth = 50;
+			var thumbheight = 50;
+			if (aData.relate.thumbnail != null) {
+				thumbnail = '/pixsigdata' + aData.relate.thumbnail;
+				aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
+				aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
+				thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
+				thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
+			}
+			intvideohtml += '<div id="RelateThumb">';
+			intvideohtml += '<img src="' + thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+			intvideohtml += '</div>';
+		}
+		intvideohtml += '<div class="mask">';
+		intvideohtml += '<div>';
+		intvideohtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		intvideohtml += '<a class="btn default btn-sm green pix-medialistdtl-intvideo-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 		intvideohtml += '</div>';
-		intvideohtml += '<h6>' + aData.name + '</h6>';
+		intvideohtml += '</div>';
+		intvideohtml += '</div>';
 
-		intvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-intvideo-add">' + common.view.add + '</button></p>';
 		intvideohtml += '</div>';
-		if ((iDisplayIndex+1) % 3 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
+
+		intvideohtml += '</div>';
+		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
 			intvideohtml += '</div>';
 			if ((iDisplayIndex+1) != $('#IntVideoTable').dataTable().fnGetData().length) {
 				intvideohtml += '<hr/>';
@@ -583,6 +621,17 @@ $('#IntVideoTable').dataTable({
 	'fnDrawCallback': function(oSettings, json) {
 		$('#IntVideoContainer .thumbs').each(function(i) {
 			$(this).height($(this).parent().width());
+		});
+		$('#IntVideoContainer .mask').each(function(i) {
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+		$('#IntVideoContainer #RelateThumb').each(function(i) {
+			var thumbwidth = $(this).find('img').attr('thumbwidth');
+			var thumbheight = $(this).find('img').attr('thumbheight');
+			$(this).css('position', 'absolute');
+			$(this).css('left', (100-thumbwidth) + '%');
+			$(this).css('top', '0');
+			$(this).css('width', thumbwidth + '%');
 		});
 	},
 	'fnServerParams': function(aoData) { 
@@ -621,24 +670,48 @@ $('#ExtVideoTable').dataTable({
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 3 == 0) {
+		if (iDisplayIndex % 4 == 0) {
 			extvideohtml = '';
 			extvideohtml += '<div class="row" >';
 		}
-		extvideohtml += '<div class="col-md-4 col-xs-4">';
+		extvideohtml += '<div class="col-md-3 col-xs-3">';
 
-		var imageurl = '/pixsigdata' + aData.thumbnail;
-		if (aData.thumbnail == null) {
-			imageurl = '../img/video.jpg';
+		extvideohtml += '<div id="ThumbContainer" style="position:relative">';
+		var thumbnail = '../img/video.jpg';
+		var thumbwidth = 100;
+		if (aData.thumbnail != null) {
+			thumbnail = '/pixsigdata' + aData.thumbnail;
+			thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 		}
-		extvideohtml += '<div class="thumbs">';
-		extvideohtml += '<img src="' + imageurl + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+		extvideohtml += '<div id="VideoThumb" class="thumbs">';
+		extvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		if (aData.relate != null) {
+			var thumbnail = '../img/video.jpg';
+			var thumbwidth = 50;
+			var thumbheight = 50;
+			if (aData.relate.thumbnail != null) {
+				thumbnail = '/pixsigdata' + aData.relate.thumbnail;
+				aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
+				aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
+				thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
+				thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
+			}
+			extvideohtml += '<div id="RelateThumb">';
+			extvideohtml += '<img src="' + thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+			extvideohtml += '</div>';
+		}
+		extvideohtml += '<div class="mask">';
+		extvideohtml += '<div>';
+		extvideohtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		extvideohtml += '<a class="btn default btn-sm green pix-medialistdtl-extvideo-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 		extvideohtml += '</div>';
-		extvideohtml += '<h6>' + aData.name + '</h6>';
-		
-		extvideohtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-extvideo-add">' + common.view.add + '</button></p>';
 		extvideohtml += '</div>';
-		if ((iDisplayIndex+1) % 3 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
+		extvideohtml += '</div>';
+
+		extvideohtml += '</div>';
+
+		extvideohtml += '</div>';
+		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
 			extvideohtml += '</div>';
 			if ((iDisplayIndex+1) != $('#ExtVideoTable').dataTable().fnGetData().length) {
 				extvideohtml += '<hr/>';
@@ -650,6 +723,17 @@ $('#ExtVideoTable').dataTable({
 	'fnDrawCallback': function(oSettings, json) {
 		$('#ExtVideoContainer .thumbs').each(function(i) {
 			$(this).height($(this).parent().width());
+		});
+		$('#ExtVideoContainer .mask').each(function(i) {
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+		$('#ExtVideoContainer #RelateThumb').each(function(i) {
+			var thumbwidth = $(this).find('img').attr('thumbwidth');
+			var thumbheight = $(this).find('img').attr('thumbheight');
+			$(this).css('position', 'absolute');
+			$(this).css('left', (100-thumbwidth) + '%');
+			$(this).css('top', '0');
+			$(this).css('width', thumbwidth + '%');
 		});
 	},
 	'fnServerParams': function(aoData) { 
@@ -688,24 +772,25 @@ $('#ImageTable').dataTable({
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 3 == 0) {
+		if (iDisplayIndex % 4 == 0) {
 			imagehtml = '';
 			imagehtml += '<div class="row" >';
 		}
-		imagehtml += '<div class="col-md-4 col-xs-4">';
+		imagehtml += '<div class="col-md-3 col-xs-3">';
 		
 		imagehtml += '<div class="thumbs">';
-		var new_width = 100;
-		if (aData.width < aData.height) {
-			new_width = 100*aData.width/aData.height;
-		}
-		imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + new_width + '%" alt="' + aData.name + '" />';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		imagehtml += '<div class="mask">';
+		imagehtml += '<div>';
+		imagehtml += '<h6 style="color:white;" class="pixtitle">' + aData.name + '</h6>';
+		imagehtml += '<a class="btn default btn-sm green pix-medialistdtl-image-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 		imagehtml += '</div>';
-		imagehtml += '<h6>' + aData.name + '</h6>';
-		
-		imagehtml += '<p><button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-image-add">' + common.view.add + '</button></p>';
 		imagehtml += '</div>';
-		if ((iDisplayIndex+1) % 3 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
+		imagehtml += '</div>';
+
+		imagehtml += '</div>';
+		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#ImageTable').dataTable().fnGetData().length) {
 			imagehtml += '</div>';
 			if ((iDisplayIndex+1) != $('#ImageTable').dataTable().fnGetData().length) {
 				imagehtml += '<hr/>';
@@ -717,6 +802,9 @@ $('#ImageTable').dataTable({
 	'fnDrawCallback': function(oSettings, json) {
 		$('#ImageContainer .thumbs').each(function(i) {
 			$(this).height($(this).parent().width());
+		});
+		$('#ImageContainer .mask').each(function(i) {
+			$(this).height($(this).parent().height() + 2);
 		});
 	},
 	'fnServerParams': function(aoData) { 
@@ -754,14 +842,18 @@ $('#MedialistDtlTable').dataTable({
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-medialistdtl-up"><i class="fa fa-arrow-up"></i></button>');
 		$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-medialistdtl-down"><i class="fa fa-arrow-down"></i></button>');
-		$('td:eq(6)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-medialistdtl-delete">' + common.view.remove + '</button>');
+		$('td:eq(6)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-medialistdtl-delete"><i class="fa fa-trash-o"></i></button>');
 		return nRow;
 	}
 });
 
 //增加本地视频到播放明细Table
 $('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
-	var data = $('#IntVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#IntVideoTable').dataTable().fnGetData(rowIndex);
 	var medialistdtl = {};
 	medialistdtl.medialistdtlid = 0;
 	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
@@ -784,7 +876,11 @@ $('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
 
 //增加引入视频到播放明细Table
 $('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
-	var data = $('#ExtVideoTable').dataTable().fnGetData($(event.target).attr("data-id"));		
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#ExtVideoTable').dataTable().fnGetData(rowIndex);
 	var medialistdtl = {};
 	medialistdtl.medialistdtlid = 0;
 	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
@@ -807,7 +903,11 @@ $('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
 
 //增加图片到播放明细Table
 $('body').on('click', '.pix-medialistdtl-image-add', function(event) {
-	var data = $('#ImageTable').dataTable().fnGetData($(event.target).attr("data-id"));
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#ImageTable').dataTable().fnGetData(rowIndex);
 	var medialistdtl = {};
 	medialistdtl.medialistdtlid = 0;
 	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;

@@ -94,7 +94,8 @@ public class PixsignageService {
 			}
 
 			IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
-			String location = ipseeker.getArea(ip);
+			String location = ipseeker.getCountry(ip);
+			logger.info("Get the location from {}: {}", ip, location);
 			int index1 = location.indexOf("省");
 			int index2 = location.indexOf("市");
 			if (index2 < 0) {
@@ -106,7 +107,7 @@ public class PixsignageService {
 				index1 = 0;
 			}
 			String city = location.substring(index1, index2);
-			if (!city.equals("对方和您在同一内部网")) {
+			if (!city.equals("局域网")) {
 				device.setCity(city);
 			}
 

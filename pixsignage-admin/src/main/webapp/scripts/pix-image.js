@@ -49,37 +49,55 @@ function initMyTable() {
 				imagehtml += '<div class="row" >';
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
-			imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '">';
+			
 			imagehtml += '<div class="thumbs">';
 			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 			imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+			imagehtml += '<div class="mask">';
+			imagehtml += '<div>';
+			imagehtml += '<a class="btn default btn-sm green fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
+			if (CurBranchid == MyBranchid) {
+				imagehtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
+				imagehtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
+			}
+			imagehtml += '</div>';
+			imagehtml += '</div>';
+			imagehtml += '</div>';
 			
-			imagehtml += '</div></a>';
+			//imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '">';
+			//imagehtml += '<div class="thumbs">';
+			//var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+			//imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+			//imagehtml += '</div></a>';
+
 			imagehtml += '<h6 class="pixtitle">' + aData.name + '<br>';
 			var filesize = '(' + aData.imageid + ') ' + parseInt(aData.size / 1024);
 			imagehtml += '' + transferIntToComma(filesize) + ' KB</h6>';
-			if (CurBranchid == MyBranchid) {
-				imagehtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
-				imagehtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
-			}
 			imagehtml += '</div>';
+			
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 				imagehtml += '</div>';
 				if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
 					imagehtml += '<hr/>';
 				}
 				$('#MediaContainer').append(imagehtml);
-				$('.thumbs').each(function(i) {
-					$(this).height($(this).parent().closest('div').width());
-				});
-				$(".fancybox").fancybox({
-					openEffect	: 'none',
-					closeEffect	: 'none',
-					closeBtn : false,
-				});
 			}
 
 			return nRow;
+		},
+		'fnDrawCallback': function(oSettings, json) {
+			$('.thumbs').each(function(i) {
+				$(this).height($(this).parent().width());
+			});
+			$('.mask').each(function(i) {
+				$(this).height($(this).parent().height() + 2);
+				$(this).find('div').css('top', $(this).height()/2 - 14);
+			});
+			$(".fancybox").fancybox({
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				closeBtn : false,
+			});
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });

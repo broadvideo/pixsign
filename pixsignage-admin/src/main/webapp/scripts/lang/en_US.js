@@ -91,6 +91,7 @@ var common = {
 		ratio_2: '9:16',
 		ratio_3: '4:3',
 		ratio_4: '3:4',
+		ratio_5: '32:9',
 		type_0: 'Private',
 		type_1: 'Public',
 

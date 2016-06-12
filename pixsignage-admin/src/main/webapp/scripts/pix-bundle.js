@@ -53,9 +53,16 @@ var oTable = $('#MyTable').dataTable({
 			bundlehtml += '<div class="row" >';
 		}
 		bundlehtml += '<div class="col-md-3 col-xs-3">';
-		bundlehtml += '<h3>' + aData.name + '</h3>';
+		bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
+
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
-		bundlehtml += '<div id="BundleDiv-'+ aData.bundleid + '"></div></a>';
+		bundlehtml += '<div class="thumbs">';
+		if (aData.snapshot != null) {
+			var thumbwidth = aData.layout.width > aData.layout.height? 100 : 100*aData.layout.width/aData.layout.height;
+			bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		}
+		bundlehtml += '</div></a>';
+
 		bundlehtml += '<div privilegeid="101010">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
@@ -71,25 +78,32 @@ var oTable = $('#MyTable').dataTable({
 			}
 			$('#BundleContainer').append(bundlehtml);
 		}
-		if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
-			for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
-				var bundle = $('#MyTable').dataTable().fnGetData(i);
-				redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
-			}
-			$('.fancybox').each(function(index,item) {
-				$(this).click(function() {
-					var index = $(this).attr('data-id');
-					var bundle = $('#MyTable').dataTable().fnGetData(index);
-					$.fancybox({
-				        padding : 0,
-				        content: '<div id="BundlePreview"></div>',
-				    });
-					redrawBundlePreview($('#BundlePreview'), bundle, 800);
-				    return false;
-				})
-			});
-		}
 		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+			var bundle = $('#MyTable').dataTable().fnGetData(i);
+			redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
+		}
+		$('.thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+		$('.fancybox').each(function(index,item) {
+			$(this).click(function() {
+				var index = $(this).attr('data-id');
+				var bundle = $('#MyTable').dataTable().fnGetData(index);
+				$.fancybox({
+					openEffect	: 'none',
+					closeEffect	: 'none',
+					closeBtn : false,
+			        padding : 0,
+			        content: '<div id="BundlePreview"></div>',
+			    });
+				redrawBundlePreview($('#BundlePreview'), bundle, 800, 1);
+			    return false;
+			})
+		});
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -343,31 +357,41 @@ $('#BundleModal').on('shown.bs.modal', function (e) {
 //在设计对话框中进行提交
 $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 	if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
-		$.ajax({
-			type : 'POST',
-			url : myurls['bundle.design'],
-			data : '{"bundle":' + $.toJSON(CurrentBundle) + '}',
-			dataType : 'json',
-			contentType : 'application/json;charset=utf-8',
-			beforeSend: function ( xhr ) {
-				Metronic.startPageLoading({animate: true});
-			},
-			success : function(data, status) {
-				Metronic.stopPageLoading();
-				$('#BundleModal').modal('hide');
-				if (data.errorcode == 0) {
-					bootbox.alert(common.tips.success);
-					$('#MyTable').dataTable()._fnAjaxUpdate();
-				} else {
-					bootbox.alert(common.tips.error + data.errormsg);
-				}
-			},
-			error : function() {
-				$('#BundleModal').modal('hide');
-				bootbox.alert(common.tips.error);
+
+		$('#snapshot_div').show();
+		redrawBundlePreview($('#snapshot_div'), CurrentBundle, 1024, 0);
+		html2canvas($('#snapshot_div'), {
+			onrendered: function(canvas) {
+				console.log(canvas.toDataURL());
+				CurrentBundle.snapshotdtl = canvas.toDataURL();
+				$('#snapshot_div').hide();
+
+				$.ajax({
+					type : 'POST',
+					url : myurls['bundle.design'],
+					data : '{"bundle":' + $.toJSON(CurrentBundle) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						$('#BundleModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#MyTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						$('#BundleModal').modal('hide');
+						bootbox.alert(common.tips.error);
+					}
+				});
 			}
 		});
-
 		event.preventDefault();
 	}
 });	

@@ -544,23 +544,22 @@ $('#LayoutDiv').click(function(e){
 		layoutdtls.sort(function(a, b) {
 			return (a.width + a.height - b.width - b.height);
 		});
-		/*
-		var index = 10000;
-		for (var i=0; i<layoutdtls.length; i++) {
-			if (CurrentLayoutdtl != null && CurrentLayoutdtl.regionid == layoutdtls[i].regionid) {
-				index = i;
-				break;
-			}
-		}
-		var oldLayoutdtl = CurrentLayoutdtl;
-		if (index >= (layoutdtls.length -1)) {
-			CurrentLayoutdtl = layoutdtls[0];
-		} else {
-			CurrentLayoutdtl = layoutdtls[index+1];
-		}*/
 
 		if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
-			CurrentLayoutdtl = layoutdtls[0];
+			//CurrentLayoutdtl = layoutdtls[0];
+			var index = 10000;
+			for (var i=0; i<layoutdtls.length; i++) {
+				if (CurrentLayoutdtl != null && CurrentLayoutdtl.regionid == layoutdtls[i].regionid) {
+					index = i;
+					break;
+				}
+			}
+			var oldLayoutdtl = CurrentLayoutdtl;
+			if (index >= (layoutdtls.length -1)) {
+				CurrentLayoutdtl = layoutdtls[0];
+			} else {
+				CurrentLayoutdtl = layoutdtls[index+1];
+			}
 			enterLayoutdtlFocus(CurrentLayoutdtl);
 		}
 	}

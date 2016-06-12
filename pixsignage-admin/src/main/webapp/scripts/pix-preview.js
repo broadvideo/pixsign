@@ -95,15 +95,16 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 }
 
 //Bundle Preview
-function redrawBundlePreview(div, bundle, maxsize) {
+function redrawBundlePreview(div, bundle, maxsize, dynamic) {
 	div.empty();
 	div.attr('bundleid', bundle.bundleid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
+	//div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; background:#FFFFFF;');
 	if (bundle.layout.bgimage != null) {
 		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
-		div.append(getBundledtlPreviewHtml(bundle, i));
+		div.append(getBundledtlPreviewHtml(bundle, i, dynamic));
 	}
 	var scale, width, height;
 	if (bundle.layout.width > bundle.layout.height ) {
@@ -139,7 +140,7 @@ function redrawBundlePreview(div, bundle, maxsize) {
 	});
 }
 
-function getBundledtlPreviewHtml(bundle, bundledtlindex) {
+function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	var bundledtl = bundle.bundledtls[bundledtlindex];
 	var bgimage = null;
 	if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
@@ -156,7 +157,8 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 	bundledtlhtml += '%; height:' + 100*bundledtl.layoutdtl.height/bundle.layout.height;
 	bundledtlhtml += '%; top: ' + 100*bundledtl.layoutdtl.topoffset/bundle.layout.height;
 	bundledtlhtml += '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/bundle.layout.width;
-	bundledtlhtml += '%; border: 1px solid #000; ">';
+	//bundledtlhtml += '%; border: 1px solid #000; ">';
+	bundledtlhtml += '%; ">';
 
 	if (bundledtl.layoutdtl.region.type == 0) {
 		if (bundledtl.objtype == 3) {
@@ -173,24 +175,24 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex) {
 
 	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
 	if (bundledtl.layoutdtl.region.type == 1) {
-		if (bundledtl.layoutdtl.direction == 4) {
-			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		if (bundledtl.layoutdtl.direction == 4 && dynamic == 1) {
+			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
 			bundledtlhtml += '</marquee>';
 		} else {
-			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
 			bundledtlhtml += '</p>';
 		}
 	} else if (bundledtl.layoutdtl.region.type == 2) {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
 	} else if (bundledtl.layoutdtl.region.type == 3) {
-		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
-		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
-		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		bundledtlhtml += '<img src="../img/duoyun.png" />';
+		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.layoutdtl.region.type == 4) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';

@@ -80,6 +80,8 @@ var oTable = $('#MyTable').dataTable({
 			layouthtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_3 + '</span>';
 		} else if (aData.ratio == 4) {
 			layouthtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_4 + '</span>';
+		} else if (aData.ratio == 5) {
+			layouthtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_5 + '</span>';
 		}
 		if (aData.type == 0) {
 			layouthtml += ' <span class="label label-sm label-default">' + common.view.type_0 + '</span></h6>';

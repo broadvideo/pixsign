@@ -121,6 +121,8 @@ public class LoginAction extends BaseAction {
 			return ERROR;
 		}
 
+		username = username.trim();
+		password = password.trim();
 		logger.info("Login start, username={}, password={}, md5={}, code={}", username, password,
 				CommonUtil.getPasswordMd5(username, password), code);
 		staff = staffMapper.login(username, CommonUtil.getPasswordMd5(username, password));

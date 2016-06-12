@@ -715,41 +715,6 @@
 			</result>
 		</action>
 
-		<action name="bundleschedule!list" method="doList"
-			class="bundlescheduleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="bundleschedule!add" method="doAdd" class="bundlescheduleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="bundleschedule!update" method="doUpdate"
-			class="bundlescheduleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="bundleschedule!delete" method="doDelete"
-			class="bundlescheduleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="bundleschedule!sync" method="doSync"
-			class="bundlescheduleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-
 		<action name="layout!list" method="doList" class="layoutAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

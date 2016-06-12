@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class Util {
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
 
-	private static StringBuilder sb = new StringBuilder();
+	// private static StringBuilder sb = new StringBuilder();
 
 	/**
 	 * 从ip的字符串形式得到字节数组形式
@@ -41,7 +41,8 @@ public class Util {
 	 * @return 字符串形式的ip
 	 */
 	public static String getIpStringFromBytes(byte[] ip) {
-		sb.delete(0, sb.length());
+		StringBuilder sb = new StringBuilder();
+		// sb.delete(0, sb.length());
 		sb.append(ip[0] & 0xFF);
 		sb.append('.');
 		sb.append(ip[1] & 0xFF);

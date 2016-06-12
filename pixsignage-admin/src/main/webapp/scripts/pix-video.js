@@ -52,53 +52,96 @@ function initMyTable() {
 			videohtml += '<div class="col-md-2 col-xs-2">';
 			
 			videohtml += '<div id="ThumbContainer" style="position:relative">';
-			var thumbnail = '/pixsigdata' + aData.thumbnail;
-			if (aData.thumbnail == null) {
-				thumbnail = '../img/video.jpg';
+			var thumbnail = '../img/video.jpg';
+			var thumbwidth = 100;
+			if (aData.thumbnail != null) {
+				thumbnail = '/pixsigdata' + aData.thumbnail;
+				thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 			}
-			if (aData.filepath == null || aData.previewflag != 1) {
-				videohtml += '<div id="VideoThumb" class="thumbs">';
-				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
-				videohtml += '</div>';
-			} else {
-				var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
-				videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.name + '">';
-				videohtml += '<div id="VideoThumb" class="thumbs">';
-				var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-				videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-				videohtml += '</div>';
-				videohtml += '</a>';
+			var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
+			videohtml += '<div id="VideoThumb" class="thumbs">';
+			videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+			videohtml += '<div class="mask">';
+			videohtml += '<div>';
+			if (aData.filepath != null && aData.previewflag == 1) {
+				videohtml += '<a class="btn default btn-sm green fancybox" href="' + videourl + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
 			}
-			
+			if (CurBranchid == MyBranchid) {
+				videohtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
+				videohtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
+			}
+			videohtml += '</div>';
+			videohtml += '</div>';
+			videohtml += '</div>';
+
 			if (aData.relate != null) {
-				var relate_thumbnail = '/pixsigdata' + aData.relate.thumbnail;
-				if (aData.relate.thumbnail == null) {
-					relate_thumbnail = '../img/video.jpg';
+				var thumbnail = '../img/video.jpg';
+				var thumbwidth = 50;
+				var thumbheight = 50;
+				if (aData.relate.thumbnail != null) {
+					thumbnail = '/pixsigdata' + aData.relate.thumbnail;
+					console.log('thumbnail: ', thumbnail);
+					aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
+					aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
+					console.log('width: ', aData.relate.width, ' height: ', aData.relate.height);
+					thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
+					thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
 				}
+				var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
 				if (aData.relate.filepath == null || aData.relate.previewflag != 1) {
 					videohtml += '<div id="RelateThumb" class="thumbs">';
-					videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" />';
+					videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					videohtml += '</div>';
 				} else {
 					var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
 					videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.relate.name + '">';
 					videohtml += '<div id="RelateThumb" class="thumbs">';
-					videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="50px" alt="' + aData.relate.name + '" />';
+					videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					videohtml += '</div>';
 					videohtml += '</a>';
 				}
 			}
+
+			//if (aData.filepath == null || aData.previewflag != 1) {
+			//	videohtml += '<div id="VideoThumb" class="thumbs">';
+			//	videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.name + '" />';
+			//	videohtml += '</div>';
+			//} else {
+				//var videourl = '/pixsigdata/video/preview/' + aData.videoid + ".mp4";
+				//videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.name + '">';
+				//videohtml += '<div id="VideoThumb" class="thumbs">';
+				//var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+				//videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+				//videohtml += '</div>';
+				//videohtml += '</a>';
+			//}
+			
+			//if (aData.relate != null) {
+			//	var relate_thumbnail = '/pixsigdata' + aData.relate.thumbnail;
+			//	if (aData.relate.thumbnail == null) {
+			//		relate_thumbnail = '../img/video.jpg';
+			//	}
+			//	if (aData.relate.filepath == null || aData.relate.previewflag != 1) {
+			//		videohtml += '<div id="RelateThumb" class="thumbs">';
+			//		videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" />';
+			//		videohtml += '</div>';
+			//	} else {
+			//		var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
+			//		videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.relate.name + '">';
+			//		videohtml += '<div id="RelateThumb" class="thumbs">';
+			//		videohtml += '<img src="' + relate_thumbnail + '" class="imgthumb" width="50px" alt="' + aData.relate.name + '" />';
+			//		videohtml += '</div>';
+			//		videohtml += '</a>';
+			//	}
+			//}
+			
 			videohtml += '</div>';
 			
 			videohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			videohtml += '(' + aData.videoid + ') ' + transferIntToComma(filesize) + ' KB</h6>';
-
-			if (CurBranchid == MyBranchid) {
-				videohtml += '<p><a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-pencil"></i> </a>';
-				videohtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> </a> </p>';
-			}
 			videohtml += '</div>';
+
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 				videohtml += '</div>';
 				if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
@@ -137,15 +180,18 @@ function initMyTable() {
 		'fnDrawCallback': function(oSettings, json) {
 			$('#MyTable #VideoThumb').each(function(i) {
 				var height = $(this).closest('#ThumbContainer').parent().width();
-				console.log(height);
 				$(this).height(height);
 				$(this).closest('#ThumbContainer').height(height);
+				$(this).find('.mask').height(height+2);
+				$(this).find('.mask').find('div').css('top', $(this).height()/2 - 10);
 			});
 			$('#MyTable #RelateThumb').each(function(i) {
+				var thumbwidth = $(this).find('img').attr('thumbwidth');
+				var thumbheight = $(this).find('img').attr('thumbheight');
 				$(this).css('position', 'absolute');
-				$(this).css('left', '50%');
+				$(this).css('left', (100-thumbwidth) + '%');
 				$(this).css('top', '0');
-				$(this).css('width', '50%');
+				$(this).css('width', thumbwidth + '%');
 			});
 		},
 		'fnServerParams': function(aoData) { 

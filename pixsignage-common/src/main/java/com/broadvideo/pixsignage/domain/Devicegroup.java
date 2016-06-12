@@ -24,6 +24,8 @@ public class Devicegroup {
 
 	private List<Device> devices;
 
+	private List<Bundleschedule> bundleschedules;
+
 	public Integer getDevicegroupid() {
 		return devicegroupid;
 	}
@@ -96,5 +98,13 @@ public class Devicegroup {
 
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
+	}
+
+	public List<Bundleschedule> getBundleschedules() {
+		return bundleschedules;
+	}
+
+	public void setBundleschedules(List<Bundleschedule> bundleschedules) {
+		this.bundleschedules = bundleschedules;
 	}
 }

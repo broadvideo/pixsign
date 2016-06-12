@@ -203,10 +203,13 @@ public class VideoAction extends BaseDatatableAction {
 					search, start, length);
 			for (Video video : videoList) {
 				if (video.getWidth().intValue() == 0 || video.getHeight().intValue() == 0) {
-					BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail()));
-					video.setWidth(img.getWidth());
-					video.setHeight(img.getHeight());
-					videoService.updateVideo(video);
+					File f = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail());
+					if (f.exists()) {
+						BufferedImage img = ImageIO.read(f);
+						video.setWidth(img.getWidth());
+						video.setHeight(img.getHeight());
+						videoService.updateVideo(video);
+					}
 				}
 				aaData.add(video);
 			}

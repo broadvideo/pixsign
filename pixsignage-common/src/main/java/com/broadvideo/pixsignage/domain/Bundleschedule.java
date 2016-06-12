@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -32,6 +33,8 @@ public class Bundleschedule {
 	private Date tempstarttime;
 
 	private Bundle bundle;
+
+	private List<Bundlescheduledtl> bundlescheduledtls;
 
 	public Integer getBundlescheduleid() {
 		return bundlescheduleid;
@@ -127,5 +130,13 @@ public class Bundleschedule {
 
 	public void setBundle(Bundle bundle) {
 		this.bundle = bundle;
+	}
+
+	public List<Bundlescheduledtl> getBundlescheduledtls() {
+		return bundlescheduledtls;
+	}
+
+	public void setBundlescheduledtls(List<Bundlescheduledtl> bundlescheduledtls) {
+		this.bundlescheduledtls = bundlescheduledtls;
 	}
 }

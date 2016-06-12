@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -56,6 +57,8 @@ public class Device {
 	private Date refreshtime;
 
 	private Devicegroup devicegroup;
+
+	private List<Bundleschedule> bundleschedules;
 
 	public Integer getDeviceid() {
 		return deviceid;
@@ -269,5 +272,13 @@ public class Device {
 
 	public void setDevicegroup(Devicegroup devicegroup) {
 		this.devicegroup = devicegroup;
+	}
+
+	public List<Bundleschedule> getBundleschedules() {
+		return bundleschedules;
+	}
+
+	public void setBundleschedules(List<Bundleschedule> bundleschedules) {
+		this.bundleschedules = bundleschedules;
 	}
 }

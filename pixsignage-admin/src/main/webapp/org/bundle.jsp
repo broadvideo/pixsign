@@ -119,7 +119,7 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group bundle-ctl regiontype-1">
-															<label class="control-label col-md-3"><spring:message code="global.type"/><span class="required">*</span></label>
+															<label class="control-label col-md-3"><spring:message code="global.bundledtl.objtype"/><span class="required">*</span></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
 																	<input type="radio" name="bundledtl.objtype" value="2" checked> <spring:message code="global.text"/>
@@ -127,13 +127,13 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group bundle-ctl regiontype-0 regiontype-1">
-															<label class="control-label col-md-3">范围<span class="required">*</span></label>
+															<label class="control-label col-md-3"><spring:message code="global.bundledtl.scope"/><span class="required">*</span></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
-																	<input type="radio" name="bundledtl.type" value="0" checked> 私有
+																	<input type="radio" name="bundledtl.type" value="0" checked> <spring:message code="global.bundledtl.type_0"/>
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" name="bundledtl.type" value="1"> 公共
+																	<input type="radio" name="bundledtl.type" value="1"> <spring:message code="global.bundledtl.type_1"/>
 																</label>
 															</div>
 														</div>
@@ -259,6 +259,10 @@ response.setDateHeader("Expires",0);
 						<h4 class="modal-title"><spring:message code="global.bundle"/></h4>
 					</div>
 					<div class="modal-body">
+						<div class="note note-success">
+							<p><spring:message code="global.tips_2"/></p>
+							<p><spring:message code="global.tips_3"/></p>
+						</div>
 						<div class="row">
 							<div class="col-md-7">
 								<div class="portlet box blue tabbable">
@@ -366,6 +370,7 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 				</div>
+				<div id="snapshot_div" style="position:relative; top:65px; display:none;"></div>
 			</div>
 		</div>
 
@@ -415,6 +420,7 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
@@ -422,9 +428,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-bundle.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -1,11 +1,31 @@
+.mask {
+    display:none;
+	position:absolute; 
+	left:0; 
+	top:0;
+	width:100%;
+	opacity: 1;
+	transition-delay: 1s;
+	background-color: rgba(0,0,0,0.5);
+	overflow: hidden;
+}
+
+.mask div {
+	position: relative; 
+}
+
 .thumbs{
+	position:relative; 
     border: 1px solid #D3D3D3;
     display:table-cell; 
     vertical-align:middle; 
     text-align:center;
 }
-.thumbs:hover{
+.thumbs:hover {
     border: 1px solid #000000; 
+}
+.thumbs:hover .mask{
+    display:block;
 }
 .imgthumb{
     box-shadow: 1px 1px 2px rgb(172, 172, 172);
@@ -15,6 +35,9 @@
 	white-space:nowrap; 
 	text-overflow:ellipsis;
 }
+
+
+
 
 .form-signin {
     max-width: 300px;
