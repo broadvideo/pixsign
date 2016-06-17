@@ -10,8 +10,8 @@ public class Bundledtl {
 	public final static String ObjType_Medialist = "1";
 	public final static String ObjType_Text = "2";
 	public final static String ObjType_Stream = "3";
-	public final static String ObjType_Dvb = "4";
 	public final static String ObjType_Widget = "5";
+	public final static String ObjType_Dvb = "6";
 
 	private Integer bundledtlid;
 
@@ -35,9 +35,9 @@ public class Bundledtl {
 
 	private Stream stream;
 
-	private Dvb dvb;
-
 	private Widget widget;
+
+	private Dvb dvb;
 
 	public Integer getBundledtlid() {
 		return bundledtlid;
@@ -127,19 +127,19 @@ public class Bundledtl {
 		this.stream = stream;
 	}
 
-	public Dvb getDvb() {
-		return dvb;
-	}
-
-	public void setDvb(Dvb dvb) {
-		this.dvb = dvb;
-	}
-
 	public Widget getWidget() {
 		return widget;
 	}
 
 	public void setWidget(Widget widget) {
 		this.widget = widget;
+	}
+
+	public Dvb getDvb() {
+		return dvb;
+	}
+
+	public void setDvb(Dvb dvb) {
+		this.dvb = dvb;
 	}
 }

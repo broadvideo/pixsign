@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,6 +9,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +144,7 @@ public class BundleServiceImpl implements BundleService {
 			bundledtl.setBundleid(bundle.getBundleid());
 			bundledtl.setRegionid(layoutdtl.getRegionid());
 			bundledtl.setType(Bundledtl.Type_Private);
-			if (layoutdtl.getRegion().getType().equals(Region.Type_NONTEXT)) {
+			if (layoutdtl.getRegion().getType().equals(Region.Type_PLAY)) {
 				Medialist medialist = new Medialist();
 				medialist.setOrgid(bundle.getOrgid());
 				medialist.setBranchid(bundle.getBranchid());
@@ -179,7 +183,7 @@ public class BundleServiceImpl implements BundleService {
 	}
 
 	@Transactional
-	public void design(Bundle bundle) {
+	public void design(Bundle bundle) throws Exception {
 		for (Bundledtl bundledtl : bundle.getBundledtls()) {
 			Bundledtl oldBundledtl = bundledtlMapper.selectByRegion("" + bundle.getBundleid(),
 					"" + bundledtl.getRegionid());
@@ -291,6 +295,16 @@ public class BundleServiceImpl implements BundleService {
 		for (HashMap<String, Object> bindObj : bindList) {
 			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
+
+		String snapshotdtl = bundle.getSnapshotdtl();
+		if (snapshotdtl.startsWith("data:image/png;base64,")) {
+			snapshotdtl = snapshotdtl.substring(22);
+		}
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+		bundle.setSnapshot(snapshotFilePath);
+		bundleMapper.updateByPrimaryKeySelective(bundle);
 	}
 
 	@Transactional
@@ -434,6 +448,16 @@ public class BundleServiceImpl implements BundleService {
 			}
 			bundledtlMapper.insertSelective(bundledtl);
 		}
+
+		String snapshotdtl = bundle.getSnapshotdtl();
+		if (snapshotdtl.startsWith("data:image/png;base64,")) {
+			snapshotdtl = snapshotdtl.substring(22);
+		}
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+		bundle.setSnapshot(snapshotFilePath);
+		bundleMapper.updateByPrimaryKeySelective(bundle);
 
 		push(bundle, devices, devicegroups);
 	}
@@ -646,7 +670,7 @@ public class BundleServiceImpl implements BundleService {
 	public void syncBundleRegions(String bindtype, String bindid) throws Exception {
 		List<Region> regionList = regionMapper.selectActiveList();
 		for (Region region : regionList) {
-			if (region.getType().equals(Region.Type_NONTEXT) || region.getType().equals(Region.Type_TEXT)) {
+			if (region.getType().equals(Region.Type_PLAY) || region.getType().equals(Region.Type_TEXT)) {
 				Msgevent msgevent = new Msgevent();
 				msgevent.setMsgtype(Msgevent.MsgType_Region_Schedule);
 				msgevent.setObjtype1(bindtype);
@@ -884,10 +908,10 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("texts", textJsonArray);
 		JSONArray streamJsonArray = new JSONArray();
 		responseJson.put("streams", streamJsonArray);
-		JSONArray dvbJsonArray = new JSONArray();
-		responseJson.put("dvbs", dvbJsonArray);
 		JSONArray widgetJsonArray = new JSONArray();
 		responseJson.put("widgets", widgetJsonArray);
+		JSONArray dvbJsonArray = new JSONArray();
+		responseJson.put("dvbs", dvbJsonArray);
 
 		Layout layout = bundle.getLayout();
 		responseJson.put("layout_id", layout.getLayoutid());
@@ -1039,18 +1063,6 @@ public class BundleServiceImpl implements BundleService {
 						streamJsonArray.put(streamJson);
 					}
 				}
-			} else if (objtype.equals(Bundledtl.ObjType_Dvb)) {
-				Dvb dvb = bundledtl.getDvb();
-				if (dvb != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
-					if (dvbHash.get(dvb.getDvbid()) == null) {
-						JSONObject dvbJson = new JSONObject();
-						dvbJson.put("id", dvb.getDvbid());
-						dvbJson.put("frequency", dvb.getFrequency());
-						dvbHash.put(dvb.getDvbid(), dvbJson);
-						dvbJsonArray.put(dvbJson);
-					}
-				}
 			} else if (objtype.equals(Bundledtl.ObjType_Widget)) {
 				Widget widget = bundledtl.getWidget();
 				if (widget != null) {
@@ -1061,6 +1073,18 @@ public class BundleServiceImpl implements BundleService {
 						widgetJson.put("url", widget.getUrl());
 						widgetHash.put(widget.getWidgetid(), widgetJson);
 						widgetJsonArray.put(widgetJson);
+					}
+				}
+			} else if (objtype.equals(Bundledtl.ObjType_Dvb)) {
+				Dvb dvb = bundledtl.getDvb();
+				if (dvb != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
+					if (dvbHash.get(dvb.getDvbid()) == null) {
+						JSONObject dvbJson = new JSONObject();
+						dvbJson.put("id", dvb.getDvbid());
+						dvbJson.put("number", dvb.getNumber());
+						dvbHash.put(dvb.getDvbid(), dvbJson);
+						dvbJsonArray.put(dvbJson);
 					}
 				}
 			}
@@ -1080,6 +1104,9 @@ public class BundleServiceImpl implements BundleService {
 				videoJsonArray.put(videoJson);
 			}
 		}
+
+		String checksum = DigestUtils.md5Hex(responseJson.toString());
+		responseJson.put("checksum", checksum);
 
 		return responseJson;
 	}

@@ -725,6 +725,7 @@ insert into region(regionid,name,code,type) values(30,'region.date_1','date-1','
 insert into region(regionid,name,code,type) values(31,'region.date_2','date-2','2');
 insert into region(regionid,name,code,type) values(35,'region.weather','weather','3');
 insert into region(regionid,name,code,type) values(40,'region.videoin','videoin','4');
+insert into region(regionid,name,code,type) values(45,'region.dvb','dvb','5');
 
 insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;

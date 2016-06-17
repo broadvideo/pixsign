@@ -20,20 +20,7 @@ public interface StaffMapper {
 
 	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname);
 
-	List<Staff> selectByUploadkey(@Param(value = "uploadkey") String uploadkey);
-
-	List<Staff> selectByOrgLogin(@Param(value = "loginname") String loginname,
-			@Param(value = "password") String password, @Param(value = "orgcode") String orgcode);
-
-	List<Staff> selectByOrg(@Param(value = "loginname") String loginname, @Param(value = "orgcode") String orgcode);
-
 	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
-
-	Staff loginWithVsp(@Param(value = "loginname") String loginname, @Param(value = "password") String password,
-			@Param(value = "vspcode") String vspcode);
-
-	Staff loginWithOrg(@Param(value = "loginname") String loginname, @Param(value = "password") String password,
-			@Param(value = "orgcode") String orgcode);
 
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);
 

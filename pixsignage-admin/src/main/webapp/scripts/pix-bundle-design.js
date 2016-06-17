@@ -151,6 +151,13 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += 'Video-In';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.region.type == 5) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += 'DVB';
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
 	}
 	div.html(bundledtlhtml);
 }
@@ -179,50 +186,57 @@ function validBundledtl(bundledtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
-		var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
-		if (type == undefined) {
-			type = 0;
-		}
-		if (objtype == undefined) {
-			objtype = 0;
-		}
-		
-		if (type == 0) {
-			if (objtype == 1) {
-				bundledtl.objid = bundledtl.medialist0.medialistid;
-				bundledtl.medialist = bundledtl.medialist0;
-			} else if (objtype == 2) {
-				bundledtl.text0.text = $('#BundledtlEditForm textarea[name="bundledtl.text.text"]').val();
-				bundledtl.objid = bundledtl.text0.textid;
-				bundledtl.text = bundledtl.text0;
-			} else if (objtype == 3) {
-				bundledtl.stream0.url = $('#BundledtlEditForm input[name="bundledtl.stream.url"]').val();
-				bundledtl.objid = bundledtl.stream0.streamid;
-				bundledtl.stream = bundledtl.stream0;
-			} else if (objtype == 5) {
-				bundledtl.widget0.url = $('#BundledtlEditForm input[name="bundledtl.widget.url"]').val();
-				bundledtl.objid = bundledtl.widget0.widgetid;
-				bundledtl.widget = bundledtl.widget0;
+		if (CurrentBundledtl.layoutdtl.region.type < 2) {
+			var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
+			var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
+			if (type == undefined) {
+				type = 0;
 			}
-		} else {
-			if (objtype == 1) {
-				bundledtl.medialist1 = $('#BundledtlSelect').select2('data').medialist;
-				bundledtl.medialist = bundledtl.medialist1;
-			} else if (objtype == 2) {
-				bundledtl.text1 = $('#BundledtlSelect').select2('data').text;
-				bundledtl.text = bundledtl.text1;
-			} else if (objtype == 3) {
-				bundledtl.stream1 = $('#BundledtlSelect').select2('data').stream;
-				bundledtl.stream = bundledtl.stream1;
-			} else if (objtype == 5) {
-				bundledtl.widget1 = $('#BundledtlSelect').select2('data').widget;
-				bundledtl.widget = bundledtl.widget1;
+			if (objtype == undefined) {
+				objtype = 0;
 			}
+			if (type == 0) {
+				if (objtype == 1) {
+					bundledtl.objid = bundledtl.medialist0.medialistid;
+					bundledtl.medialist = bundledtl.medialist0;
+				} else if (objtype == 2) {
+					bundledtl.text0.text = $('#BundledtlEditForm textarea[name="bundledtl.text.text"]').val();
+					bundledtl.objid = bundledtl.text0.textid;
+					bundledtl.text = bundledtl.text0;
+				} else if (objtype == 3) {
+					bundledtl.stream0.url = $('#BundledtlEditForm input[name="bundledtl.stream.url"]').val();
+					bundledtl.objid = bundledtl.stream0.streamid;
+					bundledtl.stream = bundledtl.stream0;
+				} else if (objtype == 5) {
+					bundledtl.widget0.url = $('#BundledtlEditForm input[name="bundledtl.widget.url"]').val();
+					bundledtl.objid = bundledtl.widget0.widgetid;
+					bundledtl.widget = bundledtl.widget0;
+				}
+			} else {
+				if (objtype == 1) {
+					bundledtl.medialist1 = $('#BundledtlSelect').select2('data').medialist;
+					bundledtl.medialist = bundledtl.medialist1;
+				} else if (objtype == 2) {
+					bundledtl.text1 = $('#BundledtlSelect').select2('data').text;
+					bundledtl.text = bundledtl.text1;
+				} else if (objtype == 3) {
+					bundledtl.stream1 = $('#BundledtlSelect').select2('data').stream;
+					bundledtl.stream = bundledtl.stream1;
+				} else if (objtype == 5) {
+					bundledtl.widget1 = $('#BundledtlSelect').select2('data').widget;
+					bundledtl.widget = bundledtl.widget1;
+				}
+				bundledtl.objid = $('#BundledtlSelect').val();
+			}
+			bundledtl.type = type;
+			bundledtl.objtype = objtype;
+		} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+			bundledtl.dvb1 = $('#BundledtlSelect').select2('data').dvb;
+			bundledtl.dvb = bundledtl.dvb1;
 			bundledtl.objid = $('#BundledtlSelect').val();
+			bundledtl.type = 1;
+			bundledtl.objtype = 6;
 		}
-		bundledtl.type = type;
-		bundledtl.objtype = objtype;
 		
 		return true;
 	}
@@ -293,6 +307,8 @@ function refreshBundledtlEdit() {
 				$('.objtype-4').css("display", "none");
 			}
 		}
+	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+		$('.regiontype-5').css("display", "block");
 	}
 
     FormValidateOption.rules = {};
@@ -308,7 +324,7 @@ function refreshBundledtlEdit() {
     } else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 5) {
     	FormValidateOption.rules['bundledtl.widget.url'] = {};
     	FormValidateOption.rules['bundledtl.widget.url']['required'] = true;
-    }
+	}
 	$('#BundledtlEditForm').validate(FormValidateOption);
     $.extend($("#BundledtlEditForm").validate().settings, {
 		rules: FormValidateOption.rules
@@ -316,7 +332,7 @@ function refreshBundledtlEdit() {
 }
 
 function refreshBundledtlSelect() {
-	if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
+	if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0 && CurrentBundledtl.layoutdtl.region.type != 5 ) {
 		return;
 	}
 	var url;
@@ -326,10 +342,10 @@ function refreshBundledtlSelect() {
 		url = 'text!list.action';
 	} else if ($('input[name="bundledtl.objtype"]:checked').val() == 3) {
 		url = 'stream!list.action';
-	} else if ($('input[name="bundledtl.objtype"]:checked').val() == 4) {
-		url = 'dvb!list.action';
 	} else if ($('input[name="bundledtl.objtype"]:checked').val() == 5) {
 		url = 'widget!list.action';
+	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+		url = 'dvb!list.action';
 	}
 	$('#BundledtlSelect').select2({
 		placeholder: common.tips.detail_select,
@@ -368,17 +384,17 @@ function refreshBundledtlSelect() {
 								id:item.streamid,
 								stream:item
 							};
-						} else if (item.dvbid) {
-							return {
-								name:item.name, 
-								id:item.dvbid,
-								dvb:item
-							};
 						} else if (item.widgetid) {
 							return {
 								name:item.name + '(' + item.url + ')', 
 								id:item.widgetid,
 								widget:item
+							};
+						} else if (item.dvbid) {
+							return {
+								name:item.name, 
+								id:item.dvbid,
+								dvb:item
 							};
 						}
 					}),
@@ -434,6 +450,11 @@ function refreshBundledtlSelect() {
 	} else if ($('input[name="bundledtl.objtype"]:checked').val() == 5) {
 		if (CurrentBundledtl.widget1 != null) {
 			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.widget1.widgetid, name: CurrentBundledtl.widget1.name, widget: CurrentBundledtl.widget1 });
+		}
+	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+		console.log(CurrentBundledtl.dvb1);
+		if (CurrentBundledtl.dvb1 != null) {
+			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.dvb1.dvbid, name: CurrentBundledtl.dvb1.name, dvb: CurrentBundledtl.dvb1 });
 		}
 	} 
 }

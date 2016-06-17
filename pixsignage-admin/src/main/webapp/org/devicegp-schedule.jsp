@@ -57,12 +57,12 @@ response.setDateHeader("Expires",0);
 											<a class="btn default btn-sm yellow pix-add-bundleschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
 										</div>
 									</div>
-									<div class="portlet-body form bundle-edit">
+									<div class="portlet-body form bundleschedule-edit">
 										<div class="row">
 											<div class="col-md-12 col-sm-12">
 												<form id="BundleScheduleForm" class="form-horizontal">
 													<div class="form-body">
-														<div class="form-group">
+														<div class="form-group bundleschedule-add">
 															<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -70,7 +70,7 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group">
+														<div class="form-group bundleschedule-add">
 															<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
 															<div class="col-md-9">
 																<div class="input-group date form_time">                                       
@@ -96,7 +96,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 									</div>
-									<div class="portlet-body bundle-view">
+									<div class="portlet-body bundleschedule-view">
 										<div class="row">
 											<div class="col-md12 col-sm-12" id="BundleScheduleDetail">
 											</div>
@@ -107,7 +107,7 @@ response.setDateHeader("Expires",0);
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer bundle-view">
+					<div class="modal-footer bundleschedule-view">
 						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
 						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 					</div>
@@ -390,7 +390,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-devicegp-schedule.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-devicegp-schedule.js?t=5"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

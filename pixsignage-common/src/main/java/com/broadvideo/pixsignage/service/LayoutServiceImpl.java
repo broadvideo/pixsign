@@ -172,7 +172,7 @@ public class LayoutServiceImpl implements LayoutService {
 			bundledtl.setBundleid(bundle.getBundleid());
 			bundledtl.setRegionid(layoutdtl.getRegionid());
 			bundledtl.setType(Bundledtl.Type_Private);
-			if (layoutdtl.getRegion().getType().equals(Region.Type_NONTEXT)) {
+			if (layoutdtl.getRegion().getType().equals(Region.Type_PLAY)) {
 				Medialist medialist = new Medialist();
 				medialist.setOrgid(bundle.getOrgid());
 				medialist.setBranchid(bundle.getBranchid());
@@ -217,10 +217,7 @@ public class LayoutServiceImpl implements LayoutService {
 		List<Layoutdtl> oldlayoutdtls = layoutdtlMapper.selectList("" + layoutid);
 		HashMap<Integer, Layoutdtl> hash = new HashMap<Integer, Layoutdtl>();
 		for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
-			if (layoutdtl.getLayoutdtlid() == 0) {
-				layoutdtl.setLayoutid(layoutid);
-				addLayoutdtl(layoutdtl);
-			} else {
+			if (layoutdtl.getLayoutdtlid() > 0) {
 				layoutdtlMapper.updateByPrimaryKeySelective(layoutdtl);
 				hash.put(layoutdtl.getLayoutdtlid(), layoutdtl);
 			}
@@ -228,6 +225,12 @@ public class LayoutServiceImpl implements LayoutService {
 		for (int i = 0; i < oldlayoutdtls.size(); i++) {
 			if (hash.get(oldlayoutdtls.get(i).getLayoutdtlid()) == null) {
 				deleteLayoutdtl("" + oldlayoutdtls.get(i).getLayoutdtlid());
+			}
+		}
+		for (Layoutdtl layoutdtl : layout.getLayoutdtls()) {
+			if (layoutdtl.getLayoutdtlid() == 0) {
+				layoutdtl.setLayoutid(layoutid);
+				addLayoutdtl(layoutdtl);
 			}
 		}
 	}

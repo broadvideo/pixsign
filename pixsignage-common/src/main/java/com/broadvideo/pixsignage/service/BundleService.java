@@ -21,7 +21,7 @@ public interface BundleService {
 
 	public void deleteBundle(String bundleid);
 
-	public void design(Bundle bundle);
+	public void design(Bundle bundle) throws Exception;
 
 	public void push(Bundle bundle, Device[] devices, Devicegroup[] devicegroups) throws Exception;
 

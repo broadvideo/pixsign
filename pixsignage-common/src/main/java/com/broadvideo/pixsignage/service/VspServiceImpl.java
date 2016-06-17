@@ -11,8 +11,6 @@ import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Vsp;
-import com.broadvideo.pixsignage.persistence.BranchMapper;
-import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.VspMapper;
@@ -27,10 +25,6 @@ public class VspServiceImpl implements VspService {
 	private StaffMapper staffMapper;
 	@Autowired
 	private PrivilegeMapper privilegeMapper;
-	@Autowired
-	private BranchMapper branchMapper;
-	@Autowired
-	private DeviceMapper deviceMapper;
 
 	public List<Vsp> selectList() {
 		return vspMapper.selectList();

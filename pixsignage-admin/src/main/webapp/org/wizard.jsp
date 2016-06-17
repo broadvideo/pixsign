@@ -610,7 +610,7 @@ response.setDateHeader("Expires",0);
 																	</label>
 																</div>
 															</div>
-															<div class="form-group bundle-ctl regiontype-0 regiontype-1 public-1">
+															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 public-1">
 																<label class="col-md-3 control-label"><spring:message code="global.detail"/></label>
 																<div class="col-md-9">
 																	<input type="hidden" id="BundledtlSelect" class="form-control select2" name="bundledtl.objid" />
@@ -856,10 +856,10 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=6"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=2"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=2"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

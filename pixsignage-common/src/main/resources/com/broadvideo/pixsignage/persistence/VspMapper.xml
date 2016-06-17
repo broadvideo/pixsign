@@ -18,7 +18,7 @@
     select 
     <include refid="Base_Column_List" />
     from vsp
-    where vspid = '${vspid}'
+    where vspid = #{vspid}
   </select>
   
   <select id="selectList" resultMap="BaseResultMap">
@@ -41,7 +41,7 @@
   
   <delete id="deleteByPrimaryKey" >
     delete from vsp
-    where vspid = '${vspid}'
+    where vspid = #{vspid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Vsp" >

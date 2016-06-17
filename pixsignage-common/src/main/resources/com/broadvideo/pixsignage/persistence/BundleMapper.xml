@@ -25,7 +25,7 @@
     select 
     <include refid="Base_Column_List" />
     from bundle
-    where bundleid = '${bundleid}'
+    where bundleid = #{bundleid}
   </select>
   
   <select id="selectCount" resultType="Integer">
@@ -55,7 +55,7 @@
   <select id="selectByLayout" resultMap="BaseResultMap">
     select * from bundle
     where status=1
-    and layoutid = '${layoutid}'
+    and layoutid = #{layoutid}
   </select>
   
 

@@ -68,7 +68,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.channelnumber"/></label>
+											<label class="col-md-3 control-label"><spring:message code="global.channelnumber"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="dvb.number" />

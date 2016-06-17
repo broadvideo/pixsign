@@ -4,9 +4,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 public class Region {
-	public final static String Type_NONTEXT = "0";
+	public final static String Type_PLAY = "0";
 	public final static String Type_TEXT = "1";
 	public final static String Type_DATE = "2";
+	public final static String Type_WEATHER = "3";
+	public final static String Type_VIDEOIN = "4";
+	public final static String Type_DVB = "5";
 
 	private Integer regionid;
 

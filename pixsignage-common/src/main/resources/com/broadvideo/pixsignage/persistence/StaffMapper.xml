@@ -52,14 +52,14 @@
 		select
 		<include refid="Base_Column_List" />
 		from staff
-		where staffid = '${staffid}'
+		where staffid = #{staffid}
 	</select>
 
 	<select id="selectNameByPrimaryKey" resultMap="MiniResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from staff
-		where staffid = '${staffid}'
+		where staffid = #{staffid}
 	</select>
 
 	<select id="selectCount" resultType="Integer">
@@ -103,29 +103,6 @@
 		where status='1' and loginname = #{loginname}
 	</select>
 
-	<select id="selectByOrgLogin" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where status='1' and loginname = #{loginname} and password = #{password} and subsystem = '2'
-			and orgid in (select orgid from org where status='1' and code=#{orgcode})
-	</select>
-
-	<select id="selectByOrg" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where status='1' and loginname = #{loginname} and subsystem = '2'
-			and orgid in (select orgid from org where status='1' and code=#{orgcode})
-	</select>
-
-	<select id="selectByToken" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where status='1' and token = #{token}
-	</select>
-
 	<select id="login" resultMap="BaseResultMap">
 		select *
 		from staff
@@ -134,23 +111,9 @@
 		and status='1'
 	</select>
 
-	<select id="loginWithVsp" resultMap="BaseResultMap">
-		select s.*
-		from staff s, vsp v
-		where s.loginname=#{loginname} and s.password=#{password} and s.subsystem=1
-		and s.status='1' and v.status='1' and s.vspid=v.vspid and v.code=#{vspcode}
-	</select>
-
-	<select id="loginWithOrg" resultMap="BaseResultMap">
-		select s.*
-		from staff s, org o
-		where s.loginname=#{loginname} and s.password=#{password} and s.subsystem=2
-		and s.status='1' and o.status='1' and s.orgid=o.orgid and o.code=#{orgcode}
-	</select>
-
   <delete id="deleteByPrimaryKey" >
     update staff set status='9'
-    where staffid = '${staffid}'
+    where staffid = #{staffid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Staff" >

@@ -13,8 +13,8 @@
     <association property="medialist" column="{objtype=objtype,medialistid=objid}" select="selectMedialistid" />
     <association property="text" column="{objtype=objtype,textid=objid}" select="selectTextid" />
     <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStreamid" />
-    <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvbid" />
     <association property="widget" column="{objtype=objtype,widgetid=objid}" select="selectWidgetid" />
+    <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvbid" />
   </resultMap>
   <sql id="Base_Column_List" >
     bundledtlid, bundleid, regionid, type, objtype, objid, createtime
@@ -35,14 +35,14 @@
     where '${objtype}' = '3' and streamid = '${streamid}'
   </select>
 
-  <select id="selectDvbid" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
-    select * from dvb
-    where '${objtype}' = '4' and dvbid = '${dvbid}'
-  </select>
-
   <select id="selectWidgetid" resultMap="com.broadvideo.pixsignage.persistence.WidgetMapper.BaseResultMap" >
     select * from widget
     where '${objtype}' = '5' and widgetid = '${widgetid}'
+  </select>
+
+  <select id="selectDvbid" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
+    select * from dvb
+    where '${objtype}' = '6' and dvbid = '${dvbid}'
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

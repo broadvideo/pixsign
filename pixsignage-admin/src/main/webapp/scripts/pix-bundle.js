@@ -332,6 +332,10 @@ $('body').on('click', '.pix-bundle', function(event) {
 		if (bundledtl.type == 1 && bundledtl.objtype == 5 && bundledtl.widget != null) {
 			bundledtl.widget1 = bundledtl.widget;
 		}
+
+		if (bundledtl.type == 1 && bundledtl.objtype == 6 && bundledtl.dvb != null) {
+			bundledtl.dvb1 = bundledtl.dvb;
+		}
 	}
 	CurrentBundleid = CurrentBundle.bundleid;
 	CurrentBundledtl = CurrentBundle.bundledtls[0];

@@ -373,6 +373,8 @@ function initData3() {
 			bundledtl.text.textid = 0;
 			bundledtl.text.name = '';
 			bundledtl.text.text = '';
+		} else if (layoutdtl.region.type == 5) {
+			bundledtl.objtype = 6;
 		} else {
 			bundledtl.objtype = 0;
 		}

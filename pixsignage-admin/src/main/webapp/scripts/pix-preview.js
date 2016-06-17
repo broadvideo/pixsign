@@ -86,6 +86,10 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'Video-In';
 		layoutdtlhtml += '</p>';
+	} else if (layoutdtl.region.type == 5) {
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'DVB';
+		layoutdtlhtml += '</p>';
 	} else if (layoutdtl.bgimage != null) {
 		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
@@ -197,6 +201,14 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	} else if (bundledtl.layoutdtl.region.type == 4) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'Video-In';
+		bundledtlhtml += '</p>';
+	} else if (bundledtl.layoutdtl.region.type == 5) {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		if (bundledtl.dvb != null) {
+			bundledtlhtml += bundledtl.dvb.name;
+		} else {
+			bundledtlhtml += 'DVB';
+		}
 		bundledtlhtml += '</p>';
 	} else if (bgimage != null) {
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';

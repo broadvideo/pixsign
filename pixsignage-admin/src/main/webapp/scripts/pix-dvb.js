@@ -93,6 +93,9 @@ function initMyEditModal() {
 	FormValidateOption.rules['dvb.name']['required'] = true;
 	FormValidateOption.rules['dvb.frequency'] = {};
 	FormValidateOption.rules['dvb.frequency']['required'] = true;
+	FormValidateOption.rules['dvb.number'] = {};
+	FormValidateOption.rules['dvb.number']['required'] = true;
+	FormValidateOption.rules['dvb.number']['number'] = true;
 	FormValidateOption.submitHandler = function(form) {
 		$.ajax({
 			type : 'POST',

@@ -163,7 +163,10 @@ function refreshBundleScheduleDetail() {
 				}
 			}
 			scheduleTabHtml += '</div>';
-			scheduleTabHtml += '<div class="col-md-2 col-sm-2"><a href="javascript:;" class="btn btn-sm red pull-right pix-del-bundleschedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a></div>';
+			scheduleTabHtml += '<div class="col-md-2 col-sm-2">';
+			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-add-bundlescheduledtl" data-id="'+ i + '">' + common.view.add + '<i class="fa fa-trash-o"></i></a>';
+			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-del-bundleschedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
+			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
@@ -228,8 +231,9 @@ $('body').on('click', '.pix-bundleschedule', function(event) {
 	currentDeviceid = currentDevice.deviceid;
 	currentBundleschedules = currentDevice.bundleschedules;
 
-	$('.bundle-edit').css('display', 'none');
-	$('.bundle-view').css('display', 'block');				
+	$('.bundleschedule-edit').css('display', 'none');
+	$('.bundleschedule-add').css('display', 'none');
+	$('.bundleschedule-view').css('display', 'block');				
 	refreshBundleScheduleDetail();
 	$('#BundleScheduleModal').modal();
 });
@@ -240,8 +244,9 @@ $('#BundleScheduleModal').on('shown.bs.modal', function (e) {
 })
 
 $('body').on('click', '.pix-add-bundleschedule', function(event) {
-	$('.bundle-edit').css('display', 'block');
-	$('.bundle-view').css('display', 'none');				
+	$('.bundleschedule-edit').css('display', 'block');
+	$('.bundleschedule-add').css('display', 'block');
+	$('.bundleschedule-view').css('display', 'none');				
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
 	$('#BundleScheduleForm input[name="starttime"]').attr('value', '');
@@ -258,8 +263,9 @@ $.extend($('#BundleScheduleForm').validate().settings, {
 });
 $('#BundleScheduleForm .pix-ok').on('click', function(event) {
 	if ($('#BundleScheduleForm').valid()) {
-		$('.bundle-edit').css('display', 'none');
-		$('.bundle-view').css('display', 'block');
+		$('.bundleschedule-edit').css('display', 'none');
+		$('.bundleschedule-add').css('display', 'none');
+		$('.bundleschedule-view').css('display', 'block');
 		
 		var starttime = $('#BundleScheduleForm input[name=starttime]').val();
 		var bundleschedules = currentBundleschedules.filter(function (el) {
@@ -279,8 +285,8 @@ $('#BundleScheduleForm .pix-ok').on('click', function(event) {
 			bundlescheduledtl.bundleid = bundleid;
 			bundlescheduledtl.bundle = bundlesels[0];
 			bundlescheduledtl.sequence = bundleschedules[0].bundlescheduledtls.length + 1;
-			//bundleschedules[0].bundlescheduledtls.push(bundlescheduledtl);
-			bundleschedules[0].bundlescheduledtls[0] = bundlescheduledtl;
+			bundleschedules[0].bundlescheduledtls.push(bundlescheduledtl);
+			//bundleschedules[0].bundlescheduledtls[0] = bundlescheduledtl;
 		} else {
 			var bundleschedule = {};
 			bundleschedule.bundlescheduleid = 'B' + Math.round(Math.random()*100000000);
@@ -308,8 +314,24 @@ $('#BundleScheduleForm .pix-ok').on('click', function(event) {
 	}
 });
 $('#BundleScheduleForm .pix-cancel').on('click', function(event) {
-	$('.bundle-edit').css('display', 'none');
-	$('.bundle-view').css('display', 'block');				
+	$('.bundleschedule-edit').css('display', 'none');
+	$('.bundleschedule-add').css('display', 'none');
+	$('.bundleschedule-view').css('display', 'block');				
+});
+
+$('body').on('click', '.pix-add-bundlescheduledtl', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	var bundleschedule = currentBundleschedules[index];
+	
+	$('.bundleschedule-edit').css('display', 'block');
+	$('.bundleschedule-add').css('display', 'none');
+	$('.bundleschedule-view').css('display', 'none');				
+	$('.form-group').removeClass('has-error');
+	$('.help-block').remove();
+	$('#BundleScheduleForm input[name="starttime"]').attr('value', bundleschedule.starttime);
 });
 
 $('body').on('click', '.pix-del-bundleschedule', function(event) {

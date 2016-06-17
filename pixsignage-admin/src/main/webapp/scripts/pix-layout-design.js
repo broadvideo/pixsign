@@ -121,6 +121,13 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += 'Video-In';
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 5) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'DVB';
+		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '</div>';
 	}
 
 	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
