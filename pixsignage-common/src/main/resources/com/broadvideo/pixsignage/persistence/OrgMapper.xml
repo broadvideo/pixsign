@@ -8,6 +8,7 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="orgtype" property="orgtype" jdbcType="CHAR" />
+    <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="videoflag" property="videoflag" jdbcType="CHAR" />
     <result column="imageflag" property="imageflag" jdbcType="CHAR" />
     <result column="textflag" property="textflag" jdbcType="CHAR" />
@@ -34,7 +35,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, name, code, status, orgtype, videoflag, imageflag, textflag, streamflag, 
+    orgid, vspid, name, code, status, orgtype, reviewflag, videoflag, imageflag, textflag, streamflag, 
     dvbflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
     currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, devicepass, createtime, createstaffid
@@ -93,7 +94,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into org (vspid, name, code, 
-      status, orgtype, videoflag, 
+      status, orgtype, reviewflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, widgetflag, expireflag, 
       expiretime, maxdevices, maxstorage, 
@@ -102,7 +103,7 @@
       powerflag, poweron, poweroff, 
       devicepass, createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, #{expireflag,jdbcType=CHAR}, 
       #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
@@ -131,6 +132,9 @@
       </if>
       <if test="orgtype != null" >
         orgtype,
+      </if>
+      <if test="reviewflag != null" >
+        reviewflag,
       </if>
       <if test="videoflag != null" >
         videoflag,
@@ -214,6 +218,9 @@
       </if>
       <if test="orgtype != null" >
         #{orgtype,jdbcType=CHAR},
+      </if>
+      <if test="reviewflag != null" >
+        #{reviewflag,jdbcType=CHAR},
       </if>
       <if test="videoflag != null" >
         #{videoflag,jdbcType=CHAR},
@@ -301,6 +308,9 @@
       <if test="orgtype != null" >
         orgtype = #{orgtype,jdbcType=CHAR},
       </if>
+      <if test="reviewflag != null" >
+        reviewflag = #{reviewflag,jdbcType=CHAR},
+      </if>
       <if test="videoflag != null" >
         videoflag = #{videoflag,jdbcType=CHAR},
       </if>
@@ -377,6 +387,7 @@
       code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       orgtype = #{orgtype,jdbcType=CHAR},
+      reviewflag = #{reviewflag,jdbcType=CHAR},
       videoflag = #{videoflag,jdbcType=CHAR},
       imageflag = #{imageflag,jdbcType=CHAR},
       textflag = #{textflag,jdbcType=CHAR},

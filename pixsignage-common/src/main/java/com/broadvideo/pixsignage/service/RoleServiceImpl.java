@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	public List<Privilege> selectOrgPrivilegeTreeList(Org org) {
-		List<Privilege> pList = privilegeService.selectOrgTreeList(org.getOrgtype());
+		List<Privilege> pList = privilegeService.selectOrgTreeList(org);
 		for (int i = 0; i < pList.size(); i++) {
 			List<Privilege> secondPrivileges = pList.get(i).getChildren();
 			for (int j = secondPrivileges.size(); j > 0; j--) {

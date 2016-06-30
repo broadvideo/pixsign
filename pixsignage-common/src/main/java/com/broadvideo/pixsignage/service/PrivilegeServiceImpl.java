@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
 
@@ -30,8 +32,18 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		return privilegeList;
 	}
 
-	public List<Privilege> selectOrgTreeList(String orgtype) {
-		List<Privilege> privilegeList = privilegeMapper.selectOrgTreeList(orgtype);
+	public List<Privilege> selectOrgTreeList(Org org) {
+		List<Privilege> privilegeList = privilegeMapper.selectOrgTreeList(org.getOrgtype());
+		if (org.getReviewflag().equals(Org.REVIEW_DISABLED)) {
+			Iterator<Privilege> it = privilegeList.iterator();
+			while (it.hasNext()) {
+				Privilege p = it.next();
+				// Remove REVIEW privilege
+				if (p.getPrivilegeid() == 305 || p.getParentid() == 305) {
+					it.remove();
+				}
+			}
+		}
 		buildTree(privilegeList);
 		return privilegeList;
 	}

@@ -61,6 +61,10 @@ var common = {
 		idle: '空闲',
 		once: '单次',
 		daily: '每日',
+		
+		review_wait: '等待审核',
+		review_passed: '审核通过',
+		review_rejected: '审核未过',
 
 		operation: '操作',
 		add: '新增',
@@ -74,6 +78,7 @@ var common = {
 		design: '设计',
 		option: '选项',
 		export: '导出',
+		review: '审核',
 		addregion: '新增区域',
 		password_reset: '重置密码',
 		unknown: '未知',

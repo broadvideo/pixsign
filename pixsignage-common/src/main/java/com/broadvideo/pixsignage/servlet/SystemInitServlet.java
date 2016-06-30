@@ -10,11 +10,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 
 @SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -29,7 +33,7 @@ public class SystemInitServlet extends HttpServlet {
 					+ ":6060/";
 			is.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("", ex);
 		}
 		try {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));
@@ -47,7 +51,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/temp"));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("", ex);
 		}
 	}
 }

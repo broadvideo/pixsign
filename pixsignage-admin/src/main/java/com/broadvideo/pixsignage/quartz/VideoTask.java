@@ -38,7 +38,8 @@ public class VideoTask {
 
 	private void handleVideoPreview(Video video) {
 		String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -y -i " + CommonConfig.CONFIG_PIXDATA_HOME
-				+ video.getFilepath() + " -vcodec libx264 -b:v 400k -s 640x360 -acodec libvo_aacenc -b:a 32k "
+				+ video.getFilepath()
+				+ " -movflags faststart -vcodec libx264 -b:v 400k -s 640x360 -acodec libvo_aacenc -b:a 32k "
 				+ CommonConfig.CONFIG_PIXDATA_HOME + "/video/preview/" + video.getVideoid() + ".mp4";
 		logger.info("Begin to convert to preview mp4: {}", command);
 		int commandResult = CommonUtil.execCommand(command);

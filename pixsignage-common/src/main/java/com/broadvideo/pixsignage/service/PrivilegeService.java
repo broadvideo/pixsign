@@ -2,6 +2,7 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 
 public interface PrivilegeService {
@@ -9,5 +10,5 @@ public interface PrivilegeService {
 
 	public List<Privilege> selectVspTreeList();
 
-	public List<Privilege> selectOrgTreeList(String orgtype);
+	public List<Privilege> selectOrgTreeList(Org org);
 }

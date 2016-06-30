@@ -62,6 +62,10 @@ var common = {
 		once: 'Once',
 		daily: 'Daily',
 
+		review_wait: 'Wait for Review',
+		review_passed: 'Review Passed',
+		review_rejected: 'Review Rejected',
+
 		operation: 'Operation',
 		add: 'Add',
 		edit: 'Edit',
@@ -74,6 +78,7 @@ var common = {
 		design: 'Design',
 		option: 'Option',
 		export: 'Export',
+		review: 'Review',
 		addregion: 'Add Region',
 		password_reset: 'Reset Password',
 		unknown: 'Unknown',

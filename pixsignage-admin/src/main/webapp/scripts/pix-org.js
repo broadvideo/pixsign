@@ -257,7 +257,7 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="org.code"]').attr('readonly','readonly');
 		if (PixContral == 1) {
-			$('.pix-control').css('display', 'block');
+			$('.pix-control').css('display', '');
 		} else {
 			$('.pix-control').css('display', 'none');
 		}

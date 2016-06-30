@@ -430,7 +430,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-bundle.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-bundle.js?t=4"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

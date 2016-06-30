@@ -177,7 +177,7 @@ function refreshBundleScheduleDetail() {
 $.ajax({
 	type : 'POST',
 	url : 'bundle!list.action',
-	data : {},
+	data : {reviewflag: '1'},
 	success : function(data, status) {
 		if (data.errorcode == 0) {
 			Bundles = data.aaData;

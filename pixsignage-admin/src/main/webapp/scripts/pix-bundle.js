@@ -54,6 +54,13 @@ var oTable = $('#MyTable').dataTable({
 		}
 		bundlehtml += '<div class="col-md-3 col-xs-3">';
 		bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
+		if (aData.reviewflag == 0) {
+			bundlehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span>';
+		} else if (aData.reviewflag == 1) {
+			bundlehtml += '<h6><span class="label label-sm label-success">' + common.view.review_passed + '</span>';
+		} else if (aData.reviewflag == 2) {
+			bundlehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span>';
+		}
 
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
 		bundlehtml += '<div class="thumbs">';
@@ -65,9 +72,11 @@ var oTable = $('#MyTable').dataTable({
 
 		bundlehtml += '<div privilegeid="101010">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-		bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+		if (aData.reviewflag == 1) {
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+			bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+		}
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
 
 		bundlehtml += '</div>';

@@ -115,12 +115,13 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private DevicefileService devicefileService;
 
-	public int selectCount(String orgid, String branchid, String search) {
-		return bundleMapper.selectCount(orgid, branchid, search);
+	public int selectCount(String orgid, String branchid, String reviewflag, String search) {
+		return bundleMapper.selectCount(orgid, branchid, reviewflag, search);
 	}
 
-	public List<Bundle> selectList(String orgid, String branchid, String search, String start, String length) {
-		List<Bundle> bundleList = bundleMapper.selectList(orgid, branchid, search, start, length);
+	public List<Bundle> selectList(String orgid, String branchid, String reviewflag, String search, String start,
+			String length) {
+		List<Bundle> bundleList = bundleMapper.selectList(orgid, branchid, reviewflag, search, start, length);
 		for (Bundle bundle : bundleList) {
 			for (Layoutdtl layoutdtl : bundle.getLayout().getLayoutdtls()) {
 				Region region = layoutdtl.getRegion();
@@ -889,6 +890,10 @@ public class BundleServiceImpl implements BundleService {
 
 	public JSONObject generateBundleJson(String bundleid) {
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
+
+		if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED) && bundle.getJson() != null) {
+			return new JSONObject(bundle.getJson());
+		}
 
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();

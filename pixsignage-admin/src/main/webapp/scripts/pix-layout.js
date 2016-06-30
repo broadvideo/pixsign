@@ -71,7 +71,7 @@ var oTable = $('#MyTable').dataTable({
 			layouthtml += '<div class="row" >';
 		}
 		layouthtml += '<div class="col-md-4 col-xs-4">';
-		layouthtml += '<h3>' + aData.name + '</h3>';
+		layouthtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 		if (aData.ratio == 1) {
 			layouthtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span>';
 		} else if (aData.ratio == 2) {

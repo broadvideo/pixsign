@@ -24,6 +24,7 @@ import com.broadvideo.pixsignage.domain.Bundleschedule;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.ImageService;
@@ -62,14 +63,15 @@ public class BundleAction extends BaseDatatableAction {
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String reviewflag = getParameter("reviewflag");
 
-			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), branchid, reviewflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Bundle> bundleList = bundleService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
-					length);
+			List<Bundle> bundleList = bundleService.selectList("" + getLoginStaff().getOrgid(), branchid, reviewflag,
+					search, start, length);
 			for (int i = 0; i < bundleList.size(); i++) {
 				aaData.add(bundleList.get(i));
 			}
@@ -89,6 +91,11 @@ public class BundleAction extends BaseDatatableAction {
 			bundle.setOrgid(getLoginStaff().getOrgid());
 			bundle.setBranchid(getLoginStaff().getBranchid());
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.REVIEW_ENABLED)) {
+				bundle.setReviewflag(Bundle.REVIEW_WAIT);
+			} else {
+				bundle.setReviewflag(Bundle.REVIEW_PASSED);
+			}
 			bundleService.addBundle(bundle);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -139,6 +146,13 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.REVIEW_ENABLED)) {
+				if (bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+					bundle.setReviewflag(Bundle.REVIEW_WAIT);
+					JSONObject bundleJson = bundleService.generateBundleJson("" + bundle.getBundleid());
+					bundle.setJson(bundleJson.toString());
+				}
+			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.design(bundle);
 			return SUCCESS;

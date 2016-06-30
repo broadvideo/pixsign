@@ -189,7 +189,7 @@ public class LoginAction extends BaseAction {
 			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
 			session.setAttribute(CommonConstants.SESSION_VSP, staff.getVsp());
 		} else if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_ORG)) {
-			List<Privilege> pList = privilegeService.selectOrgTreeList(staff.getOrg().getOrgtype());
+			List<Privilege> pList = privilegeService.selectOrgTreeList(staff.getOrg());
 			session.setAttribute(CommonConstants.SESSION_PRIVILEGES, pList);
 			session.setAttribute(CommonConstants.SESSION_ORG, staff.getOrg());
 		}

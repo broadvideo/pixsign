@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Bundle {
+	public final static String REVIEW_WAIT = "0";
+	public final static String REVIEW_PASSED = "1";
+	public final static String REVIEW_REJECTED = "2";
+
 	private Integer bundleid;
 
 	private Integer orgid;
@@ -23,6 +27,12 @@ public class Bundle {
 	private Integer width;
 
 	private String status;
+
+	private String reviewflag;
+
+	private String comment;
+
+	private String json;
 
 	private Date createtime;
 
@@ -115,6 +125,30 @@ public class Bundle {
 
 	public void setStatus(String status) {
 		this.status = status == null ? null : status.trim();
+	}
+
+	public String getReviewflag() {
+		return reviewflag;
+	}
+
+	public void setReviewflag(String reviewflag) {
+		this.reviewflag = reviewflag;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

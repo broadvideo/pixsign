@@ -5,6 +5,9 @@ import java.util.Date;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Org {
+	public final static String REVIEW_DISABLED = "0";
+	public final static String REVIEW_ENABLED = "1";
+
 	private Integer orgid;
 
 	private Integer vspid;
@@ -16,6 +19,8 @@ public class Org {
 	private String status;
 
 	private String orgtype;
+
+	private String reviewflag;
 
 	private String videoflag;
 
@@ -109,6 +114,14 @@ public class Org {
 
 	public void setOrgtype(String orgtype) {
 		this.orgtype = orgtype == null ? null : orgtype.trim();
+	}
+
+	public String getReviewflag() {
+		return reviewflag;
+	}
+
+	public void setReviewflag(String reviewflag) {
+		this.reviewflag = reviewflag;
 	}
 
 	public String getVideoflag() {
