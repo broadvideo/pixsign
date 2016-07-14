@@ -208,8 +208,8 @@ create table video(
    filepath varchar(32),
    filename varchar(128),
    size bigint,
-   md5 varchar(64),0
-   previewflag char(1) default '0';
+   md5 varchar(64),
+   previewflag char(1) default '0',
    status char(1) default '1',
    progress int,
    description varchar(1024),
@@ -674,7 +674,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(201,1,0,'menu.org','org.jsp','fa-cloud',1,1,'0');
 
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(308,2,0,'menu.wizard','wizard.jsp','fa-hand-o-up',1,1,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(300,2,0,'menu.wizard','wizard.jsp','fa-hand-o-up',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(301,2,0,'menu.resource','','fa-qrcode',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30101,2,301,'menu.medialist','medialist.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30102,2,301,'menu.intvideo','video-int.jsp','',1,2,'12');

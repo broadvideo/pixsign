@@ -29,7 +29,7 @@
     ,
     <include refid="Blob_Column_List" />
     from text
-    where textid = '${textid}'
+    where textid = #{textid}
   </select>
   
   <select id="selectCount" resultType="Integer">
@@ -58,7 +58,7 @@
 
   <delete id="deleteByPrimaryKey" >
     delete from text
-    where textid = '${textid}'
+    where textid = #{textid}
   </delete>
     
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Text" >

@@ -76,11 +76,10 @@
     and layoutid = #{layoutid}
   </select>
   
-
   <delete id="deleteByPrimaryKey" >
     update bundle 
     set status = '9'
-    where bundleid = '${bundleid}'
+    where bundleid = #{bundleid}
   </delete>
     
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Bundle" >

@@ -30,7 +30,7 @@
     select 
     <include refid="Base_Column_List" />
     from image
-    where imageid = '${imageid}'
+    where imageid = #{imageid}
   </select>
 
   <select id="selectCount" resultType="Integer">
@@ -79,7 +79,7 @@
   <delete id="deleteByPrimaryKey" >
     update image
     set status='9'
-    where imageid = '${imageid}'
+    where imageid = #{imageid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Image" >

@@ -43,6 +43,15 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					it.remove();
 				}
 			}
+		} else {
+			Iterator<Privilege> it = privilegeList.iterator();
+			while (it.hasNext()) {
+				Privilege p = it.next();
+				// Remove WIZARD privilege
+				if (p.getPrivilegeid() == 300) {
+					it.remove();
+				}
+			}
 		}
 		buildTree(privilegeList);
 		return privilegeList;

@@ -17,40 +17,41 @@
   
   <select id="selectVideoid" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
     select * from video
-    where '${objtype}' = '1' and videoid = '${videoid}'
+    where '${objtype}' = '1' and videoid = #{videoid}
   </select>
 
   <select id="selectImageid" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
     select * from image
-    where '${objtype}' = '2' and imageid = '${imageid}'
+    where '${objtype}' = '2' and imageid = #{imageid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from medialistdtl
-    where medialistdtlid = '${medialistdtlid}'
+    where medialistdtlid = #{medialistdtlid}
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from medialistdtl
-    where medialistid = '${medialistid}'
+    where medialistid = #{medialistid}
     order by sequence
   </select>
   
   <delete id="deleteByPrimaryKey" >
     delete from medialistdtl
-    where medialistdtlid = '${medialistdtlid}'
+    where medialistdtlid = #{medialistdtlid}
   </delete>
   
   <delete id="deleteByMedialist" >
     delete from medialistdtl
-    where medialistid = '${medialistid}'
+    where medialistid = #{medialistid}
   </delete>
 
   <delete id="deleteByObj" >
     delete from medialistdtl
-    where objtype = '${objtype}' and objid = '${objid}'
+    where objtype = #{objtype} 
+    and objid = #{objid}
   </delete>
 
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Medialistdtl" >

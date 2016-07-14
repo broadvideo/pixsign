@@ -29,7 +29,7 @@
     select 
     <include refid="Base_Column_List" />
     from layout
-    where layoutid = '${layoutid}'
+    where layoutid = #{layoutid}
   </select>
   
   <select id="selectList" resultMap="BaseResultMap">
@@ -53,8 +53,9 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update layout set status = '9'
-    where layoutid = '${layoutid}'
+    update layout 
+    set status = '9'
+    where layoutid = #{layoutid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Layout" >

@@ -35,18 +35,18 @@
     select 
     <include refid="Base_Column_List" />
     from layoutdtl
-    where layoutdtlid = '${layoutdtlid}'
+    where layoutdtlid = #{layoutdtlid}
   </select>
   
   <select id="selectList" resultMap="BaseResultMap">
     select * from layoutdtl
-    where layoutid = '${layoutid}'
+    where layoutid = #{layoutid}
     order by zindex, layoutdtlid
   </select>
 
   <select id="selectByBundledtlid" resultMap="BaseResultMap">
     select ld.* from layoutdtl ld, bundle b, bundledtl bd
-    where bd.bundledtlid = '${bundledtlid}' 
+    where bd.bundledtlid = #{bundledtlid}
     and ld.layoutid = b.layoutid
     and ld.regionid = bd.regionid
     and b.bundleid = bd.bundleid
@@ -54,7 +54,7 @@
 
   <delete id="deleteByPrimaryKey" >
     delete from layoutdtl
-    where layoutdtlid = '${layoutdtlid}'
+    where layoutdtlid = #{layoutdtlid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Layoutdtl" >

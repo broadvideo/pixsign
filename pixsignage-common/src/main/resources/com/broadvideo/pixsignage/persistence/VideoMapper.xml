@@ -47,16 +47,16 @@
   <select id="selectCount" resultType="Integer">
     select count(1) from video where status = 1
     <if test="orgid != null">
-      and orgid=${orgid}
+      and orgid=#{orgid}
     </if>
     <if test="branchid != null">
-      and branchid=${branchid}
+      and branchid=#{branchid}
     </if>
     <if test="type != null">
-      and type=${type}
+      and type=#{type}
     </if>
     <if test="previewflag != null">
-      and previewflag=${previewflag}
+      and previewflag=#{previewflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -67,16 +67,16 @@
     select <include refid="Base_Column_List" /> from video
     where status=1 
     <if test="orgid != null">
-      and orgid=${orgid}
+      and orgid=#{orgid}
     </if>
     <if test="branchid != null">
-      and branchid=${branchid}
+      and branchid=#{branchid}
     </if>
     <if test="type != null">
-      and type=${type}
+      and type=#{type}
     </if>
     <if test="previewflag != null">
-      and previewflag=${previewflag}
+      and previewflag=#{previewflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -89,13 +89,13 @@
 
   <select id="selectByUuid" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" /> from video
-    where uuid = '${uuid}'
+    where uuid = #{uuid}
   </select>
 
   <delete id="deleteByPrimaryKey" >
     update video
     set status='9'
-    where videoid = '${videoid}'
+    where videoid = #{videoid}
   </delete>
 
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Video" >
