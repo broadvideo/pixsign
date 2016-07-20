@@ -312,6 +312,8 @@ create table medialistdtl(
    primary key (medialistdtlid)
  )engine = innodb
 default character set utf8;
+alter table medialistdtl add foreign key medialistdtl_fk1(medialistid) references medialist(medialistid);
+alter table medialistdtl add index medialistdtl_index1(objtype, objid);
 
 create table device( 
    deviceid int not null auto_increment,
@@ -447,6 +449,8 @@ create table bundledtl(
    primary key (bundledtlid)
  )engine = innodb
 default character set utf8;
+alter table bundledtl add foreign key bundledtl_fk1(bundleid) references bundle(bundleid);
+alter table bundledtl add index bundledtl_index1(objtype, objid);
 
 create table bundleschedule( 
    bundlescheduleid int not null auto_increment,
@@ -462,6 +466,8 @@ create table bundleschedule(
    foreign key (bundleid) references bundle(bundleid)
  )engine = innodb
 default character set utf8;
+alter table bundleschedule add foreign key bundleschedule_fk1(bundleid) references bundle(bundleid);
+alter table bundleschedule add index bundleschedule_index1(bindtype, bindid);
 
 create table bundlescheduledtl( 
    bundlescheduledtlid int not null auto_increment,
@@ -471,6 +477,8 @@ create table bundlescheduledtl(
    primary key (bundlescheduledtlid)
  )engine = innodb
 default character set utf8;
+alter table bundlescheduledtl add foreign key bundlescheduledtl_fk1(bundlescheduleid) references bundleschedule(bundlescheduleid);
+alter table bundlescheduledtl add foreign key bundlescheduledtl_fk2(bundleid) references bundle(bundleid);
 
 create table task( 
    taskid int not null auto_increment,
@@ -584,6 +592,8 @@ create table devicefile(
    foreign key (deviceid) references device(deviceid)
  )engine = innodb
 default character set utf8;
+alter table devicefile add foreign key devicefile_fk1(deviceid) references device(deviceid);
+alter table devicefile add index devicefile_index1(objtype, objid);
 
 create table msgevent( 
    msgeventid int not null auto_increment,

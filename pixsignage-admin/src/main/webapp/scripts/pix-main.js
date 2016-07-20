@@ -3,6 +3,7 @@ var myurls = {
 	'device.list' : 'device!list.action',
 	'video.list' : 'video!list.action',
 	'stat' : 'stat.action',
+	'device.applist' : 'device!applist.action',
 };
 
 function initLicense() {
@@ -416,4 +417,27 @@ function initFileChart() {
 			previousPoint = null;
 		}
 	});
+}
+
+
+function initAPPTable() {
+	$('#APPTable').dataTable({
+		'sDom' : 'rt',
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['device.applist'],
+		'iDisplayLength' : -1,
+		'bSort' : false,
+		'aoColumns' : [ {'sTitle' : common.view.mainboard, 'mData' : 'mainboard', 'bSortable' : false, 'sWidth' : '10%' },
+						{'sTitle' : common.view.description, 'mData' : 'description', 'bSortable' : false, 'sWidth' : '25%' },
+						{'sTitle' : common.view.versionname, 'mData' : 'vname', 'bSortable' : false, 'sWidth' : '10%' },
+						{'sTitle' : common.view.versioncode, 'mData' : 'vcode', 'bSortable' : false, 'sWidth' : '10%' },
+						{'sTitle' : common.view.download, 'mData' : 'file', 'bSortable' : false, 'sWidth' : '45%' }],
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+			$('td:eq(4)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
+			return nRow;
+		},
+	});
+	
 }

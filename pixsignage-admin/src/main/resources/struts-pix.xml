@@ -559,6 +559,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!applist" method="doAPPList" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="devicegroup!list" method="doList" class="devicegroupAction">
 			<result name="success" type="json">

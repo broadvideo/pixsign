@@ -859,7 +859,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
 <script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=3"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

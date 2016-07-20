@@ -2,9 +2,14 @@ package com.broadvideo.pixsignage.rest;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -43,6 +48,8 @@ import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 @Produces("application/json;charset=UTF-8")
 @Path("/v1.0")
 public class PixsignageService {
+	private static Hashtable<String, String> CONFIG_SIGNATURE = new Hashtable<String, String>();
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
@@ -179,15 +186,45 @@ public class PixsignageService {
 	}
 
 	@POST
-	@Path("get_version")
+	@Path("get-version")
 	public String getversion(String request) {
 		try {
-			logger.info("Pixsignage Service get_version: {}", request);
-			File dir = new File("/opt/pixdata/app");
+			logger.info("Pixsignage Service get-version: {}", request);
+
+			if (CONFIG_SIGNATURE.size() == 0) {
+				Properties properties = new Properties();
+				InputStream is = this.getClass().getResourceAsStream("/signature.properties");
+				properties.load(is);
+				CONFIG_SIGNATURE = new Hashtable<String, String>();
+				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<Object, Object> entry = it.next();
+					CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
+				}
+				is.close();
+			}
+
+			JSONObject requestJson = new JSONObject(request);
+			String appname = requestJson.getString("app_name");
+			String sign = requestJson.getString("sign");
+			String subdir = "";
+			if (sign != null && sign.length() > 0) {
+				subdir = CONFIG_SIGNATURE.get(sign);
+				if (subdir == null) {
+					logger.error("no apk found with the sign {}", sign);
+					JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功")
+							.put("version_name", "").put("version_code", "0").put("url", "");
+					logger.info("Pixsignage Service get-version response: {}", responseJson.toString());
+					return responseJson.toString();
+				}
+				subdir = "/" + subdir;
+			}
+
+			File dir = new File("/opt/pixdata/app" + subdir);
 			File[] files = dir.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
-					return name.startsWith("DigitalBox-") && name.endsWith((".apk"));
+					return name.startsWith(appname + "-") && name.endsWith((".apk"));
 				}
 			});
 			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
@@ -197,8 +234,8 @@ public class PixsignageService {
 			String url = "";
 			if (files.length > 0) {
 				String filename = files[0].getName();
-				url = "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-						+ "/pixdata/app/" + filename;
+				url = "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT + "/pixdata/app"
+						+ subdir + "/" + filename;
 				String[] apks = filename.split("-");
 				if (apks.length >= 3) {
 					vname = apks[1];
@@ -213,11 +250,14 @@ public class PixsignageService {
 			responseJson.put("version_name", vname);
 			responseJson.put("version_code", vcode);
 			responseJson.put("url", url);
-			logger.info("Pixsignage Service get_version response: {}", responseJson.toString());
+			logger.info("Pixsignage Service get-version response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_version exception", e);
-			return handleResult(1001, "系统异常");
+			logger.error("Pixsignage Service get-version exception, ", e);
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功").put("version_name", "")
+					.put("version_code", "0").put("url", "");
+			logger.info("Pixsignage Service get-version response: {}", responseJson.toString());
+			return responseJson.toString();
 		}
 	}
 

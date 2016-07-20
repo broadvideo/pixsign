@@ -111,6 +111,10 @@ var common = {
 		poweron: 'Power on',
 		poweroff: 'Power off',
 		
+		mainboard: 'Mainboard',
+		description: 'Description',
+		download: 'Download',
+		
 		table_ZeroRecords : 'No data available in table',
 		table_Processing : '<i class="fa fa-coffee"></i>　Processing...',
 		table_EmptyTable : 'No data available in table',

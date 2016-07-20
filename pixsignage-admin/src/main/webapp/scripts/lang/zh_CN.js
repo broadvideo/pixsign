@@ -111,6 +111,10 @@ var common = {
 		poweron: '开机时间',
 		poweroff: '关机时间',
 		
+		mainboard: '主板型号',
+		description: '描述',
+		download: '下载地址',
+		
 		table_ZeroRecords : '没有匹配的数据',
 		table_Processing : '<i class="fa fa-coffee"></i>　获取数据中...',
 		table_EmptyTable : '没有匹配的数据',

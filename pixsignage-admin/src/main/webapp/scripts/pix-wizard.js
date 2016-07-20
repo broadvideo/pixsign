@@ -608,10 +608,26 @@ function submitData() {
 	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 1024, 0);
 	html2canvas($('#snapshot_div'), {
 		onrendered: function(canvas) {
-			console.log(canvas.toDataURL());
+			//console.log(canvas.toDataURL());
 			CurrentBundle.snapshotdtl = canvas.toDataURL();
 			$('#snapshot_div').hide();
 
+			for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
+				var bundledtl = CurrentBundle.bundledtls[i];
+				bundledtl.layoutdtl = undefined;
+				bundledtl.medialist0 = undefined;
+				bundledtl.text0 = undefined;
+				bundledtl.widget0 = undefined;
+				bundledtl.stream0 = undefined;
+				if (bundledtl.medialist != undefined) {
+					for (var j=0; j<bundledtl.medialist.medialistdtls.length; j++) {
+						var medialistdtl = bundledtl.medialist.medialistdtls[j];
+						medialistdtl.image = undefined;
+						medialistdtl.video = undefined;
+					}
+				} 
+			}
+			
 			$.ajax({
 				type : 'POST',
 				url : myurls['bundle.wizard'],

@@ -11,6 +11,7 @@ import com.broadvideo.pixsignage.persistence.DevicefileMapper;
 
 @Service("devicefileService")
 public class DevicefileServiceImpl implements DevicefileService {
+
 	@Autowired
 	private DevicefileMapper devicefileMapper;
 

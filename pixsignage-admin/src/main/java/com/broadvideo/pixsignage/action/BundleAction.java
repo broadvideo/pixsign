@@ -229,7 +229,7 @@ public class BundleAction extends BaseDatatableAction {
 
 			boolean exists = false;
 			if (bundleFile.exists() && zipFile.exists()) {
-				String bundleStr = FileUtils.readFileToString(bundleFile);
+				String bundleStr = FileUtils.readFileToString(bundleFile, "UTF-8");
 				if (bundleStr.equals(bundleJson.toString())) {
 					exists = true;
 				}

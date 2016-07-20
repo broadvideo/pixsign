@@ -145,6 +145,26 @@ response.setDateHeader("Expires",0);
 					</div>
 		
 				</div>
+
+				<div class="clearfix"></div>
+				<div class="row">
+					<div class="col-md-12 col-sm-12">
+						<div class="portlet solid bordered light-grey">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title5"/>
+								</div>
+							</div>
+							<div class="portlet-body">
+								<table id="APPTable" class="table table-striped table-bordered table-hover">
+									<thead></thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 
@@ -200,7 +220,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-main.js?t=5"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
@@ -214,6 +234,7 @@ jQuery(document).ready(function() {
 	initDeviceChart();
 	initMediaChart();
 	initFileChart();
+	initAPPTable();
 });
 
 </script>

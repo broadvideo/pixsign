@@ -338,11 +338,13 @@ $('body').on('click', '.pix-del-bundleschedule', function(event) {
 $('[type=submit]', $('#BundleScheduleModal')).on('click', function(event) {
 	for (var i=0; i<currentBundleschedules.length; i++) {
 		var bundleschedule = currentBundleschedules[i];
+		bundleschedule.bundle = undefined;
 		if (('' + bundleschedule.bundlescheduleid).indexOf('B') == 0) {
 			bundleschedule.bundlescheduleid = '0';
 		}
 		for (var j=0; j<bundleschedule.bundlescheduledtls.length; j++) {
 			var bundlescheduledtl = bundleschedule.bundlescheduledtls[j];
+			bundlescheduledtl.bundle = undefined;
 			if (('' + bundlescheduledtl.bundlescheduleid).indexOf('B') == 0) {
 				bundlescheduledtl.bundlescheduleid = '0';
 			}
