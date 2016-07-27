@@ -1,8 +1,12 @@
 package com.broadvideo.pixsignage.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,14 +21,13 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 
 public class SecurityFilter implements Filter {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected FilterConfig filterConfig = null;
-	private String redirectURL = null;
 	private List<String> excludeLoginURLs = new ArrayList<String>();
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -42,16 +45,12 @@ public class SecurityFilter implements Filter {
 			}
 		}
 
-		if (request.getServerName().startsWith("hyyp.")) {
-			redirectURL = "/hyyp.jsp";
-		} else if (request.getServerName().startsWith("pftx.")) {
-			redirectURL = "/pftx.jsp";
-		} else if (request.getServerName().startsWith("hlym.")) {
-			redirectURL = "/hlym.jsp";
-		} else if (request.getServerName().startsWith("aucma.")) {
-			redirectURL = "/aucma.jsp";
-		} else {
-			redirectURL = "/index.jsp";
+		String redirectURL = "/index.jsp";
+		for (String sdomain : CommonConfig.CONFIG_SDOMAIN_LIST) {
+			if (request.getServerName().startsWith(sdomain + ".")) {
+				redirectURL = "/" + sdomain + ".jsp";
+				break;
+			}
 		}
 
 		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
@@ -85,14 +84,22 @@ public class SecurityFilter implements Filter {
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		redirectURL = filterConfig.getInitParameter("redirectURL");
 
 		excludeLoginURLs.add("/index.jsp");
 		excludeLoginURLs.add("/admin.jsp");
-		excludeLoginURLs.add("/hyyp.jsp");
-		excludeLoginURLs.add("/pftx.jsp");
-		excludeLoginURLs.add("/hlym.jsp");
-		excludeLoginURLs.add("/aucma.jsp");
 		excludeLoginURLs.add("/login.action");
+		try {
+			Properties properties = new Properties();
+			InputStream is = this.getClass().getResourceAsStream("/sdomain.properties");
+			properties.load(is);
+			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<Object, Object> entry = it.next();
+				excludeLoginURLs.add("/" + entry.getKey().toString() + ".jsp");
+			}
+			is.close();
+		} catch (Exception ex) {
+			logger.error("", ex);
+		}
 	}
 }

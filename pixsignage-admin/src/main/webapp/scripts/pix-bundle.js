@@ -160,8 +160,8 @@ $.ajax({
 });
 
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
-FormValidateOption.rules['bundle.name'] = {};
-FormValidateOption.rules['bundle.name']['required'] = true;
+//FormValidateOption.rules['bundle.name'] = {};
+//FormValidateOption.rules['bundle.name']['required'] = true;
 FormValidateOption.submitHandler = function(form) {
 	$.ajax({
 		type : 'POST',

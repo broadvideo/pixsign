@@ -286,7 +286,7 @@ response.setDateHeader("Expires",0);
 													<p><spring:message code="global.tips_3"/></p>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 control-label">节目包<span class="required">*</span></label>
+													<label class="col-md-2 control-label">节目包</label>
 													<div class="col-md-10">
 														<div class="input-icon right">
 															<i class="fa"></i> <input type="text" class="form-control" name="bundle.name" />
@@ -859,7 +859,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
 <script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

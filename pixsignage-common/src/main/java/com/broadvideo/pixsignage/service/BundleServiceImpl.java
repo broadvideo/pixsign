@@ -135,11 +135,18 @@ public class BundleServiceImpl implements BundleService {
 
 	@Transactional
 	public void addBundle(Bundle bundle) {
+		if (bundle.getName() == null || bundle.getName().equals("")) {
+			bundle.setName("UNKNOWN");
+		}
 		Layout layout = layoutMapper.selectByPrimaryKey("" + bundle.getLayoutid());
 		List<Layoutdtl> layoutdtls = layout.getLayoutdtls();
 		bundle.setHeight(layout.getHeight());
 		bundle.setWidth(layout.getWidth());
 		bundleMapper.insertSelective(bundle);
+		if (bundle.getName().equals("UNKNOWN")) {
+			bundle.setName("BUNDLE-" + bundle.getBundleid());
+		}
+		bundleMapper.updateByPrimaryKeySelective(bundle);
 		for (Layoutdtl layoutdtl : layoutdtls) {
 			Bundledtl bundledtl = new Bundledtl();
 			bundledtl.setBundleid(bundle.getBundleid());
@@ -375,6 +382,9 @@ public class BundleServiceImpl implements BundleService {
 	@Transactional
 	public void handleWizard(Staff staff, Bundle bundle, Device[] devices, Devicegroup[] devicegroups)
 			throws Exception {
+		if (bundle.getName() == null || bundle.getName().equals("")) {
+			bundle.setName("UNKNOWN");
+		}
 		Layout layout = bundle.getLayout();
 		List<Bundledtl> bundledtls = bundle.getBundledtls();
 
@@ -402,6 +412,9 @@ public class BundleServiceImpl implements BundleService {
 		bundle.setHeight(layout.getHeight());
 		bundle.setWidth(layout.getWidth());
 		bundleMapper.insertSelective(bundle);
+		if (bundle.getName().equals("UNKNOWN")) {
+			bundle.setName("BUNDLE-" + bundle.getBundleid());
+		}
 		for (Bundledtl bundledtl : bundledtls) {
 			bundledtl.setBundleid(bundle.getBundleid());
 			if (bundledtl.getType().equals(Bundledtl.Type_Private)) {
@@ -959,7 +972,7 @@ public class BundleServiceImpl implements BundleService {
 			if (opacity.length() == 1) {
 				opacity = "0" + opacity;
 			}
-			regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
+			regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().trim().substring(1));
 			regionJson.put("type", layoutdtl.getRegion().getType());
 			regionJson.put("interval", layoutdtl.getIntervaltime());
 			regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));

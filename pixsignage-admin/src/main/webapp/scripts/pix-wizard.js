@@ -199,6 +199,7 @@ function initTab1() {
 }
 
 function initData1() {
+	/*
     FormValidateOption.rules = {};
 	FormValidateOption.rules['bundle.name'] = {};
 	FormValidateOption.rules['bundle.name']['required'] = true;
@@ -209,6 +210,7 @@ function initData1() {
 
 	var d = new Date().format('yyyyMMdd-hhmmss');
 	$('input[name="bundle.name"]').val(myUser + '-' + d);
+	*/
 }
 
 function initTab2() {
