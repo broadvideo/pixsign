@@ -345,6 +345,10 @@ $('body').on('click', '.pix-bundle', function(event) {
 		if (bundledtl.type == 1 && bundledtl.objtype == 6 && bundledtl.dvb != null) {
 			bundledtl.dvb1 = bundledtl.dvb;
 		}
+		
+		if (bundledtl.type == 6) {
+			bundledtl.medialist0 = bundledtl.medialist;
+		}
 	}
 	CurrentBundleid = CurrentBundle.bundleid;
 	CurrentBundledtl = CurrentBundle.bundledtls[0];
@@ -391,9 +395,11 @@ $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 							var medialistdtl = bundledtl.medialist.medialistdtls[j];
 							medialistdtl.image = undefined;
 							medialistdtl.video = undefined;
+							medialistdtl.stream = undefined;
 						}
 					} 
 				}
+				CurrentBundle.layout = undefined;
 				
 				$.ajax({
 					type : 'POST',

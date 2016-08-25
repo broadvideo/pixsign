@@ -159,7 +159,7 @@ function initDevicefiles() {
 	});	
 
 	$('#DeviceVideoTable').dataTable({
-		'sDom' : 'rt',
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : 'devicefile!list.action',
@@ -169,6 +169,7 @@ function initDevicefiles() {
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
 						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
@@ -198,7 +199,7 @@ function initDevicefiles() {
 	});
 
 	$('#DeviceImageTable').dataTable({
-		'sDom' : 'rt',
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : 'devicefile!list.action',
@@ -208,6 +209,7 @@ function initDevicefiles() {
 						{'sTitle' : 'MD5', 'mData' : 'devicefileid', 'bSortable' : false },
 						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
 						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

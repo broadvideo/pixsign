@@ -126,7 +126,7 @@
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');
-			document.location.href="index.jsp?locale=" + language;
+			document.location.href="?locale=" + language;
 		});
 	});
 </script>

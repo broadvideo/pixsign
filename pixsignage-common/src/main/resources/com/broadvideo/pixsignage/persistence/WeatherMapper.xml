@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Weather" >
     <id column="weatherid" property="weatherid" jdbcType="INTEGER" />
     <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="refreshtime" property="refreshtime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -12,7 +13,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    weatherid, city, status, refreshtime
+    weatherid, city, type, status, refreshtime
   </sql>
   <sql id="Blob_Column_List" >
     weather
@@ -33,6 +34,7 @@
     ,
     <include refid="Blob_Column_List" />
     from weather
+    where type = #{type} 
   </select>
 
   <select id="selectByCity" resultMap="ResultMapWithBLOBs">
@@ -41,7 +43,8 @@
     ,
     <include refid="Blob_Column_List" />
     from weather
-    where city = #{city}
+    where type = #{type} 
+    and city = #{city}
   </select>
 
   <delete id="deleteByPrimaryKey" >
@@ -53,9 +56,9 @@
     <selectKey resultType="java.lang.Integer" keyProperty="weatherid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into weather (city, status, refreshtime, 
+    insert into weather (city, type, status, refreshtime, 
       weather)
-    values (#{city,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{refreshtime,jdbcType=TIMESTAMP}, 
+    values (#{city,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{refreshtime,jdbcType=TIMESTAMP}, 
       #{weather,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Weather" >
@@ -66,6 +69,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="city != null" >
         city,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="status != null" >
         status,
@@ -80,6 +86,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="city != null" >
         #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -98,6 +107,9 @@
       <if test="city != null" >
         city = #{city,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -113,6 +125,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Weather" >
     update weather
     set city = #{city,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       refreshtime = #{refreshtime,jdbcType=TIMESTAMP},
       weather = #{weather,jdbcType=LONGVARCHAR}
@@ -121,6 +134,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Weather" >
     update weather
     set city = #{city,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       refreshtime = #{refreshtime,jdbcType=TIMESTAMP}
     where weatherid = #{weatherid,jdbcType=INTEGER}

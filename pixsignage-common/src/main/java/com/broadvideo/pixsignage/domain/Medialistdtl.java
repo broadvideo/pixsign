@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.domain;
 public class Medialistdtl {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
+	public final static String ObjType_Stream = "5";
 
 	private Integer medialistdtlid;
 
@@ -17,6 +18,8 @@ public class Medialistdtl {
 	private Video video;
 
 	private Image image;
+
+	private Stream stream;
 
 	public Integer getMedialistdtlid() {
 		return medialistdtlid;
@@ -72,5 +75,13 @@ public class Medialistdtl {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public Stream getStream() {
+		return stream;
+	}
+
+	public void setStream(Stream stream) {
+		this.stream = stream;
 	}
 }

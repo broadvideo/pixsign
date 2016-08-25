@@ -10,6 +10,7 @@ public class Region {
 	public final static String Type_WEATHER = "3";
 	public final static String Type_VIDEOIN = "4";
 	public final static String Type_DVB = "5";
+	public final static String Type_STREAM = "6";
 
 	private Integer regionid;
 

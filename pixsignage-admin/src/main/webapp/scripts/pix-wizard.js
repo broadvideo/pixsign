@@ -377,6 +377,12 @@ function initData3() {
 			bundledtl.text.text = '';
 		} else if (layoutdtl.region.type == 5) {
 			bundledtl.objtype = 6;
+		} else if (layoutdtl.region.type == 6) {
+			bundledtl.objtype = 1;
+			bundledtl.medialist = {};
+			bundledtl.medialist.medialistid = 0;
+			bundledtl.medialist.medialistdtls = [];
+			bundledtl.medialist.name = '';
 		} else {
 			bundledtl.objtype = 0;
 		}
@@ -626,6 +632,7 @@ function submitData() {
 						var medialistdtl = bundledtl.medialist.medialistdtls[j];
 						medialistdtl.image = undefined;
 						medialistdtl.video = undefined;
+						medialistdtl.stream = undefined;
 					}
 				} 
 			}

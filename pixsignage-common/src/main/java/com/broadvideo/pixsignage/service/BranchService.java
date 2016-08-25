@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.service;
 import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Branch;
+import com.broadvideo.pixsignage.domain.Org;
 
 public interface BranchService {
 	public Branch selectByPrimaryKey(String branchid);
@@ -15,7 +16,7 @@ public interface BranchService {
 
 	public void updateBranch(Branch branch);
 
-	public void deleteBranch(String branchid);
+	public void deleteBranch(Org org, String branchid);
 
 	public boolean validateName(Branch branch, String orgid);
 }

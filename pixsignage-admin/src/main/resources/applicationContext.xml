@@ -19,10 +19,10 @@
 		<property name="url" value="${common.pixsignage.db.url}" />
 		<property name="username" value="${common.pixsignage.db.username}" />
 		<property name="password" value="${common.pixsignage.db.password}" />
-		<property name="initialSize" value="5" />
-		<property name="maxActive" value="10" />
-		<property name="maxIdle" value="5" />
-		<property name="minIdle" value="2" />
+		<property name="initialSize" value="50" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="50" />
+		<property name="minIdle" value="20" />
 		<property name="maxWait" value="500" />
 		<property name="defaultAutoCommit" value="true" />
 		<property name="testWhileIdle" value="true" />

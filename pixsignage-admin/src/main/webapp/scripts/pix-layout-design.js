@@ -128,6 +128,20 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += 'DVB';
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.region.type == 6) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'Stream';
+		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '</div>';
+	} else {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += layoutdtl.region.name;
+		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '</div>';
 	}
 
 	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
@@ -647,7 +661,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 		layoutdtl.zindex = 2;
 	}
 	layoutdtl.bgimageid = 0;
-	layoutdtl.bgcolor = '#000000';
+	layoutdtl.bgcolor = '#FFFFFF';
 	if (CurrentLayout.bgimage != null) {
 		layoutdtl.opacity = 0;
 	} else {
@@ -658,11 +672,11 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.volume = 50;
 	layoutdtl.direction = 4;
 	layoutdtl.speed = 2;
-	layoutdtl.color = '#FFFFFF';
-	if (layoutdtl.region.type == 4) {
-		layoutdtl.size = 30;
-	} else {
+	layoutdtl.color = '#000000';
+	if (layoutdtl.region.type == '1' || layoutdtl.region.type == '2' || layoutdtl.region.type == '3') {
 		layoutdtl.size = 50;
+	} else {
+		layoutdtl.size = 30;
 	}
 	layoutdtl.dateformat = 'yyyy-MM-dd HH:mm';
 	CurrentLayout.layoutdtls[CurrentLayout.layoutdtls.length] = layoutdtl;

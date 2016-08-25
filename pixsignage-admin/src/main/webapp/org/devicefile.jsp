@@ -62,7 +62,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-title">
 								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.devicefile"/></div>
 								<div class="tools">
-									<a href="javascript:;" onClick="refreshLayoutschedule();" class="reload"></a>
+									<a href="javascript:;" onClick="refreshDeviceDetail();" class="reload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
 									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab"><spring:message code="global.device"/></a></li>

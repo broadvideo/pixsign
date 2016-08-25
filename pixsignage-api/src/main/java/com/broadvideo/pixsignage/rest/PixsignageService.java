@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -33,10 +35,12 @@ import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
+import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
@@ -56,6 +60,8 @@ public class PixsignageService {
 	private OrgMapper orgMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private DvbMapper dvbMapper;
 	@Autowired
 	private CrashreportMapper crashreportMapper;
 
@@ -495,6 +501,77 @@ public class PixsignageService {
 	}
 
 	@POST
+	@Path("report_dvb")
+	public String reportdvb(String request) {
+		try {
+			logger.info("Pixsignage Service report_dvb: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			JSONArray dvbJsonArray = requestJson.getJSONArray("dvbs");
+
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			List<Dvb> oldDvbList = dvbMapper.selectList("" + device.getOrgid(), null, null, null, null);
+			HashMap<String, Dvb> oldDvbHash = new HashMap<String, Dvb>();
+			HashMap<String, Dvb> newDvbHash = new HashMap<String, Dvb>();
+			for (Dvb dvb : oldDvbList) {
+				oldDvbHash.put(dvb.getNumber(), dvb);
+			}
+
+			if (dvbJsonArray != null) {
+				for (int i = 0; i < dvbJsonArray.length(); i++) {
+					JSONObject dvbJson = dvbJsonArray.getJSONObject(i);
+					String name = dvbJson.getString("name");
+					String num = "" + dvbJson.getInt("num");
+					Dvb dvb = oldDvbHash.get(num);
+					if (dvb != null) {
+						dvb.setBranchid(org.getTopbranchid());
+						dvb.setName(name);
+						dvb.setStatus("1");
+						dvbMapper.updateByPrimaryKeySelective(dvb);
+						newDvbHash.put(num, dvb);
+					} else {
+						dvb = new Dvb();
+						dvb.setBranchid(org.getTopbranchid());
+						dvb.setOrgid(org.getOrgid());
+						dvb.setStatus("1");
+						dvb.setType(Dvb.Type_Public);
+						dvb.setName(name);
+						dvb.setNumber(num);
+						dvbMapper.insertSelective(dvb);
+						newDvbHash.put(num, dvb);
+					}
+				}
+			}
+
+			for (Dvb dvb : oldDvbList) {
+				if (newDvbHash.get(dvb.getNumber()) == null) {
+					dvbMapper.deleteByPrimaryKey("" + dvb.getDvbid());
+				}
+			}
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_dvb exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
 	@Path("report_crash")
 	public String reportcrash(String request) {
 		try {
@@ -554,7 +631,7 @@ public class PixsignageService {
 			}
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			Weather weather = weatherService.selectByCity(city);
+			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
 			responseJson.put("weather", new JSONObject(weather.getWeather()));
 			return responseJson.toString();
 		} catch (Exception e) {

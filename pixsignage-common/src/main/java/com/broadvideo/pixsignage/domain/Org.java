@@ -12,6 +12,8 @@ public class Org {
 
 	private Integer vspid;
 
+	private Integer topbranchid;
+
 	private String name;
 
 	private String code;
@@ -82,6 +84,14 @@ public class Org {
 
 	public void setVspid(Integer vspid) {
 		this.vspid = vspid;
+	}
+
+	public Integer getTopbranchid() {
+		return topbranchid;
+	}
+
+	public void setTopbranchid(Integer topbranchid) {
+		this.topbranchid = topbranchid;
 	}
 
 	public String getName() {

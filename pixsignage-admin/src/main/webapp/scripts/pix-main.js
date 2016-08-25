@@ -429,14 +429,16 @@ function initAPPTable() {
 		'iDisplayLength' : -1,
 		'bSort' : false,
 		'aoColumns' : [ {'sTitle' : common.view.mainboard, 'mData' : 'mainboard', 'bSortable' : false, 'sWidth' : '10%' },
-						{'sTitle' : common.view.description, 'mData' : 'description', 'bSortable' : false, 'sWidth' : '25%' },
+						{'sTitle' : common.view.description, 'mData' : 'description', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.versionname, 'mData' : 'vname', 'bSortable' : false, 'sWidth' : '10%' },
-						{'sTitle' : common.view.versioncode, 'mData' : 'vcode', 'bSortable' : false, 'sWidth' : '10%' },
-						{'sTitle' : common.view.download, 'mData' : 'file', 'bSortable' : false, 'sWidth' : '45%' }],
+						{'sTitle' : common.view.download, 'mData' : 'file', 'bSortable' : false, 'sWidth' : '40%' },
+						{'sTitle' : common.view.updatetime, 'mData' : 'time', 'bSortable' : false, 'sWidth' : '20%' }],
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(4)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
-			return nRow;
+			$('td:eq(2)', nRow).html(aData.vname + ' (' + aData.vcode + ')');
+			$('td:eq(3)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
+			$('td:eq(4)', nRow).html(new Date(parseInt(aData.time)).pattern("yyyy-MM-dd HH:mm:ss"));
+			return nRow;5
 		},
 	});
 	

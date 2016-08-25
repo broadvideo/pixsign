@@ -13,11 +13,14 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
-update region set name='region.main' where regionid=1;
-update region set name='region.text' where regionid=2;
-update region set name='region.extra_1' where regionid=3;
-update region set name='region.extra_2' where regionid=4;
-update region set name='region.extra_3' where regionid=5;
+insert into region(regionid,name,code,type) values(50,'region.stream_1','stream-1','6');
+insert into region(regionid,name,code,type) values(51,'region.stream_2','stream-2','6');
+
+alter table region modify type varchar(2) default '0';
+insert into region(regionid,name,code,type) values(100,'region.a1','A1','A1');
+insert into region(regionid,name,code,type) values(101,'region.a2','A2','A2');
+update region set code='stream-1' where regionid=50;
+update region set code='stream-2' where regionid=51;
 
 ############################################################
 ## post script  ############################################

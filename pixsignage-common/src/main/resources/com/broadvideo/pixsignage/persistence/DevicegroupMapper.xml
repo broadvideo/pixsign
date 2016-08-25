@@ -64,6 +64,12 @@
     where devicegroupid = '${devicegroupid}'
   </delete>
   
+  <update id="unbindDevices" >
+    update device
+    set devicegroupid = 0 
+    where devicegroupid = #{devicegroupid}
+  </update>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicegroup" >
     <selectKey resultType="java.lang.Integer" keyProperty="devicegroupid" order="AFTER" >
       SELECT LAST_INSERT_ID()

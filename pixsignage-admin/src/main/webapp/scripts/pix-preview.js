@@ -62,7 +62,11 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '; "></div>';
 	}
 	layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (layoutdtl.region.type == 1) {
+	if (layoutdtl.region.type == 0) {
+		if (layoutdtl.bgimage != null) {
+			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+	} else if (layoutdtl.region.type == 1) {
 		if (layoutdtl.direction == 4) {
 			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
 			layoutdtlhtml += '滚动文本';
@@ -90,8 +94,14 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'DVB';
 		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.bgimage != null) {
-		layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (layoutdtl.region.type == 6) {
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += 'STREAM';
+		layoutdtlhtml += '</p>';
+	} else {
+		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
+		layoutdtlhtml += layoutdtl.region.name;
+		layoutdtlhtml += '</p>';
 	}
 	layoutdtlhtml += '</div>';
 	layoutdtlhtml += '</div>';
@@ -178,7 +188,13 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	}
 
 	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (bundledtl.layoutdtl.region.type == 1) {
+	if (bundledtl.layoutdtl.region.type == 0) {
+		if (bgimage != null) {
+			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		} else if (bundledtl.layoutdtl.bgimage != null) {
+			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+	} else if (bundledtl.layoutdtl.region.type == 1) {
 		if (bundledtl.layoutdtl.direction == 4 && dynamic == 1) {
 			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
@@ -210,10 +226,14 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 			bundledtlhtml += 'DVB';
 		}
 		bundledtlhtml += '</p>';
-	} else if (bgimage != null) {
-		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (bundledtl.layoutdtl.bgimage != null) {
-		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (bundledtl.layoutdtl.region.type == 6) {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += 'STREAM';
+		bundledtlhtml += '</p>';
+	} else {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += '</p>';
 	}
 	bundledtlhtml += '</div>';
 	bundledtlhtml += '</div>';

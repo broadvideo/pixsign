@@ -708,6 +708,37 @@ response.setDateHeader("Expires",0);
 														</div>
 													</div>
 													
+													<div class="row bundle-ctl regiontype-6">
+														<div class="col-md-7">
+															<div class="portlet box blue">
+																<div class="portlet-title">
+																	<div class="caption"><i class="fa fa-reorder"></i>视频流库</div>
+																</div>
+																<div class="portlet-body">
+																	<table id="StreamTable1" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>																		
+																</div>
+															</div>
+														</div>
+														<div class="col-md-5">
+															<div class="portlet box green">
+																<div class="portlet-title">
+																	<div class="caption"><i class="fa fa-picture"></i>已选择列表</div>
+																</div>
+																<div class="portlet-body">
+																	<div class="table-responsive">
+																		<table id="StreamTable2" class="table table-condensed table-hover">
+																			<thead></thead>
+																			<tbody></tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
 												</div>
 											</div>
 										</div>

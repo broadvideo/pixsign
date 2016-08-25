@@ -23,12 +23,12 @@ public class DvbServiceImpl implements DvbService {
 		return dvbMapper.selectByPrimaryKey(dvbid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return dvbMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String branchid, String status) {
+		return dvbMapper.selectCount(orgid, branchid, status);
 	}
 
-	public List<Dvb> selectList(String orgid, String branchid, String start, String length) {
-		return dvbMapper.selectList(orgid, branchid, start, length);
+	public List<Dvb> selectList(String orgid, String branchid, String status, String start, String length) {
+		return dvbMapper.selectList(orgid, branchid, status, start, length);
 	}
 
 	@Transactional

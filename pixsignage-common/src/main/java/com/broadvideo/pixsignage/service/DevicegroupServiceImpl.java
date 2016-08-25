@@ -52,6 +52,7 @@ public class DevicegroupServiceImpl implements DevicegroupService {
 
 	@Transactional
 	public void deleteDevicegroup(String devicegroupid) {
+		devicegroupMapper.unbindDevices(devicegroupid);
 		devicegroupMapper.deleteByPrimaryKey(devicegroupid);
 	}
 

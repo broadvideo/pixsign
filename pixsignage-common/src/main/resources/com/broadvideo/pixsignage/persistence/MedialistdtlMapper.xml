@@ -9,6 +9,7 @@
     <result column="sequence" property="sequence" jdbcType="INTEGER" />
     <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
+    <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStreamid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -23,6 +24,11 @@
   <select id="selectImageid" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
     select * from image
     where '${objtype}' = '2' and imageid = #{imageid}
+  </select>
+  
+  <select id="selectStreamid" resultMap="com.broadvideo.pixsignage.persistence.StreamMapper.BaseResultMap" >
+    select * from stream
+    where '${objtype}' = '5' and streamid = #{streamid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

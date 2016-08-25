@@ -34,10 +34,10 @@ public class DvbAction extends BaseDatatableAction {
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = dvbService.selectCount("" + getLoginStaff().getOrgid(), branchid);
+			int count = dvbService.selectCount("" + getLoginStaff().getOrgid(), branchid, "1");
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Dvb> dvbList = dvbService.selectList("" + getLoginStaff().getOrgid(), branchid, start, length);
+			List<Dvb> dvbList = dvbService.selectList("" + getLoginStaff().getOrgid(), branchid, "1", start, length);
 			for (int i = 0; i < dvbList.size(); i++) {
 				aaData.add(dvbList.get(i));
 			}

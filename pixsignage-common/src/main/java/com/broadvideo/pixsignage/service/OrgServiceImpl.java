@@ -59,6 +59,8 @@ public class OrgServiceImpl implements OrgService {
 		branch.setDescription(org.getName() + "总部");
 		branch.setCreatestaffid(org.getCreatestaffid());
 		branchMapper.insertSelective(branch);
+		org.setTopbranchid(branch.getBranchid());
+		orgMapper.updateByPrimaryKeySelective(org);
 
 		Staff staff = new Staff();
 		staff.setOrgid(org.getOrgid());

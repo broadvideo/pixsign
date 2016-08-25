@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.domain.Branch;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 
@@ -45,7 +46,8 @@ public class BranchServiceImpl implements BranchService {
 	}
 
 	@Transactional
-	public void deleteBranch(String branchid) {
+	public void deleteBranch(Org org, String branchid) {
+		deviceMapper.changeBranch(branchid, "" + org.getTopbranchid());
 		branchMapper.deleteByPrimaryKey(branchid);
 	}
 

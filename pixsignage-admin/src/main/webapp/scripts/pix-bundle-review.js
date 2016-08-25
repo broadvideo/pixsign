@@ -319,6 +319,20 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += 'DVB';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.region.type == 6) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += 'STREAM';
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	} else {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
 	}
 	div.html(bundledtlhtml);
 }

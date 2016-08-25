@@ -158,6 +158,20 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += 'DVB';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.region.type == 6) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += 'STREAM';
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	} else {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
 	}
 	div.html(bundledtlhtml);
 }
@@ -236,6 +250,9 @@ function validBundledtl(bundledtl) {
 			bundledtl.objid = $('#BundledtlSelect').val();
 			bundledtl.type = 1;
 			bundledtl.objtype = 6;
+		} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+			bundledtl.objid = bundledtl.medialist0.medialistid;
+			bundledtl.medialist = bundledtl.medialist0;
 		}
 		
 		return true;
@@ -280,6 +297,8 @@ function refreshBundledtlEdit() {
 			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 		} else if (CurrentBundledtl.layoutdtl.region.type == 1) {
 			$('.regiontype-1').css("display", "block");
+		} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+			$('.regiontype-6').css("display", "block");
 		}
 		if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == '1') {
 			$('.public-0').css("display", "none");
@@ -307,8 +326,8 @@ function refreshBundledtlEdit() {
 				$('.objtype-4').css("display", "none");
 			}
 		}
-	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
-		$('.regiontype-5').css("display", "block");
+	} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+		$('.regiontype-6').css("display", "block");
 	}
 
     FormValidateOption.rules = {};
@@ -460,42 +479,53 @@ function refreshBundledtlSelect() {
 }
 
 function refreshMedialistDtl() {
-	if ($('input[name="bundledtl.objtype"]:checked').val() == 1 && $('input[name="bundledtl.type"]:checked').val() == 0) {
-		$('#MedialistDtlTable').dataTable().fnClearTable();
+	if (CurrentBundledtl.layoutdtl.region.type == 0) {
+		if ($('input[name="bundledtl.objtype"]:checked').val() == 1 && $('input[name="bundledtl.type"]:checked').val() == 0) {
+			$('#MedialistDtlTable').dataTable().fnClearTable();
+			for (var i=0; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
+				var medialistdtl = CurrentBundledtl.medialist0.medialistdtls[i];
+				var thumbwidth = 100;
+				var thumbnail = '';
+				var thumbhtml = '';
+				var medianame = '';
+				if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
+					mediatype = common.view.intvideo;
+					medianame = medialistdtl.video.name;
+					if (medialistdtl.video.thumbnail == null) {
+						thumbnail = '../img/video.jpg';
+					} else {
+						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
+					}
+				} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
+					mediatype = common.view.extvideo;
+					medianame = medialistdtl.video.name;
+					if (medialistdtl.video.thumbnail == null) {
+						thumbnail = '../img/video.jpg';
+					} else {
+						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
+					}
+				} else if (medialistdtl.objtype == 2) {
+					mediatype = common.view.image;
+					medianame = medialistdtl.image.name;
+					thumbwidth = medialistdtl.image.width > medialistdtl.image.height? 100 : 100*medialistdtl.image.width/medialistdtl.image.height;
+					thumbnail = '/pixsigdata' + medialistdtl.image.thumbnail;
+				} else {
+					mediatype = common.view.unknown;
+				}
+				if (thumbnail != '') {
+					thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';
+				}
+				$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, medianame, 0, 0, 0]);
+			}
+		}
+	} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+		$('#StreamTable2').dataTable().fnClearTable();
 		for (var i=0; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
 			var medialistdtl = CurrentBundledtl.medialist0.medialistdtls[i];
-			var thumbwidth = 100;
-			var thumbnail = '';
-			var thumbhtml = '';
-			var medianame = '';
-			if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
-				mediatype = common.view.intvideo;
-				medianame = medialistdtl.video.name;
-				if (medialistdtl.video.thumbnail == null) {
-					thumbnail = '../img/video.jpg';
-				} else {
-					thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
-				}
-			} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
-				mediatype = common.view.extvideo;
-				medianame = medialistdtl.video.name;
-				if (medialistdtl.video.thumbnail == null) {
-					thumbnail = '../img/video.jpg';
-				} else {
-					thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
-				}
-			} else if (medialistdtl.objtype == 2) {
-				mediatype = common.view.image;
-				medianame = medialistdtl.image.name;
-				thumbwidth = medialistdtl.image.width > medialistdtl.image.height? 100 : 100*medialistdtl.image.width/medialistdtl.image.height;
-				thumbnail = '/pixsigdata' + medialistdtl.image.thumbnail;
-			} else {
-				mediatype = common.view.unknown;
+			if (medialistdtl.stream != null) {
+				var html = '<div class="pix-title">' + medialistdtl.stream.name + '</div>';
+				$('#StreamTable2').dataTable().fnAddData([medialistdtl.sequence, 'Stream', html, 0, 0, 0]);
 			}
-			if (thumbnail != '') {
-				thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';
-			}
-			$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, medianame, 0, 0, 0]);
 		}
 	}
 }
@@ -1012,4 +1042,135 @@ $('body').on('click', '.pix-medialistdtl-down', function(event) {
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1] = temp;
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1].sequence = rowIndex+2;
 	redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
+});
+
+
+$('#StreamTable1').dataTable({
+	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+	'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+					[ 10, 25, 50, 100 ] 
+					],
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'stream!list.action',
+	'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
+					{'sTitle' : 'URL', 'mData' : 'url', 'bSortable' : false, 'sWidth' : '70%' },
+					{'sTitle' : '', 'mData' : 'streamid', 'bSortable' : false, 'sWidth' : '5%' }],
+	'iDisplayLength' : 10,
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(2)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-stream-add"><i class="fa fa-plus"></i></a>');
+		return nRow;
+	}
+});
+$('#StreamTable1_wrapper .dataTables_filter input').addClass('form-control input-small');
+$('#StreamTable1_wrapper .dataTables_length select').addClass('form-control input-small');
+$('#StreamTable1_wrapper .dataTables_length select').select2();
+$('#StreamTable1').css('width', '100%');
+
+$('#StreamTable2').dataTable({
+	'sDom' : 't',
+	'iDisplayLength' : -1,
+	'aoColumns' : [ {'sTitle' : '', 'bSortable' : false, 'sWidth' : '40px' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '60px' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sClass': 'autowrap' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
+	'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
+	'oLanguage' : { 'sZeroRecords' : '列表为空',
+					'sEmptyTable' : '列表为空' }, 
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-stream-up"><i class="fa fa-arrow-up"></i></button>');
+		$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-stream-down"><i class="fa fa-arrow-down"></i></button>');
+		$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-stream-delete"><i class="fa fa-trash-o"></i></button>');
+		return nRow;
+	}
+});
+
+//增加Stream
+$('body').on('click', '.pix-stream-add', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#StreamTable1').dataTable().fnGetData(rowIndex);
+	var medialistdtl = {};
+	medialistdtl.medialistdtlid = 0;
+	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
+	medialistdtl.objtype = '5';
+	medialistdtl.objid = data.streamid;
+	medialistdtl.sequence = CurrentBundledtl.medialist0.medialistdtls.length + 1;
+	medialistdtl.stream = data;
+	CurrentBundledtl.medialist0.medialistdtls[CurrentBundledtl.medialist0.medialistdtls.length] = medialistdtl;
+
+	var html = '<div class="pix-title">' + data.name + '</div>';
+	$('#StreamTable2').dataTable().fnAddData([medialistdtl.sequence, 'Stream', html, 0, 0, 0]);
+});
+
+//删除Stream
+$('body').on('click', '.pix-stream-delete', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	for (var i=rowIndex; i<$('#StreamTable2').dataTable().fnSettings().fnRecordsDisplay(); i++) {
+		var data = $('#StreamTable2').dataTable().fnGetData(i);
+		$('#StreamTable2').dataTable().fnUpdate(i, parseInt(i), 0);
+	}
+	$('#StreamTable2').dataTable().fnDeleteRow(rowIndex);
+	
+	for (var i=rowIndex; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
+		CurrentBundledtl.medialist0.medialistdtls[i].sequence = i;
+	}
+	CurrentBundledtl.medialist0.medialistdtls.splice(rowIndex, 1);
+});
+
+//上移
+$('body').on('click', '.pix-stream-up', function(event) {
+	var rowIndex = $(event.target).attr('data-id');
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	if (rowIndex == 0) {
+		return;
+	}
+	rowIndex = parseInt(rowIndex);
+	var movedDta = $('#StreamTable2').dataTable().fnGetData(rowIndex).slice(0);
+	var prevData = $('#StreamTable2').dataTable().fnGetData(rowIndex-1).slice(0);
+	$('#StreamTable2').dataTable().fnUpdate(prevData[1], rowIndex, 1);
+	$('#StreamTable2').dataTable().fnUpdate(prevData[2], rowIndex, 2);
+	$('#StreamTable2').dataTable().fnUpdate(movedDta[1], rowIndex-1, 1);
+	$('#StreamTable2').dataTable().fnUpdate(movedDta[2], rowIndex-1, 2);
+	
+	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex] =  CurrentBundledtl.medialist0.medialistdtls[rowIndex-1];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex].sequence = rowIndex+1;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex-1] = temp;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex-1].sequence = rowIndex;
+});
+
+//下移
+$('body').on('click', '.pix-stream-down', function(event) {
+	var rowIndex = $(event.target).attr('data-id');
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	if (rowIndex == $('#BundleTextTable').dataTable().fnSettings().fnRecordsDisplay() - 1) {
+		return;
+	}
+	rowIndex = parseInt(rowIndex);
+	var movedDta = $('#StreamTable2').dataTable().fnGetData(rowIndex).slice(0);
+	var nextData = $('#StreamTable2').dataTable().fnGetData(rowIndex+1).slice(0);
+	$('#StreamTable2').dataTable().fnUpdate(nextData[1], rowIndex, 1);
+	$('#StreamTable2').dataTable().fnUpdate(nextData[2], rowIndex, 2);
+	$('#StreamTable2').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
+	$('#StreamTable2').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
+	
+	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex] = CurrentBundledtl.medialist0.medialistdtls[rowIndex+1];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex].sequence = rowIndex+1;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1] = temp;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1].sequence = rowIndex+2;
 });

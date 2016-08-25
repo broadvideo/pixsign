@@ -25,7 +25,7 @@ public class WeatherTask {
 			workflag = true;
 			logger.info("Start WeatherTask Quartz Task");
 
-			List<Weather> weatherList = weatherService.selectList();
+			List<Weather> weatherList = weatherService.selectList(Weather.Type_Baidu);
 			for (Weather weather : weatherList) {
 				weatherService.refreshWeather(weather);
 			}

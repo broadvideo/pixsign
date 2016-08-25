@@ -25,4 +25,7 @@ public interface DevicegroupMapper {
 	int updateByPrimaryKeySelective(Devicegroup record);
 
 	// int updateByPrimaryKey(Devicegroup record);
+
+	int unbindDevices(@Param(value = "devicegroupid") String devicegroupid);
+
 }

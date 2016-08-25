@@ -19,25 +19,29 @@ public class WeatherServiceImpl implements WeatherService {
 	@Autowired
 	private WeatherMapper weatherMapper;
 
-	public List<Weather> selectList() {
-		return weatherMapper.selectList();
+	public List<Weather> selectList(String type) {
+		return weatherMapper.selectList(type);
 	}
 
-	public Weather selectByCity(String city) {
-		Weather weather = weatherMapper.selectByCity(city);
+	public Weather selectByCity(String type, String city) {
+		Weather weather = weatherMapper.selectByCity(type, city);
 		if (weather == null) {
-			return getNewWeather(city);
+			return getNewWeather(type, city);
 		}
 		return weather;
 	}
 
-	private synchronized Weather getNewWeather(String city) {
-		Weather weather = weatherMapper.selectByCity(city);
+	private synchronized Weather getNewWeather(String type, String city) {
+		Weather weather = weatherMapper.selectByCity(type, city);
 		if (weather == null) {
 			weather = new Weather();
-			String s = WeatherUtil.getWeather(city);
+			weather.setType(type);
 			weather.setCity(city);
-			weather.setWeather(s);
+			if (type.equals(Weather.Type_Baidu)) {
+				weather.setWeather(WeatherUtil.getBaiduWeather(weather.getCity()));
+			} else {
+				weather.setWeather(WeatherUtil.getYahooWeather(weather.getCity()));
+			}
 			weather.setStatus("1");
 			weather.setRefreshtime(Calendar.getInstance().getTime());
 			weatherMapper.insertSelective(weather);
@@ -46,8 +50,13 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 
 	public void refreshWeather(Weather weather) {
-		String s = WeatherUtil.getWeather(weather.getCity());
-		if (!weather.getWeather().equals(s)) {
+		String s = "";
+		if (weather.getType().equals(Weather.Type_Baidu)) {
+			s = WeatherUtil.getBaiduWeather(weather.getCity());
+		} else {
+			s = WeatherUtil.getYahooWeather(weather.getCity());
+		}
+		if (!weather.getWeather().equals(s) && s.length() > 0) {
 			logger.info("Weather of {} changed", weather.getCity());
 			weather.setWeather(s);
 			weather.setRefreshtime(Calendar.getInstance().getTime());

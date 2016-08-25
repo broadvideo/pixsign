@@ -23,23 +23,31 @@
     select 
     <include refid="Base_Column_List" />
     from dvb
-    where dvbid = '${dvbid}'
+    where dvbid = #{dvbid}
   </select>
   
   <select id="selectCount" resultType="Integer">
     select count(1) from dvb
     where type = '1' 
-    and status = '1' 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from dvb
     where type = '1' 
-    and status = '1' 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
     order by dvbid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -49,7 +57,7 @@
   <delete id="deleteByPrimaryKey" >
     update dvb
     set status='9'
-    where dvbid = '${dvbid}'
+    where dvbid = #{dvbid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Dvb" >

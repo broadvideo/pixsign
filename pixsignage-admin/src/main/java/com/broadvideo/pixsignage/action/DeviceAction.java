@@ -174,16 +174,16 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doAPPList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			HashMap<String, String> app1 = getAppFile("DigitalBox_APP_UWIN_SINGLE", "a20", "A83T", "开机自启App版(单屏)");
+			HashMap<String, String> app1 = getAppFile("DigitalBox_APP_UWIN_SINGLE", "a83t", "A83T", "开机自启App版(单屏)");
 			if (app1 != null) {
 				aaData.add(app1);
 			}
-			HashMap<String, String> app2 = getAppFile("DigitalBox_LAUNCHER_UWIN_SINGLE", "a20", "A83T",
+			HashMap<String, String> app2 = getAppFile("DigitalBox_LAUNCHER_UWIN_SINGLE", "a83t", "A83T",
 					"Launcher版(单屏)");
 			if (app2 != null) {
 				aaData.add(app2);
 			}
-			HashMap<String, String> app3 = getAppFile("DigitalBox_LAUNCHER_UWIN", "a20", "A83T", "Launcher版(双屏)");
+			HashMap<String, String> app3 = getAppFile("DigitalBox_LAUNCHER_UWIN", "a83t", "A83T", "Launcher版(双屏)");
 			if (app3 != null) {
 				aaData.add(app3);
 			}
@@ -220,9 +220,10 @@ public class DeviceAction extends BaseDatatableAction {
 				return name.startsWith(appname + "-") && name.endsWith((".apk"));
 			}
 		});
-		Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
 
-		if (files.length > 0) {
+		if (files != null && files.length > 0) {
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+
 			String vname = "";
 			String vcode = "0";
 			String filename = files[0].getName();
@@ -242,6 +243,7 @@ public class DeviceAction extends BaseDatatableAction {
 			app.put("url", "/pixdata/app/" + subdir + "/" + files[0].getName());
 			app.put("vname", vname);
 			app.put("vcode", vcode);
+			app.put("time", "" + new File("/opt/pixdata/app/" + subdir + "/" + files[0].getName()).lastModified());
 			return app;
 		} else {
 			return null;

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Org" >
     <id column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="vspid" property="vspid" jdbcType="INTEGER" />
+    <result column="topbranchid" property="topbranchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -35,7 +36,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, name, code, status, orgtype, reviewflag, videoflag, imageflag, textflag, streamflag, 
+    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, videoflag, imageflag, textflag, streamflag, 
     dvbflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
     currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, devicepass, createtime, createstaffid
@@ -43,7 +44,7 @@
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select * from org
-    where orgid = '${orgid}'
+    where orgid = #{orgid}
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
@@ -72,7 +73,7 @@
   
   <delete id="deleteByPrimaryKey" >
     update org set status='9'
-    where orgid = '${orgid}'
+    where orgid = #{orgid}
   </delete>
 
   <update id="updateCurrentdevices" >
@@ -93,7 +94,7 @@
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into org (vspid, name, code, 
+    insert into org (vspid, topbranchid, name, code, 
       status, orgtype, reviewflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, widgetflag, expireflag, 
@@ -102,7 +103,7 @@
       copyright, description, backupvideoid, 
       powerflag, poweron, poweroff, 
       devicepass, createtime, createstaffid)
-    values (#{vspid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+    values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, #{expireflag,jdbcType=CHAR}, 
@@ -120,6 +121,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="vspid != null" >
         vspid,
+      </if>
+      <if test="topbranchid != null" >
+        topbranchid,
       </if>
       <if test="name != null" >
         name,
@@ -206,6 +210,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="vspid != null" >
         #{vspid,jdbcType=INTEGER},
+      </if>
+      <if test="topbranchid != null" >
+        #{topbranchid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -296,6 +303,9 @@
       <if test="vspid != null" >
         vspid = #{vspid,jdbcType=INTEGER},
       </if>
+      <if test="topbranchid != null" >
+        topbranchid = #{topbranchid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -383,6 +393,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Org" >
     update org
     set vspid = #{vspid,jdbcType=INTEGER},
+      topbranchid = #{topbranchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},

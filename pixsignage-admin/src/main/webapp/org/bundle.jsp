@@ -235,6 +235,37 @@ response.setDateHeader("Expires",0);
 													</div>
 												</div>
 												
+												<div class="row bundle-ctl regiontype-6">
+													<div class="col-md-7">
+														<div class="portlet box blue">
+															<div class="portlet-title">
+																<div class="caption"><i class="fa fa-reorder"></i>视频流库</div>
+															</div>
+															<div class="portlet-body">
+																<table id="StreamTable1" class="table table-condensed table-hover">
+																	<thead></thead>
+																	<tbody></tbody>
+																</table>																		
+															</div>
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="portlet box green">
+															<div class="portlet-title">
+																<div class="caption"><i class="fa fa-picture"></i>已选择列表</div>
+															</div>
+															<div class="portlet-body">
+																<div class="table-responsive">
+																	<table id="StreamTable2" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -428,9 +459,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-bundle.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=8"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-bundle.js?t=7"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

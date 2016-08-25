@@ -75,6 +75,8 @@
 				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
 				<button type="submit" class="btn green-haze pull-right"><spring:message code="global.login.login"/> <i class="m-icon-swapright m-icon-white"></i></button>
 				</button>
+	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
+	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
 			</div>
 			<br/>
 		</form>

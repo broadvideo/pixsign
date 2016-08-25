@@ -7,9 +7,9 @@ import com.broadvideo.pixsignage.domain.Dvb;
 public interface DvbService {
 	public Dvb selectByPrimaryKey(String dvbid);
 
-	public int selectCount(String orgid, String branchid);
+	public int selectCount(String orgid, String branchid, String status);
 
-	public List<Dvb> selectList(String orgid, String branchid, String start, String length);
+	public List<Dvb> selectList(String orgid, String branchid, String status, String start, String length);
 
 	public void addDvb(Dvb dvb);
 

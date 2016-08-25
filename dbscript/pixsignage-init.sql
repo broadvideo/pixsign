@@ -53,6 +53,7 @@ default character set utf8;
 create table org( 
    orgid int not null auto_increment,
    vspid int not null,
+   topbranchid int,
    name varchar(64) not null,
    code varchar(16) not null,
    status char(1) default '1',
@@ -260,7 +261,7 @@ create table dvb(
    orgid int not null,
    branchid int not null,
    name varchar(256) not null,
-   frequency varchar(32) not null,
+   frequency varchar(32) default '',
    number varchar(16) not null,
    type char(1) default 1,
    status char(1) default '1',
@@ -366,7 +367,7 @@ create table region(
    regionid int not null,
    name varchar(64) not null,
    code varchar(32) not null,
-   type char(1) default '0',
+   type varchar(2) default '0',
    primary key (regionid)
  )engine = innodb
 default character set utf8;
@@ -612,7 +613,8 @@ default character set utf8;
 
 create table weather( 
    weatherid int not null auto_increment,
-   city varchar(64) not null unique,
+   city varchar(64) not null,
+   type char(1) not null default '1',
    weather longtext not null default '',
    status char(1) default '1',
    refreshtime datetime,
@@ -672,9 +674,9 @@ insert into staffprivilege(staffid,privilegeid) values(@staffid3,0);
 
 insert into vsp(name,code,createstaffid) values('default','default',@staffid1);
 select last_insert_id() into @vspid;
-insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(@vspid,'default','default',0,'2037-01-01 00:00:00',20,30000,20,'Default Org',@staffid2);
+insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(@vspid,'default','default',0,'2037-01-01 00:00:00',0,0,0,'Default Org',@staffid2);
 select last_insert_id() into @orgid;
-insert into branch(orgid,parentid,name,code,description,createstaffid) values(@orgid,0,'super','root','Default Root Branch',@staffid3);
+insert into branch(orgid,parentid,name,description,createstaffid) values(@orgid,0,'super','Default Root Branch',@staffid3);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');
@@ -704,29 +706,19 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30302,2,303,'menu.bundle','bundle.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30303,2,303,'menu.deviceschedule','device-schedule.jsp','',1,3,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30304,2,303,'menu.devicegpschedule','devicegp-schedule.jsp','',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(304,2,0,'menu.page','','fa-video-camera',1,5,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30401,2,304,'menu.template','template.jsp','',1,1,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30402,2,304,'menu.pagepkg','pagepkg.jsp','',1,2,'12');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(304,2,0,'menu.page','','fa-video-camera',1,5,'12');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30401,2,304,'menu.template','template.jsp','',1,1,'12');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30402,2,304,'menu.pagepkg','pagepkg.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(305,2,0,'menu.review','','fa-eye',1,6,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30501,2,305,'menu.bundlereview','bundle-review.jsp','',1,1,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(306,2,0,'menu.vstation','','fa-video-camera',1,7,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30601,2,306,'menu.vchannel','vchannel.jsp','',1,1,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30602,2,306,'menu.playlist','vchannel-playlist.jsp','',1,2,'1');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30603,2,306,'menu.vchannelschedule','vchannel-schedule.jsp','',1,3,'1');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(306,2,0,'menu.vstation','','fa-video-camera',1,7,'1');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30601,2,306,'menu.vchannel','vchannel.jsp','',1,1,'1');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30602,2,306,'menu.playlist','vchannel-playlist.jsp','',1,2,'1');
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30603,2,306,'menu.vchannelschedule','vchannel-schedule.jsp','',1,3,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(309,2,0,'menu.systemmanage','','fa-cogs',1,10,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30901,2,309,'menu.staff','staff.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30902,2,309,'menu.role','role.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30903,2,309,'menu.branch','branch.jsp','',1,3,'12');
-
-insert into region(regionid,name,code,type) values(1,'region.main','main','0');
-insert into region(regionid,name,code,type) values(2,'region.text_1','text-1','1');
-insert into region(regionid,name,code,type) values(3,'region.text_2','text-2','1');
-insert into region(regionid,name,code,type) values(4,'region.extra_1','extra-1','0');
-insert into region(regionid,name,code,type) values(5,'region.extra_2','extra-2','0');
-insert into region(regionid,name,code,type) values(6,'region.extra_3','extra-3','0');
-insert into region(regionid,name,code,type) values(7,'region.extra_4','extra-4','0');
-insert into region(regionid,name,code,type) values(8,'region.date_1','date-1','2');
-insert into region(regionid,name,code,type) values(9,'region.date_2','date-2','2');
 
 insert into region(regionid,name,code,type) values(1,'region.main','main','0');
 insert into region(regionid,name,code,type) values(10,'region.play_1','play-1','0');

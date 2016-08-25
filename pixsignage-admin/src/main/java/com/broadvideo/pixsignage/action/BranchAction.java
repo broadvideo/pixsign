@@ -67,7 +67,7 @@ public class BranchAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			branchService.deleteBranch("" + branch.getBranchid());
+			branchService.deleteBranch(getLoginStaff().getOrg(), "" + branch.getBranchid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("doDelete exception", ex);

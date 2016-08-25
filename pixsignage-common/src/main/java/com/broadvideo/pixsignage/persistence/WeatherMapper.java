@@ -9,9 +9,9 @@ import com.broadvideo.pixsignage.domain.Weather;
 public interface WeatherMapper {
 	Weather selectByPrimaryKey(@Param(value = "weatherid") String weatherid);
 
-	List<Weather> selectList();
+	List<Weather> selectList(@Param(value = "type") String type);
 
-	Weather selectByCity(@Param(value = "city") String city);
+	Weather selectByCity(@Param(value = "type") String type, @Param(value = "city") String city);
 
 	int deleteByPrimaryKey(@Param(value = "weatherid") String weatherid);
 

@@ -3,53 +3,66 @@ package com.broadvideo.pixsignage.domain;
 import java.util.Date;
 
 public class Weather {
-    private Integer weatherid;
+	public final static String Type_Baidu = "1";
+	public final static String Type_Yahoo = "2";
 
-    private String city;
+	private Integer weatherid;
 
-    private String status;
+	private String city;
 
-    private Date refreshtime;
+	private String type;
 
-    private String weather;
+	private String status;
 
-    public Integer getWeatherid() {
-        return weatherid;
-    }
+	private Date refreshtime;
 
-    public void setWeatherid(Integer weatherid) {
-        this.weatherid = weatherid;
-    }
+	private String weather;
 
-    public String getCity() {
-        return city;
-    }
+	public Integer getWeatherid() {
+		return weatherid;
+	}
 
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
-    }
+	public void setWeatherid(Integer weatherid) {
+		this.weatherid = weatherid;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public void setCity(String city) {
+		this.city = city == null ? null : city.trim();
+	}
 
-    public Date getRefreshtime() {
-        return refreshtime;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setRefreshtime(Date refreshtime) {
-        this.refreshtime = refreshtime;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getWeather() {
-        return weather;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setWeather(String weather) {
-        this.weather = weather == null ? null : weather.trim();
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
+
+	public Date getRefreshtime() {
+		return refreshtime;
+	}
+
+	public void setRefreshtime(Date refreshtime) {
+		this.refreshtime = refreshtime;
+	}
+
+	public String getWeather() {
+		return weather;
+	}
+
+	public void setWeather(String weather) {
+		this.weather = weather == null ? null : weather.trim();
+	}
 }

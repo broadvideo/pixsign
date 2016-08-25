@@ -477,7 +477,7 @@ function initDeviceFileModal() {
 	});
 	
 	$('#DeviceVideoTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ]
 						],
@@ -517,7 +517,7 @@ function initDeviceFileModal() {
 	jQuery('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 
 	$('#DeviceImageTable').dataTable({
-		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 						[ 10, 25, 50, 100 ]
 						],

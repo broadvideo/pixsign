@@ -135,6 +135,12 @@
     where deviceid = #{deviceid}
   </update>
 
+  <update id="changeBranch" >
+    update device
+    set branchid = #{branchid2} 
+    where branchid = #{branchid1}
+  </update>
+
   <update id="checkDevicegroup" >
     update device d, devicegroup dg
     set d.devicegroupid = 0 
