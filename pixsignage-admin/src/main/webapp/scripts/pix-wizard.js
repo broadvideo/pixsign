@@ -296,6 +296,7 @@ function initData2() {
 		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
+	updateRegionBtns();
 	
 	if (myBranchid == CurrentLayout.branchid) {
 		$('#LayoutCol1').parent().unblock({

@@ -21,8 +21,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -81,6 +85,8 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			String mac = requestJson.getString("mac");
+			String appname = requestJson.getString("app_name");
+			String sign = requestJson.getString("sign");
 			String version = requestJson.getString("version");
 			String ip = req.getRemoteAddr();
 
@@ -89,6 +95,11 @@ public class PixsignageService {
 			}
 			if (terminalid == null || terminalid.equals("")) {
 				return handleResult(1003, "终端号不能为空");
+			}
+
+			String mtype = "";
+			if (sign != null && sign.length() > 0) {
+				mtype = CONFIG_SIGNATURE.get(sign);
 			}
 
 			Device device = deviceMapper.selectByHardkey(hardkey);
@@ -130,7 +141,9 @@ public class PixsignageService {
 			device.setHardkey(hardkey);
 			device.setIp(ip);
 			device.setMac(mac);
+			device.setAppname(appname);
 			device.setVersion(version);
+			device.setMtype(mtype);
 			device.setStatus("1");
 			device.setSchedulestatus("0");
 			device.setFilestatus("0");
@@ -614,7 +627,7 @@ public class PixsignageService {
 	@GET
 	@Path("get_weather")
 	@Produces("application/json;charset=UTF-8")
-	public String get_weather(@QueryParam("hardkey") String hardkey, @QueryParam("terminal_id") String terminalid,
+	public String getweather(@QueryParam("hardkey") String hardkey, @QueryParam("terminal_id") String terminalid,
 			@QueryParam("city") String city) {
 		try {
 			logger.info("Pixsignage Service get_weather: hardkey={},terminal_id={},city={}", hardkey, terminalid, city);
@@ -636,6 +649,46 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_weather exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("/report_screen")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportscreen(@FormDataParam("meta") String request,
+			@FormDataParam("screen") FormDataContentDisposition screenHeader,
+			@FormDataParam("screen") InputStream screenFile) {
+		try {
+			logger.info("Pixsignage Service report_screen: {}, screenHeader: {}", request, screenHeader);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/screen/" + device.getDeviceid()));
+			String filename = CommonConfig.CONFIG_PIXDATA_HOME + "/screen/" + device.getDeviceid() + "/screen-"
+					+ device.getDeviceid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()) + ".jpg";
+			logger.info("Save screen snapshot to: {}", filename);
+			File file = new File(filename);
+			FileUtils.copyInputStreamToFile(screenFile, file);
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service report_screen response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_screen exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

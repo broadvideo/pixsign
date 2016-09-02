@@ -34,7 +34,11 @@ public class Device {
 
 	private String onlineflag;
 
+	private String appname;
+
 	private String version;
+
+	private String mtype;
 
 	private String type;
 
@@ -172,12 +176,28 @@ public class Device {
 		this.onlineflag = onlineflag == null ? null : onlineflag.trim();
 	}
 
+	public String getAppname() {
+		return appname;
+	}
+
+	public void setAppname(String appname) {
+		this.appname = appname;
+	}
+
 	public String getVersion() {
 		return version;
 	}
 
 	public void setVersion(String version) {
 		this.version = version == null ? null : version.trim();
+	}
+
+	public String getMtype() {
+		return mtype;
+	}
+
+	public void setMtype(String mtype) {
+		this.mtype = mtype;
 	}
 
 	public String getType() {

@@ -323,7 +323,8 @@ function regionPositionUpdate(e, ui) {
 	}
 }
 
-function regionBtnUpdate() {
+/*
+function updateRegionBtns() {
 	var regionbtnhtml = '';
 	regionbtnhtml += '<a class="btn default btn-sm yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-plus"></i> ' + common.view.addregion + '  <i class="fa fa-angle-down"></i></a>';
 	regionbtnhtml += '<ul class="dropdown-menu pull-right">';
@@ -341,6 +342,36 @@ function regionBtnUpdate() {
 	regionbtnhtml += '</ul>';
 	$('#RegionBtn').empty();
 	$('#RegionBtn').append(regionbtnhtml);
+}*/
+
+function updateRegionBtns() {
+	updateRegionBtn('0');
+	updateRegionBtn('1');
+	updateRegionBtn('2');
+	updateRegionBtn('3');
+	updateRegionBtn('4');
+	updateRegionBtn('5');
+	updateRegionBtn('6');
+	updateRegionBtn('A1');
+	updateRegionBtn('A2');
+}
+
+function updateRegionBtn(regiontype) {
+	var regions = TempRegions.filter(function (el) {
+		return el.type == regiontype;
+	});
+	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+		return el.region.type == regiontype;
+	});
+	if (regions.length > layoutdtls.length) {
+		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('disabled');
+		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('default');
+		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('yellow');
+	} else {
+		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('disabled');
+		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('yellow');
+		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('default');
+	}
 }
 
 function refreshSpinners() {
@@ -641,9 +672,25 @@ $('#LayoutdtlEditForm input,select').on('change', function(e) {
 //================================设计对话框=========================================
 //在设计对话框中新增区域
 $('body').on('click', '.pix-addregion', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
+	var regiontype = $(event.target).attr('regiontype');
+	if (regiontype == undefined) {
+		regiontype = $(event.target).parent().attr('regiontype');
+	}
+	
+	var index = -1;
+	for (var i=0; i<TempRegions.length; i++) {
+		var region = TempRegions[i];
+		if (region.type != regiontype) continue;
+		var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+			return el.regionid == region.regionid;
+		});
+		if (layoutdtls.length == 0) {
+			index = i;
+			break;
+		}
+	}
+	if (index < 0) {
+		return;
 	}
 	
 	var layoutdtl = {};
@@ -682,7 +729,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 	CurrentLayout.layoutdtls[CurrentLayout.layoutdtls.length] = layoutdtl;
 	
 	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
-	regionBtnUpdate();
+	updateRegionBtns();
 });
 
 $('body').on('click', '.pix-region-delete', function(event) {
@@ -694,7 +741,7 @@ $('body').on('click', '.pix-region-delete', function(event) {
 		if (result == true) {
 			CurrentLayout.layoutdtls.splice(CurrentLayout.layoutdtls.indexOf(CurrentLayoutdtl), 1);
 			CurrentLayoutdtl = CurrentLayout.layoutdtls[0];
-			regionBtnUpdate();
+			updateRegionBtns();
 			enterLayoutdtlFocus(CurrentLayoutdtl);
 		}
 	 });

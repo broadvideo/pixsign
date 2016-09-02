@@ -361,7 +361,7 @@ $('body').on('click', '.pix-layout', function(event) {
 
 $('#LayoutModal').on('shown.bs.modal', function (e) {
 	redrawLayout($('#LayoutDiv'), CurrentLayout, null);
-	regionBtnUpdate();
+	updateRegionBtns();
 })
 
 

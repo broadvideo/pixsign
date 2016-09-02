@@ -104,7 +104,7 @@ response.setDateHeader("Expires",0);
 											</div>
 											<div id="BundleCol2">
 												<label class="page-title font-red-sunglo bundledtl-title"></label>
-												<h3 class="bundledtl-objtype">媒体列表</h3>
+												<h3 class="bundledtl-objtype"><spring:message code="global.medialist"/></h3>
 												<h3 class="bundledtl-objvalue">http://</h3>
 												<div class="bundledtl-medialist table-responsive">
 													<table id="MedialistDtlTable" class="table table-condensed table-hover">

@@ -34,4 +34,5 @@ public interface DeviceService {
 
 	public void reboot(String deviceid) throws Exception;
 
+	public void screen(String deviceid) throws Exception;
 }

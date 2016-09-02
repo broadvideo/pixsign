@@ -31,6 +31,7 @@ var common = {
 		onlineflag: '在线',
 		config: '配置',
 		control: '控制',
+		screen: '截屏',
 		progress: '进度',
 		file: '文件',
 		filename: '文件名',
@@ -54,6 +55,7 @@ var common = {
 		refreshtime: '最新访问',
 		activetime: '激活时间',
 		playtime: '播放时间',
+		screentime: '截屏时间',
 
 		unregister: '未注册',
 		online: '在线',
@@ -70,6 +72,7 @@ var common = {
 		add: '新增',
 		edit: '编辑',
 		remove: '删除',
+		view: '查看',
 		detail: '明细',
 		sync: '同步',
 		push: '推送',
@@ -132,7 +135,8 @@ var common = {
 		synclayout: '是否同步此布局至相关联的终端和终端组',
 		config: '是否重新推送配置至 ',
 		pushall: '是否推送配置至所有终端 ',
-		reboot: '是否重启',
+		reboot: '是否重启 ',
+		screen: '是否截屏 ',
 		error: '操作失败  ',
 		success: '操作成功',
 		

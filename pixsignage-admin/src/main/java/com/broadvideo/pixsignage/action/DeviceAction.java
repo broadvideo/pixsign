@@ -2,8 +2,10 @@ package com.broadvideo.pixsignage.action;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
@@ -165,6 +168,51 @@ public class DeviceAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device reboot error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doScreen() {
+		try {
+			String deviceid = getParameter("deviceid");
+			deviceService.screen(deviceid);
+			logger.info("Device screen success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device screen error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doScreenList() {
+		try {
+			String deviceid = getParameter("deviceid");
+			File[] files = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/screen/" + deviceid).listFiles();
+
+			List<Object> aaData = new ArrayList<Object>();
+			if (files != null && files.length > 0) {
+				Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+
+				for (int i = 0; i < files.length; i++) {
+					if (i >= 10) {
+						break;
+					}
+					HashMap<String, String> screen = new HashMap<String, String>();
+					screen.put("deviceid", deviceid);
+					screen.put("createtime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(files[i].lastModified())));
+					screen.put("screen", "/screen/" + deviceid + "/" + files[i].getName());
+					aaData.add(screen);
+				}
+			}
+			this.setAaData(aaData);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device doScreenList error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

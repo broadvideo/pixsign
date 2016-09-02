@@ -154,8 +154,19 @@ response.setDateHeader("Expires",0);
 									<div class="portlet-title">
 										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
 										<div class="actions">
+											<!-- 
 											<div id="RegionBtn" class="btn-group">
 											</div>
+											 -->
+											<a href="javascript:;" regiontype="0" class="btn btn-sm yellow pix-addregion"><spring:message code="region.play"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.text"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.date"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="3" class="btn btn-sm yellow pix-addregion"><spring:message code="region.weather"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>
 									</div>
 									<div class="portlet-body form">

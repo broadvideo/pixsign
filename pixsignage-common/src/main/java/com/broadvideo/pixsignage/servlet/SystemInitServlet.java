@@ -42,14 +42,16 @@ public class SystemInitServlet extends HttpServlet {
 		try {
 			Properties properties = new Properties();
 			InputStream is = this.getClass().getResourceAsStream("/sdomain.properties");
-			properties.load(is);
-			CommonConfig.CONFIG_SDOMAIN_LIST = new ArrayList<String>();
-			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Object, Object> entry = it.next();
-				CommonConfig.CONFIG_SDOMAIN_LIST.add(entry.getKey().toString());
+			if (is != null) {
+				properties.load(is);
+				CommonConfig.CONFIG_SDOMAIN_LIST = new ArrayList<String>();
+				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<Object, Object> entry = it.next();
+					CommonConfig.CONFIG_SDOMAIN_LIST.add(entry.getKey().toString());
+				}
+				is.close();
 			}
-			is.close();
 		} catch (Exception ex) {
 			logger.error("", ex);
 		}
@@ -69,6 +71,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/pagepkg"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/temp"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/screen"));
 		} catch (Exception ex) {
 			logger.error("", ex);
 		}

@@ -13,7 +13,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Pix Signage</title>
+<title>Digital Signage</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">
@@ -110,9 +110,11 @@ response.setDateHeader("Expires",0);
 																<label class="radio-inline">
 																	<input type="radio" name="bundledtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
 																</label>
+																<!-- 
 																<label class="radio-inline">
 																	<input type="radio" name="bundledtl.objtype" value="3"> <spring:message code="global.stream"/>
 																</label>
+																 -->
 																<label class="radio-inline">
 																	<input type="radio" name="bundledtl.objtype" value="5"> <spring:message code="global.widget"/>
 																</label>
@@ -149,6 +151,7 @@ response.setDateHeader("Expires",0);
 																<textarea class="form-control" rows="10" name="bundledtl.text.text"></textarea>
 															</div>
 														</div>
+														<!-- 
 														<div class="form-group bundle-ctl regiontype-0 objtype-3 public-0">
 															<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 															<div class="col-md-9">
@@ -157,6 +160,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
+														-->
 														<div class="form-group bundle-ctl regiontype-0 objtype-5 public-0">
 															<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 															<div class="col-md-9">
@@ -239,7 +243,7 @@ response.setDateHeader("Expires",0);
 													<div class="col-md-7">
 														<div class="portlet box blue">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-reorder"></i>视频流库</div>
+																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.bundledtl.stream.warehouse"/></div>
 															</div>
 															<div class="portlet-body">
 																<table id="StreamTable1" class="table table-condensed table-hover">
@@ -252,7 +256,7 @@ response.setDateHeader("Expires",0);
 													<div class="col-md-5">
 														<div class="portlet box green">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-picture"></i>已选择列表</div>
+																<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.selected"/></div>
 															</div>
 															<div class="portlet-body">
 																<div class="table-responsive">

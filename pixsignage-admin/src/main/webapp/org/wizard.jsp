@@ -286,7 +286,7 @@ response.setDateHeader("Expires",0);
 													<p><spring:message code="global.tips_3"/></p>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 control-label">节目包</label>
+													<label class="col-md-2 control-label"><spring:message code="global.bundle"/></label>
 													<div class="col-md-10">
 														<div class="input-icon right">
 															<i class="fa"></i> <input type="text" class="form-control" name="bundle.name" />
@@ -309,8 +309,19 @@ response.setDateHeader("Expires",0);
 														<div class="portlet-title">
 															<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
 															<div class="actions">
+																<!-- 
 																<div id="RegionBtn" class="btn-group">
 																</div>
+																 -->
+																<a href="javascript:;" regiontype="0" class="btn btn-sm yellow pix-addregion"><spring:message code="region.play"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.text"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.date"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="3" class="btn btn-sm yellow pix-addregion"><spring:message code="region.weather"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 															</div>
 														</div>
 														<div class="portlet-body form">
@@ -583,9 +594,11 @@ response.setDateHeader("Expires",0);
 																	<label class="radio-inline">
 																		<input type="radio" name="bundledtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
 																	</label>
+																	<!-- 
 																	<label class="radio-inline">
 																		<input type="radio" name="bundledtl.objtype" value="3"> <spring:message code="global.stream"/>
 																	</label>
+																	 -->
 																	<label class="radio-inline">
 																		<input type="radio" name="bundledtl.objtype" value="5"> <spring:message code="global.widget"/>
 																	</label>
@@ -622,6 +635,7 @@ response.setDateHeader("Expires",0);
 																	<textarea class="form-control" rows="10" name="bundledtl.text.text"></textarea>
 																</div>
 															</div>
+															<!-- 
 															<div class="form-group bundle-ctl regiontype-0 objtype-3 public-0">
 																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 																<div class="col-md-9">
@@ -630,6 +644,7 @@ response.setDateHeader("Expires",0);
 																	</div>
 																</div>
 															</div>
+															-->
 															<div class="form-group bundle-ctl regiontype-0 objtype-5 public-0">
 																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 																<div class="col-md-9">
@@ -712,7 +727,7 @@ response.setDateHeader("Expires",0);
 														<div class="col-md-7">
 															<div class="portlet box blue">
 																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-reorder"></i>视频流库</div>
+																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.bundledtl.stream.warehouse"/></div>
 																</div>
 																<div class="portlet-body">
 																	<table id="StreamTable1" class="table table-condensed table-hover">
@@ -725,7 +740,7 @@ response.setDateHeader("Expires",0);
 														<div class="col-md-5">
 															<div class="portlet box green">
 																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-picture"></i>已选择列表</div>
+																	<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.selected"/></div>
 																</div>
 																<div class="portlet-body">
 																	<div class="table-responsive">

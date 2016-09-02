@@ -95,7 +95,7 @@ response.setDateHeader("Expires",0);
 						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-bar-chart-o"></i>终端统计
+									<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title2"/>
 								</div>
 							</div>
 							<div class="portlet-body">

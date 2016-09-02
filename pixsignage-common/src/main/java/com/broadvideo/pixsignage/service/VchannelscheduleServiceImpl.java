@@ -5,8 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -25,8 +31,6 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
 import com.broadvideo.pixsignage.persistence.VchannelscheduleMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 
 @Service("vchannelscheduleService")
 public class VchannelscheduleServiceImpl implements VchannelscheduleService {
@@ -87,11 +91,23 @@ public class VchannelscheduleServiceImpl implements VchannelscheduleService {
 		JSONObject msgJson = generateVchannelScheduleJson(vchannelid);
 		String url = CommonConfig.CONFIG_VCSS_SERVER + "schedules";
 		logger.info("Send schedules message to VCSS: {}", msgJson.toString());
-		Client c = Client.create();
-		WebResource r = c.resource(url);
-		String s = r.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).post(String.class,
-				msgJson.toString());
-		logger.info("Get schedules response from VCSS: {}", s);
+
+		RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
+				.setConnectionRequestTimeout(30000).build();
+		CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+		HttpPost httppost = new HttpPost(url);
+		httppost.addHeader(HTTP.CONTENT_TYPE, "application/json");
+		httppost.setEntity(new StringEntity(msgJson.toString()));
+		CloseableHttpResponse response = httpclient.execute(httppost);
+		int status = response.getStatusLine().getStatusCode();
+		if (status == 200) {
+			String s = EntityUtils.toString(response.getEntity());
+			logger.info("Get schedules response from VCSS: {}", s);
+			httpclient.close();
+		} else {
+			logger.error("Get schedules response code from VCSS: {}", status);
+			httpclient.close();
+		}
 
 		msgevent.setStatus(Msgevent.Status_Sent);
 		msgevent.setSendtime(Calendar.getInstance().getTime());

@@ -16,7 +16,9 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
+    <result column="appname" property="appname" jdbcType="VARCHAR" />
     <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="mtype" property="mtype" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
     <result column="lontitude" property="lontitude" jdbcType="VARCHAR" />
@@ -34,7 +36,7 @@
   
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, mac, schedulestatus, 
-    filestatus, status, description, onlineflag, version, type, devicegroupid, lontitude, latitude, 
+    filestatus, status, description, onlineflag, appname, version, mtype, type, devicegroupid, lontitude, latitude, 
     city, addr1, addr2, createtime, activetime, refreshtime
   </sql>
   
@@ -153,7 +155,7 @@
     set d.onlineflag = 9 
     where d.orgid = o.orgid 
     and d.refreshtime is null 
-    or (unix_timestamp()-unix_timestamp(d.refreshtime) > 300)
+    or (unix_timestamp()-unix_timestamp(d.refreshtime) > 60)
   </update>
 
   <insert id="insertList">
@@ -176,7 +178,8 @@
       hardkey, name, position, 
       ip, mac, schedulestatus, 
       filestatus, status, description, 
-      onlineflag, version, type, 
+      onlineflag, appname, version, 
+      mtype, type, 
       devicegroupid, lontitude, latitude, 
       city, addr1, addr2, 
       createtime, activetime, refreshtime)
@@ -184,7 +187,8 @@
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
       #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{onlineflag,jdbcType=CHAR}, #{version,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{onlineflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
+      #{mtype,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{devicegroupid,jdbcType=INTEGER}, #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, #{refreshtime,jdbcType=TIMESTAMP})
@@ -234,8 +238,14 @@
       <if test="onlineflag != null" >
         onlineflag,
       </if>
+      <if test="appname != null" >
+        appname,
+      </if>
       <if test="version != null" >
         version,
+      </if>
+      <if test="mtype != null" >
+        mtype,
       </if>
       <if test="type != null" >
         type,
@@ -308,8 +318,14 @@
       <if test="onlineflag != null" >
         #{onlineflag,jdbcType=CHAR},
       </if>
+      <if test="appname != null" >
+        #{appname,jdbcType=VARCHAR},
+      </if>
       <if test="version != null" >
         #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null" >
+        #{mtype,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
         #{type,jdbcType=CHAR},
@@ -385,8 +401,14 @@
       <if test="onlineflag != null" >
         onlineflag = #{onlineflag,jdbcType=CHAR},
       </if>
+      <if test="appname != null" >
+        appname = #{appname,jdbcType=VARCHAR},
+      </if>
       <if test="version != null" >
         version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null" >
+        mtype = #{mtype,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
@@ -436,7 +458,9 @@
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       onlineflag = #{onlineflag,jdbcType=CHAR},
+      appname = #{appname,jdbcType=VARCHAR},
       version = #{version,jdbcType=VARCHAR},
+      mtype = #{mtype,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       devicegroupid = #{devicegroupid,jdbcType=INTEGER},
       lontitude = #{lontitude,jdbcType=VARCHAR},

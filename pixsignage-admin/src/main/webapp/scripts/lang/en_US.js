@@ -31,6 +31,7 @@ var common = {
 		onlineflag: 'Online Flag',
 		config: 'Config',
 		control: 'Control',
+		screen: 'Screenshot',
 		progress: 'Progress',
 		file: 'File',
 		filename: 'File Name',
@@ -54,6 +55,7 @@ var common = {
 		refreshtime: 'Refresh Time',
 		activetime: 'Active Time',
 		playtime: 'Play TIme',
+		screentime: 'Screen Shot Time',
 
 		unregister: 'Unregister',
 		online: 'Online',
@@ -70,6 +72,7 @@ var common = {
 		add: 'Add',
 		edit: 'Edit',
 		remove: 'Remove',
+		view: 'View',
 		detail: 'Detail',
 		sync: 'Sync',
 		push: 'Push',
@@ -133,6 +136,7 @@ var common = {
 		config: 'Please confirm whether to push config to ',
 		pushall: 'Please confirm whether to push config to all devices',
 		reboot: 'Please confirm whether to reboot ',
+		screen: 'Please confirm whether to screen shot ',
 		error: 'Operation failed! ',
 		success: 'Operation successfully!',
 			

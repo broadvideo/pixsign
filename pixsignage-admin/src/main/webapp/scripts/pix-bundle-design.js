@@ -326,6 +326,8 @@ function refreshBundledtlEdit() {
 				$('.objtype-4').css("display", "none");
 			}
 		}
+	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+		$('.regiontype-5').css("display", "block");
 	} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
 		$('.regiontype-6').css("display", "block");
 	}
@@ -1008,8 +1010,10 @@ $('body').on('click', '.pix-medialistdtl-up', function(event) {
 	var prevData = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex-1).slice(0);
 	$('#MedialistDtlTable').dataTable().fnUpdate(prevData[1], rowIndex, 1);
 	$('#MedialistDtlTable').dataTable().fnUpdate(prevData[2], rowIndex, 2);
+	$('#MedialistDtlTable').dataTable().fnUpdate(prevData[3], rowIndex, 3);
 	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex-1, 1);
 	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex-1, 2);
+	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[3], rowIndex-1, 3);
 	
 	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex] =  CurrentBundledtl.medialist0.medialistdtls[rowIndex-1];
@@ -1033,8 +1037,10 @@ $('body').on('click', '.pix-medialistdtl-down', function(event) {
 	var nextData = $('#MedialistDtlTable').dataTable().fnGetData(rowIndex+1).slice(0);
 	$('#MedialistDtlTable').dataTable().fnUpdate(nextData[1], rowIndex, 1);
 	$('#MedialistDtlTable').dataTable().fnUpdate(nextData[2], rowIndex, 2);
+	$('#MedialistDtlTable').dataTable().fnUpdate(nextData[3], rowIndex, 3);
 	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
 	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
+	$('#MedialistDtlTable').dataTable().fnUpdate(movedDta[3], rowIndex+1, 3);
 	
 	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex] = CurrentBundledtl.medialist0.medialistdtls[rowIndex+1];
@@ -1054,7 +1060,7 @@ $('#StreamTable1').dataTable({
 	'bServerSide' : true,
 	'sAjaxSource' : 'stream!list.action',
 	'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
-					{'sTitle' : 'URL', 'mData' : 'url', 'bSortable' : false, 'sWidth' : '70%' },
+					{'sTitle' : 'URL', 'mData' : 'url', 'bSortable' : false, 'sWidth' : '70%', 'sClass':'pixtitle' },
 					{'sTitle' : '', 'mData' : 'streamid', 'bSortable' : false, 'sWidth' : '5%' }],
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
@@ -1067,7 +1073,7 @@ $('#StreamTable1').dataTable({
 $('#StreamTable1_wrapper .dataTables_filter input').addClass('form-control input-small');
 $('#StreamTable1_wrapper .dataTables_length select').addClass('form-control input-small');
 $('#StreamTable1_wrapper .dataTables_length select').select2();
-$('#StreamTable1').css('width', '100%');
+$('#StreamTable1').css('width', '100%').css('table-layout', 'fixed');
 
 $('#StreamTable2').dataTable({
 	'sDom' : 't',

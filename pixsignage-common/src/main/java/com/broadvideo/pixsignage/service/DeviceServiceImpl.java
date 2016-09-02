@@ -214,4 +214,28 @@ public class DeviceServiceImpl implements DeviceService {
 		msgevent.setSendtime(Calendar.getInstance().getTime());
 		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
+
+	@Transactional
+	public void screen(String deviceid) throws Exception {
+		Msgevent msgevent = new Msgevent();
+		msgevent.setMsgtype(Msgevent.MsgType_Device_Screen);
+		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+		msgevent.setObjid1(Integer.parseInt(deviceid));
+		msgevent.setObjtype2(Msgevent.ObjType_2_None);
+		msgevent.setObjid2(0);
+		msgevent.setStatus(Msgevent.Status_Wait);
+		msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Screen, Msgevent.ObjType_1_Device, deviceid, null, null,
+				null);
+		msgeventMapper.insertSelective(msgevent);
+
+		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "SCREEN");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+		msgevent.setStatus(Msgevent.Status_Sent);
+		msgevent.setSendtime(Calendar.getInstance().getTime());
+		msgeventMapper.updateByPrimaryKeySelective(msgevent);
+	}
 }
