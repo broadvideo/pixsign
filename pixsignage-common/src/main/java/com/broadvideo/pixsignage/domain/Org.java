@@ -62,6 +62,8 @@ public class Org {
 
 	private Date poweroff;
 
+	private String qrcodeflag;
+
 	private String devicepass;
 
 	private Date createtime;
@@ -290,6 +292,14 @@ public class Org {
 	@JSON(format = "HH:mm:ss")
 	public void setPoweroff(Date poweroff) {
 		this.poweroff = poweroff;
+	}
+
+	public String getQrcodeflag() {
+		return qrcodeflag;
+	}
+
+	public void setQrcodeflag(String qrcodeflag) {
+		this.qrcodeflag = qrcodeflag;
 	}
 
 	public String getDevicepass() {

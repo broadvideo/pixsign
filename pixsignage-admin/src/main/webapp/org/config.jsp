@@ -98,6 +98,17 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.qrcodeflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.qrcodeflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.qrcodeflag" value="1" > <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
 									</div>
 								</form>
 							</div>

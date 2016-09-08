@@ -22,6 +22,13 @@ insert into region(regionid,name,code,type) values(101,'region.a2','A2','A2');
 update region set code='stream-1' where regionid=50;
 update region set code='stream-2' where regionid=51;
 
+alter table device add appname varchar(32) default '';
+alter table device add mtype varchar(32) default '';
+
+alter table device add iip varchar(32) default '';
+alter table device modify appname varchar(128) default '';
+alter table org add qrcodeflag char(1) default '0';
+
 ############################################################
 ## post script  ############################################
 ############################################################

@@ -124,9 +124,13 @@ function initMyTable() {
 
 	function fnFormatDetails ( oTable, nTr ) {
 		var aData = oTable.fnGetData( nTr );
-		var sOut = '<table>';
-		sOut += '<tr><td>' + common.view.hardkey + ':</td><td>' + aData.hardkey + '</td></tr>';
-		sOut += '<tr><td>IP:</td><td>'+aData.ip + '</td></tr>';
+		var sOut = '<table width="100%">';
+		sOut += '<tr><td width="20%">' + common.view.hardkey + ':</td><td width="60%">' + aData.hardkey + '</td>';
+		if (aData.iip != '') {
+			sOut += '<td rowspan="7"><img src="device!qrcode.action?deviceid=' + aData.deviceid + '" width="200"></img></td>';
+		}
+		sOut += '</tr>';
+		sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
 		sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
 		sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.mtype + ' ' + aData.appname + '(' + aData.version + ')</td></tr>';

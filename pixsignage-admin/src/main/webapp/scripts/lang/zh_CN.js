@@ -113,6 +113,7 @@ var common = {
 		powerflag: '自动开关机',
 		poweron: '开机时间',
 		poweroff: '关机时间',
+		qrcodeflag: '二维码显示',
 		
 		mainboard: '主板型号',
 		description: '描述',

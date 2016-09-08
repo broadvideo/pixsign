@@ -1,7 +1,10 @@
 package com.broadvideo.pixsignage.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +24,10 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.util.SqlUtil;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -29,6 +36,9 @@ public class DeviceAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Device device;
+
+	private String exportname;
+	private InputStream inputStream;
 
 	@Autowired
 	private DeviceService deviceService;
@@ -298,12 +308,49 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doQrcode() {
+		try {
+			String deviceid = getParameter("deviceid");
+			Device device = deviceService.selectByPrimaryKey(deviceid);
+			exportname = "qrcode-" + deviceid + ".png";
+			String text = "http://180.96.19.239/pixwidget/widget/app.jsp?ip=" + device.getIip();
+
+			BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 400, 400);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
+			inputStream = new ByteArrayInputStream(out.toByteArray());
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doExport exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Device getDevice() {
 		return device;
 	}
 
 	public void setDevice(Device device) {
 		this.device = device;
+	}
+
+	public String getExportname() {
+		return exportname;
+	}
+
+	public void setExportname(String exportname) {
+		this.exportname = exportname;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 }

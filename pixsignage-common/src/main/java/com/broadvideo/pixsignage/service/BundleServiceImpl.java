@@ -952,6 +952,7 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("bg_image", layoutBgImageJson);
 		if (layout.getBgimage() != null) {
 			layoutBgImageJson.put("id", layout.getBgimageid());
+			layoutBgImageJson.put("name", layout.getBgimage().getName());
 			layoutBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 					+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layout.getBgimage().getFilepath());
 			layoutBgImageJson.put("file", layout.getBgimage().getFilename());
@@ -964,6 +965,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 		} else {
 			layoutBgImageJson.put("id", 0);
+			layoutBgImageJson.put("name", "");
 			layoutBgImageJson.put("url", "");
 			layoutBgImageJson.put("file", "");
 			layoutBgImageJson.put("size", 0);
@@ -1016,6 +1018,7 @@ public class BundleServiceImpl implements BundleService {
 			regionJson.put("bg_image", regionBgImageJson);
 			if (layoutdtl.getBgimage() != null) {
 				regionBgImageJson.put("id", layoutdtl.getBgimageid());
+				regionBgImageJson.put("name", layoutdtl.getBgimage().getName());
 				regionBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layoutdtl.getBgimage().getFilepath());
 				regionBgImageJson.put("file", layoutdtl.getBgimage().getFilename());
@@ -1028,6 +1031,7 @@ public class BundleServiceImpl implements BundleService {
 				}
 			} else {
 				regionBgImageJson.put("id", 0);
+				regionBgImageJson.put("name", "");
 				regionBgImageJson.put("url", "");
 				regionBgImageJson.put("file", "");
 				regionBgImageJson.put("size", 0);
@@ -1047,6 +1051,7 @@ public class BundleServiceImpl implements BundleService {
 						if (videoHash.get(medialistdtl.getObjid()) == null) {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
+							videoJson.put("name", video.getName());
 							videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
@@ -1068,6 +1073,7 @@ public class BundleServiceImpl implements BundleService {
 						if (imageHash.get(medialistdtl.getObjid()) == null) {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
+							imageJson.put("name", image.getName());
 							imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
 									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilepath());
 							imageJson.put("file", image.getFilename());
@@ -1145,6 +1151,7 @@ public class BundleServiceImpl implements BundleService {
 			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
 				JSONObject videoJson = new JSONObject();
 				videoJson.put("id", video.getRelateid());
+				videoJson.put("name", video.getRelate().getName());
 				videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
 						+ "/pixsigdata" + video.getRelate().getFilepath());
 				videoJson.put("file", video.getRelate().getFilename());

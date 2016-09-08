@@ -127,6 +127,7 @@ public class DeviceServiceImpl implements DeviceService {
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 			}
 
+			msgBodyJson.put("qrcode_flag", org.getQrcodeflag());
 			msgBodyJson.put("password", org.getDevicepass());
 
 			String topic = "device-" + device.getDeviceid();
@@ -182,6 +183,7 @@ public class DeviceServiceImpl implements DeviceService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 		}
 
+		msgBodyJson.put("qrcode_flag", org.getQrcodeflag());
 		msgBodyJson.put("password", org.getDevicepass());
 
 		String topic = "device-" + deviceid;

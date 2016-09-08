@@ -10,6 +10,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="position" property="position" jdbcType="VARCHAR" />
     <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="iip" property="iip" jdbcType="VARCHAR" />
     <result column="mac" property="mac" jdbcType="VARCHAR" />
     <result column="schedulestatus" property="schedulestatus" jdbcType="CHAR" />
     <result column="filestatus" property="filestatus" jdbcType="CHAR" />
@@ -35,7 +36,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, mac, schedulestatus, 
+    deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
     filestatus, status, description, onlineflag, appname, version, mtype, type, devicegroupid, lontitude, latitude, 
     city, addr1, addr2, createtime, activetime, refreshtime
   </sql>
@@ -176,7 +177,7 @@
     </selectKey>
     insert into device (orgid, branchid, terminalid, 
       hardkey, name, position, 
-      ip, mac, schedulestatus, 
+      ip, iip, mac, schedulestatus, 
       filestatus, status, description, 
       onlineflag, appname, version, 
       mtype, type, 
@@ -185,7 +186,7 @@
       createtime, activetime, refreshtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
-      #{ip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
       #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{onlineflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
       #{mtype,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
@@ -219,6 +220,9 @@
       </if>
       <if test="ip != null" >
         ip,
+      </if>
+      <if test="iip != null" >
+        iip,
       </if>
       <if test="mac != null" >
         mac,
@@ -299,6 +303,9 @@
       </if>
       <if test="ip != null" >
         #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="iip != null" >
+        #{iip,jdbcType=VARCHAR},
       </if>
       <if test="mac != null" >
         #{mac,jdbcType=VARCHAR},
@@ -383,6 +390,9 @@
       <if test="ip != null" >
         ip = #{ip,jdbcType=VARCHAR},
       </if>
+      <if test="iip != null" >
+        iip = #{iip,jdbcType=VARCHAR},
+      </if>
       <if test="mac != null" >
         mac = #{mac,jdbcType=VARCHAR},
       </if>
@@ -452,6 +462,7 @@
       name = #{name,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       ip = #{ip,jdbcType=VARCHAR},
+      iip = #{iip,jdbcType=VARCHAR},
       mac = #{mac,jdbcType=VARCHAR},
       schedulestatus = #{schedulestatus,jdbcType=CHAR},
       filestatus = #{filestatus,jdbcType=CHAR},

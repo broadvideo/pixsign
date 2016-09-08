@@ -113,6 +113,7 @@ var common = {
 		powerflag: 'Power Control Flag',
 		poweron: 'Power on',
 		poweroff: 'Power off',
+		qrcodeflag: 'QR Code Display',
 		
 		mainboard: 'Mainboard',
 		description: 'Description',

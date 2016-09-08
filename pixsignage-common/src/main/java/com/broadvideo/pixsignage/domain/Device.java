@@ -22,6 +22,8 @@ public class Device {
 
 	private String ip;
 
+	private String iip;
+
 	private String mac;
 
 	private String schedulestatus;
@@ -126,6 +128,14 @@ public class Device {
 
 	public void setIp(String ip) {
 		this.ip = ip == null ? null : ip.trim();
+	}
+
+	public String getIip() {
+		return iip;
+	}
+
+	public void setIip(String iip) {
+		this.iip = iip;
 	}
 
 	public String getMac() {

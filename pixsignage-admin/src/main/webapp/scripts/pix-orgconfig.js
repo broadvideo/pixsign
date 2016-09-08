@@ -29,6 +29,13 @@ function refreshMyTable() {
 					var powerhtml = '<span class="label label-xs label-warning">关闭</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
 				}
+				if (CurrentOrg.qrcodeflag == 1) {
+					var qrcodehtml = '<span class="label label-xs label-success">打开</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.qrcodeflag, qrcodehtml]);
+				} else {
+					var qrcodehtml = '<span class="label label-xs label-warning">关闭</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.qrcodeflag, qrcodehtml]);
+				}
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);
 			}

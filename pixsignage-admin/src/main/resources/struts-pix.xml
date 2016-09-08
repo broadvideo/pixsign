@@ -577,6 +577,14 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!qrcode" method="doQrcode" class="deviceAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
 
 		<action name="devicegroup!list" method="doList" class="devicegroupAction">
 			<result name="success" type="json">

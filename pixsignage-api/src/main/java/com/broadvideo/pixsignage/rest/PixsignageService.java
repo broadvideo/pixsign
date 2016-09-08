@@ -85,6 +85,7 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			String mac = requestJson.getString("mac");
+			String iip = requestJson.getString("ip");
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String version = requestJson.getString("version");
@@ -117,22 +118,26 @@ public class PixsignageService {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			}
 
-			IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
-			String location = ipseeker.getCountry(ip);
-			logger.info("Get the location from {}: {}", ip, location);
-			int index1 = location.indexOf("省");
-			int index2 = location.indexOf("市");
-			if (index2 < 0) {
-				index2 = location.length();
-			}
-			if (index1 >= 0 && index1 < index2) {
-				index1 = index1 + "省".length();
-			} else {
-				index1 = 0;
-			}
-			String city = location.substring(index1, index2);
-			if (!city.equals("局域网")) {
-				device.setCity(city);
+			try {
+				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
+				String location = ipseeker.getCountry(ip);
+				logger.info("Get the location from {}: {}", ip, location);
+				int index1 = location.indexOf("省");
+				int index2 = location.indexOf("市");
+				if (index2 < 0) {
+					index2 = location.length();
+				}
+				if (index1 >= 0 && index1 < index2) {
+					index1 = index1 + "省".length();
+				} else {
+					index1 = 0;
+				}
+				String city = location.substring(index1, index2);
+				if (!city.equals("局域网")) {
+					device.setCity(city);
+				}
+			} catch (Exception e) {
+				logger.error("Pixsignage Service ip seek exception", e);
 			}
 
 			if (!device.getStatus().equals("1")) {
@@ -140,6 +145,7 @@ public class PixsignageService {
 			}
 			device.setHardkey(hardkey);
 			device.setIp(ip);
+			device.setIip(iip);
 			device.setMac(mac);
 			device.setAppname(appname);
 			device.setVersion(version);
@@ -194,6 +200,7 @@ public class PixsignageService {
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 			}
 
+			responseJson.put("qrcode_flag", Integer.parseInt(org.getQrcodeflag()));
 			responseJson.put("password", org.getDevicepass());
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
