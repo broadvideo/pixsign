@@ -18,6 +18,7 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
+import com.broadvideo.pixsignage.persistence.VspMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("orgService")
@@ -25,6 +26,8 @@ public class OrgServiceImpl implements OrgService {
 
 	@Autowired
 	private OrgMapper orgMapper;
+	@Autowired
+	private VspMapper vspMapper;
 	@Autowired
 	private StaffMapper staffMapper;
 	@Autowired
@@ -95,6 +98,8 @@ public class OrgServiceImpl implements OrgService {
 			devices.add(device);
 		}
 		deviceMapper.insertList(devices);
+		vspMapper.updateCurrentdevices();
+		vspMapper.updateCurrentstorage();
 	}
 
 	@Transactional
@@ -124,11 +129,16 @@ public class OrgServiceImpl implements OrgService {
 			org.setCurrentdeviceidx(org.getMaxdevices());
 		}
 		orgMapper.updateByPrimaryKeySelective(org);
+		vspMapper.updateCurrentdevices();
+		vspMapper.updateCurrentstorage();
 	}
 
 	@Transactional
 	public void deleteOrg(String orgid) {
+		staffMapper.deleteByOrg(orgid);
 		orgMapper.deleteByPrimaryKey(orgid);
+		vspMapper.updateCurrentdevices();
+		vspMapper.updateCurrentstorage();
 	}
 
 	public boolean validateName(Org org) {

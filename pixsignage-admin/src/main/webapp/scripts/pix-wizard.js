@@ -614,7 +614,7 @@ function submitData() {
 	}
 	
 	$('#snapshot_div').show();
-	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 1024, 0);
+	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 512, 0);
 	html2canvas($('#snapshot_div'), {
 		onrendered: function(canvas) {
 			//console.log(canvas.toDataURL());

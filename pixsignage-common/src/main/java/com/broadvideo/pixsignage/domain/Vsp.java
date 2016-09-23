@@ -11,6 +11,14 @@ public class Vsp {
 
 	private String code;
 
+	private Integer maxdevices;
+
+	private Long maxstorage;
+
+	private Integer currentdevices;
+
+	private Long currentstorage;
+
 	private String status;
 
 	private String description;
@@ -41,6 +49,38 @@ public class Vsp {
 
 	public void setCode(String code) {
 		this.code = code == null ? null : code.trim();
+	}
+
+	public Integer getMaxdevices() {
+		return maxdevices;
+	}
+
+	public void setMaxdevices(Integer maxdevices) {
+		this.maxdevices = maxdevices;
+	}
+
+	public Long getMaxstorage() {
+		return maxstorage;
+	}
+
+	public void setMaxstorage(Long maxstorage) {
+		this.maxstorage = maxstorage;
+	}
+
+	public Integer getCurrentdevices() {
+		return currentdevices;
+	}
+
+	public void setCurrentdevices(Integer currentdevices) {
+		this.currentdevices = currentdevices;
+	}
+
+	public Long getCurrentstorage() {
+		return currentstorage;
+	}
+
+	public void setCurrentstorage(Long currentstorage) {
+		this.currentstorage = currentstorage;
 	}
 
 	public String getStatus() {

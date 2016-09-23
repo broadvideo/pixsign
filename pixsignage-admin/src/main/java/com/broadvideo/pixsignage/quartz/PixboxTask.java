@@ -85,7 +85,7 @@ public class PixboxTask {
 			vchannelJson.put("end_time", "00:00:00");
 		}
 
-		String url = CommonConfig.CONFIG_PIXBOX_SERVER + "vchannels";
+		String url = "http://" + CommonConfig.CONFIG_PIXBOX_SERVER + ":8080/sync_api/vchannels";
 		logger.info("Send vchannels message to Pixbox: {}", msgJson.toString());
 		// Client c = Client.create();
 		// WebResource r = c.resource(url);
@@ -110,7 +110,7 @@ public class PixboxTask {
 	}
 
 	private void syncVideos() throws Exception {
-		String url = CommonConfig.CONFIG_PIXBOX_SERVER + "medias";
+		String url = "http://" + CommonConfig.CONFIG_PIXBOX_SERVER + ":8080/sync_api/medias";
 		logger.info("Send medias message to Pixbox");
 		// Client c = Client.create();
 		// WebResource r = c.resource(url);

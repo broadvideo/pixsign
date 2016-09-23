@@ -21,17 +21,24 @@ function initMyTable() {
 		'sAjaxSource' : myurls['common.list'],
 		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 						{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'vspid', 'bSortable' : false }],
+						{'sTitle' : common.view.maxdevices, 'mData' : 'maxdevices', 'bSortable' : false }, 
+						{'sTitle' : common.view.currentdevices, 'mData' : 'currentdevices', 'bSortable' : false }, 
+						{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
+						{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
+						{'sTitle' : '', 'mData' : 'vspid', 'bSortable' : false },
+						{'sTitle' : '', 'mData' : 'vspid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var dropdownBtn = '';
-			dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			$('td:eq(4)', nRow).html(transferIntToComma(aData.maxstorage) + ' MB');
+			$('td:eq(5)', nRow).html(transferIntToComma(aData.currentstorage) + ' MB');
+			$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 			if (aData.code != 'default') {
-				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			} else {
+				$('td:eq(7)', nRow).html('');
 			}
-			$('td:eq(2)', nRow).html(dropdownBtn);
 			return nRow;
 		}
 	});
@@ -135,6 +142,12 @@ function initMyEditModal() {
 			remote: common.tips.code_repeat
 		},
 	};
+	FormValidateOption.rules['vsp.maxdevices'] = {};
+	FormValidateOption.rules['vsp.maxdevices']['required'] = true;
+	FormValidateOption.rules['vsp.maxdevices']['number'] = true;
+	FormValidateOption.rules['vsp.maxstorage'] = {};
+	FormValidateOption.rules['vsp.maxstorage']['required'] = true;
+	FormValidateOption.rules['vsp.maxdevices']['number'] = true;
 	
 	FormValidateOption.submitHandler = function(form) {
 		var data = jQuery("#MyEditForm").serializeArray();

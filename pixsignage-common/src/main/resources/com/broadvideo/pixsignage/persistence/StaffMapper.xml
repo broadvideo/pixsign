@@ -1,119 +1,129 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.broadvideo.pixsignage.persistence.StaffMapper" >
-	<resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Staff">
-		<id column="staffid" property="staffid" jdbcType="INTEGER" />
-		<result column="subsystem" property="subsystem" jdbcType="CHAR" />
-		<result column="vspid" property="vspid" jdbcType="INTEGER" />
-		<result column="orgid" property="orgid" jdbcType="INTEGER" />
-		<result column="branchid" property="branchid" jdbcType="INTEGER" />
-		<result column="loginname" property="loginname" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="CHAR" />
-		<result column="token" property="token" jdbcType="VARCHAR" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-		<result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-		<result column="loginflag" property="loginflag" jdbcType="CHAR" />
-		<result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
-	</resultMap>
-	<resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Staff">
-		<id column="staffid" property="staffid" jdbcType="INTEGER" />
-		<result column="subsystem" property="subsystem" jdbcType="CHAR" />
-		<result column="vspid" property="vspid" jdbcType="INTEGER" />
-		<result column="orgid" property="orgid" jdbcType="INTEGER" />
-		<result column="branchid" property="branchid" jdbcType="INTEGER" />
-		<result column="loginname" property="loginname" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="CHAR" />
-		<result column="token" property="token" jdbcType="VARCHAR" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-		<result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-		<result column="loginflag" property="loginflag" jdbcType="CHAR" />
-		<result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
-		<association property="vsp" column="{vspid=vspid}" select="com.broadvideo.pixsignage.persistence.VspMapper.selectByPrimaryKey" />
-		<association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
-		<association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectNameByPrimaryKey" />
-		<collection property="privileges" ofType="com.broadvideo.pixsignage.domain.Privilege"
-			column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.PrivilegeMapper.selectByStaff" />
-		<collection property="roles" ofType="com.broadvideo.pixsignage.domain.Role"
-			column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.RoleMapper.selectByStaff" />
-	</resultMap>
-	
+  <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Staff">
+    <id column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="subsystem" property="subsystem" jdbcType="CHAR" />
+    <result column="vspid" property="vspid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="loginname" property="loginname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="loginflag" property="loginflag" jdbcType="CHAR" />
+    <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Staff">
+    <id column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="subsystem" property="subsystem" jdbcType="CHAR" />
+    <result column="vspid" property="vspid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="loginname" property="loginname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="loginflag" property="loginflag" jdbcType="CHAR" />
+    <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
+    <association property="vsp" column="{vspid=vspid}" select="com.broadvideo.pixsignage.persistence.VspMapper.selectByPrimaryKey" />
+    <association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
+    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectNameByPrimaryKey" />
+    <collection property="privileges" ofType="com.broadvideo.pixsignage.domain.Privilege"
+      column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.PrivilegeMapper.selectByStaff" />
+    <collection property="roles" ofType="com.broadvideo.pixsignage.domain.Role"
+      column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.RoleMapper.selectByStaff" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     staffid, subsystem, vspid, orgid, branchid, loginname, password, name, status, token, 
     description, createtime, createstaffid, loginflag, logintime
   </sql>
-	
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where staffid = #{staffid}
-	</select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where staffid = #{staffid}
+  </select>
 
-	<select id="selectNameByPrimaryKey" resultMap="MiniResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where staffid = #{staffid}
-	</select>
+  <select id="selectNameByPrimaryKey" resultMap="MiniResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where staffid = #{staffid}
+  </select>
 
-	<select id="selectCount" resultType="Integer">
-		select count(1) from staff
-		where status='1' and subsystem = #{subsystem}
-		<if test="vspid != null" >
-			and vspid = #{vspid}
-		</if>
-		<if test="orgid != null" >
-			and orgid = #{orgid}
-		</if>
-		<if test="search != null">
-			and (loginname like #{search} or name like #{search})
-		</if>
-	</select>
+  <select id="selectCount" resultType="Integer">
+    select count(1) from staff
+    where status='1' and subsystem = #{subsystem}
+    <if test="vspid != null" >
+      and vspid = #{vspid}
+    </if>
+    <if test="orgid != null" >
+      and orgid = #{orgid}
+    </if>
+    <if test="search != null">
+      and (loginname like #{search} or name like #{search})
+    </if>
+  </select>
 
-	<select id="selectList" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where status='1' and subsystem = #{subsystem}
-		<if test="vspid != null" >
-			and vspid = #{vspid}
-		</if>
-		<if test="orgid != null" >
-			and orgid = #{orgid}
-		</if>
-		<if test="search != null">
-			and (loginname like #{search} or name like #{search})
-		</if>
-		order by staffid desc 
-		<if test="start != null and length != null">
-			limit ${start}, ${length}
-		</if>
-	</select>
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' and subsystem = #{subsystem}
+    <if test="vspid != null" >
+      and vspid = #{vspid}
+    </if>
+    <if test="orgid != null" >
+      and orgid = #{orgid}
+    </if>
+    <if test="search != null">
+      and (loginname like #{search} or name like #{search})
+    </if>
+    order by staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
 
-	<select id="selectByLoginname" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from staff
-		where status='1' and loginname = #{loginname}
-	</select>
+  <select id="selectByLoginname" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' and loginname = #{loginname}
+  </select>
 
-	<select id="login" resultMap="BaseResultMap">
-		select *
-		from staff
-		where loginname=#{loginname} 
-		and password=#{password}
-		and status='1'
-	</select>
+  <select id="login" resultMap="BaseResultMap">
+    select *
+    from staff
+    where loginname=#{loginname} 
+    and password=#{password}
+    and status='1'
+  </select>
 
   <delete id="deleteByPrimaryKey" >
     update staff set status='9'
     where staffid = #{staffid}
+  </delete>
+  
+  <delete id="deleteByOrg" >
+    update staff set status='9'
+    where orgid = #{orgid}
+  </delete>
+  
+  <delete id="deleteByVsp" >
+    update staff set status='9'
+    where vspid = #{vspid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Staff" >
@@ -292,28 +302,28 @@
     where staffid = #{staffid,jdbcType=INTEGER}
   </update>
 
-	<delete id="clearStaffPrivileges" parameterType="com.broadvideo.pixsignage.domain.Staff">
-		delete from staffprivilege
-		where staffid = #{staff.staffid}
-	</delete>
+  <delete id="clearStaffPrivileges" parameterType="com.broadvideo.pixsignage.domain.Staff">
+    delete from staffprivilege
+    where staffid = #{staff.staffid}
+  </delete>
 
-	<insert id="assignStaffPrivileges">
-		insert into staffprivilege(staffid, privilegeid) values 
-		<foreach collection="privileges" item="item"  separator=",">
-			(#{staff.staffid}, #{item.privilegeid})
-		</foreach>
-	</insert>
+  <insert id="assignStaffPrivileges">
+    insert into staffprivilege(staffid, privilegeid) values 
+    <foreach collection="privileges" item="item"  separator=",">
+      (#{staff.staffid}, #{item.privilegeid})
+    </foreach>
+  </insert>
 
-	<delete id="clearStaffRoles" parameterType="com.broadvideo.pixsignage.domain.Staff">
-		delete from staffrole
-		where staffid = #{staff.staffid}
-	</delete>
+  <delete id="clearStaffRoles" parameterType="com.broadvideo.pixsignage.domain.Staff">
+    delete from staffrole
+    where staffid = #{staff.staffid}
+  </delete>
 
-	<insert id="assignStaffRoles">
-		insert into staffrole(staffid, roleid) values 
-		<foreach collection="roles" item="item"  separator=",">
-			(#{staff.staffid}, #{item.roleid})
-		</foreach>
-	</insert>
+  <insert id="assignStaffRoles">
+    insert into staffrole(staffid, roleid) values 
+    <foreach collection="roles" item="item"  separator=",">
+      (#{staff.staffid}, #{item.roleid})
+    </foreach>
+  </insert>
 
 </mapper>

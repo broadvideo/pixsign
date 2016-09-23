@@ -65,6 +65,7 @@ public class VspServiceImpl implements VspService {
 
 	@Transactional
 	public void deleteVsp(String vspid) {
+		staffMapper.deleteByVsp(vspid);
 		vspMapper.deleteByPrimaryKey(vspid);
 	}
 

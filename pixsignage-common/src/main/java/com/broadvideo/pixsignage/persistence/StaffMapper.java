@@ -24,6 +24,10 @@ public interface StaffMapper {
 
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);
 
+	int deleteByOrg(@Param(value = "orgid") String orgid);
+
+	int deleteByVsp(@Param(value = "vspid") String vspid);
+
 	// int insert(Staff record);
 
 	int insertSelective(Staff record);

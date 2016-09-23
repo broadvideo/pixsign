@@ -285,9 +285,10 @@ var PixContral = 0;
 <% if (session_vsp != null && session_vsp.getCode().equals("default")) {%>
 PixContral = 1;
 <% } %>  
-var MaxOrgs = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxOrgs%>;
-var MaxDevicesPerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxDevicesPerSigOrg%>;
-var MaxStoragePerSigOrg = <%=com.broadvideo.pixsignage.common.CommonConfig.LICENSE_MaxStoragePerSigOrg%>;
+var MaxDevices = <%=session_vsp.getMaxdevices()%>;
+var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;
+var MaxStorage = <%=session_vsp.getMaxstorage()%>;
+var CurrentStorage = <%=session_vsp.getCurrentstorage()%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

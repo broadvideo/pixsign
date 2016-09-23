@@ -229,7 +229,7 @@ create table text(
    orgid int not null,
    branchid int not null,
    name varchar(256) not null,
-   text longtext not null default '',
+   text longtext,
    type char(1) default 1,
    status char(1) default '1',
    description varchar(512),
@@ -615,7 +615,7 @@ create table weather(
    weatherid int not null auto_increment,
    city varchar(64) not null,
    type char(1) not null default '1',
-   weather longtext not null default '',
+   weather longtext,
    status char(1) default '1',
    refreshtime datetime,
    primary key (weatherid)
@@ -677,6 +677,7 @@ select last_insert_id() into @vspid;
 insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(@vspid,'default','default',0,'2037-01-01 00:00:00',0,0,0,'Default Org',@staffid2);
 select last_insert_id() into @orgid;
 insert into branch(orgid,parentid,name,description,createstaffid) values(@orgid,0,'super','Default Root Branch',@staffid3);
+select last_insert_id() into @branchid;
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');
@@ -735,14 +736,14 @@ insert into region(regionid,name,code,type) values(35,'region.weather','weather'
 insert into region(regionid,name,code,type) values(40,'region.videoin','videoin','4');
 insert into region(regionid,name,code,type) values(45,'region.dvb','dvb','5');
 
-insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-单区域',0,1,1,1080,1920,@staffid);
+insert into layout(orgid,branchid,name,type,status,ratio,height,width,createstaffid) values(@orgid,@branchid,'横屏-单区域',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;
 insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,1,1080,1920,0,0);
 
-insert into layout(orgid,name,type,status,ratio,height,width,createstaffid) values(@orgid,'横屏-带字幕',0,1,1,1080,1920,@staffid);
+insert into layout(orgid,branchid,name,type,status,ratio,height,width,createstaffid) values(@orgid,@branchid,'横屏-带字幕',0,1,1,1080,1920,@staffid);
 select last_insert_id() into @layoutid;
 insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,1,977,1920,0,0);
-insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,2,100,1920,980,0);
+insert into layoutdtl(layoutid,regionid,height,width,topoffset,leftoffset) values(@layoutid,20,100,1920,980,0);
 
 
 ############################################################

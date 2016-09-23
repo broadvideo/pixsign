@@ -5,13 +5,18 @@
     <id column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
+    <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
+    <result column="currentdevices" property="currentdevices" jdbcType="INTEGER" />
+    <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vspid, name, code, status, description, createtime, createstaffid
+    vspid, name, code, maxdevices, maxstorage, currentdevices, 
+    currentstorage, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -44,14 +49,30 @@
     where vspid = #{vspid}
   </delete>
   
+  <update id="updateCurrentdevices" >
+    update vsp v, 
+    (select sum(maxdevices) as value, vspid from org where status='1' group by vspid) r 
+    set v.currentdevices=r.value 
+    where v.vspid=r.vspid and v.status=1
+  </update>
+
+  <update id="updateCurrentstorage" >
+    update vsp v, 
+    (select sum(maxstorage) as value, vspid from org where status='1' group by vspid) r 
+    set v.currentstorage=r.value 
+    where v.vspid=r.vspid and v.status=1
+  </update>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Vsp" >
     <selectKey resultType="java.lang.Integer" keyProperty="vspid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vsp (name, code, status, 
+    insert into vsp (name, code, maxdevices, maxstorage, 
+      currentdevices, currentstorage, status, 
       description, createtime, createstaffid
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
+      #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, 
       #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
@@ -66,6 +87,18 @@
       </if>
       <if test="code != null" >
         code,
+      </if>
+      <if test="maxdevices != null" >
+        maxdevices,
+      </if>
+      <if test="maxstorage != null" >
+        maxstorage,
+      </if>
+      <if test="currentdevices != null" >
+        currentdevices,
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage,
       </if>
       <if test="status != null" >
         status,
@@ -86,6 +119,18 @@
       </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="maxdevices != null" >
+        #{maxdevices,jdbcType=INTEGER},
+      </if>
+      <if test="maxstorage != null" >
+        #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentdevices != null" >
+        #{currentdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentstorage != null" >
+        #{currentstorage,jdbcType=BIGINT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -110,6 +155,18 @@
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
+      <if test="maxdevices != null" >
+        maxdevices = #{maxdevices,jdbcType=INTEGER},
+      </if>
+      <if test="maxstorage != null" >
+        maxstorage = #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentdevices != null" >
+        currentdevices = #{currentdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage = #{currentstorage,jdbcType=BIGINT},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -129,6 +186,10 @@
     update vsp
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
+      maxdevices = #{maxdevices,jdbcType=INTEGER},
+      maxstorage = #{maxstorage,jdbcType=BIGINT},
+      currentdevices = #{currentdevices,jdbcType=INTEGER},
+      currentstorage = #{currentstorage,jdbcType=BIGINT},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

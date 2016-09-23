@@ -4,12 +4,14 @@ var myurls = {
 	'common.update' : 'org!update.action',
 	'common.delete' : 'org!delete.action',
 	'org.validate' : 'org!validate.action',
+	'vsp.get' : 'vsp!get.action',
 };
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
 }			
 
+var CurrentVsp;
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
@@ -26,19 +28,21 @@ function initMyTable() {
 						{'sTitle' : common.view.currentdevices, 'mData' : 'currentdevices', 'bSortable' : false }, 
 						{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
 						{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'orgid', 'bSortable' : false, 'sWidth' : '15%' }],
+						{'sTitle' : '', 'mData' : 'orgid', 'bSortable' : false },
+						{'sTitle' : '', 'mData' : 'orgid', 'bSortable' : false }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(5)', nRow).html(transferIntToComma(aData['maxstorage']) + ' MB');
-			$('td:eq(6)', nRow).html(transferIntToComma(aData['currentstorage']) + ' MB');
-			var dropdownBtn = '';
-			dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			$('td:eq(5)', nRow).html(transferIntToComma(aData.maxstorage) + ' MB');
+			$('td:eq(6)', nRow).html(transferIntToComma(aData.currentstorage) + ' MB');
+
+			$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 			if (aData.code != 'default') {
-				dropdownBtn += '&nbsp;&nbsp;<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			} else {
+				$('td:eq(8)', nRow).html('');
 			}
-			$('td:eq(7)', nRow).html(dropdownBtn);
 			return nRow;
 		}
 	});
@@ -70,6 +74,7 @@ function initMyTable() {
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							refreshMyTable();
+							refreshVsp();
 						} else {
 							bootbox.alert(common.tips.error + data.errormsg);
 						}
@@ -82,6 +87,37 @@ function initMyTable() {
 		 });
 		
 	});
+
+	$('body').on('click', '.pix-full', function(event) {
+		bootbox.alert(common.tips.org_full);
+	});			
+}
+
+function refreshVsp() {
+	$.ajax({
+		url: myurls['vsp.get'],
+		type : 'POST',
+		dataType: "json",
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var max1 = parseInt(data.vsp.maxdevices - data.vsp.currentdevices);
+				var max2 = parseInt(data.vsp.maxstorage - data.vsp.currentstorage);
+				max1 = (max1 < 0 ? 0 : max1);
+				max2 = (max2 < 0 ? 0 : max2);
+				FormValidateOption.rules['org.maxdevices']['max'] = max1;
+				FormValidateOption.rules['org.maxstorage']['max'] = max2;
+				$.extend($('#MyEditForm').validate().settings, {
+					rules: FormValidateOption.rules
+				});
+				if (max1 == 0 || max2 == 0) {
+					$('.pix-add').removeClass('pix-add').addClass('pix-full');
+				} else {
+					$('.pix-full').removeClass('pix-full').addClass('pix-add');
+				}
+			}
+		}
+	});
+	
 }
 
 function initMyEditModal() {
@@ -148,8 +184,6 @@ function initMyEditModal() {
 	FormValidateOption.rules['org.maxstorage'] = {};
 	FormValidateOption.rules['org.maxstorage']['required'] = true;
 	FormValidateOption.rules['org.maxdevices']['number'] = true;
-	FormValidateOption.rules['org.maxdevices']['max'] = MaxDevicesPerSigOrg;
-	FormValidateOption.rules['org.maxstorage']['max'] = MaxStoragePerSigOrg;
 	
 	FormValidateOption.submitHandler = function(form) {
 		if ($('input[name="org.expireflag"]:checked').val() == 0) {
@@ -181,6 +215,7 @@ function initMyEditModal() {
 					$('#MyEditModal').modal('hide');
 					bootbox.alert(common.tips.success);
 					refreshMyTable();
+					refreshVsp();
 				} else {
 					bootbox.alert(common.tips.error + data.errormsg);
 				}
@@ -191,6 +226,7 @@ function initMyEditModal() {
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
+	refreshVsp();
 
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
@@ -282,5 +318,4 @@ function initMyEditModal() {
 		todayBtn: true
 	});
 }
-
 

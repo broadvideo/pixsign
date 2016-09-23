@@ -16,11 +16,11 @@ public class ActiveMQUtil {
 	private static MqttClient mqttClient;
 
 	public synchronized static void publish(String topic, String message) throws Exception {
-		if (CommonConfig.CONFIG_SERVER_IP == null) {
+		if (CommonConfig.CONFIG_ACTIVEMQ_SERVER == null) {
 			throw new Exception("ActiveMQ ip not configured");
 		}
 		if (mqttClient == null) {
-			String broker = "tcp://" + CommonConfig.CONFIG_SERVER_IP + ":1883";
+			String broker = "tcp://" + CommonConfig.CONFIG_ACTIVEMQ_SERVER + ":1883";
 			String clientId = "PixsignageAdmin";
 			MemoryPersistence persistence = new MemoryPersistence();
 			mqttClient = new MqttClient(broker, clientId, persistence);
@@ -40,7 +40,7 @@ public class ActiveMQUtil {
 			MqttConnectOptions connOpts = new MqttConnectOptions();
 			connOpts.setKeepAliveInterval(10);
 			connOpts.setCleanSession(true);
-			logger.info("Start to connect to ActiveMQ tcp://{}:1883", CommonConfig.CONFIG_SERVER_IP);
+			logger.info("Start to connect to ActiveMQ tcp://{}:1883", CommonConfig.CONFIG_ACTIVEMQ_SERVER);
 			mqttClient.connect(connOpts);
 		} else if (!mqttClient.isConnected()) {
 			MqttConnectOptions connOpts = new MqttConnectOptions();

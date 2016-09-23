@@ -165,6 +165,7 @@ var common = {
 		code_repeat: '编码已存在',
 
 		storage_full: '存储已达上限，无法上传文件',
+		org_full: '企业终端或存储已达上限，无法创建',
 
 		maxorgs: '企业数量已达上限',
 	},

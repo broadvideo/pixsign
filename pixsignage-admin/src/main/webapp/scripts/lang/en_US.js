@@ -165,6 +165,7 @@ var common = {
 		code_repeat: 'Code conflicted',
 
 		storage_full: 'Storage reaches the limit',
+		org_full: 'Org devices or storage reaches the limit',
 
 		maxorgs: 'Org count reaches the limit',
 	},

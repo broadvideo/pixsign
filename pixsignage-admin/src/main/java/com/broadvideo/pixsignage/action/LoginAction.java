@@ -59,6 +59,9 @@ public class LoginAction extends BaseAction {
 	}
 
 	public String doLogin() throws Exception {
+		CommonConfig.LICENSE = true;
+		CommonConfig.LICENSE_HOSTID_VERIFY = true;
+		CommonConfig.LICENSE_Expire = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2037-01-01 00:00:00");
 		if (!CommonConfig.LICENSE) {
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			if (System.getProperties().getProperty("os.name").startsWith("Windows")) {

@@ -38,7 +38,7 @@ public class OrgAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -54,7 +54,7 @@ public class OrgAction extends BaseDatatableAction {
 			orgService.addOrg(org);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -66,7 +66,7 @@ public class OrgAction extends BaseDatatableAction {
 			orgService.updateOrg(org);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -78,7 +78,7 @@ public class OrgAction extends BaseDatatableAction {
 			orgService.deleteOrg("" + org.getOrgid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -107,7 +107,7 @@ public class OrgAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doValidate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -119,7 +119,7 @@ public class OrgAction extends BaseDatatableAction {
 			org = orgService.selectByPrimaryKey("" + getLoginStaff().getOrgid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("OrgAction doGet exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

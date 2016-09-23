@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 public class CommonConfig {
+	public static String CONFIG_ACTIVEMQ_SERVER = "pixsignage-mq";
+	public static String CONFIG_PIXBOX_SERVER = "pixbox";
+
 	public static String CONFIG_SERVER_IP;
 	public static String CONFIG_SERVER_PORT;
 
@@ -13,7 +16,6 @@ public class CommonConfig {
 	public static String CONFIG_FFMPEG_HOME = "/opt/pix/ffmpeg";
 
 	public static String CONFIG_VCSS_SERVER = "http://127.0.0.1:6060/";
-	public static String CONFIG_PIXBOX_SERVER = "http://127.0.0.1:8080/sync_api/";
 
 	public static List<String> CONFIG_SDOMAIN_LIST = new ArrayList<String>();
 

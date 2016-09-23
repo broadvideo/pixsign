@@ -88,10 +88,6 @@ public class SecurityFilter implements Filter {
 		excludeLoginURLs.add("/index.jsp");
 		excludeLoginURLs.add("/admin.jsp");
 		excludeLoginURLs.add("/login.action");
-		excludeLoginURLs.add("/widget/market.jsp");
-		excludeLoginURLs.add("/widget/weather-v.jsp");
-		excludeLoginURLs.add("/widget/weather-h.jsp");
-		excludeLoginURLs.add("/widget/news.jsp");
 		try {
 			Properties properties = new Properties();
 			InputStream is = this.getClass().getResourceAsStream("/sdomain.properties");

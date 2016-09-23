@@ -232,32 +232,39 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doAPPList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			HashMap<String, String> app1 = getAppFile("DigitalBox_APP_UWIN_SINGLE", "a83t", "A83T", "开机自启App版(单屏)");
-			if (app1 != null) {
-				aaData.add(app1);
-			}
-			HashMap<String, String> app2 = getAppFile("DigitalBox_LAUNCHER_UWIN_SINGLE", "a83t", "A83T",
-					"Launcher版(单屏)");
-			if (app2 != null) {
-				aaData.add(app2);
-			}
-			HashMap<String, String> app3 = getAppFile("DigitalBox_LAUNCHER_UWIN", "a83t", "A83T", "Launcher版(双屏)");
-			if (app3 != null) {
-				aaData.add(app3);
-			}
+			if (getLoginStaff().getOrg().getVspid().intValue() == 3) { // AK
+				HashMap<String, String> app1 = getAppFile("DigitalBox_LAUNCHER_UWIN_JIM", "a83t", "A83T", "Launcher版");
+				if (app1 != null) {
+					aaData.add(app1);
+				}
+			} else {
+				HashMap<String, String> app1 = getAppFile("DigitalBox_APP_UWIN_SINGLE", "a83t", "A83T", "开机自启App版(单屏)");
+				if (app1 != null) {
+					aaData.add(app1);
+				}
+				HashMap<String, String> app2 = getAppFile("DigitalBox_LAUNCHER_UWIN_SINGLE", "a83t", "A83T",
+						"Launcher版(单屏)");
+				if (app2 != null) {
+					aaData.add(app2);
+				}
+				HashMap<String, String> app3 = getAppFile("DigitalBox_LAUNCHER_UWIN", "a83t", "A83T", "Launcher版(双屏)");
+				if (app3 != null) {
+					aaData.add(app3);
+				}
 
-			HashMap<String, String> app4 = getAppFile("DigitalBox_APP", "3288", "RK3288", "开机自启App版");
-			if (app4 != null) {
-				aaData.add(app4);
-			}
-			HashMap<String, String> app5 = getAppFile("DigitalBox_LAUNCHER", "3288", "RK3288", "Launcher版");
-			if (app5 != null) {
-				aaData.add(app5);
-			}
-			HashMap<String, String> app6 = getAppFile("DigitalBox_LAUNCHER_SHANXI", "3288", "RK3288",
-					"Launcher版(支持投影仪控制)");
-			if (app6 != null) {
-				aaData.add(app6);
+				HashMap<String, String> app4 = getAppFile("DigitalBox_APP", "3288", "RK3288", "开机自启App版");
+				if (app4 != null) {
+					aaData.add(app4);
+				}
+				HashMap<String, String> app5 = getAppFile("DigitalBox_LAUNCHER", "3288", "RK3288", "Launcher版");
+				if (app5 != null) {
+					aaData.add(app5);
+				}
+				HashMap<String, String> app6 = getAppFile("DigitalBox_LAUNCHER_SHANXI", "3288", "RK3288",
+						"Launcher版(支持投影仪控制)");
+				if (app6 != null) {
+					aaData.add(app6);
+				}
 			}
 
 			this.setAaData(aaData);

@@ -29,6 +29,12 @@ alter table device add iip varchar(32) default '';
 alter table device modify appname varchar(128) default '';
 alter table org add qrcodeflag char(1) default '0';
 
+alter table vsp add maxdevices int;
+alter table vsp add maxstorage bigint;
+alter table vsp add currentdevices int default 0;
+alter table vsp add currentstorage bigint default 0;
+update vsp set maxdevices=100,maxstorage=10000 where vspid=1;
+
 ############################################################
 ## post script  ############################################
 ############################################################

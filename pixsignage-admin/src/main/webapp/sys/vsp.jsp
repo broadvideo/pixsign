@@ -70,6 +70,22 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.org.maxdevices"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="vsp.maxdevices" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.org.storage"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="vsp.maxstorage" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 											<div class="col-md-9">
 												<textarea class="form-control" rows="4" name="vsp.description"></textarea>

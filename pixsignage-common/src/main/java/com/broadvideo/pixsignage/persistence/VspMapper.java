@@ -24,4 +24,8 @@ public interface VspMapper {
 	int updateByPrimaryKeySelective(Vsp record);
 
 	// int updateByPrimaryKey(Vsp record);
+
+	int updateCurrentdevices();
+
+	int updateCurrentstorage();
 }
