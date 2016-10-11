@@ -84,7 +84,7 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1</div>
+	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1<br/>S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %></div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

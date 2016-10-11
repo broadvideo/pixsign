@@ -4,10 +4,10 @@
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner copyright">
-			<%if (org == null || org.getCopyright() == null || org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;Powered by BroadVideo&nbsp;&nbsp;粤ICP备14037592号-1 <a href="http://www.miitbeian.gov.cn">工业和信息化部备案管理系统</a>
+			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
 			<%} else { %>
-			©<%=org.getCopyright()%>
+			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
 		<div class="footer-tools">

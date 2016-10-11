@@ -226,29 +226,6 @@ function initMyEditModal() {
 		}
 	});
 	
-	$('body').on('click', '.pix-add', function(event) {
-		if ($('#MyTable').dataTable().fnGetData().length >= MaxOrgs) {
-			bootbox.alert('企业数量已达上限，无法新增。');
-			return;
-		}
-		
-		var action = myurls['common.add'];
-		refreshForm('MyEditForm');
-		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
-		$.each( checkboxes, function( index, checkbox ) {
-		    $(checkbox).attr('checked');
-		    $(checkbox).parent().addClass('checked');
-		});
-		if ($('input[name="org.expireflag"]:checked').val() == 0) {
-			$('.expiretime').css('display', 'none');
-		} else {
-			$('.expiretime').css('display', 'block');
-		}
-		$('#MyEditForm').attr('action', action);
-		$('#MyEditModal').modal();
-	});			
-
-	
 	$('body').on('click', '.pix-update', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
@@ -280,34 +257,6 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditModal').modal();
 	});
-
-	$('input[name="org.orgtype"]').click(function(e) {
-		FormValidateOption.rules['org.maxdevices'] = {};
-		FormValidateOption.rules['org.maxdevices']['required'] = true;
-		FormValidateOption.rules['org.maxdevices']['number'] = true;
-		FormValidateOption.rules['org.maxstorage'] = {};
-		FormValidateOption.rules['org.maxstorage']['required'] = true;
-		FormValidateOption.rules['org.maxdevices']['number'] = true;
-		if ($('input[name="org.orgtype"]:checked').val() == 1) {
-			FormValidateOption.rules['org.maxdevices']['max'] = MaxDevicesPerSigOrg;
-			FormValidateOption.rules['org.maxstorage']['max'] = MaxStoragePerSigOrg;
-		} else {
-			FormValidateOption.rules['org.maxdevices']['max'] = MaxDevicesPerMovieOrg;
-			FormValidateOption.rules['org.maxstorage']['max'] = MaxStoragePerMovieOrg;
-		}
-		$('#MyEditForm').validate(FormValidateOption);
-	    $.extend($("#MyEditForm").validate().settings, {
-	    	rules: FormValidateOption.rules
-		});
-	});  
-
-	$('input[name="org.expireflag"]').click(function(e) {
-		if ($('input[name="org.expireflag"]:checked').val() == 0) {
-			$('.expiretime').css('display', 'none');
-		} else {
-			$('.expiretime').css('display', 'block');
-		}
-	});  
 
 	$(".form_datetime").datetimepicker({
         autoclose: true,

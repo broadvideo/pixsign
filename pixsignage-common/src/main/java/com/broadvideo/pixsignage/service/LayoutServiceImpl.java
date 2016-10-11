@@ -164,6 +164,9 @@ public class LayoutServiceImpl implements LayoutService {
 
 	@Transactional
 	public void addLayoutdtl(Layoutdtl layoutdtl) {
+		if (layoutdtl.getRegion().getType().equals(Region.Type_STREAM)) {
+			layoutdtl.setIntervaltime(30);
+		}
 		layoutdtlMapper.insertSelective(layoutdtl);
 		List<Bundledtl> bundledtls = new ArrayList<Bundledtl>();
 		List<Bundle> bundles = bundleMapper.selectByLayout("" + layoutdtl.getLayoutid());

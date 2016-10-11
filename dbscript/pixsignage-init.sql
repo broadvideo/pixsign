@@ -148,6 +148,7 @@ create table privilege(
 default character set utf8;
 
 create table staffrole( 
+   staffroleid int not null auto_increment,
    staffid int not null,
    roleid int not null,
    foreign key (staffid) references staff(staffid),
@@ -157,6 +158,7 @@ default character set utf8;
 alter table staffrole add unique(staffid,roleid);
 
 create table staffprivilege( 
+   staffprivilegeid int not null auto_increment,
    staffid int not null,
    privilegeid int not null,
    foreign key (staffid) references staff(staffid) 
@@ -165,6 +167,7 @@ default character set utf8;
 alter table staffprivilege add unique(staffid,privilegeid);
 
 create table roleprivilege( 
+   roleprivilegeid int not null auto_increment,
    roleid int not null,
    privilegeid int not null,
    foreign key (roleid) references role(roleid) 

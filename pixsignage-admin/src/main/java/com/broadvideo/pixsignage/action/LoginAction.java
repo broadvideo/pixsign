@@ -1,11 +1,9 @@
 package com.broadvideo.pixsignage.action;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.common.CommonConfig;
-import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Org;
@@ -26,7 +22,6 @@ import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.VspMapper;
-import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PrivilegeService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
@@ -51,79 +46,12 @@ public class LoginAction extends BaseAction {
 	private StaffMapper staffMapper;
 	@Autowired
 	private PrivilegeService privilegeService;
-	@Autowired
-	private OrgService orgService;
 
 	public String doPing() {
 		return SUCCESS;
 	}
 
 	public String doLogin() throws Exception {
-		CommonConfig.LICENSE = true;
-		CommonConfig.LICENSE_HOSTID_VERIFY = true;
-		CommonConfig.LICENSE_Expire = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2037-01-01 00:00:00");
-		if (!CommonConfig.LICENSE) {
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			if (System.getProperties().getProperty("os.name").startsWith("Windows")) {
-				CommonConfig.LICENSE_HOSTID_VERIFY = true;
-				try {
-					CommonConfig.LICENSE_Expire = sf.parse("2037-01-01 00:00:00");
-				} catch (Exception e) {
-				}
-				CommonConfig.LICENSE_MaxOrgs = 10;
-				CommonConfig.LICENSE_MaxDevicesPerSigOrg = 25;
-				CommonConfig.LICENSE_MaxStoragePerSigOrg = 3000;
-				CommonConfig.LICENSE_MaxDevicesPerMovieOrg = 20;
-				CommonConfig.LICENSE_MaxStoragePerMovieOrg = 3000;
-			}
-
-			ServletContext licensecontext = getHttpServletRequest().getSession().getServletContext()
-					.getContext("/pixlicense");
-			if (licensecontext == null) {
-				logger.error("License init error: context of license is null");
-			} else if (licensecontext.getAttribute("HostIDVerify") == null) {
-				logger.error("License init error: HostIDVerify is null");
-			} else {
-				CommonConfig.LICENSE_HOSTID_VERIFY = (Boolean) licensecontext.getAttribute("HostIDVerify");
-				CommonConfig.LICENSE_Expire = sf.parse((String) licensecontext.getAttribute("Expire"));
-				CommonConfig.LICENSE_MaxOrgs = Integer.parseInt((String) licensecontext.getAttribute("MaxOrgs"));
-				CommonConfig.LICENSE_MaxDevicesPerSigOrg = Integer
-						.parseInt((String) licensecontext.getAttribute("MaxDevicesPerSigOrg"));
-				CommonConfig.LICENSE_MaxStoragePerSigOrg = Integer
-						.parseInt((String) licensecontext.getAttribute("MaxStoragePerSigOrg"));
-				CommonConfig.LICENSE_MaxDevicesPerMovieOrg = Integer
-						.parseInt((String) licensecontext.getAttribute("MaxDevicesPerMovieOrg"));
-				CommonConfig.LICENSE_MaxStoragePerMovieOrg = Integer
-						.parseInt((String) licensecontext.getAttribute("MaxStoragePerMovieOrg"));
-				logger.info("License HostID verify: " + CommonConfig.LICENSE_HOSTID_VERIFY);
-				logger.info("License Expire: " + sf.format(CommonConfig.LICENSE_Expire));
-				logger.info("License MaxOrgs: " + CommonConfig.LICENSE_MaxOrgs);
-				logger.info("License MaxDevicesPerSigOrg: " + CommonConfig.LICENSE_MaxDevicesPerSigOrg);
-				logger.info("License MaxStoragePerSigOrg: " + CommonConfig.LICENSE_MaxStoragePerSigOrg);
-				logger.info("License MaxDevicesPerMovieOrg: " + CommonConfig.LICENSE_MaxDevicesPerMovieOrg);
-				logger.info("License MaxStoragePerMovieOrg: " + CommonConfig.LICENSE_MaxStoragePerMovieOrg);
-				CommonConfig.LICENSE = true;
-			}
-
-			Org org = orgService.selectByCode("default");
-			if (org.getMaxdevices() < CommonConfig.LICENSE_MaxDevicesPerSigOrg) {
-				org.setMaxdevices(CommonConfig.LICENSE_MaxDevicesPerSigOrg);
-				org.setMaxstorage((long) CommonConfig.LICENSE_MaxStoragePerSigOrg);
-				orgService.updateOrg(org);
-			}
-		}
-
-		if (!CommonConfig.LICENSE_HOSTID_VERIFY) {
-			logger.error("Login failed for license HostID verified");
-			setErrorcode(-1);
-			return ERROR;
-		}
-		if (CommonConfig.LICENSE_Expire.getTime() < Calendar.getInstance().getTime().getTime()) {
-			logger.error("Login failed for license expired");
-			setErrorcode(-1);
-			return ERROR;
-		}
-
 		username = username.trim();
 		password = password.trim();
 		logger.info("Login start, username={}, password={}, md5={}, code={}", username, password,
