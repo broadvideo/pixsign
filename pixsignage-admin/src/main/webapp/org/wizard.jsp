@@ -385,6 +385,12 @@ response.setDateHeader("Expires",0);
 																				</div>
 																			</div>
 																			<div class="form-group nontextflag">
+																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.sleeptime"/></label>
+																				<div class="col-md-9">
+																					<input class="sleepRange" type="text" name="sleeptime" value="0"/>
+																				</div>
+																			</div>
+																			<div class="form-group nontextflag">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 																				<div class="col-md-9">
 																					<input class="intervalRange" type="text" name="intervaltime" value="10"/>
@@ -903,7 +909,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
 <script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
 <script>

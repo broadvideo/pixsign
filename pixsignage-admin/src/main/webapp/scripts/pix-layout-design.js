@@ -414,6 +414,7 @@ function validLayoutdtl(layoutdtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
+		layoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 		layoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 		layoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
 		layoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
@@ -535,6 +536,17 @@ function enterLayoutdtlFocus(layoutdtl) {
 	$(".intervalRange").ionRangeSlider("update", {
 		from: layoutdtl.intervaltime
 	});
+	$(".sleepRange").ionRangeSlider({
+		min: 0,
+		max: 60,
+		from: 0,
+		type: 'single',
+		step: 5,
+		hasGrid: false
+	});
+	$(".sleepRange").ionRangeSlider("update", {
+		from: layoutdtl.sleeptime
+	});
 	$(".sizeRange").ionRangeSlider({
 		min: 10,
 		max: 100,
@@ -655,6 +667,7 @@ $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
 });	
 
 $('#LayoutdtlEditForm input,select').on('change', function(e) {
+	CurrentLayoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 	CurrentLayoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 	CurrentLayoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
 	CurrentLayoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
@@ -714,6 +727,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 	} else {
 		layoutdtl.opacity = 255;
 	}
+	layoutdtl.sleeptime = 0;
 	layoutdtl.intervaltime = 10;
 	layoutdtl.fitflag = 1;
 	layoutdtl.volume = 50;

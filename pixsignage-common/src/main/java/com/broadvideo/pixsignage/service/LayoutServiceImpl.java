@@ -144,6 +144,7 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutdtl.setOpacity(255);
 		}
 		layoutdtl.setZindex(0);
+		layoutdtl.setSleeptime(0);
 		layoutdtl.setIntervaltime(10);
 		layoutdtl.setDirection("4");
 		layoutdtl.setSpeed("2");

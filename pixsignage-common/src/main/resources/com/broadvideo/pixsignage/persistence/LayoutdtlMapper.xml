@@ -13,6 +13,7 @@
     <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
     <result column="opacity" property="opacity" jdbcType="INTEGER" />
     <result column="bgimageid" property="bgimageid" jdbcType="INTEGER" />
+    <result column="sleeptime" property="sleeptime" jdbcType="INTEGER" />
     <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
     <result column="direction" property="direction" jdbcType="CHAR" />
     <result column="speed" property="speed" jdbcType="CHAR" />
@@ -27,7 +28,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, intervaltime, 
+    layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, sleeptime, intervaltime, 
     direction, speed, color, size, dateformat, fitflag, volume, createtime
   </sql>
   
@@ -64,13 +65,13 @@
     insert into layoutdtl (layoutid, regionid, height, 
       width, topoffset, leftoffset, 
       zindex, bgcolor, opacity, 
-      bgimageid, intervaltime, direction, 
+      bgimageid, sleeptime, intervaltime, direction, 
       speed, color, size, 
       dateformat, fitflag, volume, createtime)
     values (#{layoutid,jdbcType=INTEGER}, #{regionid,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{opacity,jdbcType=INTEGER}, 
-      #{bgimageid,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
+      #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
       #{speed,jdbcType=CHAR}, #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
       #{dateformat,jdbcType=VARCHAR}, #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
@@ -109,6 +110,9 @@
       </if>
       <if test="bgimageid != null" >
         bgimageid,
+      </if>
+      <if test="sleeptime != null" >
+        sleeptime,
       </if>
       <if test="intervaltime != null" >
         intervaltime,
@@ -168,6 +172,9 @@
       </if>
       <if test="bgimageid != null" >
         #{bgimageid,jdbcType=INTEGER},
+      </if>
+      <if test="sleeptime != null" >
+        #{sleeptime,jdbcType=INTEGER},
       </if>
       <if test="intervaltime != null" >
         #{intervaltime,jdbcType=INTEGER},
@@ -231,6 +238,9 @@
       <if test="bgimageid != null" >
         bgimageid = #{bgimageid,jdbcType=INTEGER},
       </if>
+      <if test="sleeptime != null" >
+        sleeptime = #{sleeptime,jdbcType=INTEGER},
+      </if>
       <if test="intervaltime != null" >
         intervaltime = #{intervaltime,jdbcType=INTEGER},
       </if>
@@ -273,6 +283,7 @@
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
       opacity = #{opacity,jdbcType=INTEGER},
       bgimageid = #{bgimageid,jdbcType=INTEGER},
+      sleeptime = #{sleeptime,jdbcType=INTEGER},
       intervaltime = #{intervaltime,jdbcType=INTEGER},
       direction = #{direction,jdbcType=CHAR},
       speed = #{speed,jdbcType=CHAR},

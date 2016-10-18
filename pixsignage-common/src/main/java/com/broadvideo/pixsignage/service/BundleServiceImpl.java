@@ -646,6 +646,7 @@ public class BundleServiceImpl implements BundleService {
 					}
 					regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
 					regionJson.put("type", layoutdtl.getRegion().getType());
+					regionJson.put("sleep", layoutdtl.getSleeptime());
 					regionJson.put("interval", layoutdtl.getIntervaltime());
 					regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
 					if (layoutdtl.getDirection().equals("1")) {
@@ -991,6 +992,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 			regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().trim().substring(1));
 			regionJson.put("type", layoutdtl.getRegion().getType());
+			regionJson.put("sleep", layoutdtl.getSleeptime());
 			regionJson.put("interval", layoutdtl.getIntervaltime());
 			regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
 			if (layoutdtl.getDirection().equals("1")) {
@@ -1376,6 +1378,7 @@ public class BundleServiceImpl implements BundleService {
 					}
 					regionJson.put("bgcolor", "#" + opacity + layoutdtl.getBgcolor().substring(1));
 					regionJson.put("type", layoutdtl.getRegion().getType());
+					regionJson.put("sleep", layoutdtl.getSleeptime());
 					regionJson.put("interval", layoutdtl.getIntervaltime());
 					regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
 					if (layoutdtl.getDirection().equals("1")) {

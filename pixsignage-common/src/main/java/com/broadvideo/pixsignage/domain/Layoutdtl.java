@@ -29,6 +29,8 @@ public class Layoutdtl {
 
 	private Integer bgimageid;
 
+	private Integer sleeptime;
+
 	private Integer intervaltime;
 
 	private String direction;
@@ -139,6 +141,14 @@ public class Layoutdtl {
 
 	public void setBgimageid(Integer bgimageid) {
 		this.bgimageid = bgimageid;
+	}
+
+	public Integer getSleeptime() {
+		return sleeptime;
+	}
+
+	public void setSleeptime(Integer sleeptime) {
+		this.sleeptime = sleeptime;
 	}
 
 	public Integer getIntervaltime() {
