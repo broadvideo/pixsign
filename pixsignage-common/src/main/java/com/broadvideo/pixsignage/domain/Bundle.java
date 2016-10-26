@@ -34,6 +34,14 @@ public class Bundle {
 
 	private String json;
 
+	private String touchflag;
+
+	private String homeflag;
+
+	private Integer homebundleid;
+
+	private Integer homeidletime;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -44,16 +52,7 @@ public class Bundle {
 
 	private List<Bundledtl> bundledtls;
 
-	public Bundledtl getBundledtl(String regionid) {
-		if (bundledtls != null) {
-			for (Bundledtl bundledtl : bundledtls) {
-				if (regionid.equals("" + bundledtl.getRegionid())) {
-					return bundledtl;
-				}
-			}
-		}
-		return null;
-	}
+	private List<Bundle> subbundles;
 
 	public Integer getBundleid() {
 		return bundleid;
@@ -151,6 +150,38 @@ public class Bundle {
 		this.json = json;
 	}
 
+	public String getTouchflag() {
+		return touchflag;
+	}
+
+	public void setTouchflag(String touchflag) {
+		this.touchflag = touchflag;
+	}
+
+	public String getHomeflag() {
+		return homeflag;
+	}
+
+	public void setHomeflag(String homeflag) {
+		this.homeflag = homeflag;
+	}
+
+	public Integer getHomebundleid() {
+		return homebundleid;
+	}
+
+	public void setHomebundleid(Integer homebundleid) {
+		this.homebundleid = homebundleid;
+	}
+
+	public Integer getHomeidletime() {
+		return homeidletime;
+	}
+
+	public void setHomeidletime(Integer homeidletime) {
+		this.homeidletime = homeidletime;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -191,5 +222,13 @@ public class Bundle {
 
 	public void setBundledtls(List<Bundledtl> bundledtls) {
 		this.bundledtls = bundledtls;
+	}
+
+	public List<Bundle> getSubbundles() {
+		return subbundles;
+	}
+
+	public void setSubbundles(List<Bundle> subbundles) {
+		this.subbundles = subbundles;
 	}
 }

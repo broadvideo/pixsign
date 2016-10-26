@@ -165,6 +165,7 @@ response.setDateHeader("Expires",0);
 											<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>
@@ -230,19 +231,19 @@ response.setDateHeader("Expires",0);
 																<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
 															</div>
 														</div>
-														<div class="form-group nontextflag">
+														<div class="form-group layout-ctl regiontype-0">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.sleeptime"/></label>
 															<div class="col-md-9">
 																<input class="sleepRange" type="text" name="sleeptime" value="0"/>
 															</div>
 														</div>
-														<div class="form-group nontextflag">
+														<div class="form-group layout-ctl regiontype-0 regiontype-6">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 															<div class="col-md-9">
 																<input class="intervalRange" type="text" name="intervaltime" value="10"/>
 															</div>
 														</div>
-														<div class="form-group nontextflag">
+														<div class="form-group layout-ctl regiontype-0">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -253,13 +254,13 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group nontextflag">
+														<div class="form-group layout-ctl regiontype-0 regiontype-6">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/></label>
 															<div class="col-md-9">
 																<input class="volumeRange" type="text" name="volume" value="50"/>
 															</div>
 														</div>
-														<div class="form-group textflag">
+														<div class="form-group layout-ctl regiontype-1">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -270,7 +271,7 @@ response.setDateHeader("Expires",0);
 																</label>  
 															</div>
 														</div>
-														<div class="form-group textflag">
+														<div class="form-group layout-ctl regiontype-1">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -284,7 +285,7 @@ response.setDateHeader("Expires",0);
 																</label>  
 															</div>
 														</div>
-														<div class="form-group textflag dateflag weatherflag">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 															<div class="col-md-9">
 																<div class="input-group colorpicker-component colorPick">
@@ -293,13 +294,13 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group textflag dateflag weatherflag">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
 															<div class="col-md-9">
 																<input class="sizeRange" type="text" name="size" value="50"/>
 															</div>
 														</div>
-														<div class="form-group dateflag">
+														<div class="form-group layout-ctl regiontype-2">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
 															<div class="col-md-9">
 																<select class="form-control" name="dateformat" tabindex="-1">
@@ -311,7 +312,7 @@ response.setDateHeader("Expires",0);
 																</select>
 															</div>
 														</div>
-														<div class="form-group nontextflag">
+														<div class="form-group layout-ctl regiontype-0 regiontype-7">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 															<div class="col-md-9">
 																<div class="input-group">
@@ -322,7 +323,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group textflag dateflag weatherflag">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 															<div class="col-md-9">
 																<div class="input-group colorpicker-component bgcolorPick">
@@ -331,7 +332,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group textflag dateflag weatherflag">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 															<div class="col-md-9">
 																<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -534,9 +535,9 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=8"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-layout.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

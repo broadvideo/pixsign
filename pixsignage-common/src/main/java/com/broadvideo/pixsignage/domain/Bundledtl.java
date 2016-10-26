@@ -17,13 +17,19 @@ public class Bundledtl {
 
 	private Integer bundleid;
 
-	private Integer regionid;
+	private Integer layoutdtlid;
 
 	private String type;
 
 	private String objtype;
 
 	private Integer objid;
+
+	private String touchlabel;
+
+	private String touchtype;
+
+	private Integer touchbundleid;
 
 	private Date createtime;
 
@@ -55,12 +61,12 @@ public class Bundledtl {
 		this.bundleid = bundleid;
 	}
 
-	public Integer getRegionid() {
-		return regionid;
+	public Integer getLayoutdtlid() {
+		return layoutdtlid;
 	}
 
-	public void setRegionid(Integer regionid) {
-		this.regionid = regionid;
+	public void setLayoutdtlid(Integer layoutdtlid) {
+		this.layoutdtlid = layoutdtlid;
 	}
 
 	public String getType() {
@@ -85,6 +91,30 @@ public class Bundledtl {
 
 	public void setObjid(Integer objid) {
 		this.objid = objid;
+	}
+
+	public String getTouchlabel() {
+		return touchlabel;
+	}
+
+	public void setTouchlabel(String touchlabel) {
+		this.touchlabel = touchlabel;
+	}
+
+	public String getTouchtype() {
+		return touchtype;
+	}
+
+	public void setTouchtype(String touchtype) {
+		this.touchtype = touchtype;
+	}
+
+	public Integer getTouchbundleid() {
+		return touchbundleid;
+	}
+
+	public void setTouchbundleid(Integer touchbundleid) {
+		this.touchbundleid = touchbundleid;
 	}
 
 	public Date getCreatetime() {

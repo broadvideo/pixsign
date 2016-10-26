@@ -134,7 +134,7 @@ public class LayoutAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String layoutid = getParameter("layoutid");
-			bundleService.syncBundleLayoutByLayout(layoutid);
+			bundleService.syncBundleByLayout(layoutid);
 			logger.info("Layout sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -192,53 +192,6 @@ public class LayoutAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("LayoutAction doRegionList exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doWizard() {
-		try {
-			String taskid = layoutService.handleWizard(getLoginStaff(), layout, devices, devicegroups);
-			setDataid(taskid);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("LayoutAction doWizard exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doLayoutschedulesAdd() {
-		try {
-			if (devices != null) {
-				layoutService.addLayoutschedules(layoutschedules, devices);
-			}
-			if (devicegroups != null) {
-				layoutService.addLayoutschedules(layoutschedules, devicegroups);
-			}
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("LayoutAction doLayoutschedulesAdd exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doRegionschedulesAdd() {
-		try {
-			if (devices != null) {
-				layoutService.addRegionschedules(regionschedules, devices);
-			}
-			if (devicegroups != null) {
-				layoutService.addRegionschedules(regionschedules, devicegroups);
-			}
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("LayoutAction doRegionschedulesAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

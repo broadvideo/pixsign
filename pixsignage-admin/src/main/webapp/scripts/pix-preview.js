@@ -49,12 +49,12 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 	layoutdtlhtml += '%; left: ' + 100*layoutdtl.leftoffset/layout.width;
 	layoutdtlhtml += '%; border: 1px solid #000; ">';
 	var bgcolor = layoutdtl.bgcolor;
-	if (layoutdtl.region.regionid == 1) {
+	if (layoutdtl.mainflag == 1) {
 		bgcolor = '#6Fa8DC';
-	} else if (layoutdtl.region.type == 0) {
+	} else if (layoutdtl.type == 0) {
 		bgcolor = '#FFF2CC';
 	}
-	if (layoutdtl.region.type != 0) {
+	if (layoutdtl.type != 0) {
 		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bgcolor;
 		layoutdtlhtml += '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 	} else {
@@ -62,11 +62,11 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '; "></div>';
 	}
 	layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (layoutdtl.region.type == 0) {
+	if (layoutdtl.type == 0) {
 		if (layoutdtl.bgimage != null) {
 			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
-	} else if (layoutdtl.region.type == 1) {
+	} else if (layoutdtl.type == 1) {
 		if (layoutdtl.direction == 4) {
 			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
 			layoutdtlhtml += '滚动文本';
@@ -76,31 +76,31 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 			layoutdtlhtml += '静止文本';
 			layoutdtlhtml += '</p>';
 		}
-	} else if (layoutdtl.region.type == 2) {
+	} else if (layoutdtl.type == 2) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.region.type == 3) {
+	} else if (layoutdtl.type == 3) {
 		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 4) {
+	} else if (layoutdtl.type == 4) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'Video-In';
 		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.region.type == 5) {
+	} else if (layoutdtl.type == 5) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'DVB';
 		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.region.type == 6) {
+	} else if (layoutdtl.type == 6) {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'STREAM';
 		layoutdtlhtml += '</p>';
 	} else {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += layoutdtl.region.name;
+		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
 		layoutdtlhtml += '</p>';
 	}
 	layoutdtlhtml += '</div>';
@@ -174,7 +174,7 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	//bundledtlhtml += '%; border: 1px solid #000; ">';
 	bundledtlhtml += '%; ">';
 
-	if (bundledtl.layoutdtl.region.type == 0) {
+	if (bundledtl.layoutdtl.type == 0) {
 		if (bundledtl.objtype == 3) {
 			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#A4C2F4; "></div>';
 		} else if (bundledtl.objtype == 5) {
@@ -188,13 +188,13 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	}
 
 	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (bundledtl.layoutdtl.region.type == 0) {
+	if (bundledtl.layoutdtl.type == 0) {
 		if (bgimage != null) {
 			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		} else if (bundledtl.layoutdtl.bgimage != null) {
 			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
-	} else if (bundledtl.layoutdtl.region.type == 1) {
+	} else if (bundledtl.layoutdtl.type == 1) {
 		if (bundledtl.layoutdtl.direction == 4 && dynamic == 1) {
 			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
@@ -204,21 +204,21 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 			bundledtlhtml += bundledtl.text.text;
 			bundledtlhtml += '</p>';
 		}
-	} else if (bundledtl.layoutdtl.region.type == 2) {
+	} else if (bundledtl.layoutdtl.type == 2) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.region.type == 3) {
+	} else if (bundledtl.layoutdtl.type == 3) {
 		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
 		bundledtlhtml += '<img src="../img/duoyun.png" />';
 		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 4) {
+	} else if (bundledtl.layoutdtl.type == 4) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'Video-In';
 		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.region.type == 5) {
+	} else if (bundledtl.layoutdtl.type == 5) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		if (bundledtl.dvb != null) {
 			bundledtlhtml += bundledtl.dvb.name;
@@ -226,13 +226,21 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 			bundledtlhtml += 'DVB';
 		}
 		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.region.type == 6) {
+	} else if (bundledtl.layoutdtl.type == 6) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'STREAM';
 		bundledtlhtml += '</p>';
+	} else if (bundledtl.layoutdtl.type == 7) {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		if (bundledtl.touchlabel != null) {
+			bundledtlhtml += bundledtl.touchlabel;
+		} else {
+			bundledtlhtml += eval('common.view.region_type_7');
+		}
+		bundledtlhtml += '</p>';
 	} else {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
 		bundledtlhtml += '</p>';
 	}
 	bundledtlhtml += '</div>';
@@ -314,7 +322,7 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 		}(region_bgimage, ctx, left, top, width, height);
 	} else {
 		if (fill) {
-			ctx.fillStyle = RegionColors[layoutdtl.regionid];
+			ctx.fillStyle = RegionColors[layoutdtl.type];
 			ctx.fillRect(left,top,width,height);
 		}
 	}

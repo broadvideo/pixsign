@@ -30,19 +30,11 @@ public class ActivemqNormalTask {
 			}
 			workflag = true;
 
-			List<Msgevent> msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Layout_Schedule,
+			List<Msgevent> msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Bundle_Schedule,
 					Msgevent.ObjType_1_Device, null, Msgevent.Status_Wait, null, null);
 			handleMsgevent(msgeventList);
 
-			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Layout_Schedule, Msgevent.ObjType_1_DeviceGroup,
-					null, Msgevent.Status_Wait, null, null);
-			handleMsgevent(msgeventList);
-
-			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Region_Schedule, Msgevent.ObjType_1_Device, null,
-					Msgevent.Status_Wait, null, null);
-			handleMsgevent(msgeventList);
-
-			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Region_Schedule, Msgevent.ObjType_1_DeviceGroup,
+			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_DeviceGroup,
 					null, Msgevent.Status_Wait, null, null);
 			handleMsgevent(msgeventList);
 		} catch (Exception e) {
@@ -54,15 +46,10 @@ public class ActivemqNormalTask {
 	private void handleMsgevent(List<Msgevent> msgeventList) throws Exception {
 		for (Msgevent msgevent : msgeventList) {
 			JSONObject msgJson;
-			if (msgevent.getMsgtype().equals(Msgevent.MsgType_Layout_Schedule)) {
-				msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "LAYOUT");
-				JSONObject msgBodyJson = bundleService.generateBundleLayoutJson(msgevent.getObjtype1(),
+			if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
+				msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "BUNDLE");
+				JSONObject msgBodyJson = bundleService.generateBundleScheduleJson(msgevent.getObjtype1(),
 						"" + msgevent.getObjid1());
-				msgJson.put("msg_body", msgBodyJson);
-			} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Region_Schedule)) {
-				msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "REGION");
-				JSONObject msgBodyJson = bundleService.generateBundleRegionJson(msgevent.getObjtype1(),
-						"" + msgevent.getObjid1(), "" + msgevent.getObjid2());
 				msgJson.put("msg_body", msgBodyJson);
 			} else {
 				continue;

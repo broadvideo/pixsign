@@ -5,7 +5,6 @@ var myurls = {
 	'common.delete' : 'layout!delete.action',
 	'layout.dtllist' : 'layout!dtllist.action',
 	'layout.design' : 'layout!design.action',
-	'layout.regionlist' : 'layout!regionlist.action',
 	'image.list' : 'image!list.action',
 };
 
@@ -22,26 +21,6 @@ $(window).resize(function(e) {
 		redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, Math.floor($('#LayoutDiv-' + layout.layoutid).parent().parent().width()));
 	}
 });
-
-function drawCanvasRegion(ctx, layoutdtl, left, top, width, height, fill) {
-	if (layoutdtl.bgimage != null) {
-		var region_bgimage = new Image();
-		region_bgimage.src = '/pixsigdata/image/preview/' + layoutdtl.bgimage.filename;
-		region_bgimage.onload = function(img, ctx, left, top, width, height) {
-			return function() {
-				ctx.drawImage(img, left, top, width, height);
-			}
-		}(region_bgimage, ctx, left, top, width, height);
-	} else {
-		if (fill) {
-			ctx.fillStyle = RegionColors[layoutdtl.regionid];
-			ctx.fillRect(left,top,width,height);
-		}
-	}
-	ctx.strokeStyle = '#000000';
-	ctx.lineWidth = 2;
-	ctx.strokeRect(left,top,width,height);
-};
 
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
@@ -368,11 +347,6 @@ $('#LayoutModal').on('shown.bs.modal', function (e) {
 //在设计对话框中进行提交
 $('[type=submit]', $('#LayoutModal')).on('click', function(event) {
 	if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
-		for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
-			if (('' + CurrentLayout.layoutdtls[i].layoutdtlid).indexOf('R') == 0) {
-				CurrentLayout.layoutdtls[i].layoutdtlid = '0';
-			}
-		}
 		$.ajax({
 			type : 'POST',
 			url : myurls['layout.design'],

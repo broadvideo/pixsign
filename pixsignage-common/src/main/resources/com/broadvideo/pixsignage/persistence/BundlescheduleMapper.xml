@@ -70,7 +70,15 @@
     select 
     distinct bindtype, bindid
     from bundleschedule
-    where bundleid = '${bundleid}'
+    where bundleid = #{bundleid}
+  </select>
+  
+  <select id="selectBindListByLayout" resultMap="BindResultMap" >
+    select 
+    distinct bindtype, bindid
+    from bundleschedule bs, bundle b
+    where bs.bundleid=b.bundleid
+    and b.layoutid = #{layoutid}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

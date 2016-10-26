@@ -104,6 +104,7 @@ var oTable = $('#MyTable').dataTable({
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'reviewflag','value':'0' });
+		aoData.push({'name':'touchflag','value':'0' });
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -261,7 +262,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		border = '3px solid #FF0000';
 	}
 	var bundledtlindex = bundle.bundledtls.indexOf(bundledtl);
-	if (bundledtl.layoutdtl.region.type == 0) {
+	if (bundledtl.layoutdtl.type == 0) {
 		if (bundledtl.objtype == 3) {
 			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#A4C2F4; "></div>';
 		} else if (bundledtl.objtype == 5) {
@@ -276,7 +277,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 1) {
+	} else if (bundledtl.layoutdtl.type == 1) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (bundledtl.layoutdtl.direction == 4) {
@@ -289,14 +290,14 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 			bundledtlhtml += '</p>';
 		}
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 2) {
+	} else if (bundledtl.layoutdtl.type == 2) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 3) {
+	} else if (bundledtl.layoutdtl.type == 3) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
@@ -305,21 +306,21 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 4) {
+	} else if (bundledtl.layoutdtl.type == 4) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'Video-In';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 5) {
+	} else if (bundledtl.layoutdtl.type == 5) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'DVB';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 6) {
+	} else if (bundledtl.layoutdtl.type == 6) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
@@ -330,7 +331,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
 	}
@@ -340,7 +341,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 function enterBundledtlFocus(bundledtl) {
 	redrawBundle($('#BundleDiv'), CurrentBundle, bundledtl);
 	$('#BundledtlEditForm').css('display' , 'block');
-	$('.bundledtl-title').html(bundledtl.layoutdtl.region.name);
+	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type));
 	
 	if (CurrentBundledtl.objtype == 1) {
 		$('.bundledtl-objtype').html('媒体列表');
@@ -433,7 +434,7 @@ $('#BundleDiv').click(function(e){
 		//CurrentBundledtl = bundledtls[0];
 		var index = 10000;
 		for (var i=0; i<bundledtls.length; i++) {
-			if (CurrentBundledtl != null && CurrentBundledtl.layoutdtl.regionid == bundledtls[i].layoutdtl.regionid) {
+			if (CurrentBundledtl != null && CurrentBundledtl.bundledtlid == bundledtls[i].bundledtlid) {
 				index = i;
 				break;
 			}

@@ -330,33 +330,7 @@ public class PixsignageService {
 	public String getlayout(String request) {
 		try {
 			logger.info("Pixsignage Service get_layout: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1002, "硬件码不能为空");
-			}
-			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1003, "终端号不能为空");
-			}
-			Device device = deviceMapper.selectByTerminalid(terminalid);
-			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
-			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1006, "硬件码和终端号不匹配");
-			}
-
-			JSONObject responseJson;
-			if (device.getDevicegroupid() > 0) {
-				responseJson = bundleService.generateBundleLayoutJson("2", "" + device.getDevicegroupid());
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				responseJson = bundleService.generateBundleLayoutJson("1", "" + device.getDeviceid());
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
-			responseJson.put("code", 0).put("message", "成功");
-			logger.info("Pixsignage Service get_layout response: {}", responseJson.toString());
-			return responseJson.toString();
+			return handleResult(1002, "不支持此命令");
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_layout exception", e);
 			return handleResult(1001, "系统异常");
@@ -368,37 +342,7 @@ public class PixsignageService {
 	public String getregion(String request) {
 		try {
 			logger.info("Pixsignage Service get_region: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			int regionid = requestJson.getInt("region_id");
-			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1002, "硬件码不能为空");
-			}
-			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1003, "终端号不能为空");
-			}
-			Device device = deviceMapper.selectByTerminalid(terminalid);
-			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
-			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1006, "硬件码和终端号不匹配");
-			}
-			if (regionid == 0) {
-				return handleResult(1007, "无效region_id");
-			}
-
-			JSONObject responseJson;
-			if (device.getDevicegroupid() > 0) {
-				responseJson = bundleService.generateBundleRegionJson("2", "" + device.getDevicegroupid(),
-						"" + regionid);
-			} else {
-				responseJson = bundleService.generateBundleRegionJson("1", "" + device.getDeviceid(), "" + regionid);
-			}
-			responseJson.put("code", 0).put("message", "成功");
-
-			logger.info("Pixsignage Service get_region response: {}", responseJson.toString());
-			return responseJson.toString();
+			return handleResult(1002, "不支持此命令");
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_region exception", e);
 			return handleResult(1001, "系统异常");

@@ -185,7 +185,10 @@ function refreshBundleScheduleDetail() {
 $.ajax({
 	type : 'POST',
 	url : 'bundle!list.action',
-	data : {reviewflag: '1'},
+	data : {
+		reviewflag: '1',
+		homeflag: '1',
+	},
 	success : function(data, status) {
 		if (data.errorcode == 0) {
 			Bundles = data.aaData;

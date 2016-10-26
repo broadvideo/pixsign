@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Layoutdtl" >
     <id column="layoutdtlid" property="layoutdtlid" jdbcType="INTEGER" />
     <result column="layoutid" property="layoutid" jdbcType="INTEGER" />
-    <result column="regionid" property="regionid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="mainflag" property="mainflag" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
@@ -23,12 +24,11 @@
     <result column="fitflag" property="fitflag" jdbcType="CHAR" />
     <result column="volume" property="volume" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <association property="region" column="{regionid=regionid}" select="com.broadvideo.pixsignage.persistence.RegionMapper.selectByPrimaryKey" />
     <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    layoutdtlid, layoutid, regionid, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, sleeptime, intervaltime, 
+    layoutdtlid, layoutid, type, mainflag, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, sleeptime, intervaltime, 
     direction, speed, color, size, dateformat, fitflag, volume, createtime
   </sql>
   
@@ -45,14 +45,6 @@
     order by zindex, layoutdtlid
   </select>
 
-  <select id="selectByBundledtlid" resultMap="BaseResultMap">
-    select ld.* from layoutdtl ld, bundle b, bundledtl bd
-    where bd.bundledtlid = #{bundledtlid}
-    and ld.layoutid = b.layoutid
-    and ld.regionid = bd.regionid
-    and b.bundleid = bd.bundleid
-  </select>
-
   <delete id="deleteByPrimaryKey" >
     delete from layoutdtl
     where layoutdtlid = #{layoutdtlid}
@@ -62,13 +54,15 @@
     <selectKey resultType="java.lang.Integer" keyProperty="layoutdtlid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into layoutdtl (layoutid, regionid, height, 
+    insert into layoutdtl (layoutid, 
+      type, mainflag, height, 
       width, topoffset, leftoffset, 
       zindex, bgcolor, opacity, 
       bgimageid, sleeptime, intervaltime, direction, 
       speed, color, size, 
       dateformat, fitflag, volume, createtime)
-    values (#{layoutid,jdbcType=INTEGER}, #{regionid,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+    values (#{layoutid,jdbcType=INTEGER}, 
+      #{type,jdbcType=VARCHAR}, #{mainflag,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{opacity,jdbcType=INTEGER}, 
       #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
@@ -84,8 +78,11 @@
       <if test="layoutid != null" >
         layoutid,
       </if>
-      <if test="regionid != null" >
-        regionid,
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="mainflag != null" >
+        mainflag,
       </if>
       <if test="height != null" >
         height,
@@ -146,8 +143,11 @@
       <if test="layoutid != null" >
         #{layoutid,jdbcType=INTEGER},
       </if>
-      <if test="regionid != null" >
-        #{regionid,jdbcType=INTEGER},
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mainflag != null" >
+        #{mainflag,jdbcType=CHAR},
       </if>
       <if test="height != null" >
         #{height,jdbcType=INTEGER},
@@ -211,8 +211,11 @@
       <if test="layoutid != null" >
         layoutid = #{layoutid,jdbcType=INTEGER},
       </if>
-      <if test="regionid != null" >
-        regionid = #{regionid,jdbcType=INTEGER},
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mainflag != null" >
+        mainflag = #{mainflag,jdbcType=CHAR},
       </if>
       <if test="height != null" >
         height = #{height,jdbcType=INTEGER},
@@ -274,7 +277,8 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Layoutdtl" >
     update layoutdtl
     set layoutid = #{layoutid,jdbcType=INTEGER},
-      regionid = #{regionid,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      mainflag = #{mainflag,jdbcType=CHAR},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
       topoffset = #{topoffset,jdbcType=INTEGER},

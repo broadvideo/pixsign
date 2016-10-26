@@ -16,6 +16,8 @@ public interface BundlescheduleMapper {
 
 	List<HashMap<String, Object>> selectBindListByBundle(@Param(value = "bundleid") String bundleid);
 
+	List<HashMap<String, Object>> selectBindListByLayout(@Param(value = "layoutid") String layoutid);
+
 	int deleteByPrimaryKey(@Param(value = "bundlescheduleid") String bundlescheduleid);
 
 	int deleteByDtl(@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,

@@ -7,11 +7,24 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Layoutdtl {
+	public final static String Type_PLAY = "0";
+	public final static String Type_TEXT = "1";
+	public final static String Type_DATE = "2";
+	public final static String Type_WEATHER = "3";
+	public final static String Type_VIDEOIN = "4";
+	public final static String Type_DVB = "5";
+	public final static String Type_STREAM = "6";
+	public final static String Type_TOUCH = "7";
+	public final static String Type_A1 = "A1";
+	public final static String Type_A2 = "A2";
+
 	private Integer layoutdtlid;
 
 	private Integer layoutid;
 
-	private Integer regionid;
+	private String type;
+
+	private String mainflag;
 
 	private Integer height;
 
@@ -49,8 +62,6 @@ public class Layoutdtl {
 
 	private Date createtime;
 
-	private Region region;
-
 	private Image bgimage;
 
 	private List<HashMap<String, String>> regiondtls;
@@ -71,12 +82,20 @@ public class Layoutdtl {
 		this.layoutid = layoutid;
 	}
 
-	public Integer getRegionid() {
-		return regionid;
+	public String getType() {
+		return type;
 	}
 
-	public void setRegionid(Integer regionid) {
-		this.regionid = regionid;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getMainflag() {
+		return mainflag;
+	}
+
+	public void setMainflag(String mainflag) {
+		this.mainflag = mainflag;
 	}
 
 	public Integer getHeight() {
@@ -223,14 +242,6 @@ public class Layoutdtl {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
-	}
-
-	public Region getRegion() {
-		return region;
-	}
-
-	public void setRegion(Region region) {
-		this.region = region;
 	}
 
 	public Image getBgimage() {

@@ -11,10 +11,11 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Staff;
 
 public interface BundleService {
-	public int selectCount(String orgid, String branchid, String reviewflag, String search);
+	public int selectCount(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
+			String search);
 
-	public List<Bundle> selectList(String orgid, String branchid, String reviewflag, String search, String start,
-			String length);
+	public List<Bundle> selectList(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
+			String search, String start, String length);
 
 	public void addBundle(Bundle bundle);
 
@@ -30,15 +31,7 @@ public interface BundleService {
 
 	public void addBundleschedules(Bundleschedule[] bundleschedules);
 
-	public void syncBundleLayout(String bindtype, String bindid) throws Exception;
-
-	public JSONObject generateBundleLayoutJson(String bindtype, String bindid);
-
-	public void syncBundleRegions(String bindtype, String bindid) throws Exception;
-
-	public JSONObject generateBundleRegionJson(String bindtype, String bindid, String regionid);
-
-	public void syncBundleLayoutByLayout(String layoutid) throws Exception;
+	public void syncBundleByLayout(String layoutid) throws Exception;
 
 	public void syncBundle(String bundleid) throws Exception;
 

@@ -13,7 +13,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Pix Signage</title>
+<title>Digital Signage</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">
@@ -33,118 +33,36 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="${static_ctx}/admin/pages/css/timeline-old.css" rel="stylesheet" type="text/css"/>
-<link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
-				<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</div>
-							<div class="modal-body">
-								<form id="ScheduleForm" class="form-horizontal" method="POST">
-									<div class="form-body">
-										<input type="hidden" name="layoutschedule.layoutscheduleid" value="0" />
-										<input type="hidden" name="layoutschedule.bindtype" />
-										<input type="hidden" name="layoutschedule.bindid" />
-										<div class="form-group">
-											<label class="control-label col-md-3"><spring:message code="global.option"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="layoutschedule.playmode" value="2" checked> <spring:message code="global.daily"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-group date form_time">                                       
-													<input type="text" size="16" readonly class="form-control" name="layoutschedule.starttime">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.layout"/><span class="required">*</span></label>
-											<div class="col-md-9 pre-scrollable">
-												<table id="LayoutTable" class="table-striped"></table>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
-						</div>
-					</div>
-				</div>
-
 		<div class="page-content-wrapper">
 			<div class="page-content">
-			
-				<h3 class="page-title"><spring:message code="menu.layoutschedule"/></h3>
-				<div class="page-bar">
-					<ul class="page-breadcrumb">
-						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
-							class="fa fa-angle-right"></i>
-						</li>
-						<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
-						</li>
-						<li><a href="#"><spring:message code="menu.layoutschedule"/></a>
-						</li>
-					</ul>
-				</div>
-			
+		
 				<div class="row">
 					<div class="col-md-12">
-						<div class="portlet box blue">
-							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.layoutschedule"/></div>
-								<div class="tools">
-									<a href="javascript:;" onClick="refreshLayoutschedule();" class="reload"></a>
-								</div>
-								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
-									<li class="active"><a id="DevicegroupTab" href="#TopTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
-								</ul>
-							</div>
-							<div class="portlet-body">
-								<div class="tab-content">
-									<div class="tab-pane active" id="TopTab">
-										<div class="row">
-											<div class="col-md1 col-sm-1">
-												<h3 class="event-form-title"><spring:message code="global.select"/></h3>
-											</div>
-											<div class="col-md3 col-sm-3">
-												<input type="hidden" id="DeviceSelect" class="form-control select2">
-											</div>
-											<div class="col-md5 col-sm-5"  id="DeviceDetail">
-											</div>
-											<div class="col-md3 col-sm-3">
-												<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> <spring:message code="global.syncschedule"/></a>&nbsp;
-												<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> <spring:message code="global.addschedule"/></a>
-											</div>
-										</div>
-										<br/>
-										<div class="row">
-											<div class="col-md12 col-sm-12" id="ScheduleDetail">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						<h3 class="page-title"><spring:message code="global.dashboard"/></h3>
 					</div>
 				</div>
+		
+				<div class="row ">
+					<div class="col-md-6 col-sm-6">
+						<span id="CurrentDevices"></span><span id="MaxDevices" class="badge badge-danger" style="float: right;"></span>
+						<div class="progress">
+							<div id="CurrentDevicesProgress" class="progress-bar " role="progressbar" style="width: 0%"></div>
+						</div>
+					</div>
+		
+					<div class="col-md-6 col-sm-6">
+						<span id="CurrentStorage"></span><span id="MaxStorage" class="badge badge-danger" style="float: right;"></span>
+						<div class="progress">
+							<div id="CurrentStorageProgress" class="progress-bar " role="progressbar" style="width: 0%"></div>
+						</div>
+					</div>
+		
+				</div>
+		
 			</div>
 		</div>
 
@@ -191,22 +109,25 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+
+<script src="${static_ctx}/global/plugins/flot/jquery.flot.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/flot/jquery.flot.resize.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-layout-schedule.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-vspmain.js?t=0"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initLayoutSchedules();
+	initLicense();
 });
 
 </script>

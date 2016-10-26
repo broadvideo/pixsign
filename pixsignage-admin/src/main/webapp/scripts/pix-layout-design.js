@@ -1,14 +1,26 @@
 var RegionColors = [];
-RegionColors[0] = '#BCC2F2';
-RegionColors[1] = '#99CCFF';
-RegionColors[2] = '#CCCC99';
-RegionColors[3] = '#CCCC99';
-RegionColors[4] = '#FFCCCC';
-RegionColors[5] = '#FF99CC';
-RegionColors[6] = '#CC99CC';
-RegionColors[7] = '#FFFF99';
-RegionColors[8] = '#CC9966';
-RegionColors[9] = '#CC9966';
+RegionColors['0'] = '#BCC2F2';
+RegionColors['1'] = '#99CCFF';
+RegionColors['2'] = '#CCCC99';
+RegionColors['3'] = '#CCCC99';
+RegionColors['4'] = '#FFCCCC';
+RegionColors['5'] = '#FF99CC';
+RegionColors['6'] = '#CC99CC';
+RegionColors['7'] = '#FFFF99';
+RegionColors['A1'] = '#CC9966';
+RegionColors['A2'] = '#CC9966';
+
+var RegionLimits = [];
+RegionLimits['0'] = 6;
+RegionLimits['1'] = 4;
+RegionLimits['2'] = 2;
+RegionLimits['3'] = 1;
+RegionLimits['4'] = 1;
+RegionLimits['5'] = 1;
+RegionLimits['6'] = 4;
+RegionLimits['7'] = 6;
+RegionLimits['A1'] = 1;
+RegionLimits['A2'] = 1;
 
 var CurrentLayoutid = 0;
 var CurrentLayout;
@@ -72,20 +84,20 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		border = '3px solid #FF0000';
 	}
 	var bgcolor = layoutdtl.bgcolor;
-	if (layoutdtl.region.regionid == 1) {
+	if (layoutdtl.mainflag == 1) {
 		bgcolor = '#6Fa8DC';
-	} else if (layoutdtl.region.type == 0) {
+	} else if (layoutdtl.type == 0) {
 		bgcolor = '#FFF2CC';
 	}
 	var layoutdtlindex = layout.layoutdtls.indexOf(layoutdtl);
-	if (layoutdtl.region.type == 0) {
+	if (layoutdtl.type == 0) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (layoutdtl.bgimage != null) {
 			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 1) {
+	} else if (layoutdtl.type == 1) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (layoutdtl.direction == 4) {
@@ -98,14 +110,14 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 			layoutdtlhtml += '</p>';
 		}
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 2) {
+	} else if (layoutdtl.type == 2) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 3) {
+	} else if (layoutdtl.type == 3) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
@@ -114,21 +126,21 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 4) {
+	} else if (layoutdtl.type == 4) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'Video-In';
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 5) {
+	} else if (layoutdtl.type == 5) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += 'DVB';
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.region.type == 6) {
+	} else if (layoutdtl.type == 6) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
@@ -139,13 +151,13 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += layoutdtl.region.name;
+		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
 	}
 
 	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
-	layoutdtlhtml += '<label class="btn btn-circle btn-default btn-xs">' + layoutdtl.region.name + '</label>';
+	layoutdtlhtml += '<label class="btn btn-circle btn-default btn-xs">' + eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type) + '</label>';
 	layoutdtlhtml += '</div>';
 	div.html(layoutdtlhtml);
 
@@ -282,23 +294,6 @@ function refreshRegionBgImageSelect() {
 	});
 }
 
-
-$.ajax({
-	type : "GET",
-	url : 'layout!regionlist.action',
-	data : {},
-	success : function(data, status) {
-		if (data.errorcode == 0) {
-			TempRegions = data.aaData;
-		} else {
-			bootbox.alert(common.tips.error + data.errormsg);
-		}
-	},
-	error : function() {
-		bootbox.alert(common.tips.error);
-	}
-});
-
 function regionPositionUpdate(e, ui) {
 	var w = $(this).width() / $('#LayoutDiv').width();
 	var h = $(this).height() / $('#LayoutDiv').height();
@@ -357,13 +352,10 @@ function updateRegionBtns() {
 }
 
 function updateRegionBtn(regiontype) {
-	var regions = TempRegions.filter(function (el) {
+	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
 		return el.type == regiontype;
 	});
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-		return el.region.type == regiontype;
-	});
-	if (regions.length > layoutdtls.length) {
+	if (RegionLimits[regiontype] > layoutdtls.length) {
 		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('disabled');
 		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('default');
 		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('yellow');
@@ -441,33 +433,10 @@ function enterLayoutdtlFocus(layoutdtl) {
 	redrawLayout($('#LayoutDiv'), CurrentLayout, layoutdtl);
 	$('#LayoutEditForm').css('display' , 'none');
 	$('#LayoutdtlEditForm').css('display' , 'block');
-	$('.layoutdtl-title').html(layoutdtl.region.name);
-	if (layoutdtl.region.type == 0) {
-		$('.textflag').css("display", "none");
-		$('.dateflag').css("display", "none");
-		$('.weatherflag').css("display", "none");
-		$('.nontextflag').css("display", "block");
-	} else if (layoutdtl.region.type == 1) {
-		$('.nontextflag').css("display", "none");
-		$('.dateflag').css("display", "none");
-		$('.weatherflag').css("display", "none");
-		$('.textflag').css("display", "block");
-	} else if (layoutdtl.region.type == 2) {
-		$('.nontextflag').css("display", "none");
-		$('.textflag').css("display", "none");
-		$('.weatherflag').css("display", "none");
-		$('.dateflag').css("display", "block");
-	} else if (layoutdtl.region.type == 3) {
-		$('.nontextflag').css("display", "none");
-		$('.textflag').css("display", "none");
-		$('.dateflag').css("display", "none");
-		$('.weatherflag').css("display", "block");
-	} else {
-		$('.nontextflag').css("display", "none");
-		$('.textflag').css("display", "none");
-		$('.dateflag').css("display", "none");
-		$('.weatherflag').css("display", "none");
-	}
+	$('.layoutdtl-title').html(eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type));
+	$('.layout-ctl').css("display", "none");
+	$('.regiontype-' + layoutdtl.type).css("display", "block");
+
 	$('#LayoutdtlEditForm').loadJSON(layoutdtl);
 	//$('.colorPick').colorpicker();
 	//$('.colorPick').colorpicker('setValue', layoutdtl.color);
@@ -613,7 +582,7 @@ $('#LayoutDiv').click(function(e){
 			//CurrentLayoutdtl = layoutdtls[0];
 			var index = 10000;
 			for (var i=0; i<layoutdtls.length; i++) {
-				if (CurrentLayoutdtl != null && CurrentLayoutdtl.regionid == layoutdtls[i].regionid) {
+				if (CurrentLayoutdtl != null && CurrentLayoutdtl.layoutdtlid == layoutdtls[i].layoutdtlid) {
 					index = i;
 					break;
 				}
@@ -690,32 +659,23 @@ $('body').on('click', '.pix-addregion', function(event) {
 		regiontype = $(event.target).parent().attr('regiontype');
 	}
 	
-	var index = -1;
-	for (var i=0; i<TempRegions.length; i++) {
-		var region = TempRegions[i];
-		if (region.type != regiontype) continue;
-		var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-			return el.regionid == region.regionid;
-		});
-		if (layoutdtls.length == 0) {
-			index = i;
-			break;
-		}
-	}
-	if (index < 0) {
+	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+		return el.type == regiontype;
+	});
+	if (RegionLimits[regiontype] <= layoutdtls.length) {
 		return;
 	}
 	
 	var layoutdtl = {};
-	layoutdtl.layoutdtlid = 'R' + Math.round(Math.random()*100000000);
+	layoutdtl.layoutdtlid = '-' + Math.round(Math.random()*100000000);
 	layoutdtl.layoutid = CurrentLayoutid;
-	layoutdtl.region = TempRegions[index];
-	layoutdtl.regionid = TempRegions[index].regionid;
+	layoutdtl.type = regiontype;
+	layoutdtl.mainflag = 0;
 	layoutdtl.leftoffset = CurrentLayout.height * 0.1;
 	layoutdtl.topoffset = CurrentLayout.width * 0.1;
 	layoutdtl.width = CurrentLayout.width * 0.2;
 	layoutdtl.height = CurrentLayout.height * 0.2;
-	if (layoutdtl.region.type == 0) {
+	if (layoutdtl.type == 0) {
 		layoutdtl.zindex = 1;
 	} else {
 		layoutdtl.zindex = 2;
@@ -734,7 +694,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.direction = 4;
 	layoutdtl.speed = 2;
 	layoutdtl.color = '#000000';
-	if (layoutdtl.region.type == '1' || layoutdtl.region.type == '2' || layoutdtl.region.type == '3') {
+	if (layoutdtl.type == '1' || layoutdtl.type == '2' || layoutdtl.type == '3') {
 		layoutdtl.size = 50;
 	} else {
 		layoutdtl.size = 30;
@@ -747,11 +707,11 @@ $('body').on('click', '.pix-addregion', function(event) {
 });
 
 $('body').on('click', '.pix-region-delete', function(event) {
-	if (CurrentLayoutdtl.region.regionid == 1) {
+	if (CurrentLayoutdtl.mainflag == 1) {
 		bootbox.alert(common.tips.region_remove_failed);
 		return;
 	}
-	bootbox.confirm(common.tips.remove + CurrentLayoutdtl.region.name, function(result) {
+	bootbox.confirm(common.tips.remove + eval('common.view.region_type_' + CurrentLayoutdtl.type), function(result) {
 		if (result == true) {
 			CurrentLayout.layoutdtls.splice(CurrentLayout.layoutdtls.indexOf(CurrentLayoutdtl), 1);
 			CurrentLayoutdtl = CurrentLayout.layoutdtls[0];

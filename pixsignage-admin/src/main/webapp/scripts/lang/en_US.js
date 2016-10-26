@@ -18,6 +18,7 @@ var common = {
 		dvb: 'DVB',
 		layout: 'Layout',
 
+		subbundle: 'Sub-Bundle',
 		schedule: 'Schedule',
 		layoutschedule: 'Layout Schedule',
 		regionschedule: 'Region Schedule',
@@ -67,6 +68,19 @@ var common = {
 		review_wait: 'Wait for Review',
 		review_passed: 'Review Passed',
 		review_rejected: 'Review Rejected',
+
+		region_mainflag_0: '',
+		region_mainflag_1: 'Main ',
+		region_type_0: 'Play Zone',
+		region_type_1: 'Text Zone',
+		region_type_2: 'Date Zone',
+		region_type_3: 'Weather Zone',
+		region_type_4: 'VideoIn Zone',
+		region_type_5: 'DVB Zone',
+		region_type_6: 'Stream Zone',
+		region_type_7: 'Touch Button',
+		region_type_A1: 'Lift Maintain',
+		region_type_A2: 'Lift Notice',
 
 		operation: 'Operation',
 		add: 'Add',

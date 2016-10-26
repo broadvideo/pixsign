@@ -64,14 +64,17 @@ public class BundleAction extends BaseDatatableAction {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 			String reviewflag = getParameter("reviewflag");
+			String touchflag = getParameter("touchflag");
+			String homeflag = getParameter("homeflag");
 
-			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), branchid, reviewflag, search);
+			int count = bundleService.selectCount("" + getLoginStaff().getOrgid(), branchid, reviewflag, touchflag,
+					homeflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Bundle> bundleList = bundleService.selectList("" + getLoginStaff().getOrgid(), branchid, reviewflag,
-					search, start, length);
+					touchflag, homeflag, search, start, length);
 			for (int i = 0; i < bundleList.size(); i++) {
 				aaData.add(bundleList.get(i));
 			}

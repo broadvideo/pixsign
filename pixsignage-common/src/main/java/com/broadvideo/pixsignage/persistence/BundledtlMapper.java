@@ -11,7 +11,8 @@ public interface BundledtlMapper {
 
 	List<Bundledtl> selectList(@Param(value = "bundleid") String bundleid);
 
-	Bundledtl selectByRegion(@Param(value = "bundleid") String bundleid, @Param(value = "regionid") String regionid);
+	Bundledtl selectByLayoutdtl(@Param(value = "bundleid") String bundleid,
+			@Param(value = "layoutdtlid") String layoutdtlid);
 
 	int deleteByPrimaryKey(@Param(value = "bundledtlid") String bundledtlid);
 

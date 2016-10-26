@@ -1,17 +1,18 @@
 var RegionColors = [];
-RegionColors[0] = '#BCC2F2';
-RegionColors[1] = '#99CCFF';
-RegionColors[2] = '#CCCC99';
-RegionColors[3] = '#CCCC99';
-RegionColors[4] = '#FFCCCC';
-RegionColors[5] = '#FF99CC';
-RegionColors[6] = '#CC99CC';
-RegionColors[7] = '#FFFF99';
-RegionColors[8] = '#CC9966';
-RegionColors[9] = '#CC9966';
+RegionColors['0'] = '#BCC2F2';
+RegionColors['1'] = '#99CCFF';
+RegionColors['2'] = '#CCCC99';
+RegionColors['3'] = '#CCCC99';
+RegionColors['4'] = '#FFCCCC';
+RegionColors['5'] = '#FF99CC';
+RegionColors['6'] = '#CC99CC';
+RegionColors['7'] = '#FFFF99';
+RegionColors['A1'] = '#CC9966';
+RegionColors['A2'] = '#CC9966';
 
 var CurrentBundle;
 var CurrentBundledtl;
+var CurrentSubBundles;
 
 function refreshTableFromBranchDropdown() {
 	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
@@ -100,7 +101,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		border = '3px solid #FF0000';
 	}
 	var bundledtlindex = bundle.bundledtls.indexOf(bundledtl);
-	if (bundledtl.layoutdtl.region.type == 0) {
+	if (bundledtl.layoutdtl.type == 0) {
 		if (bundledtl.objtype == 3) {
 			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#A4C2F4; "></div>';
 		} else if (bundledtl.objtype == 5) {
@@ -115,7 +116,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 1) {
+	} else if (bundledtl.layoutdtl.type == 1) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (bundledtl.layoutdtl.direction == 4) {
@@ -128,14 +129,14 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 			bundledtlhtml += '</p>';
 		}
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 2) {
+	} else if (bundledtl.layoutdtl.type == 2) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 3) {
+	} else if (bundledtl.layoutdtl.type == 3) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
@@ -144,32 +145,43 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 4) {
+	} else if (bundledtl.layoutdtl.type == 4) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'Video-In';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 5) {
+	} else if (bundledtl.layoutdtl.type == 5) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'DVB';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.region.type == 6) {
+	} else if (bundledtl.layoutdtl.type == 6) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += 'STREAM';
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.type == 7) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		if (bundledtl.touchlabel != null) {
+			bundledtlhtml += bundledtl.touchlabel;
+		} else {
+			bundledtlhtml += eval('common.view.region_type_7');
+		}
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
 	} else {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += bundledtl.layoutdtl.region.name;
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
 	}
@@ -178,11 +190,11 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 
 function generateBundledtlHtml(bundledtl) {
 	var bundledtlhtml = '';
-	bundledtlhtml += '<div id="bundledtl_' + bundledtl.bundledtlid + '" regionenabled="1" bundledtlid="' + bundledtl.bundledtlid + '" name="' + bundledtl.layoutdtl.region.name + '"';
+	bundledtlhtml += '<div id="bundledtl_' + bundledtl.bundledtlid + '" regionenabled="1" bundledtlid="' + bundledtl.bundledtlid + '" name="' + eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type) + '"';
 	bundledtlhtml += 'ondblclick="" ';
 	bundledtlhtml += 'class="region" ';
 	bundledtlhtml += 'style="position: absolute; width:' + 100*bundledtl.layoutdtl.width/CurrentBundle.layout.width + '%; height:' + 100*bundledtl.layoutdtl.height/CurrentBundle.layout.height + '%; top: ' + 100*bundledtl.layoutdtl.topoffset/CurrentBundle.layout.height + '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/CurrentBundle.layout.width + '%;">';
-	bundledtlhtml += ' <div id="bundledtl_bg_' + bundledtl.bundledtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[bundledtl.layoutdtl.regionid] + '; opacity:.80; filter:alpha(opacity=80);">';
+	bundledtlhtml += ' <div id="bundledtl_bg_' + bundledtl.bundledtlid + '" style="position:absolute; width:100%; height:100%; background-color:' + RegionColors[bundledtl.layoutdtl.type] + '; opacity:.80; filter:alpha(opacity=80);">';
 	if (bundledtl.layoutdtl.bgimage != null) {
 		bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail+ '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	}
@@ -200,7 +212,7 @@ function validBundledtl(bundledtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		if (CurrentBundledtl.layoutdtl.region.type < 2) {
+		if (CurrentBundledtl.layoutdtl.type < 2) {
 			var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
 			var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
 			if (type == undefined) {
@@ -217,10 +229,6 @@ function validBundledtl(bundledtl) {
 					bundledtl.text0.text = $('#BundledtlEditForm textarea[name="bundledtl.text.text"]').val();
 					bundledtl.objid = bundledtl.text0.textid;
 					bundledtl.text = bundledtl.text0;
-				} else if (objtype == 3) {
-					bundledtl.stream0.url = $('#BundledtlEditForm input[name="bundledtl.stream.url"]').val();
-					bundledtl.objid = bundledtl.stream0.streamid;
-					bundledtl.stream = bundledtl.stream0;
 				} else if (objtype == 5) {
 					bundledtl.widget0.url = $('#BundledtlEditForm input[name="bundledtl.widget.url"]').val();
 					bundledtl.objid = bundledtl.widget0.widgetid;
@@ -233,9 +241,6 @@ function validBundledtl(bundledtl) {
 				} else if (objtype == 2) {
 					bundledtl.text1 = $('#BundledtlSelect').select2('data').text;
 					bundledtl.text = bundledtl.text1;
-				} else if (objtype == 3) {
-					bundledtl.stream1 = $('#BundledtlSelect').select2('data').stream;
-					bundledtl.stream = bundledtl.stream1;
 				} else if (objtype == 5) {
 					bundledtl.widget1 = $('#BundledtlSelect').select2('data').widget;
 					bundledtl.widget = bundledtl.widget1;
@@ -244,15 +249,56 @@ function validBundledtl(bundledtl) {
 			}
 			bundledtl.type = type;
 			bundledtl.objtype = objtype;
-		} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+		} else if (CurrentBundledtl.layoutdtl.type == 5) {
 			bundledtl.dvb1 = $('#BundledtlSelect').select2('data').dvb;
 			bundledtl.dvb = bundledtl.dvb1;
 			bundledtl.objid = $('#BundledtlSelect').val();
 			bundledtl.type = 1;
 			bundledtl.objtype = 6;
-		} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+		} else if (CurrentBundledtl.layoutdtl.type == 6) {
 			bundledtl.objid = bundledtl.medialist0.medialistid;
 			bundledtl.medialist = bundledtl.medialist0;
+		} else if (CurrentBundledtl.layoutdtl.type == 7) {
+			bundledtl.touchlabel = $('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val();
+			bundledtl.touchtype = $('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val();
+			if (bundledtl.touchtype == 2 && $('#SubBundleSelect').select2('data') != null) {
+				bundledtl.touchbundleid = $('#SubBundleSelect').select2('data').id;
+			}
+			if (bundledtl.touchtype == 3) {
+				var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
+				var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
+				if (type == undefined) {
+					type = 0;
+				}
+				if (objtype == undefined) {
+					objtype = 0;
+				}
+				if (type == 0) {
+					if (objtype == 1) {
+						bundledtl.objid = bundledtl.medialist0.medialistid;
+						bundledtl.medialist = bundledtl.medialist0;
+					} else if (objtype == 5) {
+						bundledtl.widget0.url = $('#BundledtlEditForm input[name="bundledtl.widget.url"]').val();
+						bundledtl.objid = bundledtl.widget0.widgetid;
+						bundledtl.widget = bundledtl.widget0;
+					}
+				} else {
+					if (objtype == 1) {
+						bundledtl.medialist1 = $('#BundledtlSelect').select2('data').medialist;
+						bundledtl.medialist = bundledtl.medialist1;
+					} else if (objtype == 5) {
+						bundledtl.widget1 = $('#BundledtlSelect').select2('data').widget;
+						bundledtl.widget = bundledtl.widget1;
+					}
+					bundledtl.objid = $('#BundledtlSelect').val();
+				}
+				bundledtl.type = type;
+				bundledtl.objtype = objtype;
+			} else {
+				bundledtl.type = 0;
+				bundledtl.objtype = 0;
+				bundledtl.objid = 0;
+			}
 		}
 		
 		return true;
@@ -263,7 +309,7 @@ function validBundledtl(bundledtl) {
 function enterBundledtlFocus(bundledtl) {
 	redrawBundle($('#BundleDiv'), CurrentBundle, bundledtl);
 	$('#BundledtlEditForm').css('display' , 'block');
-	$('.bundledtl-title').html(bundledtl.layoutdtl.region.name);
+	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type));
 	
 	var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
 	$('input[name="bundledtl.type"][value="' + type + '"]').attr('checked', false);
@@ -275,6 +321,11 @@ function enterBundledtlFocus(bundledtl) {
 	$('input[name="bundledtl.objtype"][value="' + objtype + '"]').parent().removeClass('checked');
 	$('input[name="bundledtl.objtype"][value="' + bundledtl.objtype + '"]').attr('checked', true);
 	$('input[name="bundledtl.objtype"][value="' + bundledtl.objtype + '"]').parent().addClass('checked');
+	var touchtype = $('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val();
+	$('input[name="bundledtl.touchtype"][value="' + touchtype + '"]').attr('checked', false);
+	$('input[name="bundledtl.touchtype"][value="' + touchtype + '"]').parent().removeClass('checked');
+	$('input[name="bundledtl.touchtype"][value="' + bundledtl.touchtype + '"]').attr('checked', true);
+	$('input[name="bundledtl.touchtype"][value="' + bundledtl.touchtype + '"]').parent().addClass('checked');
 
 	if (CurrentBundledtl.objtype == 2 && CurrentBundledtl.type == 0) {
 		$('#BundledtlEditForm textarea[name="bundledtl.text.text"]').val(CurrentBundledtl.text0.text);
@@ -284,52 +335,82 @@ function enterBundledtlFocus(bundledtl) {
 		$('#BundledtlEditForm input[name="bundledtl.widget.url"]').val(CurrentBundledtl.widget0.url);
 	}
 
+	$('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val(CurrentBundledtl.touchlabel);
+	
 	refreshBundledtlEdit();
 	refreshBundledtlSelect();
+	refreshSubBundleSelect();
 	refreshMedialistDtl();
 }
 
 function refreshBundledtlEdit() {
 	$('.bundle-ctl').css("display", "none");
-	if (CurrentBundledtl.layoutdtl.region.type < 2) {
-		if (CurrentBundledtl.layoutdtl.region.type == 0) {
-			$('.regiontype-0').css("display", "block");
-			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
-		} else if (CurrentBundledtl.layoutdtl.region.type == 1) {
-			$('.regiontype-1').css("display", "block");
-		} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
-			$('.regiontype-6').css("display", "block");
-		}
-		if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == '1') {
+	if (CurrentBundledtl.layoutdtl.type == 0) {
+		$('.regiontype-0').css("display", "block");
+		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+		if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
 			$('.public-0').css("display", "none");
-		} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == '0') {
+		} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
 			$('.public-1').css("display", "none");
-			if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == '1') {
+			if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 1) {
 				$('.objtype-2').css("display", "none");
 				$('.objtype-3').css("display", "none");
 				$('.objtype-4').css("display", "none");
 				$('.objtype-5').css("display", "none");
-			} else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == '2') {
-				$('.objtype-1').css("display", "none");
-				$('.objtype-3').css("display", "none");
-				$('.objtype-4').css("display", "none");
-				$('.objtype-5').css("display", "none");
-			} else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == '3') {
-				$('.objtype-1').css("display", "none");
-				$('.objtype-2').css("display", "none");
-				$('.objtype-4').css("display", "none");
-				$('.objtype-5').css("display", "none");
-			} else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == '5') {
+			} else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 5) {
 				$('.objtype-1').css("display", "none");
 				$('.objtype-2').css("display", "none");
 				$('.objtype-3').css("display", "none");
 				$('.objtype-4').css("display", "none");
 			}
 		}
-	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+	} else if (CurrentBundledtl.layoutdtl.type == 1) {
+		$('.regiontype-1').css("display", "block");
+		if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
+			$('.public-0').css("display", "none");
+		} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
+			$('.public-1').css("display", "none");
+			$('.objtype-1').css("display", "none");
+			$('.objtype-3').css("display", "none");
+			$('.objtype-4').css("display", "none");
+			$('.objtype-5').css("display", "none");
+		}
+	} else if (CurrentBundledtl.layoutdtl.type == 5) {
 		$('.regiontype-5').css("display", "block");
-	} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+	} else if (CurrentBundledtl.layoutdtl.type == 6) {
 		$('.regiontype-6').css("display", "block");
+	} else if (CurrentBundledtl.layoutdtl.type == 7) {
+		$('.regiontype-7').css("display", "block");
+		if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() < 2) {
+			$('.touchtype-2').css("display", "none");
+			$('.touchtype-3').css("display", "none");
+		} else if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() == 2) {
+			$('.touchtype-3').css("display", "none");
+		} else if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() == 3) {
+			$('.touchtype-2').css("display", "none");
+			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+			if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
+				$('.public-0').css("display", "none");
+			} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
+				$('.public-1').css("display", "none");
+				if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == undefined) {
+					$('#BundledtlEditForm input[name="bundledtl.objtype"][value="1"]').attr('checked', true);
+					$('#BundledtlEditForm input[name="bundledtl.objtype"][value="1"]').parent().addClass('checked');
+				}
+				console.log($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val());
+				if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 1) {
+					$('.objtype-2').css("display", "none");
+					$('.objtype-3').css("display", "none");
+					$('.objtype-4').css("display", "none");
+					$('.objtype-5').css("display", "none");
+				} else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 5) {
+					$('.objtype-1').css("display", "none");
+					$('.objtype-2').css("display", "none");
+					$('.objtype-3').css("display", "none");
+					$('.objtype-4').css("display", "none");
+				}
+			}
+		}
 	}
 
     FormValidateOption.rules = {};
@@ -353,7 +434,7 @@ function refreshBundledtlEdit() {
 }
 
 function refreshBundledtlSelect() {
-	if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0 && CurrentBundledtl.layoutdtl.region.type != 5 ) {
+	if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0 && CurrentBundledtl.layoutdtl.type != 5 ) {
 		return;
 	}
 	var url;
@@ -365,7 +446,7 @@ function refreshBundledtlSelect() {
 		url = 'stream!list.action';
 	} else if ($('input[name="bundledtl.objtype"]:checked').val() == 5) {
 		url = 'widget!list.action';
-	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+	} else if (CurrentBundledtl.layoutdtl.type == 5) {
 		url = 'dvb!list.action';
 	}
 	$('#BundledtlSelect').select2({
@@ -472,7 +553,7 @@ function refreshBundledtlSelect() {
 		if (CurrentBundledtl.widget1 != null) {
 			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.widget1.widgetid, name: CurrentBundledtl.widget1.name, widget: CurrentBundledtl.widget1 });
 		}
-	} else if (CurrentBundledtl.layoutdtl.region.type == 5) {
+	} else if (CurrentBundledtl.layoutdtl.type == 5) {
 		console.log(CurrentBundledtl.dvb1);
 		if (CurrentBundledtl.dvb1 != null) {
 			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.dvb1.dvbid, name: CurrentBundledtl.dvb1.name, dvb: CurrentBundledtl.dvb1 });
@@ -480,8 +561,53 @@ function refreshBundledtlSelect() {
 	} 
 }
 
+function refreshSubBundleSelect() {
+	if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() != 2 && CurrentBundledtl.layoutdtl.type != 7 ) {
+		return;
+	}
+	
+	var data = [];
+	if (CurrentSubBundles != null) {
+		for (var i=0; i<CurrentSubBundles.length; i++) {
+			data.push({
+				id: CurrentSubBundles[i].bundleid,
+				name: CurrentSubBundles[i].name,
+				bundle: CurrentSubBundles[i]
+			})
+		}
+	}
+	
+	$('#SubBundleSelect').select2({
+		placeholder: common.tips.detail_select,
+		//minimumResultsForSearch: -1,
+		minimumInputLength: 0,
+		data: data,
+		formatResult: function (item) {
+			if (item.bundle != null && item.bundle.snapshot != null) {
+				return '<span><img src="/pixsigdata' + item.bundle.snapshot + '" height="25" /> ' + item.name + '</span>';
+			} else {
+				return '<span>' + item.name + '</span>';
+			}
+		},
+		formatSelection: function (item) {
+			return item.name;				
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+	if ($('input[name="bundledtl.touchtype"]:checked').val() == 2) {
+		var touchbundles = CurrentSubBundles.filter(function (el) {
+			return el.bundleid == CurrentBundledtl.touchbundleid;
+		});
+		console.log(touchbundles.length);
+		if (touchbundles.length > 0) {
+			$('#SubBundleSelect').select2('data', {id: touchbundles[0].bundleid, name: touchbundles[0].name, bundle: touchbundles[0] });
+		}
+	}
+}
+
 function refreshMedialistDtl() {
-	if (CurrentBundledtl.layoutdtl.region.type == 0) {
+	if (CurrentBundledtl.layoutdtl.type == 0 || CurrentBundledtl.layoutdtl.type == 7) {
 		if ($('input[name="bundledtl.objtype"]:checked').val() == 1 && $('input[name="bundledtl.type"]:checked').val() == 0) {
 			$('#MedialistDtlTable').dataTable().fnClearTable();
 			for (var i=0; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
@@ -520,7 +646,7 @@ function refreshMedialistDtl() {
 				$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, medianame, 0, 0, 0]);
 			}
 		}
-	} else if (CurrentBundledtl.layoutdtl.region.type == 6) {
+	} else if (CurrentBundledtl.layoutdtl.type == 6) {
 		$('#StreamTable2').dataTable().fnClearTable();
 		for (var i=0; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
 			var medialistdtl = CurrentBundledtl.medialist0.medialistdtls[i];
@@ -553,7 +679,7 @@ $('#BundleDiv').click(function(e){
 			//CurrentBundledtl = bundledtls[0];
 			var index = 10000;
 			for (var i=0; i<bundledtls.length; i++) {
-				if (CurrentBundledtl != null && CurrentBundledtl.layoutdtl.regionid == bundledtls[i].layoutdtl.regionid) {
+				if (CurrentBundledtl != null && CurrentBundledtl.bundledtlid == bundledtls[i].bundledtlid) {
 					index = i;
 					break;
 				}
@@ -593,6 +719,16 @@ $('#BundledtlSelect').on('change', function(e) {
 		redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
 	}
 });	
+
+$('#BundledtlEditForm input[name="bundledtl.touchtype"]').change(function(e) {
+	refreshBundledtlEdit();
+	refreshSubBundleSelect();
+	refreshMedialistDtl();
+	$('#SubBundleSelect').select2('data', {});
+	if (validBundledtl(CurrentBundledtl)) {
+		redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
+	}
+});
 
 //本地视频table初始化
 $('#IntVideoTable thead').css('display', 'none');

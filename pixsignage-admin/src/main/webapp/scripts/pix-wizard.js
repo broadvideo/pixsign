@@ -339,9 +339,9 @@ function initData3() {
 	for (var i=0; i<CurrentLayout.layoutdtls.length; i++) {
 		layoutdtl = CurrentLayout.layoutdtls[i];
 		var bundledtl = {};
-		bundledtl.bundledtlid = 'B' + Math.round(Math.random()*100000000);
+		bundledtl.bundledtlid = '-' + Math.round(Math.random()*100000000);
 		bundledtl.bundleid = CurrentBundle.bundleid;
-		bundledtl.regionid = layoutdtl.regionid;
+		bundledtl.layoutdtlid = layoutdtl.layoutdtlid;
 		bundledtl.medialist0 = {};
 		bundledtl.medialist0.medialistid = 0;
 		bundledtl.medialist0.medialistdtls = [];
@@ -356,7 +356,7 @@ function initData3() {
 		bundledtl.widget0 = {};
 		bundledtl.widget0.widgetid = 0;
 		bundledtl.widget0.type = 0;
-		if (layoutdtl.region.type == 0) {
+		if (layoutdtl.type == 0) {
 			bundledtl.objtype = 1;
 			bundledtl.medialist = {};
 			bundledtl.medialist.medialistid = 0;
@@ -370,15 +370,15 @@ function initData3() {
 			bundledtl.widget.widgetid = 0;
 			bundledtl.widget.name = '';
 			bundledtl.widget.url = '';
-		} else if (layoutdtl.region.type == 1) {
+		} else if (layoutdtl.type == 1) {
 			bundledtl.objtype = 2;
 			bundledtl.text = {};
 			bundledtl.text.textid = 0;
 			bundledtl.text.name = '';
 			bundledtl.text.text = '';
-		} else if (layoutdtl.region.type == 5) {
+		} else if (layoutdtl.type == 5) {
 			bundledtl.objtype = 6;
-		} else if (layoutdtl.region.type == 6) {
+		} else if (layoutdtl.type == 6) {
 			bundledtl.objtype = 1;
 			bundledtl.medialist = {};
 			bundledtl.medialist.medialistid = 0;
@@ -602,17 +602,6 @@ function initData5() {
 }
 
 function submitData() {
-	for (var i=0; i<CurrentBundle.layout.layoutdtls.length; i++) {
-		if (('' + CurrentBundle.layout.layoutdtls[i].layoutdtlid).indexOf('R') == 0) {
-			CurrentBundle.layout.layoutdtls[i].layoutdtlid = '0';
-		}
-	}
-	for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
-		if (('' + CurrentBundle.bundledtls[i].bundledtlid).indexOf('B') == 0) {
-			CurrentBundle.bundledtls[i].bundledtlid = '0';
-		}
-	}
-	
 	$('#snapshot_div').show();
 	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 512, 0);
 	html2canvas($('#snapshot_div'), {

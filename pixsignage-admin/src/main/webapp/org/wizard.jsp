@@ -384,19 +384,19 @@ response.setDateHeader("Expires",0);
 																					<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
 																				</div>
 																			</div>
-																			<div class="form-group nontextflag">
+																			<div class="form-group layout-ctl regiontype-0">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.sleeptime"/></label>
 																				<div class="col-md-9">
 																					<input class="sleepRange" type="text" name="sleeptime" value="0"/>
 																				</div>
 																			</div>
-																			<div class="form-group nontextflag">
+																			<div class="form-group layout-ctl regiontype-0 regiontype-6">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 																				<div class="col-md-9">
 																					<input class="intervalRange" type="text" name="intervaltime" value="10"/>
 																				</div>
 																			</div>
-																			<div class="form-group nontextflag">
+																			<div class="form-group layout-ctl regiontype-0">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -407,13 +407,13 @@ response.setDateHeader("Expires",0);
 																					</label>
 																				</div>
 																			</div>
-																			<div class="form-group nontextflag">
+																			<div class="form-group layout-ctl regiontype-0 regiontype-6">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/></label>
 																				<div class="col-md-9">
 																					<input class="volumeRange" type="text" name="volume" value="50"/>
 																				</div>
 																			</div>
-																			<div class="form-group textflag">
+																			<div class="form-group layout-ctl regiontype-1">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -424,7 +424,7 @@ response.setDateHeader("Expires",0);
 																					</label>  
 																				</div>
 																			</div>
-																			<div class="form-group textflag">
+																			<div class="form-group layout-ctl regiontype-1">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -438,7 +438,7 @@ response.setDateHeader("Expires",0);
 																					</label>  
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag weatherflag">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component colorPick">
@@ -447,13 +447,13 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag weatherflag">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
 																				<div class="col-md-9">
 																					<input class="sizeRange" type="text" name="size" value="50"/>
 																				</div>
 																			</div>
-																			<div class="form-group dateflag">
+																			<div class="form-group layout-ctl regiontype-2">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
 																				<div class="col-md-9">
 																					<select class="form-control" name="dateformat" tabindex="-1">
@@ -465,7 +465,7 @@ response.setDateHeader("Expires",0);
 																					</select>
 																				</div>
 																			</div>
-																			<div class="form-group">
+																			<div class="form-group layout-ctl regiontype-0 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group">
@@ -476,7 +476,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag weatherflag">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
@@ -485,7 +485,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group textflag dateflag weatherflag">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 																				<div class="col-md-9">
 																					<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -594,7 +594,40 @@ response.setDateHeader("Expires",0);
 														<input type="hidden" name="bundledtl.layoutdtlid" value="0" />
 														<div class="form-body">
 															<label class="page-title font-red-sunglo bundledtl-title"></label>
-															<div class="form-group bundle-ctl regiontype-0">
+	
+															<div class="form-group bundle-ctl regiontype-7">
+																<label class="control-label col-md-3"><spring:message code="global.bundledtl.touchlabel"/></label>
+																<div class="col-md-9">
+																	<div class="input-icon right">
+																		<i class="fa"></i> <input type="text" class="form-control" name="bundledtl.touchlabel" value=""/>
+																	</div>
+																</div>
+															</div>
+															<div class="form-group bundle-ctl regiontype-7">
+																<label class="control-label col-md-3"><spring:message code="global.bundledtl.touchtype"/><span class="required">*</span></label>
+																<div class="col-md-9 radio-list">
+																	<label class="radio-inline">
+																		<input type="radio" name="bundledtl.touchtype" value="0"> <spring:message code="global.bundledtl.touchtype_0"/>
+																	</label>
+																	<label class="radio-inline">
+																		<input type="radio" name="bundledtl.touchtype" value="1" checked> <spring:message code="global.bundledtl.touchtype_1"/>
+																	</label>
+																	<label class="radio-inline">
+																		<input type="radio" name="bundledtl.touchtype" value="2"> <spring:message code="global.bundledtl.touchtype_2"/>
+																	</label>
+																	<label class="radio-inline">
+																		<input type="radio" name="bundledtl.touchtype" value="3"> <spring:message code="global.bundledtl.touchtype_3"/>
+																	</label>
+																</div>
+															</div>
+															<div class="form-group bundle-ctl regiontype-7 touchtype-2">
+																<label class="col-md-3 control-label"><spring:message code="global.bundledtl.touchbundle"/><span class="required">*</span></label>
+																<div class="col-md-9">
+																	<input type="hidden" id="SubBundleSelect" class="form-control select2" name="bundledtl.touchbundleid" />
+																</div>
+															</div>
+	
+															<div class="form-group bundle-ctl regiontype-0 regiontype-7 touchtype-3">
 																<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 																<div class="col-md-9 radio-list">
 																	<label class="radio-inline">
@@ -610,7 +643,7 @@ response.setDateHeader("Expires",0);
 																	</label>
 																</div>
 															</div>
-															<div class="form-group bundle-ctl regiontype-1">
+															<div class="form-group bundle-ctl regiontype-1 touchtype-3">
 																<label class="control-label col-md-3"><spring:message code="global.bundledtl.objtype"/></label>
 																<div class="col-md-9 radio-list">
 																	<label class="radio-inline">
@@ -618,7 +651,7 @@ response.setDateHeader("Expires",0);
 																	</label>
 																</div>
 															</div>
-															<div class="form-group bundle-ctl regiontype-0 regiontype-1">
+															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-7 touchtype-3">
 																<label class="control-label col-md-3"><spring:message code="global.bundledtl.scope"/></label>
 																<div class="col-md-9 radio-list">
 																	<label class="radio-inline">
@@ -629,7 +662,7 @@ response.setDateHeader("Expires",0);
 																	</label>
 																</div>
 															</div>
-															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 public-1">
+															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 regiontype-7 public-1 touchtype-3">
 																<label class="col-md-3 control-label"><spring:message code="global.detail"/></label>
 																<div class="col-md-9">
 																	<input type="hidden" id="BundledtlSelect" class="form-control select2" name="bundledtl.objid" />
@@ -651,7 +684,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 															-->
-															<div class="form-group bundle-ctl regiontype-0 objtype-5 public-0">
+															<div class="form-group bundle-ctl regiontype-0 regiontype-7 objtype-5 public-0 touchtype-3">
 																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 																<div class="col-md-9">
 																	<div class="input-icon right">
@@ -662,7 +695,7 @@ response.setDateHeader("Expires",0);
 														</div>
 													</form>
 													
-													<div class="row bundle-ctl regiontype-0 objtype-1 public-0">
+													<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
 														<div class="col-md-6">
 															<div class="portlet box blue">
 																<div class="portlet-title">
@@ -908,10 +941,10 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=7"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=0"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

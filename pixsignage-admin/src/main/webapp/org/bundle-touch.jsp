@@ -47,13 +47,13 @@ response.setDateHeader("Expires",0);
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-						<h4 class="modal-title"><spring:message code="global.bundle"/></h4>
+						<h4 class="modal-title"><spring:message code="global.touchbundle"/></h4>
 					</div>
 					<div class="modal-body">
 						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 							<input type="hidden" name="bundle.bundleid" value="0" />
 							<input type="hidden" name="bundle.homebundleid" value="0" />
-							<input type="hidden" name="bundle.touchflag" value="0" />
+							<input type="hidden" name="bundle.touchflag" value="1" />
 							<input type="hidden" name="bundle.homeflag" value="1" />
 							<input type="hidden" name="bundle.status" value="1" />
 							<div class="form-body">
@@ -62,6 +62,14 @@ response.setDateHeader("Expires",0);
 									<div class="col-md-9">
 										<div class="input-icon right">
 											<i class="fa"></i> <input type="text" class="form-control" name="bundle.name" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.bundle.homeidletime"/></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="bundle.homeidletime" value="0"/>
 										</div>
 									</div>
 								</div>
@@ -94,7 +102,7 @@ response.setDateHeader("Expires",0);
 							<div class="col-md-12 col-sm-12">
 								<div class="portlet box purple">
 									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.bundle"/></div>
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.touchbundle"/></div>
 									</div>
 									<div class="portlet-body form">
 										<div class="row">
@@ -403,7 +411,7 @@ response.setDateHeader("Expires",0);
 		<div class="page-content-wrapper">
 			<div class="page-content">
 				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title"><spring:message code="menu.bundle"/></h3>
+				<h3 class="page-title"><spring:message code="menu.touchbundle"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -411,7 +419,7 @@ response.setDateHeader("Expires",0);
 						</li>
 						<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.bundle"/></a>
+						<li><a href="#"><spring:message code="menu.touchbundle"/></a>
 						</li>
 					</ul>
 				</div>
@@ -420,7 +428,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.bundle"/></div>
+								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.touchbundle"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -501,7 +509,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=0"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

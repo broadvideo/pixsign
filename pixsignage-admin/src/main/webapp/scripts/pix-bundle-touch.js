@@ -26,18 +26,17 @@ $(window).resize(function(e) {
 
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
-var bundlehtml = '';
 var oTable = $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 16, 36, 72, 108 ],
-						[ 16, 36, 72, 108 ] 
+	'aLengthMenu' : [ [ 10, 20, 30, 40 ],
+						[ 10, 20, 30, 40 ] 
 						],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : myurls['common.list'],
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
-	'iDisplayLength' : 16,
+	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
@@ -48,11 +47,9 @@ var oTable = $('#MyTable').dataTable({
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 4 == 0) {
-			bundlehtml = '';
-			bundlehtml += '<div class="row" >';
-		}
-		bundlehtml += '<div class="col-md-3 col-xs-3">';
+		var bundlehtml = '';
+		bundlehtml += '<div class="row" >';
+		bundlehtml += '<div class="col-md-12 col-xs-12">';
 		bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 		if (aData.reviewflag == 0) {
 			bundlehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span>';
@@ -61,7 +58,19 @@ var oTable = $('#MyTable').dataTable({
 		} else if (aData.reviewflag == 2) {
 			bundlehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span>';
 		}
+		bundlehtml += '<div privilegeid="101010">';
+		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subbundle-add"><i class="fa fa-plus"></i> ' + common.view.subbundle + '</a>';
+		if (aData.reviewflag == 1) {
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+			bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+		}
+		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
+		bundlehtml += '</div>';
+		bundlehtml += '</div>';
 
+		bundlehtml += '<div class="row" >';
+		bundlehtml += '<div class="col-md-4 col-xs-6">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
 		bundlehtml += '<div class="thumbs">';
 		if (aData.snapshot != null) {
@@ -69,24 +78,38 @@ var oTable = $('#MyTable').dataTable({
 			bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		}
 		bundlehtml += '</div></a>';
-
 		bundlehtml += '<div privilegeid="101010">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
-		if (aData.reviewflag == 1) {
-			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
-			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-			bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
-		}
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
-
 		bundlehtml += '</div>';
-		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
-			bundlehtml += '</div>';
-			if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
-				bundlehtml += '<hr/>';
+		bundlehtml += '</div>';
+		bundlehtml += '<div class="col-md-8 col-xs-6">';
+		for (var i=0; i<aData.subbundles.length; i++) {
+			if (i % 4 == 0) {
+				bundlehtml += '<div class="row" >';
 			}
-			$('#BundleContainer').append(bundlehtml);
+			bundlehtml += '<div class="col-md-3 col-xs-3">';
+			bundlehtml += '<h5 class="pixtitle">' + aData.subbundles[i].name + '</h5>';
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="fancybox">';
+			bundlehtml += '<div class="thumbs">';
+			if (aData.subbundles[i].snapshot != null) {
+				var subthumbwidth = aData.subbundles[i].layout.width > aData.subbundles[i].layout.height? 100 : 100*aData.subbundles[i].layout.width/aData.subbundles[i].layout.height;
+				bundlehtml += '<img src="/pixsigdata' + aData.subbundles[i].snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + subthumbwidth + '%" />';
+			}
+			bundlehtml += '</div></a>';
+			bundlehtml += '<div privilegeid="101010">';
+			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+			bundlehtml += '</div>';
+			bundlehtml += '</div>';
+			if ((i+1) % 4 == 0 || (i+1) == aData.subbundles.length) {
+				bundlehtml += '</div>';
+			}
+			
 		}
+		bundlehtml += '</div>';
+		bundlehtml += '</div>';
+
+		bundlehtml += '<hr/>';
+		$('#BundleContainer').append(bundlehtml);
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
@@ -101,7 +124,11 @@ var oTable = $('#MyTable').dataTable({
 		$('.fancybox').each(function(index,item) {
 			$(this).click(function() {
 				var index = $(this).attr('data-id');
+				var subid = $(this).attr('sub-id');
 				var bundle = $('#MyTable').dataTable().fnGetData(index);
+				if (subid != undefined) {
+					bundle = bundle.subbundles[subid];
+				}
 				$.fancybox({
 					openEffect	: 'none',
 					closeEffect	: 'none',
@@ -115,7 +142,8 @@ var oTable = $('#MyTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'touchflag','value':'0' });
+		aoData.push({'name':'touchflag','value':'1' });
+		aoData.push({'name':'homeflag','value':'1' });
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -163,8 +191,9 @@ $.ajax({
 });
 
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
-//FormValidateOption.rules['bundle.name'] = {};
-//FormValidateOption.rules['bundle.name']['required'] = true;
+FormValidateOption.rules['bundle.homeidletime'] = {};
+FormValidateOption.rules['bundle.homeidletime']['required'] = true;
+FormValidateOption.rules['bundle.homeidletime']['number'] = true;
 FormValidateOption.submitHandler = function(form) {
 	$.ajax({
 		type : 'POST',
@@ -222,6 +251,23 @@ $('body').on('click', '.pix-update', function(event) {
 	$('.bundle-layout').css('display', 'none');
 	$('#MyEditModal').modal();
 });
+
+$('body').on('click', '.pix-subbundle-add', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	var bundle = $('#MyTable').dataTable().fnGetData(index);
+	var action = myurls['common.add'];
+	refreshForm('MyEditForm');
+	var formdata = new Object();
+	formdata['bundle.homebundleid'] = bundle.bundleid;
+	formdata['bundle.homeflag'] = '0';
+	$('#MyEditForm').loadJSON(formdata);
+	$('#MyEditForm').attr('action', action);
+	$('.bundle-layout').css('display', 'block');
+	$('#MyEditModal').modal();
+});			
 
 $('body').on('click', '.pix-sync', function(event) {
 	var target = $(event.target);
@@ -301,10 +347,16 @@ $('body').on('click', '.pix-delete', function(event) {
 //在列表页面中点击内容包设计
 $('body').on('click', '.pix-bundle', function(event) {
 	var index = $(event.target).attr('data-id');
+	var subid = $(event.target).attr('sub-id');
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
+		subid = $(event.target).parent().attr('sub-id');
 	}
 	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
+	CurrentSubBundles = CurrentBundle.subbundles;
+	if (subid != undefined) {
+		CurrentBundle = CurrentBundle.subbundles[subid];
+	}
 	for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
 		var bundledtl = CurrentBundle.bundledtls[i];
 		bundledtl.medialist0 = {};
