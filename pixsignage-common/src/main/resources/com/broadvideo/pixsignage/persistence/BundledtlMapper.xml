@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundledtl" >
     <id column="bundledtlid" property="bundledtlid" jdbcType="INTEGER" />
     <result column="bundleid" property="bundleid" jdbcType="INTEGER" />
+    <result column="homebundleid" property="homebundleid" jdbcType="INTEGER" />
     <result column="layoutdtlid" property="layoutdtlid" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="objtype" property="objtype" jdbcType="CHAR" />
@@ -20,7 +21,7 @@
     <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvbid" />
   </resultMap>
   <sql id="Base_Column_List" >
-    bundledtlid, bundleid, layoutdtlid, type, objtype, objid, touchlabel, touchtype, touchbundleid, createtime
+    bundledtlid, bundleid, homebundleid, layoutdtlid, type, objtype, objid, touchlabel, touchtype, touchbundleid, createtime
   </sql>
   
   <select id="selectMedialistid" resultMap="com.broadvideo.pixsignage.persistence.MedialistMapper.BaseResultMap" >
@@ -83,10 +84,11 @@
   </update>
 
   <insert id="insertList">
-    insert into bundledtl(bundleid, layoutdtlid, objtype, objid, type) 
+    insert into bundledtl(bundleid, homebundleid, layoutdtlid, objtype, objid, type) 
     values 
     <foreach collection="bundledtls" item="item"  separator=",">
       (#{item.bundleid}, 
+      #{item.homebundleid}, 
       #{item.layoutdtlid}, 
       #{item.objtype}, 
       #{item.objid}, 
@@ -98,11 +100,11 @@
     <selectKey resultType="java.lang.Integer" keyProperty="bundledtlid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bundledtl (bundleid, layoutdtlid, 
+    insert into bundledtl (bundleid, homebundleid, layoutdtlid, 
       type, objtype, objid, 
       touchlabel, touchtype, 
       touchbundleid, createtime)
-    values (#{bundleid,jdbcType=INTEGER}, #{layoutdtlid,jdbcType=INTEGER}, 
+    values (#{bundleid,jdbcType=INTEGER}, #{homebundleid,jdbcType=INTEGER}, #{layoutdtlid,jdbcType=INTEGER}, 
       #{type,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
       #{touchlabel,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
       #{touchbundleid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
@@ -115,6 +117,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="bundleid != null" >
         bundleid,
+      </if>
+      <if test="homebundleid != null" >
+        homebundleid,
       </if>
       <if test="layoutdtlid != null" >
         layoutdtlid,
@@ -144,6 +149,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="bundleid != null" >
         #{bundleid,jdbcType=INTEGER},
+      </if>
+      <if test="homebundleid != null" >
+        #{homebundleid,jdbcType=INTEGER},
       </if>
       <if test="layoutdtlid != null" >
         #{layoutdtlid,jdbcType=INTEGER},
@@ -177,6 +185,9 @@
       <if test="bundleid != null" >
         bundleid = #{bundleid,jdbcType=INTEGER},
       </if>
+      <if test="homebundleid != null" >
+        homebundleid = #{homebundleid,jdbcType=INTEGER},
+      </if>
       <if test="layoutdtlid != null" >
         layoutdtlid = #{layoutdtlid,jdbcType=INTEGER},
       </if>
@@ -207,6 +218,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Bundledtl" >
     update bundledtl
     set bundleid = #{bundleid,jdbcType=INTEGER},
+      homebundleid = #{homebundleid,jdbcType=INTEGER},
       layoutdtlid = #{layoutdtlid,jdbcType=INTEGER},
       type = #{type,jdbcType=CHAR},
       objtype = #{objtype,jdbcType=CHAR},

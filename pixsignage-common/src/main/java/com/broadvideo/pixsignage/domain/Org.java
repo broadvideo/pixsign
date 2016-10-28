@@ -1,12 +1,13 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
 public class Org {
-	public final static String REVIEW_DISABLED = "0";
-	public final static String REVIEW_ENABLED = "1";
+	public final static String FUNCTION_DISABLED = "0";
+	public final static String FUNCTION_ENABLED = "1";
 
 	private Integer orgid;
 
@@ -24,6 +25,10 @@ public class Org {
 
 	private String reviewflag;
 
+	private String touchflag;
+
+	private String liftflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -33,6 +38,8 @@ public class Org {
 	private String streamflag;
 
 	private String dvbflag;
+
+	private String videoinflag;
 
 	private String widgetflag;
 
@@ -66,11 +73,15 @@ public class Org {
 
 	private String devicepass;
 
+	private String apps;
+
 	private Date createtime;
 
 	private Integer createstaffid;
 
 	private Video backupvideo;
+
+	List<App> applist;
 
 	public Integer getOrgid() {
 		return orgid;
@@ -136,6 +147,22 @@ public class Org {
 		this.reviewflag = reviewflag;
 	}
 
+	public String getTouchflag() {
+		return touchflag;
+	}
+
+	public void setTouchflag(String touchflag) {
+		this.touchflag = touchflag;
+	}
+
+	public String getLiftflag() {
+		return liftflag;
+	}
+
+	public void setLiftflag(String liftflag) {
+		this.liftflag = liftflag;
+	}
+
 	public String getVideoflag() {
 		return videoflag;
 	}
@@ -174,6 +201,14 @@ public class Org {
 
 	public void setDvbflag(String dvbflag) {
 		this.dvbflag = dvbflag == null ? null : dvbflag.trim();
+	}
+
+	public String getVideoinflag() {
+		return videoinflag;
+	}
+
+	public void setVideoinflag(String videoinflag) {
+		this.videoinflag = videoinflag;
 	}
 
 	public String getWidgetflag() {
@@ -310,6 +345,14 @@ public class Org {
 		this.devicepass = devicepass;
 	}
 
+	public String getApps() {
+		return apps;
+	}
+
+	public void setApps(String apps) {
+		this.apps = apps;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -334,5 +377,13 @@ public class Org {
 
 	public void setBackupvideo(Video backupvideo) {
 		this.backupvideo = backupvideo;
+	}
+
+	public List<App> getApplist() {
+		return applist;
+	}
+
+	public void setApplist(List<App> applist) {
+		this.applist = applist;
 	}
 }

@@ -3,7 +3,7 @@ var myurls = {
 	'device.list' : 'device!list.action',
 	'video.list' : 'video!list.action',
 	'stat' : 'stat.action',
-	'device.applist' : 'device!applist.action',
+	'app.filelist' : 'app!filelist.action',
 };
 
 function initLicense() {
@@ -425,7 +425,7 @@ function initAPPTable() {
 		'sDom' : 'rt',
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : myurls['device.applist'],
+		'sAjaxSource' : myurls['app.filelist'],
 		'iDisplayLength' : -1,
 		'bSort' : false,
 		'aoColumns' : [ {'sTitle' : common.view.mainboard, 'mData' : 'mainboard', 'bSortable' : false, 'sWidth' : '10%' },
@@ -435,9 +435,15 @@ function initAPPTable() {
 						{'sTitle' : common.view.updatetime, 'mData' : 'time', 'bSortable' : false, 'sWidth' : '20%' }],
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			$('td:eq(2)', nRow).html(aData.vname + ' (' + aData.vcode + ')');
-			$('td:eq(3)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
-			$('td:eq(4)', nRow).html(new Date(parseInt(aData.time)).pattern("yyyy-MM-dd HH:mm:ss"));
+			if (aData.file != '') {
+				$('td:eq(2)', nRow).html(aData.vname + ' (' + aData.vcode + ')');
+				$('td:eq(3)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
+				$('td:eq(4)', nRow).html(new Date(parseInt(aData.time)).pattern("yyyy-MM-dd HH:mm:ss"));
+			} else {
+				$('td:eq(2)', nRow).html('');
+				$('td:eq(3)', nRow).html('');
+				$('td:eq(4)', nRow).html('');
+			}
 			return nRow;5
 		},
 	});

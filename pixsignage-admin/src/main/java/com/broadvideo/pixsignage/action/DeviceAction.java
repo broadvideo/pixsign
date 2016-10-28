@@ -3,7 +3,6 @@ package com.broadvideo.pixsignage.action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -224,92 +223,6 @@ public class DeviceAction extends BaseDatatableAction {
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
-		}
-	}
-
-	public String doAPPList() {
-		try {
-			List<Object> aaData = new ArrayList<Object>();
-			if (getLoginStaff().getOrg().getVspid().intValue() == 3) { // AK
-				HashMap<String, String> app1 = getAppFile("DigitalBox_LAUNCHER_UWIN_JIM", "a83t", "A83T", "Launcher版");
-				if (app1 != null) {
-					aaData.add(app1);
-				}
-			} else {
-				HashMap<String, String> app1 = getAppFile("DigitalBox_APP_UWIN_SINGLE", "a83t", "A83T", "开机自启App版(单屏)");
-				if (app1 != null) {
-					aaData.add(app1);
-				}
-				HashMap<String, String> app2 = getAppFile("DigitalBox_LAUNCHER_UWIN_SINGLE", "a83t", "A83T",
-						"Launcher版(单屏)");
-				if (app2 != null) {
-					aaData.add(app2);
-				}
-				HashMap<String, String> app3 = getAppFile("DigitalBox_LAUNCHER_UWIN", "a83t", "A83T", "Launcher版(双屏)");
-				if (app3 != null) {
-					aaData.add(app3);
-				}
-
-				HashMap<String, String> app4 = getAppFile("DigitalBox_APP", "3288", "RK3288", "开机自启App版");
-				if (app4 != null) {
-					aaData.add(app4);
-				}
-				HashMap<String, String> app5 = getAppFile("DigitalBox_LAUNCHER", "3288", "RK3288", "Launcher版");
-				if (app5 != null) {
-					aaData.add(app5);
-				}
-				HashMap<String, String> app6 = getAppFile("DigitalBox_LAUNCHER_SHANXI", "3288", "RK3288",
-						"Launcher版(支持投影仪控制)");
-				if (app6 != null) {
-					aaData.add(app6);
-				}
-			}
-
-			this.setAaData(aaData);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("Device doAPPList error ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	private HashMap<String, String> getAppFile(String appname, String subdir, String mainboard, String description) {
-		File dir = new File("/opt/pixdata/app/" + subdir);
-		File[] files = dir.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.startsWith(appname + "-") && name.endsWith((".apk"));
-			}
-		});
-
-		if (files != null && files.length > 0) {
-			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-
-			String vname = "";
-			String vcode = "0";
-			String filename = files[0].getName();
-			String[] apks = filename.split("-");
-			if (apks.length >= 3) {
-				vname = apks[1];
-				vcode = apks[2];
-				if (vcode.indexOf(".") > 0) {
-					vcode = vcode.substring(0, vcode.indexOf("."));
-				}
-			}
-
-			HashMap<String, String> app = new HashMap<String, String>();
-			app.put("mainboard", mainboard);
-			app.put("description", description);
-			app.put("file", files[0].getName());
-			app.put("url", "/pixdata/app/" + subdir + "/" + files[0].getName());
-			app.put("vname", vname);
-			app.put("vcode", vcode);
-			app.put("time", "" + new File("/opt/pixdata/app/" + subdir + "/" + files[0].getName()).lastModified());
-			return app;
-		} else {
-			return null;
 		}
 	}
 

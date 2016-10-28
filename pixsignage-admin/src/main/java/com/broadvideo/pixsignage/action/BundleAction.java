@@ -94,7 +94,7 @@ public class BundleAction extends BaseDatatableAction {
 			bundle.setOrgid(getLoginStaff().getOrgid());
 			bundle.setBranchid(getLoginStaff().getBranchid());
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
-			if (getLoginStaff().getOrg().getReviewflag().equals(Org.REVIEW_ENABLED)) {
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				bundle.setReviewflag(Bundle.REVIEW_WAIT);
 			} else {
 				bundle.setReviewflag(Bundle.REVIEW_PASSED);
@@ -149,7 +149,7 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
-			if (getLoginStaff().getOrg().getReviewflag().equals(Org.REVIEW_ENABLED)) {
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				if (bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 					bundle.setReviewflag(Bundle.REVIEW_WAIT);
 					JSONObject bundleJson = bundleService.generateBundleJson("" + bundle.getBundleid());

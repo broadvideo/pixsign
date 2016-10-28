@@ -296,6 +296,11 @@ function initData2() {
 		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
+	$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+	$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+	$('.stream-ctrl').css('display', StreamCtrl?'':'none');
+	$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
+	$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
 	updateRegionBtns();
 	
 	if (myBranchid == CurrentLayout.branchid) {

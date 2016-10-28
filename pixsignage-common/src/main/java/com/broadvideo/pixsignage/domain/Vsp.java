@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -11,6 +12,18 @@ public class Vsp {
 
 	private String code;
 
+	private String reviewflag;
+
+	private String touchflag;
+
+	private String liftflag;
+
+	private String streamflag;
+
+	private String dvbflag;
+
+	private String videoinflag;
+
 	private Integer maxdevices;
 
 	private Long maxstorage;
@@ -19,6 +32,8 @@ public class Vsp {
 
 	private Long currentstorage;
 
+	private String apps;
+
 	private String status;
 
 	private String description;
@@ -26,6 +41,8 @@ public class Vsp {
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	List<App> applist;
 
 	public Integer getVspid() {
 		return vspid;
@@ -49,6 +66,54 @@ public class Vsp {
 
 	public void setCode(String code) {
 		this.code = code == null ? null : code.trim();
+	}
+
+	public String getReviewflag() {
+		return reviewflag;
+	}
+
+	public void setReviewflag(String reviewflag) {
+		this.reviewflag = reviewflag;
+	}
+
+	public String getTouchflag() {
+		return touchflag;
+	}
+
+	public void setTouchflag(String touchflag) {
+		this.touchflag = touchflag;
+	}
+
+	public String getLiftflag() {
+		return liftflag;
+	}
+
+	public void setLiftflag(String liftflag) {
+		this.liftflag = liftflag;
+	}
+
+	public String getStreamflag() {
+		return streamflag;
+	}
+
+	public void setStreamflag(String streamflag) {
+		this.streamflag = streamflag;
+	}
+
+	public String getDvbflag() {
+		return dvbflag;
+	}
+
+	public void setDvbflag(String dvbflag) {
+		this.dvbflag = dvbflag;
+	}
+
+	public String getVideoinflag() {
+		return videoinflag;
+	}
+
+	public void setVideoinflag(String videoinflag) {
+		this.videoinflag = videoinflag;
 	}
 
 	public Integer getMaxdevices() {
@@ -83,6 +148,14 @@ public class Vsp {
 		this.currentstorage = currentstorage;
 	}
 
+	public String getApps() {
+		return apps;
+	}
+
+	public void setApps(String apps) {
+		this.apps = apps;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -115,5 +188,13 @@ public class Vsp {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public List<App> getApplist() {
+		return applist;
+	}
+
+	public void setApplist(List<App> applist) {
+		this.applist = applist;
 	}
 }

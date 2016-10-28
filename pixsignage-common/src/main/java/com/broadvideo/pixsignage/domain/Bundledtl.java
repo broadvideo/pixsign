@@ -17,6 +17,8 @@ public class Bundledtl {
 
 	private Integer bundleid;
 
+	private Integer homebundleid;
+
 	private Integer layoutdtlid;
 
 	private String type;
@@ -59,6 +61,14 @@ public class Bundledtl {
 
 	public void setBundleid(Integer bundleid) {
 		this.bundleid = bundleid;
+	}
+
+	public Integer getHomebundleid() {
+		return homebundleid;
+	}
+
+	public void setHomebundleid(Integer homebundleid) {
+		this.homebundleid = homebundleid;
 	}
 
 	public Integer getLayoutdtlid() {

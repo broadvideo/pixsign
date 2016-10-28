@@ -116,6 +116,14 @@ response.setDateHeader("Expires",0);
 													<div class="form-body">
 														<label class="page-title font-red-sunglo bundledtl-title"></label>
 	
+														<div class="form-group bundle-ctl homeflag-0">
+															<label class="col-md-3 control-label"><spring:message code="global.bundle.homeidletime"/></label>
+															<div class="col-md-9">
+																<div class="input-icon right">
+																	<i class="fa"></i> <input type="text" class="form-control" name="bundle.homeidletime" value="0"/>
+																</div>
+															</div>
+														</div>
 														<div class="form-group bundle-ctl regiontype-7">
 															<label class="control-label col-md-3"><spring:message code="global.bundledtl.touchlabel"/></label>
 															<div class="col-md-9">

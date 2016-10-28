@@ -55,6 +55,7 @@ response.setDateHeader("Expires",0);
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="org.orgid" value="0" />
 									<input type="hidden" name="org.status" value="1" />
+									<input type="hidden" name="org.apps" value="" />
 									<div class="form-body">
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
@@ -72,7 +73,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group pix-control">
+										<div class="form-group pix-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.org.type"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
@@ -83,7 +84,7 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group review-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.org.reviewflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
@@ -94,26 +95,39 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
-										<div class="form-group pix-control">
+										<div class="form-group touch-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.touchflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.touchflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.touchflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group lift-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.liftflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.liftflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.liftflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.org.media"/></label>
 											<div class="col-md-9 checkbox-list">
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.videoflag" value="1" checked><spring:message code="global.video"/>
+												<label class="checkbox-inline stream-ctrl">
+													<input type="checkbox" name="org.streamflag" value="1"><spring:message code="global.stream"/>
 												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.imageflag" value="1" checked><spring:message code="global.image"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.textflag" value="1" checked><spring:message code="global.text"/>
-												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.streamflag" value="1" checked><spring:message code="global.stream"/>
-												</label>
-												<label class="checkbox-inline pix-control">
+												<label class="checkbox-inline dvb-ctrl">
 													<input type="checkbox" name="org.dvbflag" value="1"><spring:message code="global.dvb"/>
 												</label>
-												<label class="checkbox-inline">
-													<input type="checkbox" name="org.widgetflag" value="1" checked><spring:message code="global.widget"/>
+												<label class="checkbox-inline videoin-ctrl">
+													<input type="checkbox" name="org.videoinflag" value="1"><spring:message code="global.videoin"/>
 												</label>
 											</div>
 										</div>
@@ -161,6 +175,12 @@ response.setDateHeader("Expires",0);
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="org.copyright" />
 												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.app"/></label>
+											<div class="col-md-9">
+												<div class="col-md-9 pre-scrollable" id="AppTree"></div>						
 											</div>
 										</div>
 										<div class="form-group">
@@ -273,18 +293,23 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript" ></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-org.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-org.js?t=3"></script>
 <script>
-var PixContral = 0;
-<% if (session_vsp != null && session_vsp.getCode().equals("default")) {%>
-PixContral = 1;
-<% } %>  
+var PixCtrl = <%=(session_vsp != null && session_vsp.getCode().equals("default"))%>;
+var ReviewCtrl = <%=(session_vsp != null && session_vsp.getReviewflag().equals("1"))%>;
+var TouchCtrl = <%=(session_vsp != null && session_vsp.getTouchflag().equals("1"))%>;
+var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
+var StreamCtrl = <%=(session_vsp != null && session_vsp.getStreamflag().equals("1"))%>;
+var DvbCtrl = <%=(session_vsp != null && session_vsp.getDvbflag().equals("1"))%>;
+var VideoinCtrl = <%=(session_vsp != null && session_vsp.getVideoinflag().equals("1"))%>;
+
 var MaxDevices = <%=session_vsp.getMaxdevices()%>;
 var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;
 var MaxStorage = <%=session_vsp.getMaxstorage()%>;

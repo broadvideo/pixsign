@@ -5,11 +5,12 @@ var myurls = {
 	'common.delete' : 'org!delete.action',
 	'org.validate' : 'org!validate.action',
 	'vsp.get' : 'vsp!get.action',
+	'app.list' : 'app!list.action',
 };
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
-}			
+}
 
 var CurrentVsp;
 function initMyTable() {
@@ -74,7 +75,6 @@ function initMyTable() {
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							refreshMyTable();
-							refreshVsp();
 						} else {
 							bootbox.alert(common.tips.error + data.errormsg);
 						}
@@ -93,7 +93,7 @@ function initMyTable() {
 	});			
 }
 
-function refreshVsp() {
+function refreshVsp(org) {
 	$.ajax({
 		url: myurls['vsp.get'],
 		type : 'POST',
@@ -102,6 +102,10 @@ function refreshVsp() {
 			if (data.errorcode == 0) {
 				var max1 = parseInt(data.vsp.maxdevices - data.vsp.currentdevices);
 				var max2 = parseInt(data.vsp.maxstorage - data.vsp.currentstorage);
+				if (org != null) {
+					max1 += org.maxdevices;
+					max2 += org.maxstorage;
+				}
 				max1 = (max1 < 0 ? 0 : max1);
 				max2 = (max2 < 0 ? 0 : max2);
 				FormValidateOption.rules['org.maxdevices']['max'] = max1;
@@ -121,6 +125,86 @@ function refreshVsp() {
 }
 
 function initMyEditModal() {
+	var currentAppTreeData = [];
+	var currentApps = {};
+	
+	$.ajax({
+		type : 'POST',
+		url : myurls['app.list'],
+		data : {},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				createAppTreeData(data.aaData, currentAppTreeData);
+				createAppTree(currentAppTreeData);
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+	
+	function createAppTreeData(apps, treeData) {
+		for (var i=0; i<apps.length; i++) {
+			treeData[i] = {};
+			treeData[i]['data'] = {};
+			treeData[i]['data']['title'] = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
+			treeData[i]['attr'] = {};
+			treeData[i]['attr']['id'] = apps[i].appid;
+			treeData[i]['attr']['parentid'] = 0;
+			if (currentApps[treeData[i]['attr']['id']] == undefined) {
+				treeData[i]['attr']['class'] = 'jstree-unchecked';
+			} else {
+				treeData[i]['attr']['class'] = 'jstree-checked';
+			}
+			treeData[i]['children'] = [];
+		}
+	}
+	function refreshAppTreeData(treeData) {
+		for (var i=0; i<treeData.length; i++) {
+			if (currentApps[treeData[i]['attr']['id']] == undefined) {
+				treeData[i]['attr']['class'] = 'jstree-unchecked';
+			} else {
+				treeData[i]['attr']['class'] = 'jstree-checked';
+			}
+			refreshAppTreeData(treeData[i]['children']);
+		}
+	}
+	function createAppTree(treeData) {
+		$('#AppTree').jstree('destroy');
+		var treeview = $('#AppTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
+			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
+			'core' : {
+				'animation' : 100
+			},
+			'checkbox' : {
+				'checked_parent_open' : true,
+				'two_state' : true,
+			},
+			'themes' : {
+				'theme' : 'proton',
+				'icons' : false,
+			}
+		});
+		treeview.on('loaded.jstree', function() {
+			treeview.jstree('open_all');
+		});
+		treeview.on('check_node.jstree', function(e, data) {
+			var parentNode = data.rslt.obj.attr('parentid');
+			treeview.jstree('check_node', '#'+parentNode);
+		});
+		treeview.on('uncheck_node.jstree', function(e, data) {
+			var allChildNodes = data.inst._get_children(data.rslt.obj);
+			allChildNodes.each(function(idx, listItem) { 
+				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
+			});
+		});
+	}
+
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
 	FormValidateOption.rules = {};
@@ -198,6 +282,17 @@ function initMyEditModal() {
 				value.value = 1;
 			}
 		});
+
+		var apps = '';
+		$("#AppTree").jstree('get_checked', null, true).each(function() {
+			if (apps == '') {
+				apps += this.id;
+			} else {
+				apps += ',' + this.id;
+			}
+		});
+		$('#MyEditForm input[name="org.apps"]').val(apps);
+
 		var data = jQuery("#MyEditForm").serializeArray();
 		data = data.concat(
 			jQuery('#MyEditForm input[type=checkbox]:not(:checked)').map(
@@ -215,7 +310,6 @@ function initMyEditModal() {
 					$('#MyEditModal').modal('hide');
 					bootbox.alert(common.tips.success);
 					refreshMyTable();
-					refreshVsp();
 				} else {
 					bootbox.alert(common.tips.error + data.errormsg);
 				}
@@ -226,7 +320,6 @@ function initMyEditModal() {
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
-	refreshVsp();
 
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
@@ -239,6 +332,7 @@ function initMyEditModal() {
 		//	bootbox.alert(common.tips.maxorgs);
 		//	return;
 		//}
+		refreshVsp(null);
 		
 		var action = myurls['common.add'];
 		refreshForm('MyEditForm');
@@ -254,11 +348,19 @@ function initMyEditModal() {
 		}
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="org.code"]').removeAttr('readonly');
-		if (PixContral == 1) {
-			$('.pix-control').css('display', 'block');
-		} else {
-			$('.pix-control').css('display', 'none');
-		}
+
+		$('.pix-ctrl').css('display', PixCtrl?'':'none');
+		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
+		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
+		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
+		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
+		
+		currentApps = {};
+		refreshAppTreeData(currentAppTreeData);
+		createAppTree(currentAppTreeData);
+		
 		$('#MyEditModal').modal();
 	});			
 
@@ -268,6 +370,9 @@ function initMyEditModal() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		var item = $('#MyTable').dataTable().fnGetData(index);
+
+		refreshVsp(item);
+		
 		var action = myurls['common.update'];
 		var formdata = new Object();
 		for (var name in item) {
@@ -292,11 +397,23 @@ function initMyEditModal() {
 		}
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="org.code"]').attr('readonly','readonly');
-		if (PixContral == 1) {
-			$('.pix-control').css('display', '');
-		} else {
-			$('.pix-control').css('display', 'none');
+		$('.pix-ctrl').css('display', PixCtrl?'':'none');
+		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
+		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
+		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
+		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
+		
+		currentApps = {};
+		if (item.applist != null) {
+			for (var i=0; i<item.applist.length; i++) {
+				currentApps[item.applist[i].appid] = item.applist[i];
+			}
 		}
+		refreshAppTreeData(currentAppTreeData);
+		createAppTree(currentAppTreeData);
+		
 		$('#MyEditModal').modal();
 	});
 

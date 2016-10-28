@@ -13,6 +13,16 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+create table app( 
+   appid int not null,
+   name varchar(64) not null,
+   mainboard varchar(16),
+   subdir varchar(16),
+   description varchar(512),
+   primary key (appid)
+ )engine = innodb
+default character set utf8;
+
 alter table layoutdtl add type varchar(2) default '0';
 alter table layoutdtl add mainflag char(1) default '0';
 
@@ -21,20 +31,58 @@ alter table bundle add homeflag char(1) default '1';
 alter table bundle add homebundleid int default 0;
 alter table bundle add homeidletime int default 0;
 
+alter table bundledtl add homebundleid int;
 alter table bundledtl add layoutdtlid int default 0;
 alter table bundledtl add touchlabel varchar(128);
 alter table bundledtl add touchtype char(1) default '0';
 alter table bundledtl add touchbundleid int default 0;
 
+alter table vsp add reviewflag char(1) default '0';
+alter table vsp add touchflag char(1) default '0';
+alter table vsp add liftflag char(1) default '0';
+alter table vsp add streamflag char(1) default '0';
+alter table vsp add dvbflag char(1) default '0';
+alter table vsp add videoinflag char(1) default '0';
+alter table vsp add apps varchar(128);
+
+alter table org add touchflag char(1) default '0';
+alter table org add liftflag char(1) default '0';
+alter table org add videoinflag char(1) default '0';
+alter table org add apps varchar(128);
+
 update layoutdtl set mainflag=1 where regionid=1;
 update layoutdtl ld, region r set ld.type=r.type where ld.regionid=r.regionid;
+
+update bundledtl set homebundleid=bundleid;
 
 update bundle b, bundledtl bd, layoutdtl ld set bd.layoutdtlid=ld.layoutdtlid where b.bundleid=bd.bundleid and b.layoutid=ld.layoutid and bd.regionid=ld.regionid;
 
 alter table layoutdtl drop regionid;
 alter table bundledtl drop regionid;
 
-delete from privilege where privilegeid >= 300;
+insert into app(appid,name,mainboard,subdir,description) values(100,'DigitalBox_APP_VE','A83T','a83t','通用APP版');
+insert into app(appid,name,mainboard,subdir,description) values(101,'DigitalBox_LAUNCHER_VE','A83T','a83t','通用Launcher版');
+insert into app(appid,name,mainboard,subdir,description) values(102,'DigitalBox_APP_UWIN_SINGLE','A83T','a83t','单屏APP版');
+insert into app(appid,name,mainboard,subdir,description) values(103,'DigitalBox_LAUNCHER_UWIN_SINGLE','A83T','a83t','单屏Launcher版');
+insert into app(appid,name,mainboard,subdir,description) values(104,'DigitalBox_LAUNCHER_UWIN','A83T','a83t','双屏Launcher版');
+insert into app(appid,name,mainboard,subdir,description) values(105,'DigitalBox_LAUNCHER_UWIN_JIM','A83T','a83t','AK定制版');
+
+insert into app(appid,name,mainboard,subdir,description) values(200,'DigitalBox_APP_VE','RK3288','3288','通用APP版');
+insert into app(appid,name,mainboard,subdir,description) values(201,'DigitalBox_LAUNCHER_VE','RK3288','3288','通用Launcher版');
+insert into app(appid,name,mainboard,subdir,description) values(202,'DigitalBox_APP','RK3288','3288','单屏APP版');
+insert into app(appid,name,mainboard,subdir,description) values(203,'DigitalBox_LAUNCHER','RK3288','3288','单屏Launcher版');
+insert into app(appid,name,mainboard,subdir,description) values(204,'DigitalBox_LAUNCHER_SHANXI','RK3288','3288','Launcher版(投影仪控制)');
+
+insert into app(appid,name,mainboard,subdir,description) values(300,'DigitalBox_APP_VE','RK3368','3368','通用APP版');
+insert into app(appid,name,mainboard,subdir,description) values(301,'DigitalBox_LAUNCHER_VE','RK3368','3368','通用Launcher版');
+
+delete from privilege where privilegeid > 0;
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(109,0,0,'menu.systemmanage','','fa-cogs',1,9,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10901,0,109,'menu.config','config.jsp','',1,1,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10902,0,109,'menu.debug','crashreport.jsp','',1,2,'0');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(201,1,0,'menu.org','org.jsp','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(300,2,0,'menu.wizard','wizard.jsp','fa-hand-o-up',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(301,2,0,'menu.resource','','fa-qrcode',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30101,2,301,'menu.medialist','medialist.jsp','',1,1,'12');

@@ -52,6 +52,7 @@ response.setDateHeader("Expires",0);
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="vsp.vspid" value="0" />
 									<input type="hidden" name="vsp.status" value="1" />
+									<input type="hidden" name="vsp.apps" value="" />
 									<div class="form-body">
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
@@ -69,6 +70,53 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
+										<div class="form-group review-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.reviewflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="vsp.reviewflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="vsp.reviewflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group touch-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.touchflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="vsp.touchflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="vsp.touchflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group lift-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.liftflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="vsp.liftflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="vsp.liftflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.org.media"/></label>
+											<div class="col-md-9 checkbox-list">
+												<label class="checkbox-inline stream-ctrl">
+													<input type="checkbox" name="vsp.streamflag" value="1"><spring:message code="global.stream"/>
+												</label>
+												<label class="checkbox-inline dvb-ctrl">
+													<input type="checkbox" name="vsp.dvbflag" value="1"><spring:message code="global.dvb"/>
+												</label>
+												<label class="checkbox-inline videoin-ctrl">
+													<input type="checkbox" name="vsp.videoinflag" value="1"><spring:message code="global.videoin"/>
+												</label>
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.org.maxdevices"/><span class="required">*</span></label>
 											<div class="col-md-9">
@@ -83,6 +131,12 @@ response.setDateHeader("Expires",0);
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="vsp.maxstorage" />
 												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.app"/></label>
+											<div class="col-md-9">
+												<div class="col-md-9 pre-scrollable" id="AppTree"></div>						
 											</div>
 										</div>
 										<div class="form-group">
@@ -189,6 +243,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript" ></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>

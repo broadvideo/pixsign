@@ -77,7 +77,7 @@
     right join
     (select distinct bs.bindid as deviceid,v.videoid,v.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, video v
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=1
@@ -93,7 +93,7 @@
     left join
     (select distinct bs.bindid as deviceid,v.videoid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, video v
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=1
@@ -112,7 +112,7 @@
     right join
     (select distinct bs.bindid as deviceid,i.imageid,i.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, image i
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=2
@@ -128,7 +128,7 @@
     left join 
     (select distinct bs.bindid as deviceid,i.imageid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, image i
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=2 
@@ -147,7 +147,7 @@
     right join
     (select distinct d.deviceid,v.videoid,v.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, video v 
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bs.bindtype=2 
       and bs.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
@@ -164,7 +164,7 @@
     left join 
     (select distinct d.deviceid,v.videoid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, video v 
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bs.bindtype=2 
       and bs.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
@@ -184,7 +184,7 @@
     right join
     (select distinct d.deviceid,i.imageid,i.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, image i
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bs.bindtype=2 
       and bs.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
@@ -201,7 +201,7 @@
     left join 
     (select distinct d.deviceid,i.imageid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, image i
       where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.bundleid 
+      and bsd.bundleid=bd.homebundleid 
       and bs.bindtype=2 
       and bs.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 

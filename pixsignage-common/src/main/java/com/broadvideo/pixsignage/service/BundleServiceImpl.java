@@ -123,6 +123,11 @@ public class BundleServiceImpl implements BundleService {
 		for (Layoutdtl layoutdtl : layoutdtls) {
 			Bundledtl bundledtl = new Bundledtl();
 			bundledtl.setBundleid(bundle.getBundleid());
+			if (bundle.getHomeflag().equals("0")) {
+				bundledtl.setHomebundleid(bundle.getHomebundleid());
+			} else {
+				bundledtl.setHomebundleid(bundle.getBundleid());
+			}
 			bundledtl.setLayoutdtlid(layoutdtl.getLayoutdtlid());
 			bundledtl.setType(Bundledtl.Type_Private);
 			if (layoutdtl.getType().equals(Layoutdtl.Type_PLAY)) {
@@ -179,6 +184,11 @@ public class BundleServiceImpl implements BundleService {
 			Bundledtl oldBundledtl = bundledtlMapper.selectByLayoutdtl("" + bundle.getBundleid(),
 					"" + bundledtl.getLayoutdtlid());
 			bundledtl.setBundleid(bundle.getBundleid());
+			if (bundle.getHomeflag().equals("0")) {
+				bundledtl.setHomebundleid(bundle.getHomebundleid());
+			} else {
+				bundledtl.setHomebundleid(bundle.getBundleid());
+			}
 			if (oldBundledtl.getType().equals(Bundledtl.Type_Private)
 					&& (!oldBundledtl.getObjtype().equals(bundledtl.getObjtype())
 							|| oldBundledtl.getObjid().intValue() != bundledtl.getObjid().intValue())) {
@@ -405,6 +415,11 @@ public class BundleServiceImpl implements BundleService {
 		}
 		for (Bundledtl bundledtl : bundledtls) {
 			bundledtl.setBundleid(bundle.getBundleid());
+			if (bundle.getHomeflag().equals("0")) {
+				bundledtl.setHomebundleid(bundle.getHomebundleid());
+			} else {
+				bundledtl.setHomebundleid(bundle.getBundleid());
+			}
 			if (bundledtl.getType().equals(Bundledtl.Type_Private)) {
 				if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
 					Medialist medialist = bundledtl.getMedialist();

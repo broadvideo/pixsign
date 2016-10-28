@@ -212,6 +212,10 @@ function validBundledtl(bundledtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
+		if (CurrentBundle.homeflag == 0) {
+			CurrentBundle.homeidletime = $('#BundledtlEditForm input[name="bundle.homeidletime"]').val();
+		}
+		
 		if (CurrentBundledtl.layoutdtl.type < 2) {
 			var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
 			var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
@@ -336,6 +340,7 @@ function enterBundledtlFocus(bundledtl) {
 	}
 
 	$('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val(CurrentBundledtl.touchlabel);
+	$('#BundledtlEditForm input[name="bundle.homeidletime"]').val(CurrentBundle.homeidletime);
 	
 	refreshBundledtlEdit();
 	refreshBundledtlSelect();
@@ -345,6 +350,9 @@ function enterBundledtlFocus(bundledtl) {
 
 function refreshBundledtlEdit() {
 	$('.bundle-ctl').css("display", "none");
+	if (CurrentBundle.homeflag == 0) {
+		$('.homeflag-0').css("display", "block");
+	}
 	if (CurrentBundledtl.layoutdtl.type == 0) {
 		$('.regiontype-0').css("display", "block");
 		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
@@ -414,7 +422,12 @@ function refreshBundledtlEdit() {
 	}
 
     FormValidateOption.rules = {};
-    if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
+	if (CurrentBundle.homeflag == 0) {
+    	FormValidateOption.rules['bundle.homeidletime'] = {};
+    	FormValidateOption.rules['bundle.homeidletime']['required'] = true;
+    	FormValidateOption.rules['bundle.homeidletime']['number'] = true;
+	}
+   if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
     	FormValidateOption.rules['bundledtl.objid'] = {};
     	FormValidateOption.rules['bundledtl.objid']['required'] = true;
     } else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 2) {

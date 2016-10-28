@@ -162,12 +162,12 @@ response.setDateHeader("Expires",0);
 											<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.text"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.date"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="3" class="btn btn-sm yellow pix-addregion"><spring:message code="region.weather"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
-											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion stream-ctrl"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion dvb-ctrl"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>
 									</div>
 									<div class="portlet-body form">
@@ -539,6 +539,12 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
 <script>
+var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var LiftCtrl = <%=(session_org != null && session_org.getLiftflag().equals("1"))%>;
+var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
+var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
+var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
+
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();

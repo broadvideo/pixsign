@@ -335,6 +335,12 @@ $('body').on('click', '.pix-layout', function(event) {
 		$('#LayoutCol2').attr('class', 'col-md-6 col-sm-6');
 	}
 	
+	$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+	$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+	$('.stream-ctrl').css('display', StreamCtrl?'':'none');
+	$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
+	$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
+
 	$('#LayoutModal').modal();
 });
 

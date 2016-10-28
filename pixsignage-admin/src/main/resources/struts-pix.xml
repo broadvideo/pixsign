@@ -48,6 +48,19 @@
 			</result>
 		</action>
 
+		<action name="app!list" method="doList" class="appAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="app!filelist" method="doFileList" class="appAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="vsp!list" method="doList" class="vspAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -566,12 +579,6 @@
 			</result>
 		</action>
 		<action name="device!screenlist" method="doScreenList" class="deviceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="device!applist" method="doAPPList" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>

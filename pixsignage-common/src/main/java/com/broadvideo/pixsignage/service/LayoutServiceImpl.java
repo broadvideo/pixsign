@@ -124,6 +124,11 @@ public class LayoutServiceImpl implements LayoutService {
 		for (Bundle bundle : bundles) {
 			Bundledtl bundledtl = new Bundledtl();
 			bundledtl.setBundleid(bundle.getBundleid());
+			if (bundle.getHomeflag().equals("0")) {
+				bundledtl.setHomebundleid(bundle.getHomebundleid());
+			} else {
+				bundledtl.setHomebundleid(bundle.getBundleid());
+			}
 			bundledtl.setLayoutdtlid(layoutdtl.getLayoutdtlid());
 			bundledtl.setType(Bundledtl.Type_Private);
 			if (layoutdtl.getType().equals(Region.Type_PLAY)) {

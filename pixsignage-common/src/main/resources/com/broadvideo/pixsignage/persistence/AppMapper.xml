@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AppMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.App" >
+    <id column="appid" property="appid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mainboard" property="mainboard" jdbcType="VARCHAR" />
+    <result column="subdir" property="subdir" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    appid, name, mainboard, subdir, description
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from app
+    where appid = #{appid}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from app
+    order by appid
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app
+    where 1 != 1
+    <if test="ids != null and ids != ''">
+    or appid in (${ids})
+    </if>
+    order by appid
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from app
+    where appid = #{appid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.App" >
+    <selectKey resultType="java.lang.Integer" keyProperty="appid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into app (name, mainboard, subdir, description
+      )
+    values (#{name,jdbcType=VARCHAR}, #{mainboard,jdbcType=VARCHAR}, #{subdir,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.App" >
+    <selectKey resultType="java.lang.Integer" keyProperty="appid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into app
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mainboard != null" >
+        mainboard,
+      </if>
+      <if test="subdir != null" >
+        subdir,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mainboard != null" >
+        #{mainboard,jdbcType=VARCHAR},
+      </if>
+      <if test="subdir != null" >
+        #{subdir,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.App" >
+    update app
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mainboard != null" >
+        mainboard = #{mainboard,jdbcType=VARCHAR},
+      </if>
+      <if test="subdir != null" >
+        subdir = #{subdir,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where appid = #{appid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.App" >
+    update app
+    set name = #{name,jdbcType=VARCHAR},
+      mainboard = #{mainboard,jdbcType=VARCHAR},
+      subdir = #{subdir,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where appid = #{appid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -4,6 +4,7 @@ var myurls = {
 	'common.update' : 'vsp!update.action',
 	'common.delete' : 'vsp!delete.action',
 	'vsp.validate' : 'vsp!validate.action',
+	'app.list' : 'app!list.action',
 };
 
 function refreshMyTable() {
@@ -85,6 +86,86 @@ function initMyTable() {
 }
 
 function initMyEditModal() {
+	var currentAppTreeData = [];
+	var currentApps = {};
+	
+	$.ajax({
+		type : 'POST',
+		url : myurls['app.list'],
+		data : {},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				createAppTreeData(data.aaData, currentAppTreeData);
+				createAppTree(currentAppTreeData);
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+	
+	function createAppTreeData(apps, treeData) {
+		for (var i=0; i<apps.length; i++) {
+			treeData[i] = {};
+			treeData[i]['data'] = {};
+			treeData[i]['data']['title'] = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
+			treeData[i]['attr'] = {};
+			treeData[i]['attr']['id'] = apps[i].appid;
+			treeData[i]['attr']['parentid'] = 0;
+			if (currentApps[treeData[i]['attr']['id']] == undefined) {
+				treeData[i]['attr']['class'] = 'jstree-unchecked';
+			} else {
+				treeData[i]['attr']['class'] = 'jstree-checked';
+			}
+			treeData[i]['children'] = [];
+		}
+	}
+	function refreshAppTreeData(treeData) {
+		for (var i=0; i<treeData.length; i++) {
+			if (currentApps[treeData[i]['attr']['id']] == undefined) {
+				treeData[i]['attr']['class'] = 'jstree-unchecked';
+			} else {
+				treeData[i]['attr']['class'] = 'jstree-checked';
+			}
+			refreshAppTreeData(treeData[i]['children']);
+		}
+	}
+	function createAppTree(treeData) {
+		$('#AppTree').jstree('destroy');
+		var treeview = $('#AppTree').jstree({
+			'json_data' : {
+				'data' : treeData
+			},
+			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
+			'core' : {
+				'animation' : 100
+			},
+			'checkbox' : {
+				'checked_parent_open' : true,
+				'two_state' : true,
+			},
+			'themes' : {
+				'theme' : 'proton',
+				'icons' : false,
+			}
+		});
+		treeview.on('loaded.jstree', function() {
+			treeview.jstree('open_all');
+		});
+		treeview.on('check_node.jstree', function(e, data) {
+			var parentNode = data.rslt.obj.attr('parentid');
+			treeview.jstree('check_node', '#'+parentNode);
+		});
+		treeview.on('uncheck_node.jstree', function(e, data) {
+			var allChildNodes = data.inst._get_children(data.rslt.obj);
+			allChildNodes.each(function(idx, listItem) { 
+				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
+			});
+		});
+	}
+
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
 	FormValidateOption.rules = {};
@@ -150,6 +231,16 @@ function initMyEditModal() {
 	FormValidateOption.rules['vsp.maxdevices']['number'] = true;
 	
 	FormValidateOption.submitHandler = function(form) {
+		var apps = '';
+		$("#AppTree").jstree('get_checked', null, true).each(function() {
+			if (apps == '') {
+				apps += this.id;
+			} else {
+				apps += ',' + this.id;
+			}
+		});
+		$('#MyEditForm input[name="vsp.apps"]').val(apps);
+
 		var data = jQuery("#MyEditForm").serializeArray();
 		$.ajax({
 			type : 'POST',
@@ -180,8 +271,18 @@ function initMyEditModal() {
 	$('body').on('click', '.pix-add', function(event) {
 		var action = myurls['common.add'];
 		refreshForm('MyEditForm');
+		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
+		$.each( checkboxes, function( index, checkbox ) {
+			$(checkbox).attr('checked');
+			$(checkbox).parent().addClass('checked');
+		});
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="vsp.code"]').removeAttr('readonly');
+		
+		currentApps = {};
+		refreshAppTreeData(currentAppTreeData);
+		createAppTree(currentAppTreeData);
+		
 		$('#MyEditModal').modal();
 	});			
 
@@ -199,8 +300,28 @@ function initMyEditModal() {
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
+		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
+		$.each( checkboxes, function( index, checkbox ) {
+			if (formdata[$(checkbox).attr('name')] == 0) {
+				$(checkbox).removeAttr('checked');
+				$(checkbox).parent().removeClass('checked');
+			} else {
+				$(checkbox).attr('checked');
+				$(checkbox).parent().addClass('checked');
+			}
+		});
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="vsp.code"]').attr('readonly','readonly');
+		
+		currentApps = {};
+		if (item.applist != null) {
+			for (var i=0; i<item.applist.length; i++) {
+				currentApps[item.applist[i].appid] = item.applist[i];
+			}
+		}
+		refreshAppTreeData(currentAppTreeData);
+		createAppTree(currentAppTreeData);
+		
 		$('#MyEditModal').modal();
 	});
 
