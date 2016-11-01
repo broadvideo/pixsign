@@ -321,6 +321,7 @@ response.setDateHeader("Expires",0);
 																<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion dvb-ctrl"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 															</div>
@@ -466,7 +467,7 @@ response.setDateHeader("Expires",0);
 																					</select>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0 regiontype-7">
+																			<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group">
@@ -477,7 +478,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
@@ -486,7 +487,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 																				<div class="col-md-9">
 																					<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -945,7 +946,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=1"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

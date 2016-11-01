@@ -15,6 +15,7 @@ public class Layoutdtl {
 	public final static String Type_DVB = "5";
 	public final static String Type_STREAM = "6";
 	public final static String Type_TOUCH = "7";
+	public final static String Type_NAVIGATE = "8";
 	public final static String Type_A1 = "A1";
 	public final static String Type_A2 = "A2";
 

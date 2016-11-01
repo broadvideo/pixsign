@@ -1,8 +1,5 @@
 package com.broadvideo.pixsignage.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CommonConfig {
 	public static String CONFIG_ACTIVEMQ_SERVER = "pixsignage-mq";
 	public static String CONFIG_PIXBOX_SERVER = "pixbox";
@@ -15,8 +12,6 @@ public class CommonConfig {
 	public static String CONFIG_FFMPEG_HOME = "/opt/pix/ffmpeg";
 
 	public static String CONFIG_VCSS_SERVER = "http://127.0.0.1:6060/";
-
-	public static List<String> CONFIG_SDOMAIN_LIST = new ArrayList<String>();
 
 	public static String SYSTEM_ID = "UNKNOWN";
 

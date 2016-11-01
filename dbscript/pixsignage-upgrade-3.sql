@@ -23,6 +23,17 @@ create table app(
  )engine = innodb
 default character set utf8;
 
+create table sdomain( 
+   sdomainid int not null auto_increment,
+   name varchar(128) not null,
+   code varchar(32) not null,
+   langflag char(1) default '0',
+   description varchar(512),
+   primary key (sdomainid)
+ )engine = innodb
+default character set utf8;
+alter table sdomain add unique(code);
+
 alter table layoutdtl add type varchar(2) default '0';
 alter table layoutdtl add mainflag char(1) default '0';
 

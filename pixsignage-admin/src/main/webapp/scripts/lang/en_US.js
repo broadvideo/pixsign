@@ -79,6 +79,7 @@ var common = {
 		region_type_5: 'DVB Zone',
 		region_type_6: 'Stream Zone',
 		region_type_7: 'Touch Button',
+		region_type_8: 'Navigate Bar',
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
 

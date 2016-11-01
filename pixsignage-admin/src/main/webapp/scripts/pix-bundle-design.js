@@ -93,6 +93,8 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		text = bundledtl.text0.text;
 	} else if (bundledtl.objtype == 2 && bundledtl.type == 1) {
 		text = bundledtl.text1.text;
+	} else if (bundledtl.objtype == 5) {
+		bgimage = '../img/region/region-widget.jpg';
 	}
 	
 	var bundledtlhtml = '';
@@ -155,16 +157,12 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 	} else if (bundledtl.layoutdtl.type == 5) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += 'DVB';
-		bundledtlhtml += '</p>';
+		bundledtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.layoutdtl.type == 6) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += 'STREAM';
-		bundledtlhtml += '</p>';
+		bundledtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.layoutdtl.type == 7) {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
@@ -176,6 +174,15 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 			bundledtlhtml += eval('common.view.region_type_7');
 		}
 		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	} else if (bundledtl.layoutdtl.type == 8) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
+			bundledtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		} else {
+			bundledtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		bundledtlhtml += '</div>';
 	} else {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';

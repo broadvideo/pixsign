@@ -136,16 +136,21 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 	} else if (layoutdtl.type == 5) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'DVB';
-		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		layoutdtlhtml += '</div>';
 	} else if (layoutdtl.type == 6) {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'Stream';
-		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		layoutdtlhtml += '</div>';
+	} else if (layoutdtl.type == 8) {
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (layoutdtl.width > layoutdtl.height) {
+			layoutdtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		} else {
+			layoutdtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		layoutdtlhtml += '</div>';
 	} else {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';

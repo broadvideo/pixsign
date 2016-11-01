@@ -7,15 +7,20 @@
 <%@page import="com.broadvideo.pixsignage.common.CommonConstants"%> 
 <%@page import="com.broadvideo.pixsignage.common.CommonConfig"%> 
 
+<%@page import="org.springframework.web.context.WebApplicationContext"%> 
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%> 
+<%@page import="com.broadvideo.pixsignage.domain.Sdomain"%> 
+<%@page import="com.broadvideo.pixsignage.service.SdomainService"%> 
+
 <%
-	String logo = "default";
+	ServletContext servletContext = this.getServletContext();
+	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
+	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
+	
 	String theme = "darkblue.css";
-	for (String sdomain : CommonConfig.CONFIG_SDOMAIN_LIST) {
-		if (request.getServerName().startsWith(sdomain + ".")) {
-			logo = sdomain;
-			theme = "light.css";
-			break;
-		}
+	if (sdomain != null) {
+		theme = "light.css";
 	}
 	
 	Vsp session_vsp = (Vsp)session.getAttribute(CommonConstants.SESSION_VSP);
@@ -137,7 +142,17 @@ function hasPrivilege(privilegeid) {
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
 				<a href="main.jsp">
-				<img src="${base_ctx}/img/<%=logo%>/logo.png?t=1" height="40" alt="logo"/>
+				<%
+					if (sdomain != null) {
+				%>
+				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
+				<%
+					} else {
+				%>
+				<img src="${base_ctx}/img/logo-default.png?t=1" height="40" alt="logo" />
+				<%
+					}
+				%>
 				</a>
 				<div class="menu-toggler sidebar-toggler hide">
 				</div>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.SdomainMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Sdomain" >
+    <id column="sdomainid" property="sdomainid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="langflag" property="langflag" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sdomainid, name, code, langflag, description
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sdomain
+    where sdomainid = #{sdomainid}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sdomain
+    order by sdomainid
+  </select>
+  
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sdomain
+    where code = #{code}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from sdomain
+    where sdomainid = #{sdomainid}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Sdomain" >
+    <selectKey resultType="java.lang.Integer" keyProperty="sdomainid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sdomain (name, code, langflag, 
+      description)
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{langflag,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Sdomain" >
+    <selectKey resultType="java.lang.Integer" keyProperty="sdomainid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sdomain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="langflag != null" >
+        langflag,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="langflag != null" >
+        #{langflag,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Sdomain" >
+    update sdomain
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="langflag != null" >
+        langflag = #{langflag,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sdomainid = #{sdomainid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Sdomain" >
+    update sdomain
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      langflag = #{langflag,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where sdomainid = #{sdomainid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -338,6 +338,7 @@ function initData3() {
 	CurrentBundle.name = $('#BundleOptionForm input[name="bundle.name"]').val();
 	CurrentBundle.bundleid = 0;
 	CurrentBundle.layoutid = CurrentLayout.layoutid;
+	CurrentBundle.homeflag = 1;
 	CurrentBundle.status = 1;
 	CurrentBundle.layout = CurrentLayout;
 	CurrentBundle.bundledtls = [];

@@ -79,6 +79,7 @@ var common = {
 		region_type_5: 'DVB',
 		region_type_6: '视频流',
 		region_type_7: '互动键',
+		region_type_8: '导航条',
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
 

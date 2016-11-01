@@ -292,7 +292,8 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 
-		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getBundleid());
+		List<HashMap<String, Object>> bindList = bundlescheduleMapper
+				.selectBindListByBundle("" + bundle.getHomebundleid());
 		for (HashMap<String, Object> bindObj : bindList) {
 			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}

@@ -2,6 +2,27 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/common/taglibs.jsp"%> 
 
+<%@page import="org.springframework.web.context.WebApplicationContext"%> 
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%> 
+<%@page import="com.broadvideo.pixsignage.domain.Sdomain"%> 
+<%@page import="com.broadvideo.pixsignage.service.SdomainService"%> 
+
+<%
+	ServletContext servletContext = this.getServletContext();
+	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
+	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
+	
+	String title = "";
+	String css = "login-soft.css";
+	String bgcolor = "#666";
+	if (sdomain != null) {
+		title = sdomain.getName();
+		css = "login3.css";
+		bgcolor = "#E1E1E1";
+	}
+%>
+
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -11,7 +32,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Digital Signage</title>
+<title><%=title%> Digital Signage</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -25,7 +46,7 @@
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/pages/css/login-soft.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/admin/pages/css/<%=css%>" rel="stylesheet" type="text/css" />
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN THEME STYLES -->
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
@@ -38,10 +59,20 @@
 </head>
 <!-- END HEAD -->
 
-<body class="login">
+<body class="login" style="background-color: <%=bgcolor%> !important;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/default/logo.png?t=1" height="120" alt="" />
+		<%
+			if (sdomain != null) {
+		%>
+		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="100" alt="" />
+		<%
+			} else {
+		%>
+		<img src="${base_ctx}/img/logo-default.png?t=1" height="120" alt="" />
+		<%
+			}
+		%>
 	</div>
 	
 	<!-- END LOGO -->

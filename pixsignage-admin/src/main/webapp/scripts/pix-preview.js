@@ -91,13 +91,15 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += 'Video-In';
 		layoutdtlhtml += '</p>';
 	} else if (layoutdtl.type == 5) {
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'DVB';
-		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (layoutdtl.type == 6) {
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'STREAM';
-		layoutdtlhtml += '</p>';
+		layoutdtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (layoutdtl.type == 8) {
+		if (layoutdtl.width > layoutdtl.height) {
+			layoutdtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		} else {
+			layoutdtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 	} else {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
@@ -164,6 +166,8 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
 			bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 		}
+	} else if (bundledtl.objtype == 5) {
+		bgimage = '../img/region/region-widget.jpg';
 	}
 	
 	var bundledtlhtml = '';
@@ -219,17 +223,9 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 		bundledtlhtml += 'Video-In';
 		bundledtlhtml += '</p>';
 	} else if (bundledtl.layoutdtl.type == 5) {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		if (bundledtl.dvb != null) {
-			bundledtlhtml += bundledtl.dvb.name;
-		} else {
-			bundledtlhtml += 'DVB';
-		}
-		bundledtlhtml += '</p>';
+		bundledtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.type == 6) {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += 'STREAM';
-		bundledtlhtml += '</p>';
+		bundledtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.type == 7) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
@@ -238,6 +234,12 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 			bundledtlhtml += eval('common.view.region_type_7');
 		}
 		bundledtlhtml += '</p>';
+	} else if (bundledtl.layoutdtl.type == 8) {
+		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
+			bundledtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		} else {
+			bundledtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 	} else {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
