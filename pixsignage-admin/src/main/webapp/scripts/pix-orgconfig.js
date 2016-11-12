@@ -8,7 +8,15 @@ function refreshMyTable() {
 			if (data.errorcode == 0) {
 				CurrentOrg = data.org;
 				$('#MyTable').dataTable().fnClearTable();
-				$('#MyTable').dataTable().fnAddData([common.view.devicepass, CurrentOrg.devicepass]);
+
+				if (CurrentOrg.devicepassflag == 1) {
+					var devicepasshtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.devicepassflag, devicepasshtml]);
+					$('#MyTable').dataTable().fnAddData([common.view.devicepass, CurrentOrg.devicepass]);
+				} else {
+					var devicepasshtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.devicepassflag, devicepasshtml]);
+				}
 				if (CurrentOrg.backupvideo != null) {
 					var backupvideohtml = '';
 					if (CurrentOrg.backupvideo.thumbnail == null) {
@@ -21,20 +29,13 @@ function refreshMyTable() {
 					$('#MyTable').dataTable().fnAddData([common.view.backupvideo, '']);
 				}
 				if (CurrentOrg.powerflag == 1) {
-					var powerhtml = '<span class="label label-xs label-success">打开</span>';
+					var powerhtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
 					$('#MyTable').dataTable().fnAddData([common.view.poweron, CurrentOrg.poweron]);
 					$('#MyTable').dataTable().fnAddData([common.view.poweroff, CurrentOrg.poweroff]);
 				} else {
-					var powerhtml = '<span class="label label-xs label-warning">关闭</span>';
+					var powerhtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
-				}
-				if (CurrentOrg.qrcodeflag == 1) {
-					var qrcodehtml = '<span class="label label-xs label-success">打开</span>';
-					$('#MyTable').dataTable().fnAddData([common.view.qrcodeflag, qrcodehtml]);
-				} else {
-					var qrcodehtml = '<span class="label label-xs label-warning">关闭</span>';
-					$('#MyTable').dataTable().fnAddData([common.view.qrcodeflag, qrcodehtml]);
 				}
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);
@@ -113,6 +114,13 @@ $('body').on('click', '.pix-update', function(event) {
 			$(checkbox).parent().addClass('checked');
 		}
 	});
+
+	if ($('input[name="org.devicepassflag"]:checked').val() == 0) {
+		$('.devicepassflag').css('display', 'none');
+	} else {
+		$('.devicepassflag').css('display', '');
+	}
+
 	if ($('input[name="org.powerflag"]:checked').val() == 0) {
 		$('.powerflag').css('display', 'none');
 	} else {
@@ -122,7 +130,7 @@ $('body').on('click', '.pix-update', function(event) {
 		if ($('input[name="org.poweroff"]').val() == '') {
 			$('input[name="org.poweroff"]').val('00:00:00');
 		}
-		$('.powerflag').css('display', 'block');
+		$('.powerflag').css('display', '');
 	}
 	$('#MyEditForm').attr('action', 'org!update.action');
 	
@@ -210,6 +218,15 @@ $('body').on('click', '.pix-push', function(event) {
 	});
 });
 
+$('input[name="org.devicepassflag"]').click(function(e) {
+	if ($('input[name="org.devicepassflag"]:checked').val() == 0) {
+		$('.devicepassflag').css('display', 'none');
+	} else {
+		$('.devicepassflag').css('display', '');
+	}
+});  
+
+
 $('input[name="org.powerflag"]').click(function(e) {
 	if ($('input[name="org.powerflag"]:checked').val() == 0) {
 		$('.powerflag').css('display', 'none');
@@ -220,7 +237,7 @@ $('input[name="org.powerflag"]').click(function(e) {
 		if ($('input[name="org.poweroff"]').val() == '') {
 			$('input[name="org.poweroff"]').val('00:00:00');
 		}
-		$('.powerflag').css('display', 'block');
+		$('.powerflag').css('display', '');
 	}
 });  
 

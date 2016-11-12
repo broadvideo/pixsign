@@ -27,6 +27,7 @@ var common = {
 		terminalid: 'Terminal ID',
 		hardkey: 'Hardkey',
 		position: 'Position',
+		map: 'Map',
 		city: 'City',
 		addr: 'Address',
 		onlineflag: 'Online Flag',
@@ -57,6 +58,11 @@ var common = {
 		activetime: 'Active Time',
 		playtime: 'Play TIme',
 		screentime: 'Screen Shot Time',
+		starttime: 'Start Time',
+		endtime: 'End Time',
+		onlinetime: 'Online Time',
+		offlinetime: 'Offline Time',
+		onlineduration: 'Online Duration',
 
 		unregister: 'Unregister',
 		online: 'Online',
@@ -80,6 +86,7 @@ var common = {
 		region_type_6: 'Stream Zone',
 		region_type_7: 'Touch Button',
 		region_type_8: 'Navigate Bar',
+		region_type_9: 'QR Code',
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
 
@@ -123,12 +130,15 @@ var common = {
 		template_type_0: 'Private',
 		template_type_1: 'Public',
 
+		devicepassflag: 'Maintain Password Flag',
 		devicepass: 'Maintain Password',
 		backupvideo: 'Backup Video',
 		powerflag: 'Power Control Flag',
 		poweron: 'Power on',
 		poweroff: 'Power off',
 		qrcodeflag: 'QR Code Display',
+		on: 'ON',
+		off: 'OFF',
 		
 		mainboard: 'Mainboard',
 		description: 'Description',
@@ -153,6 +163,7 @@ var common = {
 		pushall: 'Please confirm whether to push config to all devices',
 		reboot: 'Please confirm whether to reboot ',
 		screen: 'Please confirm whether to screen shot ',
+		ucancel: 'Please confirm whether to cancel urgent message',
 		error: 'Operation failed! ',
 		success: 'Operation successfully!',
 			
@@ -174,6 +185,8 @@ var common = {
 		login_failed: 'Input error, login failed',
 
 		region_remove_failed: 'Cannot remove this region',
+
+		folder_remove_failed: 'Cannot remove this folder',
 
 		loginname_repeat: 'Login name conflicted',
 		name_repeat: 'Name conflicted',

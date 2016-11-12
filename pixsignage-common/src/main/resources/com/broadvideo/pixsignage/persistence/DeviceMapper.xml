@@ -152,11 +152,10 @@
   </update>
 
   <update id="updateOnlineflag" >
-    update device d, org o
-    set d.onlineflag = 9 
-    where d.orgid = o.orgid 
-    and d.refreshtime is null 
-    or (unix_timestamp()-unix_timestamp(d.refreshtime) > 60)
+    update device
+    set onlineflag = 9 
+    where refreshtime is null 
+    or (unix_timestamp()-unix_timestamp(refreshtime) > 60)
   </update>
 
   <insert id="insertList">

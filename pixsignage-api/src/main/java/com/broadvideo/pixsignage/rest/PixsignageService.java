@@ -40,12 +40,16 @@ import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Dvb;
+import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.domain.Playlog;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
+import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.PlaylogMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
@@ -64,6 +68,10 @@ public class PixsignageService {
 	private OrgMapper orgMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private OnlinelogMapper onlinelogMapper;
+	@Autowired
+	private PlaylogMapper playlogMapper;
 	@Autowired
 	private DvbMapper dvbMapper;
 	@Autowired
@@ -158,6 +166,14 @@ public class PixsignageService {
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
+			onlinelogMapper.updateOne("" + device.getDeviceid());
+			Onlinelog onlinelog = new Onlinelog();
+			onlinelog.setOrgid(device.getOrgid());
+			onlinelog.setBranchid(device.getBranchid());
+			onlinelog.setDeviceid(device.getDeviceid());
+			onlinelog.setOnlinetime(Calendar.getInstance().getTime());
+			onlinelogMapper.insertSelective(onlinelog);
+
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
@@ -166,6 +182,7 @@ public class PixsignageService {
 			if (device.getDevicegroup() != null) {
 				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
 			}
+			topicJsonArray.put("org-" + device.getOrgid());
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getBackupvideo() != null) {
@@ -200,7 +217,7 @@ public class PixsignageService {
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 			}
 
-			responseJson.put("qrcode_flag", Integer.parseInt(org.getQrcodeflag()));
+			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
@@ -358,6 +375,9 @@ public class PixsignageService {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			String status = requestJson.getString("status");
+			String bundleid = requestJson.getString("bundle_id");
+			String mediatype = requestJson.getString("media_type");
+			int mediaid = requestJson.getInt("media_id");
 			JSONObject locationJson = requestJson.getJSONObject("location");
 
 			if (hardkey == null || hardkey.equals("")) {
@@ -395,6 +415,16 @@ public class PixsignageService {
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
+
+			if (mediatype.equals("video")) {
+				Playlog playlog = new Playlog();
+				playlog.setOrgid(device.getOrgid());
+				playlog.setBranchid(device.getBranchid());
+				playlog.setDeviceid(device.getDeviceid());
+				playlog.setVideoid(mediaid);
+				playlog.setStarttime(Calendar.getInstance().getTime());
+				playlogMapper.insertSelective(playlog);
+			}
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
     <id column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -14,14 +15,20 @@
     <association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
     <collection property="children" ofType="com.broadvideo.pixsignage.domain.Branch" column="{id=branchid}" select="selectChild" />
   </resultMap>
-  <resultMap id="NameResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
+  <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
     <id column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    branchid, orgid, parentid, name, status, description, createtime, createstaffid
+    branchid, orgid, topfolderid, parentid, name, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -39,8 +46,10 @@
     where status = 1 and branchid = #{id}
   </select>
 
-  <select id="selectNameByPrimaryKey" resultMap="NameResultMap" >
-    select branchid,name,parentid from branch
+  <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
+    select
+    <include refid="Base_Column_List" /> 
+    from branch
     where branchid = #{branchid}
   </select>
   
@@ -62,17 +71,17 @@
 
   <delete id="deleteByPrimaryKey">
     update branch set status='9'
-    where branchid = '${branchid}'
+    where branchid = #{branchid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     <selectKey resultType="java.lang.Integer" keyProperty="branchid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into branch (orgid, parentid, name, 
+    insert into branch (orgid, topfolderid, parentid, name, 
       status, description, 
       createtime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -84,6 +93,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         orgid,
+      </if>
+      <if test="topfolderid != null" >
+        topfolderid,
       </if>
       <if test="parentid != null" >
         parentid,
@@ -107,6 +119,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="topfolderid != null" >
+        #{topfolderid,jdbcType=INTEGER},
       </if>
       <if test="parentid != null" >
         #{parentid,jdbcType=INTEGER},
@@ -134,6 +149,9 @@
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
+      <if test="topfolderid != null" >
+        topfolderid = #{topfolderid,jdbcType=INTEGER},
+      </if>
       <if test="parentid != null" >
         parentid = #{parentid,jdbcType=INTEGER},
       </if>
@@ -158,6 +176,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     update branch
     set orgid = #{orgid,jdbcType=INTEGER},
+      topfolderid = #{topfolderid,jdbcType=INTEGER},
       parentid = #{parentid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},

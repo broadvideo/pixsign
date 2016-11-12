@@ -196,6 +196,7 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'folderid','value':CurFolderid });
 			aoData.push({'name':'type','value':myType });
 		}
 	});
@@ -241,12 +242,59 @@ function initMyTable() {
 }
 
 function initMyEditModal() {
+	var currentEditFolderTreeData = [];
+	var currentEditFolderid = 0;
+	function createFolderTreeData(folderes, treeData) {
+		for (var i=0; i<folderes.length; i++) {
+			treeData[i] = {};
+			treeData[i].id = folderes[i].folderid;
+			treeData[i].text = folderes[i].name;
+			treeData[i].state = {
+				opened: true,
+			}
+			treeData[i].children = [];
+			createFolderTreeData(folderes[i].children, treeData[i].children);
+		}
+	}
+	function createEditFolderTree(treeData) {
+		$('#EditFormFolderTree').jstree('destroy');
+		$.ajax({
+			type : 'POST',
+			url : 'folder!list.action',
+			data : {
+				branchid: CurBranchid,
+			},
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					createFolderTreeData(data.aaData, currentEditFolderTreeData);
+					$('#EditFormFolderTree').jstree({
+						'core' : {
+							'multiple' : false,
+							'data' : treeData
+						},
+						'plugins' : ['unique'],
+					});
+					$('#EditFormFolderTree').on('loaded.jstree', function() {
+						$('#EditFormFolderTree').jstree('select_node', currentEditFolderid);
+					});
+				} else {
+					alert(data.errorcode + ": " + data.errormsg);
+				}
+			},
+			error : function() {
+				alert('failure');
+			}
+		});
+
+	}
+	
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 	
 	FormValidateOption.rules['video.name'] = {};
 	FormValidateOption.rules['video.name']['required'] = true;
 	FormValidateOption.rules['video.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
+		$('#MyEditForm input[name="video.folderid"]').attr('value', $("#EditFormFolderTree").jstree('get_selected', false)[0]);
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
@@ -286,6 +334,8 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
+		currentEditFolderid = CurrentVideo.folderid;
+		createEditFolderTree(currentEditFolderTreeData);
 
 		$("#RelateVideoSelect").select2({
 			placeholder: common.tips.detail_select,

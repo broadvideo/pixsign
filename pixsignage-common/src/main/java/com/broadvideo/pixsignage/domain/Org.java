@@ -71,6 +71,8 @@ public class Org {
 
 	private String qrcodeflag;
 
+	private String devicepassflag;
+
 	private String devicepass;
 
 	private String apps;
@@ -335,6 +337,14 @@ public class Org {
 
 	public void setQrcodeflag(String qrcodeflag) {
 		this.qrcodeflag = qrcodeflag;
+	}
+
+	public String getDevicepassflag() {
+		return devicepassflag;
+	}
+
+	public void setDevicepassflag(String devicepassflag) {
+		this.devicepassflag = devicepassflag;
 	}
 
 	public String getDevicepass() {

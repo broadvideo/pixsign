@@ -34,6 +34,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 
 </style>
@@ -223,74 +224,7 @@ response.setDateHeader("Expires",0);
 														</div>
 													</div>
 												</form>
-													
-												<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
-													<div class="col-md-6">
-														<div class="portlet box blue">
-															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
-																<ul class="nav nav-tabs">
-																	<li id="nav_tab3" class="imageflag">
-																		<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
-																	</li>
-																	<li id="nav_tab2" class="hide-orgtype-2">
-																		<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
-																	</li>
-																	<li id="nav_tab1" class="videoflag active">
-																		<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
-																	</li>
-																</ul>
-																<div class="actions">
-																	<div class="btn-group" id="BranchTreeDropdown">
-																		<a id="BranchTitle" class="btn default yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
-																		<ul class="dropdown-menu pull-right">
-																			<div class="pre-scrollable">
-																			</div>
-																		</ul>
-																	</div>
-																</div>
-															</div>
-															<div class="portlet-body">
-																<div class="tab-content">
-																	<div class="tab-pane active" id="portlet_tab1">
-																		<table id="IntVideoTable" class="table table-condensed table-hover">
-																			<thead></thead>
-																			<tbody></tbody>
-																		</table>
-																	</div>
-																	<div class="tab-pane" id="portlet_tab2">
-																		<table id="ExtVideoTable" class="table table-condensed table-hover">
-																			<thead></thead>
-																			<tbody></tbody>
-																		</table>
-																	</div>
-																	<div class="tab-pane" id="portlet_tab3">
-																		<table id="ImageTable" class="table table-condensed table-hover">
-																			<thead></thead>
-																			<tbody></tbody>
-																		</table>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-6">
-														<div class="portlet box green">
-															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
-															</div>
-															<div class="portlet-body">
-																<div class="table-responsive">
-																	<table id="MedialistDtlTable" class="table table-condensed table-hover">
-																		<thead></thead>
-																		<tbody></tbody>
-																	</table>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												
+																								
 												<div class="row bundle-ctl regiontype-6">
 													<div class="col-md-7">
 														<div class="portlet box blue">
@@ -324,6 +258,76 @@ response.setDateHeader("Expires",0);
 												
 											</div>
 										</div>
+										
+										<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
+											<div class="col-md-8">
+												<div class="portlet box blue">
+													<div class="portlet-title">
+														<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+														<ul class="nav nav-tabs">
+															<li id="nav_tab3" class="imageflag">
+																<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+															</li>
+															<li id="nav_tab2" class="hide-orgtype-2">
+																<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+															</li>
+															<li id="nav_tab1" class="videoflag active">
+																<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+															</li>
+														</ul>
+													</div>
+													<div class="portlet-body">
+														<div class="tab-content">
+															<div class="tab-pane active" id="portlet_tab">
+																<div class="row">
+																	<div class="col-md-3">
+																		<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
+																		<hr/>
+																		<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+																	</div>
+																	<div class="col-md-9">
+																		<div id="IntVideoDiv">
+																			<table id="IntVideoTable" class="table table-condensed table-hover">
+																				<thead></thead>
+																				<tbody></tbody>
+																			</table>
+																		</div>
+																		<div id="ExtVideoDiv" style="display:none">
+																			<table id="ExtVideoTable" class="table table-condensed table-hover">
+																				<thead></thead>
+																				<tbody></tbody>
+																			</table>
+																		</div>
+																		<div id="ImageDiv" style="display:none">
+																			<table id="ImageTable" class="table table-condensed table-hover">
+																				<thead></thead>
+																				<tbody></tbody>
+																			</table>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="portlet box green">
+													<div class="portlet-title">
+														<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
+													</div>
+													<div class="portlet-body">
+														<div class="table-responsive">
+															<table id="MedialistDtlTable" class="table table-condensed table-hover">
+																<thead></thead>
+																<tbody></tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -506,7 +510,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -516,14 +520,13 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initBranchTree();
 });
 
 </script>

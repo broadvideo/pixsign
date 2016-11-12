@@ -236,54 +236,34 @@ function initDeviceModal() {
 					
 					$('#LeftTreeDiv').jstree('destroy');
 					$('#LeftTreeDiv').jstree({
-						'json_data' : {
+						'core' : {
+							'multiple' : false,
 							'data' : branchTreeDivData
 						},
-						'plugins' : [ 'themes', 'json_data', 'ui' ],
-						'core' : {
-							'animation' : 100
-						},
-						'ui' : {
-							'select_limit' : 1,
-							'initially_select' : LeftBranchid,
-						},
-						'themes' : {
-							'theme' : 'proton',
-							'icons' : false,
-						}
+						'plugins' : ['unique'],
 					});
 					$('#LeftTreeDiv').on('loaded.jstree', function() {
-						$('#LeftTreeDiv').jstree('open_all');
+						$('#LeftTreeDiv').jstree('select_node', LeftBranchid);
 					});
 					$('#LeftTreeDiv').on('select_node.jstree', function(event, data) {
-						LeftBranchid = data.rslt.obj.attr('id');
+						LeftBranchid = data.instance.get_node(data.selected[0]).id;
 						LeftDevices = [];
 						$('#LeftTable').dataTable()._fnAjaxUpdate();
 					});
 					
 					$('#RightTreeDiv').jstree('destroy');
 					$('#RightTreeDiv').jstree({
-						'json_data' : {
+						'core' : {
+							'multiple' : false,
 							'data' : branchTreeDivData
 						},
-						'plugins' : [ 'themes', 'json_data', 'ui' ],
-						'core' : {
-							'animation' : 100
-						},
-						'ui' : {
-							'select_limit' : 1,
-							'initially_select' : RightBranchid,
-						},
-						'themes' : {
-							'theme' : 'proton',
-							'icons' : false,
-						}
+						'plugins' : ['unique'],
 					});
 					$('#RightTreeDiv').on('loaded.jstree', function() {
-						$('#RightTreeDiv').jstree('open_all');
+						$('#RightTreeDiv').jstree('select_node', RightBranchid);
 					});
 					$('#RightTreeDiv').on('select_node.jstree', function(event, data) {
-						RightBranchid = data.rslt.obj.attr('id');
+						RightBranchid = data.instance.get_node(data.selected[0]).id;
 						RightDevices = [];
 						$('#RightTable').dataTable()._fnAjaxUpdate();
 					});
@@ -300,19 +280,13 @@ function initDeviceModal() {
 	function createBranchTreeData(branches, treeData) {
 		for (var i=0; i<branches.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['title'] = branches[i].name;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == LeftBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
 			}
-			treeData[i]['children'] = [];
-			createBranchTreeData(branches[i].children, treeData[i]['children']);
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
 		}
 	}
 

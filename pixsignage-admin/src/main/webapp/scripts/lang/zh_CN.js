@@ -27,6 +27,7 @@ var common = {
 		terminalid: '终端ID',
 		hardkey: '硬件码',
 		position: '位置',
+		map: '地图',
 		city: '城市',
 		addr: '地址',
 		onlineflag: '在线',
@@ -57,6 +58,11 @@ var common = {
 		activetime: '激活时间',
 		playtime: '播放时间',
 		screentime: '截屏时间',
+		starttime: '开始时间',
+		endtime: '结束时间',
+		onlinetime: '上线时间',
+		offlinetime: '离线时间',
+		onlineduration: '在线时长',
 
 		unregister: '未注册',
 		online: '在线',
@@ -80,6 +86,7 @@ var common = {
 		region_type_6: '视频流',
 		region_type_7: '互动键',
 		region_type_8: '导航条',
+		region_type_9: '二维码',
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
 
@@ -123,12 +130,15 @@ var common = {
 		template_type_0: '内部模板',
 		template_type_1: '公共模板',
 
-		devicepass: '终端维护密码',
+		devicepassflag: '终端密码开关',
+		devicepass: '终端密码',
 		backupvideo: '默认垫片',
 		powerflag: '自动开关机',
 		poweron: '开机时间',
 		poweroff: '关机时间',
 		qrcodeflag: '二维码显示',
+		on: '打开',
+		off: '关闭',
 		
 		mainboard: '主板型号',
 		description: '描述',
@@ -153,6 +163,7 @@ var common = {
 		pushall: '是否推送配置至所有终端 ',
 		reboot: '是否重启 ',
 		screen: '是否截屏 ',
+		ucancel: '是否取消紧急消息',
 		error: '操作失败  ',
 		success: '操作成功',
 		
@@ -174,6 +185,8 @@ var common = {
 		login_failed: '信息输入有误，登陆失败',
 
 		region_remove_failed: '无法删除这个区域',
+
+		folder_remove_failed: '无法删除这个文件夹',
 
 		loginname_repeat: '登录名已存在',
 		name_repeat: '名称已存在',

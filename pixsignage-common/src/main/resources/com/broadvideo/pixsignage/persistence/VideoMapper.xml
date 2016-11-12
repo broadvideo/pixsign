@@ -5,6 +5,7 @@
     <id column="videoid" property="videoid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="folderid" property="folderid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
@@ -26,12 +27,12 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
+    videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
     thumbnail, relateid, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
-    select videoid, orgid, branchid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
+    select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
     thumbnail, 0 as relateid, createtime, createstaffid from video
     where videoid = #{videoid}
     and status != '9'
@@ -45,12 +46,16 @@
   </select>
 
   <select id="selectCount" resultType="Integer">
-    select count(1) from video where status = 1
+    select count(1) from video 
+    where status = 1
     <if test="orgid != null">
       and orgid=#{orgid}
     </if>
     <if test="branchid != null">
       and branchid=#{branchid}
+    </if>
+    <if test="folderid != null">
+      and folderid=#{folderid}
     </if>
     <if test="type != null">
       and type=#{type}
@@ -71,6 +76,9 @@
     </if>
     <if test="branchid != null">
       and branchid=#{branchid}
+    </if>
+    <if test="folderid != null">
+      and folderid=#{folderid}
     </if>
     <if test="type != null">
       and type=#{type}
@@ -102,13 +110,15 @@
     <selectKey resultType="java.lang.Integer" keyProperty="videoid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into video (orgid, branchid, name, uuid, 
+    insert into video (orgid, branchid, folderid, 
+      name, uuid, 
       type, width, height, 
       filepath, filename, size, md5, 
       previewflag, status, progress, description, 
       thumbnail, relateid, createtime, createstaffid
       )
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
@@ -126,6 +136,9 @@
       </if>
       <if test="branchid != null" >
         branchid,
+      </if>
+      <if test="folderid != null" >
+        folderid,
       </if>
       <if test="name != null" >
         name,
@@ -185,6 +198,9 @@
       </if>
       <if test="branchid != null" >
         #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="folderid != null" >
+        #{folderid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -248,6 +264,9 @@
       <if test="branchid != null" >
         branchid = #{branchid,jdbcType=INTEGER},
       </if>
+      <if test="folderid != null" >
+        folderid = #{folderid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -306,6 +325,7 @@
     update video
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
+      folderid = #{folderid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       uuid = #{uuid,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},

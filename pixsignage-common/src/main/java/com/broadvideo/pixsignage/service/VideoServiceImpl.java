@@ -27,13 +27,14 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired
 	private DevicefileMapper devicefileMapper;
 
-	public int selectCount(String orgid, String branchid, String type, String previewflag, String search) {
-		return videoMapper.selectCount(orgid, branchid, type, previewflag, search);
+	public int selectCount(String orgid, String branchid, String folderid, String type, String previewflag,
+			String search) {
+		return videoMapper.selectCount(orgid, branchid, folderid, type, previewflag, search);
 	}
 
-	public List<Video> selectList(String orgid, String branchid, String type, String previewflag, String search,
-			String start, String length) {
-		return videoMapper.selectList(orgid, branchid, type, previewflag, search, start, length);
+	public List<Video> selectList(String orgid, String branchid, String folderid, String type, String previewflag,
+			String search, String start, String length) {
+		return videoMapper.selectList(orgid, branchid, folderid, type, previewflag, search, start, length);
 	}
 
 	public Video selectByPrimaryKey(String videoid) {

@@ -292,8 +292,10 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 
-		List<HashMap<String, Object>> bindList = bundlescheduleMapper
-				.selectBindListByBundle("" + bundle.getHomebundleid());
+		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getBundleid());
+		if (bundle.getHomeflag().equals("0")) {
+			bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getHomebundleid());
+		}
 		for (HashMap<String, Object> bindObj : bindList) {
 			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
@@ -627,7 +629,11 @@ public class BundleServiceImpl implements BundleService {
 			Layoutdtl layoutdtl = bundledtl.getLayoutdtl();
 			JSONObject regionJson = new JSONObject();
 			regionJsonArray.put(regionJson);
-			regionJson.put("region_id", layoutdtl.getLayoutdtlid());
+			if (layoutdtl.getMainflag().equals("1")) {
+				regionJson.put("region_id", 1);
+			} else {
+				regionJson.put("region_id", layoutdtl.getLayoutdtlid());
+			}
 			regionJson.put("main_flag", layoutdtl.getMainflag());
 			regionJson.put("width", layoutdtl.getWidth());
 			regionJson.put("height", layoutdtl.getHeight());
@@ -642,6 +648,7 @@ public class BundleServiceImpl implements BundleService {
 			regionJson.put("type", layoutdtl.getType());
 			regionJson.put("sleep", layoutdtl.getSleeptime());
 			regionJson.put("interval", layoutdtl.getIntervaltime());
+			regionJson.put("animation", layoutdtl.getAnimation());
 			regionJson.put("fit_flag", Integer.parseInt(layoutdtl.getFitflag()));
 			if (layoutdtl.getDirection().equals("1")) {
 				regionJson.put("direction", "none");

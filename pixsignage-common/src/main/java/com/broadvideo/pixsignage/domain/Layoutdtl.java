@@ -47,6 +47,8 @@ public class Layoutdtl {
 
 	private Integer intervaltime;
 
+	private String animation;
+
 	private String direction;
 
 	private String speed;
@@ -177,6 +179,14 @@ public class Layoutdtl {
 
 	public void setIntervaltime(Integer intervaltime) {
 		this.intervaltime = intervaltime;
+	}
+
+	public String getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(String animation) {
+		this.animation = animation;
 	}
 
 	public String getDirection() {

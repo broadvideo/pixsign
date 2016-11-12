@@ -84,58 +84,37 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void configall(String orgid) throws Exception {
 		Org org = orgMapper.selectByPrimaryKey(orgid);
-		List<Device> devices = deviceMapper.selectList(orgid, null, "1", null, null, null, null, "deviceid");
-		for (Device device : devices) {
-			Msgevent msgevent = new Msgevent();
-			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
-			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-			msgevent.setObjid1(device.getDeviceid());
-			msgevent.setObjtype2(Msgevent.ObjType_2_None);
-			msgevent.setObjid2(0);
-			msgevent.setStatus(Msgevent.Status_Wait);
-			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Config, Msgevent.ObjType_1_Device,
-					"" + device.getDeviceid(), null, null, null);
-			msgeventMapper.insertSelective(msgevent);
+		JSONObject msgJson = new JSONObject().put("msg_id", 0).put("msg_type", "CONFIG");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+		msgBodyJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
+		JSONArray topicJsonArray = new JSONArray();
+		msgBodyJson.put("msg_topic", topicJsonArray);
 
-			JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "CONFIG");
-			JSONObject msgBodyJson = new JSONObject();
-			msgJson.put("msg_body", msgBodyJson);
-			msgBodyJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
-			JSONArray topicJsonArray = new JSONArray();
-			msgBodyJson.put("msg_topic", topicJsonArray);
-			topicJsonArray.put("device-" + device.getDeviceid());
-			if (device.getDevicegroup() != null) {
-				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
-			}
-
-			if (org.getBackupvideo() != null) {
-				JSONObject backupvideoJson = new JSONObject();
-				// backupvideoJson.put("type", "video");
-				backupvideoJson.put("id", org.getBackupvideoid());
-				backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilepath());
-				backupvideoJson.put("file", org.getBackupvideo().getFilename());
-				backupvideoJson.put("size", org.getBackupvideo().getSize());
-				msgBodyJson.put("backup_media", backupvideoJson);
-			}
-
-			msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
-			if (org.getPowerflag().equals("1")) {
-				msgBodyJson.put("power_on_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
-				msgBodyJson.put("power_off_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
-			}
-
-			msgBodyJson.put("qrcode_flag", org.getQrcodeflag());
-			msgBodyJson.put("password", org.getDevicepass());
-
-			String topic = "device-" + device.getDeviceid();
-			ActiveMQUtil.publish(topic, msgJson.toString());
-			msgevent.setStatus(Msgevent.Status_Sent);
-			msgevent.setSendtime(Calendar.getInstance().getTime());
-			msgeventMapper.updateByPrimaryKeySelective(msgevent);
+		if (org.getBackupvideo() != null) {
+			JSONObject backupvideoJson = new JSONObject();
+			// backupvideoJson.put("type", "video");
+			backupvideoJson.put("id", org.getBackupvideoid());
+			backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
+					+ "/pixsigdata" + org.getBackupvideo().getFilepath());
+			backupvideoJson.put("file", org.getBackupvideo().getFilename());
+			backupvideoJson.put("size", org.getBackupvideo().getSize());
+			msgBodyJson.put("backup_media", backupvideoJson);
 		}
+
+		msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
+		if (org.getPowerflag().equals("1")) {
+			msgBodyJson.put("power_on_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+			msgBodyJson.put("power_off_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+		}
+
+		msgBodyJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
+		msgBodyJson.put("password", org.getDevicepass());
+
+		String topic = "org-" + orgid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
 	}
 
 	@Transactional
@@ -162,6 +141,7 @@ public class DeviceServiceImpl implements DeviceService {
 		if (device.getDevicegroup() != null) {
 			topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
 		}
+		topicJsonArray.put("org-" + device.getOrgid());
 
 		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 		if (org.getBackupvideo() != null) {
@@ -183,7 +163,6 @@ public class DeviceServiceImpl implements DeviceService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 		}
 
-		msgBodyJson.put("qrcode_flag", org.getQrcodeflag());
 		msgBodyJson.put("password", org.getDevicepass());
 
 		String topic = "device-" + deviceid;
@@ -240,4 +219,38 @@ public class DeviceServiceImpl implements DeviceService {
 		msgevent.setSendtime(Calendar.getInstance().getTime());
 		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
+
+	@Transactional
+	public void utext(String orgid, String text, String count, String position, String speed, String color, String size,
+			String bgcolor, String opacity) throws Exception {
+		JSONObject msgJson = new JSONObject().put("msg_id", 0).put("msg_type", "UTEXT");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+		msgBodyJson.put("text", text);
+		msgBodyJson.put("count", Integer.parseInt(count));
+		msgBodyJson.put("position", position);
+		msgBodyJson.put("speed", Integer.parseInt(speed));
+		msgBodyJson.put("color", color);
+		msgBodyJson.put("size", Integer.parseInt(size));
+		msgBodyJson.put("bgcolor", bgcolor);
+		String s = Integer.toHexString(Integer.parseInt(opacity));
+		if (s.length() == 1) {
+			s = "0" + s;
+		}
+		msgBodyJson.put("bgcolor", "#" + s + bgcolor.trim().substring(1));
+
+		String topic = "org-" + orgid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+	}
+
+	@Transactional
+	public void ucancel(String orgid) throws Exception {
+		JSONObject msgJson = new JSONObject().put("msg_id", 0).put("msg_type", "UCANCEL");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+
+		String topic = "org-" + orgid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+	}
+
 }

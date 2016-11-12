@@ -77,7 +77,7 @@ public class DeviceAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("DeviceAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -91,7 +91,7 @@ public class DeviceAction extends BaseDatatableAction {
 			deviceService.addDevice(device);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("DeviceAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -103,7 +103,7 @@ public class DeviceAction extends BaseDatatableAction {
 			deviceService.updateDeviceSelective(device);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("DeviceAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -115,7 +115,7 @@ public class DeviceAction extends BaseDatatableAction {
 			deviceService.deleteDevice("" + device.getDeviceid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("DeviceAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -128,7 +128,7 @@ public class DeviceAction extends BaseDatatableAction {
 			device = deviceService.selectByPrimaryKey("" + deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("DeviceAction doGet exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -241,6 +241,43 @@ public class DeviceAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("doExport exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUText() {
+		try {
+			String text = getParameter("text");
+			String count = getParameter("count");
+			String position = getParameter("position");
+			String speed = getParameter("speed");
+			String color = getParameter("color");
+			String size = getParameter("size");
+			String bgcolor = getParameter("bgcolor");
+			String opacity = getParameter("opacity");
+			logger.info("Send utext of {}: {}", getLoginStaff().getOrg().getCode(), text);
+			deviceService.utext("" + getLoginStaff().getOrgid(), text, count, position, speed, color, size, bgcolor,
+					opacity);
+			logger.info("Device utext success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device utext error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUCancel() {
+		try {
+			logger.info("Send ucancel of {}", getLoginStaff().getOrg().getCode());
+			deviceService.ucancel("" + getLoginStaff().getOrgid());
+			logger.info("Device ucancel success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device ucancel error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

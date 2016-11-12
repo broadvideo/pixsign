@@ -115,7 +115,7 @@ public class Device {
 	}
 
 	public String getPosition() {
-		return position;
+		return position == null ? "" : position.trim();
 	}
 
 	public void setPosition(String position) {
@@ -251,7 +251,7 @@ public class Device {
 	}
 
 	public String getAddr1() {
-		return addr1;
+		return addr1 == null ? "" : addr1.trim();
 	}
 
 	public void setAddr1(String addr1) {
@@ -259,7 +259,7 @@ public class Device {
 	}
 
 	public String getAddr2() {
-		return addr2;
+		return addr2 == null ? "" : addr2.trim();
 	}
 
 	public void setAddr2(String addr2) {

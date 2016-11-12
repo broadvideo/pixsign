@@ -9,6 +9,9 @@ var myurls = {
 	'image.list' : 'image!list.action',
 };
 
+var CurrentMediaBranchid;
+var CurrentMediaFolderid;
+
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
 	if (CurBranchid == MyBranchid) {
@@ -18,7 +21,7 @@ function refreshMyTable() {
 	}
 }
 
-function refreshTableFromBranchDropdown() {
+function refreshMediaTable() {
 	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 	$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
 	$('#ImageTable').dataTable()._fnAjaxUpdate();
@@ -267,6 +270,7 @@ function initMedialistDtlModal() {
 
 	$('#MedialistDtlModal').on('shown.bs.modal', function (e) {
 		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+		initMediaBranchTree();
 	})
 
 	//本地视频table初始化
@@ -363,7 +367,8 @@ function initMedialistDtlModal() {
 			});
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'branchid','value':DropdownBranchid });
+			aoData.push({'name':'branchid','value':CurrentMediaBranchid });
+			aoData.push({'name':'folderid','value':CurrentMediaFolderid });
 			aoData.push({'name':'type','value':1 });
 		}
 	});
@@ -465,7 +470,8 @@ function initMedialistDtlModal() {
 			});
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'branchid','value':DropdownBranchid });
+			aoData.push({'name':'branchid','value':CurrentMediaBranchid });
+			aoData.push({'name':'folderid','value':CurrentMediaFolderid });
 			aoData.push({'name':'type','value':2 });
 		}
 	});
@@ -536,7 +542,8 @@ function initMedialistDtlModal() {
 			});
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'branchid','value':DropdownBranchid });
+			aoData.push({'name':'branchid','value':CurrentMediaBranchid });
+			aoData.push({'name':'folderid','value':CurrentMediaFolderid });
 		}
 	});
 	$('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
@@ -544,12 +551,21 @@ function initMedialistDtlModal() {
 	$('#ImageTable').css('width', '100%');
 
 	$('#nav_tab1').click(function(event) {
+		$('#IntVideoDiv').css('display', '');
+		$('#ExtVideoDiv').css('display', 'none');
+		$('#ImageDiv').css('display', 'none');
 		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 	});
 	$('#nav_tab2').click(function(event) {
+		$('#IntVideoDiv').css('display', 'none');
+		$('#ExtVideoDiv').css('display', '');
+		$('#ImageDiv').css('display', 'none');
 		$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
 	});
 	$('#nav_tab3').click(function(event) {
+		$('#IntVideoDiv').css('display', 'none');
+		$('#ExtVideoDiv').css('display', 'none');
+		$('#ImageDiv').css('display', '');
 		$('#ImageTable').dataTable()._fnAjaxUpdate();
 	});
 
@@ -738,4 +754,123 @@ function initMedialistDtlModal() {
 			}
 		});
 	});
-}		
+}
+
+
+function initMediaBranchTree() {
+	$.ajax({
+		type : 'POST',
+		url : 'branch!list.action',
+		data : {},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var branches = data.aaData;
+				CurrentMediaBranchid = branches[0].branchid;
+				
+				if ( $("#MediaBranchTreeDiv").length > 0 ) {
+					if (branches[0].children.length == 0) {
+						$('#MediaBranchTreeDiv').css('display', 'none');
+						CurrentMediaFolderid = null;
+						initMediaFolderTree();
+						refreshMediaTable();
+					} else {
+						var branchTreeDivData = [];
+						createBranchTreeData(branches, branchTreeDivData);
+						$('#MediaBranchTreeDiv').jstree('destroy');
+						$('#MediaBranchTreeDiv').jstree({
+							'core' : {
+								'multiple' : false,
+								'data' : branchTreeDivData
+							},
+							'plugins' : ['unique'],
+						});
+						$('#MediaBranchTreeDiv').on('loaded.jstree', function() {
+							$('#MediaBranchTreeDiv').jstree('select_node', CurrentMediaBranchid);
+						});
+						$('#MediaBranchTreeDiv').on('select_node.jstree', function(event, data) {
+							CurrentMediaBranchid = data.instance.get_node(data.selected[0]).id;
+							CurrentMediaFolderid = null;
+							initMediaFolderTree();
+							refreshMediaTable();
+						});
+					}
+				}
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+	function createBranchTreeData(branches, treeData) {
+		for (var i=0; i<branches.length; i++) {
+			treeData[i] = {};
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
+			}
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
+		}
+	}	
+}
+
+
+function initMediaFolderTree() {
+	$.ajax({
+		type : 'POST',
+		url : 'folder!list.action',
+		data : {
+			branchid: CurrentMediaBranchid
+		},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var folders = data.aaData;
+				CurrentMediaFolderid = folders[0].folderid;
+				
+				if ( $("#MediaFolderTreeDiv").length > 0 ) {
+					var folderTreeDivData = [];
+					createFolderTreeData(folders, folderTreeDivData);
+					$('#MediaFolderTreeDiv').jstree('destroy');
+					$('#MediaFolderTreeDiv').jstree({
+						'core' : {
+							'multiple' : false,
+							'data' : folderTreeDivData
+						},
+						'plugins' : ['unique', 'types'],
+						'types' : {
+							'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
+						},
+					});
+					$('#MediaFolderTreeDiv').on('loaded.jstree', function() {
+						$('#MediaFolderTreeDiv').jstree('select_node', CurrentMediaFolderid);
+					});
+					$('#MediaFolderTreeDiv').on('select_node.jstree', function(event, data) {
+						CurrentMediaFolderid = data.instance.get_node(data.selected[0]).id;
+						refreshMediaTable();
+					});
+				}
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+	function createFolderTreeData(folders, treeData) {
+		if (folders == null) return;
+		for (var i=0; i<folders.length; i++) {
+			treeData[i] = {};
+			treeData[i].id = folders[i].folderid;
+			treeData[i].text = folders[i].name;
+			treeData[i].state = {
+				opened: true,
+			}
+			treeData[i].children = [];
+			createFolderTreeData(folders[i].children, treeData[i].children);
+		}
+	}
+}

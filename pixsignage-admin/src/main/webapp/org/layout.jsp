@@ -167,6 +167,7 @@ response.setDateHeader("Expires",0);
 											<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>
@@ -242,6 +243,12 @@ response.setDateHeader("Expires",0);
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 															<div class="col-md-9">
 																<input class="intervalRange" type="text" name="intervaltime" value="10"/>
+															</div>
+														</div>
+														<div class="form-group layout-ctl regiontype-0">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.animation"/></label>
+															<div class="col-md-9">
+																<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 															</div>
 														</div>
 														<div class="form-group layout-ctl regiontype-0">
@@ -536,8 +543,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
 <script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;

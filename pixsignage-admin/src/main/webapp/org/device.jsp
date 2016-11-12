@@ -14,13 +14,12 @@ response.setDateHeader("Expires",0);
 <head>
 <meta charset="utf-8" />
 <title>Pix Signage</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-<meta content="" name="description" />
-<meta content="" name="author" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <meta name="MobileOptimized" content="320">
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="${static_ctx}/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -33,9 +32,30 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
+
+		<div id="DeviceMapModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div id="DeviceMapDiv" style="width:100%; height:600px;"></div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div id="ScreenModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
@@ -93,13 +113,13 @@ response.setDateHeader("Expires",0);
 									<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li id="nav_tab2" class="imageflag"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
-									<li id="nav_tab1" class="videoflag"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
+									<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
+									<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
 								</ul>
 							</div>
 							<div class="portlet-body">
 								<div class="tab-content">
-									<div class="tab-pane" id="portlet_tab1">
+									<div class="tab-pane active" id="portlet_tab1">
 										<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
 											<thead></thead>
 											<tbody></tbody>
@@ -180,6 +200,99 @@ response.setDateHeader("Expires",0);
 			</div>
 		</div>
 
+		<div id="UTextModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="UTextForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.count"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="count" value="0" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.position"/></label>
+									<div class="col-md-9 radio-list">
+										<label class="radio-inline">
+											<input type="radio" name="position" value="top"> <spring:message code="global.position.top"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="position" value="center"> <spring:message code="global.position.center"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="position" value="bottom" checked> <spring:message code="global.position.bottom"/>
+										</label>  
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
+									<div class="col-md-9 radio-list">
+										<label class="radio-inline">
+											<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
+										</label>  
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
+									<div class="col-md-9">
+										<div class="input-group colorpicker-component colorPick">
+											<input type="text" name="color" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
+											<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
+									<div class="col-md-9">
+										<input class="sizeRange" type="text" name="size" value="50"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+									<div class="col-md-9">
+										<div class="input-group colorpicker-component bgcolorPick">
+											<input type="text" name="bgcolor" value="#000000" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
+											<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
+									<div class="col-md-9">
+										<input class="opacityRange" type="text" name="opacity" value=""/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.text"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="3" name="text"></textarea>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="page-content-wrapper">
 			<div class="page-content">
 				<h3 class="page-title"><spring:message code="menu.device"/></h3>
@@ -215,6 +328,12 @@ response.setDateHeader("Expires",0);
 									<div class="tab-content col-md-10" id="BranchContentDiv">
 										<div class="tab-pane active" id="portlet_device1">
 											<div class="table-toolbar">
+												<div class="btn-group">
+													<button class="btn red pix-utext"><spring:message code="global.utext"/> <i class="fa fa-bolt"></i></button>
+												</div>
+												<div class="btn-group">
+													<button class="btn blue pix-ucancel"><spring:message code="global.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
+												</div>
 												<!-- 
 												<div class="btn-group">
 													<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -289,8 +408,11 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 
-<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -298,12 +420,9 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=3" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-device.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-device.js?t=5"></script>
 <script>
-var videoflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getVideoflag() %>;
-var imageflag = <%=((Org)session.getAttribute(CommonConstants.SESSION_ORG)).getImageflag() %>;
-
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
@@ -313,6 +432,8 @@ jQuery(document).ready(function() {
 	initMyEditModal();
 	initScreenModal();
 	initDeviceFileModal();
+	initMapModal();
+	initUTextModal();
 });
 
 </script>

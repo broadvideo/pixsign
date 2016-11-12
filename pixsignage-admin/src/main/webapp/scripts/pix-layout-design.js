@@ -19,6 +19,8 @@ RegionLimits['4'] = 1;
 RegionLimits['5'] = 1;
 RegionLimits['6'] = 4;
 RegionLimits['7'] = 6;
+RegionLimits['8'] = 1;
+RegionLimits['9'] = 1;
 RegionLimits['A1'] = 1;
 RegionLimits['A2'] = 1;
 
@@ -84,23 +86,38 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		border = '3px solid #FF0000';
 	}
 	var bgcolor = layoutdtl.bgcolor;
-	if (layoutdtl.mainflag == 1) {
-		bgcolor = '#6Fa8DC';
-	} else if (layoutdtl.type == 0) {
-		bgcolor = '#FFF2CC';
+	var bgimage = '';
+	if (layoutdtl.bgimage != null) {
+		bgimage = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
+	} else if (layoutdtl.mainflag == 1) {
+		bgimage = '../img/region/region-play-main.jpg';
+	} else if (layoutdtl.type == '0') {
+		bgimage = '../img/region/region-play.jpg';
+	} else if (layoutdtl.type == '4') {
+		bgimage = '../img/region/region-videoin.jpg';
+	} else if (layoutdtl.type == '5') {
+		bgimage = '../img/region/region-dvb.jpg';
+	} else if (layoutdtl.type == '6') {
+		bgimage = '../img/region/region-stream.jpg';
+	} else if (layoutdtl.type == '8') {
+		if (layoutdtl.width > layoutdtl.height) {
+			bgimage = '../img/region/region-navigate-h.jpg';
+		} else {
+			bgimage = '../img/region/region-navigate-v.jpg';
+		}
+	} else if (layoutdtl.type == '9') {
+		bgimage = '../img/region/region-qrcode.jpg';
 	}
 	var layoutdtlindex = layout.layoutdtls.indexOf(layoutdtl);
-	if (layoutdtl.type == 0) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:0.5; "></div>';
+
+	layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+	if (layoutdtl.type == '0' || layoutdtl.type == '4' || layoutdtl.type == '5' || layoutdtl.type == '6' || layoutdtl.type == '8' || layoutdtl.type == '9') {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (layoutdtl.bgimage != null) {
-			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
+		layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 1) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+	} else if (layoutdtl.type == '1') {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (layoutdtl.direction == 4) {
+		if (layoutdtl.direction == '4') {
 			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
 			layoutdtlhtml += '滚动文本';
 			layoutdtlhtml += '</marquee>';
@@ -110,15 +127,13 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 			layoutdtlhtml += '</p>';
 		}
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 2) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+	} else if (layoutdtl.type == '2') {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 3) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
+	} else if (layoutdtl.type == '3') {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
@@ -126,34 +141,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 4) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'Video-In';
-		layoutdtlhtml += '</p>';
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 5) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 6) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 8) {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (layoutdtl.width > layoutdtl.height) {
-			layoutdtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		} else {
-			layoutdtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
-		layoutdtlhtml += '</div>';
 	} else {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
@@ -299,6 +287,83 @@ function refreshRegionBgImageSelect() {
 	});
 }
 
+function refreshAnimationSelect() {
+	var animationlist = [
+		{id: 'None', text: 'None'}, 
+		{id: 'Random', text: 'Random'}, 
+		{id: 'DropOut', text: 'DropOut'}, 
+		{id: 'Landing', text: 'Landing'}, 
+//		{id: 'TakingOff', text: 'TakingOff'}, 
+		{id: 'Flash', text: 'Flash'}, 
+		{id: 'Pulse', text: 'Pulse'}, 
+		{id: 'RubberBand', text: 'RubberBand'}, 
+		{id: 'Shake', text: 'Shake'}, 
+		{id: 'Swing', text: 'Swing'}, 
+		{id: 'Wobble', text: 'Wobble'}, 
+		{id: 'Bounce', text: 'Bounce'}, 
+		{id: 'Tada', text: 'Tada'}, 
+		{id: 'StandUp', text: 'StandUp'}, 
+		{id: 'Wave', text: 'Wave'}, 
+//		{id: 'Hinge', text: 'Hinge'}, 
+		{id: 'RollIn', text: 'RollIn'}, 
+//		{id: 'RollOut', text: 'RollOut'}, 
+		{id: 'BounceIn', text: 'BounceIn'}, 
+		{id: 'BounceInDown', text: 'BounceInDown'}, 
+		{id: 'BounceInLeft', text: 'BounceInLeft'}, 
+		{id: 'BounceInRight', text: 'BounceInRight'}, 
+		{id: 'BounceInUp', text: 'BounceInUp'}, 
+		{id: 'FadeIn', text: 'FadeIn'}, 
+		{id: 'FadeInUp', text: 'FadeInUp'}, 
+		{id: 'FadeInDown', text: 'FadeInDown'}, 
+		{id: 'FadeInLeft', text: 'FadeInLeft'}, 
+		{id: 'FadeInRight', text: 'FadeInRight'}, 
+//		{id: 'FadeOut', text: 'FadeOut'}, 
+//		{id: 'FadeOutDown', text: 'FadeOutDown'}, 
+//		{id: 'FadeOutLeft', text: 'FadeOutLeft'}, 
+//		{id: 'FadeOutRight', text: 'FadeOutRight'}, 
+//		{id: 'FadeOutUp', text: 'FadeOutUp'}, 
+		{id: 'FlipInX', text: 'FlipInX'}, 
+//		{id: 'FlipOutX', text: 'FlipOutX'}, 
+//		{id: 'FlipOutY', text: 'FlipOutY'}, 
+		{id: 'RotateIn', text: 'RotateIn'}, 
+		{id: 'RotateInDownLeft', text: 'RotateInDownLeft'}, 
+		{id: 'RotateInDownRight', text: 'RotateInDownRight'}, 
+		{id: 'RotateInUpLeft', text: 'RotateInUpLeft'}, 
+		{id: 'RotateInUpRight', text: 'RotateInUpRight'}, 
+//		{id: 'RotateOut', text: 'RotateOut'}, 
+//		{id: 'RotateOutDownLeft', text: 'RotateOutDownLeft'}, 
+//		{id: 'RotateOutDownRight', text: 'RotateOutDownRight'}, 
+//		{id: 'RotateOutUpLeft', text: 'RotateOutUpLeft'}, 
+//		{id: 'RotateOutUpRight', text: 'RotateOutUpRight'}, 
+		{id: 'SlideInLeft', text: 'SlideInLeft'}, 
+		{id: 'SlideInRight', text: 'SlideInRight'}, 
+		{id: 'SlideInUp', text: 'SlideInUp'}, 
+		{id: 'SlideInDown', text: 'SlideInDown'}, 
+//		{id: 'SlideOutLeft', text: 'SlideOutLeft'}, 
+//		{id: 'SlideOutRight', text: 'SlideOutRight'}, 
+//		{id: 'SlideOutUp', text: 'SlideOutUp'}, 
+//		{id: 'SlideOutDown', text: 'SlideOutDown'}, 
+		{id: 'ZoomIn', text: 'ZoomIn'}, 
+		{id: 'ZoomInDown', text: 'ZoomInDown'}, 
+		{id: 'ZoomInLeft', text: 'ZoomInLeft'}, 
+		{id: 'ZoomInRight', text: 'ZoomInRight'}, 
+		{id: 'ZoomInUp', text: 'ZoomInUp'}, 
+//		{id: 'ZoomOut', text: 'ZoomOut'}, 
+//		{id: 'ZoomOutDown', text: 'ZoomOutDown'}, 
+//		{id: 'ZoomOutLeft', text: 'ZoomOutLeft'}, 
+//		{id: 'ZoomOutRight', text: 'ZoomOutRight'}, 
+//		{id: 'ZoomOutUp', text: 'ZoomOutUp'}, 
+	];
+	
+	$("#AnimationSelect").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		data: animationlist,
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+
 function regionPositionUpdate(e, ui) {
 	var w = $(this).width() / $('#LayoutDiv').width();
 	var h = $(this).height() / $('#LayoutDiv').height();
@@ -352,6 +417,9 @@ function updateRegionBtns() {
 	updateRegionBtn('4');
 	updateRegionBtn('5');
 	updateRegionBtn('6');
+	updateRegionBtn('7');
+	updateRegionBtn('8');
+	updateRegionBtn('9');
 	updateRegionBtn('A1');
 	updateRegionBtn('A2');
 }
@@ -413,6 +481,7 @@ function validLayoutdtl(layoutdtl) {
 
 		layoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 		layoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
+		layoutdtl.animation =  $('#AnimationSelect').select2('val');
 		layoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
 		layoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
 		layoutdtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
@@ -563,7 +632,9 @@ function enterLayoutdtlFocus(layoutdtl) {
 		from: layoutdtl.opacity
 	});
 	refreshSpinners();
-	refreshRegionBgImageSelect();	
+	refreshRegionBgImageSelect();
+	refreshAnimationSelect();
+	$('#AnimationSelect').select2('val', layoutdtl.animation);
 }
 
 $('#LayoutDiv').click(function(e){

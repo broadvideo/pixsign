@@ -331,6 +331,7 @@ function initData2() {
 }
 
 function initTab3() {
+	initMediaBranchTree();
 }
 
 function initData3() {
@@ -390,6 +391,9 @@ function initData3() {
 			bundledtl.medialist.medialistid = 0;
 			bundledtl.medialist.medialistdtls = [];
 			bundledtl.medialist.name = '';
+		} else if (layoutdtl.type == 7) {
+			bundledtl.touchtype = 1;
+			bundledtl.objtype = 0;
 		} else {
 			bundledtl.objtype = 0;
 		}

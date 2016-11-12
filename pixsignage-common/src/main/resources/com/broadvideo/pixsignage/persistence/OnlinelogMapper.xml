@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.OnlinelogMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Onlinelog" >
+    <id column="onlinelogid" property="onlinelogid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="onlinetime" property="onlinetime" jdbcType="TIMESTAMP" />
+    <result column="offlinetime" property="offlinetime" jdbcType="TIMESTAMP" />
+    <result column="duration" property="duration" jdbcType="INTEGER" />
+    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    onlinelogid, orgid, branchid, deviceid, onlinetime, offlinetime, duration
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from onlinelog
+    where onlinelogid = #{onlinelogid}
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from onlinelog
+    where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from onlinelog
+    where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    order by onlinelogid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <update id="updateAll" >
+    update onlinelog ol, device d
+    set ol.offlinetime=now(), 
+    ol.duration=(unix_timestamp()-unix_timestamp(ol.onlinetime))
+    where ol.deviceid = d.deviceid 
+    and ol.offlinetime is null
+    and d.onlineflag='9'
+  </update>
+
+  <update id="updateOne" >
+    update onlinelog
+    set offlinetime=now(), 
+    duration=(unix_timestamp()-unix_timestamp(onlinetime))
+    where deviceid=#{deviceid}
+    and offlinetime is null
+  </update>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from onlinelog
+    where onlinelogid = #{onlinelogid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Onlinelog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="onlinelogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into onlinelog (orgid, branchid, deviceid, 
+      onlinetime, offlinetime, duration
+      )
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
+      #{onlinetime,jdbcType=TIMESTAMP}, #{offlinetime,jdbcType=TIMESTAMP}, #{duration,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Onlinelog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="onlinelogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into onlinelog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="onlinetime != null" >
+        onlinetime,
+      </if>
+      <if test="offlinetime != null" >
+        offlinetime,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="onlinetime != null" >
+        #{onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlinetime != null" >
+        #{offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Onlinelog" >
+    update onlinelog
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="onlinetime != null" >
+        onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlinetime != null" >
+        offlinetime = #{offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+    </set>
+    where onlinelogid = #{onlinelogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Onlinelog" >
+    update onlinelog
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      deviceid = #{deviceid,jdbcType=INTEGER},
+      onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
+      offlinetime = #{offlinetime,jdbcType=TIMESTAMP},
+      duration = #{duration,jdbcType=INTEGER}
+    where onlinelogid = #{onlinelogid,jdbcType=INTEGER}
+  </update>
+</mapper>

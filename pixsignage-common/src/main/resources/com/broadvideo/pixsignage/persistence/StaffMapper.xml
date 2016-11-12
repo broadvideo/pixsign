@@ -36,7 +36,7 @@
     <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
     <association property="vsp" column="{vspid=vspid}" select="com.broadvideo.pixsignage.persistence.VspMapper.selectByPrimaryKey" />
     <association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
-    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectNameByPrimaryKey" />
+    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectMiniByPrimaryKey" />
     <collection property="privileges" ofType="com.broadvideo.pixsignage.domain.Privilege"
       column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.PrivilegeMapper.selectByStaff" />
     <collection property="roles" ofType="com.broadvideo.pixsignage.domain.Role"

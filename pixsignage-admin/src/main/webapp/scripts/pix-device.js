@@ -8,7 +8,9 @@ var myurls = {
 	'device.reboot' : 'device!reboot.action',
 	'device.screen' : 'device!screen.action',
 	'device.screenlist' : 'device!screenlist.action',
-	'devicefile.list' : 'devicefile!list.action'
+	'devicefile.list' : 'devicefile!list.action',
+	'device.utext' : 'device!utext.action',
+	'device.ucancel' : 'device!ucancel.action',
 };
 
 function refreshMyTable() {
@@ -16,6 +18,7 @@ function refreshMyTable() {
 	$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
 }			
 
+var CurrentDevice;
 var CurrentDeviceid = 0;
 
 function initMyTable() {
@@ -30,8 +33,8 @@ function initMyTable() {
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.config, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
@@ -48,9 +51,12 @@ function initMyTable() {
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			if (aData.devicegroupid > 0) {
-				$('td:eq(4)', nRow).html(aData.devicegroup.name);
+				$('td:eq(3)', nRow).html(aData.devicegroup.name);
 			} else {
-				$('td:eq(4)', nRow).html('');
+				$('td:eq(3)', nRow).html('');
+			}
+			if (aData.lontitude > 0 && aData.latitude > 0) {
+				$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 			}
 			if (aData.status == 0) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
@@ -334,51 +340,26 @@ function initMyEditModal() {
 	function createBranchTreeData(branches, treeData) {
 		for (var i=0; i<branches.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == currentEditBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
 			}
-			treeData[i]['children'] = [];
-			createBranchTreeData(branches[i].children, treeData[i]['children']);
-		}
-	}
-	function refreshEditBranchTreeData(treeData) {
-		for (var i=0; i<treeData.length; i++) {
-			if (treeData[i]['attr']['id'] == currentEditBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
-			}
-			refreshEditBranchTreeData(treeData[i]['children']);
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
 		}
 	}
 	function createEditBranchTree(treeData) {
 		$('#EditFormBranchTree').jstree('destroy');
 		$('#EditFormBranchTree').jstree({
-			'json_data' : {
+			'core' : {
+				'multiple' : false,
 				'data' : treeData
 			},
-			'plugins' : [ 'themes', 'json_data', 'ui' ],
-			'core' : {
-				'animation' : 100
-			},
-			'ui' : {
-				'select_limit' : 1,
-				'initially_select' : currentEditBranchid,
-			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
+			'plugins' : ['unique'],
 		});
 		$('#EditFormBranchTree').on('loaded.jstree', function() {
-			$('#EditFormBranchTree').jstree('open_all');
+			$('#EditFormBranchTree').jstree('select_node', currentEditBranchid);
 		});
 	}
 
@@ -392,9 +373,7 @@ function initMyEditModal() {
 	FormValidateOption.rules['device.name']['required'] = true;
 	FormValidateOption.rules['device.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
-		$("#EditFormBranchTree").jstree('get_selected', null, true).each(function() {
-			$('#MyEditForm input[name="device.branchid"]').attr('value', this.id);
-		});
+		$('#MyEditForm input[name="device.branchid"]').attr('value', $("#EditFormBranchTree").jstree('get_selected', false)[0]);
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
@@ -425,7 +404,6 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').attr('action', myurls['device.add']);
 		currentEditBranchid = currentEditBranchTreeData[0].attr.id;
-		refreshEditBranchTreeData(currentEditBranchTreeData);
 		createEditBranchTree(currentEditBranchTreeData);
 		$('#MyEditModal').modal();
 	});			
@@ -436,16 +414,15 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#DeviceTable').dataTable().fnGetData(index);
+		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['device.' + name] = item[name];
+		for (var name in CurrentDevice) {
+			formdata['device.' + name] = CurrentDevice[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['device.update']);
-		currentEditBranchid = item.branchid;
-		refreshEditBranchTreeData(currentEditBranchTreeData);
+		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
 		$('#MyEditModal').modal();
 	});
@@ -496,8 +473,8 @@ function initScreenModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#DeviceTable').dataTable().fnGetData(index);
-		CurrentDeviceid = item.deviceid;
+		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+		CurrentDeviceid = CurrentDevice.deviceid;
 		$('#ScreenPreview').html('');
 		$('#ScreenTable').dataTable()._fnAjaxUpdate();
 		$('#ScreenModal').modal();
@@ -544,31 +521,13 @@ function initScreenModal() {
 }
 
 function initDeviceFileModal() {
-	if (videoflag == 1) {
-		$('.videoflag').css("display", "block");
-	} else {
-		$('.videoflag').css("display", "none");
-	}
-	if (imageflag == 1) {
-		$('.imageflag').css("display", "block");
-	} else {
-		$('.imageflag').css("display", "none");
-	}
-	if (videoflag == 1) {
-		$('#nav_tab1').addClass('active');
-		$('#portlet_tab1').addClass('active');
-	} else if (imageflag == 1) {
-		$('#nav_tab2').addClass('active');
-		$('#portlet_tab2').addClass('active');
-	}
-
 	$('body').on('click', '.pix-file', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#DeviceTable').dataTable().fnGetData(index);
-		CurrentDeviceid = item.deviceid;
+		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+		CurrentDeviceid = CurrentDevice.deviceid;
 		
 		$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 		$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
@@ -667,5 +626,176 @@ function initDeviceFileModal() {
 	});			
 }
 
+function initMapModal() {
+	var CurrentMap;
 
+	$('body').on('click', '.pix-map', function(event) {
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			index = $(event.target).parent().attr('data-id');
+		}
+		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+		CurrentDeviceid = CurrentDevice.deviceid;
+		$('#DeviceMapModal').modal();
+	});
 
+	$('#DeviceMapModal').on('shown.bs.modal', function (e) {
+		if (CurrentMap == null) {
+			CurrentMap = new BMap.Map("DeviceMapDiv", {enableMapClick:false});
+			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));    
+		}
+		CurrentMap.clearOverlays();
+		var point = new BMap.Point(CurrentDevice.lontitude, CurrentDevice.latitude);
+		var marker = new BMap.Marker(point);
+		var sContent =
+			'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
+			'<p>' + CurrentDevice.addr1 + ' ' + CurrentDevice.addr2 + '</p>' + 
+			'</div>';
+		var infoWindow = new BMap.InfoWindow(sContent);
+		CurrentMap.centerAndZoom(point, 15);
+		CurrentMap.addOverlay(marker);
+		marker.addEventListener("click", function() {          
+			this.openInfoWindow(infoWindow);
+		});
+		marker.openInfoWindow(infoWindow);
+	})
+}
+
+function initUTextModal() {
+	$('.colorPick').wColorPicker({
+	    theme           : 'classic',  // set theme
+	    opacity         : 0.8,        // opacity level
+	    color           : '#FF0000',         // set init color
+	    mode            : 'click',     // mode for palette (flat, hover, click)
+	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
+	    generateButton  : false,       // if mode not flat generate button or not
+	    dropperButton   : false,      // optional dropper button to use in other apps
+	    effect          : 'slide',    // only used when not in flat mode (none, slide, fade)
+	    showSpeed       : 200,        // show speed for effects
+	    hideSpeed       : 200,        // hide speed for effects
+	    onMouseover     : null,       // callback for color mouseover
+	    onMouseout      : null,       // callback for color mouseout
+	    onSelect        : function(color){
+	    	if (color.indexOf('#') == 0) {
+		        $(".colorPick i").css('background', color);
+		        $(".colorPick input").val(color);
+	    	}
+	    },
+	    onDropper       : null        // callback when dropper is clicked
+	});
+    $(".colorPick i").css('background', '#FF0000');
+    $(".colorPick input").val('#FF0000');
+	$('.bgcolorPick').wColorPicker({
+	    theme           : 'classic',  // set theme
+	    opacity         : 0.8,        // opacity level
+	    color           : '#FFFFFF',         // set init color
+	    mode            : 'click',     // mode for palette (flat, hover, click)
+	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
+	    generateButton  : false,       // if mode not flat generate button or not
+	    dropperButton   : false,      // optional dropper button to use in other apps
+	    effect          : 'slide',    // only used when not in flat mode (none, slide, fade)
+	    showSpeed       : 200,        // show speed for effects
+	    hideSpeed       : 200,        // hide speed for effects
+	    onMouseover     : null,       // callback for color mouseover
+	    onMouseout      : null,       // callback for color mouseout
+	    onSelect        : function(color){
+	    	if (color.indexOf('#') == 0) {
+		        $(".bgcolorPick i").css('background', color);
+		        $(".bgcolorPick input").val(color);
+	    	}
+	    },
+	    onDropper       : null        // callback when dropper is clicked
+	});
+    $(".bgcolorPick i").css('background', '#FFFFFF');
+    $(".bgcolorPick input").val('#FFFFFF');
+
+	$(".sizeRange").ionRangeSlider({
+		min: 10,
+		max: 100,
+		from: 50,
+		type: 'single',
+		step: 10,
+		hasGrid: false,
+	});
+	$(".opacityRange").ionRangeSlider({
+		min: 0,
+		max: 255,
+		from: 255,
+		type: 'single',
+		step: 5,
+		hasGrid: false,
+	});
+	$(".opacityRange").ionRangeSlider("update", {
+		from: 255
+	});
+
+	$('#UTextModal').on('shown.bs.modal', function (e) {
+		$(".sizeRange").ionRangeSlider("update", {
+			from: 50
+		});
+		$(".opacityRange").ionRangeSlider("update", {
+			from: 255
+		});
+	})
+
+	FormValidateOption.rules = {};
+	FormValidateOption.rules['text'] = {};
+	FormValidateOption.rules['text']['required'] = true;
+	FormValidateOption.rules['count'] = {};
+	FormValidateOption.rules['count']['required'] = true;
+	FormValidateOption.rules['count']['number'] = true;
+	FormValidateOption.submitHandler = function(form) {
+		$.ajax({
+			type : 'POST',
+			url : myurls['device.utext'],
+			data : $('#UTextForm').serialize(),
+			success : function(data, status) {
+				$('#UTextModal').modal('hide');
+				if (data.errorcode == 0) {
+					bootbox.alert(common.tips.success);
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				bootbox.alert(common.tips.error);
+			}
+		});
+	};
+	$('#UTextForm').validate(FormValidateOption);
+	
+	$('[type=submit]', $('#UTextModal')).on('click', function(event) {
+		if ($('#UTextForm').valid()) {
+			$('#UTextForm').submit();
+		}
+	});
+	
+	$('body').on('click', '.pix-utext', function(event) {
+		$('#UTextModal').modal();
+	});			
+
+	$('body').on('click', '.pix-ucancel', function(event) {
+		bootbox.confirm(common.tips.ucancel, function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'POST',
+					url : myurls['device.ucancel'],
+					cache: false,
+					data : {},
+					success : function(data, status) {
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						bootbox.alert(common.tips.error);
+					}
+				});				
+			}
+		 });
+		
+	});
+
+}

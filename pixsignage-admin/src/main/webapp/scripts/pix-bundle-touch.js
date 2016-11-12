@@ -419,6 +419,7 @@ $('body').on('click', '.pix-bundle', function(event) {
 
 $('#BundleModal').on('shown.bs.modal', function (e) {
 	enterBundledtlFocus(CurrentBundledtl);
+	initMediaBranchTree();
 })
 
 

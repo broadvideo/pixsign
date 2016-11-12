@@ -37,6 +37,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css?t=1" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -109,6 +110,7 @@ response.setDateHeader("Expires",0);
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="video.videoid" value="0" />
+									<input type="hidden" name="video.folderid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
@@ -116,6 +118,12 @@ response.setDateHeader("Expires",0);
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="video.name" />
 												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.folder"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="pre-scrollable" id="EditFormFolderTree"></div>	
 											</div>
 										</div>
 										<div class="form-group">
@@ -159,9 +167,12 @@ response.setDateHeader("Expires",0);
 							</div>
 							<div class="portlet-body">
 								<div class="row">
-									<div class="col-md-2" id="BranchTreeDiv">
+									<div class="col-md-2">
+										<div class="row"><div class="col-md-12" id="BranchTreeDiv"></div></div>
+										<hr/>
+										<div class="row"><div class="col-md-12" id="FolderTreeDiv"></div></div>
 									</div>
-									<div class="col-md-10" id="BranchContentDiv">
+									<div class="col-md-10">
 										<div class="table-toolbar">
 											<!-- 
 											<div class="btn-group">
@@ -227,7 +238,10 @@ response.setDateHeader("Expires",0);
 	<tr class="template-upload fade">
 		<td>
 			<div class="input-icon right">
-				<i class="fa"></i> <input type="text" class="form-control" name="name" placeholder="${global_name}" />
+				<i class="fa"></i>
+				<input type="text" class="form-control" name="names" placeholder="${global_name}" />
+				<input type="hidden" name="branchids" value="{%=CurBranchid%}" />
+				<input type="hidden" name="folderids" value="{%=CurFolderid%}" />
 			</div>
 		</td>
 		<td>
@@ -329,7 +343,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/jwplayer/jwplayer.js"></script>
 <script src="${static_ctx}/global/plugins/jwplayer/jwpsrv.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
@@ -373,7 +387,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-foldertree.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-video.js?t=1"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
@@ -384,6 +399,7 @@ jQuery(document).ready(function() {
 	Layout.init();
 	DataInit.init();
 	initBranchTree();
+	initFolderTree();
 	initMyTable();
 	initMyEditModal();
 	initUploadModal();

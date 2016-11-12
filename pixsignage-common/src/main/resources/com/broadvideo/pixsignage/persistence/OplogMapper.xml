@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.OplogMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Oplog" >
+    <id column="oplogid" property="oplogid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="objtype1" property="objtype1" jdbcType="CHAR" />
+    <result column="objid1" property="objid1" jdbcType="INTEGER" />
+    <result column="objname1" property="objname1" jdbcType="VARCHAR" />
+    <result column="objtype2" property="objtype2" jdbcType="CHAR" />
+    <result column="objid2" property="objid2" jdbcType="INTEGER" />
+    <result column="objname2" property="objname2" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="staff" column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.StaffMapper.selectByPrimaryKey" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    oplogid, orgid, branchid, staffid, type, objtype1, objid1, objname1, objtype2, objid2, 
+    objname2, status, description, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from oplog
+    where oplogid = #{oplogid}
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from oplog
+    where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from oplog
+    where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    order by oplogid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from oplog
+    where oplogid = #{oplogid}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Oplog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="oplogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oplog (orgid, branchid, staffid, 
+      type, objtype1, objid1, objname1, 
+      objtype2, objid2, objname2, 
+      status, description, createtime
+      )
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{staffid,jdbcType=INTEGER}, 
+      #{type,jdbcType=CHAR}, #{objtype1,jdbcType=CHAR}, #{objid1,jdbcType=INTEGER}, #{objname1,jdbcType=VARCHAR}, 
+      #{objtype2,jdbcType=CHAR}, #{objid2,jdbcType=INTEGER}, #{objname2,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Oplog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="oplogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oplog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="staffid != null" >
+        staffid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="objtype1 != null" >
+        objtype1,
+      </if>
+      <if test="objid1 != null" >
+        objid1,
+      </if>
+      <if test="objname1 != null" >
+        objname1,
+      </if>
+      <if test="objtype2 != null" >
+        objtype2,
+      </if>
+      <if test="objid2 != null" >
+        objid2,
+      </if>
+      <if test="objname2 != null" >
+        objname2,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="staffid != null" >
+        #{staffid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="objtype1 != null" >
+        #{objtype1,jdbcType=CHAR},
+      </if>
+      <if test="objid1 != null" >
+        #{objid1,jdbcType=INTEGER},
+      </if>
+      <if test="objname1 != null" >
+        #{objname1,jdbcType=VARCHAR},
+      </if>
+      <if test="objtype2 != null" >
+        #{objtype2,jdbcType=CHAR},
+      </if>
+      <if test="objid2 != null" >
+        #{objid2,jdbcType=INTEGER},
+      </if>
+      <if test="objname2 != null" >
+        #{objname2,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Oplog" >
+    update oplog
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="staffid != null" >
+        staffid = #{staffid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="objtype1 != null" >
+        objtype1 = #{objtype1,jdbcType=CHAR},
+      </if>
+      <if test="objid1 != null" >
+        objid1 = #{objid1,jdbcType=INTEGER},
+      </if>
+      <if test="objname1 != null" >
+        objname1 = #{objname1,jdbcType=VARCHAR},
+      </if>
+      <if test="objtype2 != null" >
+        objtype2 = #{objtype2,jdbcType=CHAR},
+      </if>
+      <if test="objid2 != null" >
+        objid2 = #{objid2,jdbcType=INTEGER},
+      </if>
+      <if test="objname2 != null" >
+        objname2 = #{objname2,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where oplogid = #{oplogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Oplog" >
+    update oplog
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      staffid = #{staffid,jdbcType=INTEGER},
+      type = #{type,jdbcType=CHAR},
+      objtype1 = #{objtype1,jdbcType=CHAR},
+      objid1 = #{objid1,jdbcType=INTEGER},
+      objname1 = #{objname1,jdbcType=VARCHAR},
+      objtype2 = #{objtype2,jdbcType=CHAR},
+      objid2 = #{objid2,jdbcType=INTEGER},
+      objname2 = #{objname2,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where oplogid = #{oplogid,jdbcType=INTEGER}
+  </update>
+</mapper>

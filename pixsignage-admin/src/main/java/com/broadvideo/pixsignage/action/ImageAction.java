@@ -38,7 +38,9 @@ public class ImageAction extends BaseDatatableAction {
 	private File[] mymedia;
 	private String[] mymediaContentType;
 	private String[] mymediaFileName;
-	private String[] name;
+	private String[] names;
+	private String[] branchids;
+	private String[] folderids;
 
 	@Autowired
 	private ImageService imageService;
@@ -57,18 +59,19 @@ public class ImageAction extends BaseDatatableAction {
 				JSONObject jsonItem = new JSONObject();
 				try {
 					logger.info("Upload one image, file={}", mymediaFileName[i]);
-					if (name[i] == null || name[i].equals("")) {
-						name[i] = mymediaFileName[i];
+					if (names[i] == null || names[i].equals("")) {
+						names[i] = mymediaFileName[i];
 					}
-					jsonItem.put("name", name[i]);
+					jsonItem.put("name", names[i]);
 					jsonItem.put("filename", mymediaFileName[i]);
 					jsonItem.put("size", FileUtils.sizeOf(mymedia[i]));
 
 					BufferedImage img = ImageIO.read(mymedia[i]);
 					Image image = new Image();
 					image.setOrgid(getLoginStaff().getOrgid());
-					image.setBranchid(getLoginStaff().getBranchid());
-					image.setName(name[i]);
+					image.setBranchid(Integer.parseInt(branchids[i]));
+					image.setFolderid(Integer.parseInt(folderids[i]));
+					image.setName(names[i]);
 					image.setWidth(img.getWidth());
 					image.setHeight(img.getHeight());
 					image.setFilename(mymediaFileName[i]);
@@ -104,7 +107,7 @@ public class ImageAction extends BaseDatatableAction {
 					image.setStatus("1");
 					imageService.updateImage(image);
 
-					jsonItem.put("name", name[i]);
+					jsonItem.put("name", names[i]);
 					jsonItem.put("filename", newFileName);
 				} catch (Exception e) {
 					logger.info("Image parse error, file={}", mymediaFileName[i], e);
@@ -130,16 +133,21 @@ public class ImageAction extends BaseDatatableAction {
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String folderid = getParameter("folderid");
+			if (folderid == null || folderid.equals("")) {
+				folderid = "" + getLoginStaff().getBranch().getTopfolderid();
+			}
 			String objtype = getParameter("objtype");
 			String objid = getParameter("objid");
 
-			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, objtype, objid, search);
+			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, objtype, objid,
+					search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, objtype, objid,
-					search, start, length);
+			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid,
+					objtype, objid, search, start, length);
 			for (Image image : imageList) {
 				if (image.getWidth().intValue() == 0 || image.getHeight().intValue() == 0) {
 					BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath()));
@@ -152,7 +160,7 @@ public class ImageAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ImageAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -167,7 +175,7 @@ public class ImageAction extends BaseDatatableAction {
 			imageService.addImage(image);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ImageAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -179,7 +187,7 @@ public class ImageAction extends BaseDatatableAction {
 			imageService.updateImage(image);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ImageAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -191,7 +199,7 @@ public class ImageAction extends BaseDatatableAction {
 			imageService.deleteImage("" + image.getImageid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ImageAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -230,12 +238,28 @@ public class ImageAction extends BaseDatatableAction {
 		this.mymediaFileName = mymediaFileName;
 	}
 
-	public String[] getName() {
-		return name;
+	public String[] getNames() {
+		return names;
 	}
 
-	public void setName(String[] name) {
-		this.name = name;
+	public void setNames(String[] names) {
+		this.names = names;
+	}
+
+	public String[] getBranchids() {
+		return branchids;
+	}
+
+	public void setBranchids(String[] branchids) {
+		this.branchids = branchids;
+	}
+
+	public String[] getFolderids() {
+		return folderids;
+	}
+
+	public void setFolderids(String[] folderids) {
+		this.folderids = folderids;
 	}
 
 }

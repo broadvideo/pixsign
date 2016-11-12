@@ -49,11 +49,29 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 	layoutdtlhtml += '%; left: ' + 100*layoutdtl.leftoffset/layout.width;
 	layoutdtlhtml += '%; border: 1px solid #000; ">';
 	var bgcolor = layoutdtl.bgcolor;
-	if (layoutdtl.mainflag == 1) {
-		bgcolor = '#6Fa8DC';
-	} else if (layoutdtl.type == 0) {
-		bgcolor = '#FFF2CC';
+	var bgimage = '';
+	if (layoutdtl.bgimage != null) {
+		bgimage = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
+	} else if (layoutdtl.mainflag == 1) {
+		bgimage = '../img/region/region-play-main.jpg';
+	} else if (layoutdtl.type == '0') {
+		bgimage = '../img/region/region-play.jpg';
+	} else if (layoutdtl.type == '4') {
+		bgimage = '../img/region/region-videoin.jpg';
+	} else if (layoutdtl.type == '5') {
+		bgimage = '../img/region/region-dvb.jpg';
+	} else if (layoutdtl.type == '6') {
+		bgimage = '../img/region/region-stream.jpg';
+	} else if (layoutdtl.type == '8') {
+		if (layoutdtl.width > layoutdtl.height) {
+			bgimage = '../img/region/region-navigate-h.jpg';
+		} else {
+			bgimage = '../img/region/region-navigate-v.jpg';
+		}
+	} else if (layoutdtl.type == '9') {
+		bgimage = '../img/region/region-qrcode.jpg';
 	}
+
 	if (layoutdtl.type != 0) {
 		layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bgcolor;
 		layoutdtlhtml += '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
@@ -62,11 +80,9 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '; "></div>';
 	}
 	layoutdtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (layoutdtl.type == 0) {
-		if (layoutdtl.bgimage != null) {
-			layoutdtlhtml += '<img src="/pixsigdata' + layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
-	} else if (layoutdtl.type == 1) {
+	if (layoutdtl.type == '0' || layoutdtl.type == '4' || layoutdtl.type == '5' || layoutdtl.type == '6' || layoutdtl.type == '8' || layoutdtl.type == '9') {
+		layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (layoutdtl.type == '1') {
 		if (layoutdtl.direction == 4) {
 			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
 			layoutdtlhtml += '滚动文本';
@@ -76,30 +92,16 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 			layoutdtlhtml += '静止文本';
 			layoutdtlhtml += '</p>';
 		}
-	} else if (layoutdtl.type == 2) {
+	} else if (layoutdtl.type == '2') {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
 		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.type == 3) {
+	} else if (layoutdtl.type == '3') {
 		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == 4) {
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += 'Video-In';
-		layoutdtlhtml += '</p>';
-	} else if (layoutdtl.type == 5) {
-		layoutdtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (layoutdtl.type == 6) {
-		layoutdtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (layoutdtl.type == 8) {
-		if (layoutdtl.width > layoutdtl.height) {
-			layoutdtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		} else {
-			layoutdtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
 	} else {
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
@@ -158,16 +160,39 @@ function redrawBundlePreview(div, bundle, maxsize, dynamic) {
 
 function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	var bundledtl = bundle.bundledtls[bundledtlindex];
-	var bgimage = null;
-	if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
-		var medialistdtl = bundledtl.medialist.medialistdtls[0];
-		if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
-			bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
-		} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
-			bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
+	var bgimage = '';
+	if (bundledtl.layoutdtl.bgimage != null) {
+		bgimage = '/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail;
+	} else if (bundledtl.layoutdtl.mainflag == 1) {
+		bgimage = '../img/region/region-play-main.jpg';
+	} else if (bundledtl.layoutdtl.type == '0') {
+		bgimage = '../img/region/region-play.jpg';
+	} else if (bundledtl.layoutdtl.type == '4') {
+		bgimage = '../img/region/region-videoin.jpg';
+	} else if (bundledtl.layoutdtl.type == '5') {
+		bgimage = '../img/region/region-dvb.jpg';
+	} else if (bundledtl.layoutdtl.type == '6') {
+		bgimage = '../img/region/region-stream.jpg';
+	} else if (bundledtl.layoutdtl.type == '8') {
+		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
+			bgimage = '../img/region/region-navigate-h.jpg';
+		} else {
+			bgimage = '../img/region/region-navigate-v.jpg';
 		}
-	} else if (bundledtl.objtype == 5) {
-		bgimage = '../img/region/region-widget.jpg';
+	} else if (bundledtl.layoutdtl.type == '9') {
+		bgimage = '../img/region/region-qrcode.jpg';
+	}
+	if (bundledtl.layoutdtl.type == '0') {
+		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
+			var medialistdtl = bundledtl.medialist.medialistdtls[0];
+			if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
+				bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
+			} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
+			}
+		} else if (bundledtl.objtype == 5) {
+			bgimage = '../img/region/region-widget.jpg';
+		}
 	}
 	
 	var bundledtlhtml = '';
@@ -178,26 +203,12 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	//bundledtlhtml += '%; border: 1px solid #000; ">';
 	bundledtlhtml += '%; ">';
 
-	if (bundledtl.layoutdtl.type == 0) {
-		if (bundledtl.objtype == 3) {
-			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#A4C2F4; "></div>';
-		} else if (bundledtl.objtype == 5) {
-			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#FFF2CC; "></div>';
-		} else {
-			bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:#B4A7D6; "></div>';
-		}
-	} else {
-		bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor;
-		bundledtlhtml += '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
-	}
+	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor;
+	bundledtlhtml += '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 
 	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (bundledtl.layoutdtl.type == 0) {
-		if (bgimage != null) {
-			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		} else if (bundledtl.layoutdtl.bgimage != null) {
-			bundledtlhtml += '<img src="/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
+	if (bundledtl.layoutdtl.type == '0' || bundledtl.layoutdtl.type == '4' || bundledtl.layoutdtl.type == '5' || bundledtl.layoutdtl.type == '6' || bundledtl.layoutdtl.type == '8' || bundledtl.layoutdtl.type == '9') {
+		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.type == 1) {
 		if (bundledtl.layoutdtl.direction == 4 && dynamic == 1) {
 			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
@@ -218,14 +229,6 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 		bundledtlhtml += '<img src="../img/duoyun.png" />';
 		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == 4) {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += 'Video-In';
-		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.type == 5) {
-		bundledtlhtml += '<img src="../img/region/region-dvb.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (bundledtl.layoutdtl.type == 6) {
-		bundledtlhtml += '<img src="../img/region/region-stream.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 	} else if (bundledtl.layoutdtl.type == 7) {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
@@ -234,12 +237,6 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 			bundledtlhtml += eval('common.view.region_type_7');
 		}
 		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.type == 8) {
-		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
-			bundledtlhtml += '<img src="../img/region/region-navigate-h.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		} else {
-			bundledtlhtml += '<img src="../img/region/region-navigate-v.jpg" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
 	} else {
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);

@@ -14,11 +14,13 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Branch;
+import com.broadvideo.pixsignage.domain.Oplog;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Vsp;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
+import com.broadvideo.pixsignage.persistence.OplogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.VspMapper;
@@ -44,6 +46,8 @@ public class LoginAction extends BaseAction {
 	private BranchMapper branchMapper;
 	@Autowired
 	private StaffMapper staffMapper;
+	@Autowired
+	private OplogMapper oplogMapper;
 	@Autowired
 	private PrivilegeService privilegeService;
 
@@ -97,6 +101,15 @@ public class LoginAction extends BaseAction {
 			List<Branch> branchRoot = branchMapper.selectRoot("" + org.getOrgid());
 			staff.setBranchid(branchRoot.get(0).getBranchid());
 			staff.setBranch(branchRoot.get(0));
+		}
+
+		if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_ORG)) {
+			Oplog oplog = new Oplog();
+			oplog.setOrgid(staff.getOrgid());
+			oplog.setBranchid(staff.getBranchid());
+			oplog.setStaffid(staff.getStaffid());
+			oplog.setType("1");
+			oplogMapper.insertSelective(oplog);
 		}
 
 		if (staff.getOrg() != null && staff.getOrg().getExpireflag().equals("1")

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.service.DeviceService;
+import com.broadvideo.pixsignage.service.OnlinelogService;
 import com.broadvideo.pixsignage.service.OrgService;
 
 public class DeviceTask {
@@ -14,6 +15,8 @@ public class DeviceTask {
 
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+	private OnlinelogService onlinelogService;
 	@Autowired
 	private OrgService orgService;
 
@@ -25,6 +28,7 @@ public class DeviceTask {
 		logger.info("Start Device Quartz Task to update device & org.");
 		try {
 			deviceService.updateOnlineflag();
+			onlinelogService.updateAll();
 			orgService.updateCurrentdevices();
 			orgService.updateCurrentstorage();
 		} catch (Exception e) {

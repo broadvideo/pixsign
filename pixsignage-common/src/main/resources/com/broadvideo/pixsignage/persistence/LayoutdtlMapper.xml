@@ -16,6 +16,7 @@
     <result column="bgimageid" property="bgimageid" jdbcType="INTEGER" />
     <result column="sleeptime" property="sleeptime" jdbcType="INTEGER" />
     <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
+    <result column="animation" property="animation" jdbcType="VARCHAR" />
     <result column="direction" property="direction" jdbcType="CHAR" />
     <result column="speed" property="speed" jdbcType="CHAR" />
     <result column="color" property="color" jdbcType="VARCHAR" />
@@ -29,7 +30,7 @@
   
   <sql id="Base_Column_List" >
     layoutdtlid, layoutid, type, mainflag, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, sleeptime, intervaltime, 
-    direction, speed, color, size, dateformat, fitflag, volume, createtime
+    animation, direction, speed, color, size, dateformat, fitflag, volume, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -58,14 +59,16 @@
       type, mainflag, height, 
       width, topoffset, leftoffset, 
       zindex, bgcolor, opacity, 
-      bgimageid, sleeptime, intervaltime, direction, 
+      bgimageid, sleeptime, intervaltime, 
+      animation, direction, 
       speed, color, size, 
       dateformat, fitflag, volume, createtime)
     values (#{layoutid,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{mainflag,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{opacity,jdbcType=INTEGER}, 
-      #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, #{direction,jdbcType=CHAR}, 
+      #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, 
+      #{animation,jdbcType=VARCHAR}, #{direction,jdbcType=CHAR}, 
       #{speed,jdbcType=CHAR}, #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
       #{dateformat,jdbcType=VARCHAR}, #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
@@ -113,6 +116,9 @@
       </if>
       <if test="intervaltime != null" >
         intervaltime,
+      </if>
+      <if test="animation != null" >
+        animation,
       </if>
       <if test="direction != null" >
         direction,
@@ -178,6 +184,9 @@
       </if>
       <if test="intervaltime != null" >
         #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="animation != null" >
+        #{animation,jdbcType=VARCHAR},
       </if>
       <if test="direction != null" >
         #{direction,jdbcType=CHAR},
@@ -247,6 +256,9 @@
       <if test="intervaltime != null" >
         intervaltime = #{intervaltime,jdbcType=INTEGER},
       </if>
+      <if test="animation != null" >
+        animation = #{animation,jdbcType=VARCHAR},
+      </if>
       <if test="direction != null" >
         direction = #{direction,jdbcType=CHAR},
       </if>
@@ -289,6 +301,7 @@
       bgimageid = #{bgimageid,jdbcType=INTEGER},
       sleeptime = #{sleeptime,jdbcType=INTEGER},
       intervaltime = #{intervaltime,jdbcType=INTEGER},
+      animation = #{animation,jdbcType=VARCHAR},
       direction = #{direction,jdbcType=CHAR},
       speed = #{speed,jdbcType=CHAR},
       color = #{color,jdbcType=VARCHAR},

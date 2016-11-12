@@ -33,6 +33,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -56,44 +57,46 @@ response.setDateHeader("Expires",0);
 												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
 												<ul class="nav nav-tabs" style="margin-left: 10px;">
 													<li id="nav_tab3" class="imageflag">
-														<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
+														<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
 													</li>
 													<li id="nav_tab2" class="hide-orgtype-2">
-														<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+														<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.extvideo"/></a>
 													</li>
 													<li id="nav_tab1" class="videoflag active">
-														<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+														<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.intvideo"/></a>
 													</li>
 												</ul>
-												<div class="actions">
-													<div class="btn-group" id="BranchTreeDropdown">
-														<a id="BranchTitle" class="btn default yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
-														<ul class="dropdown-menu pull-right">
-															<div class="pre-scrollable">
-															</div>
-														</ul>
-													</div>
-												</div>
 											</div>
 											<div class="portlet-body">
 												<div class="tab-content">
-													<div class="tab-pane active" id="portlet_tab1">
-														<table id="IntVideoTable" class="table table-condensed table-hover">
-															<thead></thead>
-															<tbody></tbody>
-														</table>
-													</div>
-													<div class="tab-pane" id="portlet_tab2">
-														<table id="ExtVideoTable" class="table table-condensed table-hover">
-															<thead></thead>
-															<tbody></tbody>
-														</table>
-													</div>
-													<div class="tab-pane" id="portlet_tab3">
-														<table id="ImageTable" class="table table-condensed table-hover">
-															<thead></thead>
-															<tbody></tbody>
-														</table>
+													<div class="tab-pane active" id="portlet_tab">
+														<div class="row">
+															<div class="col-md-3">
+																<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
+																<hr/>
+																<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+															</div>
+															<div class="col-md-9">
+																<div id="IntVideoDiv">
+																	<table id="IntVideoTable" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>
+																</div>
+																<div id="ExtVideoDiv" style="display:none">
+																	<table id="ExtVideoTable" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>
+																</div>
+																<div id="ImageDiv" style="display:none">
+																	<table id="ImageTable" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -251,7 +254,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
-<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -259,8 +262,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-medialist.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-medialist.js?t=0"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

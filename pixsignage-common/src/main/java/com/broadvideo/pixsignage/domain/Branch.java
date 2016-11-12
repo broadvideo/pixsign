@@ -10,6 +10,8 @@ public class Branch {
 
 	private Integer orgid;
 
+	private Integer topfolderid;
+
 	private Integer parentid;
 
 	private String name;
@@ -42,6 +44,14 @@ public class Branch {
 
 	public void setOrgid(Integer orgid) {
 		this.orgid = orgid;
+	}
+
+	public Integer getTopfolderid() {
+		return topfolderid;
+	}
+
+	public void setTopfolderid(Integer topfolderid) {
+		this.topfolderid = topfolderid;
 	}
 
 	public Integer getParentid() {

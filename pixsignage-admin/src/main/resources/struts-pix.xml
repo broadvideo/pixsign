@@ -306,6 +306,30 @@
 			</result>
 		</action>
 
+		<action name="folder!list" method="doList" class="folderAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="folder!add" method="doAdd" class="folderAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">data.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="folder!update" method="doUpdate" class="folderAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="folder!delete" method="doDelete" class="folderAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="image!list" method="doList" class="imageAction">
 			<result name="success" type="json">
@@ -590,6 +614,18 @@
 				<param name="inputName">inputStream</param>
 				<param name="contentDisposition">attachment;filename="${exportname}"</param>
 				<param name="bufferSize">8192</param>
+			</result>
+		</action>
+		<action name="device!utext" method="doUText" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="device!ucancel" method="doUCancel" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 
@@ -1017,6 +1053,25 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="onlinelog!list" method="doList" class="onlinelogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="playlog!list" method="doList" class="playlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="oplog!list" method="doList" class="oplogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
 

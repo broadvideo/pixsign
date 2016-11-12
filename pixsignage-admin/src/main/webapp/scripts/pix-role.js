@@ -92,65 +92,49 @@ function initMyEditModal() {
 	function createTreeData(privileges, treeData) {
 		for (var i=0; i<privileges.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = privileges[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = privileges[i].privilegeid;
-			treeData[i]['attr']['parentid'] = privileges[i].parentid;
-			if (currentPrivileges[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].id = privileges[i].privilegeid;
+			treeData[i].text = privileges[i].name;
+			treeData[i].state = {
+				opened: true,
+				checked: currentPrivileges[treeData[i].id] == undefined? false : true,
 			}
-			treeData[i]['children'] = [];
-			createTreeData(privileges[i].children, treeData[i]['children']);
+			treeData[i].children = [];
+			createTreeData(privileges[i].children, treeData[i].children);
 		}
 	}
 
 	function refreshTreeData(treeData) {
 		for (var i=0; i<treeData.length; i++) {
-			if (currentPrivileges[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].state = {
+				opened: true,
+				checked: currentPrivileges[treeData[i].id] == undefined? false : true,
 			}
-			refreshTreeData(treeData[i]['children']);
+			refreshTreeData(treeData[i].children);
 		}
 	}
 
 	function createTree(treeData) {
 		$('#PrivilegeTree').jstree('destroy');
 		var treeview = $('#PrivilegeTree').jstree({
-			'json_data' : {
-				'data' : treeData
-			},
-			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
 			'core' : {
-				'animation' : 100
+				'data' : treeData
 			},
 			'checkbox' : {
 				'checked_parent_open' : true,
-				'two_state' : true,
+				'three_state' : false,
+				'tie_selection' : false,
 			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
-		});
-		treeview.on('loaded.jstree', function() {
-			treeview.jstree('open_all');
+			'plugins' : ['checkbox'],
 		});
 		treeview.on('check_node.jstree', function(e, data) {
-			var parentNode = data.rslt.obj.attr('parentid');
-			treeview.jstree('check_node', '#'+parentNode);
+			treeview.jstree('check_node', data.node.parent);
 		});
 		treeview.on('uncheck_node.jstree', function(e, data) {
-			var allChildNodes = data.inst._get_children(data.rslt.obj);
-			allChildNodes.each(function(idx, listItem) { 
-				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
-			});
+			for (var i=0; i < data.node.children.length; i++) {
+				treeview.jstree('uncheck_node', data.node.children[i]);
+			}
 		});
-		
+
 	}
 	
 	
@@ -165,11 +149,12 @@ function initMyEditModal() {
 		postData.roleid = $('#MyEditForm input[name="role.roleid"]').val();
 		postData.name = $('#MyEditForm input[name="role.name"]').val();
 		postData.privileges = [];
-		$("#PrivilegeTree").jstree('get_checked', null, true).each(function() {
+		var privileges = $("#PrivilegeTree").jstree('get_checked', false);
+		for (var i=0; i<privileges.length; i++) {
 			var privilege = {};
-			privilege.privilegeid = this.id;
+			privilege.privilegeid = privileges[i];
 			postData.privileges.push(privilege);
-		});
+		}
 
 		$.ajax({
 			type : 'POST',

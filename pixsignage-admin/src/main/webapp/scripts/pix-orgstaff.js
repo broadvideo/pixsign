@@ -109,60 +109,35 @@ function initMyEditModal() {
 	function createRoleTreeData(roles, treeData) {
 		for (var i=0; i<roles.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = roles[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = roles[i].roleid;
-			treeData[i]['attr']['parentid'] = 0;
-			if (currentRoles[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].id = roles[i].roleid;
+			treeData[i].text = roles[i].name;
+			treeData[i].state = {
+				opened: true,
+				checked: currentRoles[treeData[i].id] == undefined? false : true,
 			}
-			treeData[i]['children'] = [];
+			treeData[i].children = [];
 		}
 	}
 	function refreshRoleTreeData(treeData) {
 		for (var i=0; i<treeData.length; i++) {
-			if (currentRoles[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].state = {
+				opened: true,
+				checked: currentRoles[treeData[i].id] == undefined? false : true,
 			}
-			refreshRoleTreeData(treeData[i]['children']);
 		}
 	}
 	function createRoleTree(treeData) {
 		$('#RoleTree').jstree('destroy');
-		var treeview = $('#RoleTree').jstree({
-			'json_data' : {
-				'data' : treeData
-			},
-			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
+		$('#RoleTree').jstree({
 			'core' : {
-				'animation' : 100
+				'data' : treeData
 			},
 			'checkbox' : {
 				'checked_parent_open' : true,
-				'two_state' : true,
+				'three_state' : false,
+				'tie_selection' : false,
 			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
-		});
-		treeview.on('loaded.jstree', function() {
-			treeview.jstree('open_all');
-		});
-		treeview.on('check_node.jstree', function(e, data) {
-			var parentNode = data.rslt.obj.attr('parentid');
-			treeview.jstree('check_node', '#'+parentNode);
-		});
-		treeview.on('uncheck_node.jstree', function(e, data) {
-			var allChildNodes = data.inst._get_children(data.rslt.obj);
-			allChildNodes.each(function(idx, listItem) { 
-				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
-			});
+			'plugins' : ['checkbox'],
 		});
 	}
 	
@@ -187,51 +162,26 @@ function initMyEditModal() {
 	function createBranchTreeData(branches, treeData) {
 		for (var i=0; i<branches.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == currentEditBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
 			}
-			treeData[i]['children'] = [];
-			createBranchTreeData(branches[i].children, treeData[i]['children']);
-		}
-	}
-	function refreshEditBranchTreeData(treeData) {
-		for (var i=0; i<treeData.length; i++) {
-			if (treeData[i]['attr']['id'] == currentEditBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
-			}
-			refreshEditBranchTreeData(treeData[i]['children']);
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
 		}
 	}
 	function createEditBranchTree(treeData) {
 		$('#EditFormBranchTree').jstree('destroy');
 		$('#EditFormBranchTree').jstree({
-			'json_data' : {
+			'core' : {
+				'multiple' : false,
 				'data' : treeData
 			},
-			'plugins' : [ 'themes', 'json_data', 'ui' ],
-			'core' : {
-				'animation' : 100
-			},
-			'ui' : {
-				'select_limit' : 1,
-				'initially_select' : currentEditBranchid,
-			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
+			'plugins' : ['unique'],
 		});
 		$('#EditFormBranchTree').on('loaded.jstree', function() {
-			$('#EditFormBranchTree').jstree('open_all');
+			$('#EditFormBranchTree').jstree('select_node', currentEditBranchid);
 		});
 	}
 	
@@ -350,29 +300,27 @@ function initMyEditModal() {
 			postData.password = $('#MyEditForm input[name="staff.password"]').val();
 			postData.name = $('#MyEditForm input[name="staff.name"]').val();
 			postData.status = 1;
-			$("#EditFormBranchTree").jstree('get_selected', null, true).each(function() {
-				postData.branchid = this.id;
-			});
+			postData.branchid = $("#EditFormBranchTree").jstree('get_selected', false)[0];
 			postData.roles = [];
-			$("#RoleTree").jstree('get_checked', null, true).each(function() {
+			var roles = $("#RoleTree").jstree('get_checked', false);
+			for (var i=0; i<roles.length; i++) {
 				var role = {};
-				role.roleid = this.id;
+				role.roleid = roles[i];
 				postData.roles.push(role);
-			});
+			}
 		} else if (oper == 2) {
 			postData.staffid = $('#MyEditForm input[name="staff.staffid"]').val();
 			postData.loginname = $('#MyEditForm input[name="staff.loginname"]').val();
 			postData.name = $('#MyEditForm input[name="staff.name"]').val();
 			postData.status = 1;
-			$("#EditFormBranchTree").jstree('get_selected', null, true).each(function() {
-				postData.branchid = this.id;
-			});
+			postData.branchid = $("#EditFormBranchTree").jstree('get_selected', false)[0];
 			postData.roles = [];
-			$("#RoleTree").jstree('get_checked', null, true).each(function() {
+			var roles = $("#RoleTree").jstree('get_checked', false);
+			for (var i=0; i<roles.length; i++) {
 				var role = {};
-				role.roleid = this.id;
+				role.roleid = roles[i];
 				postData.roles.push(role);
-			});
+			}
 		} else if (oper == 3) {
 			postData.staffid = $('#MyEditForm input[name="staff.staffid"]').val();
 			postData.password = $('#MyEditForm input[name="staff.password"]').val();
@@ -409,8 +357,7 @@ function initMyEditModal() {
 	$('body').on('click', '.pix-add', function(event) {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').attr('action', myurls['common.add']);
-		currentEditBranchid = currentEditBranchTreeData[0].attr.id;
-		refreshEditBranchTreeData(currentEditBranchTreeData);
+		currentEditBranchid = currentEditBranchTreeData[0].id;
 		createEditBranchTree(currentEditBranchTreeData);
 		currentRoles = {};
 		refreshRoleTreeData(currentRoleTreeData);
@@ -439,7 +386,6 @@ function initMyEditModal() {
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
 		currentEditBranchid = item.branchid;
-		refreshEditBranchTreeData(currentEditBranchTreeData);
 		createEditBranchTree(currentEditBranchTreeData);
 		currentRoles = {};
 		for (var i=0; i<item.roles.length; i++) {

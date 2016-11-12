@@ -13,7 +13,6 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
-import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
@@ -33,9 +32,10 @@ public class OrgServiceImpl implements OrgService {
 	@Autowired
 	private PrivilegeMapper privilegeMapper;
 	@Autowired
-	private BranchMapper branchMapper;
-	@Autowired
 	private DeviceMapper deviceMapper;
+
+	@Autowired
+	private BranchService branchService;
 
 	public List<Org> selectList(String vspid, String orgid) {
 		return orgMapper.selectList(vspid, orgid);
@@ -61,7 +61,7 @@ public class OrgServiceImpl implements OrgService {
 		branch.setStatus("1");
 		branch.setDescription(org.getName() + "总部");
 		branch.setCreatestaffid(org.getCreatestaffid());
-		branchMapper.insertSelective(branch);
+		branchService.addBranch(branch);
 		org.setTopbranchid(branch.getBranchid());
 		orgMapper.updateByPrimaryKeySelective(org);
 
@@ -116,10 +116,9 @@ public class OrgServiceImpl implements OrgService {
 				if (!org.getCode().equals("default")) {
 					terminalid = org.getCode() + terminalid;
 				}
-				List<Branch> branches = branchMapper.selectRoot("" + org.getOrgid());
 				Device device = new Device();
 				device.setOrgid(org.getOrgid());
-				device.setBranchid(branches.get(0).getBranchid());
+				device.setBranchid(oldOrg.getTopbranchid());
 				device.setTerminalid(terminalid);
 				device.setName(terminalid);
 				device.setStatus("0");

@@ -40,6 +40,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 
 <style type="text/css">
@@ -322,6 +323,7 @@ response.setDateHeader("Expires",0);
 																<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 															</div>
@@ -396,6 +398,12 @@ response.setDateHeader("Expires",0);
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 																				<div class="col-md-9">
 																					<input class="intervalRange" type="text" name="intervaltime" value="10"/>
+																				</div>
+																			</div>
+																			<div class="form-group layout-ctl regiontype-0">
+																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.animation"/></label>
+																				<div class="col-md-9">
+																					<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 																				</div>
 																			</div>
 																			<div class="form-group layout-ctl regiontype-0">
@@ -697,73 +705,6 @@ response.setDateHeader("Expires",0);
 														</div>
 													</form>
 													
-													<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
-														<div class="col-md-6">
-															<div class="portlet box blue">
-																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
-																	<ul class="nav nav-tabs">
-																		<li id="nav_tab3" class="imageflag">
-																			<a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.image"/></a>
-																		</li>
-																		<li id="nav_tab2" class="hide-orgtype-2">
-																			<a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.extvideo"/></a>
-																		</li>
-																		<li id="nav_tab1" class="videoflag active">
-																			<a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.intvideo"/></a>
-																		</li>
-																	</ul>
-																	<div class="actions">
-																		<div class="btn-group" id="BranchTreeDropdown">
-																			<a id="BranchTitle" class="btn default yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
-																			<ul class="dropdown-menu pull-right">
-																				<div class="pre-scrollable">
-																				</div>
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-																<div class="portlet-body">
-																	<div class="tab-content">
-																		<div class="tab-pane active" id="portlet_tab1">
-																			<table id="IntVideoTable" class="table table-condensed table-hover">
-																				<thead></thead>
-																				<tbody></tbody>
-																			</table>
-																		</div>
-																		<div class="tab-pane" id="portlet_tab2">
-																			<table id="ExtVideoTable" class="table table-condensed table-hover">
-																				<thead></thead>
-																				<tbody></tbody>
-																			</table>
-																		</div>
-																		<div class="tab-pane" id="portlet_tab3">
-																			<table id="ImageTable" class="table table-condensed table-hover">
-																				<thead></thead>
-																				<tbody></tbody>
-																			</table>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="portlet box green">
-																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
-																</div>
-																<div class="portlet-body">
-																	<div class="table-responsive">
-																		<table id="MedialistDtlTable" class="table table-condensed table-hover">
-																			<thead></thead>
-																			<tbody></tbody>
-																		</table>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													
 													<div class="row bundle-ctl regiontype-6">
 														<div class="col-md-7">
 															<div class="portlet box blue">
@@ -797,6 +738,76 @@ response.setDateHeader("Expires",0);
 
 												</div>
 											</div>
+
+											<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
+												<div class="col-md-8">
+													<div class="portlet box blue">
+														<div class="portlet-title">
+															<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+															<ul class="nav nav-tabs">
+																<li id="nav_tab3" class="imageflag">
+																	<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+																</li>
+																<li id="nav_tab2" class="hide-orgtype-2">
+																	<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+																</li>
+																<li id="nav_tab1" class="videoflag active">
+																	<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+																</li>
+															</ul>
+														</div>
+														<div class="portlet-body">
+															<div class="tab-content">
+																<div class="tab-pane active" id="portlet_tab">
+																	<div class="row">
+																		<div class="col-md-3">
+																			<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
+																			<hr/>
+																			<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+																		</div>
+																		<div class="col-md-9">
+																			<div id="IntVideoDiv">
+																				<table id="IntVideoTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																			<div id="ExtVideoDiv" style="display:none">
+																				<table id="ExtVideoTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																			<div id="ImageDiv" style="display:none">
+																				<table id="ImageTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="portlet box green">
+														<div class="portlet-title">
+															<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
+														</div>
+														<div class="portlet-body">
+															<div class="table-responsive">
+																<table id="MedialistDtlTable" class="table table-condensed table-hover">
+																	<thead></thead>
+																	<tbody></tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
 										</div>
 														
 										<div class="tab-pane" id="tab4">
@@ -934,7 +945,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-jstree/jquery.jstree.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -942,11 +953,10 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=2"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';
@@ -961,7 +971,6 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init();
-	initBranchTree();
 	initWizard();
 });
 

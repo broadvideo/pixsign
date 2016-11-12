@@ -44,7 +44,9 @@ public class VideoAction extends BaseDatatableAction {
 	private File[] mymedia;
 	private String[] mymediaContentType;
 	private String[] mymediaFileName;
-	private String[] name;
+	private String[] names;
+	private String[] branchids;
+	private String[] folderids;
 
 	@Autowired
 	private VideoService videoService;
@@ -63,10 +65,10 @@ public class VideoAction extends BaseDatatableAction {
 				JSONObject jsonItem = new JSONObject();
 				try {
 					logger.info("Upload one video, file={}", mymediaFileName[i]);
-					if (name[i] == null || name[i].equals("")) {
-						name[i] = mymediaFileName[i];
+					if (names[i] == null || names[i].equals("")) {
+						names[i] = mymediaFileName[i];
 					}
-					jsonItem.put("name", name[i]);
+					jsonItem.put("name", names[i]);
 					jsonItem.put("filename", mymediaFileName[i]);
 					jsonItem.put("size", FileUtils.sizeOf(mymedia[i]));
 
@@ -74,7 +76,9 @@ public class VideoAction extends BaseDatatableAction {
 					video.setOrgid(getLoginStaff().getOrgid());
 					video.setBranchid(getLoginStaff().getBranchid());
 					video.setType(Video.TYPE_INTERNAL);
-					video.setName(name[i]);
+					video.setBranchid(Integer.parseInt(branchids[i]));
+					video.setFolderid(Integer.parseInt(folderids[i]));
+					video.setName(names[i]);
 					video.setFilename(mymediaFileName[i]);
 					video.setStatus("9");
 					video.setDescription(mymediaFileName[i]);
@@ -166,7 +170,7 @@ public class VideoAction extends BaseDatatableAction {
 					video.setProgress(100);
 					videoService.updateVideo(video);
 
-					jsonItem.put("name", name[i]);
+					jsonItem.put("name", names[i]);
 					jsonItem.put("filename", newFileName);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -193,14 +197,19 @@ public class VideoAction extends BaseDatatableAction {
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String folderid = getParameter("folderid");
+			if (folderid == null || folderid.equals("")) {
+				folderid = "" + getLoginStaff().getBranch().getTopfolderid();
+			}
 
-			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, null, search);
+			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, type, null,
+					search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, type, null,
-					search, start, length);
+			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid, type,
+					null, search, start, length);
 			for (Video video : videoList) {
 				if (video.getWidth().intValue() == 0 || video.getHeight().intValue() == 0) {
 					File f = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail());
@@ -217,7 +226,7 @@ public class VideoAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VideoAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -232,7 +241,7 @@ public class VideoAction extends BaseDatatableAction {
 			videoService.addVideo(video);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VideoAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -244,7 +253,7 @@ public class VideoAction extends BaseDatatableAction {
 			videoService.updateVideo(video);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VideoAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -256,7 +265,7 @@ public class VideoAction extends BaseDatatableAction {
 			videoService.deleteVideo("" + video.getVideoid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VideoAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -295,12 +304,28 @@ public class VideoAction extends BaseDatatableAction {
 		this.mymediaFileName = mymediaFileName;
 	}
 
-	public String[] getName() {
-		return name;
+	public String[] getNames() {
+		return names;
 	}
 
-	public void setName(String[] name) {
-		this.name = name;
+	public void setNames(String[] names) {
+		this.names = names;
+	}
+
+	public String[] getBranchids() {
+		return branchids;
+	}
+
+	public void setBranchids(String[] branchids) {
+		this.branchids = branchids;
+	}
+
+	public String[] getFolderids() {
+		return folderids;
+	}
+
+	public void setFolderids(String[] folderids) {
+		this.folderids = folderids;
 	}
 
 }

@@ -52,6 +52,17 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="org.orgid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.devicepassflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.devicepassflag" value="0"> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.devicepassflag" value="1" checked> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group devicepassflag">
 											<label class="col-md-3 control-label"><spring:message code="global.devicepass"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -96,17 +107,6 @@ response.setDateHeader("Expires",0);
 													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
 													</span>
 												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.qrcodeflag"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="org.qrcodeflag" value="0" checked> <spring:message code="global.off"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.qrcodeflag" value="1" > <spring:message code="global.on"/>
-												</label>
 											</div>
 										</div>
 									</div>
@@ -214,7 +214,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-orgconfig.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-orgconfig.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

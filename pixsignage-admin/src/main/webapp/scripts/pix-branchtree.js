@@ -1,5 +1,4 @@
 var CurBranchid;
-var DropdownBranchid;
 	
 function initBranchTree() {
 	$.ajax({
@@ -14,63 +13,23 @@ function initBranchTree() {
 				if ( $("#BranchTreeDiv").length > 0 ) {
 					if (branches[0].children.length == 0) {
 						$('#BranchTreeDiv').css('display', 'none');
-						$('#BranchContentDiv').removeClass("col-md-10");
-						$('#BranchContentDiv').addClass("col-md-12");
+						if ($('#BranchContentDiv') != null) {
+							$('#BranchContentDiv').removeClass("col-md-10");
+							$('#BranchContentDiv').addClass("col-md-12");
+						}
 					} else {
 						var branchTreeDivData = [];
 						createBranchTreeData(branches, branchTreeDivData);
 						$('#BranchTreeDiv').jstree('destroy');
 						$('#BranchTreeDiv').jstree({
-							'json_data' : {
+							'core' : {
+								'multiple' : false,
 								'data' : branchTreeDivData
 							},
-							'plugins' : [ 'themes', 'json_data', 'ui' ],
-							'core' : {
-								'animation' : 100
-							},
-							'ui' : {
-								'select_limit' : 1,
-								'initially_select' : CurBranchid,
-							},
-							'themes' : {
-								'theme' : 'proton',
-								'icons' : false,
-							}
+							'plugins' : ['unique'],
 						});
 						$('#BranchTreeDiv').on('loaded.jstree', function() {
-							$('#BranchTreeDiv').jstree('open_all');
-						});
-					}
-				}
-
-				if ( $("#BranchTreeDropdown").length > 0 ) {
-					DropdownBranchid = branches[0].branchid;
-					if (branches[0].children.length == 0) {
-						$('#BranchTreeDropdown').css('display', 'none');
-					} else {
-						var branchTreeDropdownData = [];
-						$('#BranchTitle').html(branches[0].name + ' <i class="fa fa-angle-down"></i>');
-						createBranchTreeData(branches, branchTreeDropdownData);
-						$('#BranchTreeDropdown .pre-scrollable').jstree('destroy');
-						$('#BranchTreeDropdown .pre-scrollable').jstree({
-							'json_data' : {
-								'data' : branchTreeDropdownData
-							},
-							'plugins' : [ 'themes', 'json_data', 'ui' ],
-							'core' : {
-								'animation' : 100
-							},
-							'ui' : {
-								'select_limit' : 1,
-								'initially_select' : DropdownBranchid,
-							},
-							'themes' : {
-								'theme' : 'proton',
-								'icons' : false,
-							}
-						});
-						$('#BranchTreeDropdown .pre-scrollable').on('loaded.jstree', function() {
-							$('#BranchTreeDropdown .pre-scrollable').jstree('open_all');
+							$('#BranchTreeDiv').jstree('select_node', CurBranchid);
 						});
 					}
 				}
@@ -85,33 +44,25 @@ function initBranchTree() {
 	function createBranchTreeData(branches, treeData) {
 		for (var i=0; i<branches.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = branches[i].name;
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = branches[i].branchid;
-			treeData[i]['attr']['title'] = branches[i].name;
-			treeData[i]['attr']['parentid'] = branches[i].parentid;
-			if (treeData[i]['attr']['id'] == CurBranchid) {
-				treeData[i]['attr']['class'] = 'jstree-selected';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-unselected';
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
 			}
-			treeData[i]['children'] = [];
-			createBranchTreeData(branches[i].children, treeData[i]['children']);
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
 		}
 	}
 
 	$('#BranchTreeDiv').on('select_node.jstree', function(event, data) {
-		CurBranchid = data.rslt.obj.attr('id');
+		CurBranchid = data.instance.get_node(data.selected[0]).id;
+		if ($('#FolderTreeDiv').length > 0) {
+			CurFolderid = null;
+			initFolderTree();
+		}
 		refreshMyTable();
 	});
 	
-	$('#BranchTreeDropdown .pre-scrollable').on('select_node.jstree', function(event, data) {
-		DropdownBranchid = data.rslt.obj.attr('id');
-		$('#BranchTitle').html(data.rslt.obj.attr('title') + ' <i class="fa fa-angle-down"></i>');
-		refreshTableFromBranchDropdown();
-	});
-
 	//var BranchidList = [];
 	//var BranchnameList = [];
 	//$("#BranchTreeDiv").on("select_node.jstree", function(event, data) {

@@ -26,7 +26,7 @@ public class VideoTask {
 			}
 			workflag = true;
 
-			List<Video> videos = videoMapper.selectList(null, null, null, "0", null, null, null);
+			List<Video> videos = videoMapper.selectList(null, null, null, null, "0", null, null, null);
 			for (Video video : videos) {
 				handleVideoPreview(video);
 			}

@@ -14,6 +14,8 @@ public class Video {
 
 	private Integer branchid;
 
+	private Integer folderid;
+
 	private String name;
 
 	private String uuid;
@@ -72,6 +74,14 @@ public class Video {
 
 	public void setBranchid(Integer branchid) {
 		this.branchid = branchid;
+	}
+
+	public Integer getFolderid() {
+		return folderid;
+	}
+
+	public void setFolderid(Integer folderid) {
+		this.folderid = folderid;
 	}
 
 	public String getName() {

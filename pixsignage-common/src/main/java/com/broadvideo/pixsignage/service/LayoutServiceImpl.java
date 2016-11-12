@@ -83,10 +83,10 @@ public class LayoutServiceImpl implements LayoutService {
 		layoutdtl.setLayoutid(layout.getLayoutid());
 		layoutdtl.setType(Layoutdtl.Type_PLAY);
 		layoutdtl.setMainflag("1");
-		layoutdtl.setWidth(layout.getWidth());
-		layoutdtl.setHeight(layout.getHeight());
-		layoutdtl.setTopoffset(0);
-		layoutdtl.setLeftoffset(0);
+		layoutdtl.setWidth((int) (layout.getWidth() / 2));
+		layoutdtl.setHeight((int) (layout.getHeight() / 2));
+		layoutdtl.setTopoffset((int) (layout.getHeight() / 4));
+		layoutdtl.setLeftoffset((int) (layout.getWidth() / 4));
 		layoutdtl.setBgcolor("#000000");
 		if (layoutdtl.getBgimageid() != null && layoutdtl.getBgimageid() > 0) {
 			layoutdtl.setOpacity(0);

@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.domain.Branch;
+import com.broadvideo.pixsignage.domain.Folder;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.FolderMapper;
 
 @Service("branchService")
 public class BranchServiceImpl implements BranchService {
 
 	@Autowired
 	private BranchMapper branchMapper;
+	@Autowired
+	private FolderMapper folderMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -38,6 +42,18 @@ public class BranchServiceImpl implements BranchService {
 	@Transactional
 	public void addBranch(Branch branch) {
 		branchMapper.insertSelective(branch);
+
+		Folder folder = new Folder();
+		folder.setOrgid(branch.getOrgid());
+		folder.setBranchid(branch.getBranchid());
+		folder.setParentid(0);
+		folder.setName("/");
+		folder.setStatus("1");
+		folder.setCreatestaffid(branch.getCreatestaffid());
+		folderMapper.insertSelective(folder);
+		branch.setTopfolderid(folder.getFolderid());
+		branchMapper.updateByPrimaryKeySelective(branch);
+
 	}
 
 	@Transactional

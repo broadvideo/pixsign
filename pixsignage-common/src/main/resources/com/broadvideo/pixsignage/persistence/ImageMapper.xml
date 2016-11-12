@@ -5,6 +5,7 @@
     <id column="imageid" property="imageid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="folderid" property="folderid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="height" property="height" jdbcType="INTEGER" />
@@ -22,7 +23,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    imageid, orgid, branchid, name, width, height, filepath, filename, size, md5, status, objtype, objid, 
+    imageid, orgid, branchid, folderid, name, width, height, filepath, filename, size, md5, status, objtype, objid, 
     description, thumbnail, createtime, createstaffid
   </sql>
   
@@ -40,6 +41,9 @@
     </if>
     <if test="branchid != null">
       and branchid = #{branchid}
+    </if>
+    <if test="folderid != null">
+      and folderid=#{folderid}
     </if>
     <if test="objtype != null">
       and objtype = #{objtype}
@@ -60,6 +64,9 @@
     </if>
     <if test="branchid != null">
       and branchid = #{branchid}
+    </if>
+    <if test="folderid != null">
+      and folderid=#{folderid}
     </if>
     <if test="objtype != null">
       and objtype = #{objtype}
@@ -86,14 +93,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="imageid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into image (orgid, branchid, name, 
-      width, height, 
+    insert into image (orgid, branchid, folderid, 
+      name, width, height, 
       filepath, filename, size, 
       md5, status, objtype, objid, 
       description, thumbnail, createtime, createstaffid
       )
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, 
       #{md5,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
       #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
@@ -110,6 +117,9 @@
       </if>
       <if test="branchid != null" >
         branchid,
+      </if>
+      <if test="folderid != null" >
+        folderid,
       </if>
       <if test="name != null" >
         name,
@@ -160,6 +170,9 @@
       </if>
       <if test="branchid != null" >
         #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="folderid != null" >
+        #{folderid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -214,6 +227,9 @@
       <if test="branchid != null" >
         branchid = #{branchid,jdbcType=INTEGER},
       </if>
+      <if test="folderid != null" >
+        folderid = #{folderid,jdbcType=INTEGER},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -263,6 +279,7 @@
     update image
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
+      folderid = #{folderid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       width = #{width,jdbcType=INTEGER},
       height = #{height,jdbcType=INTEGER},

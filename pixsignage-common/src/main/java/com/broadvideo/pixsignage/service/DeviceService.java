@@ -35,4 +35,9 @@ public interface DeviceService {
 	public void reboot(String deviceid) throws Exception;
 
 	public void screen(String deviceid) throws Exception;
+
+	public void utext(String orgid, String text, String count, String position, String speed, String color, String size,
+			String bgcolor, String opacity) throws Exception;
+
+	public void ucancel(String orgid) throws Exception;
 }
