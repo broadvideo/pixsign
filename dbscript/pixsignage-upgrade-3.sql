@@ -102,9 +102,13 @@ create table playlog(
    orgid int not null,
    branchid int not null,
    deviceid int not null,
-   videoid int,
    starttime datetime,
    endtime datetime,
+   duration int default 0,
+   bundleid int,
+   layoutdtlid int,
+   mediatype char(1),
+   mediaid int,
    primary key (playlogid)
  )engine = innodb
 default character set utf8;
@@ -128,6 +132,18 @@ create table oplog(
  )engine = innodb
 default character set utf8;
 
+create table pflowlog( 
+   pflowlogid int not null auto_increment,
+   orgid int not null,
+   branchid int not null,
+   deviceid int not null,
+   starttime datetime,
+   endtime datetime,
+   duration int default 0,
+   createtime timestamp not null default current_timestamp,
+   primary key (pflowlogid)
+ )engine = innodb
+default character set utf8;
 
 insert into folder(orgid,branchid,parentid,name) select orgid,branchid,0,'/' from branch where status!='9' order by branchid;
 update branch b, folder f set b.topfolderid=f.folderid where b.branchid=f.branchid;
@@ -199,6 +215,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30801,2,308,'menu.onlinelog','onlinelog.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30802,2,308,'menu.playlog','playlog.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30811,2,308,'menu.oplog','oplog.jsp','',1,11,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30821,2,308,'menu.pflowlog','pflowlog.jsp','',1,21,'12');
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(309,2,0,'menu.systemmanage','','fa-cogs',1,10,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30901,2,309,'menu.staff','staff.jsp','',1,1,'12');

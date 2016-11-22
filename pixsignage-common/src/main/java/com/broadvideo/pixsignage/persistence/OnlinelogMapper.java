@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -9,9 +10,16 @@ import com.broadvideo.pixsignage.domain.Onlinelog;
 public interface OnlinelogMapper {
 	Onlinelog selectByPrimaryKey(@Param(value = "onlinelogid") String onlinelogid);
 
-	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid);
+	int selectDeviceStatCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "search") String search);
 
-	List<Onlinelog> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+	List<HashMap<String, Object>> selectDeviceStatList(@Param(value = "orgid") String orgid,
+			@Param(value = "branchid") String branchid, @Param(value = "search") String search,
+			@Param(value = "start") String start, @Param(value = "length") String length);
+
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid);
+
+	List<Onlinelog> selectList(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "onlinelogid") String onlinelogid);
@@ -26,5 +34,7 @@ public interface OnlinelogMapper {
 
 	int updateAll();
 
-	int updateOne(@Param(value = "deviceid") String deviceid);
+	int updateLast2Offline(@Param(value = "deviceid") String deviceid);
+
+	int updateLast2Online(@Param(value = "deviceid") String deviceid);
 }

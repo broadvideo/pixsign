@@ -37,6 +37,32 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
+		<div id="PlaylogModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.playlog"/></div>
+							</div>
+							<div class="portlet-body">
+								<table id="PlaylogTable" class="table table-condensed table-hover">
+									<thead></thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="page-content-wrapper">
 			<div class="page-content">
 			
@@ -129,8 +155,9 @@ response.setDateHeader("Expires",0);
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initMyTable();
+	initDetailModal();
 });
 
 </script>

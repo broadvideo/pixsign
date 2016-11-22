@@ -19,8 +19,6 @@ public class Onlinelog {
 
 	private Integer duration;
 
-	private Device device;
-
 	public Integer getOnlinelogid() {
 		return onlinelogid;
 	}
@@ -79,13 +77,5 @@ public class Onlinelog {
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;
-	}
-
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
 	}
 }

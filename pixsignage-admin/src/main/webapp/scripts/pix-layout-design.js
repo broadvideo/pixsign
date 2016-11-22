@@ -765,6 +765,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 	}
 	layoutdtl.sleeptime = 0;
 	layoutdtl.intervaltime = 10;
+	layoutdtl.animation = 'None';
 	layoutdtl.fitflag = 1;
 	layoutdtl.volume = 50;
 	layoutdtl.direction = 4;

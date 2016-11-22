@@ -318,7 +318,7 @@ var CurrentStorage = <%=session_vsp.getCurrentstorage()%>;
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initMyTable();
 	initMyEditModal();
 });

@@ -556,6 +556,52 @@ public class BundleServiceImpl implements BundleService {
 		}
 	}
 
+	public void setBundleReviewWait(String bundleid) {
+		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
+		if (bundle != null && bundle.getHomebundleid() > 0) {
+			bundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
+		}
+		if (bundle != null) {
+			bundle.setReviewflag(Bundle.REVIEW_WAIT);
+			if (bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+				JSONObject bundleJson = generateBundleJson("" + bundle.getBundleid());
+				bundle.setJson(bundleJson.toString());
+			}
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+			List<Bundle> subbundles = bundle.getSubbundles();
+			if (subbundles != null) {
+				for (Bundle b : subbundles) {
+					b.setReviewflag(Bundle.REVIEW_WAIT);
+					if (b.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+						JSONObject bundleJson = generateBundleJson("" + b.getBundleid());
+						b.setJson(bundleJson.toString());
+					}
+					bundleMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+		}
+	}
+
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) {
+		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
+		if (bundle != null && bundle.getHomebundleid() > 0) {
+			bundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
+		}
+		if (bundle != null) {
+			bundle.setReviewflag(reviewflag);
+			bundle.setComment(comment);
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+			List<Bundle> subbundles = bundle.getSubbundles();
+			if (subbundles != null) {
+				for (Bundle b : subbundles) {
+					b.setReviewflag(reviewflag);
+					b.setComment(comment);
+					bundleMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+		}
+	}
+
 	public JSONObject generateBundleJson(String bundleid) {
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
 

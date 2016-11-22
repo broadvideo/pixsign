@@ -42,7 +42,6 @@ import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Playlog;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
@@ -166,7 +165,7 @@ public class PixsignageService {
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
-			onlinelogMapper.updateOne("" + device.getDeviceid());
+			onlinelogMapper.updateLast2Offline("" + device.getDeviceid());
 			Onlinelog onlinelog = new Onlinelog();
 			onlinelog.setOrgid(device.getOrgid());
 			onlinelog.setBranchid(device.getBranchid());
@@ -416,15 +415,17 @@ public class PixsignageService {
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
 
-			if (mediatype.equals("video")) {
-				Playlog playlog = new Playlog();
-				playlog.setOrgid(device.getOrgid());
-				playlog.setBranchid(device.getBranchid());
-				playlog.setDeviceid(device.getDeviceid());
-				playlog.setVideoid(mediaid);
-				playlog.setStarttime(Calendar.getInstance().getTime());
-				playlogMapper.insertSelective(playlog);
-			}
+			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
+
+			/*
+			 * if (mediatype.equals("video")) { Playlog playlog = new Playlog();
+			 * playlog.setOrgid(device.getOrgid());
+			 * playlog.setBranchid(device.getBranchid());
+			 * playlog.setDeviceid(device.getDeviceid());
+			 * playlog.setVideoid(mediaid);
+			 * playlog.setStarttime(Calendar.getInstance().getTime());
+			 * playlogMapper.insertSelective(playlog); }
+			 */
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();
@@ -635,7 +636,7 @@ public class PixsignageService {
 	}
 
 	@POST
-	@Path("/report_screen")
+	@Path("report_screen")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public String reportscreen(@FormDataParam("meta") String request,
 			@FormDataParam("screen") FormDataContentDisposition screenHeader,
@@ -670,6 +671,90 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_screen exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_playlog")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportplaylog(@FormDataParam("meta") String request,
+			@FormDataParam("playlog") FormDataContentDisposition playlogHeader,
+			@FormDataParam("playlog") InputStream playlogFile) {
+		try {
+			logger.info("Pixsignage Service report_playlog: {}, playlogHeader: {}", request, playlogHeader);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid()));
+			String tempname = CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid() + "/playlog-"
+					+ device.getDeviceid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmssSSS").format(Calendar.getInstance().getTime()) + ".tmp";
+			String filename = tempname.substring(0, tempname.length() - 4) + ".zip.ok";
+			logger.info("Save playlog to: {}", filename);
+			File tempfile = new File(tempname);
+			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
+			FileUtils.moveFile(tempfile, new File(filename));
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service report_playlog response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_playlog exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_pflow")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportpflow(@FormDataParam("meta") String request,
+			@FormDataParam("pflow") FormDataContentDisposition pflowHeader,
+			@FormDataParam("pflow") InputStream pflowFile) {
+		try {
+			logger.info("Pixsignage Service report_pflow: {}, pflowHeader: {}", request, pflowHeader);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/pflow/" + device.getDeviceid()));
+			String tempname = CommonConfig.CONFIG_PIXDATA_HOME + "/pflow/" + device.getDeviceid() + "/pflow-"
+					+ device.getTerminalid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmssSSS").format(Calendar.getInstance().getTime()) + ".tmp";
+			String filename = tempname.substring(0, tempname.length() - 4) + ".zip.ok";
+			logger.info("Save pflow to: {}", filename);
+			File tempfile = new File(tempname);
+			FileUtils.copyInputStreamToFile(pflowFile, tempfile);
+			FileUtils.moveFile(tempfile, new File(filename));
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service report_pflow response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_pflow exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

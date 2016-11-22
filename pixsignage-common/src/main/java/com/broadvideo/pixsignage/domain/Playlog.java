@@ -13,15 +13,25 @@ public class Playlog {
 
 	private Integer deviceid;
 
-	private Integer videoid;
-
 	private Date starttime;
 
 	private Date endtime;
 
+	private Integer duration;
+
+	private Integer bundleid;
+
+	private Integer layoutdtlid;
+
+	private String mediatype;
+
+	private Integer mediaid;
+
 	private Device device;
 
 	private Video video;
+
+	private Image image;
 
 	public Integer getPlaylogid() {
 		return playlogid;
@@ -55,14 +65,6 @@ public class Playlog {
 		this.deviceid = deviceid;
 	}
 
-	public Integer getVideoid() {
-		return videoid;
-	}
-
-	public void setVideoid(Integer videoid) {
-		this.videoid = videoid;
-	}
-
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getStarttime() {
 		return starttime;
@@ -83,6 +85,46 @@ public class Playlog {
 		this.endtime = endtime;
 	}
 
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public Integer getBundleid() {
+		return bundleid;
+	}
+
+	public void setBundleid(Integer bundleid) {
+		this.bundleid = bundleid;
+	}
+
+	public Integer getLayoutdtlid() {
+		return layoutdtlid;
+	}
+
+	public void setLayoutdtlid(Integer layoutdtlid) {
+		this.layoutdtlid = layoutdtlid;
+	}
+
+	public String getMediatype() {
+		return mediatype;
+	}
+
+	public void setMediatype(String mediatype) {
+		this.mediatype = mediatype == null ? null : mediatype.trim();
+	}
+
+	public Integer getMediaid() {
+		return mediaid;
+	}
+
+	public void setMediaid(Integer mediaid) {
+		this.mediaid = mediaid;
+	}
+
 	public Device getDevice() {
 		return device;
 	}
@@ -97,5 +139,13 @@ public class Playlog {
 
 	public void setVideo(Video video) {
 		this.video = video;
+	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
 	}
 }

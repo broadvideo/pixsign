@@ -46,7 +46,7 @@ public class WidgetAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("WidgetAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -61,7 +61,7 @@ public class WidgetAction extends BaseDatatableAction {
 			widgetService.addWidget(widget);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("WidgetAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -73,7 +73,7 @@ public class WidgetAction extends BaseDatatableAction {
 			widgetService.updateWidget(widget);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("WidgetAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -85,7 +85,7 @@ public class WidgetAction extends BaseDatatableAction {
 			widgetService.deleteWidget("" + widget.getWidgetid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("WidgetAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

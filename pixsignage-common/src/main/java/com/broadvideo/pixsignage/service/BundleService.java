@@ -35,6 +35,10 @@ public interface BundleService {
 
 	public void syncBundle(String bundleid) throws Exception;
 
+	public void setBundleReviewWait(String bundleid);
+
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment);
+
 	public JSONObject generateBundleJson(String bundleid);
 
 	public void syncBundleSchedule(String bindtype, String bindid) throws Exception;

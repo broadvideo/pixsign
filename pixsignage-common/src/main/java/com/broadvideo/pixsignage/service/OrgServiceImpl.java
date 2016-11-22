@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.App;
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Org;
@@ -36,6 +39,8 @@ public class OrgServiceImpl implements OrgService {
 
 	@Autowired
 	private BranchService branchService;
+	@Autowired
+	protected ResourceBundleMessageSource messageSource;
 
 	public List<Org> selectList(String vspid, String orgid) {
 		return orgMapper.selectList(vspid, orgid);
@@ -46,6 +51,15 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	public Org selectByPrimaryKey(String orgid) {
+		Org org = orgMapper.selectByPrimaryKey(orgid);
+		List<App> appList = org.getApplist();
+		if (appList != null) {
+			for (App app : appList) {
+				app.setDescription(
+						messageSource.getMessage("app." + app.getName(), null, LocaleContextHolder.getLocale()));
+			}
+
+		}
 		return orgMapper.selectByPrimaryKey(orgid);
 	}
 
@@ -57,9 +71,10 @@ public class OrgServiceImpl implements OrgService {
 		Branch branch = new Branch();
 		branch.setOrgid(org.getOrgid());
 		branch.setParentid(0);
-		branch.setName("总部");
+		branch.setName(messageSource.getMessage("global.headquarter", null, LocaleContextHolder.getLocale()));
 		branch.setStatus("1");
-		branch.setDescription(org.getName() + "总部");
+		branch.setDescription(org.getName() + " "
+				+ messageSource.getMessage("global.headquarter", null, LocaleContextHolder.getLocale()));
 		branch.setCreatestaffid(org.getCreatestaffid());
 		branchService.addBranch(branch);
 		org.setTopbranchid(branch.getBranchid());
@@ -70,9 +85,9 @@ public class OrgServiceImpl implements OrgService {
 		staff.setBranchid(branch.getBranchid());
 		staff.setLoginname("admin@" + org.getCode());
 		staff.setPassword(CommonUtil.getPasswordMd5("admin@" + org.getCode(), "admin@" + org.getCode()));
-		staff.setName(org.getName() + "管理员");
+		staff.setName(org.getName() + " Admin");
 		staff.setStatus("1");
-		staff.setDescription(org.getName() + "管理员");
+		staff.setDescription(org.getName() + " Admin");
 		staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
 		staff.setCreatestaffid(org.getCreatestaffid());
 		staffMapper.insertSelective(staff);

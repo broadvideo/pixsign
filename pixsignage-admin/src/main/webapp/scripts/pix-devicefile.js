@@ -1,4 +1,4 @@
-var currentTab = 2; //1-device 2-devicegroup
+var currentTab = 1; //1-device 2-devicegroup
 var currentDevicegroupid = 0;
 var currentTab1Deviceid = 0;
 var currentTab2Deviceid = 0;
@@ -100,7 +100,8 @@ function refreshDeviceDetail() {
 }
 
 function initDevicefiles() {
-	$('#DeviceDetail').css('display', 'none');
+	$('#DevicegroupSelectPanel').css('display', 'none');
+	refreshLeftTab();
 	
 	$('body').on('click', '#DeviceTab', function(event) {
 		currentTab = 1;

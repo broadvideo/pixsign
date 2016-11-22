@@ -95,6 +95,9 @@ public class BundleAction extends BaseDatatableAction {
 			bundle.setBranchid(getLoginStaff().getBranchid());
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				if (bundle.getHomebundleid() != null && bundle.getHomebundleid() > 0) {
+					bundleService.setBundleReviewWait("" + bundle.getHomebundleid());
+				}
 				bundle.setReviewflag(Bundle.REVIEW_WAIT);
 			} else {
 				bundle.setReviewflag(Bundle.REVIEW_PASSED);
@@ -147,14 +150,24 @@ public class BundleAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doReview() {
+		try {
+			bundleService.setBundleReviewResut("" + bundle.getBundleid(), bundle.getReviewflag(), bundle.getComment());
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("BundleAction doReview exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDesign() {
 		try {
 			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
-				if (bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
-					bundle.setReviewflag(Bundle.REVIEW_WAIT);
-					JSONObject bundleJson = bundleService.generateBundleJson("" + bundle.getBundleid());
-					bundle.setJson(bundleJson.toString());
-				}
+				bundleService.setBundleReviewWait("" + bundle.getBundleid());
+				bundle.setReviewflag(null);
+				bundle.setJson(null);
 			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.design(bundle);

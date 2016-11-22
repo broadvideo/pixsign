@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.App;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Vsp;
@@ -26,6 +29,9 @@ public class VspServiceImpl implements VspService {
 	@Autowired
 	private PrivilegeMapper privilegeMapper;
 
+	@Autowired
+	protected ResourceBundleMessageSource messageSource;
+
 	public List<Vsp> selectList() {
 		return vspMapper.selectList();
 	}
@@ -35,6 +41,15 @@ public class VspServiceImpl implements VspService {
 	}
 
 	public Vsp selectByPrimaryKey(String vspid) {
+		Vsp vsp = vspMapper.selectByPrimaryKey(vspid);
+		List<App> appList = vsp.getApplist();
+		if (appList != null) {
+			for (App app : appList) {
+				app.setDescription(
+						messageSource.getMessage("app." + app.getName(), null, LocaleContextHolder.getLocale()));
+			}
+
+		}
 		return vspMapper.selectByPrimaryKey(vspid);
 	}
 
@@ -45,9 +60,9 @@ public class VspServiceImpl implements VspService {
 		staff.setVspid(vsp.getVspid());
 		staff.setLoginname("super@" + vsp.getCode());
 		staff.setPassword(CommonUtil.getPasswordMd5("super@" + vsp.getCode(), "super@" + vsp.getCode()));
-		staff.setName(vsp.getName() + "管理员");
+		staff.setName(vsp.getName() + " Admin");
 		staff.setStatus("1");
-		staff.setDescription(vsp.getName() + "管理员");
+		staff.setDescription(vsp.getName() + " Admin");
 		staff.setSubsystem(CommonConstants.SUBSYSTEM_VSP);
 		staff.setCreatestaffid(vsp.getCreatestaffid());
 		staffMapper.insertSelective(staff);

@@ -163,6 +163,7 @@ public class DeviceServiceImpl implements DeviceService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
 		}
 
+		msgBodyJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 		msgBodyJson.put("password", org.getDevicepass());
 
 		String topic = "device-" + deviceid;

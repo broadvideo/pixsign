@@ -182,7 +182,7 @@ var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF))
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initBranchTree();
 	initMyTable();
 	initMyEditModal();

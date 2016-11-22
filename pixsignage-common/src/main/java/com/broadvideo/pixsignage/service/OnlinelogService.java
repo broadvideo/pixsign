@@ -7,9 +7,9 @@ import com.broadvideo.pixsignage.domain.Onlinelog;
 public interface OnlinelogService {
 	public Onlinelog selectByPrimaryKey(String onlinelogid);
 
-	public int selectCount(String orgid, String branchid);
+	public int selectCount(String orgid, String deviceid);
 
-	public List<Onlinelog> selectList(String orgid, String branchid, String start, String length);
+	public List<Onlinelog> selectList(String orgid, String deviceid, String start, String length);
 
 	public void addOnlinelog(Onlinelog onlinelog);
 
@@ -19,5 +19,7 @@ public interface OnlinelogService {
 
 	public void updateAll();
 
-	public void updateOne(String deviceid);
+	public void updateLast2Offline(String deviceid);
+
+	public void updateLast2Online(String deviceid);
 }

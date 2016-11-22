@@ -3,6 +3,7 @@ var myurls = {
 	'common.add' : 'bundle!add.action',
 	'common.update' : 'bundle!update.action',
 	'common.delete' : 'bundle!delete.action',
+	'bundle.review' : 'bundle!review.action',
 	'bundle.design' : 'bundle!design.action',
 	'bundle.push' : 'bundle!push.action',
 	'image.list' : 'image!list.action',
@@ -104,7 +105,7 @@ var oTable = $('#MyTable').dataTable({
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'reviewflag','value':'0' });
-		aoData.push({'name':'touchflag','value':'0' });
+		aoData.push({'name':'homeflag','value':'1' });
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -158,7 +159,7 @@ $('body').on('click', '.pix-review', function(event) {
 	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
 	CurrentBundleid = CurrentBundle.bundleid;
 	$('#ReviewForm input[name="bundle.bundleid"]').val(CurrentBundleid);
-	$('#ReviewForm').attr('action', myurls['common.update']);
+	$('#ReviewForm').attr('action', myurls['bundle.review']);
 	$('#ReviewModal').modal();
 });
 

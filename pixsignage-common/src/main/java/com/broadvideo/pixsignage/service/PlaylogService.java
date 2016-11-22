@@ -7,9 +7,9 @@ import com.broadvideo.pixsignage.domain.Playlog;
 public interface PlaylogService {
 	public Playlog selectByPrimaryKey(String playlogid);
 
-	public int selectCount(String orgid, String branchid);
+	public int selectCount(String orgid, String deviceid);
 
-	public List<Playlog> selectList(String orgid, String branchid, String start, String length);
+	public List<Playlog> selectList(String orgid, String deviceid, String start, String length);
 
 	public void addPlaylog(Playlog playlog);
 

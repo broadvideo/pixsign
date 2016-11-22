@@ -19,12 +19,12 @@ public class OnlinelogServiceImpl implements OnlinelogService {
 		return onlinelogMapper.selectByPrimaryKey(onlinelogid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return onlinelogMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String deviceid) {
+		return onlinelogMapper.selectCount(orgid, deviceid);
 	}
 
-	public List<Onlinelog> selectList(String orgid, String branchid, String start, String length) {
-		return onlinelogMapper.selectList(orgid, branchid, start, length);
+	public List<Onlinelog> selectList(String orgid, String deviceid, String start, String length) {
+		return onlinelogMapper.selectList(orgid, deviceid, start, length);
 	}
 
 	@Transactional
@@ -48,7 +48,12 @@ public class OnlinelogServiceImpl implements OnlinelogService {
 	}
 
 	@Transactional
-	public void updateOne(String deviceid) {
-		onlinelogMapper.updateOne(deviceid);
+	public void updateLast2Offline(String deviceid) {
+		onlinelogMapper.updateLast2Offline(deviceid);
+	}
+
+	@Transactional
+	public void updateLast2Online(String deviceid) {
+		onlinelogMapper.updateLast2Online(deviceid);
 	}
 }

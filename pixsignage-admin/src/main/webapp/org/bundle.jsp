@@ -510,7 +510,7 @@ response.setDateHeader("Expires",0);
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 });
 
 </script>

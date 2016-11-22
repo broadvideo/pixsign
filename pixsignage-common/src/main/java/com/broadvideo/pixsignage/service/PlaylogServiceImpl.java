@@ -19,12 +19,12 @@ public class PlaylogServiceImpl implements PlaylogService {
 		return playlogMapper.selectByPrimaryKey(playlogid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return playlogMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String deviceid) {
+		return playlogMapper.selectCount(orgid, deviceid);
 	}
 
-	public List<Playlog> selectList(String orgid, String branchid, String start, String length) {
-		return playlogMapper.selectList(orgid, branchid, start, length);
+	public List<Playlog> selectList(String orgid, String deviceid, String start, String length) {
+		return playlogMapper.selectList(orgid, deviceid, start, length);
 	}
 
 	@Transactional

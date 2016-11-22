@@ -35,92 +35,62 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
-<%@ include file="../common/common2.jsp"%>
+<%@ include file="/common/common2.jsp"%>
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
-				<div id="CrashDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static" >
-					<div class="modal-dialog modal-full">
+
+				<div id="DeviceModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 							</div>
 							<div class="modal-body">
-								<form id="CrashDtlForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
-									<div class="form-body">
-										<div class="form-group">
-											<label class="col-md-2 control-label required">IP</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientip"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.name"/></label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required">OS</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.os"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required">APP</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.appname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.debug.vname"/><</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.debug.vcode"/><</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vcode"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.debug.stack"/><</label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="16" name="crashreport.stack"></textarea>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="portlet box blue">
+											<div class="portlet-title">
+												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device"/></div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.debug.resolution"/><</label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="4" name="crashreport.resolution"></textarea>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.debug.other"/></label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="3" name="crashreport.other"></textarea>
+											<div class="portlet-body">
+												<div class="table-responsive">
+													<table id="DeviceTable" class="table table-striped table-bordered table-hover">
+														<thead></thead>
+														<tbody></tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
-								</form>
+								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
-			
-				<!-- BEGIN PAGE HEADER-->
-				<h3 class="page-title"><spring:message code="menu.debug"/></h3>
+
+				<h3 class="page-title"><spring:message code="menu.wxdevice"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
+						<li><a href="#"><spring:message code="menu.weixin"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.debug"/></a>
+						<li><a href="#"><spring:message code="menu.wxdevice"/></a>
 						</li>
 					</ul>
 				</div>
-				<!-- END PAGE HEADER-->
 			
-				<!-- BEGIN PAGE CONTENT-->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.debug"/></div>
+								<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.wxdevice"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
@@ -134,29 +104,23 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 				</div>
-				<!-- END PAGE CONTENT -->
 			</div>
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
 	
-	<!-- BEGIN FOOTER -->
-	<div class="footer">
-		<div class="footer-inner">
+	<div class="page-footer">
+		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
-		<div class="footer-tools">
-			<span class="go-top">
-			<i class="fa fa-angle-up"></i>
-			</span>
+		<div class="scroll-to-top">
+			<i class="icon-arrow-up"></i>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   
@@ -193,13 +157,16 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-crashreport.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-wxdevice.js?t=0"></script>
 <script>
+var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initMyTable();
+	initBindModal();
 });
 
 </script>

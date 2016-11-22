@@ -174,7 +174,7 @@ var myType = 2;
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initBranchTree();
 	initMyTable();
 	initMyEditModal();

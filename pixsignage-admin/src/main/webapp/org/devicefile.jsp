@@ -65,8 +65,8 @@ response.setDateHeader("Expires",0);
 									<a href="javascript:;" onClick="refreshDeviceDetail();" class="reload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
-									<li><a id="DeviceTab" href="#TopTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
-									<li class="active"><a id="DevicegroupTab" href="#TopTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
+									<li><a id="DevicegroupTab" href="#TopTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
+									<li class="active"><a id="DeviceTab" href="#TopTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
 								</ul>
 							</div>
 							<div class="portlet-body">
@@ -163,12 +163,12 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-devicefile.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-devicefile.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 	initDevicefiles();
 });
 

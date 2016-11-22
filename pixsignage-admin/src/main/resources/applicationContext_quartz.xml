@@ -136,16 +136,56 @@
 		</property>
 	</bean>
 
+	<bean id="playlogTask" class="com.broadvideo.pixsignage.quartz.PlaylogTask"></bean>
+	<bean id="playlogJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="playlogTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="playlogJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="playlogJob" />
+		</property>
+		<property name="cronExpression">
+			<value>10 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="pflowTask" class="com.broadvideo.pixsignage.quartz.PflowTask"></bean>
+	<bean id="pflowJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="pflowTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="pflowJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="pflowJob" />
+		</property>
+		<property name="cronExpression">
+			<value>20 * * * * ?</value>
+		</property>
+	</bean>
+
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
+				<!-- 
 				<ref bean="activemqNormalJobTrigger" />
 				<ref bean="activemqDailyJobTrigger" />
-				<ref bean="deviceJobTrigger" />
-				<ref bean="vcssJobTrigger" />
+				<ref bean="vcssJobTrigger" /> 
 				<ref bean="pixboxJobTrigger" />
+				-->
+				<ref bean="deviceJobTrigger" />
 				<ref bean="weatherJobTrigger" />
 				<ref bean="videoJobTrigger" />
+				<ref bean="playlogJobTrigger" />
+				<ref bean="pflowJobTrigger" />
 			</list>
 		</property>
 	</bean>

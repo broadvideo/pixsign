@@ -159,7 +159,7 @@ public class VideoAction extends BaseDatatableAction {
 						}
 
 					} catch (IOException ex) {
-						ex.printStackTrace();
+						logger.info("Video parse error, file={}", mymediaFileName[i], ex);
 					}
 
 					video.setSize(FileUtils.sizeOf(fileToCreate));
@@ -173,7 +173,7 @@ public class VideoAction extends BaseDatatableAction {
 					jsonItem.put("name", names[i]);
 					jsonItem.put("filename", newFileName);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("VideoAction doUpload exception, ", e);
 					addActionError(e.getMessage());
 					jsonItem.put("error", e.getMessage());
 				}

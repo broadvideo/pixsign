@@ -9,7 +9,6 @@
     <result column="onlinetime" property="onlinetime" jdbcType="TIMESTAMP" />
     <result column="offlinetime" property="offlinetime" jdbcType="TIMESTAMP" />
     <result column="duration" property="duration" jdbcType="INTEGER" />
-    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByPrimaryKey" />
   </resultMap>
   <sql id="Base_Column_List" >
     onlinelogid, orgid, branchid, deviceid, onlinetime, offlinetime, duration
@@ -25,22 +24,65 @@
   <select id="selectCount" resultType="Integer">
     select count(1) from onlinelog
     where orgid = #{orgid}
-    <if test="branchid != null">
-      and branchid = #{branchid}
+    <if test="deviceid != null">
+      and deviceid = #{deviceid}
     </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from onlinelog
     where orgid = #{orgid}
-    <if test="branchid != null">
-      and branchid = #{branchid}
+    <if test="deviceid != null">
+      and deviceid = #{deviceid}
     </if>
     order by onlinelogid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>
   </select>
+
+
+  <resultMap id="DeviceStatResultMap" type="java.util.HashMap">
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
+    <association property="onlinelog" column="{deviceid=deviceid}" select="selectLastOnlinelog" />
+  </resultMap>
+  <select id="selectLastOnlinelog" resultMap="BaseResultMap">
+    select * from onlinelog
+    where deviceid = #{deviceid}
+    order by onlinetime desc
+    limit 0, 1
+  </select>
+
+  <select id="selectDeviceStatCount" resultType="Integer">
+    select count(1) from device
+    where status = '1' 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+  </select>
+  <select id="selectDeviceStatList" resultMap="DeviceStatResultMap">
+    select deviceid, terminalid, name, onlineflag from device
+    where status = '1' 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+    order by deviceid
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
 
   <update id="updateAll" >
     update onlinelog ol, device d
@@ -51,12 +93,21 @@
     and d.onlineflag='9'
   </update>
 
-  <update id="updateOne" >
+  <update id="updateLast2Offline" >
     update onlinelog
     set offlinetime=now(), 
     duration=(unix_timestamp()-unix_timestamp(onlinetime))
     where deviceid=#{deviceid}
     and offlinetime is null
+  </update>
+
+  <update id="updateLast2Online" >
+    update onlinelog
+    set offlinetime=null, 
+    duration=0
+    where deviceid=#{deviceid}
+    order by onlinelogid desc
+    limit 1
   </update>
 
   <delete id="deleteByPrimaryKey" >

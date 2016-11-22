@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.App;
@@ -29,6 +31,9 @@ public class AppAction extends BaseDatatableAction {
 	@Autowired
 	private AppMapper appMapper;
 
+	@Autowired
+	protected ResourceBundleMessageSource messageSource;
+
 	public String doList() {
 		try {
 			List<App> appList;
@@ -38,6 +43,13 @@ public class AppAction extends BaseDatatableAction {
 				appList = new ArrayList<App>();
 			} else {
 				appList = getLoginStaff().getVsp().getApplist();
+			}
+			if (appList != null) {
+				for (App app : appList) {
+					app.setDescription(
+							messageSource.getMessage("app." + app.getName(), null, LocaleContextHolder.getLocale()));
+				}
+
 			}
 			List<Object> aaData = new ArrayList<Object>();
 			for (int i = 0; i < appList.size(); i++) {
@@ -61,7 +73,7 @@ public class AppAction extends BaseDatatableAction {
 				List<App> applist = org.getApplist();
 				for (App app : applist) {
 					HashMap<String, String> hash = getAppFile(app.getName(), app.getSubdir(), app.getMainboard(),
-							app.getDescription());
+							messageSource.getMessage("app." + app.getName(), null, LocaleContextHolder.getLocale()));
 					if (hash != null) {
 						aaData.add(hash);
 					}

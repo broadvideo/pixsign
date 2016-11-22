@@ -544,7 +544,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
 <script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
@@ -556,7 +556,7 @@ var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
-	DataInit.init();
+	DataInit.init('${locale}');
 });
 
 </script>

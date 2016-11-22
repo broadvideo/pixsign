@@ -109,60 +109,35 @@ function initMyEditModal() {
 	function createAppTreeData(apps, treeData) {
 		for (var i=0; i<apps.length; i++) {
 			treeData[i] = {};
-			treeData[i]['data'] = {};
-			treeData[i]['data']['title'] = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
-			treeData[i]['attr'] = {};
-			treeData[i]['attr']['id'] = apps[i].appid;
-			treeData[i]['attr']['parentid'] = 0;
-			if (currentApps[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].id = apps[i].appid;
+			treeData[i].text = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
+			treeData[i].state = {
+				opened: true,
+				checked: currentApps[treeData[i].id] == undefined? false : true,
 			}
-			treeData[i]['children'] = [];
+			treeData[i].children = [];
 		}
 	}
 	function refreshAppTreeData(treeData) {
 		for (var i=0; i<treeData.length; i++) {
-			if (currentApps[treeData[i]['attr']['id']] == undefined) {
-				treeData[i]['attr']['class'] = 'jstree-unchecked';
-			} else {
-				treeData[i]['attr']['class'] = 'jstree-checked';
+			treeData[i].state = {
+				opened: true,
+				checked: currentApps[treeData[i].id] == undefined? false : true,
 			}
-			refreshAppTreeData(treeData[i]['children']);
 		}
 	}
 	function createAppTree(treeData) {
 		$('#AppTree').jstree('destroy');
-		var treeview = $('#AppTree').jstree({
-			'json_data' : {
-				'data' : treeData
-			},
-			'plugins' : [ 'themes', 'json_data', 'checkbox' ],
+		$('#AppTree').jstree({
 			'core' : {
-				'animation' : 100
+				'data' : treeData
 			},
 			'checkbox' : {
 				'checked_parent_open' : true,
-				'two_state' : true,
+				'three_state' : false,
+				'tie_selection' : false,
 			},
-			'themes' : {
-				'theme' : 'proton',
-				'icons' : false,
-			}
-		});
-		treeview.on('loaded.jstree', function() {
-			treeview.jstree('open_all');
-		});
-		treeview.on('check_node.jstree', function(e, data) {
-			var parentNode = data.rslt.obj.attr('parentid');
-			treeview.jstree('check_node', '#'+parentNode);
-		});
-		treeview.on('uncheck_node.jstree', function(e, data) {
-			var allChildNodes = data.inst._get_children(data.rslt.obj);
-			allChildNodes.each(function(idx, listItem) { 
-				treeview.jstree('uncheck_node', '#'+$(listItem).attr("id"));
-			});
+			'plugins' : ['checkbox'],
 		});
 	}
 
@@ -232,13 +207,14 @@ function initMyEditModal() {
 	
 	FormValidateOption.submitHandler = function(form) {
 		var apps = '';
-		$("#AppTree").jstree('get_checked', null, true).each(function() {
+		var applist = $("#AppTree").jstree('get_checked', false);
+		for (var i=0; i<applist.length; i++) {
 			if (apps == '') {
-				apps += this.id;
+				apps += applist[i];
 			} else {
-				apps += ',' + this.id;
+				apps += ',' + applist[i];
 			}
-		});
+		}
 		$('#MyEditForm input[name="vsp.apps"]').val(apps);
 
 		var data = jQuery("#MyEditForm").serializeArray();

@@ -125,11 +125,10 @@ function startPingTimer(){
 
 var DataInit = function() {
 	return {
-		init : function() {
+		init : function(locale) {
 			bootbox.setDefaults({
-				locale: 'zh_CN'
+				locale: locale
 			});
-			
 			
 			$('.modal').on('hidden.bs.modal', function(e) {
 				var parent = ($(this).attr('parent'));

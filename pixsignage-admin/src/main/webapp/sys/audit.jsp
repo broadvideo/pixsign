@@ -229,7 +229,7 @@
 <script>
 jQuery(document).ready(function() {
 	App.init(); // initlayout and core plugins
-	DataInit.init();
+	DataInit.init('${locale}');
 	initMyTable();
 	initMyEditModal();
 });

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.WxinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Wxinfo" >
+    <id column="wxinfoid" property="wxinfoid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="wxappid" property="wxappid" jdbcType="VARCHAR" />
+    <result column="wxsecret" property="wxsecret" jdbcType="VARCHAR" />
+    <result column="validflag" property="validflag" jdbcType="CHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="accesstocken" property="accesstocken" jdbcType="VARCHAR" />
+    <result column="applytime" property="applytime" jdbcType="TIMESTAMP" />
+    <result column="expiretime" property="expiretime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wxinfoid, orgid, wxappid, wxsecret, validflag, comment, accesstocken, applytime, expiretime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from wxinfo
+    where wxinfoid = #{wxinfoid}
+  </select>
+  
+  <select id="selectByOrg" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from wxinfo
+    where orgid = #{orgid}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from wxinfo
+    where wxinfoid = #{wxinfoid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Wxinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="wxinfoid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wxinfo (orgid, wxappid, wxsecret, 
+      validflag, comment, 
+      accesstocken, applytime, expiretime
+      )
+    values (#{orgid,jdbcType=INTEGER}, #{wxappid,jdbcType=VARCHAR}, #{wxsecret,jdbcType=VARCHAR}, 
+    #{validflag,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{accesstocken,jdbcType=VARCHAR}, #{applytime,jdbcType=TIMESTAMP}, #{expiretime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Wxinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="wxinfoid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wxinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="wxappid != null" >
+        wxappid,
+      </if>
+      <if test="wxsecret != null" >
+        wxsecret,
+      </if>
+      <if test="validflag != null" >
+        validflag,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="accesstocken != null" >
+        accesstocken,
+      </if>
+      <if test="applytime != null" >
+        applytime,
+      </if>
+      <if test="expiretime != null" >
+        expiretime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="wxappid != null" >
+        #{wxappid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxsecret != null" >
+        #{wxsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="validflag != null" >
+        #{validflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="accesstocken != null" >
+        #{accesstocken,jdbcType=VARCHAR},
+      </if>
+      <if test="applytime != null" >
+        #{applytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiretime != null" >
+        #{expiretime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Wxinfo" >
+    update wxinfo
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="wxappid != null" >
+        wxappid = #{wxappid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxsecret != null" >
+        wxsecret = #{wxsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="validflag != null" >
+        validflag = #{validflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="accesstocken != null" >
+        accesstocken = #{accesstocken,jdbcType=VARCHAR},
+      </if>
+      <if test="applytime != null" >
+        applytime = #{applytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiretime != null" >
+        expiretime = #{expiretime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where wxinfoid = #{wxinfoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Wxinfo" >
+    update wxinfo
+    set orgid = #{orgid,jdbcType=INTEGER},
+      wxappid = #{wxappid,jdbcType=VARCHAR},
+      wxsecret = #{wxsecret,jdbcType=VARCHAR},
+      validflag = #{validflag,jdbcType=CHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      accesstocken = #{accesstocken,jdbcType=VARCHAR},
+      applytime = #{applytime,jdbcType=TIMESTAMP},
+      expiretime = #{expiretime,jdbcType=TIMESTAMP}
+    where wxinfoid = #{wxinfoid,jdbcType=INTEGER}
+  </update>
+</mapper>
