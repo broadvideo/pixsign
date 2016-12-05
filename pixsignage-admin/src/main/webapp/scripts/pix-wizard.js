@@ -11,6 +11,7 @@ var Layouts;
 var CurrentTaskid;
 var SelectedDeviceList = [];
 var SelectedDevicegroupList = [];
+var CurrentDeviceBranchid;
 
 $(window).resize(function(e) {
 	if (e.target == this) {
@@ -417,6 +418,62 @@ function initData3() {
 
 
 function initTab4() {
+	$.ajax({
+		type : 'POST',
+		url : 'branch!list.action',
+		data : {},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var branches = data.aaData;
+				CurrentDeviceBranchid = branches[0].branchid;
+				
+				if ( $("#DeviceBranchTreeDiv").length > 0 ) {
+					if (branches[0].children.length == 0) {
+						$('#DeviceBranchTreeDiv').css('display', 'none');
+						$('#DeviceTable').dataTable()._fnAjaxUpdate();
+						$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
+					} else {
+						var branchTreeDivData = [];
+						createBranchTreeData(branches, branchTreeDivData);
+						$('#DeviceBranchTreeDiv').jstree('destroy');
+						$('#DeviceBranchTreeDiv').jstree({
+							'core' : {
+								'multiple' : false,
+								'data' : branchTreeDivData
+							},
+							'plugins' : ['unique'],
+						});
+						$('#DeviceBranchTreeDiv').on('loaded.jstree', function() {
+							$('#DeviceBranchTreeDiv').jstree('select_node', CurrentDeviceBranchid);
+						});
+						$('#DeviceBranchTreeDiv').on('select_node.jstree', function(event, data) {
+							CurrentDeviceBranchid = data.instance.get_node(data.selected[0]).id;
+							$('#DeviceTable').dataTable()._fnAjaxUpdate();
+							$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
+						});
+					}
+				}
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+	function createBranchTreeData(branches, treeData) {
+		for (var i=0; i<branches.length; i++) {
+			treeData[i] = {};
+			treeData[i].id = branches[i].branchid;
+			treeData[i].text = branches[i].name;
+			treeData[i].state = {
+				opened: true,
+			}
+			treeData[i].children = [];
+			createBranchTreeData(branches[i].children, treeData[i].children);
+		}
+	}	
+
 	//编制计划对话框中的设备table初始化
 	$('#DeviceTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -438,7 +495,8 @@ function initTab4() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push( {'name':'devicegroupid','value':'0' })
+			aoData.push({'name':'branchid','value':CurrentDeviceBranchid });
+			aoData.push({'name':'devicegroupid','value':'0' })
 		}
 	});
 	jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -461,11 +519,25 @@ function initTab4() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(1)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevicegroup">' + common.view.add + '</button>');
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurrentDeviceBranchid });
 		}
 	});
 	jQuery('#DeviceGroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 	jQuery('#DeviceGroupTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	
+	$('#nav_dtab1').click(function(event) {
+		$('#DeviceDiv').css('display', '');
+		$('#DeviceGroupDiv').css('display', 'none');
+		$('#DeviceTable').dataTable()._fnAjaxUpdate();
+	});
+	$('#nav_dtab2').click(function(event) {
+		$('#DeviceDiv').css('display', 'none');
+		$('#DeviceGroupDiv').css('display', '');
+		$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
+	});
+
 	//编制计划对话框中的右侧设备选择列表初始化
 	$('#SelectedDeviceTable').dataTable({
 		'sDom' : 't',

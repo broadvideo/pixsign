@@ -345,23 +345,36 @@ response.setDateHeader("Expires",0);
 									<div class="portlet-title">
 										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.wizard.selectdevice"/></div>
 										<ul class="nav nav-tabs">
-											<li class="active"><a href="#device_tab1" data-toggle="tab"><spring:message code="global.device"/></a></li>
-											<li><a href="#device_tab2" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
+											<li id="nav_dtab1" class="active">
+												<a href="#device_tab" data-toggle="tab"><spring:message code="global.device"/></a>
+											</li>
+											<li id="nav_dtab2">
+												<a href="#device_tab" data-toggle="tab"><spring:message code="global.devicegroup"/></a>
+											</li>
 										</ul>
 									</div>
 									<div class="portlet-body">
 										<div class="tab-content">
-											<div class="tab-pane active" id="device_tab1">
-												<table id="DeviceTable" class="table table-condensed table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
-											</div>
-											<div class="tab-pane" id="device_tab2">
-												<table id="DeviceGroupTable" class="table table-condensed table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
+											<div class="tab-pane active" id="device_tab">
+												<div class="row">
+													<div class="col-md-3">
+														<div id="DeviceBranchTreeDiv"></div>
+													</div>
+													<div class="col-md-9">
+														<div id="DeviceDiv">
+															<table id="DeviceTable" class="table table-condensed table-hover">
+																<thead></thead>
+																<tbody></tbody>
+															</table>
+														</div>
+														<div id="DeviceGroupDiv" style="display:none">
+															<table id="DeviceGroupTable" class="table table-condensed table-hover">
+																<thead></thead>
+																<tbody></tbody>
+															</table>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -505,7 +518,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-bundle-design.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-bundle.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-bundle.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -155,7 +155,7 @@ function initDeviceChart() {
 		for (var i=0; i<data.length; i++) {
 			var sequence = parseInt(data[i].sequence);
 			var amount = data[i].amount;
-			series.data[sequence] = [sequence, amount];
+			series.data[sequence-1] = [sequence, amount];
 		}
 		statdata.push(series);
 		$.plot("#StatByHourPlot", statdata, options);
