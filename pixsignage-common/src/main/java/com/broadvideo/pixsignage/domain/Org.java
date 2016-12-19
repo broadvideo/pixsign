@@ -29,6 +29,8 @@ public class Org {
 
 	private String liftflag;
 
+	private String calendarflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -163,6 +165,14 @@ public class Org {
 
 	public void setLiftflag(String liftflag) {
 		this.liftflag = liftflag;
+	}
+
+	public String getCalendarflag() {
+		return calendarflag;
+	}
+
+	public void setCalendarflag(String calendarflag) {
+		this.calendarflag = calendarflag;
 	}
 
 	public String getVideoflag() {

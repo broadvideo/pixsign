@@ -148,12 +148,26 @@ response.setDateHeader("Expires",0);
 																<label class="radio-inline">
 																	<input type="radio" name="bundledtl.touchtype" value="3"> <spring:message code="global.bundledtl.touchtype_3"/>
 																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="bundledtl.touchtype" value="4"> <spring:message code="global.bundledtl.touchtype_4"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="bundledtl.touchtype" value="9"> <spring:message code="global.bundledtl.touchtype_9"/>
+																</label>
 															</div>
 														</div>
 														<div class="form-group bundle-ctl regiontype-7 touchtype-2">
 															<label class="col-md-3 control-label"><spring:message code="global.bundledtl.touchbundle"/><span class="required">*</span></label>
 															<div class="col-md-9">
 																<input type="hidden" id="SubBundleSelect" class="form-control select2" name="bundledtl.touchbundleid" />
+															</div>
+														</div>
+														<div class="form-group bundle-ctl regiontype-7 touchtype-4">
+															<label class="col-md-3 control-label">APK<span class="required">*</span></label>
+															<div class="col-md-9">
+																<div class="input-icon right">
+																	<i class="fa"></i> <input type="text" class="form-control" name="bundledtl.touchapk" />
+																</div>
 															</div>
 														</div>
 
@@ -181,7 +195,7 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-7 touchtype-3">
+														<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-7 regiontype-12 touchtype-3">
 															<label class="control-label col-md-3"><spring:message code="global.bundledtl.scope"/><span class="required">*</span></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -192,7 +206,7 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 regiontype-7 public-1 touchtype-3">
+														<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 regiontype-7 regiontype-12 public-1 touchtype-3">
 															<label class="col-md-3 control-label"><spring:message code="global.detail"/><span class="required">*</span></label>
 															<div class="col-md-9">
 																<input type="hidden" id="BundledtlSelect" class="form-control select2" name="bundledtl.objid" />
@@ -222,9 +236,17 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
+														<div class="form-group bundle-ctl regiontype-12 public-0">
+															<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
+															<div class="col-md-9">
+																<div class="input-icon right">
+																	<i class="fa"></i> <input type="text" class="form-control" name="bundledtl.rss.url" />
+																</div>
+															</div>
+														</div>
 													</div>
 												</form>
-																								
+													
 												<div class="row bundle-ctl regiontype-6">
 													<div class="col-md-7">
 														<div class="portlet box blue">
@@ -520,8 +542,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

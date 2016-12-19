@@ -10,4 +10,6 @@ public interface ConfigService {
 	public String selectValueByCode(String code);
 
 	public void updateConfig(Config config);
+
+	public void updateValue(String code, String value);
 }

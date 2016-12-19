@@ -1,87 +1,88 @@
-var myurls = {
-	'common.list' : 'config!list.action',
-	'common.update' : 'config!update.action',
-};
-
 function refreshMyTable() {
-	$('#MyTable').dataTable()._fnAjaxUpdate();
+	$.ajax({
+		type : 'GET',
+		url : 'config!list.action',
+		data : '',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				$('#MyTable').dataTable().fnClearTable();
+
+				for (var i=0; i<data.aaData.length; i++) {
+					var config = data.aaData[i];
+					if (config.code == 'ServerIP') {
+						$('#MyTable').dataTable().fnAddData([common.view.config_serverip, config.value]);
+						$('#MyEditForm input[name=serverip]').val(config.value);
+					} else if (config.code == 'ServerPort') {
+						$('#MyTable').dataTable().fnAddData([common.view.config_serverport, config.value]);
+						$('#MyEditForm input[name=serverport]').val(config.value);
+					} else if (config.code == 'PixedxIP') {
+						$('#MyTable').dataTable().fnAddData([common.view.config_pixedxip, config.value]);
+						$('#MyEditForm input[name=pixedxip]').val(config.value);
+					} else if (config.code == 'PixedxPort') {
+						$('#MyTable').dataTable().fnAddData([common.view.config_pixedxport, config.value]);
+						$('#MyEditForm input[name=pixedxport]').val(config.value);
+					}
+				}
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
+			}
+		},
+		error : function() {
+			bootbox.alert(common.tips.error);
+		}
+	});
 }			
 
-function initMyTable() {
-	var oTable = $('#MyTable').dataTable({
-		'sDom' : 'rt',
-		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-						[ 10, 25, 50, 100 ]
-						],
-		'bProcessing' : true,
-		'bServerSide' : true,
-		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.value, 'mData' : 'value', 'bSortable' : false },
-						{'sTitle' : common.view.operation, 'mData' : 'configid', 'bSortable' : false }],
-		'iDisplayLength' : 10,
-		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var data = $('#MyTable').dataTable().fnGetData(iDisplayIndex);
-			var dropdownBtn = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-update"><i class="fa fa-edit"></i>' + common.view.edit + ' </a>';
-			$('td:eq(2)', nRow).html(dropdownBtn);
-			return nRow;
-		}
-	});
+$('#MyTable').dataTable({
+	'sDom' : 't',
+	'iDisplayLength' : -1,
+	'bSort' : false,
+	'aoColumns' : [ {'sTitle' : common.view.name, 'bSortable' : false, 'sWidth' : '25%' },
+					{'sTitle' : common.view.value, 'bSortable' : false, 'sWidth' : '75%' }],
+	'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
+	'oLanguage' : { 'sZeroRecords' : common.view.empty,
+					'sEmptyTable' : common.view.empty }, 
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+	}
+});
+refreshMyTable();
 
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
-	
-}
-
-function initMyEditModal() {
-	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
-	
-	FormValidateOption.rules = {};
-	FormValidateOption.rules['config.value'] = {};
-	FormValidateOption.rules['config.value']['required'] = true;
-	
-	FormValidateOption.submitHandler = function(form) {
-		$.ajax({
-			type : 'POST',
-			url : $('#MyEditForm').attr('action'),
-			data : $('#MyEditForm').serialize(),
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					$('#MyEditModal').modal('hide');
-					bootbox.alert(common.tips.success);
-					refreshMyTable();
-				} else {
-					bootbox.alert(common.tips.error + data.errormsg);
-				}
-			},
-			error : function() {
-				bootbox.alert(common.tips.error);
+var currentConfig;
+FormValidateOption.rules = {};
+FormValidateOption.rules['serverip'] = {};
+FormValidateOption.rules['serverip']['required'] = true;
+FormValidateOption.rules['serverport'] = {};
+FormValidateOption.rules['serverport']['required'] = true;
+FormValidateOption.rules['serverport']['number'] = true;
+FormValidateOption.submitHandler = function(form) {
+	$.ajax({
+		type : 'POST',
+		url : $('#MyEditForm').attr('action'),
+		data : $('#MyEditForm').serialize(),
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				$('#MyEditModal').modal('hide');
+				bootbox.alert(common.tips.success);
+				refreshMyTable();
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
-		});
-	};
-	$('#MyEditForm').validate(FormValidateOption);
-
-	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
-		if ($('#MyEditForm').valid()) {
-			$('#MyEditForm').submit();
+		},
+		error : function() {
+			bootbox.alert(common.tips.error);
 		}
 	});
+};
+$('#MyEditForm').validate(FormValidateOption);
 
-	$('body').on('click', '.pix-update', function(event) {
-		var index = $(event.target).attr('data-id');
-		if (index == undefined) {
-			index = $(event.target).parent().attr('data-id');
-		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		$('#MyEditForm textarea[name="config.value"]').val(item['value']);
-		$('#MyEditForm input[name="config.configid"]').attr('value', item['configid']);
-		$('#MyEditForm label[name="config.name"]').html(item['name']);
-		$('#MyEditForm').attr('action', myurls['common.update']);
-		$('#MyEditModal').modal();
-	});
-}
+$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
+	if ($('#MyEditForm').valid()) {
+		$('#MyEditForm').submit();
+	}
+});
 
+$('body').on('click', '.pix-update', function(event) {
+	$('#MyEditForm').attr('action', 'config!update.action');
+	$('#MyEditModal').modal();
+});
 

@@ -18,9 +18,11 @@ RegionLimits['3'] = 1;
 RegionLimits['4'] = 1;
 RegionLimits['5'] = 1;
 RegionLimits['6'] = 4;
-RegionLimits['7'] = 6;
+RegionLimits['7'] = 10;
 RegionLimits['8'] = 1;
 RegionLimits['9'] = 1;
+RegionLimits['10'] = 1;
+RegionLimits['12'] = 2;
 RegionLimits['A1'] = 1;
 RegionLimits['A2'] = 1;
 
@@ -143,6 +145,9 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		layoutdtlhtml += '</div>';
 	} else {
 		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (bgimage != '') {
+			layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
 		layoutdtlhtml += '</p>';
@@ -169,7 +174,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 	});
 }
 
-function refreshLayoutBgImageSelect1() {
+function refreshLayoutBgImageSelect1(folderid) {
 	$("#LayoutBgImageSelect1").select2({
 		placeholder: common.tips.detail_select,
 		minimumInputLength: 0,
@@ -182,6 +187,7 @@ function refreshLayoutBgImageSelect1() {
 					sSearch: term,
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
+					folderid: folderid,
 				};
 			},
 			results: function (data, page) {
@@ -215,7 +221,7 @@ function refreshLayoutBgImageSelect1() {
 				height = 30;
 				width = 30 * width / height;
 			}
-			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/></span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
@@ -228,8 +234,8 @@ function refreshLayoutBgImageSelect1() {
 	});
 }
 
-function refreshRegionBgImageSelect() {
-	$("#RegionBgImageSelect").select2({
+function refreshLayoutBgImageSelect2(folderid) {
+	$("#LayoutBgImageSelect2").select2({
 		placeholder: common.tips.detail_select,
 		minimumInputLength: 0,
 		ajax: {
@@ -241,6 +247,7 @@ function refreshRegionBgImageSelect() {
 					sSearch: term,
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
+					folderid: folderid,
 				};
 			},
 			results: function (data, page) {
@@ -274,7 +281,67 @@ function refreshRegionBgImageSelect() {
 				height = 30;
 				width = 30 * width / height;
 			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/></span>'
+			return html;
+		},
+		initSelection: function(element, callback) {
+			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
+				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
+			}
+		},
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+
+function refreshRegionBgImageSelect(folderid) {
+	$("#RegionBgImageSelect").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		ajax: {
+			url: 'image!list.action',
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term,
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+					folderid: folderid,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.imageid, 
+							image:item, 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.image.height / data.image.width;
+			if (data.image.width < data.image.height) {
+				height = 40;
+				width = 40 * data.image.width / data.image.height;
+			}
 			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
+			return html;
+		},
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.image.width < data.image.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/></span>'
 			return html;
 		},
 		initSelection: function(element, callback) {
@@ -420,6 +487,8 @@ function updateRegionBtns() {
 	updateRegionBtn('7');
 	updateRegionBtn('8');
 	updateRegionBtn('9');
+	updateRegionBtn('10');
+	updateRegionBtn('12');
 	updateRegionBtn('A1');
 	updateRegionBtn('A2');
 }
@@ -429,13 +498,13 @@ function updateRegionBtn(regiontype) {
 		return el.type == regiontype;
 	});
 	if (RegionLimits[regiontype] > layoutdtls.length) {
-		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('disabled');
-		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('default');
-		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('yellow');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').removeClass('disabled');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').removeClass('default');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').addClass('yellow');
 	} else {
-		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('disabled');
-		$('.pix-addregion[regiontype=' + regiontype + ']').removeClass('yellow');
-		$('.pix-addregion[regiontype=' + regiontype + ']').addClass('default');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').addClass('disabled');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').removeClass('yellow');
+		$('.pix-addregion[regiontype="' + regiontype + '"]').addClass('default');
 	}
 }
 
@@ -479,6 +548,7 @@ function validLayoutdtl(layoutdtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
+		layoutdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
 		layoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 		layoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 		layoutdtl.animation =  $('#AnimationSelect').select2('val');
@@ -712,6 +782,7 @@ $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
 });	
 
 $('#LayoutdtlEditForm input,select').on('change', function(e) {
+	CurrentLayoutdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
 	CurrentLayoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 	CurrentLayoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 	CurrentLayoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
@@ -763,6 +834,7 @@ $('body').on('click', '.pix-addregion', function(event) {
 	} else {
 		layoutdtl.opacity = 255;
 	}
+	layoutdtl.calendartype = 1;
 	layoutdtl.sleeptime = 0;
 	layoutdtl.intervaltime = 10;
 	layoutdtl.animation = 'None';
@@ -798,3 +870,59 @@ $('body').on('click', '.pix-region-delete', function(event) {
 	 });
 });
 
+
+$.ajax({
+	type : 'POST',
+	url : 'folder!list.action',
+	data : { },
+	success : function(data, status) {
+		if (data.errorcode == 0) {
+			var folders = data.aaData;
+			var folderid = folders[0].folderid;
+			
+			var folderTreeDivData = [];
+			createFolderTreeData(folders, folderTreeDivData);
+			console.log($('.foldertree').length);
+			$('.foldertree').each(function() {
+				$(this).jstree('destroy');
+				$(this).jstree({
+					'core' : {
+						'multiple' : false,
+						'data' : folderTreeDivData
+					},
+					'plugins' : ['unique', 'types'],
+					'types' : {
+						'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
+					},
+				});
+				$(this).on('loaded.jstree', function() {
+					$(this).jstree('select_node', folderid);
+				});
+				$(this).on('select_node.jstree', function(event, data) {
+					folderid = data.instance.get_node(data.selected[0]).id;
+					refreshLayoutBgImageSelect1(folderid);
+					refreshLayoutBgImageSelect2(folderid);
+					refreshRegionBgImageSelect(folderid);
+				});
+			});
+		} else {
+			alert(data.errorcode + ": " + data.errormsg);
+		}
+	},
+	error : function() {
+		alert('failure');
+	}
+});
+function createFolderTreeData(folders, treeData) {
+	if (folders == null) return;
+	for (var i=0; i<folders.length; i++) {
+		treeData[i] = {};
+		treeData[i].id = folders[i].folderid;
+		treeData[i].text = folders[i].name;
+		treeData[i].state = {
+			opened: true,
+		}
+		treeData[i].children = [];
+		createFolderTreeData(folders[i].children, treeData[i].children);
+	}
+}

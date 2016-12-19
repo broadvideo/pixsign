@@ -56,6 +56,10 @@ public class Device {
 
 	private String addr2;
 
+	private String externalid;
+
+	private String externalname;
+
 	private Date createtime;
 
 	private Date activetime;
@@ -264,6 +268,22 @@ public class Device {
 
 	public void setAddr2(String addr2) {
 		this.addr2 = addr2 == null ? null : addr2.trim();
+	}
+
+	public String getExternalid() {
+		return externalid;
+	}
+
+	public void setExternalid(String externalid) {
+		this.externalid = externalid;
+	}
+
+	public String getExternalname() {
+		return externalname;
+	}
+
+	public void setExternalname(String externalname) {
+		this.externalname = externalname;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

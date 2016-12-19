@@ -13,9 +13,7 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Layout;
 import com.broadvideo.pixsignage.domain.Layoutdtl;
-import com.broadvideo.pixsignage.domain.Layoutschedule;
 import com.broadvideo.pixsignage.domain.Region;
-import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.LayoutService;
 import com.broadvideo.pixsignage.service.RegionService;
@@ -30,8 +28,6 @@ public class LayoutAction extends BaseDatatableAction {
 
 	private Device[] devices;
 	private Devicegroup[] devicegroups;
-	private Layoutschedule[] layoutschedules;
-	private Regionschedule[] regionschedules;
 
 	@Autowired
 	private LayoutService layoutService;
@@ -220,21 +216,5 @@ public class LayoutAction extends BaseDatatableAction {
 
 	public void setDevicegroups(Devicegroup[] devicegroups) {
 		this.devicegroups = devicegroups;
-	}
-
-	public Layoutschedule[] getLayoutschedules() {
-		return layoutschedules;
-	}
-
-	public void setLayoutschedules(Layoutschedule[] layoutschedules) {
-		this.layoutschedules = layoutschedules;
-	}
-
-	public Regionschedule[] getRegionschedules() {
-		return regionschedules;
-	}
-
-	public void setRegionschedules(Regionschedule[] regionschedules) {
-		this.regionschedules = regionschedules;
 	}
 }

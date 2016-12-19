@@ -177,6 +177,13 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 								</div>
+								<div class="form-group calendar-ctrl">
+									<label class="col-md-3 control-label"><spring:message code="global.device.externalid"/></label>
+									<div class="col-md-9">
+										<input type="hidden" id="ExternalSelect" class="form-control select2" name="device.externalid">
+										<input type="hidden" name="device.externalname" value="" />
+									</div>
+								</div>
 								<div class="form-group option1">
 									<label class="col-md-3 control-label"><spring:message code="global.branch"/><span class="required">*</span></label>
 									<div class="col-md-9">
@@ -423,6 +430,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-device.js?t=5"></script>
 <script>
+var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

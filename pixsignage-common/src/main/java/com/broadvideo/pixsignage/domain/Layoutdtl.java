@@ -63,6 +63,8 @@ public class Layoutdtl {
 
 	private Integer volume;
 
+	private String calendartype;
+
 	private Date createtime;
 
 	private Image bgimage;
@@ -243,6 +245,14 @@ public class Layoutdtl {
 
 	public void setVolume(Integer volume) {
 		this.volume = volume;
+	}
+
+	public String getCalendartype() {
+		return calendartype;
+	}
+
+	public void setCalendartype(String calendartype) {
+		this.calendartype = calendartype;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

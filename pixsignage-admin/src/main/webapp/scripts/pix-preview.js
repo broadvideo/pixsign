@@ -103,6 +103,9 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		layoutdtlhtml += '</div>';
 	} else {
+		if (bgimage != '') {
+			layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
 		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
 		layoutdtlhtml += '</p>';
@@ -230,6 +233,9 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.layoutdtl.type == 7) {
+		if (bgimage != '') {
+			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
 			bundledtlhtml += bundledtl.touchlabel;

@@ -320,6 +320,9 @@ $('body').on('click', '.pix-bundle', function(event) {
 		bundledtl.widget0 = {};
 		bundledtl.widget0.widgetid = 0;
 		bundledtl.widget0.type = 0;
+		bundledtl.rss0 = {};
+		bundledtl.rss0.rssid = 0;
+		bundledtl.rss0.type = 0;
 		if (bundledtl.type == 0 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
 			bundledtl.medialist0 = bundledtl.medialist;
 		}
@@ -347,6 +350,13 @@ $('body').on('click', '.pix-bundle', function(event) {
 
 		if (bundledtl.type == 1 && bundledtl.objtype == 6 && bundledtl.dvb != null) {
 			bundledtl.dvb1 = bundledtl.dvb;
+		}
+
+		if (bundledtl.type == 0 && bundledtl.objtype == 7 &&  bundledtl.rss != null) {
+			bundledtl.rss0 = bundledtl.rss;
+		}
+		if (bundledtl.type == 1 && bundledtl.objtype == 7 && bundledtl.rss != null) {
+			bundledtl.rss1 = bundledtl.rss;
 		}
 	}
 	CurrentBundleid = CurrentBundle.bundleid;
@@ -394,6 +404,7 @@ $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 					bundledtl.text0 = undefined;
 					bundledtl.widget0 = undefined;
 					bundledtl.stream0 = undefined;
+					bundledtl.rss0 = undefined;
 					if (bundledtl.medialist != undefined) {
 						for (var j=0; j<bundledtl.medialist.medialistdtls.length; j++) {
 							var medialistdtl = bundledtl.medialist.medialistdtls[j];

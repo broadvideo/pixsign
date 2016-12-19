@@ -16,7 +16,6 @@
   
   <select id="selectList" resultMap="BaseResultMap">
     select * from config
-    where type = '1'
     order by configid 
   </select>
 
@@ -29,6 +28,12 @@
     select value from config
     where code = '${code}'
   </select>
+
+  <update id="updateValue" >
+    update config
+    set value = #{value} 
+    where code = #{code}
+  </update>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Config" >
     update config

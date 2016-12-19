@@ -91,6 +91,8 @@ var common = {
 		region_type_7: '互动键',
 		region_type_8: '导航条',
 		region_type_9: '二维码',
+		region_type_10: '日程表',
+		region_type_12: 'RSS',
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
 
@@ -154,6 +156,11 @@ var common = {
 		previous_hour: '上一小时',
 		today: '今日',
 		yesterday: '昨日',
+		
+		config_serverip: '本服务器地址',
+		config_serverport: '本服务器端口',
+		config_pixedxip: 'PixedX服务器地址',
+		config_pixedxport: 'PixedX服务器端口',
 		
 		wxappid: '微信AppID',
 		wxsecret: '微信AppSecret',

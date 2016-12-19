@@ -18,6 +18,8 @@ public class Vsp {
 
 	private String liftflag;
 
+	private String calendarflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -90,6 +92,14 @@ public class Vsp {
 
 	public void setLiftflag(String liftflag) {
 		this.liftflag = liftflag;
+	}
+
+	public String getCalendarflag() {
+		return calendarflag;
+	}
+
+	public void setCalendarflag(String calendarflag) {
+		this.calendarflag = calendarflag;
 	}
 
 	public String getStreamflag() {

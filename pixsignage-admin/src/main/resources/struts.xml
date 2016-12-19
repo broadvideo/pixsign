@@ -11,7 +11,7 @@
 	<constant name="struts.custom.i18n.resources" value="resource.global" />
 	
 	<constant name="struts.multipart.maxSize" value="2147483648" />
-	<constant name="struts.multipart.saveDir" value="/pixdata/pixsignage/temp" />
+	<constant name="struts.multipart.saveDir" value="/tmp" />
 
 	<include file="struts-pix.xml" />
 	

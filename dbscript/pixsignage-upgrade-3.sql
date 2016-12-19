@@ -44,13 +44,15 @@ alter table bundle add homeidletime int default 0;
 
 alter table bundledtl add homebundleid int;
 alter table bundledtl add layoutdtlid int default 0;
-alter table bundledtl add touchlabel varchar(128);
+alter table bundledtl add touchlabel varchar(128) default '';
 alter table bundledtl add touchtype char(1) default '0';
 alter table bundledtl add touchbundleid int default 0;
+alter table bundledtl add touchapk varchar(128) default '';
 
 alter table vsp add reviewflag char(1) default '0';
 alter table vsp add touchflag char(1) default '0';
 alter table vsp add liftflag char(1) default '0';
+alter table vsp add calendarflag char(1) default '0';
 alter table vsp add streamflag char(1) default '0';
 alter table vsp add dvbflag char(1) default '0';
 alter table vsp add videoinflag char(1) default '0';
@@ -58,6 +60,7 @@ alter table vsp add apps varchar(128);
 
 alter table org add touchflag char(1) default '0';
 alter table org add liftflag char(1) default '0';
+alter table org add calendarflag char(1) default '0';
 alter table org add videoinflag char(1) default '0';
 alter table org add apps varchar(128);
 alter table org add devicepassflag char(1) default '1';
@@ -65,8 +68,12 @@ alter table org add devicepassflag char(1) default '1';
 alter table device modify position varchar(512) default '';
 alter table device modify addr1 varchar(256) default '';
 alter table device modify addr2 varchar(256) default '';
+alter table device add externalid varchar(64) default '';
+alter table device add externalname varchar(128) default '';
 
 alter table layoutdtl add animation varchar(32) default 'None';
+
+alter table layoutdtl add calendartype char(1) default '2';
 
 create table folder( 
    folderid int not null auto_increment,
@@ -145,6 +152,22 @@ create table pflowlog(
  )engine = innodb
 default character set utf8;
 
+create table rss( 
+   rssid int not null auto_increment,
+   orgid int not null,
+   branchid int not null,
+   name varchar(256) not null,
+   url varchar(1024) not null,
+   type char(1) default 1,
+   status char(1) default '1',
+   description varchar(512),
+   createtime timestamp not null default current_timestamp,
+   createstaffid int,
+   primary key (rssid),
+   foreign key (orgid) references org(orgid)
+ )engine = innodb
+default character set utf8;
+
 insert into folder(orgid,branchid,parentid,name) select orgid,branchid,0,'/' from branch where status!='9' order by branchid;
 update branch b, folder f set b.topfolderid=f.folderid where b.branchid=f.branchid;
 update image i, folder f set i.folderid=f.folderid where i.branchid=f.branchid;
@@ -197,11 +220,12 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30106,2,301,'menu.stream','stream.jsp','',1,6,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30107,2,301,'menu.dvb','dvb.jsp','',1,7,'1');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30108,2,301,'menu.widget','widget.jsp','',1,8,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30109,2,301,'menu.rss','rss.jsp','',1,9,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(302,2,0,'menu.devicemanage','','fa-desktop',1,3,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30201,2,302,'menu.device','device.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30202,2,302,'menu.devicegroup','devicegp.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30203,2,302,'menu.devicefile','devicefile.jsp','',1,3,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30204,2,302,'menu.config','config.jsp','',1,4,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30204,2,302,'menu.deviceconfig','deviceconfig.jsp','',1,4,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(303,2,0,'menu.schedulemanage','','fa-calendar',1,4,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30301,2,303,'menu.layout','layout.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30302,2,303,'menu.bundle','bundle.jsp','',1,2,'12');
@@ -221,6 +245,13 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30901,2,309,'menu.staff','staff.jsp','',1,1,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30902,2,309,'menu.role','role.jsp','',1,2,'12');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30903,2,309,'menu.branch','branch.jsp','',1,3,'12');
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30909,2,309,'menu.config','config.jsp','',1,9,'12');
+
+
+insert into config(configid, code, name, value, refer) values(101, 'ServerIP', 'config.server.ip', '127.0.0.1', '');
+insert into config(configid, code, name, value, refer) values(102, 'ServerPort', 'config.server.port', '80', '');
+insert into config(configid, code, name, value, refer) values(201, 'PixedxIP', 'config.pixedx.ip', '127.0.0.1', '');
+insert into config(configid, code, name, value, refer) values(202, 'PixedxPort', 'config.pixedx.port', '80', '');
 
 ############################################################
 ## post script  ############################################

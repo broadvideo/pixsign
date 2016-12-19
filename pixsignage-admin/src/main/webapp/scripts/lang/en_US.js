@@ -91,6 +91,8 @@ var common = {
 		region_type_7: 'Interactive Button',
 		region_type_8: 'Navigate Bar',
 		region_type_9: 'QR Code',
+		region_type_10: 'Calendar',
+		region_type_12: 'RSS',
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
 
@@ -155,6 +157,11 @@ var common = {
 		today: 'Today',
 		yesterday: 'Yesterday',
 
+		config_serverip: 'Server IP',
+		config_serverport: 'Server Port',
+		config_pixedxip: 'PixedX IP',
+		config_pixedxport: 'PixedX Port',
+		
 		wxappid: 'Weixin AppID',
 		wxsecret: 'Weixin AppSecret',
 		wxvalidflag: 'Weixin Verify',

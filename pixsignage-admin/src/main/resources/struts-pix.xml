@@ -499,6 +499,31 @@
 			</result>
 		</action>
 
+		<action name="rss!list" method="doList" class="rssAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="rss!add" method="doAdd" class="rssAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="rss!update" method="doUpdate" class="rssAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="rss!delete" method="doDelete" class="rssAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="medialist!list" method="doList" class="medialistAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -626,6 +651,12 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="device!roomlist" method="doRoomList" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
 

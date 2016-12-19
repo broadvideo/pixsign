@@ -10,11 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
-import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.MedialistMapper;
 import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
-import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 
 @Service("medialistService")
 public class MedialistServiceImpl implements MedialistService {
@@ -25,8 +23,6 @@ public class MedialistServiceImpl implements MedialistService {
 	private MedialistdtlMapper medialistdtlMapper;
 	@Autowired
 	private BundledtlMapper bundledtlMapper;
-	@Autowired
-	private RegionscheduleMapper regionscheduleMapper;
 
 	public int selectCount(int orgid, String branchid, String search) {
 		return medialistMapper.selectCount(orgid, branchid, search);
@@ -54,7 +50,6 @@ public class MedialistServiceImpl implements MedialistService {
 	public void deleteMedialist(String medialistid) {
 		medialistdtlMapper.deleteByMedialist(medialistid);
 		bundledtlMapper.clearByObj(Bundledtl.ObjType_Medialist, medialistid);
-		regionscheduleMapper.deleteByObj(Regionschedule.ObjType_Medialist, medialistid);
 		medialistMapper.deleteByPrimaryKey(medialistid);
 	}
 

@@ -24,13 +24,14 @@
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
     <result column="fitflag" property="fitflag" jdbcType="CHAR" />
     <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="calendartype" property="calendartype" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     layoutdtlid, layoutid, type, mainflag, height, width, topoffset, leftoffset, zindex, bgcolor, opacity, bgimageid, sleeptime, intervaltime, 
-    animation, direction, speed, color, size, dateformat, fitflag, volume, createtime
+    animation, direction, speed, color, size, dateformat, fitflag, volume, calendartype, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -62,7 +63,8 @@
       bgimageid, sleeptime, intervaltime, 
       animation, direction, 
       speed, color, size, 
-      dateformat, fitflag, volume, createtime)
+      dateformat, fitflag, volume, 
+      calendartype, createtime)
     values (#{layoutid,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{mainflag,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
@@ -70,7 +72,8 @@
       #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, 
       #{animation,jdbcType=VARCHAR}, #{direction,jdbcType=CHAR}, 
       #{speed,jdbcType=CHAR}, #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+      #{dateformat,jdbcType=VARCHAR}, #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
+      #{calendartype,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Layoutdtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="layoutdtlid" order="AFTER" >
@@ -141,6 +144,9 @@
       <if test="volume != null" >
         volume,
       </if>
+      <if test="calendartype != null" >
+        calendartype,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -208,6 +214,9 @@
       </if>
       <if test="volume != null" >
         #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="calendartype != null" >
+        #{calendartype,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -280,6 +289,9 @@
       <if test="volume != null" >
         volume = #{volume,jdbcType=INTEGER},
       </if>
+      <if test="calendartype != null" >
+        calendartype = #{calendartype,jdbcType=CHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -309,6 +321,7 @@
       dateformat = #{dateformat,jdbcType=VARCHAR},
       fitflag = #{fitflag,jdbcType=CHAR},
       volume = #{volume,jdbcType=INTEGER},
+      calendartype = #{calendartype,jdbcType=CHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where layoutdtlid = #{layoutdtlid,jdbcType=INTEGER}
   </update>

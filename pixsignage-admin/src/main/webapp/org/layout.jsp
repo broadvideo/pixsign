@@ -40,6 +40,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 
 <style type="text/css">
@@ -65,6 +66,11 @@ response.setDateHeader("Expires",0);
   padding: 10px;
   border-left: 1px solid;
   border-right: 1px solid;
+}
+
+.dropdown-menu li > a {
+  padding: 0px !important; 
+  display: inline !important;
 }
 
 </style>
@@ -120,7 +126,16 @@ response.setDateHeader("Expires",0);
 								<div class="form-group">
 									<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 									<div class="col-md-9">
-										<input type="hidden" id="LayoutBgImageSelect1" class="form-control select2" name="layout.bgimageid">
+										<div class="input-group">
+											<span class="input-group-btn">
+												<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+												<ul class="dropdown-menu" role="menu">
+													<div class="pre-scrollable foldertree">
+													</div>
+												</ul>
+											</span>
+											<input type="hidden" id="LayoutBgImageSelect1" class="form-control select2" name="layout.bgimageid">
+										</div>
 									</div>
 								</div>
 								<div class="form-group">
@@ -168,6 +183,8 @@ response.setDateHeader("Expires",0);
 											<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendar"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="region.rss"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>
@@ -208,6 +225,13 @@ response.setDateHeader("Expires",0);
 															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 															<div class="col-md-9">
 																<div class="input-group">
+																	<span class="input-group-btn">
+																		<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+																		<ul class="dropdown-menu" role="menu">
+																			<div class="pre-scrollable foldertree">
+																			</div>
+																		</ul>
+																	</span>
 																	<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
 																	<span class="input-group-btn">
 																	<button class="btn default" type="button" id="LayoutBgImageRemove"><i class="fa fa-trash-o"/></i></button>
@@ -231,6 +255,17 @@ response.setDateHeader("Expires",0);
 															<h3 class="col-md-6 page-title font-red-sunglo layoutdtl-title"></h3>
 															<div class="col-md-6">
 																<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
+															</div>
+														</div>
+														<div class="form-group layout-ctl regiontype-10">
+															<label class="col-md-3 control-label"><spring:message code="global.layout.region.calendartype"/></label>
+															<div class="col-md-9 radio-list">
+																<label class="radio-inline">
+																	<input type="radio" name="calendartype" value="1" checked> <spring:message code="global.layout.region.calendartype_1"/>
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" name="calendartype" value="2"> <spring:message code="global.layout.region.calendartype_2"/>
+																</label>
 															</div>
 														</div>
 														<div class="form-group layout-ctl regiontype-0">
@@ -293,7 +328,7 @@ response.setDateHeader("Expires",0);
 																</label>  
 															</div>
 														</div>
-														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-12">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 															<div class="col-md-9">
 																<div class="input-group colorpicker-component colorPick">
@@ -320,10 +355,17 @@ response.setDateHeader("Expires",0);
 																</select>
 															</div>
 														</div>
-														<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8">
+														<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 															<div class="col-md-9">
 																<div class="input-group">
+																	<span class="input-group-btn">
+																		<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+																		<ul class="dropdown-menu" role="menu">
+																			<div class="pre-scrollable foldertree">
+																			</div>
+																		</ul>
+																	</span>
 																	<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
 																	<span class="input-group-btn">
 																	<button class="btn default" type="button" id="RegionBgImageRemove"><i class="fa fa-trash-o"/></i></button>
@@ -331,7 +373,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-12">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 															<div class="col-md-9">
 																<div class="input-group colorpicker-component bgcolorPick">
@@ -340,7 +382,7 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8">
+														<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-12">
 															<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 															<div class="col-md-9">
 																<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -537,17 +579,19 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=2" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-layout.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-layout.js?t=2"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
 var LiftCtrl = <%=(session_org != null && session_org.getLiftflag().equals("1"))%>;
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;

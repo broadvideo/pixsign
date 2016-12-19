@@ -37,11 +37,7 @@ public class SystemInitServlet extends HttpServlet {
 			Properties properties = new Properties();
 			InputStream is = new BufferedInputStream(new FileInputStream("/opt/pix/conf/common.properties"));
 			properties.load(is);
-			CommonConfig.CONFIG_SERVER_IP = properties.getProperty("common.server.ip");
-			CommonConfig.CONFIG_SERVER_PORT = properties.getProperty("common.server.port");
 			CommonConfig.CONFIG_ACTIVEMQ_SERVER = properties.getProperty("common.activemq.server");
-			// CommonConfig.CONFIG_VCSS_SERVER = "http://" +
-			// properties.getProperty("common.pixsignage.vcencoder") + ":6060/";
 			is.close();
 		} catch (Exception ex) {
 			logger.error("", ex);

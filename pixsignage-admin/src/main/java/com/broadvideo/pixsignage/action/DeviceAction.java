@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,10 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
+import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -38,6 +42,9 @@ public class DeviceAction extends BaseDatatableAction {
 
 	private String exportname;
 	private InputStream inputStream;
+
+	@Autowired
+	private ConfigMapper configMapper;
 
 	@Autowired
 	private DeviceService deviceService;
@@ -189,6 +196,32 @@ public class DeviceAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device screen error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doRoomList() {
+		try {
+			List<Object> aaData = new ArrayList<Object>();
+			String server = "http://" + configMapper.selectValueByCode("PixedxIP") + ":"
+					+ configMapper.selectValueByCode("PixedxPort");
+			String s = PixedxUtil.classrooms(server);
+			if (s.length() > 0) {
+				JSONObject json = new JSONObject(s);
+				JSONArray roomJsonArray = json.getJSONArray("data");
+				for (int i = 0; i < roomJsonArray.length(); i++) {
+					HashMap<String, String> room = new HashMap<String, String>();
+					room.put("id", "" + roomJsonArray.getJSONObject(i).getInt("id"));
+					room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
+					aaData.add(room);
+				}
+			}
+			this.setAaData(aaData);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device doRoomList error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

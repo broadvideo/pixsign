@@ -363,6 +363,36 @@ function initMyEditModal() {
 		});
 	}
 
+	$.ajax({
+		type : 'GET',
+		url : 'device!roomlist.action',
+		data : {},
+		dataType: 'json',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var externallist = [];
+				for (var i=0; i<data.aaData.length; i++) {
+					externallist.push({
+						id: data.aaData[i].id,
+						text: data.aaData[i].name
+					});
+				}
+				$("#ExternalSelect").select2({
+					placeholder: common.tips.detail_select,
+					minimumInputLength: 0,
+					data: externallist,
+					dropdownCssClass: "bigdrop", 
+					escapeMarkup: function (m) { return m; } 
+				});
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
+
 	OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
 	FormValidateOption.rules = {};
@@ -374,6 +404,10 @@ function initMyEditModal() {
 	FormValidateOption.rules['device.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
 		$('#MyEditForm input[name="device.branchid"]').attr('value', $("#EditFormBranchTree").jstree('get_selected', false)[0]);
+		if ($('#ExternalSelect').select2('data') != null) {
+			$('#MyEditForm input[name="device.externalid"]').attr('value', $('#ExternalSelect').select2('data').id);
+			$('#MyEditForm input[name="device.externalname"]').attr('value', $('#ExternalSelect').select2('data').text);
+		}
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
@@ -400,15 +434,6 @@ function initMyEditModal() {
 		}
 	});
 
-	$('body').on('click', '.pix-add', function(event) {
-		refreshForm('MyEditForm');
-		$('#MyEditForm').attr('action', myurls['device.add']);
-		currentEditBranchid = currentEditBranchTreeData[0].attr.id;
-		createEditBranchTree(currentEditBranchTreeData);
-		$('#MyEditModal').modal();
-	});			
-
-
 	$('body').on('click', '.pix-update', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
@@ -424,6 +449,8 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', myurls['device.update']);
 		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
+		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
+		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
 	});
 }

@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.domain.Bundledtl;
-import com.broadvideo.pixsignage.domain.Regionschedule;
 import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
-import com.broadvideo.pixsignage.persistence.RegionscheduleMapper;
 import com.broadvideo.pixsignage.persistence.WidgetMapper;
 
 @Service("widgetService")
@@ -20,8 +18,6 @@ public class WidgetServiceImpl implements WidgetService {
 	private WidgetMapper widgetMapper;
 	@Autowired
 	private BundledtlMapper bundledtlMapper;
-	@Autowired
-	private RegionscheduleMapper regionscheduleMapper;
 
 	public Widget selectByPrimaryKey(String widgetid) {
 		return widgetMapper.selectByPrimaryKey(widgetid);
@@ -48,7 +44,6 @@ public class WidgetServiceImpl implements WidgetService {
 	@Transactional
 	public void deleteWidget(String widgetid) {
 		bundledtlMapper.clearByObj(Bundledtl.ObjType_Widget, widgetid);
-		regionscheduleMapper.deleteByObj(Regionschedule.ObjType_Widget, widgetid);
 		widgetMapper.deleteByPrimaryKey(widgetid);
 	}
 

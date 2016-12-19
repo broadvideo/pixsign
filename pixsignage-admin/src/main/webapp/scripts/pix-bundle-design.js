@@ -168,6 +168,9 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 	} else if (bundledtl.layoutdtl.type == '7') {
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (bgimage != '') {
+			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
 		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
 			bundledtlhtml += bundledtl.touchlabel;
@@ -267,6 +270,9 @@ function validBundledtl(bundledtl) {
 			if (bundledtl.touchtype == 2 && $('#SubBundleSelect').select2('data') != null) {
 				bundledtl.touchbundleid = $('#SubBundleSelect').select2('data').id;
 			}
+			if (bundledtl.touchtype == 4) {
+				bundledtl.touchapk = $('#BundledtlEditForm input[name="bundledtl.touchapk"]').val();
+			}
 			if (bundledtl.touchtype == 3) {
 				var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
 				var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
@@ -302,6 +308,22 @@ function validBundledtl(bundledtl) {
 				bundledtl.objtype = 0;
 				bundledtl.objid = 0;
 			}
+		} else if (CurrentBundledtl.layoutdtl.type == 12) {
+			var type = $('#BundledtlEditForm input[name="bundledtl.type"]:checked').val();
+			if (type == undefined) {
+				type = 0;
+			}
+			if (type == 0) {
+				bundledtl.rss0.url = $('#BundledtlEditForm input[name="bundledtl.rss.url"]').val();
+				bundledtl.objid = bundledtl.rss0.rssid;
+				bundledtl.rss = bundledtl.rss0;
+			} else {
+				bundledtl.rss1 = $('#BundledtlSelect').select2('data').rss;
+				bundledtl.rss = bundledtl.rss1;
+				bundledtl.objid = $('#BundledtlSelect').val();
+			}
+			bundledtl.type = type;
+			bundledtl.objtype = 7;
 		}
 		
 		return true;
@@ -336,10 +358,13 @@ function enterBundledtlFocus(bundledtl) {
 		$('#BundledtlEditForm input[name="bundledtl.stream.url"]').val(CurrentBundledtl.stream0.url);
 	} else if (CurrentBundledtl.objtype == 5 && CurrentBundledtl.type == 0) {
 		$('#BundledtlEditForm input[name="bundledtl.widget.url"]').val(CurrentBundledtl.widget0.url);
+	} else if (CurrentBundledtl.objtype == 7 && CurrentBundledtl.type == 0) {
+		$('#BundledtlEditForm input[name="bundledtl.rss.url"]').val(CurrentBundledtl.rss0.url);
 	}
 
-	$('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val(CurrentBundledtl.touchlabel);
 	$('#BundledtlEditForm input[name="bundle.homeidletime"]').val(CurrentBundle.homeidletime);
+	$('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val(CurrentBundledtl.touchlabel);
+	$('#BundledtlEditForm input[name="bundledtl.touchapk"]').val(CurrentBundledtl.touchapk);
 	
 	refreshBundledtlEdit();
 	refreshBundledtlSelect();
@@ -388,13 +413,13 @@ function refreshBundledtlEdit() {
 		$('.regiontype-6').css("display", "block");
 	} else if (CurrentBundledtl.layoutdtl.type == 7) {
 		$('.regiontype-7').css("display", "block");
-		if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() < 2) {
-			$('.touchtype-2').css("display", "none");
+		var touchtype = $('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val();
+		if (touchtype == 2) {
 			$('.touchtype-3').css("display", "none");
-		} else if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() == 2) {
-			$('.touchtype-3').css("display", "none");
-		} else if ($('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() == 3) {
+			$('.touchtype-4').css("display", "none");
+		} else if (touchtype == 3) {
 			$('.touchtype-2').css("display", "none");
+			$('.touchtype-4').css("display", "none");
 			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 			if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
 				$('.public-0').css("display", "none");
@@ -417,6 +442,20 @@ function refreshBundledtlEdit() {
 					$('.objtype-4').css("display", "none");
 				}
 			}
+		} else if (touchtype == 4) {
+			$('.touchtype-2').css("display", "none");
+			$('.touchtype-3').css("display", "none");
+		} else {
+			$('.touchtype-2').css("display", "none");
+			$('.touchtype-3').css("display", "none");
+			$('.touchtype-4').css("display", "none");
+		}
+	} else if (CurrentBundledtl.layoutdtl.type == 12) {
+		$('.regiontype-12').css("display", "block");
+		if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 1) {
+			$('.public-0').css("display", "none");
+		} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
+			$('.public-1').css("display", "none");
 		}
 	}
 
@@ -438,6 +477,12 @@ function refreshBundledtlEdit() {
     } else if ($('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val() == 5) {
     	FormValidateOption.rules['bundledtl.widget.url'] = {};
     	FormValidateOption.rules['bundledtl.widget.url']['required'] = true;
+    } else if (CurrentBundledtl.layoutdtl.type == 7 && $('#BundledtlEditForm input[name="bundledtl.touchtype"]:checked').val() == 4) {
+    	FormValidateOption.rules['bundledtl.touchapk'] = {};
+    	FormValidateOption.rules['bundledtl.touchapk']['required'] = true;
+    } else if (CurrentBundledtl.layoutdtl.type == 12) {
+    	FormValidateOption.rules['bundledtl.rss.url'] = {};
+    	FormValidateOption.rules['bundledtl.rss.url']['required'] = true;
 	}
 	$('#BundledtlEditForm').validate(FormValidateOption);
     $.extend($("#BundledtlEditForm").validate().settings, {
@@ -460,6 +505,8 @@ function refreshBundledtlSelect() {
 		url = 'widget!list.action';
 	} else if (CurrentBundledtl.layoutdtl.type == 5) {
 		url = 'dvb!list.action';
+	} else if (CurrentBundledtl.layoutdtl.type == 12) {
+		url = 'rss!list.action';
 	}
 	$('#BundledtlSelect').select2({
 		placeholder: common.tips.detail_select,
@@ -509,6 +556,12 @@ function refreshBundledtlSelect() {
 								name:item.name, 
 								id:item.dvbid,
 								dvb:item
+							};
+						} else if (item.rssid) {
+							return {
+								name:item.name, 
+								id:item.rssid,
+								rss:item
 							};
 						}
 					}),
@@ -566,9 +619,12 @@ function refreshBundledtlSelect() {
 			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.widget1.widgetid, name: CurrentBundledtl.widget1.name, widget: CurrentBundledtl.widget1 });
 		}
 	} else if (CurrentBundledtl.layoutdtl.type == 5) {
-		console.log(CurrentBundledtl.dvb1);
 		if (CurrentBundledtl.dvb1 != null) {
 			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.dvb1.dvbid, name: CurrentBundledtl.dvb1.name, dvb: CurrentBundledtl.dvb1 });
+		}
+	} else if (CurrentBundledtl.layoutdtl.type == 12) {
+		if (CurrentBundledtl.rss1 != null) {
+			$('#BundledtlSelect').select2('data', {id: CurrentBundledtl.rss1.rssid, name: CurrentBundledtl.rss1.name, rss: CurrentBundledtl.rss1 });
 		}
 	} 
 }

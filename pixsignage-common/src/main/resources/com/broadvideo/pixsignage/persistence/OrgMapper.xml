@@ -12,6 +12,7 @@
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
+    <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
     <result column="videoflag" property="videoflag" jdbcType="CHAR" />
     <result column="imageflag" property="imageflag" jdbcType="CHAR" />
     <result column="textflag" property="textflag" jdbcType="CHAR" />
@@ -43,7 +44,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, videoflag, imageflag, textflag, streamflag, 
+    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, calendarflag, videoflag, imageflag, textflag, streamflag, 
     dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
     currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, apps, createtime, createstaffid
@@ -103,7 +104,7 @@
     </selectKey>
     insert into org (vspid, topbranchid, name, code, 
       status, orgtype, reviewflag, 
-      touchflag, liftflag, videoflag, 
+      touchflag, liftflag, calendarflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, videoinflag, widgetflag, expireflag, 
       expiretime, maxdevices, maxstorage, 
@@ -114,7 +115,7 @@
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, 
-      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, #{expireflag,jdbcType=CHAR}, 
       #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
@@ -156,6 +157,9 @@
       </if>
       <if test="liftflag != null" >
         liftflag,
+      </if>
+      <if test="calendarflag != null" >
+        calendarflag,
       </if>
       <if test="videoflag != null" >
         videoflag,
@@ -263,6 +267,9 @@
       </if>
       <if test="liftflag != null" >
         #{liftflag,jdbcType=CHAR},
+      </if>
+      <if test="calendarflag != null" >
+        #{calendarflag,jdbcType=CHAR},
       </if>
       <if test="videoflag != null" >
         #{videoflag,jdbcType=CHAR},
@@ -374,6 +381,9 @@
       <if test="liftflag != null" >
         liftflag = #{liftflag,jdbcType=CHAR},
       </if>
+      <if test="calendarflag != null" >
+        calendarflag = #{calendarflag,jdbcType=CHAR},
+      </if>
       <if test="videoflag != null" >
         videoflag = #{videoflag,jdbcType=CHAR},
       </if>
@@ -466,6 +476,7 @@
       reviewflag = #{reviewflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},
+      calendarflag = #{calendarflag,jdbcType=CHAR},
       videoflag = #{videoflag,jdbcType=CHAR},
       imageflag = #{imageflag,jdbcType=CHAR},
       textflag = #{textflag,jdbcType=CHAR},

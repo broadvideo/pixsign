@@ -13,6 +13,8 @@ public interface ConfigMapper {
 
 	String selectValueByCode(@Param(value = "code") String code);
 
+	int updateValue(@Param(value = "code") String code, @Param(value = "value") String value);
+
 	int updateByPrimaryKeySelective(Config record);
 
 	// int updateByPrimaryKey(Config record);

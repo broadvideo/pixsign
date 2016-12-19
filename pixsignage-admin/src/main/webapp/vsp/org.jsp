@@ -106,6 +106,17 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
+										<div class="form-group touch-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.calendarflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.calendarflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.calendarflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
 										<div class="form-group lift-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.org.liftflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">

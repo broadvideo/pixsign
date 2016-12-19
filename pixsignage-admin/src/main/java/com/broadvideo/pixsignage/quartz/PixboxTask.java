@@ -28,6 +28,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Vchannel;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
@@ -41,6 +42,8 @@ public class PixboxTask {
 
 	private static boolean workflag = false;
 
+	@Autowired
+	private ConfigMapper configMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
 	@Autowired
@@ -80,7 +83,8 @@ public class PixboxTask {
 			channelJsonArray.put(vchannelJson);
 			vchannelJson.put("vchannel_uuid", vchannel.getUuid());
 			vchannelJson.put("name", vchannel.getName());
-			vchannelJson.put("url", "rtsp://" + CommonConfig.CONFIG_SERVER_IP + ":13554/" + vchannel.getVchannelid());
+			vchannelJson.put("url",
+					"rtsp://" + configMapper.selectValueByCode("ServerIP") + ":13554/" + vchannel.getVchannelid());
 			vchannelJson.put("start_time", "00:00:00");
 			vchannelJson.put("end_time", "00:00:00");
 		}

@@ -34,7 +34,7 @@ public class ConfigAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ConfigAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -43,10 +43,18 @@ public class ConfigAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
-			configService.updateConfig(config);
+			String serverip = getParameter("serverip");
+			String serverport = getParameter("serverport");
+			String pixedxip = getParameter("pixedxip");
+			String pixedxport = getParameter("pixedxport");
+
+			configService.updateValue("ServerIP", serverip);
+			configService.updateValue("ServerPort", serverport);
+			configService.updateValue("PixedxIP", pixedxip);
+			configService.updateValue("PixedxPort", pixedxport);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("ConfigAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

@@ -8,6 +8,7 @@
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
+    <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
     <result column="streamflag" property="streamflag" jdbcType="CHAR" />
     <result column="dvbflag" property="dvbflag" jdbcType="CHAR" />
     <result column="videoinflag" property="videoinflag" jdbcType="CHAR" />
@@ -23,7 +24,7 @@
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vspid, name, code, reviewflag, touchflag, liftflag, streamflag, 
+    vspid, name, code, reviewflag, touchflag, liftflag, calendarflag, streamflag, 
     dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
     currentstorage, apps, status, description, createtime, createstaffid
   </sql>
@@ -77,13 +78,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into vsp (name, code, reviewflag, 
-      touchflag, liftflag, streamflag, 
+      touchflag, liftflag, calendarflag, streamflag, 
       dvbflag, videoinflag, maxdevices, maxstorage, 
       currentdevices, currentstorage, apps, status, 
       description, createtime, createstaffid
       )
     values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
-      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
+      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
       #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
@@ -109,6 +110,9 @@
       </if>
       <if test="liftflag != null" >
         liftflag,
+      </if>
+      <if test="calendarflag != null" >
+        calendarflag,
       </if>
       <if test="streamflag != null" >
         streamflag,
@@ -162,6 +166,9 @@
       </if>
       <if test="liftflag != null" >
         #{liftflag,jdbcType=CHAR},
+      </if>
+      <if test="calendarflag != null" >
+        #{calendarflag,jdbcType=CHAR},
       </if>
       <if test="streamflag != null" >
         #{streamflag,jdbcType=CHAR},
@@ -219,6 +226,9 @@
       <if test="liftflag != null" >
         liftflag = #{liftflag,jdbcType=CHAR},
       </if>
+      <if test="calendarflag != null" >
+        calendarflag = #{calendarflag,jdbcType=CHAR},
+      </if>
       <if test="streamflag != null" >
         streamflag = #{streamflag,jdbcType=CHAR},
       </if>
@@ -265,6 +275,7 @@
       reviewflag = #{reviewflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},
+      calendarflag = #{calendarflag,jdbcType=CHAR},
       streamflag = #{streamflag,jdbcType=CHAR},
       dvbflag = #{dvbflag,jdbcType=CHAR},
       videoinflag = #{videoinflag,jdbcType=CHAR},

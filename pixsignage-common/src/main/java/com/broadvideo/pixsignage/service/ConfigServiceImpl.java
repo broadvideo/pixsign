@@ -27,4 +27,11 @@ public class ConfigServiceImpl implements ConfigService {
 	public void updateConfig(Config config) {
 		configMapper.updateByPrimaryKeySelective(config);
 	}
+
+	@Transactional
+	public void updateValue(String code, String value) {
+		if (value != null && value.length() > 0) {
+			configMapper.updateValue(code, value);
+		}
+	}
 }

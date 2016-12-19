@@ -12,6 +12,7 @@ public class Bundledtl {
 	public final static String ObjType_Stream = "3";
 	public final static String ObjType_Widget = "5";
 	public final static String ObjType_Dvb = "6";
+	public final static String ObjType_Rss = "7";
 
 	private Integer bundledtlid;
 
@@ -33,6 +34,8 @@ public class Bundledtl {
 
 	private Integer touchbundleid;
 
+	private String touchapk;
+
 	private Date createtime;
 
 	private Layoutdtl layoutdtl;
@@ -46,6 +49,8 @@ public class Bundledtl {
 	private Widget widget;
 
 	private Dvb dvb;
+
+	private Rss rss;
 
 	public Integer getBundledtlid() {
 		return bundledtlid;
@@ -127,6 +132,14 @@ public class Bundledtl {
 		this.touchbundleid = touchbundleid;
 	}
 
+	public String getTouchapk() {
+		return touchapk;
+	}
+
+	public void setTouchapk(String touchapk) {
+		this.touchapk = touchapk;
+	}
+
 	public Date getCreatetime() {
 		return createtime;
 	}
@@ -181,5 +194,13 @@ public class Bundledtl {
 
 	public void setDvb(Dvb dvb) {
 		this.dvb = dvb;
+	}
+
+	public Rss getRss() {
+		return rss;
+	}
+
+	public void setRss(Rss rss) {
+		this.rss = rss;
 	}
 }

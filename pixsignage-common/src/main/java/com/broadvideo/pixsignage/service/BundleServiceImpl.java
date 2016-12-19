@@ -32,6 +32,7 @@ import com.broadvideo.pixsignage.domain.Layoutdtl;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.domain.Msgevent;
+import com.broadvideo.pixsignage.domain.Rss;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Stream;
 import com.broadvideo.pixsignage.domain.Text;
@@ -41,12 +42,14 @@ import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.BundlescheduleMapper;
 import com.broadvideo.pixsignage.persistence.BundlescheduledtlMapper;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.LayoutMapper;
 import com.broadvideo.pixsignage.persistence.LayoutdtlMapper;
 import com.broadvideo.pixsignage.persistence.MedialistMapper;
 import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
+import com.broadvideo.pixsignage.persistence.RssMapper;
 import com.broadvideo.pixsignage.persistence.StreamMapper;
 import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.persistence.WidgetMapper;
@@ -81,7 +84,11 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private WidgetMapper widgetMapper;
 	@Autowired
+	private RssMapper rssMapper;
+	@Autowired
 	private MsgeventMapper msgeventMapper;
+	@Autowired
+	private ConfigMapper configMapper;
 
 	@Autowired
 	private MedialistService medialistService;
@@ -91,6 +98,8 @@ public class BundleServiceImpl implements BundleService {
 	private StreamService streamService;
 	@Autowired
 	private WidgetService widgetService;
+	@Autowired
+	private RssService rssService;
 	@Autowired
 	private LayoutService layoutService;
 	@Autowired
@@ -201,6 +210,8 @@ public class BundleServiceImpl implements BundleService {
 					streamService.deleteStream("" + oldBundledtl.getObjid());
 				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
 					widgetService.deleteWidget("" + oldBundledtl.getObjid());
+				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
+					rssService.deleteRss("" + oldBundledtl.getObjid());
 				}
 			}
 			if (bundledtl.getType().equals(Bundledtl.Type_Private)) {
@@ -282,6 +293,21 @@ public class BundleServiceImpl implements BundleService {
 						widgetMapper.updateByPrimaryKeySelective(widget);
 					}
 					bundledtl.setObjid(widget.getWidgetid());
+				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
+					Rss rss = bundledtl.getRss();
+					Rss oldRss = rssMapper.selectByPrimaryKey("" + bundledtl.getObjid());
+					if (oldRss == null) {
+						rss.setOrgid(bundle.getOrgid());
+						rss.setBranchid(bundle.getBranchid());
+						rss.setName(bundle.getName() + "-" + bundledtl.getLayoutdtlid());
+						rss.setType(Medialist.Type_Private);
+						rss.setCreatestaffid(bundle.getCreatestaffid());
+						rssMapper.insertSelective(rss);
+					} else {
+						rss.setRssid(bundledtl.getObjid());
+						rssMapper.updateByPrimaryKeySelective(rss);
+					}
+					bundledtl.setObjid(rss.getRssid());
 				}
 			}
 
@@ -464,6 +490,15 @@ public class BundleServiceImpl implements BundleService {
 					widget.setCreatestaffid(staff.getStaffid());
 					widgetMapper.insertSelective(widget);
 					bundledtl.setObjid(widget.getWidgetid());
+				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
+					Rss rss = bundledtl.getRss();
+					rss.setOrgid(bundle.getOrgid());
+					rss.setBranchid(bundle.getBranchid());
+					rss.setName(bundle.getName() + "-" + bundledtl.getLayoutdtlid());
+					rss.setType(Medialist.Type_Private);
+					rss.setCreatestaffid(staff.getStaffid());
+					rssMapper.insertSelective(rss);
+					bundledtl.setObjid(rss.getRssid());
 				}
 			}
 			bundledtlMapper.insertSelective(bundledtl);
@@ -603,6 +638,8 @@ public class BundleServiceImpl implements BundleService {
 	}
 
 	public JSONObject generateBundleJson(String bundleid) {
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
 
 		if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED) && bundle.getJson() != null) {
@@ -615,12 +652,12 @@ public class BundleServiceImpl implements BundleService {
 		HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> dvbHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> widgetHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> rssHash = new HashMap<Integer, JSONObject>();
 
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("bundle_id", bundle.getBundleid());
 		responseJson.put("name", bundle.getName());
-		responseJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-				+ "/pixsigdata" + bundle.getSnapshot());
+		responseJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata" + bundle.getSnapshot());
 		responseJson.put("touch_flag", bundle.getTouchflag());
 		responseJson.put("home_flag", bundle.getHomeflag());
 		responseJson.put("home_bundle_id", bundle.getHomebundleid());
@@ -638,6 +675,8 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("widgets", widgetJsonArray);
 		JSONArray dvbJsonArray = new JSONArray();
 		responseJson.put("dvbs", dvbJsonArray);
+		JSONArray rssJsonArray = new JSONArray();
+		responseJson.put("rsses", rssJsonArray);
 
 		Layout layout = bundle.getLayout();
 		responseJson.put("layout_id", layout.getLayoutid());
@@ -649,12 +688,12 @@ public class BundleServiceImpl implements BundleService {
 		if (layout.getBgimage() != null) {
 			layoutBgImageJson.put("id", layout.getBgimageid());
 			layoutBgImageJson.put("name", layout.getBgimage().getName());
-			layoutBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-					+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layout.getBgimage().getFilepath());
+			layoutBgImageJson.put("url",
+					"http://" + serverip + ":" + serverport + "/pixsigdata" + layout.getBgimage().getFilepath());
 			layoutBgImageJson.put("file", layout.getBgimage().getFilename());
 			layoutBgImageJson.put("size", layout.getBgimage().getSize());
-			layoutBgImageJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-					+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layout.getBgimage().getThumbnail());
+			layoutBgImageJson.put("thumbnail",
+					"http://" + serverip + ":" + serverport + "/pixsigdata" + layout.getBgimage().getThumbnail());
 			if (imageHash.get(layout.getBgimageid()) == null) {
 				imageHash.put(layout.getBgimageid(), layoutBgImageJson);
 				imageJsonArray.put(layoutBgImageJson);
@@ -716,11 +755,13 @@ public class BundleServiceImpl implements BundleService {
 				regionJson.put("date_format", layoutdtl.getDateformat());
 			}
 			regionJson.put("volume", layoutdtl.getVolume());
+			regionJson.put("calendar_type", layoutdtl.getCalendartype());
 
 			if (layoutdtl.getType().equals(Layoutdtl.Type_TOUCH)) {
 				regionJson.put("touch_label", bundledtl.getTouchlabel());
 				regionJson.put("touch_type", bundledtl.getTouchtype());
 				regionJson.put("touch_bundle_id", bundledtl.getTouchbundleid());
+				regionJson.put("touch_apk", bundledtl.getTouchapk());
 			}
 
 			JSONObject regionBgImageJson = new JSONObject();
@@ -728,12 +769,12 @@ public class BundleServiceImpl implements BundleService {
 			if (layoutdtl.getBgimage() != null) {
 				regionBgImageJson.put("id", layoutdtl.getBgimageid());
 				regionBgImageJson.put("name", layoutdtl.getBgimage().getName());
-				regionBgImageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layoutdtl.getBgimage().getFilepath());
+				regionBgImageJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + layoutdtl.getBgimage().getFilepath());
 				regionBgImageJson.put("file", layoutdtl.getBgimage().getFilename());
 				regionBgImageJson.put("size", layoutdtl.getBgimage().getSize());
-				regionBgImageJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + layoutdtl.getBgimage().getThumbnail());
+				regionBgImageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ layoutdtl.getBgimage().getThumbnail());
 				if (imageHash.get(layoutdtl.getBgimageid()) == null) {
 					imageHash.put(layoutdtl.getBgimageid(), regionBgImageJson);
 					imageJsonArray.put(regionBgImageJson);
@@ -761,12 +802,12 @@ public class BundleServiceImpl implements BundleService {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("name", video.getName());
-							videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getFilepath());
+							videoJson.put("url",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
-							videoJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getThumbnail());
+							videoJson.put("thumbnail",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
 							if (video.getRelate() != null) {
 								videoJson.put("relate_id", video.getRelateid());
 							} else {
@@ -783,12 +824,12 @@ public class BundleServiceImpl implements BundleService {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
 							imageJson.put("name", image.getName());
-							imageJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getFilepath());
+							imageJson.put("url",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
 							imageJson.put("file", image.getFilename());
 							imageJson.put("size", image.getSize());
-							imageJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-									+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + image.getThumbnail());
+							imageJson.put("thumbnail",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getThumbnail());
 							imageHash.put(image.getImageid(), imageJson);
 							imageJsonArray.put(imageJson);
 						}
@@ -852,6 +893,18 @@ public class BundleServiceImpl implements BundleService {
 						dvbJsonArray.put(dvbJson);
 					}
 				}
+			} else if (objtype.equals(Bundledtl.ObjType_Rss)) {
+				Rss rss = bundledtl.getRss();
+				if (rss != null) {
+					playlistJsonArray.put(new JSONObject().put("type", "rss").put("id", rss.getRssid()));
+					if (rssHash.get(rss.getRssid()) == null) {
+						JSONObject rssJson = new JSONObject();
+						rssJson.put("id", rss.getRssid());
+						rssJson.put("url", rss.getUrl());
+						rssHash.put(rss.getRssid(), rssJson);
+						rssJsonArray.put(rssJson);
+					}
+				}
 			}
 
 		}
@@ -861,12 +914,12 @@ public class BundleServiceImpl implements BundleService {
 				JSONObject videoJson = new JSONObject();
 				videoJson.put("id", video.getRelateid());
 				videoJson.put("name", video.getRelate().getName());
-				videoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-						+ "/pixsigdata" + video.getRelate().getFilepath());
+				videoJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getFilepath());
 				videoJson.put("file", video.getRelate().getFilename());
 				videoJson.put("size", video.getRelate().getSize());
-				videoJson.put("thumbnail", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + video.getRelate().getThumbnail());
+				videoJson.put("thumbnail",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getThumbnail());
 				videoJson.put("relate_id", 0);
 				videoHash.put(video.getRelateid(), videoJson);
 				videoJsonArray.put(videoJson);

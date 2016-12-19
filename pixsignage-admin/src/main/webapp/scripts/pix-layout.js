@@ -258,63 +258,7 @@ $('body').on('click', '.pix-layout', function(event) {
 	
 	$('#LayoutEditForm').loadJSON(CurrentLayout);
 	$('#LayoutEditForm .layout-title').html(CurrentLayout.name);
-	$("#LayoutBgImageSelect2").select2({
-		placeholder: common.tips.detail_select,
-		minimumInputLength: 0,
-		ajax: {
-			url: myurls['image.list'],
-			type: 'GET',
-			dataType: 'json',
-			data: function (term, page) {
-				return {
-					sSearch: term,
-					iDisplayStart: (page-1)*10,
-					iDisplayLength: 10,
-				};
-			},
-			results: function (data, page) {
-				var more = (page * 10) < data.iTotalRecords; 
-				return {
-					results : $.map(data.aaData, function (item) { 
-						return { 
-							id:item.imageid, 
-							text:item.name, 
-							image:item,
-						};
-					}),
-					more: more
-				};
-			}
-		},
-		formatResult: function (data) {
-			var width = 40;
-			var height = 40 * data.image.height / data.image.width;
-			if (data.image.width < data.image.height) {
-				height = 40;
-				width = 40 * data.image.width / data.image.height;
-			}
-			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
-			return html;
-		},
-		formatSelection: function (data) {
-			var width = 30;
-			var height = 30 * height / width;
-			if (data.image.width < data.image.height) {
-				height = 30;
-				width = 30 * width / height;
-			}
-			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
-			return html;
-		},
-		initSelection: function(element, callback) {
-			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
-			}
-		},
-		dropdownCssClass: "bigdrop", 
-		escapeMarkup: function (m) { return m; } 
-	});
-
+	refreshLayoutBgImageSelect2();
 	$('select[name="dateformat"] option').each(function() {
 		$(this).html(new Date().pattern($(this).attr('value')));
 	});
@@ -336,6 +280,7 @@ $('body').on('click', '.pix-layout', function(event) {
 	}
 	
 	$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+	$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 	$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 	$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 	$('.dvb-ctrl').css('display', DvbCtrl?'':'none');

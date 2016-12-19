@@ -12,6 +12,7 @@
     <result column="touchlabel" property="touchlabel" jdbcType="VARCHAR" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchbundleid" property="touchbundleid" jdbcType="INTEGER" />
+    <result column="touchapk" property="touchapk" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="layoutdtl" column="{layoutdtlid=layoutdtlid}" select="com.broadvideo.pixsignage.persistence.LayoutdtlMapper.selectByPrimaryKey" />
     <association property="medialist" column="{objtype=objtype,medialistid=objid}" select="selectMedialistid" />
@@ -19,9 +20,10 @@
     <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStreamid" />
     <association property="widget" column="{objtype=objtype,widgetid=objid}" select="selectWidgetid" />
     <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvbid" />
+    <association property="rss" column="{objtype=objtype,rssid=objid}" select="selectRssid" />
   </resultMap>
   <sql id="Base_Column_List" >
-    bundledtlid, bundleid, homebundleid, layoutdtlid, type, objtype, objid, touchlabel, touchtype, touchbundleid, createtime
+    bundledtlid, bundleid, homebundleid, layoutdtlid, type, objtype, objid, touchlabel, touchtype, touchbundleid, touchapk, createtime
   </sql>
   
   <select id="selectMedialistid" resultMap="com.broadvideo.pixsignage.persistence.MedialistMapper.BaseResultMap" >
@@ -47,6 +49,11 @@
   <select id="selectDvbid" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
     select * from dvb
     where '${objtype}' = '6' and dvbid = '${dvbid}'
+  </select>
+
+  <select id="selectRssid" resultMap="com.broadvideo.pixsignage.persistence.RssMapper.BaseResultMap" >
+    select * from rss
+    where '${objtype}' = '7' and rssid = '${rssid}'
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -103,11 +110,11 @@
     insert into bundledtl (bundleid, homebundleid, layoutdtlid, 
       type, objtype, objid, 
       touchlabel, touchtype, 
-      touchbundleid, createtime)
+      touchbundleid, touchapk, createtime)
     values (#{bundleid,jdbcType=INTEGER}, #{homebundleid,jdbcType=INTEGER}, #{layoutdtlid,jdbcType=INTEGER}, 
       #{type,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
       #{touchlabel,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
-      #{touchbundleid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+      #{touchbundleid,jdbcType=INTEGER}, #{touchapk,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Bundledtl" >
     <selectKey resultType="java.lang.Integer" keyProperty="bundledtlid" order="AFTER" >
@@ -142,6 +149,9 @@
       <if test="touchbundleid != null" >
         touchbundleid,
       </if>
+      <if test="touchapk != null" >
+        touchapk,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -173,6 +183,9 @@
       </if>
       <if test="touchbundleid != null" >
         #{touchbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="touchapk != null" >
+        #{touchapk,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -209,6 +222,9 @@
       <if test="touchbundleid != null" >
         touchbundleid = #{touchbundleid,jdbcType=INTEGER},
       </if>
+      <if test="touchapk != null" >
+        touchapk = #{touchapk,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -226,6 +242,7 @@
       touchlabel = #{touchlabel,jdbcType=VARCHAR},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchbundleid = #{touchbundleid,jdbcType=INTEGER},
+      touchapk = #{touchapk,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where bundledtlid = #{bundledtlid,jdbcType=INTEGER}
   </update>

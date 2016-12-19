@@ -43,6 +43,7 @@ import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Weather;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
@@ -52,6 +53,7 @@ import com.broadvideo.pixsignage.persistence.PlaylogMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
+import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 
 @Component
@@ -65,6 +67,8 @@ public class PixsignageService {
 
 	@Autowired
 	private OrgMapper orgMapper;
+	@Autowired
+	private ConfigMapper configMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 	@Autowired
@@ -174,7 +178,7 @@ public class PixsignageService {
 			onlinelogMapper.insertSelective(onlinelog);
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			responseJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
+			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
 			topicJsonArray.put("device-" + device.getDeviceid());
@@ -188,8 +192,10 @@ public class PixsignageService {
 				JSONObject backupvideoJson = new JSONObject();
 				// backupvideoJson.put("type", "video");
 				backupvideoJson.put("id", org.getBackupvideoid());
-				backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":"
-						+ CommonConfig.CONFIG_SERVER_PORT + "/pixsigdata" + org.getBackupvideo().getFilepath());
+				backupvideoJson.put("url",
+						"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+								+ org.getBackupvideo().getFilepath());
 				backupvideoJson.put("file", org.getBackupvideo().getFilename());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
@@ -200,8 +206,9 @@ public class PixsignageService {
 					// backupvideoJson.put("type", "video");
 					backupvideoJson.put("id", defaultOrg.getBackupvideoid());
 					backupvideoJson.put("url",
-							"http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-									+ "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
+							"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+									+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+									+ defaultOrg.getBackupvideo().getFilepath());
 					backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
 					backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
 					responseJson.put("backup_media", backupvideoJson);
@@ -276,8 +283,8 @@ public class PixsignageService {
 			String url = "";
 			if (files.length > 0) {
 				String filename = files[0].getName();
-				url = "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT + "/pixdata/app"
-						+ subdir + "/" + filename;
+				url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+						+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/" + filename;
 				String[] apks = filename.split("-");
 				if (apks.length >= 3) {
 					vname = apks[1];
@@ -628,6 +635,53 @@ public class PixsignageService {
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
 			responseJson.put("weather", new JSONObject(weather.getWeather()));
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_weather exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_calendar")
+	@Produces("application/json;charset=UTF-8")
+	public String getcalendar(String request) {
+		try {
+			logger.info("Pixsignage Service get_calendar: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			long starttime = requestJson.getLong("start_time");
+			long endtime = requestJson.getLong("end_time");
+
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null || !device.getStatus().equals("1")) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			}
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONArray scheduleJsonArray = new JSONArray();
+			responseJson.put("schedules", scheduleJsonArray);
+
+			if (device.getExternalid().length() > 0) {
+				String server = "http://" + configMapper.selectValueByCode("PixedxIP") + ":"
+						+ configMapper.selectValueByCode("PixedxPort");
+				String s = PixedxUtil.schedules(server, device.getExternalid(), "" + starttime, "" + endtime);
+				if (s.length() > 0) {
+					JSONObject json = new JSONObject(s);
+					JSONArray dataJsonArray = json.getJSONArray("data");
+					for (int i = 0; i < dataJsonArray.length(); i++) {
+						JSONObject dataJson = dataJsonArray.getJSONObject(i);
+						JSONObject scheduleJson = new JSONObject();
+						scheduleJson.put("name", dataJson.getString("course_name"));
+						scheduleJson.put("host", dataJson.getString("instructor"));
+						scheduleJson.put("start_time", dataJson.getLong("start_time"));
+						scheduleJson.put("end_time", dataJson.getLong("end_time"));
+						scheduleJsonArray.put(scheduleJson);
+					}
+				}
+			}
+
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_weather exception", e);

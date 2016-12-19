@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
@@ -27,6 +27,8 @@ public class DeviceServiceImpl implements DeviceService {
 	private DeviceMapper deviceMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
+	@Autowired
+	private ConfigMapper configMapper;
 	@Autowired
 	private OrgMapper orgMapper;
 
@@ -83,11 +85,13 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void configall(String orgid) throws Exception {
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
 		Org org = orgMapper.selectByPrimaryKey(orgid);
 		JSONObject msgJson = new JSONObject().put("msg_id", 0).put("msg_type", "CONFIG");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
-		msgBodyJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
+		msgBodyJson.put("msg_server", serverip + ":1883");
 		JSONArray topicJsonArray = new JSONArray();
 		msgBodyJson.put("msg_topic", topicJsonArray);
 
@@ -95,8 +99,8 @@ public class DeviceServiceImpl implements DeviceService {
 			JSONObject backupvideoJson = new JSONObject();
 			// backupvideoJson.put("type", "video");
 			backupvideoJson.put("id", org.getBackupvideoid());
-			backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-					+ "/pixsigdata" + org.getBackupvideo().getFilepath());
+			backupvideoJson.put("url",
+					"http://" + serverip + ":" + serverport + "/pixsigdata" + org.getBackupvideo().getFilepath());
 			backupvideoJson.put("file", org.getBackupvideo().getFilename());
 			backupvideoJson.put("size", org.getBackupvideo().getSize());
 			msgBodyJson.put("backup_media", backupvideoJson);
@@ -119,6 +123,8 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void config(String deviceid) throws Exception {
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
 		Msgevent msgevent = new Msgevent();
 		msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
@@ -134,7 +140,7 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "CONFIG");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
-		msgBodyJson.put("msg_server", CommonConfig.CONFIG_SERVER_IP + ":1883");
+		msgBodyJson.put("msg_server", serverip + ":1883");
 		JSONArray topicJsonArray = new JSONArray();
 		msgBodyJson.put("msg_topic", topicJsonArray);
 		topicJsonArray.put("device-" + deviceid);
@@ -148,8 +154,8 @@ public class DeviceServiceImpl implements DeviceService {
 			JSONObject backupvideoJson = new JSONObject();
 			// backupvideoJson.put("type", "video");
 			backupvideoJson.put("id", org.getBackupvideoid());
-			backupvideoJson.put("url", "http://" + CommonConfig.CONFIG_SERVER_IP + ":" + CommonConfig.CONFIG_SERVER_PORT
-					+ "/pixsigdata" + org.getBackupvideo().getFilepath());
+			backupvideoJson.put("url",
+					"http://" + serverip + ":" + serverport + "/pixsigdata" + org.getBackupvideo().getFilepath());
 			backupvideoJson.put("file", org.getBackupvideo().getFilename());
 			backupvideoJson.put("size", org.getBackupvideo().getSize());
 			msgBodyJson.put("backup_media", backupvideoJson);
