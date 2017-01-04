@@ -52,6 +52,17 @@ response.setDateHeader("Expires",0);
 									<input type="hidden" name="org.orgid" value="0" />
 									<div class="form-body">
 										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.upgradeflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.upgradeflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.upgradeflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.devicepassflag"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">

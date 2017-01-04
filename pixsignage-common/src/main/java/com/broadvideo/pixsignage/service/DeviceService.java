@@ -34,6 +34,8 @@ public interface DeviceService {
 
 	public void reboot(String deviceid) throws Exception;
 
+	public void poweroff(String deviceid) throws Exception;
+
 	public void screen(String deviceid) throws Exception;
 
 	public void utext(String orgid, String text, String count, String position, String speed, String color, String size,

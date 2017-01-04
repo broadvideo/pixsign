@@ -6,6 +6,7 @@ var myurls = {
 	'device.sync' : 'device!sync.action',
 	'device.config' : 'device!config.action',
 	'device.reboot' : 'device!reboot.action',
+	'device.poweroff' : 'device!poweroff.action',
 	'device.screen' : 'device!screen.action',
 	'device.screenlist' : 'device!screenlist.action',
 	'devicefile.list' : 'devicefile!list.action',
@@ -56,7 +57,7 @@ function initMyTable() {
 				$('td:eq(3)', nRow).html('');
 			}
 			if (aData.lontitude > 0 && aData.latitude > 0) {
-				$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
+				$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 			}
 			if (aData.status == 0) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
@@ -68,15 +69,16 @@ function initMyTable() {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}
 			
-			$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-			$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
-			$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>');
-			var html = '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-screen"><i class="fa fa-camera"></i> ' + common.view.screen + '</a>';
-			html += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.view + '</a>';
+			$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+			$('td:eq(7)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
+			$('td:eq(8)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>'
+					+ '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-poweroff"><i class="fa fa-power-off"></i> ' + common.view.shutdown + '</a>');
+			var html = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-screen"><i class="fa fa-camera"></i> ' + common.view.screen + '</a>';
+			html += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.view + '</a>';
 			$('td:eq(9)', nRow).html(html);
-			$('td:eq(10)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
-			$('td:eq(11)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(12)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
+			$('td:eq(10)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
+			$('td:eq(11)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(12)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
@@ -285,6 +287,45 @@ function initMyTable() {
 				$.ajax({
 					type : 'GET',
 					url : myurls['device.reboot'],
+					cache: false,
+					data : {
+						deviceid: currentItem.deviceid,
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					beforeSend: function ( xhr ) {
+						Metronic.startPageLoading({animate: true});
+					},
+					success : function(data, status) {
+						Metronic.stopPageLoading();
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						Metronic.stopPageLoading();
+						bootbox.alert(common.tips.error);
+					}
+				});				
+			}
+		});
+	});
+
+	$('body').on('click', '.pix-poweroff', function(event) {
+		var target = $(event.target);
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			target = $(event.target).parent();
+			index = $(event.target).parent().attr('data-id');
+		}
+		currentItem = $('#DeviceTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.poweroff + currentItem.name, function(result) {
+			if (result == true) {
+				$.ajax({
+					type : 'GET',
+					url : myurls['device.poweroff'],
 					cache: false,
 					data : {
 						deviceid: currentItem.deviceid,

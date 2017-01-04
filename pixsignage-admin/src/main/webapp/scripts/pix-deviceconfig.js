@@ -9,6 +9,13 @@ function refreshMyTable() {
 				CurrentOrg = data.org;
 				$('#MyTable').dataTable().fnClearTable();
 
+				if (CurrentOrg.upgradeflag == 1) {
+					var upgradehtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.upgradeflag, upgradehtml]);
+				} else {
+					var upgradehtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.upgradeflag, upgradehtml]);
+				}
 				if (CurrentOrg.devicepassflag == 1) {
 					var devicepasshtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.devicepassflag, devicepasshtml]);

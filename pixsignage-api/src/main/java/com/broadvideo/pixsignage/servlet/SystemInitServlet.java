@@ -1,17 +1,10 @@
 package com.broadvideo.pixsignage.servlet;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.broadvideo.pixsignage.common.CommonConfig;
 
 @SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
@@ -22,11 +15,13 @@ public class SystemInitServlet extends HttpServlet {
 		super.init();
 
 		try {
-			Properties properties = new Properties();
-			InputStream is = new BufferedInputStream(new FileInputStream("/opt/pix/conf/common.properties"));
-			properties.load(is);
-			CommonConfig.CONFIG_ACTIVEMQ_SERVER = properties.getProperty("common.activemq.server");
-			is.close();
+			// Properties properties = new Properties();
+			// InputStream is = new BufferedInputStream(new
+			// FileInputStream("/opt/pix/conf/common.properties"));
+			// properties.load(is);
+			// CommonConfig.CONFIG_ACTIVEMQ_SERVER =
+			// properties.getProperty("common.activemq.server");
+			// is.close();
 		} catch (Exception ex) {
 			logger.error("", ex);
 		}

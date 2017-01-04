@@ -58,7 +58,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group devicepassflag">
+										<div class="form-group">
 											<label class="col-md-4 control-label"><spring:message code="config.server.port"/><span class="required">*</span></label>
 											<div class="col-md-8">
 												<div class="input-icon right">
@@ -66,7 +66,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group calendar-ctrl">
 											<label class="col-md-4 control-label"><spring:message code="config.pixedx.ip"/></label>
 											<div class="col-md-8">
 												<div class="input-icon right">
@@ -74,7 +74,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group devicepassflag">
+										<div class="form-group calendar-ctrl">
 											<label class="col-md-4 control-label"><spring:message code="config.pixedx.port"/></label>
 											<div class="col-md-8">
 												<div class="input-icon right">
@@ -186,6 +186,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-config.js?t=3"></script>
 <script>
+var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

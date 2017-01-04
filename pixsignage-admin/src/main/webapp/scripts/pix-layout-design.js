@@ -23,6 +23,7 @@ RegionLimits['8'] = 1;
 RegionLimits['9'] = 1;
 RegionLimits['10'] = 1;
 RegionLimits['12'] = 2;
+RegionLimits['13'] = 1;
 RegionLimits['A1'] = 1;
 RegionLimits['A2'] = 1;
 
@@ -489,6 +490,7 @@ function updateRegionBtns() {
 	updateRegionBtn('9');
 	updateRegionBtn('10');
 	updateRegionBtn('12');
+	updateRegionBtn('13');
 	updateRegionBtn('A1');
 	updateRegionBtn('A2');
 }

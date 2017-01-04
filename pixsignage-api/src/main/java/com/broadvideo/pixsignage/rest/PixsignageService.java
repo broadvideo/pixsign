@@ -49,7 +49,6 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.PlaylogMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
@@ -73,8 +72,6 @@ public class PixsignageService {
 	private DeviceMapper deviceMapper;
 	@Autowired
 	private OnlinelogMapper onlinelogMapper;
-	@Autowired
-	private PlaylogMapper playlogMapper;
 	@Autowired
 	private DvbMapper dvbMapper;
 	@Autowired
@@ -101,6 +98,7 @@ public class PixsignageService {
 			String sign = requestJson.getString("sign");
 			String version = requestJson.getString("version");
 			String ip = req.getRemoteAddr();
+			String other = requestJson.getString("other");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -127,6 +125,8 @@ public class PixsignageService {
 			} else if (device.getStatus().equals("1") && device.getHardkey() != null
 					&& !device.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
+			} else if (other != null && device.getOther().length() > 0 && !device.getOther().equals(other)) {
+				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
 			}
 
 			try {
@@ -254,6 +254,21 @@ public class PixsignageService {
 			}
 
 			JSONObject requestJson = new JSONObject(request);
+			String terminalid = requestJson.getString("terminal_id");
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device != null) {
+				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+				if (org.getUpgradeflag().equals("0")) {
+					JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+					responseJson.put("version_name", "");
+					responseJson.put("version_code", "0");
+					responseJson.put("url", "");
+					logger.info("Auto upgrade disabled, Pixsignage Service get-version response: {}",
+							responseJson.toString());
+					return responseJson.toString();
+				}
+			}
+
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String subdir = "";
@@ -638,6 +653,38 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_weather exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("get_yahoo_weather")
+	@Produces("application/json;charset=UTF-8")
+	public String get_yahoo_weather(@QueryParam("terminal_id") String terminalid, @QueryParam("city") String city) {
+		try {
+			logger.info("Pixsignage Service get_yahoo_weather: terminal_id={},city={}", terminalid, city);
+
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null || !device.getStatus().equals("1")) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			}
+			if (city == null || city.length() == 0) {
+				city = device.getCity();
+			}
+			if (city == null || city.length() == 0) {
+				return handleResult(1008, "无效城市");
+			}
+
+			Weather weather = weatherService.selectByCity(Weather.Type_Yahoo, city);
+			if (weather.getWeather() != null && weather.getWeather().length() > 0) {
+				JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+				responseJson.put("weather", new JSONObject(weather.getWeather()));
+				return responseJson.toString();
+			} else {
+				return handleResult(1009, "天气无法获得");
+			}
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_yahoo_weather exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

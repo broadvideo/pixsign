@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Audio;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Bundleschedule;
@@ -653,6 +654,7 @@ public class BundleServiceImpl implements BundleService {
 		HashMap<Integer, JSONObject> dvbHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> widgetHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> rssHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> audioHash = new HashMap<Integer, JSONObject>();
 
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("bundle_id", bundle.getBundleid());
@@ -677,6 +679,8 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("dvbs", dvbJsonArray);
 		JSONArray rssJsonArray = new JSONArray();
 		responseJson.put("rsses", rssJsonArray);
+		JSONArray audioJsonArray = new JSONArray();
+		responseJson.put("audios", audioJsonArray);
 
 		Layout layout = bundle.getLayout();
 		responseJson.put("layout_id", layout.getLayoutid());
@@ -842,6 +846,20 @@ public class BundleServiceImpl implements BundleService {
 							streamJson.put("url", stream.getUrl());
 							streamHash.put(stream.getStreamid(), streamJson);
 							streamJsonArray.put(streamJson);
+						}
+					} else if (medialistdtl.getAudio() != null) {
+						Audio audio = medialistdtl.getAudio();
+						playlistJsonArray.put(new JSONObject().put("type", "audio").put("id", audio.getAudioid()));
+						if (audioHash.get(medialistdtl.getObjid()) == null) {
+							JSONObject audioJson = new JSONObject();
+							audioJson.put("id", audio.getAudioid());
+							audioJson.put("name", audio.getName());
+							audioJson.put("url",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + audio.getFilepath());
+							audioJson.put("file", audio.getFilename());
+							audioJson.put("size", audio.getSize());
+							audioHash.put(audio.getAudioid(), audioJson);
+							audioJsonArray.put(audioJson);
 						}
 					}
 				}

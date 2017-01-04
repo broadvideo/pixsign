@@ -12,6 +12,9 @@ public class CommonConfig {
 
 	public static String SYSTEM_ID = "UNKNOWN";
 
+	public static String CURRENT_APPVERSION;
+	public static String CURRENT_DBVERSION;
+
 	// public static boolean LICENSE = false;
 	// public static boolean LICENSE_HOSTID_VERIFY = false;
 	// public static Date LICENSE_Expire;

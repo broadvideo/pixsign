@@ -188,6 +188,20 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doPoweroff() {
+		try {
+			String deviceid = getParameter("deviceid");
+			deviceService.poweroff(deviceid);
+			logger.info("Device poweroff success");
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("Device poweroff error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doScreen() {
 		try {
 			String deviceid = getParameter("deviceid");

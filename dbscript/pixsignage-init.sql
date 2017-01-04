@@ -151,6 +151,7 @@ create table staffrole(
    staffroleid int not null auto_increment,
    staffid int not null,
    roleid int not null,
+   primary key (staffroleid),
    foreign key (staffid) references staff(staffid),
    foreign key (roleid) references role(roleid)
  )engine = innodb
@@ -161,6 +162,7 @@ create table staffprivilege(
    staffprivilegeid int not null auto_increment,
    staffid int not null,
    privilegeid int not null,
+   primary key (staffprivilegeid),
    foreign key (staffid) references staff(staffid) 
  )engine = innodb
 default character set utf8;
@@ -170,6 +172,7 @@ create table roleprivilege(
    roleprivilegeid int not null auto_increment,
    roleid int not null,
    privilegeid int not null,
+   primary key (roleprivilegeid),
    foreign key (roleid) references role(roleid) 
  )engine = innodb
 default character set utf8;
@@ -417,8 +420,7 @@ create table layoutdtl(
    volume int default 50,
    createtime timestamp not null default current_timestamp,
    primary key (layoutdtlid),
-   foreign key (layoutid) references layout(layoutid),
-   foreign key (regionid) references region(regionid)
+   foreign key (layoutid) references layout(layoutid)
  )engine = innodb
 default character set utf8;
 
@@ -681,6 +683,7 @@ insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,curr
 select last_insert_id() into @orgid;
 insert into branch(orgid,parentid,name,description,createstaffid) values(@orgid,0,'super','Default Root Branch',@staffid3);
 select last_insert_id() into @branchid;
+update org set topbranchid=@branchid where orgid=@orgid;
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');

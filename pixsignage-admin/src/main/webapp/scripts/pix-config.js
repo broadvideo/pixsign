@@ -15,10 +15,10 @@ function refreshMyTable() {
 					} else if (config.code == 'ServerPort') {
 						$('#MyTable').dataTable().fnAddData([common.view.config_serverport, config.value]);
 						$('#MyEditForm input[name=serverport]').val(config.value);
-					} else if (config.code == 'PixedxIP') {
+					} else if (config.code == 'PixedxIP' && CalendarCtrl) {
 						$('#MyTable').dataTable().fnAddData([common.view.config_pixedxip, config.value]);
 						$('#MyEditForm input[name=pixedxip]').val(config.value);
-					} else if (config.code == 'PixedxPort') {
+					} else if (config.code == 'PixedxPort' && CalendarCtrl) {
 						$('#MyTable').dataTable().fnAddData([common.view.config_pixedxport, config.value]);
 						$('#MyEditForm input[name=pixedxport]').val(config.value);
 					}
@@ -82,6 +82,7 @@ $('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 });
 
 $('body').on('click', '.pix-update', function(event) {
+	$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 	$('#MyEditForm').attr('action', 'config!update.action');
 	$('#MyEditModal').modal();
 });

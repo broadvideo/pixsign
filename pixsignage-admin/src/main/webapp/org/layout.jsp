@@ -185,6 +185,7 @@ response.setDateHeader("Expires",0);
 											<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendar"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="region.rss"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" regiontype="13" class="btn btn-sm yellow pix-addregion audio-ctrl"><spring:message code="region.audio"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 											<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 										</div>

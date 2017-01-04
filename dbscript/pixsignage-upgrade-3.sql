@@ -64,6 +64,7 @@ alter table org add calendarflag char(1) default '0';
 alter table org add videoinflag char(1) default '0';
 alter table org add apps varchar(128);
 alter table org add devicepassflag char(1) default '1';
+alter table org add upgradeflag char(1) default '0';
 
 alter table device modify position varchar(512) default '';
 alter table device modify addr1 varchar(256) default '';

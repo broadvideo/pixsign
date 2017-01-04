@@ -93,6 +93,7 @@ var common = {
 		region_type_9: 'QR Code',
 		region_type_10: 'Calendar',
 		region_type_12: 'RSS',
+		region_type_13: 'Audio',
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
 
@@ -106,6 +107,7 @@ var common = {
 		sync: 'Sync',
 		push: 'Push',
 		reboot: 'Reboot',
+		shutdown: 'Power-off',
 		bind: 'Bind',
 		unbind: 'Unbind',
 		design: 'Design',
@@ -138,6 +140,7 @@ var common = {
 		template_type_0: 'Private',
 		template_type_1: 'Public',
 
+		upgradeflag: 'Auto Upgrade Flag',
 		devicepassflag: 'Maintain Password Flag',
 		devicepass: 'Maintain Password',
 		backupvideo: 'Backup Video',
@@ -190,6 +193,7 @@ var common = {
 		config: 'Please confirm whether to push configuration to ',
 		pushall: 'Please confirm whether to push configuration to all devices',
 		reboot: 'Please confirm whether to reboot ',
+		poweroff: 'Please confirm whether to power-off ',
 		screen: 'Please confirm whether to screen shot ',
 		ucancel: 'Please confirm whether to cancel emergency message',
 		error: 'Operation failed! ',

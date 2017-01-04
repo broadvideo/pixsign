@@ -7,6 +7,7 @@ import org.apache.struts2.json.annotations.JSON;
 public class Devicefile {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
+	public final static String ObjType_Audio = "3";
 
 	private Integer devicefileid;
 

@@ -262,6 +262,7 @@ function validBundledtl(bundledtl) {
 			bundledtl.type = 1;
 			bundledtl.objtype = 6;
 		} else if (CurrentBundledtl.layoutdtl.type == 6) {
+			bundledtl.objtype = 1;
 			bundledtl.objid = bundledtl.medialist0.medialistid;
 			bundledtl.medialist = bundledtl.medialist0;
 		} else if (CurrentBundledtl.layoutdtl.type == 7) {
@@ -324,6 +325,10 @@ function validBundledtl(bundledtl) {
 			}
 			bundledtl.type = type;
 			bundledtl.objtype = 7;
+		} else if (CurrentBundledtl.layoutdtl.type == 13) {
+			bundledtl.objtype = 1;
+			bundledtl.objid = bundledtl.medialist0.medialistid;
+			bundledtl.medialist = bundledtl.medialist0;
 		}
 		
 		return true;
@@ -457,6 +462,8 @@ function refreshBundledtlEdit() {
 		} else if ($('#BundledtlEditForm input[name="bundledtl.type"]:checked').val() == 0) {
 			$('.public-1').css("display", "none");
 		}
+	} else if (CurrentBundledtl.layoutdtl.type == 13) {
+		$('.regiontype-13').css("display", "block");
 	}
 
     FormValidateOption.rules = {};
@@ -721,6 +728,15 @@ function refreshMedialistDtl() {
 			if (medialistdtl.stream != null) {
 				var html = '<div class="pix-title">' + medialistdtl.stream.name + '</div>';
 				$('#StreamTable2').dataTable().fnAddData([medialistdtl.sequence, 'Stream', html, 0, 0, 0]);
+			}
+		}
+	} else if (CurrentBundledtl.layoutdtl.type == 13) {
+		$('#AudioTable2').dataTable().fnClearTable();
+		for (var i=0; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
+			var medialistdtl = CurrentBundledtl.medialist0.medialistdtls[i];
+			if (medialistdtl.audio != null) {
+				var html = '<div class="pix-title">' + medialistdtl.audio.name + '</div>';
+				$('#AudioTable2').dataTable().fnAddData([medialistdtl.sequence, 'Audio', html, 0, 0, 0]);
 			}
 		}
 	}
@@ -1275,7 +1291,7 @@ $('#StreamTable1').dataTable({
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'stream!list.action',
-	'aoColumns' : [ {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
+	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
 					{'sTitle' : 'URL', 'mData' : 'url', 'bSortable' : false, 'sWidth' : '70%', 'sClass':'pixtitle' },
 					{'sTitle' : '', 'mData' : 'streamid', 'bSortable' : false, 'sWidth' : '5%' }],
 	'iDisplayLength' : 10,
@@ -1301,8 +1317,8 @@ $('#StreamTable2').dataTable({
 					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
 					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
 	'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
-	'oLanguage' : { 'sZeroRecords' : '列表为空',
-					'sEmptyTable' : '列表为空' }, 
+	'oLanguage' : { 'sZeroRecords' : common.view.empty,
+					'sEmptyTable' : common.view.empty }, 
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-stream-up"><i class="fa fa-arrow-up"></i></button>');
 		$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-stream-down"><i class="fa fa-arrow-down"></i></button>');
@@ -1389,6 +1405,137 @@ $('body').on('click', '.pix-stream-down', function(event) {
 	$('#StreamTable2').dataTable().fnUpdate(nextData[2], rowIndex, 2);
 	$('#StreamTable2').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
 	$('#StreamTable2').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
+	
+	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex] = CurrentBundledtl.medialist0.medialistdtls[rowIndex+1];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex].sequence = rowIndex+1;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1] = temp;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1].sequence = rowIndex+2;
+});
+
+
+$('#AudioTable1').dataTable({
+	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+	'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+					[ 10, 25, 50, 100 ] 
+					],
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'audio!list.action',
+	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
+					{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false, 'sWidth' : '70%', 'sClass':'pixtitle' },
+					{'sTitle' : '', 'mData' : 'audioid', 'bSortable' : false, 'sWidth' : '5%' }],
+	'iDisplayLength' : 10,
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(2)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-audio-add"><i class="fa fa-plus"></i></a>');
+		return nRow;
+	}
+});
+$('#AudioTable1_wrapper .dataTables_filter input').addClass('form-control input-small');
+$('#AudioTable1_wrapper .dataTables_length select').addClass('form-control input-small');
+$('#AudioTable1_wrapper .dataTables_length select').select2();
+$('#AudioTable1').css('width', '100%').css('table-layout', 'fixed');
+
+$('#AudioTable2').dataTable({
+	'sDom' : 't',
+	'iDisplayLength' : -1,
+	'aoColumns' : [ {'sTitle' : '', 'bSortable' : false, 'sWidth' : '40px' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '60px' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sClass': 'autowrap' }, 
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' },
+					{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
+	'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
+	'oLanguage' : { 'sZeroRecords' : common.view.empty,
+					'sEmptyTable' : common.view.empty }, 
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-audio-up"><i class="fa fa-arrow-up"></i></button>');
+		$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-audio-down"><i class="fa fa-arrow-down"></i></button>');
+		$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-audio-delete"><i class="fa fa-trash-o"></i></button>');
+		return nRow;
+	}
+});
+
+//增加Audio
+$('body').on('click', '.pix-audio-add', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#AudioTable1').dataTable().fnGetData(rowIndex);
+	var medialistdtl = {};
+	medialistdtl.medialistdtlid = 0;
+	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
+	medialistdtl.objtype = '6';
+	medialistdtl.objid = data.audioid;
+	medialistdtl.sequence = CurrentBundledtl.medialist0.medialistdtls.length + 1;
+	medialistdtl.audio = data;
+	CurrentBundledtl.medialist0.medialistdtls[CurrentBundledtl.medialist0.medialistdtls.length] = medialistdtl;
+
+	var html = '<div class="pix-title">' + data.name + '</div>';
+	$('#AudioTable2').dataTable().fnAddData([medialistdtl.sequence, 'Audio', html, 0, 0, 0]);
+});
+
+//删除Audio
+$('body').on('click', '.pix-audio-delete', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	for (var i=rowIndex; i<$('#AudioTable2').dataTable().fnSettings().fnRecordsDisplay(); i++) {
+		var data = $('#AudioTable2').dataTable().fnGetData(i);
+		$('#AudioTable2').dataTable().fnUpdate(i, parseInt(i), 0);
+	}
+	$('#AudioTable2').dataTable().fnDeleteRow(rowIndex);
+	
+	for (var i=rowIndex; i<CurrentBundledtl.medialist0.medialistdtls.length; i++) {
+		CurrentBundledtl.medialist0.medialistdtls[i].sequence = i;
+	}
+	CurrentBundledtl.medialist0.medialistdtls.splice(rowIndex, 1);
+});
+
+//上移
+$('body').on('click', '.pix-audio-up', function(event) {
+	var rowIndex = $(event.target).attr('data-id');
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	if (rowIndex == 0) {
+		return;
+	}
+	rowIndex = parseInt(rowIndex);
+	var movedDta = $('#AudioTable2').dataTable().fnGetData(rowIndex).slice(0);
+	var prevData = $('#AudioTable2').dataTable().fnGetData(rowIndex-1).slice(0);
+	$('#AudioTable2').dataTable().fnUpdate(prevData[1], rowIndex, 1);
+	$('#AudioTable2').dataTable().fnUpdate(prevData[2], rowIndex, 2);
+	$('#AudioTable2').dataTable().fnUpdate(movedDta[1], rowIndex-1, 1);
+	$('#AudioTable2').dataTable().fnUpdate(movedDta[2], rowIndex-1, 2);
+	
+	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex] =  CurrentBundledtl.medialist0.medialistdtls[rowIndex-1];
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex].sequence = rowIndex+1;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex-1] = temp;
+	CurrentBundledtl.medialist0.medialistdtls[rowIndex-1].sequence = rowIndex;
+});
+
+//下移
+$('body').on('click', '.pix-audio-down', function(event) {
+	var rowIndex = $(event.target).attr('data-id');
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	if (rowIndex == $('#BundleTextTable').dataTable().fnSettings().fnRecordsDisplay() - 1) {
+		return;
+	}
+	rowIndex = parseInt(rowIndex);
+	var movedDta = $('#AudioTable2').dataTable().fnGetData(rowIndex).slice(0);
+	var nextData = $('#AudioTable2').dataTable().fnGetData(rowIndex+1).slice(0);
+	$('#AudioTable2').dataTable().fnUpdate(nextData[1], rowIndex, 1);
+	$('#AudioTable2').dataTable().fnUpdate(nextData[2], rowIndex, 2);
+	$('#AudioTable2').dataTable().fnUpdate(movedDta[1], rowIndex+1, 1);
+	$('#AudioTable2').dataTable().fnUpdate(movedDta[2], rowIndex+1, 2);
 	
 	var temp = CurrentBundledtl.medialist0.medialistdtls[rowIndex];
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex] = CurrentBundledtl.medialist0.medialistdtls[rowIndex+1];

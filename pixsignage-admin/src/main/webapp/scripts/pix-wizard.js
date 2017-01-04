@@ -661,6 +661,7 @@ function submitData() {
 						medialistdtl.image = undefined;
 						medialistdtl.video = undefined;
 						medialistdtl.stream = undefined;
+						medialistdtl.audio = undefined;
 					}
 				} 
 			}

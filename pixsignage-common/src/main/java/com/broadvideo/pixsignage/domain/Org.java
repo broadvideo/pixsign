@@ -77,6 +77,8 @@ public class Org {
 
 	private String devicepass;
 
+	private String upgradeflag;
+
 	private String apps;
 
 	private Date createtime;
@@ -363,6 +365,14 @@ public class Org {
 
 	public void setDevicepass(String devicepass) {
 		this.devicepass = devicepass;
+	}
+
+	public String getUpgradeflag() {
+		return upgradeflag;
+	}
+
+	public void setUpgradeflag(String upgradeflag) {
+		this.upgradeflag = upgradeflag;
 	}
 
 	public String getApps() {

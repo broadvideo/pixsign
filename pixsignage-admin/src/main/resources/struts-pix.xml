@@ -399,6 +399,40 @@
 			</result>
 		</action>
 
+		<action name="audio!list" method="doList" class="audioAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="audio!upload" method="doUpload" class="audioAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">20480000</param>
+				<!-- <param name="allowedTypes">audio/png,audio/gif,audio/jpeg,audio/pjpeg</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="audio!add" method="doAdd" class="audioAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="audio!update" method="doUpdate" class="audioAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="audio!delete" method="doDelete" class="audioAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="text!list" method="doList" class="textAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -616,6 +650,12 @@
 			</result>
 		</action>
 		<action name="device!reboot" method="doReboot" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="device!poweroff" method="doPoweroff" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

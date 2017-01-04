@@ -37,9 +37,9 @@ alter table vsp add currentdevices int default 0;
 alter table vsp add currentstorage bigint default 0;
 update vsp set maxdevices=100,maxstorage=10000 where code='default';
 
-alter table staffrole add staffroleid int not null auto_increment, add primary key(staffroleid);
-alter table staffprivilege add staffprivilegeid int not null auto_increment, add primary key(staffprivilegeid);
-alter table roleprivilege add roleprivilegeid int not null auto_increment, add primary key(roleprivilegeid);
+#alter table staffrole add staffroleid int not null auto_increment, add primary key(staffroleid);
+#alter table staffprivilege add staffprivilegeid int not null auto_increment, add primary key(staffprivilegeid);
+#alter table roleprivilege add roleprivilegeid int not null auto_increment, add primary key(roleprivilegeid);
 
 ############################################################
 ## post script  ############################################

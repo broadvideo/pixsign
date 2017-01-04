@@ -331,6 +331,7 @@ response.setDateHeader("Expires",0);
 																<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendar"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="region.rss"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="13" class="btn btn-sm yellow pix-addregion audio-ctrl"><spring:message code="region.audio"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
 															</div>
@@ -781,6 +782,37 @@ response.setDateHeader("Expires",0);
 																<div class="portlet-body">
 																	<div class="table-responsive">
 																		<table id="StreamTable2" class="table table-condensed table-hover">
+																			<thead></thead>
+																			<tbody></tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row bundle-ctl regiontype-13">
+														<div class="col-md-7">
+															<div class="portlet box blue">
+																<div class="portlet-title">
+																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																</div>
+																<div class="portlet-body">
+																	<table id="AudioTable1" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>																		
+																</div>
+															</div>
+														</div>
+														<div class="col-md-5">
+															<div class="portlet box green">
+																<div class="portlet-title">
+																	<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.selected"/></div>
+																</div>
+																<div class="portlet-body">
+																	<div class="table-responsive">
+																		<table id="AudioTable2" class="table table-condensed table-hover">
 																			<thead></thead>
 																			<tbody></tbody>
 																		</table>

@@ -93,6 +93,7 @@ var common = {
 		region_type_9: '二维码',
 		region_type_10: '日程表',
 		region_type_12: 'RSS',
+		region_type_13: '音频',
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
 
@@ -106,6 +107,7 @@ var common = {
 		sync: '同步',
 		push: '推送',
 		reboot: '重启',
+		shutdown: '关机',
 		bind: '绑定',
 		unbind: '解绑',
 		design: '设计',
@@ -138,6 +140,7 @@ var common = {
 		template_type_0: '内部模板',
 		template_type_1: '公共模板',
 
+		upgradeflag: '自动升级开关',
 		devicepassflag: '终端密码开关',
 		devicepass: '终端密码',
 		backupvideo: '默认垫片',
@@ -190,6 +193,7 @@ var common = {
 		config: '是否重新推送配置至 ',
 		pushall: '是否推送配置至所有终端 ',
 		reboot: '是否重启 ',
+		poweroff: '是否关机',
 		screen: '是否截屏 ',
 		ucancel: '是否取消紧急消息',
 		error: '操作失败  ',

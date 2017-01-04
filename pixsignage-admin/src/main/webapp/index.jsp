@@ -6,6 +6,7 @@
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Sdomain"%> 
 <%@page import="com.broadvideo.pixsignage.service.SdomainService"%> 
+<%@page import="com.broadvideo.pixsignage.common.CommonConfig"%> 
 
 <%
 	ServletContext servletContext = this.getServletContext();
@@ -115,7 +116,12 @@
 	</div>
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">Powered by BroadVideo 粤ICP备14037592号-1<br/>S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %></div>
+	<div class="copyright">
+		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
+		Powered by BroadVideo 粤ICP备14037592号-1<br/>
+		
+		
+	</div>
 	<!-- END COPYRIGHT -->
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

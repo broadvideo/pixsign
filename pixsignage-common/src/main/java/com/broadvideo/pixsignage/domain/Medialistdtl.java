@@ -4,6 +4,7 @@ public class Medialistdtl {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
 	public final static String ObjType_Stream = "5";
+	public final static String ObjType_Audio = "6";
 
 	private Integer medialistdtlid;
 
@@ -20,6 +21,8 @@ public class Medialistdtl {
 	private Image image;
 
 	private Stream stream;
+
+	private Audio audio;
 
 	public Integer getMedialistdtlid() {
 		return medialistdtlid;
@@ -83,5 +86,13 @@ public class Medialistdtl {
 
 	public void setStream(Stream stream) {
 		this.stream = stream;
+	}
+
+	public Audio getAudio() {
+		return audio;
+	}
+
+	public void setAudio(Audio audio) {
+		this.audio = audio;
 	}
 }

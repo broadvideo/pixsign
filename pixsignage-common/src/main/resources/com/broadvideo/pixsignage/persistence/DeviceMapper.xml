@@ -29,6 +29,7 @@
     <result column="addr2" property="addr2" jdbcType="VARCHAR" />
     <result column="externalid" property="externalid" jdbcType="VARCHAR" />
     <result column="externalname" property="externalname" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="activetime" property="activetime" jdbcType="TIMESTAMP" />
     <result column="refreshtime" property="refreshtime" jdbcType="TIMESTAMP" />
@@ -40,7 +41,7 @@
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
     filestatus, status, description, onlineflag, appname, version, mtype, type, devicegroupid, lontitude, latitude, 
-    city, addr1, addr2, externalid, externalname, createtime, activetime, refreshtime
+    city, addr1, addr2, externalid, externalname, other, createtime, activetime, refreshtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -181,18 +182,20 @@
       ip, iip, mac, schedulestatus, 
       filestatus, status, description, 
       onlineflag, appname, version, 
-      mtype, type, 
-      devicegroupid, lontitude, latitude, 
-      city, addr1, addr2, externalid, externalname, 
+      mtype, type, devicegroupid, 
+      lontitude, latitude, city, 
+      addr1, addr2, externalid, 
+      externalname, other, 
       createtime, activetime, refreshtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
       #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{onlineflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
-      #{mtype,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{devicegroupid,jdbcType=INTEGER}, #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{externalid,jdbcType=VARCHAR}, #{externalname,jdbcType=VARCHAR}, 
+      #{mtype,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{devicegroupid,jdbcType=INTEGER}, 
+      #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{externalid,jdbcType=VARCHAR}, 
+      #{externalname,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, #{refreshtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
@@ -278,6 +281,9 @@
       </if>
       <if test="externalname != null" >
         externalname,
+      </if>
+      <if test="other != null" >
+        other,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -367,6 +373,9 @@
       </if>
       <if test="externalname != null" >
         #{externalname,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -460,6 +469,9 @@
       <if test="externalname != null" >
         externalname = #{externalname,jdbcType=VARCHAR},
       </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -500,6 +512,7 @@
       addr2 = #{addr2,jdbcType=VARCHAR},
       externalid = #{externalid,jdbcType=VARCHAR},
       externalname = #{externalname,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       activetime = #{activetime,jdbcType=TIMESTAMP},
       refreshtime = #{refreshtime,jdbcType=TIMESTAMP}

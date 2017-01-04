@@ -60,6 +60,8 @@ public class Device {
 
 	private String externalname;
 
+	private String other;
+
 	private Date createtime;
 
 	private Date activetime;
@@ -284,6 +286,14 @@ public class Device {
 
 	public void setExternalname(String externalname) {
 		this.externalname = externalname;
+	}
+
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

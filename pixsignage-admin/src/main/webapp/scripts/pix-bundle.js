@@ -411,6 +411,7 @@ $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 							medialistdtl.image = undefined;
 							medialistdtl.video = undefined;
 							medialistdtl.stream = undefined;
+							medialistdtl.audio = undefined;
 						}
 					} 
 				}

@@ -191,6 +191,14 @@ response.setDateHeader("Expires",0);
 									</div>	
 								</div>
 								<div class="form-group">
+									<label class="col-md-3 control-label">SSID</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="device.other" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
 									<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
 									<div class="col-md-9">
 										<textarea class="form-control" rows="2" name="device.description"></textarea>

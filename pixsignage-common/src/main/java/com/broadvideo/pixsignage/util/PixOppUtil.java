@@ -59,11 +59,12 @@ public class PixOppUtil {
 		return dockerid;
 	}
 
-	public static String init(String type, String key, String checkcode) {
+	public static String init(String type, String key, String checkcode, String svrversion, String dbversion) {
 		try {
-			logger.info("send init message type={}, key={}, checkcode={}", type, key, checkcode);
+			logger.info("send init message type={}, key={}, checkcode={}, svrversion={}, dbversion={}", type, key,
+					checkcode, svrversion, dbversion);
 			String url = "http://180.96.19.239/pixopp/rest/pixsign/init?type=" + type + "&key=" + key + "&checkcode="
-					+ checkcode;
+					+ checkcode + "&svrversion=" + svrversion + "&dbversion=" + dbversion;
 
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
 					.setConnectionRequestTimeout(30000).build();

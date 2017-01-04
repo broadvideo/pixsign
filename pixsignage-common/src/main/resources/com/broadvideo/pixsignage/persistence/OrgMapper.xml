@@ -36,6 +36,7 @@
     <result column="qrcodeflag" property="qrcodeflag" jdbcType="CHAR" />
     <result column="devicepassflag" property="devicepassflag" jdbcType="CHAR" />
     <result column="devicepass" property="devicepass" jdbcType="VARCHAR" />
+    <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="apps" property="apps" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -47,7 +48,7 @@
     orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, calendarflag, videoflag, imageflag, textflag, streamflag, 
     dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
     currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
-    powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, apps, createtime, createstaffid
+    powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, apps, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -111,7 +112,7 @@
       currentdevices, currentstorage, currentdeviceidx, 
       copyright, description, backupvideoid, 
       powerflag, poweron, poweroff, qrcodeflag, 
-      devicepassflag, devicepass, apps, 
+      devicepassflag, devicepass, upgradeflag, apps, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, 
@@ -122,7 +123,7 @@
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{currentdeviceidx,jdbcType=INTEGER}, 
       #{copyright,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{backupvideoid,jdbcType=INTEGER}, 
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, #{qrcodeflag,jdbcType=CHAR}, 
-      #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, 
+      #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, #{upgradeflag,jdbcType=CHAR}, #{apps,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
@@ -229,6 +230,9 @@
       </if>
       <if test="devicepass != null" >
         devicepass,
+      </if>
+      <if test="upgradeflag != null" >
+        upgradeflag,
       </if>
       <if test="apps != null" >
         apps,
@@ -339,6 +343,9 @@
       </if>
       <if test="devicepass != null" >
         #{devicepass,jdbcType=VARCHAR},
+      </if>
+      <if test="upgradeflag != null" >
+        #{upgradeflag,jdbcType=CHAR},
       </if>
       <if test="apps != null" >
         #{apps,jdbcType=VARCHAR},
@@ -453,6 +460,9 @@
       <if test="devicepass != null" >
         devicepass = #{devicepass,jdbcType=VARCHAR},
       </if>
+      <if test="upgradeflag != null" >
+        upgradeflag = #{upgradeflag,jdbcType=CHAR},
+      </if>
       <if test="apps != null" >
         apps = #{apps,jdbcType=VARCHAR},
       </if>
@@ -500,6 +510,7 @@
       qrcodeflag = #{qrcodeflag,jdbcType=CHAR},
       devicepassflag = #{devicepassflag,jdbcType=CHAR},
       devicepass = #{devicepass,jdbcType=VARCHAR},
+      upgradeflag = #{upgradeflag,jdbcType=CHAR},
       apps = #{apps,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
