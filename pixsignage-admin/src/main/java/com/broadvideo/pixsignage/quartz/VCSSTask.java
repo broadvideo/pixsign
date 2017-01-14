@@ -44,7 +44,7 @@ public class VCSSTask {
 			workflag = true;
 
 			List<Msgevent> msgeventList = msgeventMapper.selectList(Msgevent.MsgType_VChannel_Schedule_VCSS,
-					Msgevent.ObjType_1_VChannel, null, Msgevent.Status_Sent, null, null);
+					Msgevent.ObjType_1_VChannel, null, null, Msgevent.Status_Sent);
 			String today = new SimpleDateFormat(CommonConstants.DateFormat_Date)
 					.format(Calendar.getInstance().getTime());
 			for (Msgevent scheduleEvent : msgeventList) {
@@ -64,7 +64,7 @@ public class VCSSTask {
 
 			// Send vchannel schedule message
 			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_VChannel_Schedule_VCSS,
-					Msgevent.ObjType_1_VChannel, null, Msgevent.Status_Wait, null, null);
+					Msgevent.ObjType_1_VChannel, null, null, Msgevent.Status_Wait);
 			for (Msgevent scheduleEvent : msgeventList) {
 				sendScheduleMsg(scheduleEvent);
 			}

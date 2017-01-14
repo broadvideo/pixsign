@@ -11,7 +11,7 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
-		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDeviceGroup" />
+		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegroup" />
 	<collection property="bundleschedules" ofType="com.broadvideo.pixsignage.domain.Bundleschedule"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.BundlescheduleMapper.selectListByDevicegroup" />
   </resultMap>

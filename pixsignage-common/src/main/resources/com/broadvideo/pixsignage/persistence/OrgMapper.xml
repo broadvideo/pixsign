@@ -13,6 +13,7 @@
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
     <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
+    <result column="mscreenflag" property="mscreenflag" jdbcType="CHAR" />
     <result column="videoflag" property="videoflag" jdbcType="CHAR" />
     <result column="imageflag" property="imageflag" jdbcType="CHAR" />
     <result column="textflag" property="textflag" jdbcType="CHAR" />
@@ -23,10 +24,13 @@
     <result column="expireflag" property="expireflag" jdbcType="CHAR" />
     <result column="expiretime" property="expiretime" jdbcType="TIMESTAMP" />
     <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
-    <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
     <result column="currentdevices" property="currentdevices" jdbcType="INTEGER" />
-    <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="currentdeviceidx" property="currentdeviceidx" jdbcType="INTEGER" />
+    <result column="maxmdevices" property="maxmdevices" jdbcType="INTEGER" />
+    <result column="currentmdevices" property="currentmdevices" jdbcType="INTEGER" />
+    <result column="currentmdeviceidx" property="currentmdeviceidx" jdbcType="INTEGER" />
+    <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
+    <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="copyright" property="copyright" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="backupvideoid" property="backupvideoid" jdbcType="INTEGER" />
@@ -45,9 +49,9 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, calendarflag, videoflag, imageflag, textflag, streamflag, 
-    dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, maxstorage, currentdevices, 
-    currentstorage, currentdeviceidx, copyright, description, backupvideoid, 
+    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, 
+    videoflag, imageflag, textflag, streamflag, dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, currentdevices, 
+    currentdeviceidx, maxmdevices, currentmdevices, currentmdeviceidx, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, apps, createtime, createstaffid
   </sql>
   
@@ -103,24 +107,30 @@
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into org (vspid, topbranchid, name, code, 
-      status, orgtype, reviewflag, 
-      touchflag, liftflag, calendarflag, videoflag, 
+    insert into org (vspid, topbranchid, name, 
+      code, status, orgtype, 
+      reviewflag, touchflag, liftflag, 
+      calendarflag, mscreenflag, videoflag, 
       imageflag, textflag, streamflag, 
-      dvbflag, videoinflag, widgetflag, expireflag, 
-      expiretime, maxdevices, maxstorage, 
-      currentdevices, currentstorage, currentdeviceidx, 
+      dvbflag, videoinflag, widgetflag, 
+      expireflag, expiretime, maxdevices, 
+      currentdevices, currentdeviceidx, maxmdevices, 
+      currentmdevices, currentmdeviceidx, 
+      maxstorage, currentstorage, 
       copyright, description, backupvideoid, 
       powerflag, poweron, poweroff, qrcodeflag, 
       devicepassflag, devicepass, upgradeflag, apps, 
       createtime, createstaffid)
-    values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, 
-      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+    values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, 
+      #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, 
+      #{calendarflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
-      #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, #{expireflag,jdbcType=CHAR}, 
-      #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
-      #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{currentdeviceidx,jdbcType=INTEGER}, 
+      #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, 
+      #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
+      #{currentdevices,jdbcType=INTEGER}, #{currentdeviceidx,jdbcType=INTEGER}, #{maxmdevices,jdbcType=INTEGER}, 
+      #{currentmdevices,jdbcType=INTEGER}, #{currentmdeviceidx,jdbcType=INTEGER}, 
+      #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
       #{copyright,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{backupvideoid,jdbcType=INTEGER}, 
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, #{qrcodeflag,jdbcType=CHAR}, 
       #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, #{upgradeflag,jdbcType=CHAR}, #{apps,jdbcType=VARCHAR}, 
@@ -162,6 +172,9 @@
       <if test="calendarflag != null" >
         calendarflag,
       </if>
+      <if test="mscreenflag != null" >
+        mscreenflag,
+      </if>
       <if test="videoflag != null" >
         videoflag,
       </if>
@@ -192,17 +205,26 @@
       <if test="maxdevices != null" >
         maxdevices,
       </if>
-      <if test="maxstorage != null" >
-        maxstorage,
-      </if>
       <if test="currentdevices != null" >
         currentdevices,
       </if>
-      <if test="currentstorage != null" >
-        currentstorage,
-      </if>
       <if test="currentdeviceidx != null" >
         currentdeviceidx,
+      </if>
+      <if test="maxmdevices != null" >
+        maxmdevices,
+      </if>
+      <if test="currentmdevices != null" >
+        currentmdevices,
+      </if>
+      <if test="currentmdeviceidx != null" >
+        currentmdeviceidx,
+      </if>
+      <if test="maxstorage != null" >
+        maxstorage,
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage,
       </if>
       <if test="copyright != null" >
         copyright,
@@ -275,6 +297,9 @@
       <if test="calendarflag != null" >
         #{calendarflag,jdbcType=CHAR},
       </if>
+      <if test="mscreenflag != null" >
+        #{mscreenflag,jdbcType=CHAR},
+      </if>
       <if test="videoflag != null" >
         #{videoflag,jdbcType=CHAR},
       </if>
@@ -305,17 +330,26 @@
       <if test="maxdevices != null" >
         #{maxdevices,jdbcType=INTEGER},
       </if>
-      <if test="maxstorage != null" >
-        #{maxstorage,jdbcType=BIGINT},
-      </if>
       <if test="currentdevices != null" >
         #{currentdevices,jdbcType=INTEGER},
       </if>
-      <if test="currentstorage != null" >
-        #{currentstorage,jdbcType=BIGINT},
-      </if>
       <if test="currentdeviceidx != null" >
         #{currentdeviceidx,jdbcType=INTEGER},
+      </if>
+      <if test="maxmdevices != null" >
+        #{maxmdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentmdevices != null" >
+        #{currentmdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentmdeviceidx != null" >
+        #{currentmdeviceidx,jdbcType=INTEGER},
+      </if>
+      <if test="maxstorage != null" >
+        #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentstorage != null" >
+        #{currentstorage,jdbcType=BIGINT},
       </if>
       <if test="copyright != null" >
         #{copyright,jdbcType=VARCHAR},
@@ -391,6 +425,9 @@
       <if test="calendarflag != null" >
         calendarflag = #{calendarflag,jdbcType=CHAR},
       </if>
+      <if test="mscreenflag != null" >
+        mscreenflag = #{mscreenflag,jdbcType=CHAR},
+      </if>
       <if test="videoflag != null" >
         videoflag = #{videoflag,jdbcType=CHAR},
       </if>
@@ -421,17 +458,26 @@
       <if test="maxdevices != null" >
         maxdevices = #{maxdevices,jdbcType=INTEGER},
       </if>
-      <if test="maxstorage != null" >
-        maxstorage = #{maxstorage,jdbcType=BIGINT},
-      </if>
       <if test="currentdevices != null" >
         currentdevices = #{currentdevices,jdbcType=INTEGER},
       </if>
-      <if test="currentstorage != null" >
-        currentstorage = #{currentstorage,jdbcType=BIGINT},
-      </if>
       <if test="currentdeviceidx != null" >
         currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
+      </if>
+      <if test="maxmdevices != null" >
+        maxmdevices = #{maxmdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentmdevices != null" >
+        currentmdevices = #{currentmdevices,jdbcType=INTEGER},
+      </if>
+      <if test="currentmdeviceidx != null" >
+        currentmdeviceidx = #{currentmdeviceidx,jdbcType=INTEGER},
+      </if>
+      <if test="maxstorage != null" >
+        maxstorage = #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage = #{currentstorage,jdbcType=BIGINT},
       </if>
       <if test="copyright != null" >
         copyright = #{copyright,jdbcType=VARCHAR},
@@ -487,6 +533,7 @@
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},
       calendarflag = #{calendarflag,jdbcType=CHAR},
+      mscreenflag = #{mscreenflag,jdbcType=CHAR},
       videoflag = #{videoflag,jdbcType=CHAR},
       imageflag = #{imageflag,jdbcType=CHAR},
       textflag = #{textflag,jdbcType=CHAR},
@@ -497,10 +544,13 @@
       expireflag = #{expireflag,jdbcType=CHAR},
       expiretime = #{expiretime,jdbcType=TIMESTAMP},
       maxdevices = #{maxdevices,jdbcType=INTEGER},
-      maxstorage = #{maxstorage,jdbcType=BIGINT},
       currentdevices = #{currentdevices,jdbcType=INTEGER},
-      currentstorage = #{currentstorage,jdbcType=BIGINT},
       currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
+      maxmdevices = #{maxmdevices,jdbcType=INTEGER},
+      currentmdevices = #{currentmdevices,jdbcType=INTEGER},
+      currentmdeviceidx = #{currentmdeviceidx,jdbcType=INTEGER},
+      maxstorage = #{maxstorage,jdbcType=BIGINT},
+      currentstorage = #{currentstorage,jdbcType=BIGINT},
       copyright = #{copyright,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       backupvideoid = #{backupvideoid,jdbcType=INTEGER},

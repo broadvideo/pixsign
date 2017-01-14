@@ -240,9 +240,12 @@ function initMyEditModal() {
 	FormValidateOption.rules['org.maxdevices'] = {};
 	FormValidateOption.rules['org.maxdevices']['required'] = true;
 	FormValidateOption.rules['org.maxdevices']['number'] = true;
+	FormValidateOption.rules['org.maxmdevices'] = {};
+	FormValidateOption.rules['org.maxmdevices']['required'] = true;
+	FormValidateOption.rules['org.maxmdevices']['number'] = true;
 	FormValidateOption.rules['org.maxstorage'] = {};
 	FormValidateOption.rules['org.maxstorage']['required'] = true;
-	FormValidateOption.rules['org.maxdevices']['number'] = true;
+	FormValidateOption.rules['org.maxstorage']['number'] = true;
 	
 	FormValidateOption.submitHandler = function(form) {
 		if ($('input[name="org.expireflag"]:checked').val() == 0) {
@@ -329,6 +332,8 @@ function initMyEditModal() {
 		$('.pix-ctrl').css('display', PixCtrl?'':'none');
 		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
@@ -377,6 +382,8 @@ function initMyEditModal() {
 		$('.pix-ctrl').css('display', PixCtrl?'':'none');
 		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');

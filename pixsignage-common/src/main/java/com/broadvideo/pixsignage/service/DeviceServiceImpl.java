@@ -32,13 +32,14 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private OrgMapper orgMapper;
 
-	public int selectCount(String orgid, String branchid, String status, String devicegroupid, String search) {
-		return deviceMapper.selectCount(orgid, branchid, status, devicegroupid, search);
+	public int selectCount(String orgid, String branchid, String type, String status, String devicegroupid,
+			String search) {
+		return deviceMapper.selectCount(orgid, branchid, type, status, devicegroupid, search);
 	}
 
-	public List<Device> selectList(String orgid, String branchid, String status, String devicegroupid, String search,
-			String start, String length, String order) {
-		return deviceMapper.selectList(orgid, branchid, status, devicegroupid, search, start, length, order);
+	public List<Device> selectList(String orgid, String branchid, String type, String status, String devicegroupid,
+			String search, String start, String length, String order) {
+		return deviceMapper.selectList(orgid, branchid, type, status, devicegroupid, search, start, length, order);
 	}
 
 	public Device selectByPrimaryKey(String deviceid) {

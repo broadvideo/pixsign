@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.MediagridMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Mediagrid" >
+    <id column="mediagridid" property="mediagridid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="gridlayoutcode" property="gridlayoutcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="xcount" property="xcount" jdbcType="INTEGER" />
+    <result column="ycount" property="ycount" jdbcType="INTEGER" />
+    <result column="ratio" property="ratio" jdbcType="CHAR" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	<collection property="mediagriddtls" ofType="com.broadvideo.pixsignage.domain.Mediagriddtl"
+		column="{mediagridid=mediagridid}" select="com.broadvideo.pixsignage.persistence.MediagriddtlMapper.selectList" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    mediagridid, orgid, branchid, gridlayoutcode, name, xcount, ycount, ratio, width, height, intervaltime, snapshot, 
+    status, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from mediagrid
+    where mediagridid = #{mediagridid}
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from mediagrid 
+    where status != '9' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
+    </if>
+    <if test="search != null">
+      and name like #{search}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from mediagrid
+    where status != '9' 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
+    </if>
+    <if test="search != null">
+      and name like #{search}
+    </if>
+    order by mediagridid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectWaiting2ActiveList" resultMap="BaseResultMap">
+    select mg.* from
+    mediagrid mg,
+    (select count(1) c1,mg.mediagridid from mediagrid mg, mediagriddtl mgd, mmedia mm
+      where mg.mediagridid=mgd.mediagridid
+      and mgd.mmediaid=mm.mmediaid
+      and mm.status=1
+      group by mediagridid) t1,
+    (select count(1) c2,mg.mediagridid from mediagrid mg, mediagriddtl mgd, mmedia mm
+      where mg.mediagridid=mgd.mediagridid
+      and mgd.mmediaid=mm.mmediaid
+      group by mediagridid) t2
+    where mg.mediagridid = t1.mediagridid
+    and t1.mediagridid = t2.mediagridid
+    and c1 = c2
+    and c1 > 0
+    and mg.status=0
+  </select>
+
+  <select id="selectWaiting2ErrorList" resultMap="BaseResultMap">
+    select mg.mediagridid from
+    mediagrid mg,
+    (select count(1) c,mg.mediagridid from mediagrid mg, mediagriddtl mgd, mmedia mm
+      where mg.mediagridid=mgd.mediagridid
+      and mgd.mmediaid=mm.mmediaid
+      and mm.status=2
+      group by mediagridid) t
+      where mg.mediagridid = t.mediagridid
+      and c > 0
+    and mg.status=0
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update mediagrid set status = '9'
+    where mediagridid = #{mediagridid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Mediagrid" >
+    <selectKey resultType="java.lang.Integer" keyProperty="mediagridid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mediagrid (orgid, branchid, 
+      gridlayoutcode, name, xcount, 
+      ycount, ratio, width, 
+      height, intervaltime, 
+      snapshot, status, createtime
+      )
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, 
+      #{gridlayoutcode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{xcount,jdbcType=INTEGER}, 
+      #{ycount,jdbcType=INTEGER}, #{ratio,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, 
+      #{height,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, 
+      #{snapshot,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Mediagrid" >
+    <selectKey resultType="java.lang.Integer" keyProperty="mediagridid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mediagrid
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="gridlayoutcode != null" >
+        gridlayoutcode,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="xcount != null" >
+        xcount,
+      </if>
+      <if test="ycount != null" >
+        ycount,
+      </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime,
+      </if>
+      <if test="snapshot != null" >
+        snapshot,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="gridlayoutcode != null" >
+        #{gridlayoutcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="xcount != null" >
+        #{xcount,jdbcType=INTEGER},
+      </if>
+      <if test="ycount != null" >
+        #{ycount,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Mediagrid" >
+    update mediagrid
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="gridlayoutcode != null" >
+        gridlayoutcode = #{gridlayoutcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="xcount != null" >
+        xcount = #{xcount,jdbcType=INTEGER},
+      </if>
+      <if test="ycount != null" >
+        ycount = #{ycount,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime = #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mediagridid = #{mediagridid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Mediagrid" >
+    update mediagrid
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      gridlayoutcode = #{gridlayoutcode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      xcount = #{xcount,jdbcType=INTEGER},
+      ycount = #{ycount,jdbcType=INTEGER},
+      ratio = #{ratio,jdbcType=CHAR},
+      width = #{width,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where mediagridid = #{mediagridid,jdbcType=INTEGER}
+  </update>
+</mapper>

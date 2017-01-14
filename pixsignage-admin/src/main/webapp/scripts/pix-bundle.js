@@ -388,7 +388,6 @@ $('#PushModal').on('shown.bs.modal', function (e) {
 //在设计对话框中进行提交
 $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 	if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
-
 		$('#snapshot_div').show();
 		redrawBundlePreview($('#snapshot_div'), CurrentBundle, 512, 0);
 		html2canvas($('#snapshot_div'), {
@@ -532,7 +531,8 @@ $('#DeviceTable').dataTable({
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'branchid','value':CurrentDeviceBranchid });
-		aoData.push({'name':'devicegroupid','value':'0' })
+		aoData.push({'name':'devicegroupid','value':'0' });
+		aoData.push({'name':'type','value':'1' });
 	}
 });
 jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');

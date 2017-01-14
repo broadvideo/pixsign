@@ -31,11 +31,11 @@ public class ActivemqNormalTask {
 			workflag = true;
 
 			List<Msgevent> msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Bundle_Schedule,
-					Msgevent.ObjType_1_Device, null, Msgevent.Status_Wait, null, null);
+					Msgevent.ObjType_1_Device, null, null, Msgevent.Status_Wait);
 			handleMsgevent(msgeventList);
 
-			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_DeviceGroup,
-					null, Msgevent.Status_Wait, null, null);
+			msgeventList = msgeventMapper.selectList(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Devicegroup,
+					null, null, Msgevent.Status_Wait);
 			handleMsgevent(msgeventList);
 		} catch (Exception e) {
 			logger.error("ActivemqNormalTask Quartz Task error: {}", e.getMessage());
@@ -58,7 +58,7 @@ public class ActivemqNormalTask {
 			String topic = "";
 			if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Device)) {
 				topic = "device-" + msgevent.getObjid1();
-			} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_DeviceGroup)) {
+			} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Devicegroup)) {
 				topic = "group-" + msgevent.getObjid1();
 			}
 			ActiveMQUtil.publish(topic, msgJson.toString());

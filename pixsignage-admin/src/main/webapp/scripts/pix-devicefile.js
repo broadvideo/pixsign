@@ -9,7 +9,8 @@ function refreshLeftTab() {
 			type : 'POST',
 			url : 'device!list.action',
 			data : {
-				devicegroupid: 0
+				devicegroupid: 0,
+				type: 1,
 			},
 			success : function(data, status) {
 				if (data.errorcode == 0) {
@@ -48,7 +49,8 @@ function refreshLeftTab() {
 			type : 'POST',
 			url : 'device!list.action',
 			data : {
-				devicegroupid: currentDevicegroupid
+				devicegroupid: currentDevicegroupid,
+				type: 1
 			},
 			success : function(data, status) {
 				if (data.errorcode == 0) {

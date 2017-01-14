@@ -23,25 +23,25 @@
     select 
     <include refid="Base_Column_List" />
     from msgevent
-    where msgeventid = '${msgeventid}'
+    where msgeventid = #{msgeventid}
   </select>
   
   <select id="selectList" resultMap="BaseResultMap">
     select * from msgevent
-    where msgtype = '${msgtype}'
+    where msgtype = #{msgtype}
     <if test="objtype1 != null">
-      and objtype1 = '${objtype1}'
+      and objtype1 = #{objtype1}
+    </if>
+    <if test="objid1 != null">
+      and objid1 = #{objid1}
     </if>
     <if test="objtype2 != null">
-      and objtype2 = '${objtype2}'
+      and objtype2 = #{objtype2}
     </if>
     <if test="status != null">
-      and status = '${status}'
+      and status = #{status}
     </if>
     order by createtime
-    <if test="start != null and length != null">
-      limit ${start}, ${length}
-    </if>
   </select>
 
   <select id="selectVchannelVCSSEvent" resultMap="BaseResultMap">
@@ -61,7 +61,7 @@
 
   <delete id="deleteByPrimaryKey" >
     delete from msgevent
-    where msgeventid = '${msgeventid}'
+    where msgeventid = #{msgeventid}
   </delete>
   
   <delete id="deleteByDtl" >

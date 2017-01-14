@@ -106,7 +106,7 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
-										<div class="form-group touch-ctrl">
+										<div class="form-group calendar-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.org.calendarflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
@@ -114,6 +114,17 @@ response.setDateHeader("Expires",0);
 												</label>
 												<label class="radio-inline">
 													<input type="radio" name="org.calendarflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group mscreen-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.mscreenflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.mscreenflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.mscreenflag" value="1"> <spring:message code="global.on"/>
 												</label>
 											</div>
 										</div>
@@ -169,6 +180,14 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group mscreen-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.maxmdevices"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="org.maxmdevices" />
 												</div>
 											</div>
 										</div>
@@ -316,6 +335,8 @@ response.setDateHeader("Expires",0);
 var PixCtrl = <%=(session_vsp != null && session_vsp.getCode().equals("default"))%>;
 var ReviewCtrl = <%=(session_vsp != null && session_vsp.getReviewflag().equals("1"))%>;
 var TouchCtrl = <%=(session_vsp != null && session_vsp.getTouchflag().equals("1"))%>;
+var CalendarCtrl = <%=(session_vsp != null && session_vsp.getCalendarflag().equals("1"))%>;
+var MscreenCtrl = <%=(session_vsp != null && session_vsp.getMscreenflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
 var StreamCtrl = <%=(session_vsp != null && session_vsp.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_vsp != null && session_vsp.getDvbflag().equals("1"))%>;

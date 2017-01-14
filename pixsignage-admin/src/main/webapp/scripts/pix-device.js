@@ -87,6 +87,7 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'type','value':'1' });
 			aoData.push({'name':'status','value':'1' });
 		}
 	});
@@ -121,6 +122,7 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'type','value':'1' });
 			aoData.push({'name':'status','value':'0' });
 		}
 	});

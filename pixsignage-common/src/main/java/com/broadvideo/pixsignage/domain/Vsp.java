@@ -20,6 +20,8 @@ public class Vsp {
 
 	private String calendarflag;
 
+	private String mscreenflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -100,6 +102,14 @@ public class Vsp {
 
 	public void setCalendarflag(String calendarflag) {
 		this.calendarflag = calendarflag;
+	}
+
+	public String getMscreenflag() {
+		return mscreenflag;
+	}
+
+	public void setMscreenflag(String mscreenflag) {
+		this.mscreenflag = mscreenflag;
 	}
 
 	public String getStreamflag() {

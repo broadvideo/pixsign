@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.MmediadtlMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Mmediadtl" >
+    <id column="mmediadtlid" property="mmediadtlid" jdbcType="INTEGER" />
+    <result column="mmediaid" property="mmediaid" jdbcType="INTEGER" />
+    <result column="xpos" property="xpos" jdbcType="INTEGER" />
+    <result column="ypos" property="ypos" jdbcType="INTEGER" />
+    <result column="fileidx" property="fileidx" jdbcType="VARCHAR" />
+    <result column="filepath" property="filepath" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    mmediadtlid, mmediaid, xpos, ypos, fileidx, filepath, filename, size, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from mmediadtl
+    where mmediadtlid = #{mmediadtlid}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from mmediadtl
+    where mmediaid = #{mmediaid}
+  </select>
+  
+  <select id="selectByPos" resultMap="BaseResultMap">
+    select * from mmediadtl
+    where mmediaid = #{mmediaid}
+    and xpos = #{xpos}
+    and ypos = #{ypos}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from mmediadtl
+    where mmediadtlid = #{mmediadtlid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Mmediadtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="mmediadtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mmediadtl (mmediaid, xpos, ypos, 
+      fileidx, filepath, filename, 
+      size, createtime)
+    values (#{mmediaid,jdbcType=INTEGER}, #{xpos,jdbcType=INTEGER}, #{ypos,jdbcType=INTEGER}, 
+      #{fileidx,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
+      #{size,jdbcType=BIGINT}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Mmediadtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="mmediadtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mmediadtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mmediaid != null" >
+        mmediaid,
+      </if>
+      <if test="xpos != null" >
+        xpos,
+      </if>
+      <if test="ypos != null" >
+        ypos,
+      </if>
+      <if test="fileidx != null" >
+        fileidx,
+      </if>
+      <if test="filepath != null" >
+        filepath,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mmediaid != null" >
+        #{mmediaid,jdbcType=INTEGER},
+      </if>
+      <if test="xpos != null" >
+        #{xpos,jdbcType=INTEGER},
+      </if>
+      <if test="ypos != null" >
+        #{ypos,jdbcType=INTEGER},
+      </if>
+      <if test="fileidx != null" >
+        #{fileidx,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Mmediadtl" >
+    update mmediadtl
+    <set >
+      <if test="mmediaid != null" >
+        mmediaid = #{mmediaid,jdbcType=INTEGER},
+      </if>
+      <if test="xpos != null" >
+        xpos = #{xpos,jdbcType=INTEGER},
+      </if>
+      <if test="ypos != null" >
+        ypos = #{ypos,jdbcType=INTEGER},
+      </if>
+      <if test="fileidx != null" >
+        fileidx = #{fileidx,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null" >
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mmediadtlid = #{mmediadtlid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Mmediadtl" >
+    update mmediadtl
+    set mmediaid = #{mmediaid,jdbcType=INTEGER},
+      xpos = #{xpos,jdbcType=INTEGER},
+      ypos = #{ypos,jdbcType=INTEGER},
+      fileidx = #{fileidx,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
+      size = #{size,jdbcType=BIGINT},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where mmediadtlid = #{mmediadtlid,jdbcType=INTEGER}
+  </update>
+</mapper>

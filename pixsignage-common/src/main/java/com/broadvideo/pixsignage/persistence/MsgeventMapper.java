@@ -10,8 +10,8 @@ public interface MsgeventMapper {
 	Msgevent selectByPrimaryKey(@Param(value = "msgeventid") String msgeventid);
 
 	List<Msgevent> selectList(@Param(value = "msgtype") String msgtype, @Param(value = "objtype1") String objtype1,
-			@Param(value = "objtype2") String objtype2, @Param(value = "status") String status,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "objid1") String objid1, @Param(value = "objtype2") String objtype2,
+			@Param(value = "status") String status);
 
 	Msgevent selectVchannelVCSSEvent();
 

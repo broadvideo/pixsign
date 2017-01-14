@@ -327,6 +327,7 @@ function initDeviceModal() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':LeftBranchid });
+			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 
@@ -366,7 +367,8 @@ function initDeviceModal() {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push( {'name':'branchid','value':RightBranchid })
+			aoData.push({'name':'branchid','value':RightBranchid });
+			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 

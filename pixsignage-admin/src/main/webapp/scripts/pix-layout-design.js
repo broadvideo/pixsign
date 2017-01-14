@@ -884,7 +884,6 @@ $.ajax({
 			
 			var folderTreeDivData = [];
 			createFolderTreeData(folders, folderTreeDivData);
-			console.log($('.foldertree').length);
 			$('.foldertree').each(function() {
 				$(this).jstree('destroy');
 				$(this).jstree({

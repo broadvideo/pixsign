@@ -969,7 +969,7 @@ public class BundleServiceImpl implements BundleService {
 		String topic = "";
 		if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Device)) {
 			topic = "device-" + msgevent.getObjid1();
-		} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_DeviceGroup)) {
+		} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Devicegroup)) {
 			topic = "group-" + msgevent.getObjid1();
 		}
 

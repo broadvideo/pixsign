@@ -49,7 +49,6 @@ public class SystemInitServlet extends HttpServlet {
 		}
 
 		try {
-
 			String hostid = PixOppUtil.getHostID();
 			String dockerid = PixOppUtil.getDockerID();
 			String type = "0";
@@ -73,10 +72,12 @@ public class SystemInitServlet extends HttpServlet {
 					if (dataJson != null) {
 						String svrurl = dataJson.getString("svrurl");
 						if (svrurl.length() > 0) {
-							String shell = "/usr/local/bin/pixsignage-install " + svrurl + " "
-									+ CommonConfig.CURRENT_DBVERSION + " pixsignage-db";
-							logger.info("begin to run {}", shell);
-							CommonUtil.execCommand(shell);
+							// String shell = "/usr/local/bin/pixsignage-install
+							// " + svrurl + " "
+							// + CommonConfig.CURRENT_DBVERSION + "
+							// pixsignage-db";
+							// logger.info("begin to run {}", shell);
+							// CommonUtil.execCommand(shell);
 						}
 
 						ServletContext servletContext = this.getServletContext();
@@ -131,6 +132,10 @@ public class SystemInitServlet extends HttpServlet {
 		}
 
 		try {
+			if (System.getProperties().getProperty("os.name").startsWith("Windows")) {
+				CommonConfig.CONFIG_FFMPEG_CMD = "/opt/pix/ffmpeg/bin/ffmpeg.exe";
+			}
+
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload"));
@@ -153,6 +158,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/temp"));
 
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/mediagrid"));
 		} catch (Exception ex) {
 			logger.error("", ex);
 		}

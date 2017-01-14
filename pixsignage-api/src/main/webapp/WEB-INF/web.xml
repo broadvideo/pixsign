@@ -26,7 +26,7 @@
 		<param-value>/WEB-INF/applicationContext*.xml,classpath*:applicationContext*.xml</param-value>
 	</context-param>
   
-  <!-- jersey servlet -->
+	<!-- jersey servlet -->
 	<servlet>
 		<servlet-name>SpringApplication</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -36,7 +36,7 @@
 		</init-param>
 		<init-param>
 		   <param-name>jersey.config.server.provider.classnames</param-name>
-		   <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature;com.broadvideo.pixsignage.rest.PixsignageService</param-value>
+		   <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature;com.broadvideo.pixsignage.rest.PixsignageService;com.broadvideo.pixsignage.rest.MultisignService</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -44,8 +44,8 @@
 		<servlet-name>SpringApplication</servlet-name>
 		<url-pattern>/service/*</url-pattern>
 	</servlet-mapping>
-  
-  <welcome-file-list>
-	<welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>

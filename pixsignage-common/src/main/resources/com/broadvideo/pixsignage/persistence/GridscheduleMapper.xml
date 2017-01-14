@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.GridscheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Gridschedule" >
+    <id column="gridscheduleid" property="gridscheduleid" jdbcType="INTEGER" />
+    <result column="devicegridid" property="devicegridid" jdbcType="INTEGER" />
+    <result column="playmode" property="playmode" jdbcType="CHAR" />
+    <result column="playdate" property="playdate" jdbcType="DATE" />
+    <result column="starttime" property="starttime" jdbcType="TIME" />
+    <result column="endtime" property="endtime" jdbcType="TIME" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	<collection property="gridscheduledtls" ofType="com.broadvideo.pixsignage.domain.Gridscheduledtl"
+		column="{gridscheduleid=gridscheduleid}" select="com.broadvideo.pixsignage.persistence.GridscheduledtlMapper.selectList" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    gridscheduleid, devicegridid, playmode, playdate, starttime, endtime, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from gridschedule
+    where gridscheduleid = #{gridscheduleid}
+  </select>
+  
+  <select id="selectListByDevicegrid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from gridschedule
+    where devicegridid = #{devicegridid}
+    order by playdate, starttime
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from gridschedule
+    where devicegridid = #{devicegridid}
+    <if test="playmode != null">
+      and playmode = #{playmode}
+    </if>
+    <if test="fromdate != null">
+      and playdate &gt;= '${fromdate}'
+    </if>
+    <if test="todate != null">
+      and playdate &lt;= '${todate}'
+    </if>
+    order by playdate, starttime
+  </select>
+  
+  <select id="selectDevicegridByMediagrid" resultType="Integer" >
+    select 
+    distinct devicegridid
+    from gridschedule
+    where mediagridid = #{mediagridid}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from gridschedule
+    where gridscheduleid = #{gridscheduleid}
+  </delete>
+  
+  <delete id="deleteByDtl" >
+    delete from gridschedule
+    where devicegridid = #{devicegridid} 
+    <if test="playmode != null">
+      and playmode = #{playmode}
+    </if>
+    <if test="playdate != null">
+      and playdate = #{playdate}
+    </if>
+    <if test="starttime != null">
+      and starttime = #{starttime}
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Gridschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="gridscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gridschedule (devicegridid, playmode, playdate, 
+      starttime, endtime, createtime
+      )
+    values (#{devicegridid,jdbcType=INTEGER}, #{playmode,jdbcType=CHAR}, #{playdate,jdbcType=DATE}, 
+      #{starttime,jdbcType=TIME}, #{endtime,jdbcType=TIME}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Gridschedule" >
+    <selectKey resultType="java.lang.Integer" keyProperty="gridscheduleid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gridschedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="devicegridid != null" >
+        devicegridid,
+      </if>
+      <if test="playmode != null" >
+        playmode,
+      </if>
+      <if test="playdate != null" >
+        playdate,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="devicegridid != null" >
+        #{devicegridid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIME},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Gridschedule" >
+    update gridschedule
+    <set >
+      <if test="devicegridid != null" >
+        devicegridid = #{devicegridid,jdbcType=INTEGER},
+      </if>
+      <if test="playmode != null" >
+        playmode = #{playmode,jdbcType=CHAR},
+      </if>
+      <if test="playdate != null" >
+        playdate = #{playdate,jdbcType=DATE},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIME},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIME},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where gridscheduleid = #{gridscheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Gridschedule" >
+    update gridschedule
+    set devicegridid = #{devicegridid,jdbcType=INTEGER},
+      playmode = #{playmode,jdbcType=CHAR},
+      playdate = #{playdate,jdbcType=DATE},
+      starttime = #{starttime,jdbcType=TIME},
+      endtime = #{endtime,jdbcType=TIME},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where gridscheduleid = #{gridscheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

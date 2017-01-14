@@ -31,7 +31,7 @@
     where bundlescheduledtlid = #{bundlescheduledtlid}
   </delete>
   
-    <delete id="deleteByDtl" >
+  <delete id="deleteByDtl" >
     delete bsd from bundleschedule bs, bundlescheduledtl bsd
     where bs.bundlescheduleid = bsd.bundlescheduleid
     and bs.bindtype = #{bindtype} and bs.bindid = #{bindid}

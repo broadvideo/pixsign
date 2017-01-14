@@ -451,7 +451,8 @@ function initTab4() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurrentDeviceBranchid });
-			aoData.push({'name':'devicegroupid','value':'0' })
+			aoData.push({'name':'devicegroupid','value':'0' });
+			aoData.push({'name':'type','value':'1' });
 		}
 	});
 	jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');

@@ -10,13 +10,18 @@ public interface DeviceMapper {
 	Device selectByPrimaryKey(@Param(value = "deviceid") String deviceid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "status") String status, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "search") String search);
+			@Param(value = "type") String type, @Param(value = "status") String status,
+			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "search") String search);
 
 	List<Device> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "status") String status, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "search") String search, @Param(value = "start") String start,
-			@Param(value = "length") String length, @Param(value = "order") String order);
+			@Param(value = "type") String type, @Param(value = "status") String status,
+			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "search") String search,
+			@Param(value = "start") String start, @Param(value = "length") String length,
+			@Param(value = "order") String order);
+
+	List<Device> selectByDevicegroup(@Param(value = "devicegroupid") String devicegroupid);
+
+	List<Device> selectByDevicegrid(@Param(value = "devicegridid") String devicegridid);
 
 	Device selectByHardkey(@Param(value = "hardkey") String hardkey);
 

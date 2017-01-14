@@ -247,7 +247,8 @@ function initDevicegpDtlModal() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
-			aoData.push({'name':'devicegroupid','value':'0' })
+			aoData.push({'name':'devicegroupid','value':'0' });
+			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 
@@ -289,7 +290,8 @@ function initDevicegpDtlModal() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
-			aoData.push( {'name':'devicegroupid','value':currentDevicegroupid })
+			aoData.push({'name':'devicegroupid','value':currentDevicegroupid });
+			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 

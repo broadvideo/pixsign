@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Device {
+	public final static String Type_Sign = "1";
+	public final static String Type_Multisign = "2";
+
 	private Integer deviceid;
 
 	private Integer orgid;
@@ -67,6 +70,12 @@ public class Device {
 	private Date activetime;
 
 	private Date refreshtime;
+
+	private Integer devicegridid;
+
+	private Integer xpos;
+
+	private Integer ypos;
 
 	private Devicegroup devicegroup;
 
@@ -324,6 +333,30 @@ public class Device {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setRefreshtime(Date refreshtime) {
 		this.refreshtime = refreshtime;
+	}
+
+	public Integer getDevicegridid() {
+		return devicegridid;
+	}
+
+	public void setDevicegridid(Integer devicegridid) {
+		this.devicegridid = devicegridid;
+	}
+
+	public Integer getXpos() {
+		return xpos;
+	}
+
+	public void setXpos(Integer xpos) {
+		this.xpos = xpos;
+	}
+
+	public Integer getYpos() {
+		return ypos;
+	}
+
+	public void setYpos(Integer ypos) {
+		this.ypos = ypos;
 	}
 
 	public Devicegroup getDevicegroup() {

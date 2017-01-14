@@ -29,9 +29,6 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
-import com.gif4j.GifEncoder;
-import com.gif4j.GifFrame;
-import com.gif4j.GifImage;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -102,9 +99,10 @@ public class VideoAction extends BaseDatatableAction {
 					video.setFilename(newFileName);
 					try {
 						// Generate preview gif
-						String cmd = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + fileToCreate
-								+ " -r 1 -ss 1 -t 15 -f image2 " + CommonConfig.CONFIG_TEMP_HOME + "/"
-								+ video.getVideoid() + "-%03d.jpg";
+						FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
+						String cmd = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
+								+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+								+ "/video/snapshot/" + video.getVideoid() + ".jpg";
 						logger.info("Begin to generate preview and thumbnail: " + cmd);
 						Process process = Runtime.getRuntime().exec(cmd);
 						InputStream fis = process.getInputStream();
@@ -116,48 +114,13 @@ public class VideoAction extends BaseDatatableAction {
 						br.close();
 						fis.close();
 
-						List<String> jpgList = new ArrayList<String>();
-						for (int j = 1; j < 999; j++) {
-							String jpgName = video.getVideoid() + "-" + String.format("%03d", j) + ".jpg";
-							if (new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgName).exists()) {
-								jpgList.add(jpgName);
-							} else {
-								break;
-							}
-						}
-
-						if (jpgList.size() > 0) {
-							GifImage gifImage = new GifImage();
-							gifImage.setDefaultDelay(100);
-							for (int j = 0; j < jpgList.size(); j++) {
-								BufferedImage img = ImageIO
-										.read(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)));
-								gifImage.addGifFrame(new GifFrame(img));
-							}
-							GifEncoder.encode(gifImage, new File(
-									CommonConfig.CONFIG_PIXDATA_HOME + "/video/gif/" + video.getVideoid() + ".gif"));
-							logger.info("Finish preview generating.");
-
-							// Generate thumbnail
-							File srcFile = new File(
-									CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1));
-							File destFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/"
-									+ video.getVideoid() + ".jpg");
-							if (jpgList.size() >= 6) {
-								srcFile = new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5));
-							}
-							FileUtils.copyFile(srcFile, destFile);
-							BufferedImage img = ImageIO.read(destFile);
-							video.setWidth(img.getWidth());
-							video.setHeight(img.getHeight());
-							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
-
-							for (int j = 0; j < jpgList.size(); j++) {
-								new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
-							}
-							logger.info("Finish thumbnail generating.");
-						}
-
+						File destFile = new File(
+								CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid() + ".jpg");
+						BufferedImage img = ImageIO.read(destFile);
+						video.setWidth(img.getWidth());
+						video.setHeight(img.getHeight());
+						video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
+						logger.info("Finish thumbnail generating.");
 					} catch (IOException ex) {
 						logger.info("Video parse error, file={}", mymediaFileName[i], ex);
 					}

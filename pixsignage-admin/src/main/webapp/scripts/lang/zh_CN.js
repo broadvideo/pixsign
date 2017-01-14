@@ -74,6 +74,8 @@ var common = {
 		idle: '空闲',
 		once: '单次',
 		daily: '每日',
+		status_0: '待处理',
+		status_1: '有效',
 		
 		review_wait: '等待审核',
 		review_passed: '审核通过',
@@ -204,11 +206,9 @@ var common = {
 		detail_select: '请选择对应内容',
 		device_missed: '需要选择终端或者终端组',
 		
-		device_layoutschedule_zero: '当前终端没有布局计划，请新增计划',
-		device_bundleschedule_zero: '当前终端没有节目包计划，请新增计划',
-		devicegp_layoutschedule_zero: '当前终端组没有布局计划，请新增计划',
-		devicegp_bundleschedule_zero: '当前终端组没有节目包计划，请新增计划',
-		regionschedule_zero: '当前区域没有播放计划，请新增计划',
+		device_bundleschedule_zero: '当前终端没有播出计划，请新增',
+		devicegp_bundleschedule_zero: '当前终端组没有播出计划，请新增',
+		devicegrid_schedule_zero: '当前终端格没有播出计划，请新增',
 		
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',

@@ -30,7 +30,7 @@
     select 
     <include refid="Base_Column_List" />
     from bundleschedule
-    where bundlescheduleid = '${bundlescheduleid}'
+    where bundlescheduleid = #{bundlescheduleid}
   </select>
   
   <select id="selectListByDevice" resultMap="BaseResultMap" >
@@ -53,9 +53,9 @@
     select 
     <include refid="Base_Column_List" />
     from bundleschedule
-    where bindtype = '${bindtype}' and bindid = '${bindid}'
+    where bindtype = #{bindtype} and bindid = #{bindid}
     <if test="playmode != null">
-      and playmode = '${playmode}'
+      and playmode = #{playmode}
     </if>
     <if test="fromdate != null">
       and playdate &gt;= '${fromdate}'
@@ -83,20 +83,21 @@
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from bundleschedule
-    where bundlescheduleid = '${bundlescheduleid}'
+    where bundlescheduleid = #{bundlescheduleid}
   </delete>
   
-    <delete id="deleteByDtl" >
+  <delete id="deleteByDtl" >
     delete from bundleschedule
-    where bindtype = '${bindtype}' and bindid = '${bindid}'
+    where bindtype = #{bindtype} 
+    and bindid = #{bindid}
     <if test="playmode != null">
-      and playmode = '${playmode}'
+      and playmode = #{playmode}
     </if>
     <if test="playdate != null">
-      and playdate = '${playdate}'
+      and playdate = #{playdate}
     </if>
     <if test="starttime != null">
-      and starttime = '${starttime}'
+      and starttime = #{starttime}
     </if>
   </delete>
 

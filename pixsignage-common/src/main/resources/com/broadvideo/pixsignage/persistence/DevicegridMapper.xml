@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.DevicegridMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Devicegrid" >
+    <id column="devicegridid" property="devicegridid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="gridlayoutcode" property="gridlayoutcode" jdbcType="VARCHAR" />
+    <result column="xcount" property="xcount" jdbcType="INTEGER" />
+    <result column="ycount" property="ycount" jdbcType="INTEGER" />
+    <result column="ratio" property="ratio" jdbcType="CHAR" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
+		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegrid" />
+	<collection property="gridschedules" ofType="com.broadvideo.pixsignage.domain.Gridschedule"
+		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.GridscheduleMapper.selectListByDevicegrid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    devicegridid, orgid, branchid, name, gridlayoutcode, xcount, ycount, ratio, width, height, status, 
+    description, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from devicegrid
+    where devicegridid = #{devicegridid}
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from devicegrid 
+    where status = 1
+    <if test="orgid != null">
+      and orgid = '${orgid}'
+    </if>
+    <if test="branchid != null">
+      and branchid = '${branchid}'
+    </if>
+    <if test="search != null">
+      and name like '%${search}%'
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from devicegrid
+    where status=1
+    <if test="orgid != null">
+      and orgid = '${orgid}'
+    </if>
+    <if test="branchid != null">
+      and branchid = '${branchid}'
+    </if>
+    <if test="search != null">
+      and name like '%${search}%'
+    </if>
+    order by devicegridid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from devicegrid
+    where devicegridid = #{devicegridid}
+  </delete>
+  
+  <update id="unbindDevices" >
+    update device
+    set devicegridid = 0,
+    xpos=0, ypos=0 
+    where devicegridid = #{devicegridid}
+  </update>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicegrid" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicegridid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicegrid (orgid, branchid, name, 
+      gridlayoutcode, xcount, ycount, 
+      ratio, width, height, 
+      status, description, createtime)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{gridlayoutcode,jdbcType=VARCHAR}, #{xcount,jdbcType=INTEGER}, #{ycount,jdbcType=INTEGER}, 
+      #{ratio,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Devicegrid" >
+    <selectKey resultType="java.lang.Integer" keyProperty="devicegridid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into devicegrid
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="gridlayoutcode != null" >
+        gridlayoutcode,
+      </if>
+      <if test="xcount != null" >
+        xcount,
+      </if>
+      <if test="ycount != null" >
+        ycount,
+      </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gridlayoutcode != null" >
+        #{gridlayoutcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xcount != null" >
+        #{xcount,jdbcType=INTEGER},
+      </if>
+      <if test="ycount != null" >
+        #{ycount,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Devicegrid" >
+    update devicegrid
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gridlayoutcode != null" >
+        gridlayoutcode = #{gridlayoutcode,jdbcType=VARCHAR},
+      </if>
+      <if test="xcount != null" >
+        xcount = #{xcount,jdbcType=INTEGER},
+      </if>
+      <if test="ycount != null" >
+        ycount = #{ycount,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where devicegridid = #{devicegridid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Devicegrid" >
+    update devicegrid
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      gridlayoutcode = #{gridlayoutcode,jdbcType=VARCHAR},
+      xcount = #{xcount,jdbcType=INTEGER},
+      ycount = #{ycount,jdbcType=INTEGER},
+      ratio = #{ratio,jdbcType=CHAR},
+      width = #{width,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where devicegridid = #{devicegridid,jdbcType=INTEGER}
+  </update>
+</mapper>

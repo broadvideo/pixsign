@@ -163,8 +163,8 @@ public class PixboxTask {
 								FileUtils.forceDelete(new File(newFilePath));
 							}
 							if (oldFilePath.endsWith(".m3u8")) {
-								String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + oldFilePath
-										+ " -c copy " + newFilePath;
+								String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + oldFilePath + " -c copy "
+										+ newFilePath;
 								logger.info("Begin to convert m3u8 to mp4: {}", command);
 								int commandResult = CommonUtil.execCommand(command);
 								if (commandResult > 0) {
@@ -176,7 +176,7 @@ public class PixboxTask {
 							}
 
 							// Generate preview gif
-							String command = CommonConfig.CONFIG_FFMPEG_HOME + "/ffmpeg -i " + newFilePath
+							String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + newFilePath
 									+ " -r 1 -ss 1 -t 15 -f image2 " + CommonConfig.CONFIG_TEMP_HOME + "/"
 									+ video.getVideoid() + "-%03d.jpg";
 							logger.info("Begin to generate preview and thumbnail: {}", command);

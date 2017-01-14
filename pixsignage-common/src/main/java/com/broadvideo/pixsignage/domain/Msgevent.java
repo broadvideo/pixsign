@@ -6,9 +6,12 @@ import org.apache.struts2.json.annotations.JSON;
 
 public class Msgevent {
 	public final static String MsgType_Bundle_Schedule = "0";
+	public final static String MsgType_Grid_Schedule = "1";
+
 	public final static String MsgType_VChannel_Info_VCSS = "3";
 	public final static String MsgType_VChannel_Schedule_VCSS = "4";
 	public final static String MsgType_VChannel_Info_PixBox = "5";
+
 	public final static String MsgType_Device_Config = "6";
 	public final static String MsgType_Device_Reboot = "7";
 	public final static String MsgType_Device_Screen = "8";
@@ -16,8 +19,9 @@ public class Msgevent {
 
 	public final static String ObjType_1_None = "0";
 	public final static String ObjType_1_Device = "1";
-	public final static String ObjType_1_DeviceGroup = "2";
+	public final static String ObjType_1_Devicegroup = "2";
 	public final static String ObjType_1_VChannel = "3";
+	public final static String ObjType_1_Devicegrid = "4";
 
 	public final static String ObjType_2_None = "0";
 	public final static String ObjType_2_Region = "1";

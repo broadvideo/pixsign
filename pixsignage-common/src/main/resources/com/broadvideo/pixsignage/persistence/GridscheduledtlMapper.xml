@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.GridscheduledtlMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Gridscheduledtl" >
+    <id column="gridscheduledtlid" property="gridscheduledtlid" jdbcType="INTEGER" />
+    <result column="gridscheduleid" property="gridscheduleid" jdbcType="INTEGER" />
+    <result column="mediagridid" property="mediagridid" jdbcType="INTEGER" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <association property="mediagrid" column="{mediagridid=mediagridid}" select="com.broadvideo.pixsignage.persistence.MediagridMapper.selectByPrimaryKey" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    gridscheduledtlid, gridscheduleid, mediagridid, sequence
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from gridscheduledtl
+    where gridscheduledtlid = #{gridscheduledtlid}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from gridscheduledtl
+    where gridscheduleid = #{gridscheduleid}
+    order by sequence
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from gridscheduledtl
+    where gridscheduledtlid = #{gridscheduledtlid}
+  </delete>
+
+  <delete id="deleteByDtl" >
+    delete gsd from gridschedule gs, gridscheduledtl gsd
+    where gs.gridscheduleid = gsd.gridscheduleid
+    and gs.devicegridid = #{devicegridid}
+    <if test="playmode != null">
+      and gs.playmode = #{playmode}
+    </if>
+    <if test="playdate != null">
+      and gs.playdate = #{playdate}
+    </if>
+    <if test="starttime != null">
+      and gs.starttime = #{starttime}
+    </if>
+  </delete>
+
+  <delete id="deleteByGridschedule" >
+    delete from gridscheduledtl
+    where gridscheduleid = #{gridscheduleid}
+  </delete>
+
+  <delete id="deleteByMediagrid" >
+    delete from gridscheduledtl
+    where mediagridid = #{mediagridid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Gridscheduledtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="gridscheduledtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gridscheduledtl (gridscheduleid, mediagridid, sequence
+      )
+    values (#{gridscheduleid,jdbcType=INTEGER}, #{mediagridid,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Gridscheduledtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="gridscheduledtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gridscheduledtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="gridscheduleid != null" >
+        gridscheduleid,
+      </if>
+      <if test="mediagridid != null" >
+        mediagridid,
+      </if>
+      <if test="sequence != null" >
+        sequence,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="gridscheduleid != null" >
+        #{gridscheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="mediagridid != null" >
+        #{mediagridid,jdbcType=INTEGER},
+      </if>
+      <if test="sequence != null" >
+        #{sequence,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Gridscheduledtl" >
+    update gridscheduledtl
+    <set >
+      <if test="gridscheduleid != null" >
+        gridscheduleid = #{gridscheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="mediagridid != null" >
+        mediagridid = #{mediagridid,jdbcType=INTEGER},
+      </if>
+      <if test="sequence != null" >
+        sequence = #{sequence,jdbcType=INTEGER},
+      </if>
+    </set>
+    where gridscheduledtlid = #{gridscheduledtlid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Gridscheduledtl" >
+    update gridscheduledtl
+    set gridscheduleid = #{gridscheduleid,jdbcType=INTEGER},
+      mediagridid = #{mediagridid,jdbcType=INTEGER},
+      sequence = #{sequence,jdbcType=INTEGER}
+    where gridscheduledtlid = #{gridscheduledtlid,jdbcType=INTEGER}
+  </update>
+</mapper>

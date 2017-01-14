@@ -31,6 +31,8 @@ public class Org {
 
 	private String calendarflag;
 
+	private String mscreenflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -51,13 +53,19 @@ public class Org {
 
 	private Integer maxdevices;
 
-	private Long maxstorage;
-
 	private Integer currentdevices;
 
-	private Long currentstorage;
-
 	private Integer currentdeviceidx;
+
+	private Integer maxmdevices;
+
+	private Integer currentmdevices;
+
+	private Integer currentmdeviceidx;
+
+	private Long maxstorage;
+
+	private Long currentstorage;
 
 	private String copyright;
 
@@ -177,6 +185,14 @@ public class Org {
 		this.calendarflag = calendarflag;
 	}
 
+	public String getMscreenflag() {
+		return mscreenflag;
+	}
+
+	public void setMscreenflag(String mscreenflag) {
+		this.mscreenflag = mscreenflag;
+	}
+
 	public String getVideoflag() {
 		return videoflag;
 	}
@@ -259,14 +275,6 @@ public class Org {
 		this.maxdevices = maxdevices;
 	}
 
-	public Long getMaxstorage() {
-		return maxstorage;
-	}
-
-	public void setMaxstorage(Long maxstorage) {
-		this.maxstorage = maxstorage;
-	}
-
 	public Integer getCurrentdevices() {
 		return currentdevices;
 	}
@@ -275,20 +283,52 @@ public class Org {
 		this.currentdevices = currentdevices;
 	}
 
-	public Long getCurrentstorage() {
-		return currentstorage;
-	}
-
-	public void setCurrentstorage(Long currentstorage) {
-		this.currentstorage = currentstorage;
-	}
-
 	public Integer getCurrentdeviceidx() {
 		return currentdeviceidx;
 	}
 
 	public void setCurrentdeviceidx(Integer currentdeviceidx) {
 		this.currentdeviceidx = currentdeviceidx;
+	}
+
+	public Integer getMaxmdevices() {
+		return maxmdevices;
+	}
+
+	public void setMaxmdevices(Integer maxmdevices) {
+		this.maxmdevices = maxmdevices;
+	}
+
+	public Integer getCurrentmdevices() {
+		return currentmdevices;
+	}
+
+	public void setCurrentmdevices(Integer currentmdevices) {
+		this.currentmdevices = currentmdevices;
+	}
+
+	public Integer getCurrentmdeviceidx() {
+		return currentmdeviceidx;
+	}
+
+	public void setCurrentmdeviceidx(Integer currentmdeviceidx) {
+		this.currentmdeviceidx = currentmdeviceidx;
+	}
+
+	public Long getMaxstorage() {
+		return maxstorage;
+	}
+
+	public void setMaxstorage(Long maxstorage) {
+		this.maxstorage = maxstorage;
+	}
+
+	public Long getCurrentstorage() {
+		return currentstorage;
+	}
+
+	public void setCurrentstorage(Long currentstorage) {
+		this.currentstorage = currentstorage;
 	}
 
 	public String getCopyright() {
