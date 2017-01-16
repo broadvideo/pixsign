@@ -109,6 +109,7 @@ public class VideoTask {
 					logger.info("Crop video success, result={}", commandResult);
 					mmediadtl.setFilename(filename);
 					mmediadtl.setFilepath(filepath);
+					mmediadtl.setSize(FileUtils.sizeOf(new File(CommonConfig.CONFIG_PIXDATA_HOME + filepath)));
 					mmediadtlMapper.updateByPrimaryKeySelective(mmediadtl);
 				} else {
 					result = false;
@@ -159,6 +160,7 @@ public class VideoTask {
 				logger.info("Crop image success");
 				mmediadtl.setFilename(filename);
 				mmediadtl.setFilepath(filepath);
+				mmediadtl.setSize(FileUtils.sizeOf(new File(CommonConfig.CONFIG_PIXDATA_HOME + filepath)));
 				mmediadtlMapper.updateByPrimaryKeySelective(mmediadtl);
 				fos.close();
 			}

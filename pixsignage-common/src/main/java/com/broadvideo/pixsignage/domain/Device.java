@@ -41,7 +41,11 @@ public class Device {
 
 	private String appname;
 
-	private String version;
+	private String sign;
+
+	private String vname;
+
+	private Integer vcode;
 
 	private String mtype;
 
@@ -209,12 +213,28 @@ public class Device {
 		this.appname = appname;
 	}
 
-	public String getVersion() {
-		return version;
+	public String getSign() {
+		return sign;
 	}
 
-	public void setVersion(String version) {
-		this.version = version == null ? null : version.trim();
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public String getVname() {
+		return vname;
+	}
+
+	public void setVname(String vname) {
+		this.vname = vname;
+	}
+
+	public Integer getVcode() {
+		return vcode;
+	}
+
+	public void setVcode(Integer vcode) {
+		this.vcode = vcode;
 	}
 
 	public String getMtype() {

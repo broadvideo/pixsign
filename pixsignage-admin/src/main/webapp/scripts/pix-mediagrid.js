@@ -12,6 +12,7 @@ var myurls = {
 var CurrentMediagridid = 0;
 var CurrentMediagrid;
 var CurrentMediagriddtl;
+var CurrentFolderid = 0;
 
 $(window).resize(function(e) {
 	if (CurrentMediagrid != null && e.target == this) {
@@ -550,9 +551,8 @@ $('#MediaSelect').on('change', function(e) {
 });	
 
 
-function refreshMediaSelect(folderid) {
-	console.log(CurrentMediagriddtl);
-	if (CurrentMediagriddtl.objtype == 1) {
+function refreshMediaSelect() {
+	if (CurrentMediagriddtl != null && CurrentMediagriddtl.objtype == 1) {
 		$("#MediaSelect").select2({
 			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
@@ -565,7 +565,7 @@ function refreshMediaSelect(folderid) {
 						sSearch: term,
 						iDisplayStart: (page-1)*10,
 						iDisplayLength: 10,
-						folderid: folderid,
+						folderid: CurrentFolderid,
 					};
 				},
 				results: function (data, page) {
@@ -611,7 +611,7 @@ function refreshMediaSelect(folderid) {
 			dropdownCssClass: "bigdrop", 
 			escapeMarkup: function (m) { return m; } 
 		});
-	} else {
+	} else if (CurrentMediagriddtl != null) {
 		$("#MediaSelect").select2({
 			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
@@ -624,7 +624,7 @@ function refreshMediaSelect(folderid) {
 						sSearch: term,
 						iDisplayStart: (page-1)*10,
 						iDisplayLength: 10,
-						folderid: folderid,
+						folderid: CurrentFolderid,
 					};
 				},
 				results: function (data, page) {
@@ -672,6 +672,9 @@ function refreshMediaSelect(folderid) {
 	}
 }
 
+function refreshFolder() {
+	
+}
 $.ajax({
 	type : 'POST',
 	url : 'folder!list.action',
@@ -679,7 +682,7 @@ $.ajax({
 	success : function(data, status) {
 		if (data.errorcode == 0) {
 			var folders = data.aaData;
-			var folderid = folders[0].folderid;
+			CurrentFolderid = folders[0].folderid;
 			
 			var folderTreeDivData = [];
 			createFolderTreeData(folders, folderTreeDivData);
@@ -696,11 +699,11 @@ $.ajax({
 					},
 				});
 				$(this).on('loaded.jstree', function() {
-					$(this).jstree('select_node', folderid);
+					$(this).jstree('select_node', CurrentFolderid);
 				});
 				$(this).on('select_node.jstree', function(event, data) {
-					folderid = data.instance.get_node(data.selected[0]).id;
-					refreshMediaSelect(folderid);
+					CurrentFolderid = data.instance.get_node(data.selected[0]).id;
+					refreshMediaSelect();
 				});
 			});
 		} else {

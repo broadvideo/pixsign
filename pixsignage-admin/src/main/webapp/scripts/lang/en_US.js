@@ -192,6 +192,7 @@ var common = {
 		unbind: 'Please confirm whether to unbind ',
 		sync: 'Please confirm whether to sync schedules to ',
 		synclayout: 'Please confirm whether to sync the layout',
+		syncmediagrid: 'Please confirm whether to sync the media grid',
 		config: 'Please confirm whether to push configuration to ',
 		pushall: 'Please confirm whether to push configuration to all devices',
 		reboot: 'Please confirm whether to reboot ',

@@ -51,9 +51,10 @@
   
   <select id="selectDevicegridByMediagrid" resultType="Integer" >
     select 
-    distinct devicegridid
-    from gridschedule
-    where mediagridid = #{mediagridid}
+    distinct gs.devicegridid
+    from gridschedule gs, gridscheduledtl gsd
+    where gs.gridscheduleid = gsd.gridscheduleid
+    and gsd.mediagridid = #{mediagridid}
   </select>
   
   <delete id="deleteByPrimaryKey" >

@@ -161,7 +161,7 @@ public class PixsignageService {
 			device.setIip(iip);
 			device.setMac(mac);
 			device.setAppname(appname);
-			device.setVersion(version);
+			device.setVname(version);
 			device.setMtype(mtype);
 			device.setStatus("1");
 			device.setSchedulestatus("0");

@@ -192,6 +192,7 @@ var common = {
 		unbind: '请确认是否解绑 ',
 		sync: '是否同步播放计划至 ',
 		synclayout: '是否同步此布局至相关联的终端和终端组',
+		syncmediagrid: '是否同步此联屏媒体至相关联的终端',
 		config: '是否重新推送配置至 ',
 		pushall: '是否推送配置至所有终端 ',
 		reboot: '是否重启 ',

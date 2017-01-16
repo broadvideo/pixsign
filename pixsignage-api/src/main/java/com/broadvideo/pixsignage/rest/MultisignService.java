@@ -69,6 +69,19 @@ public class MultisignService {
 	@Path("init")
 	public String init(String request, @Context HttpServletRequest req) {
 		try {
+			if (CONFIG_SIGNATURE.size() == 0) {
+				Properties properties = new Properties();
+				InputStream is = this.getClass().getResourceAsStream("/signature.properties");
+				properties.load(is);
+				CONFIG_SIGNATURE = new Hashtable<String, String>();
+				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<Object, Object> entry = it.next();
+					CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
+				}
+				is.close();
+			}
+
 			logger.info("Multisign Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
@@ -78,7 +91,7 @@ public class MultisignService {
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String vname = requestJson.getString("version_name");
-			String vcode = requestJson.getString("version_code");
+			int vcode = requestJson.getInt("version_code");
 			String ip = req.getRemoteAddr();
 			String other = requestJson.getString("other");
 
@@ -143,7 +156,9 @@ public class MultisignService {
 			device.setIip(iip);
 			device.setMac(mac);
 			device.setAppname(appname);
-			device.setVersion(vname);
+			device.setSign(sign);
+			device.setVname(vname);
+			device.setVcode(vcode);
 			device.setMtype(mtype);
 			device.setStatus("1");
 			device.setSchedulestatus("0");
@@ -175,97 +190,6 @@ public class MultisignService {
 		} catch (Exception e) {
 			logger.error("Multisign Service init exception", e);
 			return handleResult(1001, "系统异常");
-		}
-	}
-
-	@POST
-	@Path("get-version")
-	public String getversion(String request) {
-		try {
-			logger.info("Multisign Service get-version: {}", request);
-
-			if (CONFIG_SIGNATURE.size() == 0) {
-				Properties properties = new Properties();
-				InputStream is = this.getClass().getResourceAsStream("/signature.properties");
-				properties.load(is);
-				CONFIG_SIGNATURE = new Hashtable<String, String>();
-				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
-				while (it.hasNext()) {
-					Entry<Object, Object> entry = it.next();
-					CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
-				}
-				is.close();
-			}
-
-			JSONObject requestJson = new JSONObject(request);
-			String terminalid = requestJson.getString("terminal_id");
-			Device device = deviceMapper.selectByTerminalid(terminalid);
-			if (device != null) {
-				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-				if (org.getUpgradeflag().equals("0")) {
-					JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-					responseJson.put("version_name", "");
-					responseJson.put("version_code", "0");
-					responseJson.put("url", "");
-					logger.info("Auto upgrade disabled, Multisign Service get-version response: {}",
-							responseJson.toString());
-					return responseJson.toString();
-				}
-			}
-
-			String appname = requestJson.getString("app_name");
-			String sign = requestJson.getString("sign");
-			String subdir = "";
-			if (sign != null && sign.length() > 0) {
-				subdir = CONFIG_SIGNATURE.get(sign);
-				if (subdir == null) {
-					logger.error("no apk found with the sign {}", sign);
-					JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功")
-							.put("version_name", "").put("version_code", "0").put("url", "");
-					logger.info("Multisign Service get-version response: {}", responseJson.toString());
-					return responseJson.toString();
-				}
-				subdir = "/" + subdir;
-			}
-
-			File dir = new File("/opt/pixdata/app" + subdir);
-			File[] files = dir.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.startsWith(appname + "-") && name.endsWith((".apk"));
-				}
-			});
-			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-
-			String vname = "";
-			String vcode = "0";
-			String url = "";
-			if (files.length > 0) {
-				String filename = files[0].getName();
-				url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-						+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/" + filename;
-				String[] apks = filename.split("-");
-				if (apks.length >= 3) {
-					vname = apks[1];
-					vcode = apks[2];
-					if (vcode.indexOf(".") > 0) {
-						vcode = vcode.substring(0, vcode.indexOf("."));
-					}
-				}
-			}
-
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			responseJson.put("version_name", vname);
-			responseJson.put("version_code", vcode);
-			responseJson.put("url", url);
-			logger.info("Multisign Service get-version response: {}", responseJson.toString());
-			return responseJson.toString();
-		} catch (Exception e) {
-			logger.error("Multisign Service get-version exception, ", e);
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功").put("version_name", "")
-					.put("version_code", "0").put("url", "");
-			logger.info("Multisign Service get-version response: {}", responseJson.toString());
-			return responseJson.toString();
 		}
 	}
 
@@ -352,6 +276,61 @@ public class MultisignService {
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+
+			String vname = "";
+			String vcode = "0";
+			String url = "";
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			if (org.getUpgradeflag().equals("0")) {
+				logger.info("Auto upgrade disabled, Multisign Service get-version response: {}",
+						responseJson.toString());
+			} else {
+				String appname = device.getAppname();
+				String sign = device.getSign();
+				String subdir = "";
+				if (sign != null && sign.length() > 0) {
+					subdir = CONFIG_SIGNATURE.get(sign);
+					if (subdir == null) {
+						logger.error("no apk found with the sign {}", sign);
+					} else {
+						subdir = "/" + subdir;
+						File dir = new File("/opt/pixdata/app" + subdir);
+						File[] files = dir.listFiles(new FilenameFilter() {
+							@Override
+							public boolean accept(File dir, String name) {
+								return name.startsWith(appname + "-") && name.endsWith((".apk"));
+							}
+						});
+						Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+						if (files.length > 0) {
+							String filename = files[0].getName();
+							url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+									+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"
+									+ filename;
+							String[] apks = filename.split("-");
+							if (apks.length >= 3) {
+								vname = apks[1];
+								vcode = apks[2];
+								if (vcode.indexOf(".") > 0) {
+									vcode = vcode.substring(0, vcode.indexOf("."));
+								}
+								int v = 0;
+								try {
+									v = Integer.parseInt(vcode);
+								} catch (Exception e) {
+									v = 0;
+								}
+								if (device.getVcode() < v) {
+									responseJson.put("version_name", vname);
+									responseJson.put("version_code", vcode);
+									responseJson.put("url", url);
+								}
+							}
+						}
+					}
+				}
+			}
+
 			JSONArray eventJsonArray = new JSONArray();
 			responseJson.put("events", eventJsonArray);
 			if (device.getDevicegridid() > 0) {
@@ -368,6 +347,9 @@ public class MultisignService {
 				}
 			}
 
+			if (responseJson.getString("url").length() > 0 || responseJson.getJSONArray("events").length() > 0) {
+				logger.info("Multisign Service refresh response: {}", responseJson.toString());
+			}
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Multisign Service refresh exception", e);

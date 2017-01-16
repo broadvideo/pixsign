@@ -520,7 +520,7 @@ public class JSONObject {
 	 *             if the key is not found or if the value cannot be converted
 	 *             to an integer.
 	 */
-	public int getInt(String key) throws JSONException {
+	public int getInt(String key) {
 		Object object = this.get(key);
 		try {
 			return object instanceof Number ? ((Number) object).intValue() : Integer.parseInt((String) object);
