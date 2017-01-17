@@ -157,7 +157,7 @@ response.setDateHeader("Expires",0);
 															<h3 class="col-md-6 page-title font-red-sunglo devicegriddtl-title"></h3>
 														</div>
 														<div class="form-group devicegrid-ctl last">
-															<label class="col-md-3 control-label"><spring:message code="global.devicegrid"/></label>
+															<label class="col-md-3 control-label"><spring:message code="global.device"/></label>
 															<div class="col-md-9">
 																<input type="hidden" id="DeviceSelect" class="form-control select2" name="deviceid" />
 															</div>

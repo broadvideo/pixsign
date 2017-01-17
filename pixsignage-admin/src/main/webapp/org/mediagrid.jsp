@@ -129,7 +129,7 @@ response.setDateHeader("Expires",0);
 									<div class="portlet-title">
 										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.mediagrid"/></div>
 										<div class="actions">
-											<a href="javascript:;" class="btn btn-sm yellow pix-addregion"><spring:message code="region.play"/> <i class="fa fa-plus"></i></a>
+											<a href="javascript:;" class="btn btn-sm yellow pix-dtl-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></a>
 										</div>
 									</div>
 									<div class="portlet-body form">
@@ -159,7 +159,7 @@ response.setDateHeader("Expires",0);
 														<div class="row">
 															<h3 class="col-md-6 page-title font-red-sunglo mediagriddtl-title"></h3>
 															<div class="col-md-6">
-																<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
+																<a href="javascript:;" class="btn default btn-sm red pull-right pix-dtl-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
 															</div>
 														</div>
 														<div class="form-group mediagrid-ctl">
@@ -303,7 +303,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-mediagrid.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-mediagrid.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

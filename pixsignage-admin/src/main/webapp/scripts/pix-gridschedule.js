@@ -4,7 +4,7 @@ var currentGridschedules;
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
-}			
+}
 
 $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -196,6 +196,11 @@ function refreshGridscheduleDetail() {
 				var thumbwidth = gridscheduledtl.mediagrid.width > gridscheduledtl.mediagrid.height? 100 : 100*gridscheduledtl.mediagrid.width/gridscheduledtl.mediagrid.height;
 				scheduleTabHtml += '<div class="thumbs">';
 				scheduleTabHtml += '<img src="/pixsigdata' + gridscheduledtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + gridscheduledtl.mediagrid.name + '" />';
+				scheduleTabHtml += '<div class="mask">';
+				scheduleTabHtml += '<div>';
+				scheduleTabHtml += '<br/><a href="javascript:;" class="btn default btn-sm red pix-del-gridscheduledtl" gridscheduleid="' + i + '" gridscheduledtlid="' + j + '"><i class="fa fa-trash-o"></i></a>';
+				scheduleTabHtml += '</div>';
+				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '<h6 class="pixtitle">' + gridscheduledtl.mediagrid.name + '</h6>';
 				scheduleTabHtml += '</div>';
@@ -205,7 +210,7 @@ function refreshGridscheduleDetail() {
 			}
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '<div class="col-md-2 col-sm-2">';
-			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-add-gridscheduledtl" data-id="'+ i + '">' + common.view.add + '<i class="fa fa-trash-o"></i></a>';
+			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-add-gridscheduledtl" data-id="'+ i + '">' + common.view.add + '<i class="fa fa-plus"></i></a>';
 			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-del-gridschedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
@@ -220,6 +225,7 @@ function refreshGridscheduleDetail() {
 	$('#GridscheduleDetail').html(scheduleTabHtml);
 	$('#GridscheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
+		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
 }
 
@@ -287,6 +293,7 @@ $('body').on('click', '.pix-gridschedule', function(event) {
 $('#GridscheduleModal').on('shown.bs.modal', function (e) {
 	$('#GridscheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
+		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
 })
 
@@ -363,6 +370,17 @@ $('#GridscheduleForm .pix-cancel').on('click', function(event) {
 	$('.gridschedule-edit').css('display', 'none');
 	$('.gridschedule-add').css('display', 'none');
 	$('.gridschedule-view').css('display', 'block');				
+});
+
+$('body').on('click', '.pix-del-gridscheduledtl', function(event) {
+	var i = $(event.target).attr('gridscheduleid');
+	var j = $(event.target).attr('gridscheduledtlid');
+	if (i == undefined) {
+		i = $(event.target).parent().attr('gridscheduleid');
+		j = $(event.target).parent().attr('gridscheduledtlid');
+	}
+	currentGridschedules[i].gridscheduledtls.splice(j, 1);
+	refreshGridscheduleDetail();
 });
 
 $('body').on('click', '.pix-add-gridscheduledtl', function(event) {

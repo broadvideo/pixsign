@@ -248,15 +248,13 @@ function redrawMediagrid(div, mediagrid, mediagriddtl) {
 			redrawMediagriddtl($('#MediagriddtlDiv' + mediagrid.mediagriddtls[i].mediagriddtlid), mediagrid, mediagrid.mediagriddtls[i], false);
 		}
 	}
-	for (var i=0; i<mediagrid.xcount; i++) {
-		for (var j=0; j<mediagrid.ycount; j++) {
-			var html = '<div style="position: absolute; width:' + (100/mediagrid.xcount);
-			html += '%; height:' + (100/mediagrid.ycount);
-			html += '%; left: ' + (i*100/mediagrid.xcount);
-			html += '%; top: ' + (j*100/mediagrid.ycount);
-			html += '%; border: 1px dotted #000; ">';
-			div.append(html);
-		}
+	for (var i=1; i<mediagrid.xcount; i++) {
+		var html = '<div style="position:absolute; width:1px; height:100%; left:' + (i*100/mediagrid.xcount) + '%; top:0%; border: 1px dotted #000; ">';
+		div.append(html);
+	}
+	for (var i=1; i<mediagrid.ycount; i++) {
+		var html = '<div style="position:absolute; width:100%; height:1px; left:0%; top:' + (i*100/mediagrid.ycount) + '%; border: 1px dotted #000; ">';
+		div.append(html);
 	}
 
 	var width, scale, height;
@@ -271,6 +269,7 @@ function redrawMediagrid(div, mediagrid, mediagriddtl) {
 	}
 	div.css('width' , width);
 	div.css('height' , height);
+	updateAddDtlBtn();
 }
 
 function redrawMediagriddtl(div, mediagrid, mediagriddtl, selected) {
@@ -307,7 +306,9 @@ function redrawMediagriddtl(div, mediagrid, mediagriddtl, selected) {
 
 	div.draggable({
 		containment: div.parent(),
-		stop: regionPositionUpdate,
+		stop: function(e, ui) {
+			redrawMediagrid($('#MediagridDiv'), CurrentMediagrid, CurrentMediagriddtl);
+		},
 		drag: regionPositionUpdate
 	}).resizable({
 		containment: div.parent(),
@@ -440,29 +441,59 @@ $('body').on('click', '.pix-delete', function(event) {
 
 
 function regionPositionUpdate(e, ui) {
-	/*
-	var w = $(this).width() / $('#LayoutDiv').width();
-	var h = $(this).height() / $('#LayoutDiv').height();
-	var l = $(this).position().left / $('#LayoutDiv').width();
-	var t = $(this).position().top / $('#LayoutDiv').height();
-	$(this).css("width" , (100 * parseFloat(w)) + '%');
-	$(this).css("height" , (100 * parseFloat(h)) + '%');
-	$(this).css("left" , (100 * parseFloat(l)) + '%');
-	$(this).css("top" , (100 * parseFloat(t)) + '%');
-
-	var layoutdtlid = $(this).attr("layoutdtlid");
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-		return el.layoutdtlid == layoutdtlid;
-	});
-	layoutdtls[0].width = Math.round(CurrentLayout.width * w, 0);
-	layoutdtls[0].height = Math.round(CurrentLayout.height * h, 0);
-	layoutdtls[0].leftoffset = Math.round(CurrentLayout.width * l, 0);
-	layoutdtls[0].topoffset = Math.round(CurrentLayout.height * t, 0);
-
-	if (CurrentLayoutdtl != null && layoutdtls[0].layoutdtlid == CurrentLayoutdtl.layoutdtlid) {
-		refreshSpinners();
+	var xcount = CurrentMediagrid.xcount;
+	var ycount = CurrentMediagrid.ycount;
+	var x = Math.floor($(this).position().left / ($('#MediagridDiv').width()/xcount));
+	var y = Math.floor($(this).position().top / ($('#MediagridDiv').height()/ycount));
+	var w = Math.round($(this).width() / ($('#MediagridDiv').width()/xcount));
+	var h = Math.round($(this).height() / ($('#MediagridDiv').height()/ycount));
+	w = (w == 0) ? 1 : w;
+	h = (h == 0) ? 1 : h;
+	
+	var mediagriddtlid = $(this).attr("mediagriddtlid");
+	for (var i=0; i<CurrentMediagrid.mediagriddtls.length; i++) {
+		var dtl = CurrentMediagrid.mediagriddtls[i];
+		if (dtl.mediagriddtlid != mediagriddtlid) {
+			var x1 = dtl.xpos;
+			var y1 = dtl.ypos;
+			var w1 = dtl.xcount;
+			var h1 = dtl.ycount;
+			if ((y+h <= y1) || (y1+h1 <= y) || (x+w <= x1) || (x1+w1 <= x)) {
+				continue;
+			} else {
+				return;
+			}
+		}
 	}
-	*/
+
+	var mediagriddtls = CurrentMediagrid.mediagriddtls.filter(function (el) {
+		return el.mediagriddtlid == mediagriddtlid;
+	});
+	mediagriddtls[0].xcount = w;
+	mediagriddtls[0].ycount = h;
+	mediagriddtls[0].xpos = x;
+	mediagriddtls[0].ypos = y;
+	//$(this).css("width" , 100*w/CurrentMediagrid.xcount + '%');
+	//$(this).css("height" , 100*h/CurrentMediagrid.ycount + '%');
+	//$(this).css("left" , 100*x/CurrentMediagrid.xcount + '%');
+	//$(this).css("top" , 100*y/CurrentMediagrid.ycount + '%');
+}
+
+function updateAddDtlBtn() {
+	var area = 0;
+	for (var i=0; i<CurrentMediagrid.mediagriddtls.length; i++) {
+		var dtl = CurrentMediagrid.mediagriddtls[i];
+		area += dtl.xcount * dtl.ycount;
+	}
+	if (CurrentMediagrid.xcount * CurrentMediagrid.ycount > area) {
+		$('.pix-dtl-add').removeClass('disabled');
+		$('.pix-dtl-add').removeClass('default');
+		$('.pix-dtl-add').addClass('yellow');
+	} else {
+		$('.pix-dtl-add').addClass('disabled');
+		$('.pix-dtl-add').removeClass('yellow');
+		$('.pix-dtl-add').addClass('default');
+	}
 }
 
 
@@ -473,8 +504,6 @@ $('#MediagridDiv').click(function(e){
 	var xpos = Math.floor((e.pageX - offset.left) / ($('#MediagridDiv').width()/xcount));
 	var ypos = Math.floor((e.pageY - offset.top) / ($('#MediagridDiv').height()/ycount));
 
-	console.log(xpos, ypos);
-	
 	var mediagriddtls = CurrentMediagrid.mediagriddtls.filter(function (el) {
 		return (xpos >= el.xpos) && (xpos < (el.xpos + el.xcount)) && (ypos >= el.ypos) && (ypos < (el.ypos + el.ycount));
 	});
@@ -603,7 +632,6 @@ function refreshMediaSelect() {
 				return html;
 			},
 			initSelection: function(element, callback) {
-				console.log(1);
 				if (CurrentMediagriddtl != null && CurrentMediagriddtl.video != null) {
 					callback({id: CurrentMediagriddtl.video.videoid, text: CurrentMediagriddtl.video.name, video: CurrentMediagriddtl.video });
 				}
@@ -672,9 +700,53 @@ function refreshMediaSelect() {
 	}
 }
 
-function refreshFolder() {
+//在设计对话框中新增区域
+$('body').on('click', '.pix-dtl-add', function(event) {
+	var xcount = CurrentMediagrid.xcount;
+	var ycount = CurrentMediagrid.ycount;
+	var find = false;
+	for (var i=0; i<xcount; i++) {
+		for (var j=0; j<ycount; j++) {
+			var mediagriddtls = CurrentMediagrid.mediagriddtls.filter(function (el) {
+				return (i >= el.xpos) && (i < (el.xpos + el.xcount)) && (j >= el.ypos) && (j < (el.ypos + el.ycount));
+			});
+			if (mediagriddtls.length == 0) {
+				var mediagriddtl = {};
+				mediagriddtl.mediagriddtlid = '-' + Math.round(Math.random()*100000000);
+				mediagriddtl.mediagridid = CurrentMediagridid;
+				mediagriddtl.xpos = i;
+				mediagriddtl.ypos = j;
+				mediagriddtl.xcount = 1;
+				mediagriddtl.ycount = 1;
+				mediagriddtl.objtype = 1;
+				mediagriddtl.objid = 0;
+				mediagriddtl.mmediaid = 0;
+				CurrentMediagrid.mediagriddtls[CurrentMediagrid.mediagriddtls.length] = mediagriddtl;
+				CurrentMediagriddtl = mediagriddtl;
+				enterMediagriddtlFocus(CurrentMediagriddtl);
+				return;
+			}
+		}
+	}
 	
-}
+
+});
+
+$('body').on('click', '.pix-dtl-delete', function(event) {
+	if (CurrentMediagrid.mediagriddtls.length == 1) {
+		bootbox.alert(common.tips.region_remove_failed);
+		return;
+	}
+	bootbox.confirm(common.tips.remove, function(result) {
+		if (result == true) {
+			CurrentMediagrid.mediagriddtls.splice(CurrentMediagrid.mediagriddtls.indexOf(CurrentMediagriddtl), 1);
+			CurrentMediagriddtl = CurrentMediagrid.mediagriddtls[0];
+			enterMediagriddtlFocus(CurrentMediagriddtl);
+		}
+	 });
+});
+
+
 $.ajax({
 	type : 'POST',
 	url : 'folder!list.action',
@@ -766,7 +838,6 @@ $('[type=submit]', $('#MediagridModal')).on('click', function(event) {
 			onrendered: function(canvas) {
 				CurrentMediagrid.snapshotdtl = canvas.toDataURL();
 				$('#snapshot_div').hide();
-				console.log(CurrentMediagrid);
 
 				$.ajax({
 					type : 'POST',
