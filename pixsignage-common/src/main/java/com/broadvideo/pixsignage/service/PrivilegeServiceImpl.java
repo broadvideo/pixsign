@@ -48,9 +48,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 			if (org.getReviewflag().equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
 					|| org.getReviewflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| org.getReviewflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
+					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
+					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30303
-					|| org.getStreamflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
-					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107) {
+					|| org.getStreamflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
+					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if (!org.getCode().equals("default") && p.getPrivilegeid().intValue() == 30909) {

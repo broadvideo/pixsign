@@ -926,6 +926,12 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="page!pagelist" method="doPageList" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="page!get" method="doGet" class="pageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

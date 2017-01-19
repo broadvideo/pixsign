@@ -69,19 +69,6 @@ public class MultisignService {
 	@Path("init")
 	public String init(String request, @Context HttpServletRequest req) {
 		try {
-			if (CONFIG_SIGNATURE.size() == 0) {
-				Properties properties = new Properties();
-				InputStream is = this.getClass().getResourceAsStream("/signature.properties");
-				properties.load(is);
-				CONFIG_SIGNATURE = new Hashtable<String, String>();
-				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
-				while (it.hasNext()) {
-					Entry<Object, Object> entry = it.next();
-					CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
-				}
-				is.close();
-			}
-
 			logger.info("Multisign Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
@@ -228,6 +215,19 @@ public class MultisignService {
 	@Path("refresh")
 	public String refresh(String request) {
 		try {
+			if (CONFIG_SIGNATURE.size() == 0) {
+				Properties properties = new Properties();
+				InputStream is = this.getClass().getResourceAsStream("/signature.properties");
+				properties.load(is);
+				CONFIG_SIGNATURE = new Hashtable<String, String>();
+				Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<Object, Object> entry = it.next();
+					CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
+				}
+				is.close();
+			}
+
 			logger.info("Multisign Service refresh: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
@@ -291,40 +291,40 @@ public class MultisignService {
 				if (sign != null && sign.length() > 0) {
 					subdir = CONFIG_SIGNATURE.get(sign);
 					if (subdir == null) {
-						logger.error("no apk found with the sign {}", sign);
-					} else {
-						subdir = "/" + subdir;
-						File dir = new File("/opt/pixdata/app" + subdir);
-						File[] files = dir.listFiles(new FilenameFilter() {
-							@Override
-							public boolean accept(File dir, String name) {
-								return name.startsWith(appname + "-") && name.endsWith((".apk"));
+						subdir = "debug";
+						logger.info("sign {} unrecognized, set as debug", sign);
+					}
+					subdir = "/" + subdir;
+					File dir = new File("/opt/pixdata/app" + subdir);
+					File[] files = dir.listFiles(new FilenameFilter() {
+						@Override
+						public boolean accept(File dir, String name) {
+							return name.startsWith(appname + "-") && name.endsWith((".apk"));
+						}
+					});
+					Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+					if (files.length > 0) {
+						String filename = files[0].getName();
+						url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+								+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"
+								+ filename;
+						String[] apks = filename.split("-");
+						if (apks.length >= 3) {
+							vname = apks[1];
+							vcode = apks[2];
+							if (vcode.indexOf(".") > 0) {
+								vcode = vcode.substring(0, vcode.indexOf("."));
 							}
-						});
-						Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-						if (files.length > 0) {
-							String filename = files[0].getName();
-							url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-									+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"
-									+ filename;
-							String[] apks = filename.split("-");
-							if (apks.length >= 3) {
-								vname = apks[1];
-								vcode = apks[2];
-								if (vcode.indexOf(".") > 0) {
-									vcode = vcode.substring(0, vcode.indexOf("."));
-								}
-								int v = 0;
-								try {
-									v = Integer.parseInt(vcode);
-								} catch (Exception e) {
-									v = 0;
-								}
-								if (device.getVcode() < v) {
-									responseJson.put("version_name", vname);
-									responseJson.put("version_code", vcode);
-									responseJson.put("url", url);
-								}
+							int v = 0;
+							try {
+								v = Integer.parseInt(vcode);
+							} catch (Exception e) {
+								v = 0;
+							}
+							if (device.getVcode() < v) {
+								responseJson.put("version_name", vname);
+								responseJson.put("version_code", vcode);
+								responseJson.put("url", url);
 							}
 						}
 					}

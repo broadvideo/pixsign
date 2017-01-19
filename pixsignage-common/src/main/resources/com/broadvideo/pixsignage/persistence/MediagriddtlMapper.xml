@@ -14,6 +14,7 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
+    <association property="page" column="{objtype=objtype,pageid=objid}" select="selectPageid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -29,6 +30,11 @@
   <select id="selectImageid" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
     select * from image
     where '${objtype}' = '2' and imageid = #{imageid}
+  </select>
+  
+  <select id="selectPageid" resultMap="com.broadvideo.pixsignage.persistence.PageMapper.BaseResultMap" >
+    select * from page
+    where '${objtype}' = '3' and pageid = #{pageid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

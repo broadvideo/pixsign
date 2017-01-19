@@ -36,7 +36,7 @@ $('#MyTable').dataTable({
 				gridschedulehtml += '<div class="col-md-10 col-xs-10">';
 				for (var j=0; j<schedule.gridscheduledtls.length; j++) {
 					var gridscheduledtl = schedule.gridscheduledtls[j];
-					if (j % 6 == 0) {
+					if (j % 4 == 0) {
 						gridschedulehtml += '<div class="row" >';
 					}
 					gridschedulehtml += '<div class="col-md-3 col-xs-3">';

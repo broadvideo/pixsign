@@ -1,8 +1,10 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,29 +162,51 @@ public class DevicegridServiceImpl implements DevicegridService {
 				for (Mediagriddtl mediagriddtl : mediagriddtls) {
 					int x = xpos - mediagriddtl.getXpos().intValue();
 					int y = ypos - mediagriddtl.getYpos().intValue();
-					if (x < mediagriddtl.getXcount().intValue() && y < mediagriddtl.getYcount().intValue()) {
-						Mmediadtl mmediadtl = mmediadtlMapper.selectByPos("" + mediagriddtl.getMmediaid(), "" + x,
-								"" + y);
-						if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Video)) {
-							JSONObject scheduledtlJson = new JSONObject();
-							scheduledtlJsonArray.put(scheduledtlJson);
-							scheduledtlJson.put("scheduledtl_id", gridscheduledtl.getGridscheduledtlid());
-							scheduledtlJson.put("media_type", "video");
-							scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
-							scheduledtlJson.put("url",
-									"http://" + serverip + ":" + serverport + "/pixsigdata" + mmediadtl.getFilepath());
-							scheduledtlJson.put("file", mmediadtl.getFilename());
-							scheduledtlJson.put("size", mmediadtl.getSize());
-						} else if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
-							JSONObject scheduledtlJson = new JSONObject();
-							scheduledtlJsonArray.put(scheduledtlJson);
-							scheduledtlJson.put("scheduledtl_id", gridscheduledtl.getGridscheduledtlid());
-							scheduledtlJson.put("media_type", "image");
-							scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
-							scheduledtlJson.put("url",
-									"http://" + serverip + ":" + serverport + "/pixsigdata" + mmediadtl.getFilepath());
-							scheduledtlJson.put("file", mmediadtl.getFilename());
-							scheduledtlJson.put("size", mmediadtl.getSize());
+					if (x >= 0 && x < mediagriddtl.getXcount().intValue() && y >= 0
+							&& y < mediagriddtl.getYcount().intValue()) {
+						if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Page)) {
+							String zipPath = "/page/" + mediagriddtl.getObjid() + "/page-" + mediagriddtl.getObjid()
+									+ ".zip";
+							File zipFile = new File("/pixdata/pixsignage" + zipPath);
+							if (zipFile.exists()) {
+								JSONObject scheduledtlJson = new JSONObject();
+								scheduledtlJsonArray.put(scheduledtlJson);
+								scheduledtlJson.put("scheduledtl_id", gridscheduledtl.getGridscheduledtlid());
+								scheduledtlJson.put("media_type", "page");
+								scheduledtlJson.put("media_id", mediagriddtl.getObjid());
+								scheduledtlJson.put("url",
+										"http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+								scheduledtlJson.put("file", zipFile.getName());
+								scheduledtlJson.put("size", FileUtils.sizeOf(zipFile));
+								scheduledtlJson.put("duration", 30);
+							}
+						} else {
+							Mmediadtl mmediadtl = mmediadtlMapper.selectByPos("" + mediagriddtl.getMmediaid(), "" + x,
+									"" + y);
+							if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Video)) {
+								JSONObject scheduledtlJson = new JSONObject();
+								scheduledtlJsonArray.put(scheduledtlJson);
+								scheduledtlJson.put("scheduledtl_id", gridscheduledtl.getGridscheduledtlid());
+								scheduledtlJson.put("media_type", "video");
+								scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
+								scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+										+ mmediadtl.getFilepath());
+								scheduledtlJson.put("file", mmediadtl.getFilename());
+								scheduledtlJson.put("size", mmediadtl.getSize());
+								scheduledtlJson.put("duration", 0);
+							} else
+								if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
+								JSONObject scheduledtlJson = new JSONObject();
+								scheduledtlJsonArray.put(scheduledtlJson);
+								scheduledtlJson.put("scheduledtl_id", gridscheduledtl.getGridscheduledtlid());
+								scheduledtlJson.put("media_type", "image");
+								scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
+								scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+										+ mmediadtl.getFilepath());
+								scheduledtlJson.put("file", mmediadtl.getFilename());
+								scheduledtlJson.put("size", mmediadtl.getSize());
+								scheduledtlJson.put("duration", 10);
+							}
 						}
 					}
 				}

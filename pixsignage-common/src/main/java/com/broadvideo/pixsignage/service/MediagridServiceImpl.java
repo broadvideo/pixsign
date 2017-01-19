@@ -106,6 +106,9 @@ public class MediagridServiceImpl implements MediagridService {
 	}
 
 	private void checkMmedia(Mediagriddtl mediagriddtl) {
+		if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Page)) {
+			return;
+		}
 		if (mediagriddtl.getObjid().intValue() > 0) {
 			String objtype = mediagriddtl.getObjtype();
 			int objid = mediagriddtl.getObjid();
@@ -180,10 +183,15 @@ public class MediagridServiceImpl implements MediagridService {
 		int mediagridid = mediagrid.getMediagridid();
 		List<Mediagriddtl> oldmediagriddtls = mediagriddtlMapper.selectList("" + mediagridid);
 		HashMap<Integer, Mediagriddtl> hash = new HashMap<Integer, Mediagriddtl>();
+		mediagrid.setStatus(Mediagrid.Status_Active);
 		for (Mediagriddtl mediagriddtl : mediagrid.getMediagriddtls()) {
 			if (mediagriddtl.getMediagriddtlid() > 0) {
 				updateMediagriddtl(mediagriddtl);
 				hash.put(mediagriddtl.getMediagriddtlid(), mediagriddtl);
+			}
+			if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Video)
+					|| mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
+				mediagrid.setStatus(Mediagrid.Status_Waiting);
 			}
 		}
 		for (int i = 0; i < oldmediagriddtls.size(); i++) {
@@ -207,7 +215,6 @@ public class MediagridServiceImpl implements MediagridService {
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		mediagrid.setSnapshot(snapshotFilePath);
-		mediagrid.setStatus(Mediagrid.Status_Waiting);
 		mediagridMapper.updateByPrimaryKeySelective(mediagrid);
 		checkStatus();
 	}

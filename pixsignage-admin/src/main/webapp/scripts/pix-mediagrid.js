@@ -201,6 +201,8 @@ function redrawMediagridPreview(div, mediagrid, maxsize) {
 			bgimage = '/pixsigdata' + mediagriddtl.video.thumbnail;
 		} else if (mediagriddtl.image != null) {
 			bgimage = '/pixsigdata' + mediagriddtl.image.thumbnail;
+		} else if (mediagriddtl.page != null) {
+			bgimage = '/pixsigdata' + mediagriddtl.page.snapshot;
 		}
 		mediagriddtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
 		if (bgimage != null) {
@@ -235,6 +237,11 @@ function redrawMediagridPreview(div, mediagrid, maxsize) {
 }
 
 function redrawMediagrid(div, mediagrid, mediagriddtl) {
+	if (mediagriddtl != null && (mediagriddtl.xcount > 1 || mediagriddtl.ycount > 1)) {
+		$('.page-ctrl').css('display', 'none');
+	} else {
+		$('.page-ctrl').css('display', '');
+	}
 	div.empty();
 	div.css('position', 'relative');
 	div.css('margin-left', 'auto');
@@ -291,6 +298,8 @@ function redrawMediagriddtl(div, mediagrid, mediagriddtl, selected) {
 		bgimage = '/pixsigdata' + mediagriddtl.video.thumbnail;
 	} else if (mediagriddtl.image != null) {
 		bgimage = '/pixsigdata' + mediagriddtl.image.thumbnail;
+	} else if (mediagriddtl.page != null) {
+		bgimage = '/pixsigdata' + mediagriddtl.page.snapshot;
 	}
 
 	mediagriddtlhtml += '<div style="position:absolute; width:100%; height:100%; "></div>';
@@ -443,8 +452,8 @@ $('body').on('click', '.pix-delete', function(event) {
 function regionPositionUpdate(e, ui) {
 	var xcount = CurrentMediagrid.xcount;
 	var ycount = CurrentMediagrid.ycount;
-	var x = Math.floor($(this).position().left / ($('#MediagridDiv').width()/xcount));
-	var y = Math.floor($(this).position().top / ($('#MediagridDiv').height()/ycount));
+	var x = Math.round($(this).position().left / ($('#MediagridDiv').width()/xcount));
+	var y = Math.round($(this).position().top / ($('#MediagridDiv').height()/ycount));
 	var w = Math.round($(this).width() / ($('#MediagridDiv').width()/xcount));
 	var h = Math.round($(this).height() / ($('#MediagridDiv').height()/ycount));
 	w = (w == 0) ? 1 : w;
@@ -458,9 +467,14 @@ function regionPositionUpdate(e, ui) {
 			var y1 = dtl.ypos;
 			var w1 = dtl.xcount;
 			var h1 = dtl.ycount;
+			//console.log(x1, y1, w1, h1);
 			if ((y+h <= y1) || (y1+h1 <= y) || (x+w <= x1) || (x1+w1 <= x)) {
 				continue;
 			} else {
+				return;
+			}
+		} else {
+			if (dtl.objtype == 3 && (w > 1 || h > 1)) {
 				return;
 			}
 		}
@@ -473,10 +487,6 @@ function regionPositionUpdate(e, ui) {
 	mediagriddtls[0].ycount = h;
 	mediagriddtls[0].xpos = x;
 	mediagriddtls[0].ypos = y;
-	//$(this).css("width" , 100*w/CurrentMediagrid.xcount + '%');
-	//$(this).css("height" , 100*h/CurrentMediagrid.ycount + '%');
-	//$(this).css("left" , 100*x/CurrentMediagrid.xcount + '%');
-	//$(this).css("top" , 100*y/CurrentMediagrid.ycount + '%');
 }
 
 function updateAddDtlBtn() {
@@ -559,8 +569,10 @@ function validMediagriddtl(mediagriddtl) {
 $('#MediagriddtlEditForm input[name=objtype]').change(function(e) {
 	CurrentMediagriddtl.objtype = $('#MediagriddtlEditForm input[name=objtype]:checked').attr('value');
 	CurrentMediagriddtl.objid = 0;
+	CurrentMediagriddtl.mmediaid = 0;
 	CurrentMediagriddtl.video = null;
 	CurrentMediagriddtl.image = null;
+	CurrentMediagriddtl.page = null;
 	refreshMediaSelect();
 	redrawMediagrid($('#MediagridDiv'), CurrentMediagrid, CurrentMediagriddtl);
 });
@@ -571,9 +583,15 @@ $('#MediaSelect').on('change', function(e) {
 		if (CurrentMediagriddtl.objtype == 1) {
 			CurrentMediagriddtl.video = $('#MediaSelect').select2('data').video;
 			CurrentMediagriddtl.image = null;
-		} else {
+			CurrentMediagriddtl.page = null;
+		} else if (CurrentMediagriddtl.objtype == 2) {
 			CurrentMediagriddtl.image = $('#MediaSelect').select2('data').image;
 			CurrentMediagriddtl.video = null;
+			CurrentMediagriddtl.page = null;
+		} else if (CurrentMediagriddtl.objtype == 3) {
+			CurrentMediagriddtl.page = $('#MediaSelect').select2('data').page;
+			CurrentMediagriddtl.video = null;
+			CurrentMediagriddtl.image = null;
 		}
 	}
 	redrawMediagrid($('#MediagridDiv'), CurrentMediagrid, CurrentMediagriddtl);
@@ -639,7 +657,7 @@ function refreshMediaSelect() {
 			dropdownCssClass: "bigdrop", 
 			escapeMarkup: function (m) { return m; } 
 		});
-	} else if (CurrentMediagriddtl != null) {
+	} else if (CurrentMediagriddtl != null && CurrentMediagriddtl.objtype == 2) {
 		$("#MediaSelect").select2({
 			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
@@ -692,6 +710,63 @@ function refreshMediaSelect() {
 			initSelection: function(element, callback) {
 				if (CurrentMediagriddtl != null && CurrentMediagriddtl.image != null) {
 					callback({id: CurrentMediagriddtl.image.imageid, text: CurrentMediagriddtl.image.name, image: CurrentMediagriddtl.image });
+				}
+			},
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
+	} else if (CurrentMediagriddtl != null && CurrentMediagriddtl.objtype == 3) {
+		$("#MediaSelect").select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: {
+				url: 'page!pagelist.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term,
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.name, 
+								id:item.pageid, 
+								page:item, 
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function(data) {
+				var width = 40;
+				var height = 40 * data.page.height / data.page.width;
+				if (data.page.width < data.page.height) {
+					height = 40;
+					width = 40 * data.page.width / data.page.height;
+				}
+				var html = '<span><img src="/pixsigdata' + data.page.snapshot + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.page.name + '</span>'
+				return html;
+			},
+			formatSelection: function(data) {
+				var width = 30;
+				var height = 30 * height / width;
+				if (data.page.width < data.page.height) {
+					height = 30;
+					width = 30 * width / height;
+				}
+				var html = '<span><img src="/pixsigdata' + data.page.snapshot + '" width="' + width + 'px" height="' + height + 'px"/></span>'
+				return html;
+			},
+			initSelection: function(element, callback) {
+				if (CurrentMediagriddtl != null && CurrentMediagriddtl.page != null) {
+					callback({id: CurrentMediagriddtl.page.pageid, text: CurrentMediagriddtl.page.name, page: CurrentMediagriddtl.page });
 				}
 			},
 			dropdownCssClass: "bigdrop", 

@@ -5,6 +5,7 @@ import java.util.Date;
 public class Mediagriddtl {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
+	public final static String ObjType_Page = "3";
 
 	private Integer mediagriddtlid;
 
@@ -29,6 +30,8 @@ public class Mediagriddtl {
 	private Video video;
 
 	private Image image;
+
+	private Page page;
 
 	public Integer getMediagriddtlid() {
 		return mediagriddtlid;
@@ -124,5 +127,13 @@ public class Mediagriddtl {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
 	}
 }

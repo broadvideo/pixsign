@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.PagezoneMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Pagezone" >
+    <id column="pagezoneid" property="pagezoneid" jdbcType="INTEGER" />
+    <result column="pageid" property="pageid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="VARCHAR" />
+    <result column="topoffset" property="topoffset" jdbcType="VARCHAR" />
+    <result column="leftoffset" property="leftoffset" jdbcType="VARCHAR" />
+    <result column="zindex" property="zindex" jdbcType="INTEGER" />
+    <result column="transform" property="transform" jdbcType="VARCHAR" />
+    <result column="bdcolor" property="bdcolor" jdbcType="VARCHAR" />
+    <result column="bdstyle" property="bdstyle" jdbcType="VARCHAR" />
+    <result column="bdwidth" property="bdwidth" jdbcType="VARCHAR" />
+    <result column="bdtl" property="bdtl" jdbcType="VARCHAR" />
+    <result column="bdtr" property="bdtr" jdbcType="VARCHAR" />
+    <result column="bdbl" property="bdbl" jdbcType="VARCHAR" />
+    <result column="bdbr" property="bdbr" jdbcType="VARCHAR" />
+    <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="opacity" property="opacity" jdbcType="INTEGER" />
+    <result column="padding" property="padding" jdbcType="VARCHAR" />
+    <result column="shadow" property="shadow" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="fontfamily" property="fontfamily" jdbcType="VARCHAR" />
+    <result column="fontsize" property="fontsize" jdbcType="VARCHAR" />
+    <result column="fontweight" property="fontweight" jdbcType="VARCHAR" />
+    <result column="fontstyle" property="fontstyle" jdbcType="VARCHAR" />
+    <result column="decoration" property="decoration" jdbcType="VARCHAR" />
+    <result column="align" property="align" jdbcType="VARCHAR" />
+    <result column="lineheight" property="lineheight" jdbcType="VARCHAR" />
+    <result column="linkpageid" property="linkpageid" jdbcType="INTEGER" />
+    <result column="imageid" property="imageid" jdbcType="VARCHAR" />
+    <result column="videoid" property="videoid" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Pagezone" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    pagezoneid, pageid, name, type, status, height, width, topoffset, leftoffset, zindex, 
+    transform, bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, opacity, padding, 
+    shadow, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, lineheight, 
+    linkpageid, imageid, videoid, createtime
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pagezone
+    where pagezoneid = #{pagezoneid}
+  </select>
+  
+  <select id="selectList" resultMap="ResultMapWithBLOBs">
+    select * from pagezone
+    where pageid = #{pageid}
+    order by pagezoneid
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from pagezone
+    where pagezoneid = #{pagezoneid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pagezone (pageid, name, type, 
+      status, height, width, 
+      topoffset, leftoffset, zindex, 
+      transform, bdcolor, bdstyle, 
+      bdwidth, bdtl, bdtr, 
+      bdbl, bdbr, bgcolor, 
+      opacity, padding, shadow, 
+      color, fontfamily, fontsize, 
+      fontweight, fontstyle, decoration, 
+      align, lineheight, linkpageid, 
+      imageid, videoid, createtime, 
+      content)
+    values (#{pageid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{height,jdbcType=VARCHAR}, #{width,jdbcType=VARCHAR}, 
+      #{topoffset,jdbcType=VARCHAR}, #{leftoffset,jdbcType=VARCHAR}, #{zindex,jdbcType=INTEGER}, 
+      #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, #{bdstyle,jdbcType=VARCHAR}, 
+      #{bdwidth,jdbcType=VARCHAR}, #{bdtl,jdbcType=VARCHAR}, #{bdtr,jdbcType=VARCHAR}, 
+      #{bdbl,jdbcType=VARCHAR}, #{bdbr,jdbcType=VARCHAR}, #{bgcolor,jdbcType=VARCHAR}, 
+      #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=VARCHAR}, #{shadow,jdbcType=VARCHAR}, 
+      #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=VARCHAR}, 
+      #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, 
+      #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=VARCHAR}, #{linkpageid,jdbcType=INTEGER}, 
+      #{imageid,jdbcType=VARCHAR}, #{videoid,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pagezone
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pageid != null" >
+        pageid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="topoffset != null" >
+        topoffset,
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset,
+      </if>
+      <if test="zindex != null" >
+        zindex,
+      </if>
+      <if test="transform != null" >
+        transform,
+      </if>
+      <if test="bdcolor != null" >
+        bdcolor,
+      </if>
+      <if test="bdstyle != null" >
+        bdstyle,
+      </if>
+      <if test="bdwidth != null" >
+        bdwidth,
+      </if>
+      <if test="bdtl != null" >
+        bdtl,
+      </if>
+      <if test="bdtr != null" >
+        bdtr,
+      </if>
+      <if test="bdbl != null" >
+        bdbl,
+      </if>
+      <if test="bdbr != null" >
+        bdbr,
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor,
+      </if>
+      <if test="opacity != null" >
+        opacity,
+      </if>
+      <if test="padding != null" >
+        padding,
+      </if>
+      <if test="shadow != null" >
+        shadow,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="fontfamily != null" >
+        fontfamily,
+      </if>
+      <if test="fontsize != null" >
+        fontsize,
+      </if>
+      <if test="fontweight != null" >
+        fontweight,
+      </if>
+      <if test="fontstyle != null" >
+        fontstyle,
+      </if>
+      <if test="decoration != null" >
+        decoration,
+      </if>
+      <if test="align != null" >
+        align,
+      </if>
+      <if test="lineheight != null" >
+        lineheight,
+      </if>
+      <if test="linkpageid != null" >
+        linkpageid,
+      </if>
+      <if test="imageid != null" >
+        imageid,
+      </if>
+      <if test="videoid != null" >
+        videoid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pageid != null" >
+        #{pageid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=VARCHAR},
+      </if>
+      <if test="topoffset != null" >
+        #{topoffset,jdbcType=VARCHAR},
+      </if>
+      <if test="leftoffset != null" >
+        #{leftoffset,jdbcType=VARCHAR},
+      </if>
+      <if test="zindex != null" >
+        #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="transform != null" >
+        #{transform,jdbcType=VARCHAR},
+      </if>
+      <if test="bdcolor != null" >
+        #{bdcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bdstyle != null" >
+        #{bdstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bdwidth != null" >
+        #{bdwidth,jdbcType=VARCHAR},
+      </if>
+      <if test="bdtl != null" >
+        #{bdtl,jdbcType=VARCHAR},
+      </if>
+      <if test="bdtr != null" >
+        #{bdtr,jdbcType=VARCHAR},
+      </if>
+      <if test="bdbl != null" >
+        #{bdbl,jdbcType=VARCHAR},
+      </if>
+      <if test="bdbr != null" >
+        #{bdbr,jdbcType=VARCHAR},
+      </if>
+      <if test="bgcolor != null" >
+        #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="opacity != null" >
+        #{opacity,jdbcType=INTEGER},
+      </if>
+      <if test="padding != null" >
+        #{padding,jdbcType=VARCHAR},
+      </if>
+      <if test="shadow != null" >
+        #{shadow,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fontfamily != null" >
+        #{fontfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="fontsize != null" >
+        #{fontsize,jdbcType=VARCHAR},
+      </if>
+      <if test="fontweight != null" >
+        #{fontweight,jdbcType=VARCHAR},
+      </if>
+      <if test="fontstyle != null" >
+        #{fontstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="decoration != null" >
+        #{decoration,jdbcType=VARCHAR},
+      </if>
+      <if test="align != null" >
+        #{align,jdbcType=VARCHAR},
+      </if>
+      <if test="lineheight != null" >
+        #{lineheight,jdbcType=VARCHAR},
+      </if>
+      <if test="linkpageid != null" >
+        #{linkpageid,jdbcType=INTEGER},
+      </if>
+      <if test="imageid != null" >
+        #{imageid,jdbcType=VARCHAR},
+      </if>
+      <if test="videoid != null" >
+        #{videoid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    update pagezone
+    <set >
+      <if test="pageid != null" >
+        pageid = #{pageid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=VARCHAR},
+      </if>
+      <if test="topoffset != null" >
+        topoffset = #{topoffset,jdbcType=VARCHAR},
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset = #{leftoffset,jdbcType=VARCHAR},
+      </if>
+      <if test="zindex != null" >
+        zindex = #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="transform != null" >
+        transform = #{transform,jdbcType=VARCHAR},
+      </if>
+      <if test="bdcolor != null" >
+        bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bdstyle != null" >
+        bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bdwidth != null" >
+        bdwidth = #{bdwidth,jdbcType=VARCHAR},
+      </if>
+      <if test="bdtl != null" >
+        bdtl = #{bdtl,jdbcType=VARCHAR},
+      </if>
+      <if test="bdtr != null" >
+        bdtr = #{bdtr,jdbcType=VARCHAR},
+      </if>
+      <if test="bdbl != null" >
+        bdbl = #{bdbl,jdbcType=VARCHAR},
+      </if>
+      <if test="bdbr != null" >
+        bdbr = #{bdbr,jdbcType=VARCHAR},
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="opacity != null" >
+        opacity = #{opacity,jdbcType=INTEGER},
+      </if>
+      <if test="padding != null" >
+        padding = #{padding,jdbcType=VARCHAR},
+      </if>
+      <if test="shadow != null" >
+        shadow = #{shadow,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fontfamily != null" >
+        fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="fontsize != null" >
+        fontsize = #{fontsize,jdbcType=VARCHAR},
+      </if>
+      <if test="fontweight != null" >
+        fontweight = #{fontweight,jdbcType=VARCHAR},
+      </if>
+      <if test="fontstyle != null" >
+        fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="decoration != null" >
+        decoration = #{decoration,jdbcType=VARCHAR},
+      </if>
+      <if test="align != null" >
+        align = #{align,jdbcType=VARCHAR},
+      </if>
+      <if test="lineheight != null" >
+        lineheight = #{lineheight,jdbcType=VARCHAR},
+      </if>
+      <if test="linkpageid != null" >
+        linkpageid = #{linkpageid,jdbcType=INTEGER},
+      </if>
+      <if test="imageid != null" >
+        imageid = #{imageid,jdbcType=VARCHAR},
+      </if>
+      <if test="videoid != null" >
+        videoid = #{videoid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    update pagezone
+    set pageid = #{pageid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      height = #{height,jdbcType=VARCHAR},
+      width = #{width,jdbcType=VARCHAR},
+      topoffset = #{topoffset,jdbcType=VARCHAR},
+      leftoffset = #{leftoffset,jdbcType=VARCHAR},
+      zindex = #{zindex,jdbcType=INTEGER},
+      transform = #{transform,jdbcType=VARCHAR},
+      bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=VARCHAR},
+      bdtl = #{bdtl,jdbcType=VARCHAR},
+      bdtr = #{bdtr,jdbcType=VARCHAR},
+      bdbl = #{bdbl,jdbcType=VARCHAR},
+      bdbr = #{bdbr,jdbcType=VARCHAR},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      opacity = #{opacity,jdbcType=INTEGER},
+      padding = #{padding,jdbcType=VARCHAR},
+      shadow = #{shadow,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=VARCHAR},
+      fontweight = #{fontweight,jdbcType=VARCHAR},
+      fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      decoration = #{decoration,jdbcType=VARCHAR},
+      align = #{align,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=VARCHAR},
+      linkpageid = #{linkpageid,jdbcType=INTEGER},
+      imageid = #{imageid,jdbcType=VARCHAR},
+      videoid = #{videoid,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    update pagezone
+    set pageid = #{pageid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      height = #{height,jdbcType=VARCHAR},
+      width = #{width,jdbcType=VARCHAR},
+      topoffset = #{topoffset,jdbcType=VARCHAR},
+      leftoffset = #{leftoffset,jdbcType=VARCHAR},
+      zindex = #{zindex,jdbcType=INTEGER},
+      transform = #{transform,jdbcType=VARCHAR},
+      bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=VARCHAR},
+      bdtl = #{bdtl,jdbcType=VARCHAR},
+      bdtr = #{bdtr,jdbcType=VARCHAR},
+      bdbl = #{bdbl,jdbcType=VARCHAR},
+      bdbr = #{bdbr,jdbcType=VARCHAR},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      opacity = #{opacity,jdbcType=INTEGER},
+      padding = #{padding,jdbcType=VARCHAR},
+      shadow = #{shadow,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=VARCHAR},
+      fontweight = #{fontweight,jdbcType=VARCHAR},
+      fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      decoration = #{decoration,jdbcType=VARCHAR},
+      align = #{align,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=VARCHAR},
+      linkpageid = #{linkpageid,jdbcType=INTEGER},
+      imageid = #{imageid,jdbcType=VARCHAR},
+      videoid = #{videoid,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
+  </update>
+</mapper>

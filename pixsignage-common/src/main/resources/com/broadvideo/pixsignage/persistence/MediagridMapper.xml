@@ -83,7 +83,6 @@
     where mg.mediagridid = t1.mediagridid
     and t1.mediagridid = t2.mediagridid
     and c1 = c2
-    and c1 > 0
     and mg.status=0
   </select>
 
@@ -95,8 +94,8 @@
       and mgd.mmediaid=mm.mmediaid
       and mm.status=2
       group by mediagridid) t
-      where mg.mediagridid = t.mediagridid
-      and c > 0
+    where mg.mediagridid = t.mediagridid
+    and c > 0
     and mg.status=0
   </select>
 
