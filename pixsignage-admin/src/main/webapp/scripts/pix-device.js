@@ -373,11 +373,11 @@ function initMyEditModal() {
 				createBranchTreeData(data.aaData, currentEditBranchTreeData);
 				createEditBranchTree(currentEditBranchTreeData);
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(data.errorcode + ": " + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			bootbox.alert('failure');
 		}
 	});
 	function createBranchTreeData(branches, treeData) {
@@ -428,11 +428,11 @@ function initMyEditModal() {
 					escapeMarkup: function (m) { return m; } 
 				});
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(data.errorcode + ": " + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			bootbox.alert('failure');
 		}
 	});
 

@@ -149,7 +149,7 @@ function refreshBundleScheduleDetail() {
 			scheduleTabHtml += '<div class="row"><div class="col-md-10 col-sm-10">';
 			for (var j=0; j<schedule.bundlescheduledtls.length; j++) {
 				var bundlescheduledtl = schedule.bundlescheduledtls[j];
-				if (j % 6 == 0) {
+				if (j % 4 == 0) {
 					scheduleTabHtml += '<div class="row" >';
 				}
 				scheduleTabHtml += '<div class="col-md-3 col-xs-3">';

@@ -18,6 +18,7 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="staff" column="{staffid=staffid}" select="com.broadvideo.pixsignage.persistence.StaffMapper.selectByPrimaryKey" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     oplogid, orgid, branchid, staffid, type, objtype1, objid1, objname1, objtype2, objid2, 
     objname2, status, description, createtime
@@ -60,6 +61,7 @@
     delete from oplog
     where oplogid = #{oplogid}
   </delete>
+  
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Oplog" >
     <selectKey resultType="java.lang.Integer" keyProperty="oplogid" order="AFTER" >
       SELECT LAST_INSERT_ID()

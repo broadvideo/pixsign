@@ -179,7 +179,7 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.org.maxdevices"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" />
+													<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" value="0" />
 												</div>
 											</div>
 										</div>
@@ -187,7 +187,7 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.org.maxmdevices"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.maxmdevices" />
+													<i class="fa"></i> <input type="text" class="form-control" name="org.maxmdevices" value="0"/>
 												</div>
 											</div>
 										</div>
@@ -195,7 +195,7 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.org.storage"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" />
+													<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" value="0" />
 												</div>
 											</div>
 										</div>

@@ -222,7 +222,7 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 	$(div).find('.grid-font').each(function() {
 		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.5 * lineheight + 'px');
+		$(this).css('font-size', 0.2 * lineheight + 'px');
 		$(this).css('line-height', lineheight + 'px');
 	});
 }
@@ -277,7 +277,7 @@ function redrawDevicegrid(div, devicegrid) {
 	$(div).find('.grid-font').each(function() {
 		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.5 * lineheight + 'px');
+		$(this).css('font-size', 0.2 * lineheight + 'px');
 		$(this).css('line-height', lineheight + 'px');
 	});
 }

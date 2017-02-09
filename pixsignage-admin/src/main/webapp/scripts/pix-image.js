@@ -248,10 +248,11 @@ function initMyEditModal() {
 }
 
 function initUploadModal() {
+	console.log(/Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent));
 	$('#UploadForm').fileupload({
-		disableImageResize: false,
 		autoUpload: false,
-		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		disableImageResize: true,
 		maxFileSize: 20480000,
 		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
 		// Uncomment the following to send cross-domain cookies:

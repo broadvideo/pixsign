@@ -95,6 +95,7 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 				var device = devicegrid.devices[k];
 				if (device.xpos == i && device.ypos == j) {
 					terminalid = device.terminalid;
+					terminalid = terminalid.substr(terminalid.length-5,5);
 				}
 			}
 			var html = '<div style="position: absolute; width:' + (100/devicegrid.xcount);
@@ -127,7 +128,7 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 	$(div).find('.grid-font').each(function() {
 		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.5 * lineheight + 'px');
+		$(this).css('font-size', 0.2 * lineheight + 'px');
 		$(this).css('line-height', lineheight + 'px');
 	});
 }
@@ -189,7 +190,7 @@ function refreshGridscheduleDetail() {
 			scheduleTabHtml += '<div class="row"><div class="col-md-10 col-sm-10">';
 			for (var j=0; j<schedule.gridscheduledtls.length; j++) {
 				var gridscheduledtl = schedule.gridscheduledtls[j];
-				if (j % 6 == 0) {
+				if (j % 4 == 0) {
 					scheduleTabHtml += '<div class="row" >';
 				}
 				scheduleTabHtml += '<div class="col-md-3 col-xs-3">';

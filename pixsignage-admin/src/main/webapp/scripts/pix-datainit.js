@@ -118,7 +118,7 @@ function startPingTimer(){
 			setTimeout('startPingTimer()',10000); 
 		},
 		error : function() {
-			window.location.reload();
+			//window.location.reload();
 		}
 	});
 }
