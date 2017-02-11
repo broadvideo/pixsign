@@ -55,15 +55,13 @@ function initDeviceChart() {
 
 	var CurrentDevice;
 	var CurrentDeviceid = 0;
-	var SelectedYear = new Date().format('yyyy');
-	var SelectedMonth = new Date().format('MM');
-	var SelectedDay = new Date().format('dd');
 	
 	$('body').on('click', '.pix-chart', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
+		$('input[name="pflowlog.statdate"]').val(new Date().format('yyyy') + '-' + new Date().format('MM') + '-' + new Date().format('dd'));
 		CurrentDevice = $('#MyTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;		
 		$('#ChartModal').modal();
@@ -73,6 +71,38 @@ function initDeviceChart() {
 		refreshStatByHourChart();
 		refreshStatByDayChart();
 	})
+
+	$('input[name="pflowlog.statdate"]').on('change', function(e) {
+		refreshStatByHourChart();
+	});
+
+	var CurrentMonth = new Date().format('yyyy-MM');
+	var MonthData = [];
+	var yy = new Date().getFullYear();
+	var mm = new Date().getMonth();
+	for (var i=0; i<12; i++) {
+		MonthData[i] = {};
+		MonthData[i].id = new Date(yy, mm-i, 1).format('yyyy-MM');
+		MonthData[i].text = new Date(yy, mm-i, 1).format('yyyy-MM');
+		MonthData[i].value = new Date(yy, mm-i, 1).format('yyyyMM');
+		MonthData[i].year = new Date(yy, mm-i, 1).format('yyyy');
+		MonthData[i].month = new Date(yy, mm-i, 1).format('MM');
+	}
+	$('#MonthSelect1').select2({
+		placeholder: '',
+		minimumInputLength: 0,
+		data: MonthData,
+	});
+	$('#MonthSelect1').select2('val', MonthData[0].id);
+	$('#MonthSelect2').select2({
+		placeholder: '',
+		minimumInputLength: 0,
+		data: MonthData,
+	});
+	$('#MonthSelect2').select2('val', MonthData[0].id);
+	$('#MonthSelect2').on('change', function(e) {
+		refreshStatByDayChart();
+	});
 
 	function refreshStatByHourChart() {
 		$('#StatLoding1').show();
@@ -84,7 +114,7 @@ function initDeviceChart() {
 			type : 'POST',
 			data : {
 				'deviceid': CurrentDeviceid,
-				'day': '' + SelectedYear + SelectedMonth + SelectedDay,
+				'day': $('input[name="pflowlog.statdate"]').val(),
 			},
 			dataType: "json",
 			success : function(data, status) {
@@ -146,7 +176,7 @@ function initDeviceChart() {
 
 		var statdata = [];
 		var series = {};
-		series.label = SelectedYear + '-' + SelectedMonth + '-' + SelectedDay;
+		series.label = $('input[name="pflowlog.statdate"]').val();
 		series.data = [];
 		
 		for (var i=0; i<24; i++) {
@@ -170,7 +200,7 @@ function initDeviceChart() {
 					prevStatByHourPoint = item.dataIndex;
 					$("#StatByHourTooltip").remove();
 					var x = item.datapoint[0], y = item.datapoint[1];
-					var title = SelectedYear + '-' + SelectedMonth + '-' + SelectedDay + ' ' + (x-1) + ':00';
+					var title = $('input[name="pflowlog.statdate"]').val() + ' ' + (x-1) + ':00';
 					$('<div id="StatByHourTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
 						position: 'absolute',
 						display: 'none',
@@ -257,7 +287,7 @@ function initDeviceChart() {
 			type : 'POST',
 			data : {
 				'deviceid': CurrentDeviceid,
-				'month': '' + SelectedYear + SelectedMonth,
+				'month': $('#MonthSelect2').select2('data').text,
 			},
 			dataType: "json",
 			success : function(data, status) {
@@ -273,19 +303,19 @@ function initDeviceChart() {
 	}
 	
 	function initStatByDayPlot(data) {
-		var month = parseInt(SelectedMonth, 10);
-		var d = new Date(SelectedYear, month, 0);
+		var month = parseInt($('#MonthSelect2').select2('data').month, 10);
+		var d = new Date($('#MonthSelect2').select2('data').year, month, 0);
 		var daycount = d.getDate();
 		
 		var ticks = [];
-		ticks.push([2, SelectedMonth + '-02']);
-		ticks.push([6, SelectedMonth + '-06']);
-		ticks.push([10, SelectedMonth + '-10']);
-		ticks.push([14, SelectedMonth + '-14']);
-		ticks.push([18, SelectedMonth + '-18']);
-		ticks.push([22, SelectedMonth + '-22']);
-		ticks.push([26, SelectedMonth + '-26']);
-		ticks.push([daycount, SelectedMonth + '-' + daycount]);
+		ticks.push([2, $('#MonthSelect2').select2('data').month + '-02']);
+		ticks.push([6, $('#MonthSelect2').select2('data').month + '-06']);
+		ticks.push([10, $('#MonthSelect2').select2('data').month + '-10']);
+		ticks.push([14, $('#MonthSelect2').select2('data').month + '-14']);
+		ticks.push([18, $('#MonthSelect2').select2('data').month + '-18']);
+		ticks.push([22, $('#MonthSelect2').select2('data').month + '-22']);
+		ticks.push([26, $('#MonthSelect2').select2('data').month + '-26']);
+		ticks.push([daycount, $('#MonthSelect2').select2('data').month + '-' + daycount]);
 		
 		var options = {
 				series: {
@@ -319,7 +349,7 @@ function initDeviceChart() {
 
 		var statdata = [];
 		var series = {};
-		series.label = SelectedYear + '-' + SelectedMonth;
+		series.label = $('#MonthSelect2').select2('data').text;
 		series.data = [];
 		
 		for (var i=0; i<daycount; i++) {
@@ -343,7 +373,7 @@ function initDeviceChart() {
 					prevStatByDayPoint = item.dataIndex;
 					$("#StatByDayTooltip").remove();
 					var x = item.datapoint[0], y = item.datapoint[1];
-					var title = SelectedYear + '-' + SelectedMonth + '-' + x;
+					var title = $('#MonthSelect2').select2('data').text + '-' + x;
 					$('<div id="StatByDayTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
 						position: 'absolute',
 						display: 'none',
@@ -364,19 +394,19 @@ function initDeviceChart() {
 	}
 
 	function initStatByDayBar(data) {
-		var month = parseInt(SelectedMonth, 10);
-		var d = new Date(SelectedYear, month, 0);
+		var month = parseInt($('#MonthSelect2').select2('data').month, 10);
+		var d = new Date($('#MonthSelect2').select2('data').year, month, 0);
 		var daycount = d.getDate();
 		
 		var ticks = [];
-		ticks.push([1.6, SelectedMonth + '-02']);
-		ticks.push([5.6, SelectedMonth + '-06']);
-		ticks.push([9.6, SelectedMonth + '-10']);
-		ticks.push([13.6, SelectedMonth + '-14']);
-		ticks.push([17.6, SelectedMonth + '-18']);
-		ticks.push([21.6, SelectedMonth + '-22']);
-		ticks.push([25.6, SelectedMonth + '-26']);
-		ticks.push([daycount-0.4, SelectedMonth + '-' + daycount]);
+		ticks.push([1.6, $('#MonthSelect2').select2('data').month + '-02']);
+		ticks.push([5.6, $('#MonthSelect2').select2('data').month + '-06']);
+		ticks.push([9.6, $('#MonthSelect2').select2('data').month + '-10']);
+		ticks.push([13.6, $('#MonthSelect2').select2('data').month + '-14']);
+		ticks.push([17.6, $('#MonthSelect2').select2('data').month + '-18']);
+		ticks.push([21.6, $('#MonthSelect2').select2('data').month + '-22']);
+		ticks.push([25.6, $('#MonthSelect2').select2('data').month + '-26']);
+		ticks.push([daycount-0.4, $('#MonthSelect2').select2('data').month + '-' + daycount]);
 
 		var statdata = [];
 		for (var i=0; i<daycount; i++) {
@@ -420,3 +450,41 @@ function initDeviceChart() {
 	}
 
 }
+
+function initDownloadModal() {
+	FormValidateOption.rules = {};
+	FormValidateOption.rules['day'] = {};
+	FormValidateOption.rules['day']['required'] = true;
+	FormValidateOption.submitHandler = null;
+	$('#DownloadByHourForm').validate(FormValidateOption);
+
+	$('body').on('click', '.pix-downloadbyhour', function(event) {
+		$('#DownloadByHourModal').modal();
+	});
+	$('[type=submit]', $('#DownloadByHourModal')).on('click', function(event) {
+		if ($('#DownloadByHourForm').valid()) {
+			$('#DownloadByHourForm').submit();
+			$('#DownloadByHourModal').modal('hide');
+		}
+	});
+
+	$('body').on('click', '.pix-downloadbyday', function(event) {
+		$('#DownloadByDayModal').modal();
+	});
+	$('[type=submit]', $('#DownloadByDayModal')).on('click', function(event) {
+		if ($('#DownloadByDayForm').valid()) {
+			$('#DownloadByDayForm').submit();
+			$('#DownloadByDayModal').modal('hide');
+		}
+	});
+}
+
+$(".form_datetime").datetimepicker({
+	autoclose: true,
+	isRTL: Metronic.isRTL(),
+	format: "yyyy-mm-dd",
+	pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+	language: "zh-CN",
+	minView: 'month',
+	todayBtn: true
+});

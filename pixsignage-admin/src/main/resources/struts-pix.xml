@@ -1190,6 +1190,22 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="pflowlog!downloadbyhour" method="doDownloadByHour" class="pflowlogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="pflowlog!downloadbyday" method="doDownloadByDay" class="pflowlogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
 
 
 		<action name="gridlayout!list" method="doList" class="gridlayoutAction">

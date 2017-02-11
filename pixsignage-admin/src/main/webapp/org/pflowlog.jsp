@@ -33,9 +33,69 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
+
+		<div id="DownloadByHourModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.pflowlog.statbyhour.export"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="DownloadByHourForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="pflowlog!downloadbyhour.action">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.statday"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="input-group date form_datetime">                                       
+											<input type="text" size="16" readonly class="form-control" name="day">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.export"/> </button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="DownloadByDayModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.pflowlog.statbyday.export"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="DownloadByDayForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="pflowlog!downloadbyday.action">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.statmonth"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<input type="hidden" id="MonthSelect1" name="month" class="form-control select2">
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.export"/> </button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div id="ChartModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-full">
@@ -53,6 +113,16 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 									<div class="portlet-body">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="input-group date form_datetime">                                       
+													<input type="text" size="16" readonly class="form-control" name="pflowlog.statdate">
+													<span class="input-group-btn">
+													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+													</span>
+												</div>
+											</div>
+										</div>
 										<div class="row">
 											<div class="col-md-12 col-sm-12" id="StatLoding1">
 												<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
@@ -76,6 +146,13 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 									<div class="portlet-body">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="btn-group">
+													<input type="hidden" id="MonthSelect2" class="form-control select2">
+												</div>
+											</div>
+										</div>
 										<div class="row">
 											<div class="col-md-12 col-sm-12" id="StatLoding2">
 												<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
@@ -126,6 +203,14 @@ response.setDateHeader("Expires",0);
 								</div>
 							</div>
 							<div class="portlet-body">
+								<div class="table-toolbar">
+									<div class="btn-group">
+										<button class="btn green pix-downloadbyhour"><spring:message code="global.pflowlog.statbyhour.export"/> <i class="fa fa-download"></i></button>
+									</div>
+									<div class="btn-group">
+										<button class="btn green pix-downloadbyday"><spring:message code="global.pflowlog.statbyday.export"/> <i class="fa fa-download"></i></button>
+									</div>
+								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
 									<thead></thead>
 									<tbody></tbody>
@@ -181,6 +266,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/flot/jquery.flot.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/flot/jquery.flot.resize.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
@@ -191,7 +278,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-pflowlog.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-pflowlog.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
@@ -199,6 +286,7 @@ jQuery(document).ready(function() {
 	DataInit.init('${locale}');
 	initMyTable();
 	initDeviceChart();
+	initDownloadModal();
 });
 
 </script>
