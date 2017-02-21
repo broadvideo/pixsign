@@ -225,16 +225,18 @@ public class MediagridServiceImpl implements MediagridService {
 		for (int devicegridid : devicegridids) {
 			List<Device> devices = deviceMapper.selectByDevicegrid("" + devicegridid);
 			for (Device device : devices) {
-				Msgevent msgevent = new Msgevent();
-				msgevent.setMsgtype(Msgevent.MsgType_Grid_Schedule);
-				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-				msgevent.setObjid1(device.getDeviceid());
-				msgevent.setObjtype2(Msgevent.ObjType_2_None);
-				msgevent.setObjid2(0);
-				msgevent.setStatus(Msgevent.Status_Wait);
-				msgeventMapper.deleteByDtl(Msgevent.MsgType_Grid_Schedule, Msgevent.ObjType_1_Device,
-						"" + device.getDeviceid(), null, null, null);
-				msgeventMapper.insertSelective(msgevent);
+				if (device.getOnlineflag().equals("1")) {
+					Msgevent msgevent = new Msgevent();
+					msgevent.setMsgtype(Msgevent.MsgType_Grid_Schedule);
+					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+					msgevent.setObjid1(device.getDeviceid());
+					msgevent.setObjtype2(Msgevent.ObjType_2_None);
+					msgevent.setObjid2(0);
+					msgevent.setStatus(Msgevent.Status_Wait);
+					msgeventMapper.deleteByDtl(Msgevent.MsgType_Grid_Schedule, Msgevent.ObjType_1_Device,
+							"" + device.getDeviceid(), null, null, null);
+					msgeventMapper.insertSelective(msgevent);
+				}
 			}
 		}
 	}

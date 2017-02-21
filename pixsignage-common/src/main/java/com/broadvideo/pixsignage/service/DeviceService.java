@@ -5,11 +5,11 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Device;
 
 public interface DeviceService {
-	public int selectCount(String orgid, String branchid, String type, String status, String devicegroupid,
-			String search);
+	public int selectCount(String orgid, String branchid, String type, String status, String onlineflag,
+			String devicegroupid, String search);
 
-	public List<Device> selectList(String orgid, String branchid, String type, String status, String devicegroupid,
-			String search, String start, String length, String order);
+	public List<Device> selectList(String orgid, String branchid, String type, String status, String onlineflag,
+			String devicegroupid, String search, String start, String length, String order);
 
 	public Device selectByPrimaryKey(String deviceid);
 

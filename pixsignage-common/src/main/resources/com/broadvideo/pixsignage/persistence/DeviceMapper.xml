@@ -93,6 +93,9 @@
     <if test="status != null">
       and status = #{status}
     </if>
+    <if test="onlineflag != null">
+      and onlineflag = #{onlineflag}
+    </if>
     <if test="devicegroupid != null">
       and devicegroupid = #{devicegroupid}
     </if>

@@ -28,7 +28,10 @@
   
   <select id="selectList" resultMap="BaseResultMap">
     select * from msgevent
-    where msgtype = #{msgtype}
+    where 1 = 1
+    <if test="msgtype != null">
+      and msgtype = #{msgtype}
+    </if>
     <if test="objtype1 != null">
       and objtype1 = #{objtype1}
     </if>

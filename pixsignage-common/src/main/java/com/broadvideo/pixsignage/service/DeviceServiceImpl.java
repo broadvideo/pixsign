@@ -1,7 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -32,14 +31,15 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private OrgMapper orgMapper;
 
-	public int selectCount(String orgid, String branchid, String type, String status, String devicegroupid,
-			String search) {
-		return deviceMapper.selectCount(orgid, branchid, type, status, devicegroupid, search);
+	public int selectCount(String orgid, String branchid, String type, String status, String onlineflag,
+			String devicegroupid, String search) {
+		return deviceMapper.selectCount(orgid, branchid, type, status, onlineflag, devicegroupid, search);
 	}
 
-	public List<Device> selectList(String orgid, String branchid, String type, String status, String devicegroupid,
-			String search, String start, String length, String order) {
-		return deviceMapper.selectList(orgid, branchid, type, status, devicegroupid, search, start, length, order);
+	public List<Device> selectList(String orgid, String branchid, String type, String status, String onlineflag,
+			String devicegroupid, String search, String start, String length, String order) {
+		return deviceMapper.selectList(orgid, branchid, type, status, onlineflag, devicegroupid, search, start, length,
+				order);
 	}
 
 	public Device selectByPrimaryKey(String deviceid) {
@@ -86,6 +86,21 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void configall(String orgid) throws Exception {
+		List<Device> devices = deviceMapper.selectList(orgid, null, Device.Type_Sign, "1", "1", null, null, null, null,
+				null);
+		for (Device device : devices) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(device.getDeviceid());
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Config, Msgevent.ObjType_1_Device,
+					"" + device.getDeviceid(), null, null, null);
+			msgeventMapper.insertSelective(msgevent);
+		}
+
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
 		Org org = orgMapper.selectByPrimaryKey(orgid);
@@ -124,21 +139,23 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void config(String deviceid) throws Exception {
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getOnlineflag().equals("1")) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(Integer.parseInt(deviceid));
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Config, Msgevent.ObjType_1_Device, deviceid, null, null,
+					null);
+			msgeventMapper.insertSelective(msgevent);
+		}
+
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
-		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(Integer.parseInt(deviceid));
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Config, Msgevent.ObjType_1_Device, deviceid, null, null,
-				null);
-		msgeventMapper.insertSelective(msgevent);
-
-		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "CONFIG");
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "CONFIG");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
 		msgBodyJson.put("msg_server", serverip + ":1883");
@@ -175,81 +192,80 @@ public class DeviceServiceImpl implements DeviceService {
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
-		msgevent.setStatus(Msgevent.Status_Sent);
-		msgevent.setSendtime(Calendar.getInstance().getTime());
-		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
 	@Transactional
 	public void reboot(String deviceid) throws Exception {
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Device_Reboot);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(Integer.parseInt(deviceid));
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Reboot, Msgevent.ObjType_1_Device, deviceid, null, null,
-				null);
-		msgeventMapper.insertSelective(msgevent);
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getOnlineflag().equals("1")) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Reboot);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(Integer.parseInt(deviceid));
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Reboot, Msgevent.ObjType_1_Device, deviceid, null, null,
+					null);
+			msgeventMapper.insertSelective(msgevent);
+		}
 
-		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "REBOOT");
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "REBOOT");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
-		msgevent.setStatus(Msgevent.Status_Sent);
-		msgevent.setSendtime(Calendar.getInstance().getTime());
-		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
 	@Transactional
 	public void poweroff(String deviceid) throws Exception {
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Device_Poweroff);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(Integer.parseInt(deviceid));
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Poweroff, Msgevent.ObjType_1_Device, deviceid, null, null,
-				null);
-		msgeventMapper.insertSelective(msgevent);
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getOnlineflag().equals("1")) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Poweroff);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(Integer.parseInt(deviceid));
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Poweroff, Msgevent.ObjType_1_Device, deviceid, null,
+					null, null);
+			msgeventMapper.insertSelective(msgevent);
+		}
 
-		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "POWEROFF");
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "POWEROFF");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
-
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
-		msgevent.setStatus(Msgevent.Status_Sent);
-		msgevent.setSendtime(Calendar.getInstance().getTime());
-		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
 	@Transactional
 	public void screen(String deviceid) throws Exception {
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Device_Screen);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(Integer.parseInt(deviceid));
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Screen, Msgevent.ObjType_1_Device, deviceid, null, null,
-				null);
-		msgeventMapper.insertSelective(msgevent);
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getOnlineflag().equals("1")) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Screen);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(Integer.parseInt(deviceid));
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Screen, Msgevent.ObjType_1_Device, deviceid, null, null,
+					null);
+			msgeventMapper.insertSelective(msgevent);
+		}
 
-		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "SCREEN");
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "SCREEN");
 		JSONObject msgBodyJson = new JSONObject();
 		msgJson.put("msg_body", msgBodyJson);
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
-		msgevent.setStatus(Msgevent.Status_Sent);
-		msgevent.setSendtime(Calendar.getInstance().getTime());
-		msgeventMapper.updateByPrimaryKeySelective(msgevent);
+		// msgevent.setStatus(Msgevent.Status_Sent);
+		// msgevent.setSendtime(Calendar.getInstance().getTime());
+		// msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
 	@Transactional

@@ -17,6 +17,10 @@ public class Msgevent {
 	public final static String MsgType_Device_Screen = "8";
 	public final static String MsgType_Device_Poweroff = "9";
 
+	public final static String MsgType_Device_UText = "10";
+	public final static String MsgType_Device_UBundle = "11";
+	public final static String MsgType_Device_UCancel = "12";
+
 	public final static String ObjType_1_None = "0";
 	public final static String ObjType_1_Device = "1";
 	public final static String ObjType_1_Devicegroup = "2";

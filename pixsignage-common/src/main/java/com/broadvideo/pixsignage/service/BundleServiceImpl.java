@@ -952,31 +952,48 @@ public class BundleServiceImpl implements BundleService {
 
 	@Transactional
 	public void syncBundleSchedule(String bindtype, String bindid) throws Exception {
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
-		msgevent.setObjtype1(bindtype);
-		msgevent.setObjid1(Integer.parseInt(bindid));
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, bindtype, bindid, null, null, null);
-		msgeventMapper.insertSelective(msgevent);
-
-		JSONObject msgJson = new JSONObject().put("msg_id", msgevent.getMsgeventid()).put("msg_type", "BUNDLE");
-		JSONObject msgBodyJson = generateBundleScheduleJson(msgevent.getObjtype1(), "" + msgevent.getObjid1());
-		msgJson.put("msg_body", msgBodyJson);
-
-		String topic = "";
-		if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Device)) {
-			topic = "device-" + msgevent.getObjid1();
-		} else if (msgevent.getObjtype1().equals(Msgevent.ObjType_1_Devicegroup)) {
-			topic = "group-" + msgevent.getObjid1();
+		if (bindtype.equals(Msgevent.ObjType_1_Device)) {
+			Device device = deviceMapper.selectByPrimaryKey(bindid);
+			if (device.getOnlineflag().equals("1")) {
+				Msgevent msgevent = new Msgevent();
+				msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
+				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+				msgevent.setObjid1(Integer.parseInt(bindid));
+				msgevent.setObjtype2(Msgevent.ObjType_2_None);
+				msgevent.setObjid2(0);
+				msgevent.setStatus(Msgevent.Status_Wait);
+				msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device, bindid, null,
+						null, null);
+				msgeventMapper.insertSelective(msgevent);
+			}
+		} else if (bindtype.equals(Msgevent.ObjType_1_Devicegroup)) {
+			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
+			for (Device device : devices) {
+				if (device.getOnlineflag().equals("1")) {
+					Msgevent msgevent = new Msgevent();
+					msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
+					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+					msgevent.setObjid1(device.getDeviceid());
+					msgevent.setObjtype2(Msgevent.ObjType_2_None);
+					msgevent.setObjid2(0);
+					msgevent.setStatus(Msgevent.Status_Wait);
+					msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device,
+							"" + device.getDeviceid(), null, null, null);
+					msgeventMapper.insertSelective(msgevent);
+				}
+			}
 		}
 
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
+		JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
+		msgJson.put("msg_body", msgBodyJson);
+		String topic = "";
+		if (bindtype.equals(Msgevent.ObjType_1_Device)) {
+			topic = "device-" + bindid;
+		} else if (bindtype.equals(Msgevent.ObjType_1_Devicegroup)) {
+			topic = "group-" + bindid;
+		}
 		ActiveMQUtil.publish(topic, msgJson.toString());
-		msgevent.setStatus(Msgevent.Status_Sent);
-		msgevent.setSendtime(Calendar.getInstance().getTime());
-		msgeventMapper.updateByPrimaryKeySelective(msgevent);
 	}
 
 	public JSONObject generateBundleScheduleJson(String bindtype, String bindid) {
