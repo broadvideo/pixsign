@@ -11,6 +11,8 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Staff;
 
 public interface BundleService {
+	public Bundle selectByPrimaryKey(String bundleid);
+
 	public int selectCount(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
 			String search);
 

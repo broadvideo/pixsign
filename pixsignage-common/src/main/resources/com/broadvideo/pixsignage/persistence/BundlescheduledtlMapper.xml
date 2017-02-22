@@ -6,7 +6,7 @@
     <result column="bundlescheduleid" property="bundlescheduleid" jdbcType="INTEGER" />
     <result column="bundleid" property="bundleid" jdbcType="INTEGER" />
     <result column="sequence" property="sequence" jdbcType="INTEGER" />
-    <association property="bundle" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectByPrimaryKey" />
+    <association property="bundle" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectBaseByPrimaryKey" />
   </resultMap>
   
   <sql id="Base_Column_List" >

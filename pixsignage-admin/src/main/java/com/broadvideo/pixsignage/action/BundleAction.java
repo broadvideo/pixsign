@@ -52,6 +52,19 @@ public class BundleAction extends BaseDatatableAction {
 	@Autowired
 	private ImageService imageService;
 
+	public String doGet() {
+		try {
+			String bundleid = getParameter("bundleid");
+			bundle = bundleService.selectByPrimaryKey(bundleid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("OrgAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));

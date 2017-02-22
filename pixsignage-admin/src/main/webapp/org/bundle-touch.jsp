@@ -541,9 +541,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=2"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-bundle-touch.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -3,8 +3,6 @@ package com.broadvideo.pixsignage.service;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -105,6 +103,10 @@ public class BundleServiceImpl implements BundleService {
 	private LayoutService layoutService;
 	@Autowired
 	private DevicefileService devicefileService;
+
+	public Bundle selectByPrimaryKey(String bundleid) {
+		return bundleMapper.selectByPrimaryKey(bundleid);
+	}
 
 	public int selectCount(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
 			String search) {
@@ -351,7 +353,6 @@ public class BundleServiceImpl implements BundleService {
 			Bundleschedule bundleschedule = new Bundleschedule();
 			bundleschedule.setBindtype(Bundleschedule.BindType_Device);
 			bundleschedule.setBindid(device.getDeviceid());
-			bundleschedule.setBundleid(bundle.getBundleid());
 			bundleschedule.setPlaymode(Bundleschedule.PlayMode_Daily);
 			bundleschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
 			bundlescheduleMapper.insertSelective(bundleschedule);
@@ -376,7 +377,6 @@ public class BundleServiceImpl implements BundleService {
 			Bundleschedule bundleschedule = new Bundleschedule();
 			bundleschedule.setBindtype(Bundleschedule.BindType_DeviceGroup);
 			bundleschedule.setBindid(devicegroup.getDevicegroupid());
-			bundleschedule.setBundleid(bundle.getBundleid());
 			bundleschedule.setPlaymode(Bundleschedule.PlayMode_Daily);
 			bundleschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
 			bundlescheduleMapper.insertSelective(bundleschedule);
@@ -535,47 +535,6 @@ public class BundleServiceImpl implements BundleService {
 			}
 			devicefileService.refreshDevicefiles(bindtype, bindid);
 		}
-	}
-
-	private List<Bundleschedule> getBundlescheduleList48Hours(String bindtype, String bindid) {
-		List<Bundleschedule> finalscheduleList = new ArrayList<Bundleschedule>();
-		List<Bundleschedule> bundlescheduleList = bundlescheduleMapper.selectList(bindtype, bindid,
-				Bundleschedule.PlayMode_Daily, null, null);
-		String today = new SimpleDateFormat(CommonConstants.DateFormat_Date).format(Calendar.getInstance().getTime());
-		String tomorrow = new SimpleDateFormat(CommonConstants.DateFormat_Date)
-				.format(new Date(Calendar.getInstance().getTimeInMillis() + 24 * 3600 * 1000));
-
-		// Add the first schedule from 00:00
-		if (bundlescheduleList.size() > 0 && !new SimpleDateFormat(CommonConstants.DateFormat_Time)
-				.format(bundlescheduleList.get(0).getStarttime()).equals("00:00:00")) {
-			Bundleschedule newschedule = new Bundleschedule();
-			newschedule.setBundleid(bundlescheduleList.get(bundlescheduleList.size() - 1).getBundleid());
-			newschedule.setBundle(bundlescheduleList.get(bundlescheduleList.size() - 1).getBundle());
-			String s = today + " 00:00:00";
-			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
-			finalscheduleList.add(newschedule);
-		}
-		// Add today schedules
-		for (Bundleschedule bundleschedule : bundlescheduleList) {
-			Bundleschedule newschedule = new Bundleschedule();
-			newschedule.setBundleid(bundleschedule.getBundleid());
-			newschedule.setBundle(bundleschedule.getBundle());
-			String s = today + " "
-					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(bundleschedule.getStarttime());
-			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
-			finalscheduleList.add(newschedule);
-		}
-		// Add tomorrow schedules
-		for (Bundleschedule bundleschedule : bundlescheduleList) {
-			Bundleschedule newschedule = new Bundleschedule();
-			newschedule.setBundleid(bundleschedule.getBundleid());
-			newschedule.setBundle(bundleschedule.getBundle());
-			String s = tomorrow + " "
-					+ new SimpleDateFormat(CommonConstants.DateFormat_Time).format(bundleschedule.getStarttime());
-			newschedule.setTempstarttime(CommonUtil.parseDate(s, CommonConstants.DateFormat_Full));
-			finalscheduleList.add(newschedule);
-		}
-		return finalscheduleList;
 	}
 
 	public void syncBundleByLayout(String layoutid) throws Exception {
@@ -1018,7 +977,8 @@ public class BundleServiceImpl implements BundleService {
 		List<Bundleschedule> bundlescheduleList = bundlescheduleMapper.selectList(bindtype, bindid, "2", null, null);
 		for (Bundleschedule bundleschedule : bundlescheduleList) {
 			JSONObject scheduleJson = new JSONObject();
-			scheduleJson.put("bundle_id", bundleschedule.getBundle().getBundleid());
+			// scheduleJson.put("bundle_id",
+			// bundleschedule.getBundle().getBundleid());
 			scheduleJson.put("playmode", "daily");
 			scheduleJson.put("start_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(bundleschedule.getStarttime()));

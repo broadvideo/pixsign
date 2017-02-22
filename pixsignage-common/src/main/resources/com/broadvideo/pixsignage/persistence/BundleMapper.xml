@@ -19,12 +19,12 @@
     <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <association property="layout" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutMapper.selectByPrimaryKey" />
-    <collection property="bundledtls" ofType="com.broadvideo.pixsignage.domain.Bundledtl" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundledtlMapper.selectList" />
     <collection property="subbundles" ofType="com.broadvideo.pixsignage.domain.Bundle" column="{homebundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectSubList" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Bundle" extends="BaseResultMap" >
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Bundle" extends="BaseResultMap" >
     <result column="json" property="json" jdbcType="LONGVARCHAR" />
+    <association property="layout" column="{layoutid=layoutid}" select="com.broadvideo.pixsignage.persistence.LayoutMapper.selectByPrimaryKey" />
+    <collection property="bundledtls" ofType="com.broadvideo.pixsignage.domain.Bundledtl" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundledtlMapper.selectList" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -34,7 +34,16 @@
     json
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from bundle
+    where bundleid = #{bundleid}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select 
     <include refid="Base_Column_List" />
     ,

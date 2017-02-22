@@ -18,10 +18,10 @@ $(window).resize(function(e) {
 		$('#BundleDiv').css('width', width);
 		$('#BundleDiv').css('height', height);
 	}
-	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
-		var bundle = $('#MyTable').dataTable().fnGetData(i);
-		redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
-	}
+	//for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+	//	var bundle = $('#MyTable').dataTable().fnGetData(i);
+	//	redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
+	//}
 });
 
 $("#MyTable thead").css("display", "none");
@@ -71,10 +71,10 @@ var oTable = $('#MyTable').dataTable({
 
 		bundlehtml += '<div class="row" >';
 		bundlehtml += '<div class="col-md-4 col-xs-6">';
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
+		bundlehtml += '<a href="javascript:;" bundleid="' + aData.bundleid + '" class="fancybox">';
 		bundlehtml += '<div class="thumbs">';
 		if (aData.snapshot != null) {
-			var thumbwidth = aData.layout.width > aData.layout.height? 100 : 100*aData.layout.width/aData.layout.height;
+			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 			bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		}
 		bundlehtml += '</div></a>';
@@ -89,10 +89,10 @@ var oTable = $('#MyTable').dataTable({
 			}
 			bundlehtml += '<div class="col-md-3 col-xs-3">';
 			bundlehtml += '<h5 class="pixtitle">' + aData.subbundles[i].name + '</h5>';
-			bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="fancybox">';
+			bundlehtml += '<a href="javascript:;" bundleid="' + aData.subbundles[i].bundleid + '" sub-id="' + i + '" class="fancybox">';
 			bundlehtml += '<div class="thumbs">';
 			if (aData.subbundles[i].snapshot != null) {
-				var subthumbwidth = aData.subbundles[i].layout.width > aData.subbundles[i].layout.height? 100 : 100*aData.subbundles[i].layout.width/aData.subbundles[i].layout.height;
+				var subthumbwidth = aData.subbundles[i].width > aData.subbundles[i].height? 100 : 100*aData.subbundles[i].width/aData.subbundles[i].height;
 				bundlehtml += '<img src="/pixsigdata' + aData.subbundles[i].snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + subthumbwidth + '%" />';
 			}
 			bundlehtml += '</div></a>';
@@ -113,30 +113,39 @@ var oTable = $('#MyTable').dataTable({
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
-		for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
-			var bundle = $('#MyTable').dataTable().fnGetData(i);
-			redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
-		}
+		//for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+		//	var bundle = $('#MyTable').dataTable().fnGetData(i);
+		//	redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
+		//}
 		$('.thumbs').each(function(i) {
 			$(this).width($(this).parent().closest('div').width());
 			$(this).height($(this).parent().closest('div').width());
 		});
 		$('.fancybox').each(function(index,item) {
 			$(this).click(function() {
-				var index = $(this).attr('data-id');
-				var subid = $(this).attr('sub-id');
-				var bundle = $('#MyTable').dataTable().fnGetData(index);
-				if (subid != undefined) {
-					bundle = bundle.subbundles[subid];
-				}
-				$.fancybox({
-					openEffect	: 'none',
-					closeEffect	: 'none',
-					closeBtn : false,
-			        padding : 0,
-			        content: '<div id="BundlePreview"></div>',
-			    });
-				redrawBundlePreview($('#BundlePreview'), bundle, 800, 1);
+				var bundleid = $(this).attr('bundleid');
+				$.ajax({
+					type : 'GET',
+					url : 'bundle!get.action',
+					data : {bundleid: bundleid},
+					success : function(data, status) {
+						if (data.errorcode == 0) {
+							$.fancybox({
+								openEffect	: 'none',
+								closeEffect	: 'none',
+								closeBtn : false,
+						        padding : 0,
+						        content: '<div id="BundlePreview"></div>',
+						    });
+							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
+						} else {
+							alert(data.errorcode + ": " + data.errormsg);
+						}
+					},
+					error : function() {
+						alert('failure');
+					}
+				});
 			    return false;
 			})
 		});
@@ -353,68 +362,84 @@ $('body').on('click', '.pix-bundle', function(event) {
 		subid = $(event.target).parent().attr('sub-id');
 	}
 	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
+	var bundleid = CurrentBundle.bundleid;
 	CurrentSubBundles = CurrentBundle.subbundles;
 	if (subid != undefined) {
-		CurrentBundle = CurrentBundle.subbundles[subid];
+		bundleid = CurrentBundle.subbundles[subid].bundleid;
 	}
-	for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
-		var bundledtl = CurrentBundle.bundledtls[i];
-		bundledtl.medialist0 = {};
-		bundledtl.medialist0.medialistid = 0;
-		bundledtl.medialist0.medialistdtls = [];
-		bundledtl.medialist0.type = 0;
-		bundledtl.text0 = {};
-		bundledtl.text0.textid = 0;
-		bundledtl.text0.type = 0;
-		bundledtl.stream0 = {};
-		bundledtl.stream0.streamid = 0;
-		bundledtl.stream0.type = 0;
-		bundledtl.widget0 = {};
-		bundledtl.widget0.widgetid = 0;
-		bundledtl.widget0.type = 0;
-		if (bundledtl.type == 0 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
-			bundledtl.medialist0 = bundledtl.medialist;
-		}
-		if (bundledtl.type == 1 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
-			bundledtl.medialist1 = bundledtl.medialist;
-		}
-		if (bundledtl.type == 0 && bundledtl.objtype == 2 &&  bundledtl.text != null) {
-			bundledtl.text0 = bundledtl.text;
-		}
-		if (bundledtl.type == 1 && bundledtl.objtype == 2 && bundledtl.text != null) {
-			bundledtl.text1 = bundledtl.text;
-		}
-		if (bundledtl.type == 0 && bundledtl.objtype == 3 &&  bundledtl.stream != null) {
-			bundledtl.stream0 = bundledtl.stream;
-		}
-		if (bundledtl.type == 1 && bundledtl.objtype == 3 && bundledtl.stream != null) {
-			bundledtl.stream1 = bundledtl.stream;
-		}
-		if (bundledtl.type == 0 && bundledtl.objtype == 5 &&  bundledtl.widget != null) {
-			bundledtl.widget0 = bundledtl.widget;
-		}
-		if (bundledtl.type == 1 && bundledtl.objtype == 5 && bundledtl.widget != null) {
-			bundledtl.widget1 = bundledtl.widget;
-		}
 
-		if (bundledtl.type == 1 && bundledtl.objtype == 6 && bundledtl.dvb != null) {
-			bundledtl.dvb1 = bundledtl.dvb;
+	$.ajax({
+		type : 'GET',
+		url : 'bundle!get.action',
+		data : {bundleid: bundleid},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				CurrentBundle = data.bundle;
+				for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
+					var bundledtl = CurrentBundle.bundledtls[i];
+					bundledtl.medialist0 = {};
+					bundledtl.medialist0.medialistid = 0;
+					bundledtl.medialist0.medialistdtls = [];
+					bundledtl.medialist0.type = 0;
+					bundledtl.text0 = {};
+					bundledtl.text0.textid = 0;
+					bundledtl.text0.type = 0;
+					bundledtl.stream0 = {};
+					bundledtl.stream0.streamid = 0;
+					bundledtl.stream0.type = 0;
+					bundledtl.widget0 = {};
+					bundledtl.widget0.widgetid = 0;
+					bundledtl.widget0.type = 0;
+					if (bundledtl.type == 0 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
+						bundledtl.medialist0 = bundledtl.medialist;
+					}
+					if (bundledtl.type == 1 && bundledtl.objtype == 1 && bundledtl.medialist != null) {
+						bundledtl.medialist1 = bundledtl.medialist;
+					}
+					if (bundledtl.type == 0 && bundledtl.objtype == 2 &&  bundledtl.text != null) {
+						bundledtl.text0 = bundledtl.text;
+					}
+					if (bundledtl.type == 1 && bundledtl.objtype == 2 && bundledtl.text != null) {
+						bundledtl.text1 = bundledtl.text;
+					}
+					if (bundledtl.type == 0 && bundledtl.objtype == 3 &&  bundledtl.stream != null) {
+						bundledtl.stream0 = bundledtl.stream;
+					}
+					if (bundledtl.type == 1 && bundledtl.objtype == 3 && bundledtl.stream != null) {
+						bundledtl.stream1 = bundledtl.stream;
+					}
+					if (bundledtl.type == 0 && bundledtl.objtype == 5 &&  bundledtl.widget != null) {
+						bundledtl.widget0 = bundledtl.widget;
+					}
+					if (bundledtl.type == 1 && bundledtl.objtype == 5 && bundledtl.widget != null) {
+						bundledtl.widget1 = bundledtl.widget;
+					}
+
+					if (bundledtl.type == 1 && bundledtl.objtype == 6 && bundledtl.dvb != null) {
+						bundledtl.dvb1 = bundledtl.dvb;
+					}
+				}
+				CurrentBundleid = CurrentBundle.bundleid;
+				CurrentBundledtl = CurrentBundle.bundledtls[0];
+				
+				$('.form-group').removeClass('has-error');
+				$('.help-block').remove();
+				if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
+					$('#BundleCol1').attr('class', 'col-md-3 col-sm-3');
+					$('#BundleCol2').attr('class', 'col-md-9 col-sm-9');
+				} else {
+					$('#BundleCol1').attr('class', 'col-md-2 col-sm-2');
+					$('#BundleCol2').attr('class', 'col-md-10 col-sm-10');
+				}
+				$('#BundleModal').modal();
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
 		}
-	}
-	CurrentBundleid = CurrentBundle.bundleid;
-	CurrentBundledtl = CurrentBundle.bundledtls[0];
-	
-	$('.form-group').removeClass('has-error');
-	$('.help-block').remove();
-	if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
-		$('#BundleCol1').attr('class', 'col-md-3 col-sm-3');
-		$('#BundleCol2').attr('class', 'col-md-9 col-sm-9');
-	} else {
-		$('#BundleCol1').attr('class', 'col-md-2 col-sm-2');
-		$('#BundleCol2').attr('class', 'col-md-10 col-sm-10');
-	}
-	
-	$('#BundleModal').modal();
+	});	
 });
 
 $('#BundleModal').on('shown.bs.modal', function (e) {

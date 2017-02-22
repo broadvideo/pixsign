@@ -33,7 +33,7 @@ public class VspAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -46,7 +46,7 @@ public class VspAction extends BaseDatatableAction {
 			vspService.addVsp(vsp);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -58,7 +58,7 @@ public class VspAction extends BaseDatatableAction {
 			vspService.updateVsp(vsp);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -70,7 +70,7 @@ public class VspAction extends BaseDatatableAction {
 			vspService.deleteVsp("" + vsp.getVspid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -99,7 +99,7 @@ public class VspAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doValidate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -111,7 +111,7 @@ public class VspAction extends BaseDatatableAction {
 			vsp = vspService.selectByPrimaryKey("" + getLoginStaff().getVspid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("VspAction doGet exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

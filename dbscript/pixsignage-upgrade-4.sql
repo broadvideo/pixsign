@@ -15,6 +15,10 @@ select last_insert_id() into @dbversionid;
 
 alter table device add other varchar(128) default '';
 
+alter table bundleschedule drop foreign key bundleschedule_ibfk_1;
+alter table bundleschedule drop foreign key bundleschedule_ibfk_2;
+alter table bundleschedule drop bundleid;
+
 create table audio( 
    audioid int not null auto_increment,
    orgid int not null,

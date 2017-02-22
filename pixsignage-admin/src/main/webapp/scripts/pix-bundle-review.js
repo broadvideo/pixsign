@@ -1,8 +1,8 @@
 var myurls = {
-	'common.list' : 'bundle!list.action',
-	'common.add' : 'bundle!add.action',
-	'common.update' : 'bundle!update.action',
-	'common.delete' : 'bundle!delete.action',
+	'bundle.list' : 'bundle!list.action',
+	'bundle.add' : 'bundle!add.action',
+	'bundle.update' : 'bundle!update.action',
+	'bundle.delete' : 'bundle!delete.action',
 	'bundle.review' : 'bundle!review.action',
 	'bundle.design' : 'bundle!design.action',
 	'bundle.push' : 'bundle!push.action',
@@ -19,10 +19,10 @@ $(window).resize(function(e) {
 		$('#BundleDiv').css('width', width);
 		$('#BundleDiv').css('height', height);
 	}
-	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
-		var bundle = $('#MyTable').dataTable().fnGetData(i);
-		redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
-	}
+	//for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+	//	var bundle = $('#MyTable').dataTable().fnGetData(i);
+	//	redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
+	//}
 });
 
 $("#MyTable thead").css("display", "none");
@@ -35,7 +35,7 @@ var oTable = $('#MyTable').dataTable({
 						],
 	'bProcessing' : true,
 	'bServerSide' : true,
-	'sAjaxSource' : myurls['common.list'],
+	'sAjaxSource' : myurls['bundle.list'],
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
 	'iDisplayLength' : 16,
@@ -56,16 +56,16 @@ var oTable = $('#MyTable').dataTable({
 		bundlehtml += '<div class="col-md-3 col-xs-3">';
 		bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
+		bundlehtml += '<a href="javascript:;" bundleid="' + aData.bundleid + '" class="fancybox">';
 		bundlehtml += '<div class="thumbs">';
 		if (aData.snapshot != null) {
-			var thumbwidth = aData.layout.width > aData.layout.height? 100 : 100*aData.layout.width/aData.layout.height;
+			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 			bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		}
 		bundlehtml += '</div></a>';
 
 		bundlehtml += '<div privilegeid="101010">';
-		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-stack-overflow"></i> ' + common.view.detail + '</a>';
+		bundlehtml += '<a href="javascript:;" bundleid="' + aData.bundleid + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-stack-overflow"></i> ' + common.view.detail + '</a>';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-review"><i class="fa fa-eye"></i> ' + common.view.review + '</a> </div>';
 
 		bundlehtml += '</div>';
@@ -79,26 +79,39 @@ var oTable = $('#MyTable').dataTable({
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
-		for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
-			var bundle = $('#MyTable').dataTable().fnGetData(i);
-			redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
-		}
+		//for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
+		//	var bundle = $('#MyTable').dataTable().fnGetData(i);
+		//	redrawBundlePreview($('#BundleDiv-' + bundle.bundleid), bundle, Math.floor($('#BundleDiv-' + bundle.bundleid).parent().parent().width()));
+		//}
 		$('.thumbs').each(function(i) {
 			$(this).width($(this).parent().closest('div').width());
 			$(this).height($(this).parent().closest('div').width());
 		});
 		$('.fancybox').each(function(index,item) {
 			$(this).click(function() {
-				var index = $(this).attr('data-id');
-				var bundle = $('#MyTable').dataTable().fnGetData(index);
-				$.fancybox({
-					openEffect	: 'none',
-					closeEffect	: 'none',
-					closeBtn : false,
-			        padding : 0,
-			        content: '<div id="BundlePreview"></div>',
-			    });
-				redrawBundlePreview($('#BundlePreview'), bundle, 800, 1);
+				var bundleid = $(this).attr('bundleid');
+				$.ajax({
+					type : 'GET',
+					url : 'bundle!get.action',
+					data : {bundleid: bundleid},
+					success : function(data, status) {
+						if (data.errorcode == 0) {
+							$.fancybox({
+								openEffect	: 'none',
+								closeEffect	: 'none',
+								closeBtn : false,
+						        padding : 0,
+						        content: '<div id="BundlePreview"></div>',
+						    });
+							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
+						} else {
+							alert(data.errorcode + ": " + data.errormsg);
+						}
+					},
+					error : function() {
+						alert('failure');
+					}
+				});
 			    return false;
 			})
 		});
@@ -165,25 +178,38 @@ $('body').on('click', '.pix-review', function(event) {
 
 //在列表页面中点击内容包设计
 $('body').on('click', '.pix-detail', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
+	var bundleid = $(event.target).attr('bundleid');
+	if (bundleid == undefined) {
+		bundleid = $(event.target).parent().attr('bundleid');
 	}
-	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
-	CurrentBundleid = CurrentBundle.bundleid;
-	CurrentBundledtl = CurrentBundle.bundledtls[0];
-	
-	$('.form-group').removeClass('has-error');
-	$('.help-block').remove();
-	if (CurrentBundle.layout.width > CurrentBundle.layout.height) {
-		$('#BundleCol1').attr('class', 'col-md-6 col-sm-6');
-		$('#BundleCol2').attr('class', 'col-md-6 col-sm-6');
-	} else {
-		$('#BundleCol1').attr('class', 'col-md-5 col-sm-5');
-		$('#BundleCol2').attr('class', 'col-md-7 col-sm-7');
-	}
-	
-	$('#BundleModal').modal();
+	$.ajax({
+		type : 'GET',
+		url : 'bundle!get.action',
+		data : {bundleid: bundleid},
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				CurrentBundle = data.bundle;
+				CurrentBundleid = CurrentBundle.bundleid;
+				CurrentBundledtl = CurrentBundle.bundledtls[0];
+				
+				$('.form-group').removeClass('has-error');
+				$('.help-block').remove();
+				if (CurrentBundle.width > CurrentBundle.height) {
+					$('#BundleCol1').attr('class', 'col-md-6 col-sm-6');
+					$('#BundleCol2').attr('class', 'col-md-6 col-sm-6');
+				} else {
+					$('#BundleCol1').attr('class', 'col-md-5 col-sm-5');
+					$('#BundleCol2').attr('class', 'col-md-7 col-sm-7');
+				}
+				$('#BundleModal').modal();
+			} else {
+				alert(data.errorcode + ": " + data.errormsg);
+			}
+		},
+		error : function() {
+			alert('failure');
+		}
+	});
 });
 
 $('#BundleModal').on('shown.bs.modal', function (e) {

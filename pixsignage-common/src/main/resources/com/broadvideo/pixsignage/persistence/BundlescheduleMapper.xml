@@ -5,13 +5,11 @@
     <id column="bundlescheduleid" property="bundlescheduleid" jdbcType="INTEGER" />
     <result column="bindtype" property="bindtype" jdbcType="CHAR" />
     <result column="bindid" property="bindid" jdbcType="INTEGER" />
-    <result column="bundleid" property="bundleid" jdbcType="INTEGER" />
     <result column="playmode" property="playmode" jdbcType="CHAR" />
     <result column="playdate" property="playdate" jdbcType="DATE" />
     <result column="starttime" property="starttime" jdbcType="TIME" />
     <result column="endtime" property="endtime" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <association property="bundle" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectByPrimaryKey" />
 	<collection property="bundlescheduledtls" ofType="com.broadvideo.pixsignage.domain.Bundlescheduledtl"
 		column="{bundlescheduleid=bundlescheduleid}" select="com.broadvideo.pixsignage.persistence.BundlescheduledtlMapper.selectList" />
   </resultMap>
@@ -22,7 +20,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    bundlescheduleid, bindtype, bindid, bundleid, playmode, playdate, starttime, endtime, 
+    bundlescheduleid, bindtype, bindid, playmode, playdate, starttime, endtime, 
     createtime
   </sql>
   
@@ -69,15 +67,17 @@
   <select id="selectBindListByBundle" resultMap="BindResultMap" >
     select 
     distinct bindtype, bindid
-    from bundleschedule
-    where bundleid = #{bundleid}
+    from bundleschedule bs, bundlescheduledtl bsd
+    where bs.bundlescheduleid = bsd.bundlescheduleid
+    and bsd.bundleid = #{bundleid}
   </select>
   
   <select id="selectBindListByLayout" resultMap="BindResultMap" >
     select 
     distinct bindtype, bindid
-    from bundleschedule bs, bundle b
-    where bs.bundleid=b.bundleid
+    from bundleschedule bs, bundlescheduledtl bsd, bundle b
+    where bs.bundlescheduleid = bsd.bundlescheduleid
+    and bsd.bundleid = b.bundleid
     and b.layoutid = #{layoutid}
   </select>
   
@@ -105,10 +105,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="bundlescheduleid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bundleschedule (bindtype, bindid, bundleid, 
+    insert into bundleschedule (bindtype, bindid, 
       playmode, playdate, starttime, 
       endtime, createtime)
-    values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, #{bundleid,jdbcType=INTEGER}, 
+    values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, 
       #{playmode,jdbcType=CHAR}, #{playdate,jdbcType=DATE}, #{starttime,jdbcType=TIME}, 
       #{endtime,jdbcType=TIME}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
@@ -123,9 +123,6 @@
       </if>
       <if test="bindid != null" >
         bindid,
-      </if>
-      <if test="bundleid != null" >
-        bundleid,
       </if>
       <if test="playmode != null" >
         playmode,
@@ -149,9 +146,6 @@
       </if>
       <if test="bindid != null" >
         #{bindid,jdbcType=INTEGER},
-      </if>
-      <if test="bundleid != null" >
-        #{bundleid,jdbcType=INTEGER},
       </if>
       <if test="playmode != null" >
         #{playmode,jdbcType=CHAR},
@@ -179,9 +173,6 @@
       <if test="bindid != null" >
         bindid = #{bindid,jdbcType=INTEGER},
       </if>
-      <if test="bundleid != null" >
-        bundleid = #{bundleid,jdbcType=INTEGER},
-      </if>
       <if test="playmode != null" >
         playmode = #{playmode,jdbcType=CHAR},
       </if>
@@ -204,7 +195,6 @@
     update bundleschedule
     set bindtype = #{bindtype,jdbcType=CHAR},
       bindid = #{bindid,jdbcType=INTEGER},
-      bundleid = #{bundleid,jdbcType=INTEGER},
       playmode = #{playmode,jdbcType=CHAR},
       playdate = #{playdate,jdbcType=DATE},
       starttime = #{starttime,jdbcType=TIME},

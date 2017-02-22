@@ -18,8 +18,6 @@ public class Bundleschedule {
 
 	private Integer bindid;
 
-	private Integer bundleid;
-
 	private String playmode;
 
 	private Date playdate;
@@ -31,8 +29,6 @@ public class Bundleschedule {
 	private Date createtime;
 
 	private Date tempstarttime;
-
-	private Bundle bundle;
 
 	private List<Bundlescheduledtl> bundlescheduledtls;
 
@@ -58,14 +54,6 @@ public class Bundleschedule {
 
 	public void setBindid(Integer bindid) {
 		this.bindid = bindid;
-	}
-
-	public Integer getBundleid() {
-		return bundleid;
-	}
-
-	public void setBundleid(Integer bundleid) {
-		this.bundleid = bundleid;
 	}
 
 	public String getPlaymode() {
@@ -122,14 +110,6 @@ public class Bundleschedule {
 
 	public void setTempstarttime(Date tempstarttime) {
 		this.tempstarttime = tempstarttime;
-	}
-
-	public Bundle getBundle() {
-		return bundle;
-	}
-
-	public void setBundle(Bundle bundle) {
-		this.bundle = bundle;
 	}
 
 	public List<Bundlescheduledtl> getBundlescheduledtls() {

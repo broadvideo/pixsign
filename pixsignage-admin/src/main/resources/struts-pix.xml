@@ -776,6 +776,12 @@
 			</result>
 		</action>
 
+		<action name="bundle!get" method="doGet" class="bundleAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">bundle.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="bundle!list" method="doList" class="bundleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
