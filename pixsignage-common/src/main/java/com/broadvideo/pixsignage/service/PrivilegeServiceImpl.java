@@ -23,6 +23,10 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	@Autowired
 	protected ResourceBundleMessageSource messageSource;
 
+	public Privilege selectByPrimaryKey(String privilegeid) {
+		return privilegeMapper.selectByPrimaryKey(privilegeid);
+	}
+
 	public List<Privilege> selectSysTreeList() {
 		List<Privilege> privilegeList = privilegeMapper.selectSysTreeList();
 		buildTree(privilegeList);

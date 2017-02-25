@@ -8,6 +8,8 @@ public class CommonConstants {
 	public static final String SESSION_SUBSYSTEM = "SESSION_SUBSYSTEM";
 	public static final String SESSION_PRIVILEGES = "SESSION_PRIVILEGES";
 
+	public static final String SESSION_EDUCLOUD_UID = "SESSION_EDUCLOUD_UID";
+
 	public static final String SUBSYSTEM_SYS = "0";
 	public static final String SUBSYSTEM_VSP = "1";
 	public static final String SUBSYSTEM_ORG = "2";

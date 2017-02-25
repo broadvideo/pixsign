@@ -25,6 +25,7 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
+import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
 import com.google.zxing.BarcodeFormat;
@@ -220,19 +221,38 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doRoomList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			String server = "http://" + configMapper.selectValueByCode("PixedxIP") + ":"
-					+ configMapper.selectValueByCode("PixedxPort");
-			String s = PixedxUtil.classrooms(server);
-			if (s.length() > 0) {
-				JSONObject json = new JSONObject(s);
-				JSONArray roomJsonArray = json.getJSONArray("data");
-				for (int i = 0; i < roomJsonArray.length(); i++) {
-					HashMap<String, String> room = new HashMap<String, String>();
-					room.put("id", "" + roomJsonArray.getJSONObject(i).getInt("id"));
-					room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
-					aaData.add(room);
+
+			String pixedxip = configMapper.selectValueByCode("PixedxIP");
+			String pixedxport = configMapper.selectValueByCode("PixedxPort");
+			if (pixedxip.equals("www.jzjyy.cn")) {
+				String s = EduCloudUtil.getClassList(getLoginStaff().getOrg().getCode());
+				if (s.length() > 0) {
+					JSONObject json = new JSONObject(s);
+					JSONArray roomJsonArray = json.getJSONArray("result");
+					if (roomJsonArray != null) {
+						for (int i = 0; i < roomJsonArray.length(); i++) {
+							HashMap<String, String> room = new HashMap<String, String>();
+							room.put("id", roomJsonArray.getJSONObject(i).getString("code"));
+							room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
+							aaData.add(room);
+						}
+					}
+				}
+			} else {
+				String server = "http://" + pixedxip + ":" + pixedxport;
+				String s = PixedxUtil.classrooms(server);
+				if (s.length() > 0) {
+					JSONObject json = new JSONObject(s);
+					JSONArray roomJsonArray = json.getJSONArray("data");
+					for (int i = 0; i < roomJsonArray.length(); i++) {
+						HashMap<String, String> room = new HashMap<String, String>();
+						room.put("id", "" + roomJsonArray.getJSONObject(i).getInt("id"));
+						room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
+						aaData.add(room);
+					}
 				}
 			}
+
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {

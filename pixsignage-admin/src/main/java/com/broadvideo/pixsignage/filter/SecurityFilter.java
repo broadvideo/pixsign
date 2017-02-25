@@ -76,6 +76,10 @@ public class SecurityFilter implements Filter {
 
 		excludeLoginURLs.add("/index.jsp");
 		excludeLoginURLs.add("/admin.jsp");
+		excludeLoginURLs.add("/error.jsp");
 		excludeLoginURLs.add("/login.action");
+
+		excludeLoginURLs.add("/org/educloudinit.action");
+		excludeLoginURLs.add("/org/educloudcallback.action");
 	}
 }

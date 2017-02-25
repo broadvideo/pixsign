@@ -20,6 +20,8 @@ public interface StaffMapper {
 
 	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname);
 
+	Staff selectBySource(@Param(value = "sourcetype") String sourcetype, @Param(value = "sourceid") String sourceid);
+
 	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
 
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);

@@ -12,6 +12,8 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
+    <result column="sourceid" property="sourceid" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -44,7 +46,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    staffid, subsystem, vspid, orgid, branchid, loginname, password, name, status, token, 
+    staffid, subsystem, vspid, orgid, branchid, loginname, password, name, status, token, sourcetype, sourceid, 
     description, createtime, createstaffid, loginflag, logintime
   </sql>
   
@@ -64,7 +66,9 @@
 
   <select id="selectCount" resultType="Integer">
     select count(1) from staff
-    where status='1' and subsystem = #{subsystem}
+    where status = '1' 
+    and subsystem = #{subsystem}
+    and sourcetype = '1'
     <if test="vspid != null" >
       and vspid = #{vspid}
     </if>
@@ -80,7 +84,9 @@
     select
     <include refid="Base_Column_List" />
     from staff
-    where status='1' and subsystem = #{subsystem}
+    where status = '1'
+    and subsystem = #{subsystem}
+    and sourcetype = '1'
     <if test="vspid != null" >
       and vspid = #{vspid}
     </if>
@@ -100,7 +106,17 @@
     select
     <include refid="Base_Column_List" />
     from staff
-    where status='1' and loginname = #{loginname}
+    where status='1' 
+    and loginname = #{loginname}
+  </select>
+
+  <select id="selectBySource" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' 
+    and sourcetype = #{sourcetype}
+    and sourceid = #{sourceid}
   </select>
 
   <select id="login" resultMap="BaseResultMap">
@@ -132,12 +148,14 @@
     </selectKey>
     insert into staff (subsystem, vspid, orgid, 
       branchid, loginname, password, 
-      name, status, token, description, 
+      name, status, token, 
+      sourcetype, sourceid, description, 
       createtime, createstaffid, loginflag, 
       logintime)
     values (#{subsystem,jdbcType=CHAR}, #{vspid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, 
       #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, 
+      #{sourcetype,jdbcType=CHAR}, #{sourceid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{loginflag,jdbcType=CHAR}, 
       #{logintime,jdbcType=TIMESTAMP})
   </insert>
@@ -173,6 +191,12 @@
       </if>
       <if test="token != null" >
         token,
+      </if>
+      <if test="sourcetype != null" >
+        sourcetype,
+      </if>
+      <if test="sourceid != null" >
+        sourceid,
       </if>
       <if test="description != null" >
         description,
@@ -217,6 +241,12 @@
       </if>
       <if test="token != null" >
         #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null" >
+        #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="sourceid != null" >
+        #{sourceid,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -265,6 +295,12 @@
       <if test="token != null" >
         token = #{token,jdbcType=VARCHAR},
       </if>
+      <if test="sourcetype != null" >
+        sourcetype = #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="sourceid != null" >
+        sourceid = #{sourceid,jdbcType=VARCHAR},
+      </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -294,6 +330,8 @@
       name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       token = #{token,jdbcType=VARCHAR},
+      sourcetype = #{sourcetype,jdbcType=CHAR},
+      sourceid = #{sourceid,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER},

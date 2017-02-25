@@ -19,6 +19,9 @@ alter table bundleschedule drop foreign key bundleschedule_ibfk_1;
 alter table bundleschedule drop foreign key bundleschedule_ibfk_2;
 alter table bundleschedule drop bundleid;
 
+alter table staff add sourcetype char(1) default '1';
+alter table staff add sourceid varchar(32) default '';
+
 create table audio( 
    audioid int not null auto_increment,
    orgid int not null,

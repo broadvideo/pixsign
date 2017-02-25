@@ -3,9 +3,11 @@ package com.broadvideo.pixsignage.rest;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -52,6 +54,8 @@ import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
+import com.broadvideo.pixsignage.util.CommonUtil;
+import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 
@@ -713,20 +717,45 @@ public class PixsignageService {
 			responseJson.put("schedules", scheduleJsonArray);
 
 			if (device.getExternalid().length() > 0) {
-				String server = "http://" + configMapper.selectValueByCode("PixedxIP") + ":"
-						+ configMapper.selectValueByCode("PixedxPort");
-				String s = PixedxUtil.schedules(server, device.getExternalid(), "" + starttime, "" + endtime);
-				if (s.length() > 0) {
-					JSONObject json = new JSONObject(s);
-					JSONArray dataJsonArray = json.getJSONArray("data");
-					for (int i = 0; i < dataJsonArray.length(); i++) {
-						JSONObject dataJson = dataJsonArray.getJSONObject(i);
-						JSONObject scheduleJson = new JSONObject();
-						scheduleJson.put("name", dataJson.getString("course_name"));
-						scheduleJson.put("host", dataJson.getString("instructor"));
-						scheduleJson.put("start_time", dataJson.getLong("start_time"));
-						scheduleJson.put("end_time", dataJson.getLong("end_time"));
-						scheduleJsonArray.put(scheduleJson);
+				String pixedxip = configMapper.selectValueByCode("PixedxIP");
+				String pixedxport = configMapper.selectValueByCode("PixedxPort");
+				if (pixedxip.equals("www.jzjyy.cn")) {
+					DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+					String s1 = dateFormat.format(new Date(starttime));
+					String s2 = dateFormat.format(new Date(endtime));
+					String s = EduCloudUtil.getScheduleList(device.getExternalid(), s1, s2);
+					if (s.length() > 0) {
+						JSONObject json = new JSONObject(s);
+						JSONArray dataJsonArray = json.getJSONArray("result");
+						if (dataJsonArray != null) {
+							for (int i = 0; i < dataJsonArray.length(); i++) {
+								JSONObject dataJson = dataJsonArray.getJSONObject(i);
+								Date d1 = CommonUtil.parseDate(dataJson.getString("startTime"), "yyyyMMddHHmmss");
+								Date d2 = CommonUtil.parseDate(dataJson.getString("endTime"), "yyyyMMddHHmmss");
+								JSONObject scheduleJson = new JSONObject();
+								scheduleJson.put("name", dataJson.getString("courseName"));
+								scheduleJson.put("host", dataJson.getString("teacherName"));
+								scheduleJson.put("start_time", d1.getTime());
+								scheduleJson.put("end_time", d2.getTime());
+								scheduleJsonArray.put(scheduleJson);
+							}
+						}
+					}
+				} else {
+					String server = "http://" + pixedxip + ":" + pixedxport;
+					String s = PixedxUtil.schedules(server, device.getExternalid(), "" + starttime, "" + endtime);
+					if (s.length() > 0) {
+						JSONObject json = new JSONObject(s);
+						JSONArray dataJsonArray = json.getJSONArray("data");
+						for (int i = 0; i < dataJsonArray.length(); i++) {
+							JSONObject dataJson = dataJsonArray.getJSONObject(i);
+							JSONObject scheduleJson = new JSONObject();
+							scheduleJson.put("name", dataJson.getString("course_name"));
+							scheduleJson.put("host", dataJson.getString("instructor"));
+							scheduleJson.put("start_time", dataJson.getLong("start_time"));
+							scheduleJson.put("end_time", dataJson.getLong("end_time"));
+							scheduleJsonArray.put(scheduleJson);
+						}
 					}
 				}
 			}

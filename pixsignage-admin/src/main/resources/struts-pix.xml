@@ -1371,6 +1371,18 @@
 			</result>
 		</action>
 
+		<action name="educloudinit" method="doInit" class="educloudAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="educloudcallback" method="doCallback" class="educloudAction">
+			<param name="message"></param>
+			<result name="success">/org/main.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
 	</package>
 
 </struts>

@@ -367,7 +367,7 @@ $('[type=submit]', $('#BundleScheduleModal')).on('click', function(event) {
 	}
 	$.ajax({
 		type : 'POST',
-		url : 'bundle!addbundleschedules',
+		url : 'bundle!addbundleschedules.action',
 		data : '{"bundleschedules":' + $.toJSON(currentBundleschedules) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',

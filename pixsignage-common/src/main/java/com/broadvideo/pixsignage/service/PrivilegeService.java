@@ -6,6 +6,8 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 
 public interface PrivilegeService {
+	public Privilege selectByPrimaryKey(String privilegeid);
+
 	public List<Privilege> selectSysTreeList();
 
 	public List<Privilege> selectVspTreeList();

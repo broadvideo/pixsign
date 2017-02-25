@@ -26,6 +26,10 @@ public class Staff {
 
 	private String token;
 
+	private String sourcetype;
+
+	private String sourceid;
+
 	private String description;
 
 	private Date createtime;
@@ -126,6 +130,22 @@ public class Staff {
 
 	public void setToken(String token) {
 		this.token = token == null ? null : token.trim();
+	}
+
+	public String getSourcetype() {
+		return sourcetype;
+	}
+
+	public void setSourcetype(String sourcetype) {
+		this.sourcetype = sourcetype;
+	}
+
+	public String getSourceid() {
+		return sourceid;
+	}
+
+	public void setSourceid(String sourceid) {
+		this.sourceid = sourceid;
 	}
 
 	public String getDescription() {

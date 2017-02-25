@@ -143,6 +143,7 @@ public class LoginAction extends BaseAction {
 
 	public String doLogout() throws Exception {
 		HttpSession session = super.getSession();
+		Staff staff = (Staff) session.getAttribute(CommonConstants.SESSION_STAFF);
 		if (session != null) {
 			session.removeAttribute(CommonConstants.SESSION_TOKEN);
 			session.removeAttribute(CommonConstants.SESSION_STAFF);
@@ -152,7 +153,11 @@ public class LoginAction extends BaseAction {
 			session.removeAttribute(CommonConstants.SESSION_SUBSYSTEM);
 			session.invalidate();
 		}
-		getHttpServletResponse().sendRedirect(getHttpServletRequest().getRequestURI());
+		if (staff.getSourcetype().equals("2")) {
+			getHttpServletResponse().sendRedirect("http://www.jzjyy.cn/zhxy/j_spring_security_logout");
+		} else {
+			getHttpServletResponse().sendRedirect(getHttpServletRequest().getRequestURI());
+		}
 		return SUCCESS;
 	}
 
