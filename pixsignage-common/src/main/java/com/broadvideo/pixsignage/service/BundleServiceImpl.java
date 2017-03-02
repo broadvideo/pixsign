@@ -671,6 +671,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		List<Video> videoList = new ArrayList<Video>();
+		List<Image> imageList = new ArrayList<Image>();
 		JSONArray regionJsonArray = new JSONArray();
 		responseJson.put("regions", regionJsonArray);
 		for (Bundledtl bundledtl : bundle.getBundledtls()) {
@@ -793,8 +794,14 @@ public class BundleServiceImpl implements BundleService {
 							imageJson.put("size", image.getSize());
 							imageJson.put("thumbnail",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getThumbnail());
+							if (image.getRelate() != null) {
+								imageJson.put("relate_id", image.getRelateid());
+							} else {
+								imageJson.put("relate_id", 0);
+							}
 							imageHash.put(image.getImageid(), imageJson);
 							imageJsonArray.put(imageJson);
+							imageList.add(image);
 						}
 					} else if (medialistdtl.getStream() != null) {
 						Stream stream = medialistdtl.getStream();
@@ -900,6 +907,22 @@ public class BundleServiceImpl implements BundleService {
 				videoJson.put("relate_id", 0);
 				videoHash.put(video.getRelateid(), videoJson);
 				videoJsonArray.put(videoJson);
+			}
+		}
+		for (Image image : imageList) {
+			if (image.getRelate() != null && imageHash.get(image.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", image.getRelateid());
+				imageJson.put("name", image.getRelate().getName());
+				imageJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getFilepath());
+				imageJson.put("file", image.getRelate().getFilename());
+				imageJson.put("size", image.getRelate().getSize());
+				imageJson.put("thumbnail",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getThumbnail());
+				imageJson.put("relate_id", 0);
+				imageHash.put(image.getRelateid(), imageJson);
+				imageJsonArray.put(imageJson);
 			}
 		}
 

@@ -80,10 +80,8 @@ function initMyTable() {
 				var thumbheight = 50;
 				if (aData.relate.thumbnail != null) {
 					thumbnail = '/pixsigdata' + aData.relate.thumbnail;
-					console.log('thumbnail: ', thumbnail);
 					aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
 					aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
-					console.log('width: ', aData.relate.width, ' height: ', aData.relate.height);
 					thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
 					thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
 				}
@@ -234,7 +232,6 @@ function initMyTable() {
 			}
 		 });
 	});
-
 
 	$('body').on('click', '.pix-full', function(event) {
 		bootbox.alert(common.tips.storage_full);
@@ -389,9 +386,9 @@ function initMyEditModal() {
 
 function initUploadModal() {
 	$('#UploadForm').fileupload({
-		disableImageResize: false,
 		autoUpload: false,
-		disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+		disableImageResize: true,
 		maxFileSize: 2147483648,
 		acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv|avi|wmv|mpg|flv)$/i,
 		// Uncomment the following to send cross-domain cookies:

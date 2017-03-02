@@ -126,6 +126,12 @@ response.setDateHeader("Expires",0);
 												<div class="pre-scrollable" id="EditFormFolderTree"></div>	
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.relateimage"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="RelateImageSelect" class="form-control select2" name="image.relateid">
+											</div>
+										</div>
 									</div>
 								</form>
 							</div>
@@ -381,7 +387,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-foldertree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-image.js?t=6"></script>
+<script src="${base_ctx}/scripts/pix-image.js?t=7"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

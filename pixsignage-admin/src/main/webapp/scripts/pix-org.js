@@ -318,7 +318,8 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 		$.each( checkboxes, function( index, checkbox ) {
-			$(checkbox).attr('checked');
+			$(checkbox).val('1');
+			$(checkbox).attr('checked', 'checked');
 			$(checkbox).parent().addClass('checked');
 		});
 		if ($('input[name="org.expireflag"]:checked').val() == 0) {

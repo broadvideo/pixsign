@@ -37,9 +37,13 @@ public class Image {
 
 	private String thumbnail;
 
+	private Integer relateid;
+
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private Image relate;
 
 	public Integer getImageid() {
 		return imageid;
@@ -169,6 +173,14 @@ public class Image {
 		this.thumbnail = thumbnail == null ? null : thumbnail.trim();
 	}
 
+	public Integer getRelateid() {
+		return relateid;
+	}
+
+	public void setRelateid(Integer relateid) {
+		this.relateid = relateid;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -185,5 +197,13 @@ public class Image {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Image getRelate() {
+		return relate;
+	}
+
+	public void setRelate(Image relate) {
+		this.relate = relate;
 	}
 }

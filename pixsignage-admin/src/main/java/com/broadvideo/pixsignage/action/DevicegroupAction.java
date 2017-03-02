@@ -127,7 +127,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
 			bundleService.syncBundleSchedule("2", devicegroupid);
-			logger.error("Devicegroup schedule sync success");
+			logger.info("Devicegroup schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Devicegroup schedule sync error: " + ex.getMessage());

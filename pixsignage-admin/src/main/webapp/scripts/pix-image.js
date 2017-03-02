@@ -14,6 +14,7 @@ function refreshMyTable() {
 	}
 }			
 
+var CurrentImage;
 function initMyTable() {
 	$("#MyTable thead").css("display", "none");
 	$("#MyTable tbody").css("display", "none");
@@ -50,8 +51,9 @@ function initMyTable() {
 			}
 			imagehtml += '<div class="col-md-2 col-xs-2">';
 			
-			imagehtml += '<div class="thumbs">';
+			imagehtml += '<div id="ThumbContainer" style="position:relative">';
 			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+			imagehtml += '<div id="ImageThumb" class="thumbs">';
 			imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 			imagehtml += '<div class="mask">';
 			imagehtml += '<div>';
@@ -63,16 +65,24 @@ function initMyTable() {
 			imagehtml += '</div>';
 			imagehtml += '</div>';
 			imagehtml += '</div>';
-			
-			//imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '">';
-			//imagehtml += '<div class="thumbs">';
-			//var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-			//imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-			//imagehtml += '</div></a>';
 
+			if (aData.relate != null) {
+				aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
+				aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
+				thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
+				thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
+				imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.relate.filepath + '" title="' + aData.relate.name + '">';
+				imagehtml += '<div id="RelateThumb" class="thumbs">';
+				imagehtml += '<img src="/pixsigdata' + aData.relate.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+				imagehtml += '</div>';
+				imagehtml += '</a>';
+			}
+
+			imagehtml += '</div>';
+			
 			imagehtml += '<h6 class="pixtitle">' + aData.name + '<br>';
-			var filesize = '(' + aData.imageid + ') ' + parseInt(aData.size / 1024);
-			imagehtml += '' + transferIntToComma(filesize) + ' KB</h6>';
+			var filesize = parseInt(aData.size / 1024);
+			imagehtml += '(' + aData.imageid + ') ' + transferIntToComma(filesize) + ' KB</h6>';
 			imagehtml += '</div>';
 			
 			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
@@ -86,12 +96,20 @@ function initMyTable() {
 			return nRow;
 		},
 		'fnDrawCallback': function(oSettings, json) {
-			$('.thumbs').each(function(i) {
-				$(this).height($(this).parent().width());
+			$('#MyTable #ImageThumb').each(function(i) {
+				var height = $(this).closest('#ThumbContainer').parent().width();
+				$(this).height(height);
+				$(this).closest('#ThumbContainer').height(height);
+				$(this).find('.mask').height(height+2);
+				$(this).find('.mask').find('div').css('top', $(this).height()/2 - 10);
 			});
-			$('.mask').each(function(i) {
-				$(this).height($(this).parent().height() + 2);
-				$(this).find('div').css('top', $(this).height()/2 - 14);
+			$('#MyTable #RelateThumb').each(function(i) {
+				var thumbwidth = $(this).find('img').attr('thumbwidth');
+				var thumbheight = $(this).find('img').attr('thumbheight');
+				$(this).css('position', 'absolute');
+				$(this).css('left', (100-thumbwidth) + '%');
+				$(this).css('top', '0');
+				$(this).css('width', thumbwidth + '%');
 			});
 			$(".fancybox").fancybox({
 				openEffect	: 'none',
@@ -109,23 +127,20 @@ function initMyTable() {
 	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').select2();
 	
-	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		currentItem = item;
-		
-		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
+		CurrentImage = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.remove + CurrentImage.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
 					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'image.imageid': currentItem['imageid']
+						'image.imageid': CurrentImage.imageid
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -232,28 +247,73 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		CurrentImage = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['image.' + name] = item[name];
+		for (var name in CurrentImage) {
+			formdata['image.' + name] = CurrentImage[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
-		currentEditFolderid = item.folderid;
+		currentEditFolderid = CurrentImage.folderid;
 		createEditFolderTree(currentEditFolderTreeData);
+
+		$("#RelateImageSelect").select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: { 
+				url: 'image!list.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term, 
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.name, 
+								id:item.imageid,
+								thumbnail:item.thumbnail
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function (image) {
+				var html = '<span><img src="/pixsigdata' + image.thumbnail + '" height="25" /> ' + image.text + '</span>'
+				return html;
+			},
+			formatSelection: function (image) {
+				var html = '<span><img src="/pixsigdata' + image.thumbnail + '" height="25" /> ' + image.text + '</span>'
+				return html;
+			},
+			initSelection: function(element, callback) {
+				if (CurrentImage.relate != null) {
+					callback({id: CurrentImage.relateid, text: CurrentImage.relate.name, thumbnail: CurrentImage.relate.thumbnail });
+				}
+			},
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
+
 		$('#MyEditModal').modal();
 	});
 
 }
 
 function initUploadModal() {
-	console.log(/Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent));
 	$('#UploadForm').fileupload({
 		autoUpload: false,
 		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 		disableImageResize: true,
-		maxFileSize: 20480000,
+		maxFileSize: 5242880,
 		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				

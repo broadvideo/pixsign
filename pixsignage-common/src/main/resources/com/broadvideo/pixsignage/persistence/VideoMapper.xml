@@ -33,7 +33,8 @@
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
     select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, 0 as relateid, createtime, createstaffid from video
+    thumbnail, 0 as relateid, createtime, createstaffid
+    from video
     where videoid = #{videoid}
     and status != '9'
   </select>

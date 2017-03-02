@@ -206,6 +206,16 @@ function initMyEditModal() {
 	FormValidateOption.rules['vsp.maxdevices']['number'] = true;
 	
 	FormValidateOption.submitHandler = function(form) {
+		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
+		$.each( checkboxes, function( key, value ) {
+			if (value.checked === false) {
+				value.value = 0;
+			} else {
+				value.value = 1;
+			}
+		});
+
+
 		var apps = '';
 		var applist = $("#AppTree").jstree('get_checked', false);
 		for (var i=0; i<applist.length; i++) {
@@ -218,6 +228,13 @@ function initMyEditModal() {
 		$('#MyEditForm input[name="vsp.apps"]').val(apps);
 
 		var data = jQuery("#MyEditForm").serializeArray();
+		data = data.concat(
+			jQuery('#MyEditForm input[type=checkbox]:not(:checked)').map(
+				function() {
+					return {"name": this.name, "value": this.value};
+				}).get()
+		);
+		
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
@@ -249,7 +266,8 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		var checkboxes = $('#MyEditForm').find('input[type="checkbox"]');
 		$.each( checkboxes, function( index, checkbox ) {
-			$(checkbox).attr('checked');
+			$(checkbox).val('1');
+			$(checkbox).attr('checked', 'checked');
 			$(checkbox).parent().addClass('checked');
 		});
 		$('#MyEditForm').attr('action', action);
