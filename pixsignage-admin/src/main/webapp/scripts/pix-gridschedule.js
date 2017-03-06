@@ -428,7 +428,7 @@ $('[type=submit]', $('#GridscheduleModal')).on('click', function(event) {
 	}
 	$.ajax({
 		type : 'POST',
-		url : 'devicegrid!addgridschedules',
+		url : 'devicegrid!addgridschedules.action',
 		data : '{"gridschedules":' + $.toJSON(currentGridschedules) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',

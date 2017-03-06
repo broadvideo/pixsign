@@ -60,7 +60,7 @@ public class DeviceAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
-			if (branchid == null || branchid.equals("")) {
+			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 			String type = getParameter("type");
@@ -70,15 +70,18 @@ public class DeviceAction extends BaseDatatableAction {
 			if (order == null || order.equals("")) {
 				order = "deviceid";
 			}
+			String orgid = null;
+			if (getLoginStaff().getOrgid() != null) {
+				orgid = "" + getLoginStaff().getOrgid();
+			}
 
-			int count = deviceService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, status, null,
-					devicegroupid, search);
+			int count = deviceService.selectCount(orgid, branchid, type, status, null, devicegroupid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectList("" + getLoginStaff().getOrgid(), branchid, type, status,
-					null, devicegroupid, search, start, length, order);
+			List<Device> deviceList = deviceService.selectList(orgid, branchid, type, status, null, devicegroupid,
+					search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}

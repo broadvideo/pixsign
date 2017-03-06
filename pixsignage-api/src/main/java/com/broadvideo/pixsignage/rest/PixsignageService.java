@@ -39,6 +39,7 @@ import org.springframework.stereotype.Component;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Crashreport;
+import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Dvb;
@@ -47,6 +48,7 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
+import com.broadvideo.pixsignage.persistence.DebugreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
@@ -80,6 +82,8 @@ public class PixsignageService {
 	private DvbMapper dvbMapper;
 	@Autowired
 	private CrashreportMapper crashreportMapper;
+	@Autowired
+	private DebugreportMapper debugreportMapper;
 
 	@Autowired
 	private BundleService bundleService;
@@ -117,10 +121,17 @@ public class PixsignageService {
 			}
 
 			Device device = deviceMapper.selectByHardkey(hardkey);
+			String oldhardkey = hardkey;
 			if (device != null && !device.getTerminalid().equals(terminalid)) {
 				device.setHardkey(null);
 				device.setStatus("0");
 				deviceMapper.updateByPrimaryKey(device);
+			}
+			if (device == null) {
+				int index = hardkey.indexOf("-");
+				if (index > 0) {
+					oldhardkey = hardkey.substring(0, index);
+				}
 			}
 
 			device = deviceMapper.selectByTerminalid(terminalid);
@@ -129,7 +140,7 @@ public class PixsignageService {
 			} else if (!device.getType().equals(Device.Type_Sign)) {
 				return handleResult(1010, "终端类型不匹配");
 			} else if (device.getStatus().equals("1") && device.getHardkey() != null
-					&& !device.getHardkey().equals(hardkey)) {
+					&& !device.getHardkey().equals(hardkey) && !device.getHardkey().equals(oldhardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			} else if (other != null && device.getOther().length() > 0 && !device.getOther().equals(other)) {
 				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
@@ -887,6 +898,52 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_pflow exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_debug")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportdebug(@FormDataParam("meta") String request,
+			@FormDataParam("debug") FormDataContentDisposition debugHeader,
+			@FormDataParam("debug") InputStream debugFile) {
+		try {
+			logger.info("Pixsignage Service report_debug: {}, debugHeader: {}", request, debugHeader);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/debug/" + device.getDeviceid()));
+			String filepath = "/debug/" + device.getDeviceid() + "/debug-" + device.getDeviceid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()) + ".zip";
+			logger.info("Save debug zip to: {}", CommonConfig.CONFIG_PIXDATA_HOME + filepath);
+			File file = new File(CommonConfig.CONFIG_PIXDATA_HOME + filepath);
+			FileUtils.copyInputStreamToFile(debugFile, file);
+
+			Debugreport debugreport = new Debugreport();
+			debugreport.setDeviceid(device.getDeviceid());
+			debugreport.setHardkey(hardkey);
+			debugreport.setFilepath(filepath);
+			debugreportMapper.insertSelective(debugreport);
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service report_debug response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_debug exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

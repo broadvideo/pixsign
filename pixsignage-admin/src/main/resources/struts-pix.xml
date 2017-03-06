@@ -1132,6 +1132,19 @@
 			</result>
 		</action>
 
+		<action name="debugreport!list" method="doList" class="debugreportAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="debugreport!collect" method="doCollect" class="debugreportAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="stat!devices" method="statDevices" class="statAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

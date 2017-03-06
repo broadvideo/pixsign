@@ -9,19 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.domain.Crashreport;
-import com.broadvideo.pixsignage.persistence.CrashreportMapper;
+import com.broadvideo.pixsignage.domain.Debugreport;
+import com.broadvideo.pixsignage.persistence.DebugreportMapper;
+import com.broadvideo.pixsignage.service.DeviceService;
 
 @SuppressWarnings("serial")
 @Scope("request")
-@Controller("crashreportAction")
-public class CrashreportAction extends BaseDatatableAction {
+@Controller("debugreportAction")
+public class DebugreportAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Crashreport crashreport;
+	private Debugreport debugreport;
 
 	@Autowired
-	private CrashreportMapper crashreportMapper;
+	private DebugreportMapper debugreportMapper;
+	@Autowired
+	private DeviceService deviceService;
 
 	public String doList() {
 		try {
@@ -29,45 +32,46 @@ public class CrashreportAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 
-			int count = crashreportMapper.selectCount();
+			int count = debugreportMapper.selectCount();
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Crashreport> crashreportList = crashreportMapper.selectList(start, length);
-			for (int i = 0; i < crashreportList.size(); i++) {
-				aaData.add(crashreportList.get(i));
+			List<Debugreport> debugreportList = debugreportMapper.selectList(start, length);
+			for (int i = 0; i < debugreportList.size(); i++) {
+				aaData.add(debugreportList.get(i));
 			}
 			this.setAaData(aaData);
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("CrashreportAction doList exception, ", ex);
+			logger.error("DebugreportAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
 		}
 	}
 
-	public String doGet() {
+	public String doCollect() {
 		try {
-			int crashreportid = crashreport.getCrashreportid();
-			crashreport = crashreportMapper.selectAllByPrimaryKey("" + crashreportid);
+			String deviceid = getParameter("deviceid");
+			deviceService.debug(deviceid);
+			logger.info("Device collect debug success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("CrashreportAction doGet exception, ", ex);
+			logger.error("Device collect debug error", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
 		}
 	}
 
-	public Crashreport getCrashreport() {
-		return crashreport;
+	public Debugreport getDebugreport() {
+		return debugreport;
 	}
 
-	public void setCrashreport(Crashreport crashreport) {
-		this.crashreport = crashreport;
+	public void setDebugreport(Debugreport debugreport) {
+		this.debugreport = debugreport;
 	}
 
 }

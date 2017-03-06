@@ -155,7 +155,7 @@ var common = {
 		
 		mainboard: '主板型号',
 		description: '描述',
-		download: '下载地址',
+		download: '下载',
 		
 		current_hour: '当前小时',
 		previous_hour: '上一小时',

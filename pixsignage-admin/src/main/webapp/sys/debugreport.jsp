@@ -39,67 +39,34 @@ response.setDateHeader("Expires",0);
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
-				<div id="CrashDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static" >
-					<div class="modal-dialog modal-full">
+			
+				<div id="DebugModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title"><spring:message code="global.debug.collect"/></h4>
 							</div>
 							<div class="modal-body">
-								<form id="CrashDtlForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+								<form id="DebugForm" class="form-horizontal" method="POST">
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-2 control-label required">IP</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientip"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.name"/></label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.clientname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required">OS</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.os"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required">APP</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.appname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.crash.vname"/><</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vname"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.crash.vcode"/><</label>
-											<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vcode"></label>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.crash.stack"/><</label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="16" name="crashreport.stack"></textarea>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.crash.resolution"/><</label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="4" name="crashreport.resolution"></textarea>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label required"><spring:message code="global.crash.other"/></label>
-											<div class="col-md-10">
-												<textarea class="form-control" rows="3" name="crashreport.other"></textarea>
+											<label class="col-md-3 control-label"><spring:message code="global.device"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="DeviceSelect" class="form-control select2" name="deviceid" />
 											</div>
 										</div>
 									</div>
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 							</div>
 						</div>
 					</div>
 				</div>
-			
+
 				<!-- BEGIN PAGE HEADER-->
 				<h3 class="page-title"><spring:message code="menu.debug"/></h3>
 				<div class="page-bar">
@@ -120,12 +87,17 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.crash"/></div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.debug"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>
 							</div>
 							<div class="portlet-body">
+								<div class="table-toolbar">
+									<div class="btn-group">
+										<button class="btn green pix-collect"><spring:message code="global.debug.collect"/> <i class="fa fa-crosshairs"></i></button>
+									</div>
+								</div>
 								<table id="MyTable" class="table table-striped table-bordered table-hover">
 									<thead></thead>
 									<tbody></tbody>
@@ -193,7 +165,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-crashreport.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-debugreport.js?t=0"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

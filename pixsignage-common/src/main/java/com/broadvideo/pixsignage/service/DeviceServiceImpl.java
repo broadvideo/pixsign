@@ -269,6 +269,33 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Transactional
+	public void debug(String deviceid) throws Exception {
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getOnlineflag().equals("1")) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Device_Debug);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(Integer.parseInt(deviceid));
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Device_Debug, Msgevent.ObjType_1_Device, deviceid, null, null,
+					null);
+			msgeventMapper.insertSelective(msgevent);
+		}
+
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "DEBUG");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+		// msgevent.setStatus(Msgevent.Status_Sent);
+		// msgevent.setSendtime(Calendar.getInstance().getTime());
+		// msgeventMapper.updateByPrimaryKeySelective(msgevent);
+	}
+
+	@Transactional
 	public void utext(String orgid, String text, String count, String position, String speed, String color, String size,
 			String bgcolor, String opacity) throws Exception {
 		JSONObject msgJson = new JSONObject().put("msg_id", 0).put("msg_type", "UTEXT");

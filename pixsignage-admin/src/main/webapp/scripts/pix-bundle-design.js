@@ -1053,15 +1053,27 @@ $('#ImageTable').dataTable({
 		}
 		imagehtml += '<div class="col-md-2 col-xs-2">';
 		
-		imagehtml += '<div class="thumbs">';
+		imagehtml += '<div id="ThumbContainer" style="position:relative">';
 		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		imagehtml += '<div id="ImageThumb" class="thumbs">';
 		imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		if (aData.relate != null) {
+			aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
+			aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
+			thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
+			thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
+			imagehtml += '<div id="RelateThumb">';
+			imagehtml += '<img src="/pixsigdata' + aData.relate.thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+			imagehtml += '</div>';
+		}
 		imagehtml += '<div class="mask">';
 		imagehtml += '<div>';
-		imagehtml += '<h6 style="color:white;" class="pixtitle">' + aData.name + '</h6>';
+		imagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
 		imagehtml += '<a class="btn default btn-sm green pix-medialistdtl-image-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 		imagehtml += '</div>';
 		imagehtml += '</div>';
+		imagehtml += '</div>';
+
 		imagehtml += '</div>';
 
 		imagehtml += '</div>';
@@ -1079,7 +1091,15 @@ $('#ImageTable').dataTable({
 			$(this).height($(this).parent().width());
 		});
 		$('#ImageContainer .mask').each(function(i) {
-			$(this).height($(this).parent().height() + 2);
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+		$('#ImageContainer #RelateThumb').each(function(i) {
+			var thumbwidth = $(this).find('img').attr('thumbwidth');
+			var thumbheight = $(this).find('img').attr('thumbheight');
+			$(this).css('position', 'absolute');
+			$(this).css('left', (100-thumbwidth) + '%');
+			$(this).css('top', '0');
+			$(this).css('width', thumbwidth + '%');
 		});
 	},
 	'fnServerParams': function(aoData) { 

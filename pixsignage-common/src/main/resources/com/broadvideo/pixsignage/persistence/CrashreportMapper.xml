@@ -40,7 +40,7 @@
     select 
     <include refid="Base_Column_List" />
     from crashreport
-    where crashreportid = '${crashreportid}'
+    where crashreportid = #{crashreportid}
   </select>
   
   <select id="selectCount" resultType="Integer">
@@ -57,7 +57,7 @@
 
   <delete id="deleteByPrimaryKey" >
     delete from crashreport
-    where crashreportid = '${crashreportid}'
+    where crashreportid = #{crashreportid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Crashreport" >

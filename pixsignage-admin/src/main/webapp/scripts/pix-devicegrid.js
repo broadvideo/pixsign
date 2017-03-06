@@ -454,7 +454,7 @@ $('#DeviceSelect').on('change', function(e) {
 
 
 function refreshDeviceSelect() {
-	$("#DeviceSelect").select2({
+	$('#DeviceSelect').select2({
 		placeholder: common.tips.detail_select,
 		minimumInputLength: 0,
 		ajax: {
