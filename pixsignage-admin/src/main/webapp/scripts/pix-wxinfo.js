@@ -24,7 +24,7 @@ function refreshMyTable() {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 }			
@@ -64,7 +64,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };

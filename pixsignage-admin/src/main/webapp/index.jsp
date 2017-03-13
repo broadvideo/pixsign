@@ -118,9 +118,11 @@
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
 		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
-		Powered by BroadVideo 粤ICP备14037592号-1<br/>
-		
-		
+		<%if (sdomain == null || sdomain.getDescription() == null) { %>
+		Powered by BroadVideo 粤ICP备14037592号-1<br/>	
+		<%} else { %>
+		©<%=sdomain.getDescription()%>
+		<%} %>
 	</div>
 	<!-- END COPYRIGHT -->
 

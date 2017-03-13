@@ -67,7 +67,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -142,7 +142,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};

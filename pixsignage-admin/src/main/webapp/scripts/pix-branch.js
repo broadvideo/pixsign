@@ -32,11 +32,11 @@ function refreshMyTable() {
 					expanderCollapsedClass: 'glyphicon glyphicon-plus'
 				});
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	
@@ -105,7 +105,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -161,7 +161,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};
@@ -268,11 +268,11 @@ function initDeviceModal() {
 						$('#RightTable').dataTable()._fnAjaxUpdate();
 					});
 				} else {
-					alert(data.errorcode + ": " + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				alert('failure');
+				console.log('failue');
 			}
 		});
 
@@ -456,7 +456,7 @@ function initDeviceModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});
@@ -480,7 +480,7 @@ function initDeviceModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});

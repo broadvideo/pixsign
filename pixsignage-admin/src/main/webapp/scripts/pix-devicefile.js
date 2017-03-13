@@ -31,11 +31,11 @@ function refreshLeftTab() {
 					deviceTabHtml += '</ul>';
 					$('#LeftTab').html(deviceTabHtml);
 				} else {
-					alert(data.errorcode + ": " + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				alert('failure');
+				console.log('failue');
 			}
 		});
 	} else {
@@ -71,11 +71,11 @@ function refreshLeftTab() {
 					deviceTabHtml += '</ul>';
 					$('#LeftTab').html(deviceTabHtml);
 				} else {
-					alert(data.errorcode + ": " + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				alert('failure');
+				console.log('failue');
 			}
 		});
 	}

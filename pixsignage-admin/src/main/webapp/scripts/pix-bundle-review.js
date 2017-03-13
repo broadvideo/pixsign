@@ -105,11 +105,11 @@ var oTable = $('#MyTable').dataTable({
 						    });
 							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
 						} else {
-							alert(data.errorcode + ": " + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						alert('failure');
+						console.log('failue');
 					}
 				});
 			    return false;
@@ -152,7 +152,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -203,11 +203,11 @@ $('body').on('click', '.pix-detail', function(event) {
 				}
 				$('#BundleModal').modal();
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 });

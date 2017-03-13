@@ -124,7 +124,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -202,7 +202,7 @@ $('body').on('click', '.pix-sync', function(event) {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -235,7 +235,7 @@ $('body').on('click', '.pix-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -319,7 +319,7 @@ $('[type=submit]', $('#LayoutModal')).on('click', function(event) {
 			},
 			error : function() {
 				$('#LayoutModal').modal('hide');
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 

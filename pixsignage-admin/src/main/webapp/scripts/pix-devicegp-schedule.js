@@ -115,7 +115,7 @@ $('body').on('click', '.pix-sync', function(event) {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -209,11 +209,11 @@ $.ajax({
 			$('#BundleTable').html(bundleTableHtml);
 			$('#BundleTable').width(220 * Bundles.length);
 		} else {
-			alert(data.errorcode + ": " + data.errormsg);
+			bootbox.alert(common.tips.error + data.errormsg);
 		}
 	},
 	error : function() {
-		alert('failure');
+		console.log('failue');
 	}
 });
 
@@ -377,7 +377,7 @@ $('[type=submit]', $('#BundleScheduleModal')).on('click', function(event) {
 		},
 		error : function() {
 			$('#BundleScheduleModal').modal('hide');
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 

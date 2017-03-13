@@ -34,11 +34,11 @@ function initBranchTree() {
 					}
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	function createBranchTreeData(branches, treeData) {

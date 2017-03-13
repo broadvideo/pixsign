@@ -13,6 +13,8 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table pflowlog add index pflowlog_index1(deviceid);
+
 create table debugreport( 
    debugreportid int not null auto_increment,
    deviceid int,

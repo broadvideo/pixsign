@@ -210,7 +210,7 @@ function initMyEditModal() {
 					bootbox.alert('操作成功');
 					refreshMyTable();
 				} else {
-					bootbox.alert('出错了：' + data.errorcode + ': ' + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {

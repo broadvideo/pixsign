@@ -132,7 +132,7 @@ function submitMyEditForm() {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -152,7 +152,7 @@ function submitPageEditForm() {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -327,7 +327,7 @@ $('body').on('click', '.pix-pagepkg-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -358,7 +358,7 @@ $('body').on('click', '.pix-page-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}

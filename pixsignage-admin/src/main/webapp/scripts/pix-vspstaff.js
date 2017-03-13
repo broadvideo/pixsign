@@ -72,7 +72,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -96,11 +96,11 @@ function initMyEditModal() {
 				createRoleTreeData(data.aaData, currentRoleTreeData);
 				createRoleTree(currentRoleTreeData);
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	
@@ -317,7 +317,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};

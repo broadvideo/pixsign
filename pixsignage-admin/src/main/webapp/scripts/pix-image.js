@@ -150,7 +150,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -199,11 +199,11 @@ function initMyEditModal() {
 						$('#EditFormFolderTree').jstree('select_node', currentEditFolderid);
 					});
 				} else {
-					alert(data.errorcode + ": " + data.errormsg);
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
 			},
 			error : function() {
-				alert('failure');
+				console.log('failue');
 			}
 		});
 
@@ -230,7 +230,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};
@@ -313,7 +313,7 @@ function initUploadModal() {
 		autoUpload: false,
 		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 		disableImageResize: true,
-		maxFileSize: 5242880,
+		maxFileSize: 10240000,
 		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				

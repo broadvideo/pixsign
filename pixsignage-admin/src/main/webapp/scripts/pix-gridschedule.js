@@ -165,7 +165,7 @@ $('body').on('click', '.pix-sync', function(event) {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -266,11 +266,11 @@ function refreshMediagridTable() {
 				$('#MediagridTable').html(mediagridTableHtml);
 				$('#MediagridTable').width(220 * Mediagrids.length);
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 }
@@ -447,7 +447,7 @@ $('[type=submit]', $('#GridscheduleModal')).on('click', function(event) {
 		},
 		error : function() {
 			$('#GridscheduleModal').modal('hide');
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 

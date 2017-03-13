@@ -113,7 +113,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -182,7 +182,7 @@ $('body').on('click', '.pix-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}

@@ -108,7 +108,7 @@ function initMyTable() {
 			},
 			error : function() {
 				$('#DebugModal').modal('hide');
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 

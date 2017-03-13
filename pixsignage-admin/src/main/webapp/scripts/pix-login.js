@@ -78,7 +78,7 @@ var Login = function () {
 						},
 						error : function() {
 							Metronic.stopPageLoading();
-							alert('failure');
+							console.log('failue');
 						}
 					});
 	            }

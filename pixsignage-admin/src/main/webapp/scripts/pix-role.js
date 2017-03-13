@@ -59,7 +59,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -81,11 +81,11 @@ function initMyEditModal() {
 				createTreeData(data.aaData, currentTreeData);
 				createTree(currentTreeData);
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	
@@ -172,7 +172,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};

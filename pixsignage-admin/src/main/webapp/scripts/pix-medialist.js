@@ -128,7 +128,7 @@ function initMyTable() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}
@@ -158,7 +158,7 @@ function initMyEditModal() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};
@@ -263,7 +263,7 @@ function initMedialistDtlModal() {
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});
@@ -750,7 +750,7 @@ function initMedialistDtlModal() {
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});
@@ -796,11 +796,11 @@ function initMediaBranchTree() {
 					}
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	function createBranchTreeData(branches, treeData) {
@@ -853,11 +853,11 @@ function initMediaFolderTree() {
 					});
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	function createFolderTreeData(folders, treeData) {

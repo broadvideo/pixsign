@@ -1,15 +1,3 @@
-var RegionColors = [];
-RegionColors['0'] = '#BCC2F2';
-RegionColors['1'] = '#99CCFF';
-RegionColors['2'] = '#CCCC99';
-RegionColors['3'] = '#CCCC99';
-RegionColors['4'] = '#FFCCCC';
-RegionColors['5'] = '#FF99CC';
-RegionColors['6'] = '#CC99CC';
-RegionColors['7'] = '#FFFF99';
-RegionColors['A1'] = '#CC9966';
-RegionColors['A2'] = '#CC9966';
-
 var RegionLimits = [];
 RegionLimits['0'] = 6;
 RegionLimits['1'] = 4;
@@ -22,10 +10,15 @@ RegionLimits['7'] = 10;
 RegionLimits['8'] = 1;
 RegionLimits['9'] = 1;
 RegionLimits['10'] = 1;
+RegionLimits['11'] = 1;
 RegionLimits['12'] = 2;
 RegionLimits['13'] = 1;
 RegionLimits['A1'] = 1;
 RegionLimits['A2'] = 1;
+
+var RegionRatios = [];
+RegionRatios['10'] = 0.8333; //5:6
+RegionRatios['11'] = 1.7699; //1000:565
 
 var CurrentLayoutid = 0;
 var CurrentLayout;
@@ -433,19 +426,29 @@ function refreshAnimationSelect() {
 }
 
 function regionPositionUpdate(e, ui) {
-	var w = $(this).width() / $('#LayoutDiv').width();
-	var h = $(this).height() / $('#LayoutDiv').height();
+	var layoutdtlid = $(this).attr("layoutdtlid");
+	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+		return el.layoutdtlid == layoutdtlid;
+	});
+
 	var l = $(this).position().left / $('#LayoutDiv').width();
 	var t = $(this).position().top / $('#LayoutDiv').height();
+	if (RegionRatios[layoutdtls[0].type] != undefined) {
+		var w = $(this).width() / $('#LayoutDiv').width();
+		var h = $(this).width() / parseFloat(RegionRatios[layoutdtls[0].type]) / $('#LayoutDiv').height();
+		if (t + h > 1) {
+			h = 1 - t;
+			w = h * $('#LayoutDiv').height() * parseFloat(RegionRatios[layoutdtls[0].type]) / $('#LayoutDiv').width();
+		}
+	} else {
+		var w = $(this).width() / $('#LayoutDiv').width();
+		var h = $(this).height() / $('#LayoutDiv').height();
+	}
 	$(this).css("width" , (100 * parseFloat(w)) + '%');
 	$(this).css("height" , (100 * parseFloat(h)) + '%');
 	$(this).css("left" , (100 * parseFloat(l)) + '%');
 	$(this).css("top" , (100 * parseFloat(t)) + '%');
 
-	var layoutdtlid = $(this).attr("layoutdtlid");
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-		return el.layoutdtlid == layoutdtlid;
-	});
 	layoutdtls[0].width = Math.round(CurrentLayout.width * w, 0);
 	layoutdtls[0].height = Math.round(CurrentLayout.height * h, 0);
 	layoutdtls[0].leftoffset = Math.round(CurrentLayout.width * l, 0);
@@ -489,6 +492,7 @@ function updateRegionBtns() {
 	updateRegionBtn('8');
 	updateRegionBtn('9');
 	updateRegionBtn('10');
+	updateRegionBtn('11');
 	updateRegionBtn('12');
 	updateRegionBtn('13');
 	updateRegionBtn('A1');
@@ -822,8 +826,13 @@ $('body').on('click', '.pix-addregion', function(event) {
 	layoutdtl.mainflag = 0;
 	layoutdtl.leftoffset = CurrentLayout.height * 0.1;
 	layoutdtl.topoffset = CurrentLayout.width * 0.1;
-	layoutdtl.width = CurrentLayout.width * 0.2;
-	layoutdtl.height = CurrentLayout.height * 0.2;
+	if (RegionRatios[regiontype] != undefined) {
+		layoutdtl.width = CurrentLayout.width * 0.2;
+		layoutdtl.height = CurrentLayout.width * 0.2 / RegionRatios[regiontype];
+	} else {
+		layoutdtl.width = CurrentLayout.width * 0.2;
+		layoutdtl.height = CurrentLayout.height * 0.2;
+	}
 	if (layoutdtl.type == 0) {
 		layoutdtl.zindex = 1;
 	} else {
@@ -907,11 +916,11 @@ $.ajax({
 				});
 			});
 		} else {
-			alert(data.errorcode + ": " + data.errormsg);
+			bootbox.alert(common.tips.error + data.errormsg);
 		}
 	},
 	error : function() {
-		alert('failure');
+		console.log('failue');
 	}
 });
 function createFolderTreeData(folders, treeData) {

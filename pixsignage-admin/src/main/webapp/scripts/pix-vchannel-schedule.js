@@ -187,7 +187,7 @@ function initVchannels() {
 				}
 			},
 			error : function() {
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	};
@@ -228,7 +228,7 @@ function initVchannels() {
 			},
 			error : function() {
 				Metronic.stopPageLoading();
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});
@@ -256,7 +256,7 @@ function initVchannels() {
 						}
 					},
 					error : function() {
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});				
 			}

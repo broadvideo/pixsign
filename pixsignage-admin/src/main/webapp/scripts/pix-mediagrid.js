@@ -147,11 +147,11 @@ $.ajax({
 				redrawGridlayout($('#GridlayoutDiv-' + gridlayout.gridlayoutid), gridlayout, 200);
 			}
 		} else {
-			alert(data.errorcode + ": " + data.errormsg);
+			bootbox.alert(common.tips.error + data.errormsg);
 		}
 	},
 	error : function() {
-		alert('failure');
+		console.log('failue');
 	}
 });
 
@@ -349,7 +349,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -406,7 +406,7 @@ $('body').on('click', '.pix-sync', function(event) {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -439,7 +439,7 @@ $('body').on('click', '.pix-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -854,11 +854,11 @@ $.ajax({
 				});
 			});
 		} else {
-			alert(data.errorcode + ": " + data.errormsg);
+			bootbox.alert(common.tips.error + data.errormsg);
 		}
 	},
 	error : function() {
-		alert('failure');
+		console.log('failue');
 	}
 });
 function createFolderTreeData(folders, treeData) {
@@ -935,7 +935,7 @@ $('[type=submit]', $('#MediagridModal')).on('click', function(event) {
 					},
 					error : function() {
 						$('#MediagridModal').modal('hide');
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});
 			}

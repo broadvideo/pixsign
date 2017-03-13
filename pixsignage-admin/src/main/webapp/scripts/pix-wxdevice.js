@@ -126,7 +126,7 @@ function initBindModal() {
 			},
 			error : function() {
 				$('#DeviceModal').modal('hide');
-				bootbox.alert(common.tips.error);
+				console.log('failue');
 			}
 		});
 	});

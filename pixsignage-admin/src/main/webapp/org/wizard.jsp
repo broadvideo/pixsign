@@ -329,7 +329,8 @@ response.setDateHeader("Expires",0);
 																<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
-																<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendar"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendarlist"/> <i class="fa fa-plus"></i></a>
+																<a href="javascript:;" regiontype="11" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendartable"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="region.rss"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="13" class="btn btn-sm yellow pix-addregion audio-ctrl"><spring:message code="region.audio"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
@@ -401,17 +402,6 @@ response.setDateHeader("Expires",0);
 																				<h3 class="col-md-6 page-title font-red-sunglo layoutdtl-title"></h3>
 																				<div class="col-md-6">
 																					<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
-																				</div>
-																			</div>
-																			<div class="form-group layout-ctl regiontype-10">
-																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.calendartype"/></label>
-																				<div class="col-md-9 radio-list">
-																					<label class="radio-inline">
-																						<input type="radio" name="calendartype" value="1" checked> <spring:message code="global.layout.region.calendartype_1"/>
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio" name="calendartype" value="2"> <spring:message code="global.layout.region.calendartype_2"/>
-																					</label>
 																				</div>
 																			</div>
 																			<div class="form-group layout-ctl regiontype-0">
@@ -501,7 +491,7 @@ response.setDateHeader("Expires",0);
 																					</select>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10">
+																			<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10 regiontype-11">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group">
@@ -519,7 +509,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-12">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
@@ -528,7 +518,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-12">
+																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 																				<div class="col-md-9">
 																					<input class="opacityRange" type="text" name="opacity" value=""/>

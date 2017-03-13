@@ -190,11 +190,11 @@ function initTab1() {
 					redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, 200);
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 }
@@ -409,11 +409,11 @@ function initTab4() {
 					}
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 	function createBranchTreeData(branches, treeData) {
@@ -694,7 +694,7 @@ function submitData() {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});
 		}

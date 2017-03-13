@@ -101,11 +101,11 @@ function initFolderTree() {
 									data.instance.set_id(data.node, result.data.folderid);
 								} else {
 									data.instance.refresh();
-									bootbox.alert(common.tips.error);
+									console.log('failue');
 								}
 							},
 							error : function() {
-								bootbox.alert(common.tips.error);
+								console.log('failue');
 							}
 						});				
 					});
@@ -121,12 +121,12 @@ function initFolderTree() {
 							success : function(result, status) {
 								if (result.errorcode != 0) {
 									data.instance.refresh();
-									bootbox.alert(common.tips.error);
+									console.log('failue');
 								}
 							},
 							error : function() {
 								data.instance.refresh();
-								bootbox.alert(common.tips.error);
+								console.log('failue');
 							}
 						});				
 					});
@@ -153,11 +153,11 @@ function initFolderTree() {
 					})
 				}
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});
 

@@ -139,11 +139,11 @@ var oTable = $('#MyTable').dataTable({
 						    });
 							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
 						} else {
-							alert(data.errorcode + ": " + data.errormsg);
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
 					},
 					error : function() {
-						alert('failure');
+						console.log('failue');
 					}
 				});
 			    return false;
@@ -191,11 +191,11 @@ $.ajax({
 				redrawLayoutPreview($('#LayoutDiv-' + layout.layoutid), layout, 200);
 			}
 		} else {
-			alert(data.errorcode + ": " + data.errormsg);
+			bootbox.alert(common.tips.error + data.errormsg);
 		}
 	},
 	error : function() {
-		alert('failure');
+		console.log('failue');
 	}
 });
 
@@ -218,7 +218,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		},
 		error : function() {
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 };
@@ -311,7 +311,7 @@ $('body').on('click', '.pix-sync', function(event) {
 				},
 				error : function() {
 					Metronic.stopPageLoading();
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -344,7 +344,7 @@ $('body').on('click', '.pix-delete', function(event) {
 					}
 				},
 				error : function() {
-					bootbox.alert(common.tips.error);
+					console.log('failue');
 				}
 			});				
 		}
@@ -433,11 +433,11 @@ $('body').on('click', '.pix-bundle', function(event) {
 				}
 				$('#BundleModal').modal();
 			} else {
-				alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
 		error : function() {
-			alert('failure');
+			console.log('failue');
 		}
 	});	
 });
@@ -499,7 +499,7 @@ $('[type=submit]', $('#BundleModal')).on('click', function(event) {
 					},
 					error : function() {
 						$('#BundleModal').modal('hide');
-						bootbox.alert(common.tips.error);
+						console.log('failue');
 					}
 				});
 			}
@@ -696,7 +696,7 @@ $('[type=submit]', $('#PushModal')).on('click', function(event) {
 		},
 		error : function() {
 			$('#PushModal').modal('hide');
-			bootbox.alert(common.tips.error);
+			console.log('failue');
 		}
 	});
 
