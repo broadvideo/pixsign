@@ -43,6 +43,7 @@ import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Dvb;
+import com.broadvideo.pixsignage.domain.Flowlog;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Weather;
@@ -51,6 +52,7 @@ import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
+import com.broadvideo.pixsignage.persistence.FlowlogMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.BundleService;
@@ -84,6 +86,8 @@ public class PixsignageService {
 	private CrashreportMapper crashreportMapper;
 	@Autowired
 	private DebugreportMapper debugreportMapper;
+	@Autowired
+	private FlowlogMapper flowlogMapper;
 
 	@Autowired
 	private BundleService bundleService;
@@ -773,7 +777,7 @@ public class PixsignageService {
 
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_weather exception", e);
+			logger.error("Pixsignage Service get_calendar exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -898,6 +902,67 @@ public class PixsignageService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_pflow exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_flowrate")
+	public String reportflowrate(String request) {
+		try {
+			logger.info("Pixsignage Service report_flowrate: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			long starttime = requestJson.getLong("start_time");
+			long endtime = requestJson.getLong("end_time");
+			int total = requestJson.getInt("total_delta");
+			int male = requestJson.getInt("male_delta");
+			int female = requestJson.getInt("female_delta");
+			int age1 = requestJson.getInt("child_delta");
+			int age2 = requestJson.getInt("juvenile_delta");
+			int age3 = requestJson.getInt("youndster_delta");
+			int age4 = requestJson.getInt("middle_delta");
+			int age5 = requestJson.getInt("elder_delta");
+
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			Flowlog flowlog = new Flowlog();
+			flowlog.setOrgid(device.getOrgid());
+			flowlog.setBranchid(device.getBranchid());
+			flowlog.setDeviceid(device.getDeviceid());
+			flowlog.setUuid("" + starttime);
+			Calendar c1 = Calendar.getInstance();
+			c1.setTimeInMillis(starttime);
+			Calendar c2 = Calendar.getInstance();
+			c2.setTimeInMillis(endtime);
+			flowlog.setStarttime(c1.getTime());
+			flowlog.setEndtime(c2.getTime());
+			flowlog.setTotal(total);
+			flowlog.setMale(male);
+			flowlog.setFemale(female);
+			flowlog.setAge1(age1);
+			flowlog.setAge2(age2);
+			flowlog.setAge3(age3);
+			flowlog.setAge4(age4);
+			flowlog.setAge5(age5);
+			flowlogMapper.insertSelective(flowlog);
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_flowrate exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

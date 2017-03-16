@@ -109,8 +109,6 @@ public class MultisignService {
 			} else if (device.getStatus().equals("1") && device.getHardkey() != null
 					&& !device.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
-			} else if (other != null && device.getOther().length() > 0 && !device.getOther().equals(other)) {
-				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
 			}
 
 			try {
@@ -302,8 +300,8 @@ public class MultisignService {
 							return name.startsWith(appname + "-") && name.endsWith((".apk"));
 						}
 					});
-					Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
 					if (files.length > 0) {
+						Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
 						String filename = files[0].getName();
 						url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 								+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"

@@ -1,12 +1,8 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
-import org.apache.struts2.json.annotations.JSON;
-
-public class Layoutdtl {
+public class Templetdtl {
 	public final static String Type_PLAY = "0";
 	public final static String Type_TEXT = "1";
 	public final static String Type_DATE = "2";
@@ -24,9 +20,19 @@ public class Layoutdtl {
 	public final static String Type_A1 = "A1";
 	public final static String Type_A2 = "A2";
 
-	private Integer layoutdtlid;
+	public final static String ObjType_NONE = "0";
+	public final static String ObjType_Medialist = "1";
+	public final static String ObjType_Text = "2";
+	public final static String ObjType_Stream = "3";
+	public final static String ObjType_Widget = "5";
+	public final static String ObjType_Dvb = "6";
+	public final static String ObjType_Rss = "7";
 
-	private Integer layoutid;
+	private Integer templetdtlid;
+
+	private Integer templetid;
+
+	private Integer hometempletid;
 
 	private String type;
 
@@ -68,28 +74,56 @@ public class Layoutdtl {
 
 	private Integer volume;
 
-	private String calendartype;
+	private String objtype;
+
+	private Integer objid;
+
+	private String touchlabel;
+
+	private String touchtype;
+
+	private Integer touchtempletid;
+
+	private String touchapk;
 
 	private Date createtime;
 
 	private Image bgimage;
 
-	private List<HashMap<String, String>> regiondtls;
+	private Medialist medialist;
 
-	public Integer getLayoutdtlid() {
-		return layoutdtlid;
+	private Text text;
+
+	private Stream stream;
+
+	private Widget widget;
+
+	private Dvb dvb;
+
+	private Rss rss;
+
+	public Integer getTempletdtlid() {
+		return templetdtlid;
 	}
 
-	public void setLayoutdtlid(Integer layoutdtlid) {
-		this.layoutdtlid = layoutdtlid;
+	public void setTempletdtlid(Integer templetdtlid) {
+		this.templetdtlid = templetdtlid;
 	}
 
-	public Integer getLayoutid() {
-		return layoutid;
+	public Integer getTempletid() {
+		return templetid;
 	}
 
-	public void setLayoutid(Integer layoutid) {
-		this.layoutid = layoutid;
+	public void setTempletid(Integer templetid) {
+		this.templetid = templetid;
+	}
+
+	public Integer getHometempletid() {
+		return hometempletid;
+	}
+
+	public void setHometempletid(Integer hometempletid) {
+		this.hometempletid = hometempletid;
 	}
 
 	public String getType() {
@@ -97,7 +131,7 @@ public class Layoutdtl {
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.type = type == null ? null : type.trim();
 	}
 
 	public String getMainflag() {
@@ -105,7 +139,7 @@ public class Layoutdtl {
 	}
 
 	public void setMainflag(String mainflag) {
-		this.mainflag = mainflag;
+		this.mainflag = mainflag == null ? null : mainflag.trim();
 	}
 
 	public Integer getHeight() {
@@ -153,7 +187,7 @@ public class Layoutdtl {
 	}
 
 	public void setBgcolor(String bgcolor) {
-		this.bgcolor = bgcolor;
+		this.bgcolor = bgcolor == null ? null : bgcolor.trim();
 	}
 
 	public Integer getOpacity() {
@@ -193,7 +227,7 @@ public class Layoutdtl {
 	}
 
 	public void setAnimation(String animation) {
-		this.animation = animation;
+		this.animation = animation == null ? null : animation.trim();
 	}
 
 	public String getDirection() {
@@ -233,7 +267,7 @@ public class Layoutdtl {
 	}
 
 	public void setDateformat(String dateformat) {
-		this.dateformat = dateformat;
+		this.dateformat = dateformat == null ? null : dateformat.trim();
 	}
 
 	public String getFitflag() {
@@ -241,7 +275,7 @@ public class Layoutdtl {
 	}
 
 	public void setFitflag(String fitflag) {
-		this.fitflag = fitflag;
+		this.fitflag = fitflag == null ? null : fitflag.trim();
 	}
 
 	public Integer getVolume() {
@@ -252,20 +286,58 @@ public class Layoutdtl {
 		this.volume = volume;
 	}
 
-	public String getCalendartype() {
-		return calendartype;
+	public String getObjtype() {
+		return objtype;
 	}
 
-	public void setCalendartype(String calendartype) {
-		this.calendartype = calendartype;
+	public void setObjtype(String objtype) {
+		this.objtype = objtype == null ? null : objtype.trim();
 	}
 
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Integer getObjid() {
+		return objid;
+	}
+
+	public void setObjid(Integer objid) {
+		this.objid = objid;
+	}
+
+	public String getTouchlabel() {
+		return touchlabel;
+	}
+
+	public void setTouchlabel(String touchlabel) {
+		this.touchlabel = touchlabel == null ? null : touchlabel.trim();
+	}
+
+	public String getTouchtype() {
+		return touchtype;
+	}
+
+	public void setTouchtype(String touchtype) {
+		this.touchtype = touchtype == null ? null : touchtype.trim();
+	}
+
+	public Integer getTouchtempletid() {
+		return touchtempletid;
+	}
+
+	public void setTouchtempletid(Integer touchtempletid) {
+		this.touchtempletid = touchtempletid;
+	}
+
+	public String getTouchapk() {
+		return touchapk;
+	}
+
+	public void setTouchapk(String touchapk) {
+		this.touchapk = touchapk == null ? null : touchapk.trim();
+	}
+
 	public Date getCreatetime() {
 		return createtime;
 	}
 
-	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
@@ -278,12 +350,51 @@ public class Layoutdtl {
 		this.bgimage = bgimage;
 	}
 
-	public List<HashMap<String, String>> getRegiondtls() {
-		return regiondtls;
+	public Medialist getMedialist() {
+		return medialist;
 	}
 
-	public void setRegiondtls(List<HashMap<String, String>> regiondtls) {
-		this.regiondtls = regiondtls;
+	public void setMedialist(Medialist medialist) {
+		this.medialist = medialist;
 	}
 
+	public Text getText() {
+		return text;
+	}
+
+	public void setText(Text text) {
+		this.text = text;
+	}
+
+	public Stream getStream() {
+		return stream;
+	}
+
+	public void setStream(Stream stream) {
+		this.stream = stream;
+	}
+
+	public Widget getWidget() {
+		return widget;
+	}
+
+	public void setWidget(Widget widget) {
+		this.widget = widget;
+	}
+
+	public Dvb getDvb() {
+		return dvb;
+	}
+
+	public void setDvb(Dvb dvb) {
+		this.dvb = dvb;
+	}
+
+	public Rss getRss() {
+		return rss;
+	}
+
+	public void setRss(Rss rss) {
+		this.rss = rss;
+	}
 }

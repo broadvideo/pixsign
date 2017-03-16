@@ -146,7 +146,9 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update device set status='0'
+    update device 
+    set status = '0',
+    hardkey = null
     where deviceid = #{deviceid}
   </delete>
 

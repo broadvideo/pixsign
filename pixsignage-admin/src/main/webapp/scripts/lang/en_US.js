@@ -20,6 +20,7 @@ var common = {
 		layout: 'Layout',
 
 		subbundle: 'Sub-Program',
+		subtemplet: 'Sub-Templet',
 		schedule: 'Schedule',
 		layoutschedule: 'Layout Schedule',
 		regionschedule: 'Region Schedule',
@@ -167,6 +168,14 @@ var common = {
 		config_serverport: 'Server Port',
 		config_pixedxip: 'PixedX IP',
 		config_pixedxport: 'PixedX Port',
+		
+		male: 'Male',
+		female: 'Female',
+		age1: '0-6',
+		age2: '7-17',
+		age3: '18-40',
+		age4: '41-65',
+		age5: '66+',
 		
 		wxappid: 'Weixin AppID',
 		wxsecret: 'Weixin AppSecret',

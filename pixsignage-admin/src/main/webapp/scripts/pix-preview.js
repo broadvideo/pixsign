@@ -336,3 +336,140 @@ function drawCanvasRegion(ctx, bundle, layoutdtl, left, top, width, height, fill
 	ctx.strokeRect(left,top,width,height);
 };
 
+
+//Templet Preview
+function redrawTempletPreview(div, templet, maxsize, dynamic) {
+	div.empty();
+	div.attr('templetid', templet.templetid);
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; background:#FFFFFF;');
+	if (templet.bgimage != null) {
+		div.append('<img class="layout-bg" src="/pixsigdata' + templet.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	}
+	for (var i=0; i<templet.templetdtls.length; i++) {
+		div.append(getTempletdtlPreviewHtml(templet, i, dynamic));
+	}
+	var scale, width, height;
+	if (templet.width > templet.height ) {
+		width = maxsize;
+		scale = templet.width / width;
+		height = templet.height / scale;
+		div.css('width' , width);
+		div.css('height' , height);
+	} else {
+		height = maxsize;
+		scale = templet.height / height;
+		width = templet.width / scale;
+		div.css('width' , width);
+		div.css('height' , height);
+	}
+	$(div).find('.templet-font').each(function() {
+		var templetdtl = templet.templetdtls[$(this).attr('templetdtlindex')];
+		var fontsize = templetdtl.size * templetdtl.height / 100 / scale;
+		var text = $(this).html();
+		$(this).css('font-size', fontsize + 'px');
+		$(this).css('line-height', templetdtl.height / scale + 'px');
+		if (fontsize < 9) {
+			$(this).html('');
+			$(this).find('img').each(function() {
+				$(this).css('display', 'none');
+			});
+		} else {
+			$(this).find('img').each(function() {
+				$(this).css('height', fontsize + 'px');
+				$(this).css('display', 'inline');
+			});
+		}
+	});
+}
+
+function getTempletdtlPreviewHtml(templet, templetdtlindex, dynamic) {
+	var templetdtl = templet.templetdtls[templetdtlindex];
+	var bgimage = '';
+	if (templetdtl.bgimage != null) {
+		bgimage = '/pixsigdata' + templetdtl.bgimage.thumbnail;
+	} else if (templetdtl.mainflag == 1) {
+		bgimage = '../img/region/region-play-main.jpg';
+	} else if (templetdtl.type == '0') {
+		bgimage = '../img/region/region-play.jpg';
+	} else if (templetdtl.type == '4') {
+		bgimage = '../img/region/region-videoin.jpg';
+	} else if (templetdtl.type == '5') {
+		bgimage = '../img/region/region-dvb.jpg';
+	} else if (templetdtl.type == '6') {
+		bgimage = '../img/region/region-stream.jpg';
+	} else if (templetdtl.type == '8') {
+		if (templetdtl.width > templetdtl.height) {
+			bgimage = '../img/region/region-navigate-h.jpg';
+		} else {
+			bgimage = '../img/region/region-navigate-v.jpg';
+		}
+	} else if (templetdtl.type == '9') {
+		bgimage = '../img/region/region-qrcode.jpg';
+	}
+	if (templetdtl.type == '0') {
+		if (templetdtl.objtype == 1 && templetdtl.medialist.medialistdtls.length > 0) {
+			var medialistdtl = templetdtl.medialist.medialistdtls[0];
+			if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
+				bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
+			} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
+			}
+		} else if (templetdtl.objtype == 5) {
+			bgimage = '../img/region/region-widget.jpg';
+		}
+	}
+	
+	var templetdtlhtml = '';
+	templetdtlhtml += '<div style="position: absolute; width:' + 100*templetdtl.width/templet.width;
+	templetdtlhtml += '%; height:' + 100*templetdtl.height/templet.height;
+	templetdtlhtml += '%; top: ' + 100*templetdtl.topoffset/templet.height;
+	templetdtlhtml += '%; left: ' + 100*templetdtl.leftoffset/templet.width;
+	templetdtlhtml += '%; ">';
+
+	templetdtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + templetdtl.bgcolor;
+	templetdtlhtml += '; opacity:' + templetdtl.opacity/255 + '; "></div>';
+
+	templetdtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
+	if (templetdtl.type == '0' || templetdtl.type == '4' || templetdtl.type == '5' || templetdtl.type == '6' || templetdtl.type == '8' || templetdtl.type == '9') {
+		templetdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+	} else if (templetdtl.type == 1) {
+		if (templetdtl.direction == 4 && dynamic == 1) {
+			templetdtlhtml += '<marquee class="templet-font" templetdtlindex="' + templetdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + templetdtl.color + '; font-size:12px; font-weight:bold; ">';
+			templetdtlhtml += templetdtl.text.text;
+			templetdtlhtml += '</marquee>';
+		} else {
+			templetdtlhtml += '<p class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; font-weight:bold; ">';
+			templetdtlhtml += templetdtl.text.text;
+			templetdtlhtml += '</p>';
+		}
+	} else if (templetdtl.type == 2) {
+		templetdtlhtml += '<p class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; font-weight:bold; ">';
+		templetdtlhtml += new Date().pattern(templetdtl.dateformat);
+		templetdtlhtml += '</p>';
+	} else if (templetdtl.type == 3) {
+		templetdtlhtml += '<div class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; font-weight:bold; ">';
+		templetdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		templetdtlhtml += '<img src="../img/duoyun.png" />';
+		templetdtlhtml += '<img src="../img/xiaoyu.png" />';
+		templetdtlhtml += '</div>';
+	} else if (templetdtl.type == 7) {
+		if (bgimage != '') {
+			templetdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+		templetdtlhtml += '<p class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; ">';
+		if (templetdtl.touchlabel != null) {
+			templetdtlhtml += templetdtl.touchlabel;
+		} else {
+			templetdtlhtml += eval('common.view.region_type_7');
+		}
+		templetdtlhtml += '</p>';
+	} else {
+		templetdtlhtml += '<p class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; ">';
+		templetdtlhtml += eval('common.view.region_mainflag_' + templetdtl.mainflag) + eval('common.view.region_type_' + templetdtl.type);
+		templetdtlhtml += '</p>';
+	}
+	templetdtlhtml += '</div>';
+	templetdtlhtml += '</div>';
+	return templetdtlhtml;
+}
+

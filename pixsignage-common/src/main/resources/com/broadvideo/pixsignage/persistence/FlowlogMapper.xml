@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.FlowlogMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Flowlog" >
+    <id column="flowlogid" property="flowlogid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="male" property="male" jdbcType="INTEGER" />
+    <result column="female" property="female" jdbcType="INTEGER" />
+    <result column="age1" property="age1" jdbcType="INTEGER" />
+    <result column="age2" property="age2" jdbcType="INTEGER" />
+    <result column="age3" property="age3" jdbcType="INTEGER" />
+    <result column="age4" property="age4" jdbcType="INTEGER" />
+    <result column="age5" property="age5" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    flowlogid, orgid, branchid, deviceid, uuid, starttime, endtime, total, male, female, 
+    age1, age2, age3, age4, age5, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from flowlog
+    where flowlogid = #{flowlogid}
+  </select>
+  
+  <resultMap id="DeviceStatResultMap" type="java.util.HashMap">
+    <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
+    <association property="amount1" column="{deviceid=deviceid}" select="selectHour1Amount" />
+    <association property="amount2" column="{deviceid=deviceid}" select="selectHour2Amount" />
+    <association property="amount3" column="{deviceid=deviceid}" select="selectDay1Amount" />
+    <association property="amount4" column="{deviceid=deviceid}" select="selectDay2Amount" />
+  </resultMap>
+  <select id="selectHour1Amount" resultType="Integer">
+    select sum(total) from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d%H') = date_format(now(),'%Y%m%d%H')
+  </select>
+  <select id="selectHour2Amount" resultType="Integer">
+    select sum(total) from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d%H') = date_format(date_sub(now(), interval 1 hour),'%Y%m%d%H')
+  </select>
+  <select id="selectDay1Amount" resultType="Integer">
+    select sum(total) from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d') = date_format(now(),'%Y%m%d')
+  </select>
+  <select id="selectDay2Amount" resultType="Integer">
+    select sum(total) from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d') = date_format(date_sub(now(), interval 1 day),'%Y%m%d')
+  </select>
+
+  <select id="selectDeviceStatCount" resultType="Integer">
+    select count(1) from device
+    where status = '1' 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+  </select>
+  <select id="selectDeviceStatList" resultMap="DeviceStatResultMap">
+    select deviceid, terminalid, name, onlineflag from device
+    where status = '1' 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+    order by deviceid
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <resultMap id="PeriodResultMap" type="java.util.HashMap">
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="statPeriodByDay" resultMap="PeriodResultMap" >
+    select date_format(starttime,'%H') as sequence, date_format(starttime,'%Y%m%d%H') as period, sum(total) as amount
+    from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d') = #{day}
+    group by period
+    order by period
+  </select>
+  <select id="statPeriodByMonth" resultMap="PeriodResultMap" >
+    select date_format(starttime,'%d') as sequence, date_format(starttime,'%Y%m%d') as period, sum(total) as amount
+    from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m') = #{month}
+    group by period
+    order by period
+  </select>
+  
+  <resultMap id="CatalogResultMap" type="java.util.HashMap">
+    <result column="male" property="male" jdbcType="INTEGER" />
+    <result column="female" property="female" jdbcType="INTEGER" />
+    <result column="age1" property="age1" jdbcType="INTEGER" />
+    <result column="age2" property="age2" jdbcType="INTEGER" />
+    <result column="age3" property="age3" jdbcType="INTEGER" />
+    <result column="age4" property="age4" jdbcType="INTEGER" />
+    <result column="age5" property="age5" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="statCatalogByDay" resultMap="CatalogResultMap" >
+    select ifnull(sum(male),0) as male, 
+    ifnull(sum(female),0) as female, 
+    ifnull(sum(age1),0) as age1, 
+    ifnull(sum(age2),0) as age2, 
+    ifnull(sum(age3),0) as age3, 
+    ifnull(sum(age4),0) as age4, 
+    ifnull(sum(age5),0) as age5
+    from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d') = #{day}
+  </select>
+  <select id="statCatalogByMonth" resultMap="CatalogResultMap" >
+    select ifnull(sum(male),0) as male, 
+    ifnull(sum(female),0) as female, 
+    ifnull(sum(age1),0) as age1, 
+    ifnull(sum(age2),0) as age2, 
+    ifnull(sum(age3),0) as age3, 
+    ifnull(sum(age4),0) as age4, 
+    ifnull(sum(age5),0) as age5
+    from flowlog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m') = #{month}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from flowlog
+    where flowlogid = #{flowlogid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Flowlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="flowlogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into flowlog (orgid, branchid, deviceid, 
+      uuid, starttime, endtime, 
+      total, male, female, 
+      age1, age2, age3, age4, 
+      age5, createtime)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
+      #{uuid,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{total,jdbcType=INTEGER}, #{male,jdbcType=INTEGER}, #{female,jdbcType=INTEGER}, 
+      #{age1,jdbcType=INTEGER}, #{age2,jdbcType=INTEGER}, #{age3,jdbcType=INTEGER}, #{age4,jdbcType=INTEGER}, 
+      #{age5,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Flowlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="flowlogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into flowlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="deviceid != null" >
+        deviceid,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="male != null" >
+        male,
+      </if>
+      <if test="female != null" >
+        female,
+      </if>
+      <if test="age1 != null" >
+        age1,
+      </if>
+      <if test="age2 != null" >
+        age2,
+      </if>
+      <if test="age3 != null" >
+        age3,
+      </if>
+      <if test="age4 != null" >
+        age4,
+      </if>
+      <if test="age5 != null" >
+        age5,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="male != null" >
+        #{male,jdbcType=INTEGER},
+      </if>
+      <if test="female != null" >
+        #{female,jdbcType=INTEGER},
+      </if>
+      <if test="age1 != null" >
+        #{age1,jdbcType=INTEGER},
+      </if>
+      <if test="age2 != null" >
+        #{age2,jdbcType=INTEGER},
+      </if>
+      <if test="age3 != null" >
+        #{age3,jdbcType=INTEGER},
+      </if>
+      <if test="age4 != null" >
+        #{age4,jdbcType=INTEGER},
+      </if>
+      <if test="age5 != null" >
+        #{age5,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Flowlog" >
+    update flowlog
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null" >
+        deviceid = #{deviceid,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="male != null" >
+        male = #{male,jdbcType=INTEGER},
+      </if>
+      <if test="female != null" >
+        female = #{female,jdbcType=INTEGER},
+      </if>
+      <if test="age1 != null" >
+        age1 = #{age1,jdbcType=INTEGER},
+      </if>
+      <if test="age2 != null" >
+        age2 = #{age2,jdbcType=INTEGER},
+      </if>
+      <if test="age3 != null" >
+        age3 = #{age3,jdbcType=INTEGER},
+      </if>
+      <if test="age4 != null" >
+        age4 = #{age4,jdbcType=INTEGER},
+      </if>
+      <if test="age5 != null" >
+        age5 = #{age5,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where flowlogid = #{flowlogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Flowlog" >
+    update flowlog
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      deviceid = #{deviceid,jdbcType=INTEGER},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      total = #{total,jdbcType=INTEGER},
+      male = #{male,jdbcType=INTEGER},
+      female = #{female,jdbcType=INTEGER},
+      age1 = #{age1,jdbcType=INTEGER},
+      age2 = #{age2,jdbcType=INTEGER},
+      age3 = #{age3,jdbcType=INTEGER},
+      age4 = #{age4,jdbcType=INTEGER},
+      age5 = #{age5,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where flowlogid = #{flowlogid,jdbcType=INTEGER}
+  </update>
+</mapper>

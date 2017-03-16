@@ -776,6 +776,47 @@
 			</result>
 		</action>
 
+		<action name="templet!get" method="doGet" class="templetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">templet.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="templet!list" method="doList" class="templetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="templet!add" method="doAdd" class="templetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="templet!update" method="doUpdate" class="templetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="templet!delete" method="doDelete" class="templetAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="templet!design" method="doDesign" class="templetAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="bundle!get" method="doGet" class="bundleAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1218,6 +1259,53 @@
 			</result>
 		</action>
 		<action name="pflowlog!downloadbyday" method="doDownloadByDay" class="pflowlogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+
+		<action name="flowlog!devicestatlist" method="doDeviceStatList" class="flowlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="flowlog!statperiodbyday" method="doStatPeriodByDay" class="flowlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="flowlog!statcatalogbyday" method="doStatCatalogByDay" class="flowlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="flowlog!statperiodbymonth" method="doStatPeriodByMonth" class="flowlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="flowlog!statcatalogbymonth" method="doStatCatalogByMonth" class="flowlogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="flowlog!downloadbyday" method="doDownloadByDay" class="flowlogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="flowlog!downloadbymonth" method="doDownloadByMonth" class="flowlogAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
 				<param name="inputName">inputStream</param>

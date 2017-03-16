@@ -20,6 +20,7 @@ var common = {
 		layout: '布局',
 
 		subbundle: '子节目',
+		subtemplet: '子模板',
 		schedule: '计划',
 		layoutschedule: '布局计划',
 		regionschedule: '播出计划',
@@ -167,6 +168,14 @@ var common = {
 		config_serverport: '本服务器端口',
 		config_pixedxip: 'PixedX服务器地址',
 		config_pixedxport: 'PixedX服务器端口',
+		
+		male: '男性',
+		female: '女性',
+		age1: '0-6岁',
+		age2: '7-17岁',
+		age3: '18-40岁',
+		age4: '41-65岁',
+		age5: '66岁以上',
 		
 		wxappid: '微信AppID',
 		wxsecret: '微信AppSecret',

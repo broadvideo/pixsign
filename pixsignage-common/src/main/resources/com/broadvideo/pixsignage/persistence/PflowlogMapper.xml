@@ -14,6 +14,7 @@
   <sql id="Base_Column_List" >
     pflowlogid, orgid, branchid, deviceid, starttime, endtime, duration, createtime
   </sql>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
