@@ -42,7 +42,7 @@ public class FolderAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doList exception", ex);
+			logger.error("FolderAction doList exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -57,7 +57,7 @@ public class FolderAction extends BaseDatatableAction {
 			setData(folder);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doAdd exception", ex);
+			logger.error("FolderAction doAdd exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -69,7 +69,7 @@ public class FolderAction extends BaseDatatableAction {
 			folderService.updateFolder(folder);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doUpdate exception", ex);
+			logger.error("FolderAction doUpdate exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -96,7 +96,7 @@ public class FolderAction extends BaseDatatableAction {
 				return SUCCESS;
 			}
 		} catch (Exception ex) {
-			logger.error("doDelete exception", ex);
+			logger.error("FolderAction doDelete exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

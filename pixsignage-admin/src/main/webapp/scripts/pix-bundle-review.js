@@ -444,12 +444,12 @@ function enterBundledtlFocus(bundledtl) {
 		$('.bundledtl-objvalue').css('display', 'block');
 		$('.bundledtl-medialist').css('display', 'none');
 		$('.bundledtl-objtype').html('视频流');
-		$('.bundledtl-objvalue').html(CurrentBundledtl.stream.text);
+		$('.bundledtl-objvalue').html(CurrentBundledtl.stream.url);
 	} else if (CurrentBundledtl.objtype == 5) {
 		$('.bundledtl-objvalue').css('display', 'block');
 		$('.bundledtl-medialist').css('display', 'none');
 		$('.bundledtl-objtype').html('Widget');
-		$('.bundledtl-objvalue').html(CurrentBundledtl.widget.text);
+		$('.bundledtl-objvalue').html(CurrentBundledtl.widget.url);
 	} else if (CurrentBundledtl.objtype == 6) {
 		$('.bundledtl-objvalue').css('display', 'block');
 		$('.bundledtl-medialist').css('display', 'none');

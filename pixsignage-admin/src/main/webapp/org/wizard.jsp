@@ -739,7 +739,7 @@ response.setDateHeader("Expires",0);
 																	</div>
 																</div>
 															</div>
-															<div class="form-group bundle-ctl regiontype-0 regiontype-7 regiontype-12 objtype-5 public-0 touchtype-3">
+															<div class="form-group bundle-ctl regiontype-12 public-0">
 																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 																<div class="col-md-9">
 																	<div class="input-icon right">

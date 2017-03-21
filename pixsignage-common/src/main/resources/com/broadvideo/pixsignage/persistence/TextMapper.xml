@@ -38,6 +38,9 @@
     and status = '1' 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="search != null">
+      and text like #{search}
+    </if>
   </select>
 
   <select id="selectList" resultMap="ResultMapWithBLOBs">
@@ -50,6 +53,9 @@
     and status = '1' 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="search != null">
+      and text like #{search}
+    </if>
     order by textid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}

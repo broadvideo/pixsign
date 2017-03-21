@@ -67,7 +67,7 @@ function initDetailModal() {
 		CurrentDevice = $('#MyTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
 		
-		$('#OnlinelogTable').dataTable()._fnAjaxUpdate();
+		$('#OnlinelogTable').dataTable().fnDraw(true);
 		$('#OnlinelogModal').modal();
 	});
 

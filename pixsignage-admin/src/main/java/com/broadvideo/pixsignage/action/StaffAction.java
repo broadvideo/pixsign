@@ -56,7 +56,7 @@ public class StaffAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -72,7 +72,7 @@ public class StaffAction extends BaseDatatableAction {
 			staffService.addStaff(staff);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -84,7 +84,7 @@ public class StaffAction extends BaseDatatableAction {
 			staffService.updateStaff(staff);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -96,7 +96,7 @@ public class StaffAction extends BaseDatatableAction {
 			staffService.resetPassword(staff);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doResetPassword exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -112,7 +112,7 @@ public class StaffAction extends BaseDatatableAction {
 				return ERROR;
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doUpdatePassword exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -124,7 +124,7 @@ public class StaffAction extends BaseDatatableAction {
 			staffService.deleteStaff("" + staff.getStaffid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -144,7 +144,7 @@ public class StaffAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StaffAction doValidate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

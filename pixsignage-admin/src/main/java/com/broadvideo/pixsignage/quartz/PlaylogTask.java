@@ -127,9 +127,14 @@ public class PlaylogTask {
 						c1.setTimeInMillis(Long.parseLong(ss[5]));
 						Calendar c2 = Calendar.getInstance();
 						c2.setTimeInMillis(Long.parseLong(ss[6]));
+						int duration = (int) Math.ceil((c2.getTimeInMillis() - c1.getTimeInMillis()) / 1000);
+						// 2017-01-01 00:00:00
+						if (c1.getTimeInMillis() < 1483200000000L || duration == 0) {
+							continue;
+						}
 						playlog.setStarttime(c1.getTime());
 						playlog.setEndtime(c2.getTime());
-						playlog.setDuration((int) Math.ceil((c2.getTimeInMillis() - c1.getTimeInMillis()) / 1000));
+						playlog.setDuration(duration);
 						playlogMapper.insertSelective(playlog);
 					}
 				}

@@ -23,12 +23,12 @@ public class TextServiceImpl implements TextService {
 		return textMapper.selectByPrimaryKey(textid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return textMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String branchid, String search) {
+		return textMapper.selectCount(orgid, branchid, search);
 	}
 
-	public List<Text> selectList(String orgid, String branchid, String start, String length) {
-		return textMapper.selectList(orgid, branchid, start, length);
+	public List<Text> selectList(String orgid, String branchid, String search, String start, String length) {
+		return textMapper.selectList(orgid, branchid, search, start, length);
 	}
 
 	@Transactional

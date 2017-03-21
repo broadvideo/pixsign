@@ -52,11 +52,11 @@ var oTable = $('#MyTable').dataTable({
 		bundlehtml += '<div class="col-md-12 col-xs-12">';
 		bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 		if (aData.reviewflag == 0) {
-			bundlehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span>';
+			bundlehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span></h6>';
 		} else if (aData.reviewflag == 1) {
-			bundlehtml += '<h6><span class="label label-sm label-success">' + common.view.review_passed + '</span>';
+			bundlehtml += '<h6><span class="label label-sm label-success">' + common.view.review_passed + '</span></h6>';
 		} else if (aData.reviewflag == 2) {
-			bundlehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span>';
+			bundlehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span></h6>';
 		}
 		bundlehtml += '<div privilegeid="101010">';
 		bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subbundle-add"><i class="fa fa-plus"></i> ' + common.view.subbundle + '</a>';

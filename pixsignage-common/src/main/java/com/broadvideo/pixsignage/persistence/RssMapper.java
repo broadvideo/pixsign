@@ -9,10 +9,12 @@ import com.broadvideo.pixsignage.domain.Rss;
 public interface RssMapper {
 	Rss selectByPrimaryKey(@Param(value = "rssid") String rssid);
 
-	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid);
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "search") String search);
 
 	List<Rss> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "rssid") String rssid);
 	// int insert(Rss record);

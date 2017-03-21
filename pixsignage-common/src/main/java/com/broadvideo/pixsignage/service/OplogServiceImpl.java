@@ -19,12 +19,13 @@ public class OplogServiceImpl implements OplogService {
 		return oplogMapper.selectByPrimaryKey(oplogid);
 	}
 
-	public int selectCount(String orgid, String branchid, String type) {
-		return oplogMapper.selectCount(orgid, branchid, type);
+	public int selectCount(String orgid, String branchid, String type, String search) {
+		return oplogMapper.selectCount(orgid, branchid, type, search);
 	}
 
-	public List<Oplog> selectList(String orgid, String branchid, String type, String start, String length) {
-		return oplogMapper.selectList(orgid, branchid, type, start, length);
+	public List<Oplog> selectList(String orgid, String branchid, String type, String search, String start,
+			String length) {
+		return oplogMapper.selectList(orgid, branchid, type, search, start, length);
 	}
 
 	@Transactional

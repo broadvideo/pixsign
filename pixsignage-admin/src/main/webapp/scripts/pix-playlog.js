@@ -74,7 +74,8 @@ function initDetailModal() {
 		CurrentDevice = $('#MyTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
 		
-		$('#PlaylogTable').dataTable()._fnAjaxUpdate();
+		$('#PlaylogTable').dataTable().fnDraw(true);
+		//$('#PlaylogTable').dataTable()._fnAjaxUpdate();
 		$('#PlaylogModal').modal();
 	});
 
@@ -91,6 +92,7 @@ function initDetailModal() {
 						{'sTitle' : common.view.starttime, 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.endtime, 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.duration, 'mData' : 'duration', 'bSortable' : false, 'sWidth' : '20%' },],
+		'iDisplayStart' : 0,
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,

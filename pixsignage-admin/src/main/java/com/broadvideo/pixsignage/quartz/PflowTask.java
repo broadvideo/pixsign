@@ -108,6 +108,10 @@ public class PflowTask {
 				if (line.length() > 0) {
 					String[] ss = line.split(",");
 					if (ss.length >= 2) {
+						// 2017-01-01 00:00:00
+						if (Long.parseLong(ss[0]) < 1483200000000L) {
+							continue;
+						}
 						Pflowlog pflowlog = new Pflowlog();
 						pflowlog.setOrgid(device.getOrgid());
 						pflowlog.setBranchid(device.getBranchid());

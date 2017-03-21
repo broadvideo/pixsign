@@ -23,12 +23,12 @@ public class StreamServiceImpl implements StreamService {
 		return streamMapper.selectByPrimaryKey(streamid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return streamMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String branchid, String search) {
+		return streamMapper.selectCount(orgid, branchid, search);
 	}
 
-	public List<Stream> selectList(String orgid, String branchid, String start, String length) {
-		return streamMapper.selectList(orgid, branchid, start, length);
+	public List<Stream> selectList(String orgid, String branchid, String search, String start, String length) {
+		return streamMapper.selectList(orgid, branchid, search, start, length);
 	}
 
 	@Transactional

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Stream;
 import com.broadvideo.pixsignage.service.StreamService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -28,16 +29,18 @@ public class StreamAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = streamService.selectCount("" + getLoginStaff().getOrgid(), branchid);
+			int count = streamService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Stream> streamList = streamService.selectList("" + getLoginStaff().getOrgid(), branchid, start,
+			List<Stream> streamList = streamService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
 					length);
 			for (int i = 0; i < streamList.size(); i++) {
 				aaData.add(streamList.get(i));

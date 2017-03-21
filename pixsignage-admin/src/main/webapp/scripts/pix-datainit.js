@@ -166,12 +166,12 @@ var DataInit = function() {
 							bootbox.alert(common.tips.success);
 						} else {
 							$('#ChangePwdModal').modal('hide');
-							bootbox.alert(password_success.error);
+							bootbox.alert(common.tips.error);
 						}
 					},
 					error : function() {
 						$('#ChangePwdModal').modal('hide');
-						bootbox.alert(password_success.error);
+						bootbox.alert(common.tips.error);
 					}
 				});
 			};

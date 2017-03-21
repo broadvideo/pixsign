@@ -27,12 +27,14 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
+    videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
+    filename, size, md5, previewflag, status, progress, description, 
     thumbnail, relateid, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
-    select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, filename, size, md5, previewflag, status, progress, description, 
+    select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
+    filename, size, md5, previewflag, status, progress, description, 
     thumbnail, 0 as relateid, createtime, createstaffid
     from video
     where videoid = #{videoid}

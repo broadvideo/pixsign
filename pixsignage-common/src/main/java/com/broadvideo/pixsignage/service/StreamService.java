@@ -7,9 +7,9 @@ import com.broadvideo.pixsignage.domain.Stream;
 public interface StreamService {
 	public Stream selectByPrimaryKey(String streamid);
 
-	public int selectCount(String orgid, String branchid);
+	public int selectCount(String orgid, String branchid, String search);
 
-	public List<Stream> selectList(String orgid, String branchid, String start, String length);
+	public List<Stream> selectList(String orgid, String branchid, String search, String start, String length);
 
 	public void addStream(Stream stream);
 

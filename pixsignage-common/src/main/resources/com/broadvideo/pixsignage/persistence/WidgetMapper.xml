@@ -31,6 +31,9 @@
     and status = '1' 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="search != null">
+      and name like #{search}
+    </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
@@ -39,6 +42,9 @@
     and status = '1' 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="search != null">
+      and name like #{search}
+    </if>
     order by widgetid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}

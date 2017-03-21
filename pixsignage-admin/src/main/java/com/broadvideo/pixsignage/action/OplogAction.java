@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Oplog;
 import com.broadvideo.pixsignage.service.OplogService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -28,12 +29,15 @@ public class OplogAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = oplogService.selectCount("" + getLoginStaff().getOrgid(), null, null);
+			int count = oplogService.selectCount("" + getLoginStaff().getOrgid(), null, null, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Oplog> oplogList = oplogService.selectList("" + getLoginStaff().getOrgid(), null, null, start, length);
+			List<Oplog> oplogList = oplogService.selectList("" + getLoginStaff().getOrgid(), null, null, search, start,
+					length);
 			for (int i = 0; i < oplogList.size(); i++) {
 				aaData.add(oplogList.get(i));
 			}

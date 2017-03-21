@@ -23,10 +23,10 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.url, 'mData' : 'url', 'bSortable' : false, 'sWidth' : '70%' },
-						{'sTitle' : '', 'mData' : 'rssid', 'bSortable' : false, 'sWidth' : '5%' },
-						{'sTitle' : '', 'mData' : 'rssid', 'bSortable' : false, 'sWidth' : '5%' }],
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
+						{'sTitle' : common.view.url, 'mData' : 'url', 'bSortable' : false, 'sWidth' : '65%', 'sClass': 'autowrap' },
+						{'sTitle' : '', 'mData' : 'rssid', 'bSortable' : false, 'sWidth' : '10%' },
+						{'sTitle' : '', 'mData' : 'rssid', 'bSortable' : false, 'sWidth' : '10%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -48,7 +48,7 @@ function initMyTable() {
 	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').select2();
-	$('#MyTable').css('width', '100%');
+	$('#MyTable').css('width', '100%').css('table-layout', 'fixed');
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {

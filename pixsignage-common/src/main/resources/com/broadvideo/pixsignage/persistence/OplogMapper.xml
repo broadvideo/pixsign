@@ -32,26 +32,34 @@
   </select>
   
   <select id="selectCount" resultType="Integer">
-    select count(1) from oplog
-    where orgid = #{orgid}
+    select count(1) from oplog o, staff s
+    where o.orgid = #{orgid}
+    and o.staffid = s.staffid
     <if test="branchid != null">
-      and branchid = #{branchid}
+      and o.branchid = #{branchid}
     </if>
     <if test="type != null">
-      and type = #{type}
+      and o.type = #{type}
+    </if>
+    <if test="search != null">
+      and s.loginname like #{search}
     </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
-    select * from oplog
-    where orgid = #{orgid}
+    select o.* from oplog o, staff s
+    where o.orgid = #{orgid}
+    and o.staffid = s.staffid
     <if test="branchid != null">
-      and branchid = #{branchid}
+      and o.branchid = #{branchid}
     </if>
     <if test="type != null">
-      and type = #{type}
+      and o.type = #{type}
     </if>
-    order by oplogid desc 
+    <if test="search != null">
+      and s.loginname like #{search}
+    </if>
+    order by o.oplogid desc 
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>

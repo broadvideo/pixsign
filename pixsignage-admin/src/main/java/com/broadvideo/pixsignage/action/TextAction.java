@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.service.TextService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -28,16 +29,19 @@ public class TextAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = textService.selectCount("" + getLoginStaff().getOrgid(), branchid);
+			int count = textService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Text> textList = textService.selectList("" + getLoginStaff().getOrgid(), branchid, start, length);
+			List<Text> textList = textService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
+					length);
 			for (int i = 0; i < textList.size(); i++) {
 				aaData.add(textList.get(i));
 			}

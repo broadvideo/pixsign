@@ -23,12 +23,12 @@ public class RssServiceImpl implements RssService {
 		return rssMapper.selectByPrimaryKey(rssid);
 	}
 
-	public int selectCount(String orgid, String branchid) {
-		return rssMapper.selectCount(orgid, branchid);
+	public int selectCount(String orgid, String branchid, String search) {
+		return rssMapper.selectCount(orgid, branchid, search);
 	}
 
-	public List<Rss> selectList(String orgid, String branchid, String start, String length) {
-		return rssMapper.selectList(orgid, branchid, start, length);
+	public List<Rss> selectList(String orgid, String branchid, String search, String start, String length) {
+		return rssMapper.selectList(orgid, branchid, search, start, length);
 	}
 
 	@Transactional

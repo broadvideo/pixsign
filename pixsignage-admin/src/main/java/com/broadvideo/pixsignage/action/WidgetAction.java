@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.service.WidgetService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -28,16 +29,18 @@ public class WidgetAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = widgetService.selectCount("" + getLoginStaff().getOrgid(), branchid);
+			int count = widgetService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Widget> widgetList = widgetService.selectList("" + getLoginStaff().getOrgid(), branchid, start,
+			List<Widget> widgetList = widgetService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start,
 					length);
 			for (int i = 0; i < widgetList.size(); i++) {
 				aaData.add(widgetList.get(i));

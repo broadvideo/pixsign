@@ -7,9 +7,9 @@ import com.broadvideo.pixsignage.domain.Text;
 public interface TextService {
 	public Text selectByPrimaryKey(String textid);
 
-	public int selectCount(String orgid, String branchid);
+	public int selectCount(String orgid, String branchid, String search);
 
-	public List<Text> selectList(String orgid, String branchid, String start, String length);
+	public List<Text> selectList(String orgid, String branchid, String search, String start, String length);
 
 	public void addText(Text text);
 

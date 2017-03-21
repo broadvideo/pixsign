@@ -84,7 +84,7 @@ public class StaffServiceImpl implements StaffService {
 		if (list.size() == 0) {
 			return true;
 		} else {
-			return (staff.getStaffid() == list.get(0).getStaffid());
+			return (staff.getStaffid().intValue() == list.get(0).getStaffid().intValue());
 		}
 	}
 

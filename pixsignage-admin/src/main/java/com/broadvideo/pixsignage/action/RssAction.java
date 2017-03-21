@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Rss;
 import com.broadvideo.pixsignage.service.RssService;
+import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -28,16 +29,18 @@ public class RssAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = rssService.selectCount("" + getLoginStaff().getOrgid(), branchid);
+			int count = rssService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Rss> rssList = rssService.selectList("" + getLoginStaff().getOrgid(), branchid, start, length);
+			List<Rss> rssList = rssService.selectList("" + getLoginStaff().getOrgid(), branchid, search, start, length);
 			for (int i = 0; i < rssList.size(); i++) {
 				aaData.add(rssList.get(i));
 			}
