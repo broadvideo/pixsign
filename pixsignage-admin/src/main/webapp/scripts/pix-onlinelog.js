@@ -67,6 +67,7 @@ function initDetailModal() {
 		CurrentDevice = $('#MyTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
 		
+		$('input[name="onlinelog.statdate"]').val('');
 		$('#OnlinelogTable').dataTable().fnDraw(true);
 		$('#OnlinelogModal').modal();
 	});
@@ -92,11 +93,26 @@ function initDetailModal() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'deviceid','value':CurrentDeviceid });
+			aoData.push({'name':'day','value':$('input[name="onlinelog.statdate"]').val() });
 		} 
 	});
 
 	jQuery('#OnlinelogTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
 	jQuery('#OnlinelogTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#OnlinelogTable').css('width', '100%').css('table-layout', 'fixed');
+
+	$('input[name="onlinelog.statdate"]').on('change', function(e) {
+		$('#OnlinelogTable').dataTable().fnDraw(true);
+	});
+
 }
 
+$(".form_datetime").datetimepicker({
+	autoclose: true,
+	isRTL: Metronic.isRTL(),
+	format: "yyyy-mm-dd",
+	pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+	language: "zh-CN",
+	minView: 'month',
+	todayBtn: true
+});

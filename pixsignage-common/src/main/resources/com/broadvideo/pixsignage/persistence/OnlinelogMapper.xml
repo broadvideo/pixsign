@@ -27,6 +27,9 @@
     <if test="deviceid != null">
       and deviceid = #{deviceid}
     </if>
+    <if test="day != null">
+      and date_format(onlinetime,'%Y%m%d') = #{day}
+    </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
@@ -34,6 +37,9 @@
     where orgid = #{orgid}
     <if test="deviceid != null">
       and deviceid = #{deviceid}
+    </if>
+    <if test="day != null">
+      and date_format(onlinetime,'%Y%m%d') = #{day}
     </if>
     order by onlinelogid desc 
     <if test="start != null and length != null">

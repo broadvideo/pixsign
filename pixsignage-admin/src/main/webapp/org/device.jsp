@@ -344,6 +344,9 @@ response.setDateHeader("Expires",0);
 										<div class="tab-pane active" id="portlet_device1">
 											<div class="table-toolbar">
 												<div class="btn-group">
+													<button class="btn green pix-allmap"><spring:message code="global.device.map"/> <i class="fa fa-map-marker"></i></button>
+												</div>
+												<div class="btn-group">
 													<button class="btn red pix-utext"><spring:message code="global.utext"/> <i class="fa fa-bolt"></i></button>
 												</div>
 												<div class="btn-group">

@@ -154,8 +154,7 @@ response.setDateHeader("Expires",0);
 							</div>
 							<div class="portlet-body">
 								<div class="row">
-									<div class="col-md-2">
-										<div class="row"><div class="col-md-12" id="BranchTreeDiv"></div></div>
+									<div class="col-md-2" id="BranchTreeDiv">
 									</div>
 									<div class="col-md-10">
 										<div class="table-toolbar">

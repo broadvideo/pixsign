@@ -17,10 +17,12 @@ public interface OnlinelogMapper {
 			@Param(value = "branchid") String branchid, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
-	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid);
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid,
+			@Param(value = "day") String day);
 
 	List<Onlinelog> selectList(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "day") String day, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "onlinelogid") String onlinelogid);
 

@@ -33,6 +33,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -50,6 +51,16 @@ response.setDateHeader("Expires",0);
 								<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.onlinelog"/></div>
 							</div>
 							<div class="portlet-body">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="input-group date form_datetime">                                       
+											<input type="text" size="16" readonly class="form-control" name="onlinelog.statdate">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
 								<table id="OnlinelogTable" class="table table-condensed table-hover">
 									<thead></thead>
 									<tbody></tbody>
@@ -144,6 +155,9 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->

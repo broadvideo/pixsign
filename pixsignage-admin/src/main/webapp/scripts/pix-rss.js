@@ -7,11 +7,12 @@ var myurls = {
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
+	/*
 	if (CurBranchid == MyBranchid) {
 		$('#BranchContentDiv .table-toolbar').css('display', 'block');
 	} else {
 		$('#BranchContentDiv .table-toolbar').css('display', 'none');
-	}
+	}*/
 }			
 
 function initMyTable() {

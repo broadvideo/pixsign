@@ -21,6 +21,8 @@ function refreshMyTable() {
 
 var CurrentDevice;
 var CurrentDeviceid = 0;
+var CurrentDevices;
+var MapType = 0; //0-One Device 1-All Device
 
 function initMyTable() {
 	var oTable = $('#DeviceTable').dataTable({
@@ -50,7 +52,12 @@ function initMyTable() {
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
+		'fnPreDrawCallback': function (oSettings) {
+			CurrentDevices = [];
+			return true;
+		},
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+			CurrentDevices.push(aData);
 			if (aData.devicegroupid > 0) {
 				$('td:eq(3)', nRow).html(aData.devicegroup.name);
 			} else {
@@ -706,6 +713,12 @@ function initMapModal() {
 		}
 		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
+		MapType = 0;
+		$('#DeviceMapModal').modal();
+	});
+
+	$('body').on('click', '.pix-allmap', function(event) {
+		MapType = 1;
 		$('#DeviceMapModal').modal();
 	});
 
@@ -715,19 +728,47 @@ function initMapModal() {
 			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));    
 		}
 		CurrentMap.clearOverlays();
-		var point = new BMap.Point(CurrentDevice.lontitude, CurrentDevice.latitude);
-		var marker = new BMap.Marker(point);
-		var sContent =
-			'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
-			'<p>' + CurrentDevice.addr1 + ' ' + CurrentDevice.addr2 + '</p>' + 
-			'</div>';
-		var infoWindow = new BMap.InfoWindow(sContent);
-		CurrentMap.centerAndZoom(point, 15);
-		CurrentMap.addOverlay(marker);
-		marker.addEventListener("click", function() {          
-			this.openInfoWindow(infoWindow);
-		});
-		marker.openInfoWindow(infoWindow);
+		if (MapType == 0) {
+			var point = new BMap.Point(CurrentDevice.lontitude, CurrentDevice.latitude);
+			var marker = new BMap.Marker(point);
+			var sContent =
+				'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
+				'<p>' + CurrentDevice.addr1 + ' ' + CurrentDevice.addr2 + '</p>' + 
+				'</div>';
+			var infoWindow = new BMap.InfoWindow(sContent);
+			CurrentMap.centerAndZoom(point, 15);
+			CurrentMap.addOverlay(marker);
+			marker.addEventListener("click", function() {          
+				this.openInfoWindow(infoWindow);
+			});
+			marker.openInfoWindow(infoWindow);
+		} else {
+			var points = [];
+			for (var i=0; i<CurrentDevices.length; i++) {
+				var device = CurrentDevices[i];
+				if (device.lontitude > 0 && device.latitude > 0) {
+					var point = new BMap.Point(device.lontitude, device.latitude);
+					points.push(point);
+					var marker = new BMap.Marker(point, {title : device.terminalid});
+					CurrentMap.addOverlay(marker);
+					marker.addEventListener("click", function() {
+						var terminalid = this.getTitle();
+						var ds = CurrentDevices.filter(function (el) {
+							return (el.terminalid == terminalid);
+						});
+						var sContent =
+							'<div><h4>' + ds[0].terminalid + ' - ' + ds[0].name + '</h4>' + 
+							'<p>' + ds[0].addr1 + ' ' + ds[0].addr2 + '</p>' + 
+							'</div>';
+						var infoWindow = new BMap.InfoWindow(sContent);
+						this.openInfoWindow(infoWindow);
+						//var infoWindow = new BMap.InfoWindow(arr[this.zIndex].split(",")[2], opts); 
+						//this.openInfoWindow(infoWindow);
+					});
+				}
+			}
+			CurrentMap.setViewport(points);
+		}
 	})
 }
 

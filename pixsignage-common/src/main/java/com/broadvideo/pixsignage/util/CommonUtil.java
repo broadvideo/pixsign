@@ -2,7 +2,6 @@ package com.broadvideo.pixsignage.util;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +13,11 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gif4j.GifEncoder;
+import net.coobird.thumbnailator.Thumbnails;
 
 public class CommonUtil {
 	private static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
@@ -57,29 +57,33 @@ public class CommonUtil {
 		return result;
 	}
 
-	public static byte[] generateThumbnail(File file, int width) throws IOException {
-		BufferedImage img = ImageIO.read(file);
+	public static boolean resizeImage(File srcFile, File destFile, int max) throws IOException {
+		BufferedImage img = ImageIO.read(srcFile);
+
 		int h = img.getHeight();
 		int w = img.getWidth();
-
-		byte[] thumbnail;
-		if (w >= width) {
-			int nw = width;
+		if (w >= h && w > max) {
+			int nw = max;
 			int nh = (nw * h) / w;
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BufferedImage dest = new BufferedImage(nw, nh, BufferedImage.TYPE_4BYTE_ABGR);
-			dest.getGraphics().drawImage(img, 0, 0, nw, nh, null);
-			GifEncoder.encode(dest, out);
-			// ImageIO.write(dest, "gif", out);
-			thumbnail = out.toByteArray();
-			out.close();
+			logger.info("resizeImage image from {} x {} to {} x {}", w, h, nw, nh);
+			// BufferedImage thumbnail = Scalr.resize(img,
+			// Scalr.Method.BALANCED, max);
+			// ImageIO.write(thumbnail, "jpg", destFile);
+			Thumbnails.of(srcFile).size(nw, nh).toFile(destFile);
+			return true;
+		} else if (h > w && h > max) {
+			int nh = max;
+			int nw = (nh * w) / h;
+			logger.info("resizeImage image from {} x {} to {} x {}", w, h, nw, nh);
+			// BufferedImage thumbnail = Scalr.resize(img, Scalr.Method.QUALITY,
+			// max);
+			// ImageIO.write(thumbnail, "jpg", destFile);
+			Thumbnails.of(srcFile).size(nw, nh).toFile(destFile);
+			return true;
 		} else {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			GifEncoder.encode(img, out);
-			thumbnail = out.toByteArray();
-			out.close();
+			FileUtils.copyFile(srcFile, destFile);
+			return false;
 		}
-		return thumbnail;
 	}
 
 }

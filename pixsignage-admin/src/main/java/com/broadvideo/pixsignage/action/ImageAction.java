@@ -66,14 +66,11 @@ public class ImageAction extends BaseDatatableAction {
 					jsonItem.put("filename", mymediaFileName[i]);
 					jsonItem.put("size", FileUtils.sizeOf(mymedia[i]));
 
-					BufferedImage img = ImageIO.read(mymedia[i]);
 					Image image = new Image();
 					image.setOrgid(getLoginStaff().getOrgid());
 					image.setBranchid(Integer.parseInt(branchids[i]));
 					image.setFolderid(Integer.parseInt(folderids[i]));
 					image.setName(names[i]);
-					image.setWidth(img.getWidth());
-					image.setHeight(img.getHeight());
 					image.setFilename(mymediaFileName[i]);
 					image.setStatus("9");
 					image.setObjtype("0");
@@ -94,9 +91,18 @@ public class ImageAction extends BaseDatatableAction {
 					if (thumbFile.exists()) {
 						thumbFile.delete();
 					}
-					FileUtils.moveFile(mymedia[i], imageFile);
-					FileUtils.writeByteArrayToFile(thumbFile, CommonUtil.generateThumbnail(imageFile, 640));
+					boolean resize = CommonUtil.resizeImage(mymedia[i], imageFile, 3840);
+					CommonUtil.resizeImage(imageFile, thumbFile, 640);
+					if (resize) {
+						FileUtils.moveFile(mymedia[i], new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload/"
+								+ image.getImageid() + "_original." + FilenameUtils.getExtension(mymediaFileName[i])));
+					} else {
+						FileUtils.deleteQuietly(mymedia[i]);
+					}
 
+					BufferedImage img = ImageIO.read(imageFile);
+					image.setWidth(img.getWidth());
+					image.setHeight(img.getHeight());
 					image.setFilepath(imageFilePath);
 					image.setThumbnail(thumbFilePath);
 					image.setFilename(newFileName);

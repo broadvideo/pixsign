@@ -147,6 +147,11 @@ function refreshBundleScheduleDetail() {
 				var thumbwidth = bundlescheduledtl.bundle.width > bundlescheduledtl.bundle.height? 100 : 100*bundlescheduledtl.bundle.width/bundlescheduledtl.bundle.height;
 				scheduleTabHtml += '<div class="thumbs">';
 				scheduleTabHtml += '<img src="/pixsigdata' + bundlescheduledtl.bundle.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + bundlescheduledtl.bundle.name + '" />';
+				scheduleTabHtml += '<div class="mask">';
+				scheduleTabHtml += '<div>';
+				scheduleTabHtml += '<br/><a href="javascript:;" class="btn default btn-sm red pix-del-bundlescheduledtl" bundlescheduleid="' + i + '" bundlescheduledtlid="' + j + '"><i class="fa fa-trash-o"></i></a>';
+				scheduleTabHtml += '</div>';
+				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '<h6 class="pixtitle">' + bundlescheduledtl.bundle.name + '</h6>';
 				scheduleTabHtml += '</div>';
@@ -171,6 +176,7 @@ function refreshBundleScheduleDetail() {
 	$('#BundleScheduleDetail').html(scheduleTabHtml);
 	$('#BundleScheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
+		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
 }
 
@@ -235,6 +241,7 @@ $('body').on('click', '.pix-bundleschedule', function(event) {
 $('#BundleScheduleModal').on('shown.bs.modal', function (e) {
 	$('#BundleScheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
+		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
 })
 
@@ -312,6 +319,17 @@ $('#BundleScheduleForm .pix-cancel').on('click', function(event) {
 	$('.bundleschedule-edit').css('display', 'none');
 	$('.bundleschedule-add').css('display', 'none');
 	$('.bundleschedule-view').css('display', 'block');				
+});
+
+$('body').on('click', '.pix-del-bundlescheduledtl', function(event) {
+	var i = $(event.target).attr('bundlescheduleid');
+	var j = $(event.target).attr('bundlescheduledtlid');
+	if (i == undefined) {
+		i = $(event.target).parent().attr('bundlescheduleid');
+		j = $(event.target).parent().attr('bundlescheduledtlid');
+	}
+	currentBundleschedules[i].bundlescheduledtls.splice(j, 1);
+	refreshBundleScheduleDetail();
 });
 
 $('body').on('click', '.pix-add-bundlescheduledtl', function(event) {

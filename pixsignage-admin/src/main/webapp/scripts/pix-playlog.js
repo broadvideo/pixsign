@@ -18,7 +18,7 @@ function initMyTable() {
 		'sAjaxSource' : myurls['playlog.devicestatlist'],
 		'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' },
-						{'sTitle' : common.view.video + '/' + common.view.image, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
+						{'sTitle' : common.view.video, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.starttime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.endtime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.duration, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' },
@@ -41,7 +41,7 @@ function initMyTable() {
 			$('td:eq(5)', nRow).html('');
 			if (aData.playlog != null && aData.playlog.length > 0) {
 				if (aData.playlog[0].video != null) {
-					$('td:eq(2)', nRow).html(common.view.video + ': ' + aData.playlog[0].video.name);
+					$('td:eq(2)', nRow).html(aData.playlog[0].video.name);
 				} if (aData.playlog[0].image != null) {
 					$('td:eq(2)', nRow).html(common.view.image + ': ' + aData.playlog[0].image.name);
 				}
@@ -74,6 +74,7 @@ function initDetailModal() {
 		CurrentDevice = $('#MyTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
 		
+		$('input[name="playlog.statdate"]').val('');
 		$('#PlaylogTable').dataTable().fnDraw(true);
 		//$('#PlaylogTable').dataTable()._fnAjaxUpdate();
 		$('#PlaylogModal').modal();
@@ -88,7 +89,7 @@ function initDetailModal() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['playlog.list'],
 		'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'playlogid', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.video + '/' + common.view.image, 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '20%' },
+						{'sTitle' : common.view.video, 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.starttime, 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.endtime, 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '20%' },
 						{'sTitle' : common.view.duration, 'mData' : 'duration', 'bSortable' : false, 'sWidth' : '20%' },],
@@ -99,7 +100,7 @@ function initDetailModal() {
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(0)', nRow).html(CurrentDevice.terminalid + '(' + CurrentDevice.name + ')');
 			if (aData.video != null) {
-				$('td:eq(1)', nRow).html(common.view.video + ': ' + aData.video.name);
+				$('td:eq(1)', nRow).html(aData.video.name);
 			} if (aData.image != null) {
 				$('td:eq(1)', nRow).html(common.view.image + ': ' + aData.image.name);
 			}
@@ -107,10 +108,26 @@ function initDetailModal() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'deviceid','value':CurrentDeviceid });
+			aoData.push({'name':'day','value':$('input[name="playlog.statdate"]').val() });
 		} 
 	});
 
 	jQuery('#PlaylogTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
 	jQuery('#PlaylogTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#PlaylogTable').css('width', '100%').css('table-layout', 'fixed');
+
+	$('input[name="playlog.statdate"]').on('change', function(e) {
+		$('#PlaylogTable').dataTable().fnDraw(true);
+	});
+
 }
+
+$(".form_datetime").datetimepicker({
+	autoclose: true,
+	isRTL: Metronic.isRTL(),
+	format: "yyyy-mm-dd",
+	pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+	language: "zh-CN",
+	minView: 'month',
+	todayBtn: true
+});

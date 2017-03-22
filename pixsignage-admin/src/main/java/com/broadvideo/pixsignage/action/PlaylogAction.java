@@ -31,12 +31,17 @@ public class PlaylogAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String deviceid = getParameter("deviceid");
+			String day = getParameter("day");
+			day = day.replace("-", "");
+			if (day.equals("")) {
+				day = null;
+			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = playlogMapper.selectCount("" + getLoginStaff().getOrgid(), deviceid);
+			int count = playlogMapper.selectCount("" + getLoginStaff().getOrgid(), deviceid, day);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Playlog> playlogList = playlogMapper.selectList("" + getLoginStaff().getOrgid(), deviceid, start,
+			List<Playlog> playlogList = playlogMapper.selectList("" + getLoginStaff().getOrgid(), deviceid, day, start,
 					length);
 			for (int i = 0; i < playlogList.size(); i++) {
 				aaData.add(playlogList.get(i));

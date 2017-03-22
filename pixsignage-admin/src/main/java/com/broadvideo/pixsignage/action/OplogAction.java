@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Oplog;
-import com.broadvideo.pixsignage.service.OplogService;
+import com.broadvideo.pixsignage.persistence.OplogMapper;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -22,7 +22,7 @@ public class OplogAction extends BaseDatatableAction {
 	private Oplog oplog;
 
 	@Autowired
-	private OplogService oplogService;
+	private OplogMapper oplogMapper;
 
 	public String doList() {
 		try {
@@ -33,10 +33,10 @@ public class OplogAction extends BaseDatatableAction {
 			search = SqlUtil.likeEscapeH(search);
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = oplogService.selectCount("" + getLoginStaff().getOrgid(), null, null, search);
+			int count = oplogMapper.selectCount("" + getLoginStaff().getOrgid(), null, null, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Oplog> oplogList = oplogService.selectList("" + getLoginStaff().getOrgid(), null, null, search, start,
+			List<Oplog> oplogList = oplogMapper.selectList("" + getLoginStaff().getOrgid(), null, null, search, start,
 					length);
 			for (int i = 0; i < oplogList.size(); i++) {
 				aaData.add(oplogList.get(i));

@@ -31,13 +31,18 @@ public class OnlinelogAction extends BaseDatatableAction {
 			String start = getParameter("iDisplayStart");
 			String length = getParameter("iDisplayLength");
 			String deviceid = getParameter("deviceid");
+			String day = getParameter("day");
+			day = day.replace("-", "");
+			if (day.equals("")) {
+				day = null;
+			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = onlinelogMapper.selectCount("" + getLoginStaff().getOrgid(), deviceid);
+			int count = onlinelogMapper.selectCount("" + getLoginStaff().getOrgid(), deviceid, day);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Onlinelog> onlinelogList = onlinelogMapper.selectList("" + getLoginStaff().getOrgid(), deviceid, start,
-					length);
+			List<Onlinelog> onlinelogList = onlinelogMapper.selectList("" + getLoginStaff().getOrgid(), deviceid, day,
+					start, length);
 			for (int i = 0; i < onlinelogList.size(); i++) {
 				aaData.add(onlinelogList.get(i));
 			}

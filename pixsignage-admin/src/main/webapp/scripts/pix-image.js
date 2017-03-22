@@ -7,11 +7,12 @@ var myurls = {
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
+	/*
 	if (CurBranchid == MyBranchid) {
 		$('#BranchContentDiv .table-toolbar').css('display', 'block');
 	} else {
 		$('#BranchContentDiv .table-toolbar').css('display', 'none');
-	}
+	}*/
 }			
 
 var CurrentImage;
@@ -313,7 +314,7 @@ function initUploadModal() {
 		autoUpload: false,
 		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 		disableImageResize: true,
-		maxFileSize: 10240000,
+		maxFileSize: 20480000,
 		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				

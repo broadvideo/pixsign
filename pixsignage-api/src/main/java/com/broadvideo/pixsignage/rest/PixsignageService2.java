@@ -645,7 +645,7 @@ public class PixsignageService2 {
 			JSONArray dvbJsonArray = requestJson.getJSONArray("dvbs");
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			List<Dvb> oldDvbList = dvbMapper.selectList("" + device.getOrgid(), null, null, null, null);
+			List<Dvb> oldDvbList = dvbMapper.selectList("" + device.getOrgid(), null, null, null, null, null);
 			HashMap<String, Dvb> oldDvbHash = new HashMap<String, Dvb>();
 			HashMap<String, Dvb> newDvbHash = new HashMap<String, Dvb>();
 			for (Dvb dvb : oldDvbList) {

@@ -259,13 +259,10 @@ public class PageAction extends BaseDatatableAction {
 									CommonConfig.CONFIG_TEMP_HOME + "/" + zoneContent);
 							if (statusCode == 200) {
 								File downloadFile = new File(CommonConfig.CONFIG_TEMP_HOME + "/" + zoneContent);
-								BufferedImage img = ImageIO.read(downloadFile);
 								Image image = new Image();
 								image.setOrgid(getLoginStaff().getOrgid());
 								image.setBranchid(getLoginStaff().getBranchid());
 								image.setName(zoneContent);
-								image.setWidth(img.getWidth());
-								image.setHeight(img.getHeight());
 								image.setFilename(zoneContent);
 								image.setObjtype("1");
 								image.setObjid(t.getPageid());
@@ -287,9 +284,13 @@ public class PageAction extends BaseDatatableAction {
 								if (thumbFile.exists()) {
 									thumbFile.delete();
 								}
-								FileUtils.moveFile(downloadFile, imageFile);
-								FileUtils.writeByteArrayToFile(thumbFile, CommonUtil.generateThumbnail(imageFile, 640));
+								CommonUtil.resizeImage(downloadFile, imageFile, 3840);
+								CommonUtil.resizeImage(imageFile, thumbFile, 640);
+								FileUtils.deleteQuietly(downloadFile);
 
+								BufferedImage img = ImageIO.read(imageFile);
+								image.setWidth(img.getWidth());
+								image.setHeight(img.getHeight());
 								image.setFilepath(imageFilePath);
 								image.setThumbnail(thumbFilePath);
 								image.setFilename(newFileName);
@@ -429,13 +430,10 @@ public class PageAction extends BaseDatatableAction {
 			if (pageimage != null && page != null) {
 				logger.info("Upload one image for page {}", page.getName());
 
-				BufferedImage img = ImageIO.read(pageimage);
 				Image image = new Image();
 				image.setOrgid(getLoginStaff().getOrgid());
 				image.setBranchid(getLoginStaff().getBranchid());
 				image.setName(pageimageFileName);
-				image.setWidth(img.getWidth());
-				image.setHeight(img.getHeight());
 				image.setFilename(pageimageFileName);
 				if (page.getPagepkgid().intValue() == 0) {
 					image.setObjtype("1");
@@ -466,9 +464,13 @@ public class PageAction extends BaseDatatableAction {
 				if (thumbFile.exists()) {
 					thumbFile.delete();
 				}
-				FileUtils.moveFile(pageimage, imageFile);
-				FileUtils.writeByteArrayToFile(thumbFile, CommonUtil.generateThumbnail(imageFile, 640));
+				CommonUtil.resizeImage(pageimage, imageFile, 3840);
+				CommonUtil.resizeImage(imageFile, thumbFile, 640);
+				FileUtils.deleteQuietly(pageimage);
 
+				BufferedImage img = ImageIO.read(imageFile);
+				image.setWidth(img.getWidth());
+				image.setHeight(img.getHeight());
 				image.setFilepath(imageFilePath);
 				image.setThumbnail(thumbFilePath);
 				image.setFilename(newFileName);
