@@ -18,10 +18,9 @@ function initMyTable() {
 		'sAjaxSource' : myurls['playlog.devicestatlist'],
 		'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' },
-						{'sTitle' : common.view.video, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '50px' },
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '40%' },
 						{'sTitle' : common.view.starttime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.endtime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.duration, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : common.view.detail, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
@@ -38,19 +37,24 @@ function initMyTable() {
 			$('td:eq(2)', nRow).html('');
 			$('td:eq(3)', nRow).html('');
 			$('td:eq(4)', nRow).html('');
-			$('td:eq(5)', nRow).html('');
 			if (aData.playlog != null && aData.playlog.length > 0) {
+				var thumbwidth = 100;
+				var thumbhtml = '';
+				var playhtml = '';
 				if (aData.playlog[0].video != null) {
-					$('td:eq(2)', nRow).html(aData.playlog[0].video.name);
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.playlog[0].video.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml = common.view.video + ': ' + aData.playlog[0].video.name;
 				} if (aData.playlog[0].image != null) {
-					$('td:eq(2)', nRow).html(common.view.image + ': ' + aData.playlog[0].image.name);
+					thumbwidth = aData.playlog[0].image.width > aData.playlog[0].image.height? 100 : 100*aData.playlog[0].image.width/aData.playlog[0].image.height;
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.playlog[0].image.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml += common.view.image + ': ' + aData.playlog[0].image.name;
 				}
-				$('td:eq(3)', nRow).html(aData.playlog[0].starttime);
-				$('td:eq(4)', nRow).html(aData.playlog[0].endtime);
-				$('td:eq(5)', nRow).html(aData.playlog[0].duration);
+				$('td:eq(2)', nRow).html(thumbhtml);
+				$('td:eq(3)', nRow).html(playhtml);
+				$('td:eq(4)', nRow).html(aData.playlog[0].starttime);
 			}
 
-			$('td:eq(6)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.more + '</a>');
+			$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.more + '</a>');
 			return nRow;
 		}
 	});
@@ -89,21 +93,28 @@ function initDetailModal() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['playlog.list'],
 		'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'playlogid', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.video, 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.starttime, 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.endtime, 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : common.view.duration, 'mData' : 'duration', 'bSortable' : false, 'sWidth' : '20%' },],
+						{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '5%' },
+						{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '50%' },
+						{'sTitle' : common.view.starttime, 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '20%' }],
 		'iDisplayStart' : 0,
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(0)', nRow).html(CurrentDevice.terminalid + '(' + CurrentDevice.name + ')');
+			var thumbwidth = 100;
+			var thumbhtml = '';
+			var playhtml = '';
 			if (aData.video != null) {
-				$('td:eq(1)', nRow).html(aData.video.name);
+				thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.video.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+				playhtml = common.view.video + ': ' + aData.video.name;
 			} if (aData.image != null) {
-				$('td:eq(1)', nRow).html(common.view.image + ': ' + aData.image.name);
+				thumbwidth = aData.image.width > aData.image.height? 100 : 100*aData.image.width/aData.image.height;
+				thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.image.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+				playhtml += common.view.image + ': ' + aData.image.name;
 			}
+			$('td:eq(1)', nRow).html(thumbhtml);
+			$('td:eq(2)', nRow).html(playhtml);
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

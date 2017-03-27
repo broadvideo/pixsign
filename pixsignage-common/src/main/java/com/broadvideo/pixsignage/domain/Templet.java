@@ -34,9 +34,11 @@ public class Templet {
 
 	private Integer homeidletime;
 
+	private String description;
+
 	private String status;
 
-	private String description;
+	private String publicflag;
 
 	private Date createtime;
 
@@ -162,6 +164,14 @@ public class Templet {
 		this.homeidletime = homeidletime;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description == null ? null : description.trim();
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -170,12 +180,12 @@ public class Templet {
 		this.status = status == null ? null : status.trim();
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPublicflag() {
+		return publicflag;
 	}
 
-	public void setDescription(String description) {
-		this.description = description == null ? null : description.trim();
+	public void setPublicflag(String publicflag) {
+		this.publicflag = publicflag;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

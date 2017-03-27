@@ -45,16 +45,25 @@ public class TempletAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String ratio = getParameter("ratio");
+			String templetflag = getParameter("templetflag");
 			String touchflag = getParameter("touchflag");
 			String homeflag = getParameter("homeflag");
+			String publicflag = null;
 
-			int count = templetService.selectCount("" + getLoginStaff().getOrgid(), touchflag, homeflag, search);
+			String orgid = "" + getLoginStaff().getOrgid();
+			if (templetflag != null && templetflag.equals("2")) {
+				orgid = "1";
+				publicflag = "1";
+			}
+
+			int count = templetService.selectCount(orgid, ratio, touchflag, homeflag, publicflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Templet> templetList = templetService.selectList("" + getLoginStaff().getOrgid(), touchflag, homeflag,
-					search, start, length);
+			List<Templet> templetList = templetService.selectList(orgid, ratio, touchflag, homeflag, publicflag, search,
+					start, length);
 			for (int i = 0; i < templetList.size(); i++) {
 				aaData.add(templetList.get(i));
 			}

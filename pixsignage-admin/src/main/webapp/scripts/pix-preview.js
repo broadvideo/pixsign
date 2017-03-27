@@ -121,32 +121,32 @@ function redrawBundlePreview(div, bundle, maxsize, dynamic) {
 	div.attr('bundleid', bundle.bundleid);
 	//div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
 	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; background:#FFFFFF;');
-	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	if (bundle.bgimage != null) {
+		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
 		div.append(getBundledtlPreviewHtml(bundle, i, dynamic));
 	}
 	var scale, width, height;
-	if (bundle.layout.width > bundle.layout.height ) {
+	if (bundle.width > bundle.height ) {
 		width = maxsize;
-		scale = bundle.layout.width / width;
-		height = bundle.layout.height / scale;
+		scale = bundle.width / width;
+		height = bundle.height / scale;
 		div.css('width' , width);
 		div.css('height' , height);
 	} else {
 		height = maxsize;
-		scale = bundle.layout.height / height;
-		width = bundle.layout.width / scale;
+		scale = bundle.height / height;
+		width = bundle.width / scale;
 		div.css('width' , width);
 		div.css('height' , height);
 	}
 	$(div).find('.bundle-font').each(function() {
 		var bundledtl = bundle.bundledtls[$(this).attr('bundledtlindex')];
-		var fontsize = bundledtl.layoutdtl.size * bundledtl.layoutdtl.height / 100 / scale;
+		var fontsize = bundledtl.size * bundledtl.height / 100 / scale;
 		var text = $(this).html();
 		$(this).css('font-size', fontsize + 'px');
-		$(this).css('line-height', bundledtl.layoutdtl.height / scale + 'px');
+		$(this).css('line-height', bundledtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
 			$(this).find('img').each(function() {
@@ -164,28 +164,28 @@ function redrawBundlePreview(div, bundle, maxsize, dynamic) {
 function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	var bundledtl = bundle.bundledtls[bundledtlindex];
 	var bgimage = '';
-	if (bundledtl.layoutdtl.bgimage != null) {
-		bgimage = '/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail;
-	} else if (bundledtl.layoutdtl.mainflag == 1) {
+	if (bundledtl.bgimage != null) {
+		bgimage = '/pixsigdata' + bundledtl.bgimage.thumbnail;
+	} else if (bundledtl.mainflag == 1) {
 		bgimage = '../img/region/region-play-main.jpg';
-	} else if (bundledtl.layoutdtl.type == '0') {
+	} else if (bundledtl.type == '0') {
 		bgimage = '../img/region/region-play.jpg';
-	} else if (bundledtl.layoutdtl.type == '4') {
+	} else if (bundledtl.type == '4') {
 		bgimage = '../img/region/region-videoin.jpg';
-	} else if (bundledtl.layoutdtl.type == '5') {
+	} else if (bundledtl.type == '5') {
 		bgimage = '../img/region/region-dvb.jpg';
-	} else if (bundledtl.layoutdtl.type == '6') {
+	} else if (bundledtl.type == '6') {
 		bgimage = '../img/region/region-stream.jpg';
-	} else if (bundledtl.layoutdtl.type == '8') {
-		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
+	} else if (bundledtl.type == '8') {
+		if (bundledtl.width > bundledtl.height) {
 			bgimage = '../img/region/region-navigate-h.jpg';
 		} else {
 			bgimage = '../img/region/region-navigate-v.jpg';
 		}
-	} else if (bundledtl.layoutdtl.type == '9') {
+	} else if (bundledtl.type == '9') {
 		bgimage = '../img/region/region-qrcode.jpg';
 	}
-	if (bundledtl.layoutdtl.type == '0') {
+	if (bundledtl.type == '0') {
 		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
 			var medialistdtl = bundledtl.medialist.medialistdtls[0];
 			if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
@@ -199,44 +199,44 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	}
 	
 	var bundledtlhtml = '';
-	bundledtlhtml += '<div style="position: absolute; width:' + 100*bundledtl.layoutdtl.width/bundle.layout.width;
-	bundledtlhtml += '%; height:' + 100*bundledtl.layoutdtl.height/bundle.layout.height;
-	bundledtlhtml += '%; top: ' + 100*bundledtl.layoutdtl.topoffset/bundle.layout.height;
-	bundledtlhtml += '%; left: ' + 100*bundledtl.layoutdtl.leftoffset/bundle.layout.width;
+	bundledtlhtml += '<div style="position: absolute; width:' + 100*bundledtl.width/bundle.width;
+	bundledtlhtml += '%; height:' + 100*bundledtl.height/bundle.height;
+	bundledtlhtml += '%; top: ' + 100*bundledtl.topoffset/bundle.height;
+	bundledtlhtml += '%; left: ' + 100*bundledtl.leftoffset/bundle.width;
 	//bundledtlhtml += '%; border: 1px solid #000; ">';
 	bundledtlhtml += '%; ">';
 
-	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor;
-	bundledtlhtml += '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor;
+	bundledtlhtml += '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 
 	bundledtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-	if (bundledtl.layoutdtl.type == '0' || bundledtl.layoutdtl.type == '4' || bundledtl.layoutdtl.type == '5' || bundledtl.layoutdtl.type == '6' || bundledtl.layoutdtl.type == '8' || bundledtl.layoutdtl.type == '9') {
+	if (bundledtl.type == '0' || bundledtl.type == '4' || bundledtl.type == '5' || bundledtl.type == '6' || bundledtl.type == '8' || bundledtl.type == '9') {
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-	} else if (bundledtl.layoutdtl.type == 1) {
-		if (bundledtl.layoutdtl.direction == 4 && dynamic == 1) {
-			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
+	} else if (bundledtl.type == 1) {
+		if (bundledtl.direction == 4 && dynamic == 1) {
+			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
 			bundledtlhtml += '</marquee>';
 		} else {
-			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
+			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; font-weight:bold; ">';
 			bundledtlhtml += bundledtl.text.text;
 			bundledtlhtml += '</p>';
 		}
-	} else if (bundledtl.layoutdtl.type == 2) {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
-		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
+	} else if (bundledtl.type == 2) {
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; font-weight:bold; ">';
+		bundledtlhtml += new Date().pattern(bundledtl.dateformat);
 		bundledtlhtml += '</p>';
-	} else if (bundledtl.layoutdtl.type == 3) {
-		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; font-weight:bold; ">';
+	} else if (bundledtl.type == 3) {
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
 		bundledtlhtml += '<img src="../img/duoyun.png" />';
 		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == 7) {
+	} else if (bundledtl.type == 7) {
 		if (bgimage != '') {
 			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
 			bundledtlhtml += bundledtl.touchlabel;
 		} else {
@@ -244,8 +244,8 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 		}
 		bundledtlhtml += '</p>';
 	} else {
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type);
 		bundledtlhtml += '</p>';
 	}
 	bundledtlhtml += '</div>';

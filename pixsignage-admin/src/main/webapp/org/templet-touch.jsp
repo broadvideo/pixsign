@@ -76,9 +76,8 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<!-- 模板新增修改对话框  -->
 		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -93,8 +92,7 @@ response.setDateHeader("Expires",0);
 							<input type="hidden" name="templet.status" value="1" />
 							<div class="form-body">
 								<div class="form-group">
-									<label class="col-md-3 control-label"><spring:message code="global.name"/><span
-										class="required">*</span></label>
+									<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
 									<div class="col-md-9">
 										<div class="input-icon right">
 											<i class="fa"></i> <input type="text" class="form-control" name="templet.name" />
@@ -105,33 +103,45 @@ response.setDateHeader("Expires",0);
 									<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
 									<div class="col-md-9">
 										<select class="form-control" name="templet.ratio" tabindex="-1">
-											<option value="1"><spring:message code="global.layout.ratio_1"/></option>
+											<option value="1" selected="selected"><spring:message code="global.layout.ratio_1"/></option>
 											<option value="2"><spring:message code="global.layout.ratio_2"/></option>
 											<option value="3"><spring:message code="global.layout.ratio_3"/></option>
 											<option value="4"><spring:message code="global.layout.ratio_4"/></option>
 										</select>
 									</div>
 								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="SubtempletModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.subbundle"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="SubtempletForm" class="form-horizontal" data-async data-target="#SubtempletModal" method="POST">
+							<input type="hidden" name="templet.templetid" value="0" />
+							<input type="hidden" name="templet.hometempletid" value="0" />
+							<input type="hidden" name="templet.touchflag" value="1" />
+							<input type="hidden" name="templet.homeflag" value="1" />
+							<input type="hidden" name="templet.status" value="1" />
+							<input type="hidden" name="templet.ratio" value="1" />
+							<div class="form-body">
 								<div class="form-group">
-									<label class="col-md-3 control-label"><spring:message code="global.bundle.homeidletime"/></label>
+									<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
 									<div class="col-md-9">
 										<div class="input-icon right">
-											<i class="fa"></i> <input type="text" class="form-control" name="templet.homeidletime" value="0"/>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
-									<div class="col-md-9">
-										<div class="input-group">
-											<span class="input-group-btn">
-												<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
-												<ul class="dropdown-menu" role="menu">
-													<div class="pre-scrollable foldertree">
-													</div>
-												</ul>
-											</span>
-											<input type="hidden" id="LayoutBgImageSelect1" class="form-control select2" name="templet.bgimageid">
+											<i class="fa"></i> <input type="text" class="form-control" name="templet.name" />
 										</div>
 									</div>
 								</div>
@@ -157,8 +167,6 @@ response.setDateHeader("Expires",0);
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 
-
-
 								<div id="MyWizard">
 									<div class="form-wizard">
 										<div class="form-body">
@@ -166,19 +174,19 @@ response.setDateHeader("Expires",0);
 												<li>
 													<a href="#tab1" data-toggle="tab" class="step">
 														<span class="number">1</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.baseedit"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.baseedit"/></span>   
 													</a>
 												</li>
 												<li>
 													<a href="#tab2" data-toggle="tab" class="step">
 														<span class="number">2</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.designlayout"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designlayout"/></span>   
 													</a>
 												</li>
 												<li>
 													<a href="#tab3" data-toggle="tab" class="step">
 														<span class="number">3</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.designcontent"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designcontent"/></span>   
 													</a>
 												</li>
 											</ul>
@@ -203,9 +211,9 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 														</div>
-														<div class="form-group bundle-ctl homeflag-0">
+														<div class="form-group">
 															<label class="col-md-3 control-label"><spring:message code="global.bundle.homeidletime"/></label>
-															<div class="col-md-9">
+															<div class="col-md-6">
 																<div class="input-icon right">
 																	<i class="fa"></i> <input type="text" class="form-control" name="homeidletime" value="0"/>
 																</div>
@@ -754,9 +762,6 @@ response.setDateHeader("Expires",0);
 									</div>
 								</div>
 
-
-
-
 							</div>
 						</div>
 					</div>
@@ -866,11 +871,11 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-templet-touch.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-templet-wizard.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-templet-design1.js?t=0"></script>
-<script src="${base_ctx}/scripts/pix-templet-design2.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-templet-touch.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-templet-wizard.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-templet-design1.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-templet-design2.js?t=10"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;

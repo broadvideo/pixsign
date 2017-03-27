@@ -69,7 +69,7 @@ public class CommonUtil {
 			// BufferedImage thumbnail = Scalr.resize(img,
 			// Scalr.Method.BALANCED, max);
 			// ImageIO.write(thumbnail, "jpg", destFile);
-			Thumbnails.of(srcFile).size(nw, nh).toFile(destFile);
+			Thumbnails.of(srcFile).size(nw, nh).outputQuality(1).toFile(destFile);
 			return true;
 		} else if (h > w && h > max) {
 			int nh = max;
@@ -78,7 +78,7 @@ public class CommonUtil {
 			// BufferedImage thumbnail = Scalr.resize(img, Scalr.Method.QUALITY,
 			// max);
 			// ImageIO.write(thumbnail, "jpg", destFile);
-			Thumbnails.of(srcFile).size(nw, nh).toFile(destFile);
+			Thumbnails.of(srcFile).size(nw, nh).outputQuality(1).toFile(destFile);
 			return true;
 		} else {
 			FileUtils.copyFile(srcFile, destFile);

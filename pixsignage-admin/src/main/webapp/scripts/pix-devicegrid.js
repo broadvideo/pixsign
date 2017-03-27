@@ -466,7 +466,6 @@ function refreshDeviceSelect() {
 					sSearch: term,
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
-					type: 2,
 				};
 			},
 			results: function (data, page) {

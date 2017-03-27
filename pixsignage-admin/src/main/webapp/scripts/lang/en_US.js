@@ -19,6 +19,7 @@ var common = {
 		dvb: 'DVB',
 		layout: 'Layout',
 
+		bundle: 'Program',
 		subbundle: 'Sub-Program',
 		subtemplet: 'Sub-Templet',
 		schedule: 'Schedule',

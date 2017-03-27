@@ -64,9 +64,6 @@
     <if test="branchid != null">
       and branchid = #{branchid}
     </if>
-    <if test="type != null">
-      and type = #{type}
-    </if>
     <if test="status != null">
       and status = #{status}
     </if>
@@ -86,9 +83,6 @@
     </if>
     <if test="branchid != null">
       and branchid = #{branchid}
-    </if>
-    <if test="type != null">
-      and type = #{type}
     </if>
     <if test="status != null">
       and status = #{status}

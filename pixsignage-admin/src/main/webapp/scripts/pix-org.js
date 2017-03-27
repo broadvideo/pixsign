@@ -240,9 +240,6 @@ function initMyEditModal() {
 	FormValidateOption.rules['org.maxdevices'] = {};
 	FormValidateOption.rules['org.maxdevices']['required'] = true;
 	FormValidateOption.rules['org.maxdevices']['number'] = true;
-	FormValidateOption.rules['org.maxmdevices'] = {};
-	FormValidateOption.rules['org.maxmdevices']['required'] = true;
-	FormValidateOption.rules['org.maxmdevices']['number'] = true;
 	FormValidateOption.rules['org.maxstorage'] = {};
 	FormValidateOption.rules['org.maxstorage']['required'] = true;
 	FormValidateOption.rules['org.maxstorage']['number'] = true;

@@ -16,8 +16,9 @@
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="hometempletid" property="hometempletid" jdbcType="INTEGER" />
     <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="publicflag" property="publicflag" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <collection property="subtemplets" ofType="com.broadvideo.pixsignage.domain.Templet" column="{hometempletid=templetid}" select="com.broadvideo.pixsignage.persistence.TempletMapper.selectSubList" />
@@ -29,8 +30,8 @@
   
   <sql id="Base_Column_List" >
     templetid, uuid, orgid, name, snapshot, ratio, height, width, bgcolor, bgimageid, 
-    touchflag, homeflag, hometempletid, homeidletime, status, description, createtime, 
-    createstaffid
+    touchflag, homeflag, hometempletid, homeidletime, description, status, publicflag, 
+    createtime, createstaffid
   </sql>
 
   <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
@@ -51,11 +52,17 @@
     select count(1) from templet
     where status = 1 
     and orgid = #{orgid}
+    <if test="ratio != null">
+      and ratio = #{ratio}
+    </if>
     <if test="touchflag != null">
       and touchflag = #{touchflag}
     </if>
     <if test="homeflag != null">
       and homeflag = #{homeflag}
+    </if>
+    <if test="publicflag != null">
+      and publicflag = #{publicflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -67,11 +74,17 @@
     from templet
     where status=1
     and orgid = #{orgid}
+    <if test="ratio != null">
+      and ratio = #{ratio}
+    </if>
     <if test="touchflag != null">
       and touchflag = #{touchflag}
     </if>
     <if test="homeflag != null">
       and homeflag = #{homeflag}
+    </if>
+    <if test="publicflag != null">
+      and publicflag = #{publicflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -103,14 +116,14 @@
       snapshot, ratio, height, 
       width, bgcolor, bgimageid, 
       touchflag, homeflag, hometempletid, 
-      homeidletime, status, description, 
-      createtime, createstaffid)
+      homeidletime, description, status, 
+      publicflag, createtime, createstaffid)
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{bgimageid,jdbcType=INTEGER}, 
       #{touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, #{hometempletid,jdbcType=INTEGER}, 
-      #{homeidletime,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{homeidletime,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{publicflag,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Templet" >
     <selectKey resultType="java.lang.Integer" keyProperty="templetid" order="AFTER" >
@@ -157,11 +170,14 @@
       <if test="homeidletime != null" >
         homeidletime,
       </if>
+      <if test="description != null" >
+        description,
+      </if>
       <if test="status != null" >
         status,
       </if>
-      <if test="description != null" >
-        description,
+      <if test="publicflag != null" >
+        publicflag,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -210,11 +226,14 @@
       <if test="homeidletime != null" >
         #{homeidletime,jdbcType=INTEGER},
       </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
+      <if test="publicflag != null" >
+        #{publicflag,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -266,11 +285,14 @@
       <if test="homeidletime != null" >
         homeidletime = #{homeidletime,jdbcType=INTEGER},
       </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
+      <if test="publicflag != null" >
+        publicflag = #{publicflag,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -296,8 +318,9 @@
       homeflag = #{homeflag,jdbcType=CHAR},
       hometempletid = #{hometempletid,jdbcType=INTEGER},
       homeidletime = #{homeidletime,jdbcType=INTEGER},
-      status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      publicflag = #{publicflag,jdbcType=CHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where templetid = #{templetid,jdbcType=INTEGER}

@@ -1,6 +1,5 @@
 package com.broadvideo.pixsignage.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,13 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Layout;
 import com.broadvideo.pixsignage.domain.Layoutdtl;
-import com.broadvideo.pixsignage.domain.Medialist;
-import com.broadvideo.pixsignage.domain.Region;
-import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.LayoutMapper;
@@ -119,47 +113,39 @@ public class LayoutServiceImpl implements LayoutService {
 			layoutdtl.setIntervaltime(30);
 		}
 		layoutdtlMapper.insertSelective(layoutdtl);
-		List<Bundledtl> bundledtls = new ArrayList<Bundledtl>();
-		List<Bundle> bundles = bundleMapper.selectByLayout("" + layoutdtl.getLayoutid());
-		for (Bundle bundle : bundles) {
-			Bundledtl bundledtl = new Bundledtl();
-			bundledtl.setBundleid(bundle.getBundleid());
-			if (bundle.getHomeflag().equals("0")) {
-				bundledtl.setHomebundleid(bundle.getHomebundleid());
-			} else {
-				bundledtl.setHomebundleid(bundle.getBundleid());
-			}
-			bundledtl.setLayoutdtlid(layoutdtl.getLayoutdtlid());
-			bundledtl.setType(Bundledtl.Type_Private);
-			if (layoutdtl.getType().equals(Region.Type_PLAY)) {
-				Medialist medialist = new Medialist();
-				medialist.setOrgid(bundle.getOrgid());
-				medialist.setBranchid(bundle.getBranchid());
-				medialist.setName(bundle.getName() + "-" + layoutdtl.getLayoutdtlid());
-				medialist.setType(Medialist.Type_Private);
-				medialist.setCreatestaffid(bundle.getCreatestaffid());
-				medialistMapper.insertSelective(medialist);
-				bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
-				bundledtl.setObjid(medialist.getMedialistid());
-			} else if (layoutdtl.getType().equals(Region.Type_TEXT)) {
-				Text text = new Text();
-				text.setOrgid(bundle.getOrgid());
-				text.setBranchid(bundle.getBranchid());
-				text.setName(bundle.getName() + "-" + layoutdtl.getLayoutdtlid());
-				text.setType(Medialist.Type_Private);
-				text.setCreatestaffid(bundle.getCreatestaffid());
-				textMapper.insertSelective(text);
-				bundledtl.setObjtype(Bundledtl.ObjType_Text);
-				bundledtl.setObjid(text.getTextid());
-			} else {
-				bundledtl.setObjtype(Bundledtl.ObjType_NONE);
-				bundledtl.setObjid(0);
-			}
-			bundledtls.add(bundledtl);
-		}
-		if (bundledtls.size() > 0) {
-			bundledtlMapper.insertList(bundledtls);
-		}
+		/*
+		 * List<Bundledtl> bundledtls = new ArrayList<Bundledtl>(); List<Bundle>
+		 * bundles = bundleMapper.selectByLayout("" + layoutdtl.getLayoutid());
+		 * for (Bundle bundle : bundles) { Bundledtl bundledtl = new
+		 * Bundledtl(); bundledtl.setBundleid(bundle.getBundleid()); if
+		 * (bundle.getHomeflag().equals("0")) {
+		 * bundledtl.setHomebundleid(bundle.getHomebundleid()); } else {
+		 * bundledtl.setHomebundleid(bundle.getBundleid()); }
+		 * bundledtl.setLayoutdtlid(layoutdtl.getLayoutdtlid());
+		 * bundledtl.setType(Bundledtl.Type_Private); if
+		 * (layoutdtl.getType().equals(Region.Type_PLAY)) { Medialist medialist
+		 * = new Medialist(); medialist.setOrgid(bundle.getOrgid());
+		 * medialist.setBranchid(bundle.getBranchid());
+		 * medialist.setName(bundle.getName() + "-" +
+		 * layoutdtl.getLayoutdtlid());
+		 * medialist.setType(Medialist.Type_Private);
+		 * medialist.setCreatestaffid(bundle.getCreatestaffid());
+		 * medialistMapper.insertSelective(medialist);
+		 * bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
+		 * bundledtl.setObjid(medialist.getMedialistid()); } else if
+		 * (layoutdtl.getType().equals(Region.Type_TEXT)) { Text text = new
+		 * Text(); text.setOrgid(bundle.getOrgid());
+		 * text.setBranchid(bundle.getBranchid()); text.setName(bundle.getName()
+		 * + "-" + layoutdtl.getLayoutdtlid());
+		 * text.setType(Medialist.Type_Private);
+		 * text.setCreatestaffid(bundle.getCreatestaffid());
+		 * textMapper.insertSelective(text);
+		 * bundledtl.setObjtype(Bundledtl.ObjType_Text);
+		 * bundledtl.setObjid(text.getTextid()); } else {
+		 * bundledtl.setObjtype(Bundledtl.ObjType_NONE); bundledtl.setObjid(0);
+		 * } bundledtls.add(bundledtl); } if (bundledtls.size() > 0) {
+		 * bundledtlMapper.insertList(bundledtls); }
+		 */
 	}
 
 	@Transactional

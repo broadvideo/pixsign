@@ -91,7 +91,7 @@ public class ImageAction extends BaseDatatableAction {
 					if (thumbFile.exists()) {
 						thumbFile.delete();
 					}
-					boolean resize = CommonUtil.resizeImage(mymedia[i], imageFile, 3840);
+					boolean resize = CommonUtil.resizeImage(mymedia[i], imageFile, 38400);
 					CommonUtil.resizeImage(imageFile, thumbFile, 640);
 					if (resize) {
 						FileUtils.moveFile(mymedia[i], new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/upload/"

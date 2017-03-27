@@ -66,7 +66,6 @@ public class OrgServiceImpl implements OrgService {
 	@Transactional
 	public void addOrg(Org org) {
 		org.setCurrentdeviceidx(org.getMaxdevices());
-		org.setCurrentmdeviceidx(org.getMaxmdevices());
 		orgMapper.insertSelective(org);
 
 		Branch branch = new Branch();
@@ -111,34 +110,12 @@ public class OrgServiceImpl implements OrgService {
 			device.setTerminalid(terminalid);
 			device.setName(terminalid);
 			device.setStatus("0");
-			device.setType(Device.Type_Sign);
 			devices.add(device);
 		}
 		if (devices.size() > 0) {
 			deviceMapper.insertList(devices);
 		}
 
-		devices = new ArrayList<Device>();
-		for (int i = 0; i < org.getMaxmdevices(); i++) {
-			String terminalid = "" + (i + 1);
-			int k = 4 - terminalid.length();
-			for (int j = 0; j < k; j++) {
-				terminalid = "0" + terminalid;
-			}
-			terminalid = "1" + terminalid;
-			terminalid = org.getCode() + terminalid;
-			Device device = new Device();
-			device.setOrgid(org.getOrgid());
-			device.setBranchid(branch.getBranchid());
-			device.setTerminalid(terminalid);
-			device.setName(terminalid);
-			device.setStatus("0");
-			device.setType(Device.Type_Multisign);
-			devices.add(device);
-		}
-		if (devices.size() > 0) {
-			deviceMapper.insertList(devices);
-		}
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();
 	}
@@ -162,37 +139,11 @@ public class OrgServiceImpl implements OrgService {
 				device.setBranchid(oldOrg.getTopbranchid());
 				device.setTerminalid(terminalid);
 				device.setName(terminalid);
-				device.setType(Device.Type_Sign);
 				device.setStatus("0");
 				devices.add(device);
 			}
 			deviceMapper.insertList(devices);
 			org.setCurrentdeviceidx(org.getMaxdevices());
-		}
-
-		if (org.getMaxmdevices() != null && org.getMaxmdevices() > oldOrg.getCurrentmdeviceidx()) {
-			List<Device> devices = new ArrayList<Device>();
-			for (int i = oldOrg.getCurrentmdeviceidx(); i < org.getMaxmdevices(); i++) {
-				String terminalid = "" + (i + 1);
-				int k = 4 - terminalid.length();
-				for (int j = 0; j < k; j++) {
-					terminalid = "0" + terminalid;
-				}
-				terminalid = "1" + terminalid;
-				if (!org.getCode().equals("default")) {
-					terminalid = org.getCode() + terminalid;
-				}
-				Device device = new Device();
-				device.setOrgid(org.getOrgid());
-				device.setBranchid(oldOrg.getTopbranchid());
-				device.setTerminalid(terminalid);
-				device.setName(terminalid);
-				device.setType(Device.Type_Multisign);
-				device.setStatus("0");
-				devices.add(device);
-			}
-			deviceMapper.insertList(devices);
-			org.setCurrentmdeviceidx(org.getMaxmdevices());
 		}
 
 		orgMapper.updateByPrimaryKeySelective(org);

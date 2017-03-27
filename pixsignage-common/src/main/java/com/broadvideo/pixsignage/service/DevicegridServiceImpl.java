@@ -151,6 +151,7 @@ public class DevicegridServiceImpl implements DevicegridService {
 			scheduleJson.put("playmode", "daily");
 			scheduleJson.put("start_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(gridschedule.getStarttime()));
+			scheduleJson.put("multi_flag", "1");
 			JSONArray scheduledtlJsonArray = new JSONArray();
 			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
 			for (Gridscheduledtl gridscheduledtl : gridschedule.getGridscheduledtls()) {

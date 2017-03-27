@@ -110,6 +110,14 @@
     and loginname = #{loginname}
   </select>
 
+  <select id="selectByToken" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' 
+    and token = #{token}
+  </select>
+
   <select id="selectBySource" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

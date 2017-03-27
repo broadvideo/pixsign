@@ -39,100 +39,115 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div class="page-content-wrapper">
-			<div class="page-content">
-		
-				<div id="DevicegpDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-full">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</div>
-							<div class="modal-body">
-								<div class="row">
-									<div class="col-md-6">
-										<div class="portlet box blue">
-											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.selecting"/></div>
-											</div>
-											<div class="portlet-body">
-												<div class="table-toolbar">
-													<div class="btn-group pull-right">
-														<button class="btn btn-sm blue pix-adddevicegpdtl"><spring:message code="global.add"/> <i class="fa fa-arrow-right"></i></button>
-													</div>
-												</div>
-												<table id="DeviceTable" class="table table-striped table-bordered table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
-											</div>
-										</div>
+		<div id="DeviceMapModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div id="DeviceMapDiv" style="width:100%; height:600px;"></div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="DevicegpDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-full">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="portlet box blue">
+									<div class="portlet-title">
+										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.selecting"/></div>
 									</div>
-									<div class="col-md-6">
-										<div class="portlet box green">
-											<div class="portlet-title">
-												<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
-											</div>
-											<div class="portlet-body">
-												<div class="table-toolbar">
-													<div class="btn-group">
-														<button class="btn btn-sm red pix-deletedevicegpdtl"><i class="fa fa-arrow-left"></i> <spring:message code="global.remove"/></button>
-													</div>
-												</div>
-												<table id="DevicegpDtlTable" class="table table-striped table-bordered table-hover">
-													<thead></thead>
-													<tbody></tbody>
-												</table>
+									<div class="portlet-body">
+										<div class="table-toolbar">
+											<div class="btn-group pull-right">
+												<button class="btn btn-sm blue pix-adddevicegpdtl"><spring:message code="global.add"/> <i class="fa fa-arrow-right"></i></button>
 											</div>
 										</div>
+										<table id="DeviceTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-							<div class="modal-footer">
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+							<div class="col-md-6">
+								<div class="portlet box green">
+									<div class="portlet-title">
+										<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
+									</div>
+									<div class="portlet-body">
+										<div class="table-toolbar">
+											<div class="btn-group">
+												<button class="btn btn-sm red pix-deletedevicegpdtl"><i class="fa fa-arrow-left"></i> <spring:message code="global.remove"/></button>
+											</div>
+										</div>
+										<table id="DevicegpDtlTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
 				</div>
+			</div>
+		</div>
 			
-				<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title"><spring:message code="global.devicegroup"/></h4>
-							</div>
-							<div class="modal-body">
-								<form id="MyEditForm" class="form-horizontal" method="POST">
-									<input type="hidden" name="devicegroup.devicegroupid" value="0" />
-									<input type="hidden" name="devicegroup.branchid" value="0" />
-									<input type="hidden" name="devicegroup.status" value="1" />
-									<div class="form-body">
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.name" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
-											<div class="col-md-9">
-												<textarea class="form-control" rows="4" name="devicegroup.description"></textarea>
-											</div>
+		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.devicegroup"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="MyEditForm" class="form-horizontal" method="POST">
+							<input type="hidden" name="devicegroup.devicegroupid" value="0" />
+							<input type="hidden" name="devicegroup.branchid" value="0" />
+							<input type="hidden" name="devicegroup.status" value="1" />
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="devicegroup.name" />
 										</div>
 									</div>
-								</form>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+									<div class="col-md-9">
+										<textarea class="form-control" rows="4" name="devicegroup.description"></textarea>
+									</div>
+								</div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
-						</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 					</div>
 				</div>
+			</div>
+		</div>
 			
+		<div class="page-content-wrapper">
+			<div class="page-content">
 				<h3 class="page-title"><spring:message code="menu.devicegroup"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
@@ -223,6 +238,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -231,7 +247,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-devicegp.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-devicegp.js?t=8"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
@@ -240,6 +256,7 @@ jQuery(document).ready(function() {
 	initBranchTree();
 	initMyTable();
 	initMyEditModal();
+	initMapModal();
 	initDevicegpDtlModal();
 });
 

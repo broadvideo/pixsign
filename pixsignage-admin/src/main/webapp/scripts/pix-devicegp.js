@@ -13,6 +13,8 @@ function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
 }			
 
+var CurrentDevicegroup;
+
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -22,8 +24,9 @@ function initMyTable() {
 		'bProcessing' : true,
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['common.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '65%' },
+						{'sTitle' : common.view.position, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
@@ -38,10 +41,11 @@ function initMyTable() {
 			}
 			$('td:eq(1)', nRow).html(listhtml);
 			
-			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
-			$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+			$('td:eq(2)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+			$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
+			$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -174,10 +178,10 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['devicegroup.' + name] = item[name];
+		for (var name in CurrentDevicegroup) {
+			formdata['devicegroup.' + name] = CurrentDevicegroup[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
@@ -185,6 +189,52 @@ function initMyEditModal() {
 		$('#MyEditModal').modal();
 	});
 
+}
+
+function initMapModal() {
+	var CurrentMap;
+
+	$('body').on('click', '.pix-map', function(event) {
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			index = $(event.target).parent().attr('data-id');
+		}
+		CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+		$('#DeviceMapModal').modal();
+	});
+
+	$('#DeviceMapModal').on('shown.bs.modal', function (e) {
+		if (CurrentMap == null) {
+			CurrentMap = new BMap.Map("DeviceMapDiv", {enableMapClick:false});
+			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));
+			var point = new BMap.Point(114, 30);
+			CurrentMap.centerAndZoom(point, 1);
+		}
+		CurrentMap.clearOverlays();
+		var points = [];
+		for (var i=0; i<CurrentDevicegroup.devices.length; i++) {
+			var device = CurrentDevicegroup.devices[i];
+			if (device.lontitude > 0 && device.latitude > 0) {
+				var point = new BMap.Point(device.lontitude, device.latitude);
+				points.push(point);
+				var marker = new BMap.Marker(point, {title : device.terminalid});
+				CurrentMap.addOverlay(marker);
+				marker.addEventListener("click", function() {
+					var terminalid = this.getTitle();
+					var ds = CurrentDevicegroup.devices.filter(function (el) {
+						return (el.terminalid == terminalid);
+					});
+					var sContent =
+						'<div><h4>' + ds[0].terminalid + ' - ' + ds[0].name + '</h4>' + 
+						'<p>' + ds[0].addr1 + ' ' + ds[0].addr2 + '</p>' + 
+						'</div>';
+					var infoWindow = new BMap.InfoWindow(sContent);
+					this.openInfoWindow(infoWindow);
+				});
+			}
+		}
+		CurrentMap.setViewport(points);
+	})
 }
 
 //==============================终端组明细对话框====================================			
@@ -248,7 +298,6 @@ function initDevicegpDtlModal() {
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push({'name':'devicegroupid','value':'0' });
-			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 

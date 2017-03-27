@@ -135,105 +135,6 @@ response.setDateHeader("Expires",0);
 					</div>
 				</div>
 			
-				<div id="RegionDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-					<div class="modal-dialog modal-large">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</div>
-							<div class="modal-body">
-								<form id="RegionDtlForm" class="form-horizontal">
-									<div class="form-body">
-										<input type="hidden" name="regiondtl.regionid" />
-										<div class="form-group">
-											<label class="control-label col-md-3"><spring:message code="global.option"/></label>
-											<div class="col-md-9 radio-list">
-												<!-- 
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.playmode" value="1" checked> <spring:message code="global.once"/>
-												</label>
-												-->
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.playmode" value="2" checked> <spring:message code="global.daily"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group playmode-1">
-											<label class="col-md-3 control-label"><spring:message code="global.playdate"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-group date form_date">                                       
-													<input type="text" size="16" readonly class="form-control" name="regiondtl.playdate">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-group date form_time">                                       
-													<input type="text" size="16" readonly class="form-control" name="regiondtl.starttime">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class="form-group playmode-1">
-											<label class="col-md-3 control-label"><spring:message code="global.endtime"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="input-group date form_time">                                       
-													<input type="text" size="16" readonly class="form-control" name="regiondtl.endtime">
-													<span class="input-group-btn">
-													<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-													</span>
-												</div>
-											</div>
-										</div>
-			
-										<div class="form-group objtype-0">
-											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="3"> <spring:message code="global.stream"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="4"> <spring:message code="global.dvb"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="5"> <spring:message code="global.widget"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group objtype-1">
-											<label class="control-label col-md-3"><spring:message code="global.type"/></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="regiondtl.objtype" value="2"> <spring:message code="global.text"/>
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.detail"/><span class="required">*</span></label>
-											<div class="col-md-9">
-												<input type="hidden" id="RegionDtlSelect" class="form-control select2" name="regiondtl.objid" />
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-								<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-							</div>
-						</div>
-					</div>
-				</div>
-			
 				<div class="row">
 					<div class="col-md-12">
 						<div id="MyWizard">
@@ -243,30 +144,36 @@ response.setDateHeader("Expires",0);
 										<li>
 											<a href="#tab1" data-toggle="tab" class="step">
 												<span class="number">1</span>
-												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selectlayout"/></span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selecttemplet"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab2" data-toggle="tab" class="step">
 												<span class="number">2</span>
-												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.designlayout"/></span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.baseedit"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab3" data-toggle="tab" class="step">
 												<span class="number">3</span>
-												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.playschedule"/></span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.designlayout"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab4" data-toggle="tab" class="step">
 												<span class="number">4</span>
-												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selectdevice"/></span>   
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.designcontent"/></span>   
 											</a>
 										</li>
 										<li>
 											<a href="#tab5" data-toggle="tab" class="step">
 												<span class="number">5</span>
+												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.selectdevice"/></span>   
+											</a>
+										</li>
+										<li>
+											<a href="#tab6" data-toggle="tab" class="step">
+												<span class="number">6</span>
 												<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.wizard.publish"/></span>   
 											</a> 
 										</li>
@@ -284,41 +191,95 @@ response.setDateHeader("Expires",0);
 											<button class="close" data-dismiss="alert"></button>
 											Your form validation is successful!
 										</div>
-														
+										
 										<div class="tab-pane" id="tab1">
-											<form id="BundleOptionForm" class="form-horizontal" data-async method="POST">
+											<form id="TempletOptionForm" class="form-horizontal" data-async method="POST">
 												<div class="note note-success">
 													<p><spring:message code="global.tips_1"/></p>
 													<p><spring:message code="global.tips_3"/></p>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 control-label"><spring:message code="global.bundle"/></label>
-													<div class="col-md-10">
-														<div class="input-icon right">
-															<i class="fa"></i> <input type="text" class="form-control" name="bundle.name" />
-														</div>
+													<label class="control-label col-md-2"><spring:message code="global.layout.ratio"/></label>
+													<div class="col-md-6">
+														<select class="form-control" name="bundle.ratio" tabindex="-1">
+															<option value="1" selected="selected"><spring:message code="global.layout.ratio_1"/></option>
+															<option value="2"><spring:message code="global.layout.ratio_2"/></option>
+															<option value="3"><spring:message code="global.layout.ratio_3"/></option>
+															<option value="4"><spring:message code="global.layout.ratio_4"/></option>
+														</select>
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 control-label"><spring:message code="global.layout"/></label>
-													<div class="col-md-10 pre-scrollable">
-														<table id="LayoutTable" class="table-striped"></table>
+													<label class="col-md-2 control-label"><spring:message code="global.bundle.templetflag"/></label>
+													<div class="col-md-10 radio-list">
+														<label class="radio-inline">
+															<input type="radio" name="templetflag" value="0" checked> <spring:message code="global.bundle.templetflag_0"/>
+														</label>
+														<label class="radio-inline">
+															<input type="radio" name="templetflag" value="1"> <spring:message code="global.bundle.templetflag_1"/>
+														</label>
+														<label class="radio-inline">
+															<input type="radio" name="templetflag" value="2"> <spring:message code="global.bundle.templetflag_2"/>
+														</label>
+													</div>
+												</div>
+												<div class="form-group templet-ctrl">
+													<label class="col-md-3 control-label"><spring:message code="global.templet"/><span class="required">*</span></label>
+													<div class="col-md-9 pre-scrollable">
+														<table id="TempletTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
 													</div>
 												</div>
 											</form>
 										</div>
 										
 										<div class="tab-pane" id="tab2">
+											<form id="BundleOptionForm" class="form-horizontal" data-async method="POST">
+												<input type="hidden" name="homeidletime" value="0" />
+												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+													<div class="col-md-6">
+														<div class="input-icon right">
+															<i class="fa"></i> <input type="text" class="form-control" name="name" />
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+													<div class="col-md-6">
+														<div class="input-group">
+															<span class="input-group-btn">
+																<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+																<ul class="dropdown-menu" role="menu">
+																	<div class="pre-scrollable foldertree">
+																	</div>
+																</ul>
+															</span>
+															<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
+															<span class="input-group-btn">
+																<button class="btn default" type="button" id="LayoutBgImageRemove"><i class="fa fa-trash-o"/></i></button>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+													<div class="col-md-6">
+														<textarea class="form-control" rows="6" name="description"></textarea>
+													</div>
+												</div>
+											</form>
+										</div>
+
+										<div class="tab-pane" id="tab3">
 											<div class="row">
 												<div class="col-md-12 col-sm-12">
 													<div class="portlet box purple">
 														<div class="portlet-title">
 															<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
 															<div class="actions">
-																<!-- 
-																<div id="RegionBtn" class="btn-group">
-																</div>
-																 -->
 																<a href="javascript:;" regiontype="0" class="btn btn-sm yellow pix-addregion"><spring:message code="region.play"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.text"/> <i class="fa fa-plus"></i></a>
 																<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.date"/> <i class="fa fa-plus"></i></a>
@@ -343,86 +304,34 @@ response.setDateHeader("Expires",0);
 																	<div id="LayoutDiv" layoutid="0"></div>
 																</div>
 																<div id="LayoutCol2">
-																	<form id="LayoutEditForm" class="form-horizontal pix-bordered">
-																		<input type="hidden" name="layout.layoutid" value="0" />
-																		<input type="hidden" name="layout.status" value="1" />
-																		<div class="form-body">
-																			<label class="page-title layout-title"></label>
-																			<div class="form-group">
-																				<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
-																				<div class="col-md-9">
-																					<div class="input-icon right">
-																						<i class="fa"></i> <input type="text" class="form-control" name="name" />
-																					</div>
-																				</div>
-																			</div>
-																			<% if (((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranch().getParentid().intValue() == 0) { %>
-																			<div class="form-group">
-																				<label class="col-md-3 control-label"><spring:message code="global.type"/></label>
-																				<div class="col-md-9 radio-list">
-																					<label class="radio-inline">
-																						<input type="radio" name="type" value="0" checked> <spring:message code="global.layout.type_0"/>
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio" name="type" value="1"> <spring:message code="global.layout.type_1"/>
-																					</label>  
-																				</div>
-																			</div>
-																			<% } %>
-																			<div class="form-group">
-																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
-																				<div class="col-md-9">
-																					<div class="input-group">
-																						<span class="input-group-btn">
-																							<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
-																							<ul class="dropdown-menu" role="menu">
-																								<div class="pre-scrollable foldertree">
-																								</div>
-																							</ul>
-																						</span>
-																						<input type="hidden" id="LayoutBgImageSelect2" class="form-control select2" name="bgimageid">
-																						<span class="input-group-btn">
-																						<button class="btn default" type="button" id="LayoutBgImageRemove"><i class="fa fa-trash-o"/></i></button>
-																						</span>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="form-group last">
-																				<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
-																				<div class="col-md-9">
-																					<textarea class="form-control" rows="4" name="description"></textarea>
-																				</div>
-																			</div>
-																		</div>
-																	</form>
 																	<form id="LayoutdtlEditForm" class="form-horizontal pix-bordered">
 																		<input type="hidden" name="regionid" value="0" />
 																		<div class="form-body">
 																			<div class="row">
-																				<h3 class="col-md-6 page-title font-red-sunglo layoutdtl-title"></h3>
+																				<h3 class="col-md-6 page-title font-red-sunglo bundledtl-title"></h3>
 																				<div class="col-md-6">
 																					<a href="javascript:;" class="btn default btn-sm red pull-right pix-region-delete"><i class="fa fa-trash-o"></i> <spring:message code="global.remove"/></a>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0">
+																			<div class="form-group bundle-ctl regiontype-0">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.sleeptime"/></label>
 																				<div class="col-md-9">
 																					<input class="sleepRange" type="text" name="sleeptime" value="0"/>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0 regiontype-6">
+																			<div class="form-group bundle-ctl regiontype-0 regiontype-6">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
 																				<div class="col-md-9">
 																					<input class="intervalRange" type="text" name="intervaltime" value="10"/>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0">
+																			<div class="form-group bundle-ctl regiontype-0">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.animation"/></label>
 																				<div class="col-md-9">
 																					<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0">
+																			<div class="form-group bundle-ctl regiontype-0">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -433,13 +342,13 @@ response.setDateHeader("Expires",0);
 																					</label>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0 regiontype-6">
+																			<div class="form-group bundle-ctl regiontype-0 regiontype-6">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/></label>
 																				<div class="col-md-9">
 																					<input class="volumeRange" type="text" name="volume" value="50"/>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1">
+																			<div class="form-group bundle-ctl regiontype-1">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -450,7 +359,7 @@ response.setDateHeader("Expires",0);
 																					</label>  
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1">
+																			<div class="form-group bundle-ctl regiontype-1">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
 																				<div class="col-md-9 radio-list">
 																					<label class="radio-inline">
@@ -464,7 +373,7 @@ response.setDateHeader("Expires",0);
 																					</label>  
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-12">
+																			<div class="form-group bundle-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-12">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component colorPick">
@@ -473,13 +382,13 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
+																			<div class="form-group bundle-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
 																				<div class="col-md-9">
 																					<input class="sizeRange" type="text" name="size" value="50"/>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-2">
+																			<div class="form-group bundle-ctl regiontype-2">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
 																				<div class="col-md-9">
 																					<select class="form-control" name="dateformat" tabindex="-1">
@@ -491,7 +400,7 @@ response.setDateHeader("Expires",0);
 																					</select>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10 regiontype-11">
+																			<div class="form-group bundle-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10 regiontype-11">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group">
@@ -504,12 +413,12 @@ response.setDateHeader("Expires",0);
 																						</span>
 																						<input type="hidden" id="RegionBgImageSelect" class="form-control select2" name="bgimageid" />
 																						<span class="input-group-btn">
-																						<button class="btn default" type="button" id="RegionBgImageRemove"><i class="fa fa-trash-o"/></i></button>
+																							<button class="btn default" type="button" id="RegionBgImageRemove"><i class="fa fa-trash-o"/></i></button>
 																						</span>
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
+																			<div class="form-group bundle-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
 																				<div class="col-md-9">
 																					<div class="input-group colorpicker-component bgcolorPick">
@@ -518,7 +427,7 @@ response.setDateHeader("Expires",0);
 																					</div>
 																				</div>
 																			</div>
-																			<div class="form-group layout-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
+																			<div class="form-group bundle-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
 																				<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
 																				<div class="col-md-9">
 																					<input class="opacityRange" type="text" name="opacity" value=""/>
@@ -616,7 +525,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 										
-										<div class="tab-pane" id="tab3">
+										<div class="tab-pane" id="tab4">
 											<div class="row">
 												<div id="BundleCol1">
 													<div id="BundleDiv" bundleid="0"></div>
@@ -624,7 +533,6 @@ response.setDateHeader("Expires",0);
 												<div id="BundleCol2">
 													<form id="BundledtlEditForm" class="form-horizontal pix-bordered">
 														<input type="hidden" name="bundledtl.bundledtlid" value="0" />
-														<input type="hidden" name="bundledtl.layoutdtlid" value="0" />
 														<div class="form-body">
 															<label class="page-title font-red-sunglo bundledtl-title"></label>
 	
@@ -680,11 +588,6 @@ response.setDateHeader("Expires",0);
 																	<label class="radio-inline">
 																		<input type="radio" name="bundledtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
 																	</label>
-																	<!-- 
-																	<label class="radio-inline">
-																		<input type="radio" name="bundledtl.objtype" value="3"> <spring:message code="global.stream"/>
-																	</label>
-																	 -->
 																	<label class="radio-inline">
 																		<input type="radio" name="bundledtl.objtype" value="5"> <spring:message code="global.widget"/>
 																	</label>
@@ -699,16 +602,16 @@ response.setDateHeader("Expires",0);
 																</div>
 															</div>
 															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-7 regiontype-12 touchtype-3">
-																<label class="control-label col-md-3"><spring:message code="global.bundledtl.scope"/></label>
+																<label class="control-label col-md-3"><spring:message code="global.bundledtl.scope"/><span class="required">*</span></label>
 																<div class="col-md-9 radio-list">
 																	<label class="radio-inline">
-																		<input type="radio" name="bundledtl.type" value="0" checked> <spring:message code="global.bundledtl.type_0"/>
+																		<input type="radio" name="bundledtl.referflag" value="0" checked> <spring:message code="global.bundledtl.type_0"/>
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" name="bundledtl.type" value="1"> <spring:message code="global.bundledtl.type_1"/>
+																		<input type="radio" name="bundledtl.referflag" value="1"> <spring:message code="global.bundledtl.type_1"/>
 																	</label>
 																</div>
-															</div>
+															</div>																	
 															<div class="form-group bundle-ctl regiontype-0 regiontype-1 regiontype-5 regiontype-7 regiontype-12 public-1 touchtype-3">
 																<label class="col-md-3 control-label"><spring:message code="global.detail"/></label>
 																<div class="col-md-9">
@@ -721,16 +624,6 @@ response.setDateHeader("Expires",0);
 																	<textarea class="form-control" rows="10" name="bundledtl.text.text"></textarea>
 																</div>
 															</div>
-															<!-- 
-															<div class="form-group bundle-ctl regiontype-0 objtype-3 public-0">
-																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
-																<div class="col-md-9">
-																	<div class="input-icon right">
-																		<i class="fa"></i> <input type="text" class="form-control" name="bundledtl.stream.url" />
-																	</div>
-																</div>
-															</div>
-															-->
 															<div class="form-group bundle-ctl regiontype-0 regiontype-7 objtype-5 public-0 touchtype-3">
 																<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
 																<div class="col-md-9">
@@ -749,7 +642,7 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 													</form>
-													
+															
 													<div class="row bundle-ctl regiontype-6">
 														<div class="col-md-7">
 															<div class="portlet box blue">
@@ -780,7 +673,7 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 													</div>
-
+	
 													<div class="row bundle-ctl regiontype-13">
 														<div class="col-md-7">
 															<div class="portlet box blue">
@@ -811,10 +704,10 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 													</div>
-
+		
 												</div>
 											</div>
-
+		
 											<div class="row bundle-ctl regiontype-0 regiontype-7 objtype-1 public-0 touchtype-3">
 												<div class="col-md-8">
 													<div class="portlet box blue">
@@ -883,10 +776,9 @@ response.setDateHeader("Expires",0);
 													</div>
 												</div>
 											</div>
-
 										</div>
-														
-										<div class="tab-pane" id="tab4">
+										
+										<div class="tab-pane" id="tab5">
 											<div class="col-md-7">
 												<div class="portlet box blue tabbable">
 													<div class="portlet-title">
@@ -957,7 +849,7 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 			
-										<div class="tab-pane" id="tab5">
+										<div class="tab-pane" id="tab6">
 											<h3 class="block"><spring:message code="global.wizard.confirm"/></h3>
 											<table id="ConfirmTable" class="table table-striped table-bordered table-hover"></table>
 										</div>
@@ -1042,10 +934,10 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=2"></script>
-<script src="${base_ctx}/scripts/pix-layout-design.js?t=5"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design.js?t=3"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design1.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design2.js?t=10"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

@@ -76,7 +76,6 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<!-- 模板新增修改对话框  -->
 		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -149,8 +148,6 @@ response.setDateHeader("Expires",0);
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 
-
-
 								<div id="MyWizard">
 									<div class="form-wizard">
 										<div class="form-body">
@@ -158,19 +155,19 @@ response.setDateHeader("Expires",0);
 												<li>
 													<a href="#tab1" data-toggle="tab" class="step">
 														<span class="number">1</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.baseedit"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.baseedit"/></span>   
 													</a>
 												</li>
 												<li>
 													<a href="#tab2" data-toggle="tab" class="step">
 														<span class="number">2</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.designlayout"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designlayout"/></span>   
 													</a>
 												</li>
 												<li>
 													<a href="#tab3" data-toggle="tab" class="step">
 														<span class="number">3</span>
-														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.templet.designcontent"/></span>   
+														<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designcontent"/></span>   
 													</a>
 												</li>
 											</ul>
@@ -737,9 +734,6 @@ response.setDateHeader("Expires",0);
 										</div>
 									</div>
 								</div>
-
-
-
 
 							</div>
 						</div>

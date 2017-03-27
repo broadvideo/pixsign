@@ -393,7 +393,7 @@ function enterBundledtlFocus(bundledtl) {
 	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type));
 	
 	if (CurrentBundledtl.objtype == 1) {
-		$('.bundledtl-objtype').html('媒体列表');
+		$('.bundledtl-objtype').html(common.view.medialist);
 		$('.bundledtl-objvalue').css('display', 'none');
 		$('.bundledtl-medialist').css('display', 'block');
 		
@@ -405,7 +405,7 @@ function enterBundledtlFocus(bundledtl) {
 				var thumbnail = '';
 				var thumbhtml = '';
 				var medianame = '';
-				if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
+				if (medialistdtl.objtype == 1) {
 					mediatype = common.view.intvideo;
 					medianame = medialistdtl.video.name;
 					if (medialistdtl.video.thumbnail == null) {
@@ -413,27 +413,44 @@ function enterBundledtlFocus(bundledtl) {
 					} else {
 						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
 					}
-				} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
-					mediatype = common.view.extvideo;
-					medianame = medialistdtl.video.name;
-					if (medialistdtl.video.thumbnail == null) {
-						thumbnail = '../img/video.jpg';
-					} else {
-						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
-					}
+					thumbhtml += '<a href="/pixsigdata/video/preview/' + medialistdtl.video.videoid + '.mp4" class="fancybox">';
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div></a>';
 				} else if (medialistdtl.objtype == 2) {
 					mediatype = common.view.image;
 					medianame = medialistdtl.image.name;
 					thumbwidth = medialistdtl.image.width > medialistdtl.image.height? 100 : 100*medialistdtl.image.width/medialistdtl.image.height;
 					thumbnail = '/pixsigdata' + medialistdtl.image.thumbnail;
+					thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';
 				} else {
 					mediatype = common.view.unknown;
 				}
-				if (thumbnail != '') {
-					thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';
-				}
 				$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, mediatype, thumbhtml, medianame]);
 			}
+			$('.fancybox').click(function() {
+				var myVideo = this.href;
+				$.fancybox({
+					openEffect	: 'none',
+					closeEffect	: 'none',
+					closeBtn : false,
+		            padding : 0,
+		            content: '<div id="video_container">Loading the player ... </div>',
+		            afterShow: function(){
+		            	jwplayer.key='rMF5t+PiENAlr4SobpLajtNkDjTaqzQToz13+5sNGLI=';
+		                jwplayer('video_container').setup({ 
+		                	stretching: 'fill',
+		                	image: '/pixres/global/plugins/jwplayer/preview.jpg',
+		                    file: myVideo,
+		                    width: 760,
+		                    height: 428,
+		                    autostart: true,
+		                    primary: 'flash', 
+		                    bufferlength:10,
+		                    flashplayer: '/pixres/global/plugins/jwplayer/jwplayer.flash.swf'
+		                });
+		            }
+		        });
+		        return false;
+			});
 		}
 	} else if (CurrentBundledtl.objtype == 2) {
 		$('.bundledtl-objvalue').css('display', 'block');

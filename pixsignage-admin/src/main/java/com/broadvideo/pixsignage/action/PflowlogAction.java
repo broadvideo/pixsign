@@ -132,8 +132,8 @@ public class PflowlogAction extends BaseDatatableAction {
 				cell.setCellValue(s);
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, Device.Type_Sign, "1",
-					null, null, null, null, null, "deviceid");
+			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, "1", null, null, null,
+					null, null, "deviceid");
 			for (Device device : devices) {
 				count++;
 				row = sheet.createRow(count);
@@ -204,8 +204,8 @@ public class PflowlogAction extends BaseDatatableAction {
 				cell.setCellValue(s);
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, Device.Type_Sign, "1",
-					null, null, null, null, null, "deviceid");
+			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, "1", null, null, null,
+					null, null, "deviceid");
 			for (Device device : devices) {
 				count++;
 				row = sheet.createRow(count);

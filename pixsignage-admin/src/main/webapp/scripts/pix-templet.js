@@ -34,7 +34,7 @@ $(window).resize(function(e) {
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
 var templethtml = '';
-var oTable = $('#MyTable').dataTable({
+$('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 16, 36, 72, 108 ],
 						[ 16, 36, 72, 108 ] 

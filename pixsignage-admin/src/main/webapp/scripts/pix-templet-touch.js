@@ -33,7 +33,7 @@ $(window).resize(function(e) {
 
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
-var oTable = $('#MyTable').dataTable({
+$('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 10, 20, 30, 40 ],
 						[ 10, 20, 30, 40 ] 
@@ -94,6 +94,7 @@ var oTable = $('#MyTable').dataTable({
 			templethtml += '</div></a>';
 			templethtml += '<div privilegeid="101010">';
 			templethtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-templet"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+			templethtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			templethtml += '</div>';
 			templethtml += '</div>';
 			if ((i+1) % 4 == 0 || (i+1) == aData.subtemplets.length) {
@@ -152,19 +153,66 @@ jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control inpu
 jQuery('#MyTable_wrapper .dataTables_length select').select2();
 
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
-FormValidateOption.rules['templet.name'] = {};
-FormValidateOption.rules['templet.name']['required'] = true;
-FormValidateOption.rules['templet.homeidletime'] = {};
-FormValidateOption.rules['templet.homeidletime']['required'] = true;
-FormValidateOption.rules['templet.homeidletime']['number'] = true;
-FormValidateOption.submitHandler = function(form) {
+
+FormValidateOption.rules = {};
+FormValidateOption.rules['homeidletime'] = {};
+FormValidateOption.rules['homeidletime']['required'] = true;
+FormValidateOption.rules['homeidletime']['number'] = true;
+FormValidateOption.submitHandler = null;
+$('#TempletOptionForm').validate(FormValidateOption);
+
+$('body').on('click', '.pix-add', function(event) {
+	var action = myurls['templet.add'];
+	refreshForm('MyEditForm');
+	$('#MyEditForm').attr('action', action);
+	CurrentTemplet = null;
+	CurrentTempletid = 0;
+	$('#MyEditModal').modal();
+});			
+$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
+	if ($('#MyEditForm').valid()) {
+		$.ajax({
+			type : 'POST',
+			url : $('#MyEditForm').attr('action'),
+			data : $('#MyEditForm').serialize(),
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					$('#MyEditModal').modal('hide');
+					bootbox.alert(common.tips.success);
+					$('#MyTable').dataTable()._fnAjaxUpdate();
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				console.log('failue');
+			}
+		});
+	}
+});
+
+$('body').on('click', '.pix-subtemplet-add', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	var templet = $('#MyTable').dataTable().fnGetData(index);
+	var formdata = new Object();
+	formdata['templet.name'] = '';
+	formdata['templet.hometempletid'] = templet.templetid;
+	formdata['templet.homeflag'] = '0';
+	formdata['templet.ratio'] = templet.ratio;
+	$('#SubtempletForm').loadJSON(formdata);
+	$('#SubtempletModal').modal();
+});			
+$('[type=submit]', $('#SubtempletModal')).on('click', function(event) {
 	$.ajax({
 		type : 'POST',
-		url : $('#MyEditForm').attr('action'),
-		data : $('#MyEditForm').serialize(),
+		url : myurls['templet.add'],
+		data : $('#SubtempletForm').serialize(),
 		success : function(data, status) {
 			if (data.errorcode == 0) {
-				$('#MyEditModal').modal('hide');
+				$('#SubtempletModal').modal('hide');
 				bootbox.alert(common.tips.success);
 				$('#MyTable').dataTable()._fnAjaxUpdate();
 			} else {
@@ -175,100 +223,33 @@ FormValidateOption.submitHandler = function(form) {
 			console.log('failue');
 		}
 	});
-};
-$('#MyEditForm').validate(FormValidateOption);
-
-$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
-	if ($('#MyEditForm').valid()) {
-		$('#MyEditForm').submit();
-	}
 });
 
-$('body').on('click', '.pix-add', function(event) {
-	var action = myurls['templet.add'];
-	refreshForm('MyEditForm');
-	$('#MyEditForm').attr('action', action);
-	$('.templet-layout').css('display', 'block');
-	CurrentTemplet = null;
-	CurrentTempletid = 0;
-	$('#MyEditModal').modal();
-});			
-
-
-$('body').on('click', '.pix-subtemplet-add', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
-	}
-	var templet = $('#MyTable').dataTable().fnGetData(index);
-	var action = myurls['templet.add'];
-	refreshForm('MyEditForm');
-	var formdata = new Object();
-	formdata['templet.hometempletid'] = templet.templetid;
-	formdata['templet.homeflag'] = '0';
-	$('#MyEditForm').loadJSON(formdata);
-	$('#MyEditForm').attr('action', action);
-	$('.templet-layout').css('display', 'block');
-	$('#MyEditModal').modal();
-});			
-
-$('body').on('click', '.pix-sync', function(event) {
-	var target = $(event.target);
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		target = $(event.target).parent();
-		index = $(event.target).parent().attr('data-id');
-	}
-	CurrentTemplet = $('#MyTable').dataTable().fnGetData(index);
-	CurrentTempletid = CurrentTemplet.templetid;
-	bootbox.confirm(common.tips.synclayout, function(result) {
-		if (result == true) {
-			$.ajax({
-				type : 'GET',
-				url : 'templet!sync.action',
-				cache: false,
-				data : {
-					templetid: CurrentTempletid,
-				},
-				dataType : 'json',
-				contentType : 'application/json;charset=utf-8',
-				beforeSend: function ( xhr ) {
-					Metronic.startPageLoading({animate: true});
-				},
-				success : function(data, status) {
-					Metronic.stopPageLoading();
-					if (data.errorcode == 0) {
-						bootbox.alert(common.tips.success);
-					} else {
-						bootbox.alert(common.tips.error + data.errormsg);
-					}
-				},
-				error : function() {
-					Metronic.stopPageLoading();
-					console.log('failue');
-				}
-			});				
-		}
-	});
-});
 
 $('body').on('click', '.pix-delete', function(event) {
 	var index = $(event.target).attr('data-id');
+	var subid = $(event.target).attr('sub-id');
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
+		subid = $(event.target).parent().attr('sub-id');
 	}
 	CurrentTemplet = $('#MyTable').dataTable().fnGetData(index);
-	CurrentTempletid = CurrentTemplet.templetid;
-	var action = myurls['templet.delete'];
-	
-	bootbox.confirm(common.tips.remove + CurrentTemplet.name, function(result) {
+	var templetid = CurrentTemplet.templetid;
+	var name = CurrentTemplet.name;
+	CurrentSubTemplets = CurrentTemplet.subtemplets;
+	if (subid != undefined) {
+		templetid = CurrentTemplet.subtemplets[subid].templetid;
+		name = CurrentTemplet.subtemplets[subid].name;
+	}
+
+	bootbox.confirm(common.tips.remove + name, function(result) {
 		if (result == true) {
 			$.ajax({
 				type : 'POST',
-				url : action,
+				url : myurls['templet.delete'],
 				cache: false,
 				data : {
-					'templet.templetid': CurrentTempletid
+					'templet.templetid': templetid
 				},
 				success : function(data, status) {
 					if (data.errorcode == 0) {

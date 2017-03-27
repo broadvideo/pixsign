@@ -65,13 +65,14 @@ public class TempletServiceImpl implements TempletService {
 		return templetMapper.selectByPrimaryKey(templetid);
 	}
 
-	public int selectCount(String orgid, String touchflag, String homeflag, String search) {
-		return templetMapper.selectCount(orgid, touchflag, homeflag, search);
+	public int selectCount(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search) {
+		return templetMapper.selectCount(orgid, ratio, touchflag, homeflag, publicflag, search);
 	}
 
-	public List<Templet> selectList(String orgid, String touchflag, String homeflag, String search, String start,
-			String length) {
-		return templetMapper.selectList(orgid, touchflag, homeflag, search, start, length);
+	public List<Templet> selectList(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search, String start, String length) {
+		return templetMapper.selectList(orgid, ratio, touchflag, homeflag, publicflag, search, start, length);
 	}
 
 	@Transactional
@@ -103,7 +104,7 @@ public class TempletServiceImpl implements TempletService {
 		templetMapper.insertSelective(templet);
 
 		if (templet.getName().equals("UNKNOWN")) {
-			templet.setName("TEMPLATE-" + templet.getTempletid());
+			templet.setName("TEMPLET-" + templet.getTempletid());
 		}
 		templetMapper.updateByPrimaryKeySelective(templet);
 
@@ -165,7 +166,6 @@ public class TempletServiceImpl implements TempletService {
 			templet.setName("UNKNOWN");
 		}
 
-		// Handle layout design
 		templetMapper.updateByPrimaryKeySelective(templet);
 		int templetid = templet.getTempletid();
 		List<Templetdtl> templetdtls = templet.getTempletdtls();

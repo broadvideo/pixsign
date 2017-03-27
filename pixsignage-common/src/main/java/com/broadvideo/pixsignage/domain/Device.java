@@ -6,9 +6,6 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Device {
-	public final static String Type_Sign = "1";
-	public final static String Type_Multisign = "2";
-
 	private Integer deviceid;
 
 	private Integer orgid;

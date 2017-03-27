@@ -50,7 +50,6 @@ public class OrgAction extends BaseDatatableAction {
 			org.setCreatestaffid(getLoginStaff().getStaffid());
 			org.setVspid(getLoginStaff().getVspid());
 			org.setCurrentdevices(0);
-			org.setCurrentmdevices(0);
 			org.setCurrentstorage((long) 0);
 			orgService.addOrg(org);
 			return SUCCESS;

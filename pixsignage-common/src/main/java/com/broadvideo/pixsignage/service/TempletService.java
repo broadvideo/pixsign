@@ -7,10 +7,11 @@ import com.broadvideo.pixsignage.domain.Templet;
 public interface TempletService {
 	public Templet selectByPrimaryKey(String templetid);
 
-	public int selectCount(String orgid, String touchflag, String homeflag, String search);
+	public int selectCount(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search);
 
-	public List<Templet> selectList(String orgid, String touchflag, String homeflag, String search, String start,
-			String length);
+	public List<Templet> selectList(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search, String start, String length);
 
 	public void addTemplet(Templet templet);
 

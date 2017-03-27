@@ -40,7 +40,7 @@ response.setDateHeader("Expires",0);
 <%@ include file="/common/common2.jsp"%>
 
 		<div id="PlaylogModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-full">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -165,7 +165,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-playlog.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-playlog.js?t=4"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

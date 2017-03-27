@@ -19,7 +19,7 @@ public interface BundleService {
 	public List<Bundle> selectList(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
 			String search, String start, String length);
 
-	public void addBundle(Bundle bundle);
+	public void addBundle(Bundle bundle) throws Exception;
 
 	public void updateBundle(Bundle bundle);
 
@@ -33,7 +33,7 @@ public interface BundleService {
 
 	public void addBundleschedules(Bundleschedule[] bundleschedules);
 
-	public void syncBundleByLayout(String layoutid) throws Exception;
+	public void syncBundleByTemplet(String templetid) throws Exception;
 
 	public void syncBundle(String bundleid) throws Exception;
 

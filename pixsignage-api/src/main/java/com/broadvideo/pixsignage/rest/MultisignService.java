@@ -104,8 +104,6 @@ public class MultisignService {
 			device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
 				return handleResult(1004, "无效终端号" + terminalid);
-			} else if (!device.getType().equals(Device.Type_Multisign)) {
-				return handleResult(1010, "终端类型不匹配");
 			} else if (device.getStatus().equals("1") && device.getHardkey() != null
 					&& !device.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");

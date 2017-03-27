@@ -210,6 +210,8 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jwplayer/jwplayer.js"></script>
+<script src="${static_ctx}/global/plugins/jwplayer/jwpsrv.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>

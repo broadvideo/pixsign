@@ -20,39 +20,34 @@ var RegionRatios = [];
 RegionRatios['10'] = 0.8333; //5:6
 RegionRatios['11'] = 1.7699; //1000:565
 
-var CurrentLayoutid = 0;
-var CurrentLayout;
-var CurrentLayoutdtl;
-var TempRegions;
-
-function redrawLayout(div, layout, layoutdtl) {
+function redrawLayout(div, bundle, bundledtl) {
 	div.empty();
 	div.css('position', 'relative');
 	div.css('margin-left', 'auto');
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
-	if (layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	if (bundle.bgimage != null) {
+		div.append('<img class="bundle-bg" src="/pixsigdata' + bundle.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
-	for (var i=0; i<layout.layoutdtls.length; i++) {
-		div.append('<div id="LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid + '"></div>');
-		if (layoutdtl != null && layoutdtl.layoutdtlid == layout.layoutdtls[i].layoutdtlid) {
-			redrawLayoutdtl($('#LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid), layout, layout.layoutdtls[i], true);
+	for (var i=0; i<bundle.bundledtls.length; i++) {
+		div.append('<div id="LayoutdtlDiv' + bundle.bundledtls[i].bundledtlid + '"></div>');
+		if (bundledtl != null && bundledtl.bundledtlid == bundle.bundledtls[i].bundledtlid) {
+			redrawLayoutdtl($('#LayoutdtlDiv' + bundle.bundledtls[i].bundledtlid), bundle, bundle.bundledtls[i], true);
 		} else {
-			redrawLayoutdtl($('#LayoutdtlDiv' + layout.layoutdtls[i].layoutdtlid), layout, layout.layoutdtls[i], false);
+			redrawLayoutdtl($('#LayoutdtlDiv' + bundle.bundledtls[i].bundledtlid), bundle, bundle.bundledtls[i], false);
 		}
 	}
 	var width = Math.floor(div.parent().width());
-	var scale = layout.width / width;
-	var height = layout.height / scale;
+	var scale = bundle.width / width;
+	var height = bundle.height / scale;
 	div.css('width' , width);
 	div.css('height' , height);
-	$(div).find('.layout-font').each(function() {
-		var layoutdtl = layout.layoutdtls[$(this).attr('layoutdtlindex')];
-		var fontsize = layoutdtl.size * layoutdtl.height / 100 / scale;
+	$(div).find('.bundle-font').each(function() {
+		var bundledtl = bundle.bundledtls[$(this).attr('bundledtlindex')];
+		var fontsize = bundledtl.size * bundledtl.height / 100 / scale;
 		var text = $(this).html();
 		$(this).css('font-size', fontsize + 'px');
-		$(this).css('line-height', layoutdtl.height / scale + 'px');
+		$(this).css('line-height', bundledtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
 			$(this).find('img').each(function() {
@@ -67,91 +62,111 @@ function redrawLayout(div, layout, layoutdtl) {
 	});
 }
 
-function redrawLayoutdtl(div, layout, layoutdtl, selected) {
+function redrawLayoutdtl(div, bundle, bundledtl, selected) {
 	div.empty();
 	div.attr("class", "region ui-draggable ui-resizable");
-	div.attr('layoutdtlid', layoutdtl.layoutdtlid);
+	div.attr('bundledtlid', bundledtl.bundledtlid);
 	div.css('position', 'absolute');
-	div.css('width', 100*layoutdtl.width/layout.width + '%');
-	div.css('height', 100*layoutdtl.height/layout.height + '%');
-	div.css('top', 100*layoutdtl.topoffset/layout.height + '%');
-	div.css('left', 100*layoutdtl.leftoffset/layout.width + '%');
-	var layoutdtlhtml = '';
+	div.css('width', 100*bundledtl.width/bundle.width + '%');
+	div.css('height', 100*bundledtl.height/bundle.height + '%');
+	div.css('top', 100*bundledtl.topoffset/bundle.height + '%');
+	div.css('left', 100*bundledtl.leftoffset/bundle.width + '%');
+	var bundledtlhtml = '';
 	var border = '1px solid #000000';
 	if (selected) {
 		border = '3px solid #FF0000';
 	}
-	var bgcolor = layoutdtl.bgcolor;
+	var bgcolor = bundledtl.bgcolor;
 	var bgimage = '';
-	if (layoutdtl.bgimage != null) {
-		bgimage = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
-	} else if (layoutdtl.mainflag == 1) {
+	if (bundledtl.bgimage != null) {
+		bgimage = '/pixsigdata' + bundledtl.bgimage.thumbnail;
+	} else if (bundledtl.mainflag == 1) {
 		bgimage = '../img/region/region-play-main.jpg';
-	} else if (layoutdtl.type == '0') {
+	} else if (bundledtl.type == 0) {
 		bgimage = '../img/region/region-play.jpg';
-	} else if (layoutdtl.type == '4') {
+	} else if (bundledtl.type == 4) {
 		bgimage = '../img/region/region-videoin.jpg';
-	} else if (layoutdtl.type == '5') {
+	} else if (bundledtl.type == 5) {
 		bgimage = '../img/region/region-dvb.jpg';
-	} else if (layoutdtl.type == '6') {
+	} else if (bundledtl.type == 6) {
 		bgimage = '../img/region/region-stream.jpg';
-	} else if (layoutdtl.type == '8') {
-		if (layoutdtl.width > layoutdtl.height) {
+	} else if (bundledtl.type == 8) {
+		if (bundledtl.width > bundledtl.height) {
 			bgimage = '../img/region/region-navigate-h.jpg';
 		} else {
 			bgimage = '../img/region/region-navigate-v.jpg';
 		}
-	} else if (layoutdtl.type == '9') {
+	} else if (bundledtl.type == 9) {
 		bgimage = '../img/region/region-qrcode.jpg';
 	}
-	var layoutdtlindex = layout.layoutdtls.indexOf(layoutdtl);
-
-	layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + layoutdtl.opacity/255 + '; "></div>';
-	if (layoutdtl.type == '0' || layoutdtl.type == '4' || layoutdtl.type == '5' || layoutdtl.type == '6' || layoutdtl.type == '8' || layoutdtl.type == '9') {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == '1') {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (layoutdtl.direction == '4') {
-			layoutdtlhtml += '<marquee class="layout-font" layoutdtlindex="' + layoutdtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + layoutdtl.color + '; font-size:12px; ">';
-			layoutdtlhtml += '滚动文本';
-			layoutdtlhtml += '</marquee>';
-		} else {
-			layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-			layoutdtlhtml += '静止文本';
-			layoutdtlhtml += '</p>';
+	if (bundledtl.type == 0) {
+		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
+			var medialistdtl = bundledtl.medialist.medialistdtls[0];
+			if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
+				bgimage = '/pixsigdata' + medialistdtl.video.thumbnail;
+			} else if (medialistdtl.objtype == 2 && medialistdtl.image.filename != null) {
+				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
+			}
+		} else if (bundledtl.objtype == 5) {
+			bgimage = '../img/region/region-widget.jpg';
 		}
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == '2') {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += new Date().pattern(layoutdtl.dateformat);
-		layoutdtlhtml += '</p>';
-		layoutdtlhtml += '</div>';
-	} else if (layoutdtl.type == '3') {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		layoutdtlhtml += '<div class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
-		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
-		layoutdtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
-		layoutdtlhtml += '</div>';
-		layoutdtlhtml += '</div>';
-	} else {
-		layoutdtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (bgimage != '') {
-			layoutdtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
-		layoutdtlhtml += '<p class="layout-font" layoutdtlindex="' + layoutdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + layoutdtl.color + '; font-size:12px; ">';
-		layoutdtlhtml += eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type);
-		layoutdtlhtml += '</p>';
-		layoutdtlhtml += '</div>';
 	}
 
-	layoutdtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
-	layoutdtlhtml += '<label class="btn btn-circle btn-default btn-xs">' + eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type) + '</label>';
-	layoutdtlhtml += '</div>';
-	div.html(layoutdtlhtml);
+	var bundledtlindex = bundle.bundledtls.indexOf(bundledtl);
+
+	bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
+	if (bundledtl.type == '0' || bundledtl.type == '4' || bundledtl.type == '5' || bundledtl.type == '6' || bundledtl.type == '8' || bundledtl.type == '9') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		bundledtlhtml += '</div>';
+	} else if (bundledtl.type == 1) {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		var text = bundledtl.text.text;
+		if (bundledtl.direction == '4') {
+			if (text == '') {
+				text = '滚动文本';
+			}
+			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.color + '; font-size:12px; ">';
+			bundledtlhtml += text;
+			bundledtlhtml += '</marquee>';
+		} else {
+			if (text == '') {
+				text = '静止文本';
+			}
+			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+			bundledtlhtml += text;
+			bundledtlhtml += '</p>';
+		}
+		bundledtlhtml += '</div>';
+	} else if (bundledtl.type == '2') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += new Date().pattern(bundledtl.dateformat);
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	} else if (bundledtl.type == '3') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
+		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
+		bundledtlhtml += '</div>';
+		bundledtlhtml += '</div>';
+	} else {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+		if (bgimage != '') {
+			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type);
+		bundledtlhtml += '</p>';
+		bundledtlhtml += '</div>';
+	}
+
+	bundledtlhtml += '<div class="btn-group" style="z-index:50; opacity:0.5; ">';
+	bundledtlhtml += '<label class="btn btn-circle btn-default btn-xs">' + eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type) + '</label>';
+	bundledtlhtml += '</div>';
+	div.html(bundledtlhtml);
 
 	div.draggable({
 		containment: div.parent(),
@@ -162,7 +177,7 @@ function redrawLayoutdtl(div, layout, layoutdtl, selected) {
 		minWidth: 25,
 		minHeight: 25,
 		stop: function(e, ui) {
-			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+			redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 		},
 		resize: regionPositionUpdate
 	});
@@ -219,8 +234,8 @@ function refreshLayoutBgImageSelect1(folderid) {
 			return html;
 		},
 		initSelection: function(element, callback) {
-			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
+			if (CurrentBundle != null && CurrentBundle.bgimage != null) {
+				callback({id: CurrentBundle.bgimage.imageid, text: CurrentBundle.bgimage.name, image: CurrentBundle.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -279,8 +294,9 @@ function refreshLayoutBgImageSelect2(folderid) {
 			return html;
 		},
 		initSelection: function(element, callback) {
-			if (CurrentLayout != null && CurrentLayout.bgimage != null) {
-				callback({id: CurrentLayout.bgimage.imageid, text: CurrentLayout.bgimage.name, image: CurrentLayout.bgimage });
+			if (CurrentBundle != null && CurrentBundle.bgimage != null) {
+				console.log(CurrentBundle.bgimage);
+				callback({id: CurrentBundle.bgimage.imageid, text: CurrentBundle.bgimage.name, image: CurrentBundle.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -339,8 +355,8 @@ function refreshRegionBgImageSelect(folderid) {
 			return html;
 		},
 		initSelection: function(element, callback) {
-			if (CurrentLayoutdtl != null && CurrentLayoutdtl.bgimage != null) {
-				callback({id: CurrentLayoutdtl.bgimage.imageid, text: CurrentLayoutdtl.bgimage.name, image: CurrentLayoutdtl.bgimage });
+			if (CurrentBundledtl != null && CurrentBundledtl.bgimage != null) {
+				callback({id: CurrentBundledtl.bgimage.imageid, text: CurrentBundledtl.bgimage.name, image: CurrentBundledtl.bgimage });
 			}
 		},
 		dropdownCssClass: "bigdrop", 
@@ -437,19 +453,19 @@ function refreshAnimationSelect() {
 }
 
 function regionPositionUpdate(e, ui) {
-	var layoutdtlid = $(this).attr("layoutdtlid");
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-		return el.layoutdtlid == layoutdtlid;
+	var bundledtlid = $(this).attr("bundledtlid");
+	var bundledtls = CurrentBundle.bundledtls.filter(function (el) {
+		return el.bundledtlid == bundledtlid;
 	});
 
 	var l = $(this).position().left / $('#LayoutDiv').width();
 	var t = $(this).position().top / $('#LayoutDiv').height();
-	if (RegionRatios[layoutdtls[0].type] != undefined) {
+	if (RegionRatios[bundledtls[0].type] != undefined) {
 		var w = $(this).width() / $('#LayoutDiv').width();
-		var h = $(this).width() / parseFloat(RegionRatios[layoutdtls[0].type]) / $('#LayoutDiv').height();
+		var h = $(this).width() / parseFloat(RegionRatios[bundledtls[0].type]) / $('#LayoutDiv').height();
 		if (t + h > 1) {
 			h = 1 - t;
-			w = h * $('#LayoutDiv').height() * parseFloat(RegionRatios[layoutdtls[0].type]) / $('#LayoutDiv').width();
+			w = h * $('#LayoutDiv').height() * parseFloat(RegionRatios[bundledtls[0].type]) / $('#LayoutDiv').width();
 		}
 	} else {
 		var w = $(this).width() / $('#LayoutDiv').width();
@@ -460,36 +476,15 @@ function regionPositionUpdate(e, ui) {
 	$(this).css("left" , (100 * parseFloat(l)) + '%');
 	$(this).css("top" , (100 * parseFloat(t)) + '%');
 
-	layoutdtls[0].width = Math.round(CurrentLayout.width * w, 0);
-	layoutdtls[0].height = Math.round(CurrentLayout.height * h, 0);
-	layoutdtls[0].leftoffset = Math.round(CurrentLayout.width * l, 0);
-	layoutdtls[0].topoffset = Math.round(CurrentLayout.height * t, 0);
+	bundledtls[0].width = Math.round(CurrentBundle.width * w, 0);
+	bundledtls[0].height = Math.round(CurrentBundle.height * h, 0);
+	bundledtls[0].leftoffset = Math.round(CurrentBundle.width * l, 0);
+	bundledtls[0].topoffset = Math.round(CurrentBundle.height * t, 0);
 
-	if (CurrentLayoutdtl != null && layoutdtls[0].layoutdtlid == CurrentLayoutdtl.layoutdtlid) {
+	if (CurrentBundledtl != null && bundledtls[0].bundledtlid == CurrentBundledtl.bundledtlid) {
 		refreshSpinners();
 	}
 }
-
-/*
-function updateRegionBtns() {
-	var regionbtnhtml = '';
-	regionbtnhtml += '<a class="btn default btn-sm yellow" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-plus"></i> ' + common.view.addregion + '  <i class="fa fa-angle-down"></i></a>';
-	regionbtnhtml += '<ul class="dropdown-menu pull-right">';
-	for (var i=0; i<TempRegions.length; i++) {
-		var region = TempRegions[i];
-		var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
-			return el.regionid == region.regionid;
-		});
-		if (layoutdtls.length > 0) {
-			regionbtnhtml += '<li><a href="javascript:;" data-id="" class="btn-sm disabled-link"><span class="disable-target">'+ region.name + ' </span></a></li>';
-		} else {
-			regionbtnhtml += '<li><a href="javascript:;" data-id="' + i + '" class="btn-sm pix-addregion"> '+ region.name + '</a></li>';
-		}
-	}
-	regionbtnhtml += '</ul>';
-	$('#RegionBtn').empty();
-	$('#RegionBtn').append(regionbtnhtml);
-}*/
 
 function updateRegionBtns() {
 	updateRegionBtn('0');
@@ -511,10 +506,10 @@ function updateRegionBtns() {
 }
 
 function updateRegionBtn(regiontype) {
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+	var bundledtls = CurrentBundle.bundledtls.filter(function (el) {
 		return el.type == regiontype;
 	});
-	if (RegionLimits[regiontype] > layoutdtls.length) {
+	if (RegionLimits[regiontype] > bundledtls.length) {
 		$('.pix-addregion[regiontype="' + regiontype + '"]').removeClass('disabled');
 		$('.pix-addregion[regiontype="' + regiontype + '"]').removeClass('default');
 		$('.pix-addregion[regiontype="' + regiontype + '"]').addClass('yellow');
@@ -530,10 +525,10 @@ function refreshSpinners() {
 	$('#spinner-y').spinner();
 	$('#spinner-w').spinner();
 	$('#spinner-h').spinner();
-	$('#spinner-x').spinner('setting', {value:parseInt(CurrentLayoutdtl.leftoffset), step: 1, min: 0, max: parseInt(CurrentLayout.width)-parseInt(CurrentLayoutdtl.width)});
-	$('#spinner-y').spinner('setting', {value:parseInt(CurrentLayoutdtl.topoffset), step: 1, min: 0, max: parseInt(CurrentLayout.height)-parseInt(CurrentLayoutdtl.height)});
-	$('#spinner-w').spinner('setting', {value:parseInt(CurrentLayoutdtl.width), step: 1, min: 1, max: parseInt(CurrentLayout.width)-parseInt(CurrentLayoutdtl.leftoffset)});
-	$('#spinner-h').spinner('setting', {value:parseInt(CurrentLayoutdtl.height), step: 1, min: 1, max: parseInt(CurrentLayout.height)-parseInt(CurrentLayoutdtl.topoffset)});
+	$('#spinner-x').spinner('setting', {value:parseInt(CurrentBundledtl.leftoffset), step: 1, min: 0, max: parseInt(CurrentBundle.width)-parseInt(CurrentBundledtl.width)});
+	$('#spinner-y').spinner('setting', {value:parseInt(CurrentBundledtl.topoffset), step: 1, min: 0, max: parseInt(CurrentBundle.height)-parseInt(CurrentBundledtl.height)});
+	$('#spinner-w').spinner('setting', {value:parseInt(CurrentBundledtl.width), step: 1, min: 1, max: parseInt(CurrentBundle.width)-parseInt(CurrentBundledtl.leftoffset)});
+	$('#spinner-h').spinner('setting', {value:parseInt(CurrentBundledtl.height), step: 1, min: 1, max: parseInt(CurrentBundle.height)-parseInt(CurrentBundledtl.topoffset)});
 }
 
 
@@ -541,73 +536,72 @@ FormValidateOption.rules = {};
 FormValidateOption.rules['name'] = {};
 FormValidateOption.rules['name']['required'] = true;
 FormValidateOption.rules['name']['minlength'] = 2;
-$('#LayoutEditForm').validate(FormValidateOption);
+$('#BundleOptionForm').validate(FormValidateOption);
 
-function validLayout(layout) {
-	if ($('#LayoutEditForm').valid()) {
+function validBundleOption(bundle) {
+	if ($('#BundleOptionForm').valid()) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		layout.name = $('#LayoutEditForm input[name=name]').attr('value');
-		layout.type = $('#LayoutEditForm input[name=type]:checked').attr('value');
+		bundle.name = $('#BundleOptionForm input[name=name]').attr('value');
+		bundle.homeidletime = $('#BundleOptionForm input[name=homeidletime]').attr('value');
 		if ($('#LayoutBgImageSelect2').select2('data') != null) {
-			layout.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
-			layout.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
+			bundle.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
+			bundle.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
 		}
-		layout.description = $('#LayoutEditForm textarea').val();
+		bundle.description = $('#BundleOptionForm textarea').val();
 		return true;
 	}
 	return false;
 }
 
-function validLayoutdtl(layoutdtl) {
+function validLayoutdtl(bundledtl) {
 	if ($('#LayoutdtlEditForm').valid()) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		layoutdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
-		layoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
-		layoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
-		layoutdtl.animation =  $('#AnimationSelect').select2('val');
-		layoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
-		layoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
-		layoutdtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
-		layoutdtl.speed = $('#LayoutdtlEditForm input[name=speed]:checked').attr('value');
-		layoutdtl.color = $('#LayoutdtlEditForm input[name=color]').attr('value');
-		layoutdtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
-		layoutdtl.dateformat = $('#LayoutdtlEditForm select[name=dateformat]').val();
+		bundledtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
+		bundledtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
+		bundledtl.animation =  $('#AnimationSelect').select2('val');
+		bundledtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
+		bundledtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
+		bundledtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
+		bundledtl.speed = $('#LayoutdtlEditForm input[name=speed]:checked').attr('value');
+		bundledtl.color = $('#LayoutdtlEditForm input[name=color]').attr('value');
+		bundledtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
+		bundledtl.dateformat = $('#LayoutdtlEditForm select[name=dateformat]').val();
 
 		if ($('#RegionBgImageSelect').select2('data') != null) {
-			layoutdtl.bgimageid =  $('#RegionBgImageSelect').select2('data').id;
-			layoutdtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
+			bundledtl.bgimageid =  $('#RegionBgImageSelect').select2('data').id;
+			bundledtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
 		}
-		layoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
-		layoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
-		layoutdtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
+		bundledtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
+		bundledtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
+		bundledtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
 
 		return true;
 	}
 	return false;
 }
 
-function enterLayoutdtlFocus(layoutdtl) {
-	redrawLayout($('#LayoutDiv'), CurrentLayout, layoutdtl);
+function enterLayoutdtlFocus(bundledtl) {
+	redrawLayout($('#LayoutDiv'), CurrentBundle, bundledtl);
 	$('#LayoutEditForm').css('display' , 'none');
 	$('#LayoutdtlEditForm').css('display' , 'block');
-	$('.layoutdtl-title').html(eval('common.view.region_mainflag_' + layoutdtl.mainflag) + eval('common.view.region_type_' + layoutdtl.type));
-	$('.layout-ctl').css("display", "none");
-	$('.regiontype-' + layoutdtl.type).css("display", "block");
+	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type));
+	$('.bundle-ctl').css("display", "none");
+	$('.regiontype-' + bundledtl.type).css("display", "block");
 
-	$('#LayoutdtlEditForm').loadJSON(layoutdtl);
+	$('#LayoutdtlEditForm').loadJSON(bundledtl);
 	//$('.colorPick').colorpicker();
-	//$('.colorPick').colorpicker('setValue', layoutdtl.color);
+	//$('.colorPick').colorpicker('setValue', bundledtl.color);
 	//$('.bgcolorPick').colorpicker();
-	//$('.bgcolorPick').colorpicker('setValue', layoutdtl.bgcolor);
+	//$('.bgcolorPick').colorpicker('setValue', bundledtl.bgcolor);
 	
 	$('.colorPick').wColorPicker({
 	    theme           : 'classic',  // set theme
 	    opacity         : 0.8,        // opacity level
-	    color           : layoutdtl.color,  // set init color
+	    color           : bundledtl.color,  // set init color
 	    mode            : 'click',     // mode for palette (flat, hover, click)
 	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
 	    generateButton  : false,       // if mode not flat generate button or not
@@ -621,18 +615,18 @@ function enterLayoutdtlFocus(layoutdtl) {
 	    	if (color.indexOf('#') == 0) {
 		        $(".colorPick i").css('background', color);
 		        $(".colorPick input").val(color);
-		        CurrentLayoutdtl.color = color;
-		        redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+		        CurrentBundledtl.color = color;
+		        redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 	    	}
 	    },
 	    onDropper       : null        // callback when dropper is clicked
 	});
-    $(".colorPick i").css('background', layoutdtl.color);
-    $(".colorPick input").val(layoutdtl.color);
+    $(".colorPick i").css('background', bundledtl.color);
+    $(".colorPick input").val(bundledtl.color);
 	$('.bgcolorPick').wColorPicker({
 	    theme           : 'classic',  // set theme
 	    opacity         : 0.8,        // opacity level
-	    color           : layoutdtl.bgcolor,  // set init color
+	    color           : bundledtl.bgcolor,  // set init color
 	    mode            : 'click',     // mode for palette (flat, hover, click)
 	    position        : 'br',       // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
 	    generateButton  : false,       // if mode not flat generate button or not
@@ -646,14 +640,14 @@ function enterLayoutdtlFocus(layoutdtl) {
 	    	if (color.indexOf('#') == 0) {
 		        $(".bgcolorPick i").css('background', color);
 		        $(".bgcolorPick input").val(color);
-		        CurrentLayoutdtl.bgcolor = color;
-		        redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+		        CurrentBundledtl.bgcolor = color;
+		        redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 	    	}
 	    },
 	    onDropper       : null        // callback when dropper is clicked
 	});
-    $(".bgcolorPick i").css('background', layoutdtl.bgcolor);
-    $(".bgcolorPick input").val(layoutdtl.bgcolor);
+    $(".bgcolorPick i").css('background', bundledtl.bgcolor);
+    $(".bgcolorPick input").val(bundledtl.bgcolor);
 	
 	$(".intervalRange").ionRangeSlider({
 		min: 5,
@@ -664,7 +658,7 @@ function enterLayoutdtlFocus(layoutdtl) {
 		hasGrid: false
 	});
 	$(".intervalRange").ionRangeSlider("update", {
-		from: layoutdtl.intervaltime
+		from: bundledtl.intervaltime
 	});
 	$(".sleepRange").ionRangeSlider({
 		min: 0,
@@ -675,7 +669,7 @@ function enterLayoutdtlFocus(layoutdtl) {
 		hasGrid: false
 	});
 	$(".sleepRange").ionRangeSlider("update", {
-		from: layoutdtl.sleeptime
+		from: bundledtl.sleeptime
 	});
 	$(".sizeRange").ionRangeSlider({
 		min: 10,
@@ -685,12 +679,12 @@ function enterLayoutdtlFocus(layoutdtl) {
 		step: 10,
 		hasGrid: false,
 		onChange: function(data) {
-			CurrentLayoutdtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
-			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+			CurrentBundledtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
+			redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 		}
 	});
 	$(".sizeRange").ionRangeSlider("update", {
-		from: layoutdtl.size
+		from: bundledtl.size
 	});
 	$(".volumeRange").ionRangeSlider({
 		min: 0,
@@ -701,7 +695,7 @@ function enterLayoutdtlFocus(layoutdtl) {
 		hasGrid: false
 	});
 	$(".volumeRange").ionRangeSlider("update", {
-		from: layoutdtl.volume
+		from: bundledtl.volume
 	});
 	$(".opacityRange").ionRangeSlider({
 		min: 0,
@@ -711,108 +705,106 @@ function enterLayoutdtlFocus(layoutdtl) {
 		step: 5,
 		hasGrid: false,
 		onChange: function(data) {
-			CurrentLayoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
-			redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+			CurrentBundledtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
+			redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 		}
 	});
 	$(".opacityRange").ionRangeSlider("update", {
-		from: layoutdtl.opacity
+		from: bundledtl.opacity
 	});
 	refreshSpinners();
 	refreshRegionBgImageSelect();
 	refreshAnimationSelect();
-	$('#AnimationSelect').select2('val', layoutdtl.animation);
+	$('#AnimationSelect').select2('val', bundledtl.animation);
 }
 
 $('#LayoutDiv').click(function(e){
-	var scale = CurrentLayout.width / $('#LayoutDiv').width();
+	var scale = CurrentBundle.width / $('#LayoutDiv').width();
 	var offset = $(this).offset();
 	var posX = (e.pageX - offset.left) * scale;
 	var posY = (e.pageY - offset.top) * scale;
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+	var bundledtls = CurrentBundle.bundledtls.filter(function (el) {
 		var width = parseInt(el.width);
 		var height = parseInt(el.height);
 		var leftoffset = parseInt(el.leftoffset);
 		var topoffset = parseInt(el.topoffset);
 		return (posX > leftoffset) && (posX < (leftoffset + width)) && (posY > topoffset) && (posY < (topoffset + height));
 	});
-	if (layoutdtls.length > 0) {
-		layoutdtls.sort(function(a, b) {
+	if (bundledtls.length > 0) {
+		bundledtls.sort(function(a, b) {
 			return (a.width + a.height - b.width - b.height);
 		});
 
-		if (CurrentLayoutdtl == null && validLayout(CurrentLayout) || CurrentLayoutdtl != null && validLayoutdtl(CurrentLayoutdtl)) {
-			//CurrentLayoutdtl = layoutdtls[0];
+		if (validLayoutdtl(CurrentBundledtl)) {
 			var index = 10000;
-			for (var i=0; i<layoutdtls.length; i++) {
-				if (CurrentLayoutdtl != null && CurrentLayoutdtl.layoutdtlid == layoutdtls[i].layoutdtlid) {
+			for (var i=0; i<bundledtls.length; i++) {
+				if (CurrentBundledtl != null && CurrentBundledtl.bundledtlid == bundledtls[i].bundledtlid) {
 					index = i;
 					break;
 				}
 			}
-			var oldLayoutdtl = CurrentLayoutdtl;
-			if (index >= (layoutdtls.length -1)) {
-				CurrentLayoutdtl = layoutdtls[0];
+			var oldLayoutdtl = CurrentBundledtl;
+			if (index >= (bundledtls.length -1)) {
+				CurrentBundledtl = bundledtls[0];
 			} else {
-				CurrentLayoutdtl = layoutdtls[index+1];
+				CurrentBundledtl = bundledtls[index+1];
 			}
-			enterLayoutdtlFocus(CurrentLayoutdtl);
+			enterLayoutdtlFocus(CurrentBundledtl);
 		}
 	}
 });
 
 $('#RegionBgImageSelect').on('change', function(e) {
 	if ($('#RegionBgImageSelect').select2('data') != null) {
-		CurrentLayoutdtl.bgimageid = $('#RegionBgImageSelect').select2('data').id;
-		CurrentLayoutdtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
+		CurrentBundledtl.bgimageid = $('#RegionBgImageSelect').select2('data').id;
+		CurrentBundledtl.bgimage = $('#RegionBgImageSelect').select2('data').image;
 	}
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 });	
 $('#RegionBgImageRemove').on('click', function(e) {
 	$('#RegionBgImageSelect').select2('val', '');
-	CurrentLayoutdtl.bgimageid = 0;
-	CurrentLayoutdtl.bgimage = null;
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	CurrentBundledtl.bgimageid = 0;
+	CurrentBundledtl.bgimage = null;
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 });	
 
 $('#LayoutBgImageSelect2').on('change', function(e) {
 	if ($('#LayoutBgImageSelect2').select2('data') != null) {
-		CurrentLayout.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
-		CurrentLayout.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
+		CurrentBundle.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
+		CurrentBundle.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
 	}
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 });	
 $('#LayoutBgImageRemove').on('click', function(e) {
 	$('#LayoutBgImageSelect2').select2('val', '');
-	CurrentLayout.bgimageid = 0;
-	CurrentLayout.bgimage = null;
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	CurrentBundle.bgimageid = 0;
+	CurrentBundle.bgimage = null;
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 });	
 
 $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
-	CurrentLayoutdtl.leftoffset = $('#spinner-x').spinner('value');
-	CurrentLayoutdtl.topoffset = $('#spinner-y').spinner('value');
-	CurrentLayoutdtl.width = $('#spinner-w').spinner('value');
-	CurrentLayoutdtl.height = $('#spinner-h').spinner('value');
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	CurrentBundledtl.leftoffset = $('#spinner-x').spinner('value');
+	CurrentBundledtl.topoffset = $('#spinner-y').spinner('value');
+	CurrentBundledtl.width = $('#spinner-w').spinner('value');
+	CurrentBundledtl.height = $('#spinner-h').spinner('value');
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 	refreshSpinners();
 });	
 
 $('#LayoutdtlEditForm input,select').on('change', function(e) {
-	CurrentLayoutdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
-	CurrentLayoutdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
-	CurrentLayoutdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
-	CurrentLayoutdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
-	CurrentLayoutdtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
-	CurrentLayoutdtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
-	CurrentLayoutdtl.speed = $('#LayoutdtlEditForm input[name=speed]:checked').attr('value');
-	CurrentLayoutdtl.color = $('#LayoutdtlEditForm input[name=color]').attr('value');
-	CurrentLayoutdtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
-	CurrentLayoutdtl.dateformat = $('#LayoutdtlEditForm select[name=dateformat]').val();
-	CurrentLayoutdtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
-	CurrentLayoutdtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
-	CurrentLayoutdtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	CurrentBundledtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
+	CurrentBundledtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
+	CurrentBundledtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
+	CurrentBundledtl.volume = $('#LayoutdtlEditForm input[name=volume]').attr('value');
+	CurrentBundledtl.direction = $('#LayoutdtlEditForm input[name=direction]:checked').attr('value');
+	CurrentBundledtl.speed = $('#LayoutdtlEditForm input[name=speed]:checked').attr('value');
+	CurrentBundledtl.color = $('#LayoutdtlEditForm input[name=color]').attr('value');
+	CurrentBundledtl.size = $('#LayoutdtlEditForm input[name=size]').attr('value');
+	CurrentBundledtl.dateformat = $('#LayoutdtlEditForm select[name=dateformat]').val();
+	CurrentBundledtl.bgcolor = $('#LayoutdtlEditForm input[name=bgcolor]').attr('value');
+	CurrentBundledtl.opacity = $('#LayoutdtlEditForm input[name=opacity]').attr('value');
+	CurrentBundledtl.zindex = $('#LayoutdtlEditForm input[name=zindex]:checked').attr('value');
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 });
 
 //================================设计对话框=========================================
@@ -823,71 +815,115 @@ $('body').on('click', '.pix-addregion', function(event) {
 		regiontype = $(event.target).parent().attr('regiontype');
 	}
 	
-	var layoutdtls = CurrentLayout.layoutdtls.filter(function (el) {
+	var bundledtls = CurrentBundle.bundledtls.filter(function (el) {
 		return el.type == regiontype;
 	});
-	if (RegionLimits[regiontype] <= layoutdtls.length) {
+	if (RegionLimits[regiontype] <= bundledtls.length) {
 		return;
 	}
 	
-	var layoutdtl = {};
-	layoutdtl.layoutdtlid = '-' + Math.round(Math.random()*100000000);
-	layoutdtl.layoutid = CurrentLayoutid;
-	layoutdtl.type = regiontype;
-	layoutdtl.mainflag = 0;
-	layoutdtl.leftoffset = CurrentLayout.height * 0.1;
-	layoutdtl.topoffset = CurrentLayout.width * 0.1;
+	var bundledtl = {};
+	bundledtl.bundledtlid = '-' + Math.round(Math.random()*100000000);
+	bundledtl.bundleid = CurrentBundleid;
+	bundledtl.type = regiontype;
+	bundledtl.mainflag = 0;
+	bundledtl.leftoffset = CurrentBundle.height * 0.1;
+	bundledtl.topoffset = CurrentBundle.width * 0.1;
 	if (RegionRatios[regiontype] != undefined) {
-		layoutdtl.width = CurrentLayout.width * 0.2;
-		layoutdtl.height = CurrentLayout.width * 0.2 / RegionRatios[regiontype];
+		bundledtl.width = CurrentBundle.width * 0.2;
+		bundledtl.height = CurrentBundle.width * 0.2 / RegionRatios[regiontype];
 	} else {
-		layoutdtl.width = CurrentLayout.width * 0.2;
-		layoutdtl.height = CurrentLayout.height * 0.2;
+		bundledtl.width = CurrentBundle.width * 0.2;
+		bundledtl.height = CurrentBundle.height * 0.2;
 	}
-	if (layoutdtl.type == 0) {
-		layoutdtl.zindex = 1;
+	if (bundledtl.type == 0) {
+		bundledtl.zindex = 1;
 	} else {
-		layoutdtl.zindex = 2;
+		bundledtl.zindex = 2;
 	}
-	layoutdtl.bgimageid = 0;
-	layoutdtl.bgcolor = '#FFFFFF';
-	if (CurrentLayout.bgimage != null) {
-		layoutdtl.opacity = 0;
+	bundledtl.bgimageid = 0;
+	bundledtl.bgcolor = '#FFFFFF';
+	if (CurrentBundle.bgimage != null) {
+		bundledtl.opacity = 0;
 	} else {
-		layoutdtl.opacity = 255;
+		bundledtl.opacity = 255;
 	}
-	layoutdtl.calendartype = 1;
-	layoutdtl.sleeptime = 0;
-	layoutdtl.intervaltime = 10;
-	layoutdtl.animation = 'None';
-	layoutdtl.fitflag = 1;
-	layoutdtl.volume = 50;
-	layoutdtl.direction = 4;
-	layoutdtl.speed = 2;
-	layoutdtl.color = '#000000';
-	if (layoutdtl.type == '1' || layoutdtl.type == '2' || layoutdtl.type == '3') {
-		layoutdtl.size = 50;
+	bundledtl.sleeptime = 0;
+	bundledtl.intervaltime = 10;
+	bundledtl.animation = 'None';
+	bundledtl.fitflag = 1;
+	bundledtl.volume = 50;
+	bundledtl.direction = 4;
+	bundledtl.speed = 2;
+	bundledtl.color = '#000000';
+	if (bundledtl.type == '1' || bundledtl.type == '2' || bundledtl.type == '3') {
+		bundledtl.size = 50;
 	} else {
-		layoutdtl.size = 30;
+		bundledtl.size = 30;
 	}
-	layoutdtl.dateformat = 'yyyy-MM-dd HH:mm';
-	CurrentLayout.layoutdtls[CurrentLayout.layoutdtls.length] = layoutdtl;
+	bundledtl.dateformat = 'yyyy-MM-dd HH:mm';
+
+	if (bundledtl.type == 0) {
+		bundledtl.objtype = 1;
+		bundledtl.medialist = {};
+		bundledtl.medialist.medialistid = 0;
+		bundledtl.medialist.medialistdtls = [];
+		bundledtl.medialist.name = '';
+		bundledtl.medialist0 = bundledtl.medialist;
+		bundledtl.widget = {};
+		bundledtl.widget.widgetid = 0;
+		bundledtl.widget.name = '';
+		bundledtl.widget.url = '';
+		bundledtl.widget0 = bundledtl.widget;
+	} else if (bundledtl.type == 1) {
+		bundledtl.objtype = 2;
+		bundledtl.text = {};
+		bundledtl.text.textid = 0;
+		bundledtl.text.name = '';
+		bundledtl.text.text = '';
+		bundledtl.text0 = bundledtl.text;
+	} else if (bundledtl.type == 5) {
+		bundledtl.objtype = 6;
+	} else if (bundledtl.type == 6) {
+		bundledtl.objtype = 1;
+		bundledtl.medialist = {};
+		bundledtl.medialist.medialistid = 0;
+		bundledtl.medialist.medialistdtls = [];
+		bundledtl.medialist.name = '';
+		bundledtl.medialist0 = bundledtl.medialist;
+	} else if (bundledtl.type == 7) {
+		bundledtl.touchtype = 1;
+		bundledtl.objtype = 0;
+	} else if (bundledtl.type == 12) {
+		bundledtl.objtype = 7;
+		bundledtl.rss = {};
+		bundledtl.rss.rssid = 0;
+		bundledtl.rss.name = '';
+		bundledtl.rss.url = '';
+		bundledtl.rss0 = bundledtl.rss;
+	} else {
+		bundledtl.objtype = 0;
+	}
+	bundledtl.referflag = 0;
+	bundledtl.objid = 0;
 	
-	redrawLayout($('#LayoutDiv'), CurrentLayout, CurrentLayoutdtl);
+	CurrentBundle.bundledtls[CurrentBundle.bundledtls.length] = bundledtl;
+	
+	redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 	updateRegionBtns();
 });
 
 $('body').on('click', '.pix-region-delete', function(event) {
-	if (CurrentLayoutdtl.mainflag == 1) {
+	if (CurrentBundledtl.mainflag == 1) {
 		bootbox.alert(common.tips.region_remove_failed);
 		return;
 	}
-	bootbox.confirm(common.tips.remove + eval('common.view.region_type_' + CurrentLayoutdtl.type), function(result) {
+	bootbox.confirm(common.tips.remove + eval('common.view.region_type_' + CurrentBundledtl.type), function(result) {
 		if (result == true) {
-			CurrentLayout.layoutdtls.splice(CurrentLayout.layoutdtls.indexOf(CurrentLayoutdtl), 1);
-			CurrentLayoutdtl = CurrentLayout.layoutdtls[0];
+			CurrentBundle.bundledtls.splice(CurrentBundle.bundledtls.indexOf(CurrentBundledtl), 1);
+			CurrentBundledtl = CurrentBundle.bundledtls[0];
 			updateRegionBtns();
-			enterLayoutdtlFocus(CurrentLayoutdtl);
+			enterLayoutdtlFocus(CurrentBundledtl);
 		}
 	 });
 });

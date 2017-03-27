@@ -41,13 +41,13 @@ function initWizard() {
 				return false;
 			}
 			if (index == 0 && clickedIndex == 1) {
-				if (validTempletOption(CurrentTemplet)) {
+				if (validBundleOption(CurrentBundle)) {
 					initData2();
 				} else {
 					return false;
 				}
 			} else if (index == 1 && clickedIndex == 2) {
-				if (validLayoutdtl(CurrentTempletdtl)) {
+				if (validLayoutdtl(CurrentBundledtl)) {
 					initData3();
 				} else {
 					return false;
@@ -56,13 +56,13 @@ function initWizard() {
 		},
 		onNext: function (tab, navigation, index) {
 			if (index == 1) {
-				if (validTempletOption(CurrentTemplet)) {
+				if (validBundleOption(CurrentBundle)) {
 					initData2();
 				} else {
 					return false;
 				}
 			} else if (index == 2) {
-				if (validLayoutdtl(CurrentTempletdtl)) {
+				if (validLayoutdtl(CurrentBundledtl)) {
 					initData3();
 				} else {
 					return false;
@@ -74,11 +74,11 @@ function initWizard() {
 		onTabShow: function (tab, navigation, index) {
 			handleTitle(tab, navigation, index);
 			if (index == 1) {
-				redrawLayout($('#LayoutDiv'), CurrentTemplet, CurrentTempletdtl);
-				enterLayoutdtlFocus(CurrentTempletdtl);
+				redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
+				enterLayoutdtlFocus(CurrentBundledtl);
 				//initMediaBranchTree();
 			} else if (index == 2) {
-				enterBundledtlFocus(CurrentTempletdtl);
+				enterBundledtlFocus(CurrentBundledtl);
 				$('#IntVideoTable').dataTable()._fnAjaxUpdate();
 			}
 		}
@@ -86,9 +86,11 @@ function initWizard() {
 
 	$('#MyWizard').find('.button-previous').hide();
 	$('#MyWizard .button-submit').click(function () {
-		if (CurrentTempletdtl != null && validBundledtl(CurrentTempletdtl)) {
+		$('#MyWizard .button-submit').attr('disabled', 'true');
+		if (CurrentBundledtl != null && validBundledtl(CurrentBundledtl)) {
 			submitData();
 		}
+		$('#MyWizard .button-submit').removeAttr('disabled');
 	}).hide();
 	
 	$('#MyWizard').bootstrapWizard('first');
@@ -99,7 +101,7 @@ function initTab1() {
 }
 
 function initData1() {
-	$('#TempletOptionForm').loadJSON(CurrentTemplet);
+	$('#BundleOptionForm').loadJSON(CurrentBundle);
 	refreshLayoutBgImageSelect2();
 }
 
@@ -110,7 +112,7 @@ function initTab2() {
 function initData2() {
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	if (CurrentTemplet.width > CurrentTemplet.height) {
+	if (CurrentBundle.width > CurrentBundle.height) {
 		$('#LayoutCol1').attr('class', 'col-md-7 col-sm-7');
 		$('#LayoutCol2').attr('class', 'col-md-5 col-sm-5');
 	} else {
@@ -131,11 +133,11 @@ function initTab3() {
 }
 
 function initData3() {
-	CurrentTempletdtl = CurrentTemplet.templetdtls[0];
+	CurrentBundledtl = CurrentBundle.bundledtls[0];
 
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	if (CurrentTemplet.width > CurrentTemplet.height) {
+	if (CurrentBundle.width > CurrentBundle.height) {
 		$('#BundleCol1').attr('class', 'col-md-3 col-sm-3');
 		$('#BundleCol2').attr('class', 'col-md-9 col-sm-9');
 	} else {
@@ -154,19 +156,23 @@ function submitData() {
 		animate: true
 	});
 	$('#snapshot_div').show();
-	redrawTempletPreview($('#snapshot_div'), CurrentTemplet, 512, 0);
+	redrawBundlePreview($('#snapshot_div'), CurrentBundle, 512, 0);
 	html2canvas($('#snapshot_div'), {
 		onrendered: function(canvas) {
 			//console.log(canvas.toDataURL());
-			CurrentTemplet.snapshotdtl = canvas.toDataURL();
+			CurrentBundle.snapshotdtl = canvas.toDataURL();
 			$('#snapshot_div').hide();
 
-			for (var i=0; i<CurrentTemplet.templetdtls.length; i++) {
-				var templetdtl = CurrentTemplet.templetdtls[i];
-				templetdtl.layoutdtl = undefined;
-				if (templetdtl.medialist != undefined) {
-					for (var j=0; j<templetdtl.medialist.medialistdtls.length; j++) {
-						var medialistdtl = templetdtl.medialist.medialistdtls[j];
+			for (var i=0; i<CurrentBundle.bundledtls.length; i++) {
+				var bundledtl = CurrentBundle.bundledtls[i];
+				bundledtl.medialist0 = undefined;
+				bundledtl.text0 = undefined;
+				bundledtl.widget0 = undefined;
+				bundledtl.stream0 = undefined;
+				bundledtl.rss0 = undefined;
+				if (bundledtl.medialist != undefined) {
+					for (var j=0; j<bundledtl.medialist.medialistdtls.length; j++) {
+						var medialistdtl = bundledtl.medialist.medialistdtls[j];
 						medialistdtl.image = undefined;
 						medialistdtl.video = undefined;
 						medialistdtl.stream = undefined;
@@ -177,14 +183,14 @@ function submitData() {
 			
 			$.ajax({
 				type : 'POST',
-				url : myurls['templet.design'],
-				data : '{"templet":' + $.toJSON(CurrentTemplet) + '}',
+				url : myurls['bundle.design'],
+				data : '{"bundle":' + $.toJSON(CurrentBundle) + '}',
 				dataType : 'json',
 				contentType : 'application/json;charset=utf-8',
 				success : function(data, status) {
 					submitflag = false;
 					Metronic.unblockUI();
-					$('#TempletModal').modal('hide');
+					$('#BundleModal').modal('hide');
 					if (data.errorcode == 0) {
 						bootbox.alert(common.tips.success);
 						$('#MyTable').dataTable()._fnAjaxUpdate();
@@ -195,7 +201,7 @@ function submitData() {
 				error : function() {
 					submitflag = false;
 					Metronic.unblockUI();
-					$('#TempletModal').modal('hide');
+					$('#BundleModal').modal('hide');
 					console.log('failue');
 				}
 			});

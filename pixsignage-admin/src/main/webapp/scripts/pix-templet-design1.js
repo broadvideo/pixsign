@@ -365,65 +365,76 @@ function refreshRegionBgImageSelect(folderid) {
 
 function refreshAnimationSelect() {
 	var animationlist = [
-		{id: 'None', text: 'None'}, 
-		{id: 'Random', text: 'Random'}, 
-		{id: 'DropOut', text: 'DropOut'}, 
-		{id: 'Landing', text: 'Landing'}, 
+		{id: 'None', text: '无'}, 
+		{id: 'Random', text: '随机'}, 
+		{id: 'FadeIn', text: '淡入'}, 
+		{id: 'SlideInLeft', text: '向左平移'}, 
+		{id: 'SlideInRight', text: '向右平移'}, 
+		{id: 'SlideInUp', text: '向下平移'}, 
+		{id: 'SlideInDown', text: '向上平移'}, 
+		{id: 'ZoomIn', text: '放大'}, 
+		{id: 'RotateIn', text: '旋转'}, 
+		{id: 'RotateInUpLeft', text: '旋转2'}, 
+		{id: 'FlipInX', text: '翻转'}, 
+		{id: 'RollIn', text: '翻滚'}, 
+
+//		{id: 'DropOut', text: 'DropOut'}, 
+//		{id: 'Landing', text: 'Landing'}, 
 //		{id: 'TakingOff', text: 'TakingOff'}, 
-		{id: 'Flash', text: 'Flash'}, 
-		{id: 'Pulse', text: 'Pulse'}, 
-		{id: 'RubberBand', text: 'RubberBand'}, 
-		{id: 'Shake', text: 'Shake'}, 
-		{id: 'Swing', text: 'Swing'}, 
-		{id: 'Wobble', text: 'Wobble'}, 
-		{id: 'Bounce', text: 'Bounce'}, 
-		{id: 'Tada', text: 'Tada'}, 
-		{id: 'StandUp', text: 'StandUp'}, 
-		{id: 'Wave', text: 'Wave'}, 
+//		{id: 'Flash', text: 'Flash'}, 
+//		{id: 'Pulse', text: 'Pulse'}, 
+//		{id: 'RubberBand', text: 'RubberBand'}, 
+//		{id: 'Shake', text: 'Shake'}, 
+//		{id: 'Swing', text: 'Swing'}, 
+//		{id: 'Wobble', text: 'Wobble'}, 
+//		{id: 'Bounce', text: 'Bounce'}, 
+//		{id: 'Tada', text: 'Tada'}, 
+//		{id: 'StandUp', text: 'StandUp'}, 
+//		{id: 'Wave', text: 'Wave'}, 
 //		{id: 'Hinge', text: 'Hinge'}, 
-		{id: 'RollIn', text: 'RollIn'}, 
+//		{id: 'RollIn', text: 'RollIn'}, 
 //		{id: 'RollOut', text: 'RollOut'}, 
-		{id: 'BounceIn', text: 'BounceIn'}, 
-		{id: 'BounceInDown', text: 'BounceInDown'}, 
-		{id: 'BounceInLeft', text: 'BounceInLeft'}, 
-		{id: 'BounceInRight', text: 'BounceInRight'}, 
-		{id: 'BounceInUp', text: 'BounceInUp'}, 
-		{id: 'FadeIn', text: 'FadeIn'}, 
-		{id: 'FadeInUp', text: 'FadeInUp'}, 
-		{id: 'FadeInDown', text: 'FadeInDown'}, 
-		{id: 'FadeInLeft', text: 'FadeInLeft'}, 
-		{id: 'FadeInRight', text: 'FadeInRight'}, 
+//		{id: 'BounceIn', text: 'BounceIn'}, 
+//		{id: 'BounceInDown', text: 'BounceInDown'}, 
+//		{id: 'BounceInLeft', text: 'BounceInLeft'}, 
+//		{id: 'BounceInRight', text: 'BounceInRight'}, 
+//		{id: 'BounceInUp', text: 'BounceInUp'}, 
+//		{id: 'FadeIn', text: 'FadeIn'}, 
+//		{id: 'FadeInUp', text: 'FadeInUp'}, 
+//		{id: 'FadeInDown', text: 'FadeInDown'}, 
+//		{id: 'FadeInLeft', text: 'FadeInLeft'}, 
+//		{id: 'FadeInRight', text: 'FadeInRight'}, 
 //		{id: 'FadeOut', text: 'FadeOut'}, 
 //		{id: 'FadeOutDown', text: 'FadeOutDown'}, 
 //		{id: 'FadeOutLeft', text: 'FadeOutLeft'}, 
 //		{id: 'FadeOutRight', text: 'FadeOutRight'}, 
 //		{id: 'FadeOutUp', text: 'FadeOutUp'}, 
-		{id: 'FlipInX', text: 'FlipInX'}, 
+//		{id: 'FlipInX', text: 'FlipInX'}, 
 //		{id: 'FlipOutX', text: 'FlipOutX'}, 
 //		{id: 'FlipOutY', text: 'FlipOutY'}, 
-		{id: 'RotateIn', text: 'RotateIn'}, 
-		{id: 'RotateInDownLeft', text: 'RotateInDownLeft'}, 
-		{id: 'RotateInDownRight', text: 'RotateInDownRight'}, 
-		{id: 'RotateInUpLeft', text: 'RotateInUpLeft'}, 
-		{id: 'RotateInUpRight', text: 'RotateInUpRight'}, 
+//		{id: 'RotateIn', text: 'RotateIn'}, 
+//		{id: 'RotateInDownLeft', text: 'RotateInDownLeft'}, 
+//		{id: 'RotateInDownRight', text: 'RotateInDownRight'}, 
+//		{id: 'RotateInUpLeft', text: 'RotateInUpLeft'}, 
+//		{id: 'RotateInUpRight', text: 'RotateInUpRight'}, 
 //		{id: 'RotateOut', text: 'RotateOut'}, 
 //		{id: 'RotateOutDownLeft', text: 'RotateOutDownLeft'}, 
 //		{id: 'RotateOutDownRight', text: 'RotateOutDownRight'}, 
 //		{id: 'RotateOutUpLeft', text: 'RotateOutUpLeft'}, 
 //		{id: 'RotateOutUpRight', text: 'RotateOutUpRight'}, 
-		{id: 'SlideInLeft', text: 'SlideInLeft'}, 
-		{id: 'SlideInRight', text: 'SlideInRight'}, 
-		{id: 'SlideInUp', text: 'SlideInUp'}, 
-		{id: 'SlideInDown', text: 'SlideInDown'}, 
+//		{id: 'SlideInLeft', text: 'SlideInLeft'}, 
+//		{id: 'SlideInRight', text: 'SlideInRight'}, 
+//		{id: 'SlideInUp', text: 'SlideInUp'}, 
+//		{id: 'SlideInDown', text: 'SlideInDown'}, 
 //		{id: 'SlideOutLeft', text: 'SlideOutLeft'}, 
 //		{id: 'SlideOutRight', text: 'SlideOutRight'}, 
 //		{id: 'SlideOutUp', text: 'SlideOutUp'}, 
 //		{id: 'SlideOutDown', text: 'SlideOutDown'}, 
-		{id: 'ZoomIn', text: 'ZoomIn'}, 
-		{id: 'ZoomInDown', text: 'ZoomInDown'}, 
-		{id: 'ZoomInLeft', text: 'ZoomInLeft'}, 
-		{id: 'ZoomInRight', text: 'ZoomInRight'}, 
-		{id: 'ZoomInUp', text: 'ZoomInUp'}, 
+//		{id: 'ZoomIn', text: 'ZoomIn'}, 
+//		{id: 'ZoomInDown', text: 'ZoomInDown'}, 
+//		{id: 'ZoomInLeft', text: 'ZoomInLeft'}, 
+//		{id: 'ZoomInRight', text: 'ZoomInRight'}, 
+//		{id: 'ZoomInUp', text: 'ZoomInUp'}, 
 //		{id: 'ZoomOut', text: 'ZoomOut'}, 
 //		{id: 'ZoomOutDown', text: 'ZoomOutDown'}, 
 //		{id: 'ZoomOutLeft', text: 'ZoomOutLeft'}, 
@@ -547,7 +558,6 @@ function validLayoutdtl(templetdtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		templetdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
 		templetdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 		templetdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 		templetdtl.animation =  $('#AnimationSelect').select2('val');
@@ -780,7 +790,6 @@ $('#spinner-x,#spinner-y,#spinner-w,#spinner-h').on("change", function(e) {
 });	
 
 $('#LayoutdtlEditForm input,select').on('change', function(e) {
-	CurrentTempletdtl.calendartype = $('#LayoutdtlEditForm input[name=calendartype]:checked').attr('value');
 	CurrentTempletdtl.sleeptime = $('#LayoutdtlEditForm input[name=sleeptime]').attr('value');
 	CurrentTempletdtl.intervaltime = $('#LayoutdtlEditForm input[name=intervaltime]').attr('value');
 	CurrentTempletdtl.fitflag = $('#LayoutdtlEditForm input[name=fitflag]:checked').attr('value');
@@ -837,7 +846,6 @@ $('body').on('click', '.pix-addregion', function(event) {
 	} else {
 		templetdtl.opacity = 255;
 	}
-	templetdtl.calendartype = 1;
 	templetdtl.sleeptime = 0;
 	templetdtl.intervaltime = 10;
 	templetdtl.animation = 'None';

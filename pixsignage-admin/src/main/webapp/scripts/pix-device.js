@@ -94,7 +94,6 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
-			aoData.push({'name':'type','value':'1' });
 			aoData.push({'name':'status','value':'1' });
 		}
 	});
@@ -129,7 +128,6 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
-			aoData.push({'name':'type','value':'1' });
 			aoData.push({'name':'status','value':'0' });
 		}
 	});
@@ -725,7 +723,9 @@ function initMapModal() {
 	$('#DeviceMapModal').on('shown.bs.modal', function (e) {
 		if (CurrentMap == null) {
 			CurrentMap = new BMap.Map("DeviceMapDiv", {enableMapClick:false});
-			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));    
+			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));
+			var point = new BMap.Point(114, 30);
+			CurrentMap.centerAndZoom(point, 1);
 		}
 		CurrentMap.clearOverlays();
 		if (MapType == 0) {

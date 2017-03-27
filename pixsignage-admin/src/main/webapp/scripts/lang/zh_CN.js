@@ -19,6 +19,7 @@ var common = {
 		dvb: '数字频道',
 		layout: '布局',
 
+		bundle: '单屏节目',
 		subbundle: '子节目',
 		subtemplet: '子模板',
 		schedule: '计划',

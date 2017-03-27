@@ -130,7 +130,7 @@ public class LayoutAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String layoutid = getParameter("layoutid");
-			bundleService.syncBundleByLayout(layoutid);
+			// bundleService.syncBundleByLayout(layoutid);
 			logger.info("Layout sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

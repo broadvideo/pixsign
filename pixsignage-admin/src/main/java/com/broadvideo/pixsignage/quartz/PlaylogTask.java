@@ -111,30 +111,38 @@ public class PlaylogTask {
 						if (!ss[0].equals("0")) {
 							continue;
 						}
-						Playlog playlog = new Playlog();
-						playlog.setOrgid(device.getOrgid());
-						playlog.setBranchid(device.getBranchid());
-						playlog.setDeviceid(device.getDeviceid());
-						playlog.setBundleid(Integer.parseInt(ss[1]));
-						playlog.setLayoutdtlid(Integer.parseInt(ss[2]));
-						if (ss[3].equals("image")) {
-							playlog.setMediatype("2");
-						} else {
-							playlog.setMediatype("1");
-						}
-						playlog.setMediaid(Integer.parseInt(ss[4]));
 						Calendar c1 = Calendar.getInstance();
 						c1.setTimeInMillis(Long.parseLong(ss[5]));
 						Calendar c2 = Calendar.getInstance();
 						c2.setTimeInMillis(Long.parseLong(ss[6]));
 						int duration = (int) Math.ceil((c2.getTimeInMillis() - c1.getTimeInMillis()) / 1000);
 						// 2017-01-01 00:00:00
-						if (c1.getTimeInMillis() < 1483200000000L || duration == 0) {
+						if (c1.getTimeInMillis() < 1483200000000L) {
 							continue;
 						}
-						playlog.setStarttime(c1.getTime());
-						playlog.setEndtime(c2.getTime());
-						playlog.setDuration(duration);
+
+						Playlog playlog = new Playlog();
+						playlog.setOrgid(device.getOrgid());
+						playlog.setBranchid(device.getBranchid());
+						playlog.setDeviceid(device.getDeviceid());
+						playlog.setBundleid(Integer.parseInt(ss[1]));
+						playlog.setLayoutdtlid(Integer.parseInt(ss[2]));
+						playlog.setMediaid(Integer.parseInt(ss[4]));
+						if (ss[3].equals("image")) {
+							playlog.setMediatype("2");
+							playlog.setStarttime(c1.getTime());
+							playlog.setEndtime(c1.getTime());
+							playlog.setDuration(0);
+						} else {
+							if (duration == 0) {
+								continue;
+							}
+							playlog.setMediatype("1");
+							playlog.setStarttime(c1.getTime());
+							playlog.setEndtime(c2.getTime());
+							playlog.setDuration(duration);
+						}
+
 						playlogMapper.insertSelective(playlog);
 					}
 				}

@@ -2,13 +2,15 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.broadvideo.pixsignage.domain.Device;
 
 public interface DeviceService {
-	public int selectCount(String orgid, String branchid, String type, String status, String onlineflag,
-			String devicegroupid, String search);
+	public int selectCount(String orgid, String branchid, String status, String onlineflag, String devicegroupid,
+			String search);
 
-	public List<Device> selectList(String orgid, String branchid, String type, String status, String onlineflag,
+	public List<Device> selectList(String orgid, String branchid, String status, String onlineflag,
 			String devicegroupid, String search, String start, String length, String order);
 
 	public Device selectByPrimaryKey(String deviceid);
@@ -45,4 +47,6 @@ public interface DeviceService {
 			String bgcolor, String opacity) throws Exception;
 
 	public void ucancel(String orgid) throws Exception;
+
+	public JSONObject generateScheduleJson(String deviceid);
 }

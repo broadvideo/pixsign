@@ -82,7 +82,6 @@ $('#MyTable').dataTable({
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'branchid','value':CurBranchid });
 		aoData.push({'name':'devicegroupid','value':0 });
-		aoData.push({'name':'type','value':'1' });
 	}
 });
 
