@@ -1212,16 +1212,46 @@
 			</result>
 		</action>
 
-		<action name="playlog!list" method="doList" class="playlogAction">
+		<action name="hourplaylog!statbyhour" method="doStatByHour" class="hourplaylogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="playlog!devicestatlist" method="doDeviceStatList" class="playlogAction">
+		<action name="hourplaylog!statbyday" method="doStatByDay" class="hourplaylogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="hourplaylog!statbymonth" method="doStatByMonth" class="hourplaylogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="hourplaylog!downloadbyhour" method="doDownloadByHour" class="hourplaylogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="hourplaylog!downloadbyday" method="doDownloadByDay" class="hourplaylogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="hourplaylog!downloadbymonth" method="doDownloadByMonth" class="hourplaylogAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
 			</result>
 		</action>
 		

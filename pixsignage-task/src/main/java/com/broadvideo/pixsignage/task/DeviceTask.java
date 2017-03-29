@@ -1,4 +1,4 @@
-package com.broadvideo.pixsignage.quartz;
+package com.broadvideo.pixsignage.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

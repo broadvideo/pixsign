@@ -1,4 +1,4 @@
-package com.broadvideo.pixsignage.quartz;
+package com.broadvideo.pixsignage.task;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -18,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Playlog;
+import com.broadvideo.pixsignage.domain.Hourplaylog;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.PlaylogMapper;
+import com.broadvideo.pixsignage.persistence.HourplaylogMapper;
 
 public class PlaylogTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,7 +29,7 @@ public class PlaylogTask {
 	private static boolean workflag = false;
 
 	@Autowired
-	private PlaylogMapper playlogMapper;
+	private HourplaylogMapper hourplaylogMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -61,7 +62,7 @@ public class PlaylogTask {
 					try {
 						handleZipFile(zipfile, device);
 					} catch (Exception e) {
-						logger.error("Handle {} error: {}", zipfile.getAbsolutePath(), e.getMessage());
+						logger.error("Handle {} error. ", zipfile.getAbsolutePath(), e);
 					}
 					String newfilename = zipfile.getAbsolutePath().substring(0, zipfile.getAbsolutePath().length() - 3);
 					zipfile.renameTo(new File(newfilename));
@@ -120,30 +121,36 @@ public class PlaylogTask {
 						if (c1.getTimeInMillis() < 1483200000000L) {
 							continue;
 						}
-
-						Playlog playlog = new Playlog();
-						playlog.setOrgid(device.getOrgid());
-						playlog.setBranchid(device.getBranchid());
-						playlog.setDeviceid(device.getDeviceid());
-						playlog.setBundleid(Integer.parseInt(ss[1]));
-						playlog.setLayoutdtlid(Integer.parseInt(ss[2]));
-						playlog.setMediaid(Integer.parseInt(ss[4]));
+						String mediatype = "1";
 						if (ss[3].equals("image")) {
-							playlog.setMediatype("2");
-							playlog.setStarttime(c1.getTime());
-							playlog.setEndtime(c1.getTime());
-							playlog.setDuration(0);
-						} else {
+							mediatype = "2";
+						} else if (ss[3].equals("video")) {
 							if (duration == 0) {
 								continue;
 							}
-							playlog.setMediatype("1");
-							playlog.setStarttime(c1.getTime());
-							playlog.setEndtime(c2.getTime());
-							playlog.setDuration(duration);
+						} else {
+							continue;
 						}
 
-						playlogMapper.insertSelective(playlog);
+						Hourplaylog hourplaylog = hourplaylogMapper.selectByDetail("" + device.getDeviceid(), mediatype,
+								ss[4], new SimpleDateFormat("yyyyMMddHH").format(c1.getTime()));
+						if (hourplaylog != null) {
+							hourplaylog.setTotal(hourplaylog.getTotal() + 1);
+							hourplaylogMapper.updateByPrimaryKeySelective(hourplaylog);
+						} else {
+							hourplaylog = new Hourplaylog();
+							hourplaylog.setOrgid(device.getOrgid());
+							hourplaylog.setBranchid(device.getBranchid());
+							hourplaylog.setDeviceid(device.getDeviceid());
+							hourplaylog.setMediatype(mediatype);
+							hourplaylog.setMediaid(Integer.parseInt(ss[4]));
+							c1.set(Calendar.MINUTE, 0);
+							c1.set(Calendar.SECOND, 0);
+							c1.set(Calendar.MILLISECOND, 0);
+							hourplaylog.setStarttime(c1.getTime());
+							hourplaylog.setTotal(1);
+							hourplaylogMapper.insertSelective(hourplaylog);
+						}
 					}
 				}
 			}

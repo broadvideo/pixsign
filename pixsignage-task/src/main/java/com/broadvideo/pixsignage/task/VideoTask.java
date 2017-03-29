@@ -1,4 +1,4 @@
-package com.broadvideo.pixsignage.quartz;
+package com.broadvideo.pixsignage.task;
 
 import java.io.File;
 import java.io.FileOutputStream;

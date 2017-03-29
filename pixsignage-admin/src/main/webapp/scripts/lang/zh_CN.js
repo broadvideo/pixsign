@@ -165,11 +165,18 @@ var common = {
 		today: '今日',
 		yesterday: '昨日',
 		
+		stat_period: '统计周期',
+		amount: '总数',
+
 		config_serverip: '本服务器地址',
 		config_serverport: '本服务器端口',
 		config_pixedxip: 'PixedX服务器地址',
 		config_pixedxport: 'PixedX服务器端口',
 		
+		hourstat: '每小时统计',
+		daystat: '每天统计',
+		monthstat: '每月统计',
+
 		male: '男性',
 		female: '女性',
 		age1: '0-6岁',

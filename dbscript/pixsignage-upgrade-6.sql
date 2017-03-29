@@ -51,6 +51,22 @@ default character set utf8;
 alter table flowlog add index flowlog_index1(deviceid);
 alter table flowlog add unique(deviceid, uuid);
 
+create table hourplaylog( 
+   hourplaylogid int not null auto_increment,
+   orgid int not null,
+   branchid int not null,
+   deviceid int not null,
+   mediatype char(1),
+   mediaid int not null,
+   starttime datetime,
+   total int default 0,
+   createtime timestamp not null default current_timestamp,
+   primary key (hourplaylogid)
+ )engine = innodb
+default character set utf8;
+alter table hourplaylog add index hourplaylog_index1(deviceid);
+alter table hourplaylog add unique(deviceid, mediatype, mediaid, starttime);
+
 create table templet( 
    templetid int not null auto_increment,
    uuid varchar(64) not null,
@@ -144,6 +160,9 @@ alter table bundledtl add volume int default 50;
 
 update bundle b, layout l set b.ratio=l.ratio, b.bgcolor=l.bgcolor, b.bgimageid=l.bgimageid where b.layoutid=l.layoutid;
 update bundledtl b, layoutdtl l set b.type=l.type, b.mainflag=l.mainflag, b.height=l.height, b.width=l.width, b.topoffset=l.topoffset, b.leftoffset=l.leftoffset, b.zindex=l.zindex, b.bgcolor=l.bgcolor, b.opacity=l.opacity, b.bgimageid=l.bgimageid, b.sleeptime=l.sleeptime, b.intervaltime=l.intervaltime, b.animation=l.animation, b.direction=l.direction, b.speed=l.speed, b.color=l.color, b.size=l.size, b.dateformat=l.dateformat, b.fitflag=l.fitflag, b.volume=l.volume where b.layoutdtlid=l.layoutdtlid;
+
+insert into hourplaylog(orgid, branchid, deviceid, mediatype, mediaid, starttime, total) select orgid, branchid, deviceid, mediatype, mediaid, concat(date_format(starttime,'%Y-%m-%d %H'),':00:00'), count(1) from playlog group by orgid, branchid, deviceid, mediatype, mediaid, date_format(starttime,'%Y%m%d%H');
+
 
 delete from privilege where parentid=109;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10901,0,109,'menu.config','config.jsp','',1,1,'0');

@@ -844,15 +844,19 @@ public class PixsignageService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid()));
-			String tempname = CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid() + "/playlog-"
-					+ device.getDeviceid() + "-"
-					+ new SimpleDateFormat("yyyyMMddHHmmssSSS").format(Calendar.getInstance().getTime()) + ".tmp";
-			String filename = tempname.substring(0, tempname.length() - 4) + ".zip.ok";
-			logger.info("Save playlog to: {}", filename);
-			File tempfile = new File(tempname);
+			String filename = playlogHeader.getFileName();
+			String okname = filename + ".ok";
+			String tempname = filename + ".tmp";
+			File dir = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid());
+			FileUtils.forceMkdir(dir);
+			if (new File(dir, filename).exists() || new File(dir, okname).exists()
+					|| new File(dir, tempname).exists()) {
+				return handleResult(1001, "文件已存在");
+			}
+			logger.info("Save {} playlog to: {}", terminalid, dir + "/" + filename);
+			File tempfile = new File(dir, tempname);
 			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
-			FileUtils.moveFile(tempfile, new File(filename));
+			FileUtils.moveFile(tempfile, new File(dir, okname));
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();

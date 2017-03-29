@@ -17,6 +17,13 @@
 			</includes>
 		</fileSet>
 		<fileSet>
+			<directory>${project.parent.basedir}/pixsignage-task/target</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>*.war</include>
+			</includes>
+		</fileSet>
+		<fileSet>
 			<directory>${project.parent.basedir}/pixsignage-api/target</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>

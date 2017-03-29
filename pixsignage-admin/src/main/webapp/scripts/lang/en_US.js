@@ -165,11 +165,18 @@ var common = {
 		today: 'Today',
 		yesterday: 'Yesterday',
 
+		stat_period: 'Period',
+		amount: 'Amount',
+
 		config_serverip: 'Server IP',
 		config_serverport: 'Server Port',
 		config_pixedxip: 'PixedX IP',
 		config_pixedxport: 'PixedX Port',
 		
+		hourstat: 'Hourly Stat',
+		daystat: 'Daily Stat',
+		monthstat: 'Monthly Stat',
+
 		male: 'Male',
 		female: 'Female',
 		age1: '0-6',

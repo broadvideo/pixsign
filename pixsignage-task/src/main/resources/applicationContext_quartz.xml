@@ -10,7 +10,7 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-	<bean id="deviceTask" class="com.broadvideo.pixsignage.quartz.DeviceTask"></bean>
+	<bean id="deviceTask" class="com.broadvideo.pixsignage.task.DeviceTask"></bean>
 	<bean id="deviceJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="deviceTask" />
@@ -28,7 +28,7 @@
 		</property>
 	</bean>
 
-	<bean id="vcssTask" class="com.broadvideo.pixsignage.quartz.VCSSTask"></bean>
+	<bean id="vcssTask" class="com.broadvideo.pixsignage.task.VCSSTask"></bean>
 	<bean id="vcssJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="vcssTask" />
@@ -46,7 +46,7 @@
 		</property>
 	</bean>
 
-	<bean id="pixboxTask" class="com.broadvideo.pixsignage.quartz.PixboxTask"></bean>
+	<bean id="pixboxTask" class="com.broadvideo.pixsignage.task.PixboxTask"></bean>
 	<bean id="pixboxJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="pixboxTask" />
@@ -64,7 +64,7 @@
 		</property>
 	</bean>
 
-	<bean id="weatherTask" class="com.broadvideo.pixsignage.quartz.WeatherTask"></bean>
+	<bean id="weatherTask" class="com.broadvideo.pixsignage.task.WeatherTask"></bean>
 	<bean id="weatherJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="weatherTask" />
@@ -82,7 +82,7 @@
 		</property>
 	</bean>
 
-	<bean id="videoTask" class="com.broadvideo.pixsignage.quartz.VideoTask"></bean>
+	<bean id="videoTask" class="com.broadvideo.pixsignage.task.VideoTask"></bean>
 	<bean id="videoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="videoTask" />
@@ -100,7 +100,7 @@
 		</property>
 	</bean>
 
-	<bean id="playlogTask" class="com.broadvideo.pixsignage.quartz.PlaylogTask"></bean>
+	<bean id="playlogTask" class="com.broadvideo.pixsignage.task.PlaylogTask"></bean>
 	<bean id="playlogJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="playlogTask" />
@@ -118,7 +118,7 @@
 		</property>
 	</bean>
 
-	<bean id="pflowTask" class="com.broadvideo.pixsignage.quartz.PflowTask"></bean>
+	<bean id="pflowTask" class="com.broadvideo.pixsignage.task.PflowTask"></bean>
 	<bean id="pflowJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="pflowTask" />

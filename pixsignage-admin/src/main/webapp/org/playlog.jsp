@@ -52,12 +52,30 @@ response.setDateHeader("Expires",0);
 							</div>
 							<div class="portlet-body">
 								<div class="row">
-									<div class="col-md-3">
-										<div class="input-group date form_datetime">                                       
-											<input type="text" size="16" readonly class="form-control" name="playlog.statdate">
+									<div class="col-md-3 stat-hour">
+										<div class="input-group date form_datetime_hour">                                       
+											<input type="text" size="16" readonly class="form-control" name="playlog.stathour">
 											<span class="input-group-btn">
 											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
 											</span>
+										</div>
+									</div>
+									<div class="col-md-3 stat-day">
+										<div class="input-group date form_datetime_day">                                       
+											<input type="text" size="16" readonly class="form-control" name="playlog.statday">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+									<div class="col-md-3 stat-month">
+										<div class="btn-group">
+											<input type="hidden" id="MonthSelect" class="form-control select2">
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="btn-group">
+											<a href="" class="btn green pix-download"><spring:message code="global.export"/> <i class="fa fa-download"></i></a>
 										</div>
 									</div>
 								</div>
@@ -165,7 +183,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-playlog.js?t=4"></script>
+<script src="${base_ctx}/scripts/pix-playlog.js?t=5"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
