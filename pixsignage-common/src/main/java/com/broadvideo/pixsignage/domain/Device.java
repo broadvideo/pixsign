@@ -48,6 +48,8 @@ public class Device {
 
 	private String type;
 
+	private String ostype;
+
 	private Integer devicegroupid;
 
 	private String lontitude;
@@ -248,6 +250,14 @@ public class Device {
 
 	public void setType(String type) {
 		this.type = type == null ? null : type.trim();
+	}
+
+	public String getOstype() {
+		return ostype;
+	}
+
+	public void setOstype(String ostype) {
+		this.ostype = ostype;
 	}
 
 	public Integer getDevicegroupid() {

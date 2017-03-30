@@ -110,6 +110,12 @@ public class PixsignageService2 {
 			String terminalid = requestJson.getString("terminal_id");
 			String mac = requestJson.getString("mac");
 			String iip = requestJson.getString("ip");
+			String ostype = requestJson.getString("os_type");
+			if (ostype.equals("windows")) {
+				ostype = "2";
+			} else {
+				ostype = "1";
+			}
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String vname = requestJson.getString("version_name");
@@ -182,6 +188,7 @@ public class PixsignageService2 {
 			device.setIp(ip);
 			device.setIip(iip);
 			device.setMac(mac);
+			device.setOstype(ostype);
 			device.setAppname(appname);
 			device.setVname(vname);
 			device.setVcode(vcode);
@@ -447,50 +454,55 @@ public class PixsignageService2 {
 			String url = "";
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getUpgradeflag().equals("0")) {
-				logger.info("Auto upgrade disabled, Multisign Service get-version response: {}",
+				logger.info("Auto upgrade disabled, Pixsignage Service get-version response: {}",
 						responseJson.toString());
 			} else {
+				String ostype = device.getOstype();
 				String appname = device.getAppname();
 				String sign = device.getSign();
 				String subdir = "";
-				if (sign != null && sign.length() > 0) {
+				if (ostype.equals("2")) {
+					subdir = "windows";
+				} else {
 					subdir = CONFIG_SIGNATURE.get(sign);
 					if (subdir == null) {
 						subdir = "debug";
 						logger.info("sign {} unrecognized, set as debug", sign);
 					}
-					subdir = "/" + subdir;
-					File dir = new File("/opt/pixdata/app" + subdir);
-					File[] files = dir.listFiles(new FilenameFilter() {
-						@Override
-						public boolean accept(File dir, String name) {
-							return name.startsWith(appname + "-") && name.endsWith((".apk"));
+				}
+				File dir = new File("/opt/pixdata/app/" + subdir);
+				File[] files = dir.listFiles(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						if (ostype.equals("2")) {
+							return name.startsWith(appname + "-") && name.endsWith(".exe");
+						} else {
+							return name.startsWith(appname + "-") && name.endsWith(".apk");
 						}
-					});
-					if (files.length > 0) {
-						Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-						String filename = files[0].getName();
-						url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-								+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"
-								+ filename;
-						String[] apks = filename.split("-");
-						if (apks.length >= 3) {
-							vname = apks[1];
-							vcode = apks[2];
-							if (vcode.indexOf(".") > 0) {
-								vcode = vcode.substring(0, vcode.indexOf("."));
-							}
-							int v = 0;
-							try {
-								v = Integer.parseInt(vcode);
-							} catch (Exception e) {
-								v = 0;
-							}
-							if (device.getVcode() < v) {
-								responseJson.put("version_name", vname);
-								responseJson.put("version_code", vcode);
-								responseJson.put("url", url);
-							}
+					}
+				});
+				if (files != null && files.length > 0) {
+					Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+					String filename = files[0].getName();
+					url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+							+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app/" + subdir + "/" + filename;
+					String[] apks = filename.split("-");
+					if (apks.length >= 3) {
+						vname = apks[1];
+						vcode = apks[2];
+						if (vcode.indexOf(".") > 0) {
+							vcode = vcode.substring(0, vcode.indexOf("."));
+						}
+						int v = 0;
+						try {
+							v = Integer.parseInt(vcode);
+						} catch (Exception e) {
+							v = 0;
+						}
+						if (device.getVcode() < v) {
+							responseJson.put("version_name", vname);
+							responseJson.put("version_code", vcode);
+							responseJson.put("url", url);
 						}
 					}
 				}
@@ -545,6 +557,9 @@ public class PixsignageService2 {
 					eventJson.put("event_content", new JSONObject());
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_UCancel)) {
 					eventJson.put("event_type", "ucancel");
+					eventJson.put("event_content", new JSONObject());
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Debug)) {
+					eventJson.put("event_type", "debug");
 					eventJson.put("event_content", new JSONObject());
 				}
 				msgevent.setStatus(Msgevent.Status_Sent);

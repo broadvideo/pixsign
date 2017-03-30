@@ -48,6 +48,15 @@
     select * from image
     where '${mediatype}' = '2' and imageid = #{imageid}
   </select>
+  <select id="statByPeriod" resultMap="PeriodResultMap">
+    select deviceid, mediatype, mediaid, sum(total) as amount
+    from hourplaylog
+    where deviceid = #{deviceid}
+    and date_format(starttime,'%Y%m%d') &gt;= #{from}
+    and date_format(starttime,'%Y%m%d') &lt;= #{to}
+    group by mediatype, mediaid
+    order by amount desc
+  </select>
   <select id="statByHour" resultMap="PeriodResultMap">
     select deviceid, date_format(starttime,'%Y%m%d%H') as period, mediatype, mediaid, sum(total) as amount
     from hourplaylog

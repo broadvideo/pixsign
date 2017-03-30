@@ -106,6 +106,12 @@ public class PixsignageService {
 			String terminalid = requestJson.getString("terminal_id");
 			String mac = requestJson.getString("mac");
 			String iip = requestJson.getString("ip");
+			String ostype = requestJson.getString("os_type");
+			if (ostype.equals("windows")) {
+				ostype = "2";
+			} else {
+				ostype = "1";
+			}
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String version = requestJson.getString("version");
@@ -177,6 +183,7 @@ public class PixsignageService {
 			device.setIp(ip);
 			device.setIip(iip);
 			device.setMac(mac);
+			device.setOstype(ostype);
 			device.setAppname(appname);
 			device.setVname(version);
 			device.setMtype(mtype);

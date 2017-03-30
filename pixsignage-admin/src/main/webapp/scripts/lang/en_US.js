@@ -173,9 +173,10 @@ var common = {
 		config_pixedxip: 'PixedX IP',
 		config_pixedxport: 'PixedX Port',
 		
-		hourstat: 'Hourly Stat',
-		daystat: 'Daily Stat',
-		monthstat: 'Monthly Stat',
+		hourstat: 'Hourly',
+		daystat: 'Daily',
+		monthstat: 'Monthly',
+		periodstat: 'Period',
 
 		male: 'Male',
 		female: 'Female',

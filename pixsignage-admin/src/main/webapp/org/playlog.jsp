@@ -40,7 +40,7 @@ response.setDateHeader("Expires",0);
 <%@ include file="/common/common2.jsp"%>
 
 		<div id="PlaylogModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-full">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -71,6 +71,22 @@ response.setDateHeader("Expires",0);
 									<div class="col-md-3 stat-month">
 										<div class="btn-group">
 											<input type="hidden" id="MonthSelect" class="form-control select2">
+										</div>
+									</div>
+									<div class="col-md-3 stat-period">
+										<div class="input-group date form_datetime_day">                                       
+											<input type="text" size="16" readonly class="form-control" name="playlog.statfrom">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+									<div class="col-md-3 stat-period">
+										<div class="input-group date form_datetime_day">                                       
+											<input type="text" size="16" readonly class="form-control" name="playlog.statto">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
 										</div>
 									</div>
 									<div class="col-md-3">

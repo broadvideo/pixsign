@@ -32,6 +32,30 @@ public class HourplaylogAction extends BaseDatatableAction {
 	@Autowired
 	private HourplaylogMapper hourplaylogMapper;
 
+	public String doStatByPeriod() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String deviceid = getParameter("deviceid");
+			String from = getParameter("from");
+			from = from.replace("-", "");
+			String to = getParameter("to");
+			to = to.replace("-", "");
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<HashMap<String, Object>> list = hourplaylogMapper.statByPeriod(deviceid, from, to);
+			for (int i = 0; i < list.size(); i++) {
+				aaData.add(list.get(i));
+			}
+			this.setAaData(aaData);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("HourplaylogAction doStatByPeriod exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doStatByHour() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
@@ -94,6 +118,66 @@ public class HourplaylogAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("HourplaylogAction doStatPeriodByMonth exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doDownloadByPeriod() {
+		try {
+			String deviceid = getParameter("deviceid");
+			String from = getParameter("from");
+			from = from.replace("-", "");
+			String to = getParameter("to");
+			to = to.replace("-", "");
+
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			HSSFSheet sheet = workbook.createSheet();
+			HSSFCellStyle style = workbook.createCellStyle();
+			style.setWrapText(true);
+			int count = 0;
+			HSSFRow row;
+			HSSFCell cell;
+
+			List<HashMap<String, Object>> list = hourplaylogMapper.statByPeriod(deviceid, from, to);
+			for (int i = 0; i < list.size(); i++) {
+				HashMap<String, Object> hash = list.get(i);
+				row = sheet.createRow(count);
+				if (hash.get("mediatype").toString().equals("1")) {
+					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue("Video");
+					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					ArrayList<HashMap> videos = (ArrayList<HashMap>) hash.get("video");
+					cell.setCellValue(videos.get(0).get("name").toString());
+					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue(hash.get("amount").toString());
+				} else {
+					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue("Image");
+					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					ArrayList<HashMap> images = (ArrayList<HashMap>) hash.get("image");
+					cell.setCellValue(images.get(0).get("name").toString());
+					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue(hash.get("amount").toString());
+				}
+				count++;
+			}
+
+			sheet.setColumnWidth(0, 3000);
+			sheet.setColumnWidth(1, 10000);
+			sheet.setColumnWidth(2, 3000);
+
+			FileOutputStream fOut = new FileOutputStream("/tmp/playlog-" + deviceid + "-" + from + "-" + to + ".xls");
+			workbook.write(fOut);
+			fOut.flush();
+			fOut.close();
+			workbook.close();
+			inputStream = new FileInputStream("/tmp/playlog-" + deviceid + "-" + from + "-" + to + ".xls");
+			downloadname = "playlog-" + deviceid + "-" + from + "-" + to + ".xls";
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("HourplaylogAction doDownloadByDay exception. ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

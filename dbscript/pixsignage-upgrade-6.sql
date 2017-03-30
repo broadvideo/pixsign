@@ -17,6 +17,7 @@ alter table pflowlog add index pflowlog_index1(deviceid);
 alter table playlog add index playlog_index1(deviceid);
 alter table onlinelog add index onlinelog_index1(deviceid);
 alter table crashreport modify os varchar(64);
+alter table device add ostype char(1) default '1';
 
 create table debugreport( 
    debugreportid int not null auto_increment,
