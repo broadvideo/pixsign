@@ -151,6 +151,200 @@ public class TempletServiceImpl implements TempletService {
 	}
 
 	@Transactional
+	public void copyTemplet(String fromtempletid, Templet templet) throws Exception {
+		if (templet.getName() == null || templet.getName().equals("")) {
+			templet.setName("UNKNOWN");
+		}
+		Templet fromtemplet = templetMapper.selectByPrimaryKey(fromtempletid);
+		if (fromtemplet == null) {
+			// Create templet from blank
+			if (templet.getRatio().equals("1")) {
+				// 16:9
+				templet.setWidth(1920);
+				templet.setHeight(1080);
+			} else if (templet.getRatio().equals("2")) {
+				// 9:16
+				templet.setWidth(1080);
+				templet.setHeight(1920);
+			} else if (templet.getRatio().equals("3")) {
+				// 4:3
+				templet.setWidth(1920);
+				templet.setHeight(1440);
+			} else if (templet.getRatio().equals("4")) {
+				// 3:4
+				templet.setWidth(1440);
+				templet.setHeight(1920);
+			} else if (templet.getRatio().equals("5")) {
+				// 32:9
+				templet.setWidth(1920);
+				templet.setHeight(540);
+			}
+			templetMapper.insertSelective(templet);
+
+			if (templet.getName().equals("UNKNOWN")) {
+				templet.setName("TEMPLET-" + templet.getTempletid());
+			}
+			templetMapper.updateByPrimaryKeySelective(templet);
+
+			Templetdtl templetdtl = new Templetdtl();
+			templetdtl.setTempletid(templet.getTempletid());
+			templetdtl.setType(Templetdtl.Type_PLAY);
+			templetdtl.setMainflag("1");
+			if (templet.getHomeflag().equals("0")) {
+				templetdtl.setHometempletid(templet.getHometempletid());
+			} else {
+				templetdtl.setHometempletid(templet.getTempletid());
+			}
+			templetdtl.setWidth((int) (templet.getWidth() / 2));
+			templetdtl.setHeight((int) (templet.getHeight() / 2));
+			templetdtl.setTopoffset((int) (templet.getHeight() / 4));
+			templetdtl.setLeftoffset((int) (templet.getWidth() / 4));
+			templetdtl.setBgcolor("#000000");
+			if (templetdtl.getBgimageid() != null && templetdtl.getBgimageid() > 0) {
+				templetdtl.setOpacity(0);
+			} else {
+				templetdtl.setOpacity(255);
+			}
+			templetdtl.setZindex(0);
+			templetdtl.setSleeptime(0);
+			templetdtl.setIntervaltime(10);
+			templetdtl.setDirection("4");
+			templetdtl.setSpeed("2");
+			templetdtl.setColor("#FFFFFF");
+			templetdtl.setSize(50);
+			templetdtl.setObjtype(Templetdtl.ObjType_NONE);
+			templetdtl.setObjid(0);
+			templetdtlMapper.insertSelective(templetdtl);
+
+			Medialist medialist = new Medialist();
+			medialist.setOrgid(templet.getOrgid());
+			medialist.setBranchid(0);
+			medialist.setName(templet.getName() + "-" + templetdtl.getTempletdtlid());
+			medialist.setType(Medialist.Type_Private);
+			medialist.setCreatestaffid(templet.getCreatestaffid());
+			medialistMapper.insertSelective(medialist);
+			templetdtl.setObjtype(Templetdtl.ObjType_Medialist);
+			templetdtl.setObjid(medialist.getMedialistid());
+			templetdtlMapper.updateByPrimaryKeySelective(templetdtl);
+		} else {
+			// Copy templet
+			templet.setTempletid(fromtemplet.getTempletid());
+			templet.setRatio(fromtemplet.getRatio());
+			templet.setHeight(fromtemplet.getHeight());
+			templet.setWidth(fromtemplet.getWidth());
+			templet.setBgcolor(fromtemplet.getBgcolor());
+			templet.setBgimageid(fromtemplet.getBgimageid());
+			templet.setHomeidletime(fromtemplet.getHomeidletime());
+			templetMapper.insertSelective(templet);
+			if (templet.getName().equals("UNKNOWN")) {
+				templet.setName("TEMPLET-" + templet.getTempletid());
+			}
+			if (fromtemplet.getSnapshot() != null) {
+				String snapshotFilePath = "/templet/" + templet.getTempletid() + "/snapshot/" + templet.getTempletid()
+						+ ".png";
+				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + fromtemplet.getSnapshot()),
+						snapshotFile);
+				templet.setSnapshot(snapshotFilePath);
+			}
+			templetMapper.updateByPrimaryKeySelective(templet);
+
+			List<Templetdtl> fromtempletdtls = fromtemplet.getTempletdtls();
+			for (Templetdtl fromtempletdtl : fromtempletdtls) {
+				Templetdtl templetdtl = new Templetdtl();
+				templetdtl.setTempletid(templet.getTempletid());
+				if (templet.getHomeflag().equals("0")) {
+					templetdtl.setHometempletid(templet.getHometempletid());
+				} else {
+					templetdtl.setHometempletid(templet.getTempletid());
+				}
+				templetdtl.setTempletdtlid(fromtempletdtl.getTempletdtlid());
+				templetdtl.setType(fromtempletdtl.getType());
+				templetdtl.setMainflag(fromtempletdtl.getMainflag());
+				templetdtl.setHeight(fromtempletdtl.getHeight());
+				templetdtl.setWidth(fromtempletdtl.getWidth());
+				templetdtl.setTopoffset(fromtempletdtl.getTopoffset());
+				templetdtl.setLeftoffset(fromtempletdtl.getLeftoffset());
+				templetdtl.setZindex(fromtempletdtl.getZindex());
+				templetdtl.setBgcolor(fromtempletdtl.getBgcolor());
+				templetdtl.setOpacity(fromtempletdtl.getOpacity());
+				templetdtl.setBgimageid(fromtempletdtl.getBgimageid());
+				templetdtl.setSleeptime(fromtempletdtl.getSleeptime());
+				templetdtl.setIntervaltime(fromtempletdtl.getIntervaltime());
+				templetdtl.setAnimation(fromtempletdtl.getAnimation());
+				templetdtl.setDirection(fromtempletdtl.getDirection());
+				templetdtl.setSpeed(fromtempletdtl.getSpeed());
+				templetdtl.setColor(fromtempletdtl.getColor());
+				templetdtl.setSize(fromtempletdtl.getSize());
+				templetdtl.setDateformat(fromtempletdtl.getDateformat());
+				templetdtl.setFitflag(fromtempletdtl.getFitflag());
+				templetdtl.setVolume(fromtempletdtl.getVolume());
+				templetdtl.setObjtype(fromtempletdtl.getObjtype());
+				templetdtl.setTouchlabel(fromtempletdtl.getTouchlabel());
+				templetdtl.setTouchtype(fromtempletdtl.getTouchtype());
+				templetdtl.setTouchtempletid(fromtempletdtl.getTouchtempletid());
+				templetdtl.setTouchapk(fromtempletdtl.getTouchapk());
+
+				if (fromtempletdtl.getObjtype().equals(Templetdtl.ObjType_Medialist)) {
+					Medialist temp = medialistMapper.selectByPrimaryKey("" + fromtempletdtl.getObjid());
+					Medialist medialist = new Medialist();
+					medialist.setOrgid(fromtempletdtl.getMedialist().getOrgid());
+					medialist.setBranchid(fromtempletdtl.getMedialist().getBranchid());
+					medialist.setName(templet.getName() + "-" + fromtempletdtl.getTempletdtlid());
+					medialist.setType(Medialist.Type_Private);
+					medialist.setCreatestaffid(templet.getCreatestaffid());
+					medialistMapper.insertSelective(medialist);
+					for (Medialistdtl md : temp.getMedialistdtls()) {
+						Medialistdtl medialistdtl = new Medialistdtl();
+						medialistdtl.setMedialistid(medialist.getMedialistid());
+						medialistdtl.setObjtype(md.getObjtype());
+						medialistdtl.setObjid(md.getObjid());
+						medialistdtl.setSequence(md.getSequence());
+						medialistdtlMapper.insertSelective(medialistdtl);
+					}
+					templetdtl.setObjid(medialist.getMedialistid());
+				} else if (fromtempletdtl.getObjtype().equals(Templetdtl.ObjType_Text)) {
+					Text temp = textMapper.selectByPrimaryKey("" + fromtempletdtl.getObjid());
+					Text text = new Text();
+					text.setOrgid(fromtempletdtl.getText().getOrgid());
+					text.setBranchid(fromtempletdtl.getText().getBranchid());
+					text.setName(templet.getName() + "-" + fromtempletdtl.getTempletdtlid());
+					text.setType(Text.Type_Private);
+					text.setCreatestaffid(templet.getCreatestaffid());
+					text.setText(temp.getText());
+					textMapper.insertSelective(text);
+					templetdtl.setObjid(text.getTextid());
+				} else if (fromtempletdtl.getObjtype().equals(Templetdtl.ObjType_Widget)) {
+					Widget temp = widgetMapper.selectByPrimaryKey("" + fromtempletdtl.getObjid());
+					Widget widget = new Widget();
+					widget.setOrgid(fromtempletdtl.getWidget().getOrgid());
+					widget.setBranchid(fromtempletdtl.getWidget().getBranchid());
+					widget.setName(templet.getName() + "-" + fromtempletdtl.getTempletdtlid());
+					widget.setType(Widget.Type_Private);
+					widget.setCreatestaffid(templet.getCreatestaffid());
+					widget.setUrl(temp.getUrl());
+					widgetMapper.insertSelective(widget);
+					templetdtl.setObjid(widget.getWidgetid());
+				} else if (fromtempletdtl.getObjtype().equals(Templetdtl.ObjType_Rss)) {
+					Rss temp = rssMapper.selectByPrimaryKey("" + fromtempletdtl.getObjid());
+					Rss rss = new Rss();
+					rss.setOrgid(fromtempletdtl.getRss().getOrgid());
+					rss.setBranchid(fromtempletdtl.getRss().getBranchid());
+					rss.setName(templet.getName() + "-" + fromtempletdtl.getTempletdtlid());
+					rss.setType(Rss.Type_Private);
+					rss.setCreatestaffid(templet.getCreatestaffid());
+					rss.setUrl(temp.getUrl());
+					rssMapper.insertSelective(rss);
+					templetdtl.setObjid(rss.getRssid());
+				} else {
+					templetdtl.setObjid(fromtempletdtl.getObjid());
+				}
+				templetdtlMapper.insertSelective(templetdtl);
+			}
+		}
+	}
+
+	@Transactional
 	public void updateTemplet(Templet templet) {
 		templetMapper.updateByPrimaryKeySelective(templet);
 	}

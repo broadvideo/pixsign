@@ -98,8 +98,6 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private RssService rssService;
 	@Autowired
-	private TempletService templetService;
-	@Autowired
 	private DevicefileService devicefileService;
 
 	public Bundle selectByPrimaryKey(String bundleid) {
@@ -203,6 +201,7 @@ public class BundleServiceImpl implements BundleService {
 			bundle.setWidth(templet.getWidth());
 			bundle.setBgcolor(templet.getBgcolor());
 			bundle.setBgimageid(templet.getBgimageid());
+			bundle.setHomeidletime(templet.getHomeidletime());
 			bundleMapper.insertSelective(bundle);
 			if (bundle.getName().equals("UNKNOWN")) {
 				bundle.setName("BUNDLE-" + bundle.getBundleid());
@@ -344,6 +343,243 @@ public class BundleServiceImpl implements BundleService {
 						bundledtl.setObjid(rss.getRssid());
 					} else {
 						bundledtl.setObjid(templetdtl.getObjid());
+					}
+					bundledtlMapper.insertSelective(bundledtl);
+				}
+			}
+
+		}
+	}
+
+	@Transactional
+	public void copyBundle(String frombundleid, Bundle bundle) throws Exception {
+		if (bundle.getName() == null || bundle.getName().equals("")) {
+			bundle.setName("UNKNOWN");
+		}
+		Bundle frombundle = bundleMapper.selectByPrimaryKey(frombundleid);
+		if (frombundle == null) {
+			// Create bundle from blank
+			if (bundle.getRatio().equals("1")) {
+				// 16:9
+				bundle.setWidth(1920);
+				bundle.setHeight(1080);
+			} else if (bundle.getRatio().equals("2")) {
+				// 9:16
+				bundle.setWidth(1080);
+				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("3")) {
+				// 4:3
+				bundle.setWidth(1920);
+				bundle.setHeight(1440);
+			} else if (bundle.getRatio().equals("4")) {
+				// 3:4
+				bundle.setWidth(1440);
+				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("5")) {
+				// 32:9
+				bundle.setWidth(1920);
+				bundle.setHeight(540);
+			}
+			bundleMapper.insertSelective(bundle);
+
+			if (bundle.getName().equals("UNKNOWN")) {
+				bundle.setName("BUNDLE-" + bundle.getBundleid());
+			}
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+
+			Bundledtl bundledtl = new Bundledtl();
+			bundledtl.setBundleid(bundle.getBundleid());
+			bundledtl.setType(Bundledtl.Type_PLAY);
+			bundledtl.setMainflag("1");
+			if (bundle.getHomeflag().equals("0")) {
+				bundledtl.setHomebundleid(bundle.getHomebundleid());
+			} else {
+				bundledtl.setHomebundleid(bundle.getBundleid());
+			}
+			bundledtl.setWidth((int) (bundle.getWidth() / 2));
+			bundledtl.setHeight((int) (bundle.getHeight() / 2));
+			bundledtl.setTopoffset((int) (bundle.getHeight() / 4));
+			bundledtl.setLeftoffset((int) (bundle.getWidth() / 4));
+			bundledtl.setBgcolor("#000000");
+			if (bundledtl.getBgimageid() != null && bundledtl.getBgimageid() > 0) {
+				bundledtl.setOpacity(0);
+			} else {
+				bundledtl.setOpacity(255);
+			}
+			bundledtl.setZindex(0);
+			bundledtl.setSleeptime(0);
+			bundledtl.setIntervaltime(10);
+			bundledtl.setDirection("4");
+			bundledtl.setSpeed("2");
+			bundledtl.setColor("#FFFFFF");
+			bundledtl.setSize(50);
+			bundledtl.setObjtype(Bundledtl.ObjType_NONE);
+			bundledtl.setObjid(0);
+			bundledtlMapper.insertSelective(bundledtl);
+
+			Medialist medialist = new Medialist();
+			medialist.setOrgid(bundle.getOrgid());
+			medialist.setBranchid(0);
+			medialist.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
+			medialist.setType(Medialist.Type_Private);
+			medialist.setCreatestaffid(bundle.getCreatestaffid());
+			medialistMapper.insertSelective(medialist);
+			bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
+			bundledtl.setObjid(medialist.getMedialistid());
+			bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
+		} else {
+			// Copy bundle
+			Hashtable<Integer, Integer> bundleidHash = new Hashtable<Integer, Integer>();
+			ArrayList<Bundle> frombundleList = new ArrayList<Bundle>();
+
+			bundle.setTempletid(frombundle.getTempletid());
+			bundle.setRatio(frombundle.getRatio());
+			bundle.setHeight(frombundle.getHeight());
+			bundle.setWidth(frombundle.getWidth());
+			bundle.setBgcolor(frombundle.getBgcolor());
+			bundle.setBgimageid(frombundle.getBgimageid());
+			bundle.setHomeidletime(frombundle.getHomeidletime());
+			bundleMapper.insertSelective(bundle);
+			if (bundle.getName().equals("UNKNOWN")) {
+				bundle.setName("BUNDLE-" + bundle.getBundleid());
+			}
+			if (frombundle.getSnapshot() != null) {
+				String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid()
+						+ ".png";
+				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + frombundle.getSnapshot()), snapshotFile);
+				bundle.setSnapshot(snapshotFilePath);
+			}
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+			bundleidHash.put(frombundle.getTempletid(), bundle.getBundleid());
+			frombundleList.add(frombundle);
+
+			List<Bundle> fromsubbundles = frombundle.getSubbundles();
+			for (Bundle s : fromsubbundles) {
+				Bundle fromsubbundle = bundleMapper.selectByPrimaryKey("" + s.getBundleid());
+				Bundle subbundle = new Bundle();
+				subbundle.setOrgid(bundle.getOrgid());
+				subbundle.setBranchid(bundle.getBranchid());
+				subbundle.setTempletid(fromsubbundle.getTempletid());
+				subbundle.setName(fromsubbundle.getName());
+				subbundle.setRatio(fromsubbundle.getRatio());
+				subbundle.setHeight(fromsubbundle.getHeight());
+				subbundle.setWidth(fromsubbundle.getWidth());
+				subbundle.setBgcolor(fromsubbundle.getBgcolor());
+				subbundle.setBgimageid(fromsubbundle.getBgimageid());
+				subbundle.setTouchflag(fromsubbundle.getTouchflag());
+				subbundle.setHomeflag(fromsubbundle.getHomeflag());
+				subbundle.setHomebundleid(bundle.getBundleid());
+				subbundle.setHomeidletime(fromsubbundle.getHomeidletime());
+				bundleMapper.insertSelective(subbundle);
+				bundleidHash.put(fromsubbundle.getTempletid(), subbundle.getBundleid());
+				frombundleList.add(fromsubbundle);
+				if (fromsubbundle.getSnapshot() != null) {
+					String snapshotFilePath = "/bundle/" + subbundle.getBundleid() + "/snapshot/"
+							+ subbundle.getBundleid() + ".png";
+					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + fromsubbundle.getSnapshot()),
+							snapshotFile);
+					subbundle.setSnapshot(snapshotFilePath);
+					bundleMapper.updateByPrimaryKeySelective(subbundle);
+				}
+			}
+
+			for (Bundle t : frombundleList) {
+				List<Bundledtl> frombundledtls = t.getBundledtls();
+				for (Bundledtl frombundledtl : frombundledtls) {
+					Bundledtl bundledtl = new Bundledtl();
+					bundledtl.setBundleid(bundleidHash.get(t.getTempletid()));
+					if (bundle.getHomeflag().equals("0")) {
+						bundledtl.setHomebundleid(bundle.getHomebundleid());
+					} else {
+						bundledtl.setHomebundleid(bundle.getBundleid());
+					}
+					bundledtl.setTempletdtlid(frombundledtl.getTempletdtlid());
+					bundledtl.setType(frombundledtl.getType());
+					bundledtl.setMainflag(frombundledtl.getMainflag());
+					bundledtl.setHeight(frombundledtl.getHeight());
+					bundledtl.setWidth(frombundledtl.getWidth());
+					bundledtl.setTopoffset(frombundledtl.getTopoffset());
+					bundledtl.setLeftoffset(frombundledtl.getLeftoffset());
+					bundledtl.setZindex(frombundledtl.getZindex());
+					bundledtl.setBgcolor(frombundledtl.getBgcolor());
+					bundledtl.setOpacity(frombundledtl.getOpacity());
+					bundledtl.setBgimageid(frombundledtl.getBgimageid());
+					bundledtl.setSleeptime(frombundledtl.getSleeptime());
+					bundledtl.setIntervaltime(frombundledtl.getIntervaltime());
+					bundledtl.setAnimation(frombundledtl.getAnimation());
+					bundledtl.setDirection(frombundledtl.getDirection());
+					bundledtl.setSpeed(frombundledtl.getSpeed());
+					bundledtl.setColor(frombundledtl.getColor());
+					bundledtl.setSize(frombundledtl.getSize());
+					bundledtl.setDateformat(frombundledtl.getDateformat());
+					bundledtl.setFitflag(frombundledtl.getFitflag());
+					bundledtl.setVolume(frombundledtl.getVolume());
+					bundledtl.setReferflag(Bundledtl.ReferFlag_Private);
+					bundledtl.setObjtype(frombundledtl.getObjtype());
+					bundledtl.setTouchlabel(frombundledtl.getTouchlabel());
+					bundledtl.setTouchtype(frombundledtl.getTouchtype());
+					Integer touchbundleid = bundleidHash.get(frombundledtl.getTouchbundleid());
+					if (touchbundleid == null) {
+						touchbundleid = 0;
+					}
+					bundledtl.setTouchbundleid(touchbundleid);
+					bundledtl.setTouchapk(frombundledtl.getTouchapk());
+
+					if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Medialist)) {
+						Medialist temp = medialistMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
+						Medialist medialist = new Medialist();
+						medialist.setOrgid(bundle.getOrgid());
+						medialist.setBranchid(bundle.getBranchid());
+						medialist.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
+						medialist.setType(Medialist.Type_Private);
+						medialist.setCreatestaffid(bundle.getCreatestaffid());
+						medialistMapper.insertSelective(medialist);
+						for (Medialistdtl md : temp.getMedialistdtls()) {
+							Medialistdtl medialistdtl = new Medialistdtl();
+							medialistdtl.setMedialistid(medialist.getMedialistid());
+							medialistdtl.setObjtype(md.getObjtype());
+							medialistdtl.setObjid(md.getObjid());
+							medialistdtl.setSequence(md.getSequence());
+							medialistdtlMapper.insertSelective(medialistdtl);
+						}
+						bundledtl.setObjid(medialist.getMedialistid());
+					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Text)) {
+						Text temp = textMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
+						Text text = new Text();
+						text.setOrgid(bundle.getOrgid());
+						text.setBranchid(bundle.getBranchid());
+						text.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
+						text.setType(Text.Type_Private);
+						text.setCreatestaffid(bundle.getCreatestaffid());
+						text.setText(temp.getText());
+						textMapper.insertSelective(text);
+						bundledtl.setObjid(text.getTextid());
+					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Widget)) {
+						Widget temp = widgetMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
+						Widget widget = new Widget();
+						widget.setOrgid(bundle.getOrgid());
+						widget.setBranchid(bundle.getBranchid());
+						widget.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
+						widget.setType(Widget.Type_Private);
+						widget.setCreatestaffid(bundle.getCreatestaffid());
+						widget.setUrl(temp.getUrl());
+						widgetMapper.insertSelective(widget);
+						bundledtl.setObjid(widget.getWidgetid());
+					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Rss)) {
+						Rss temp = rssMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
+						Rss rss = new Rss();
+						rss.setOrgid(bundle.getOrgid());
+						rss.setBranchid(bundle.getBranchid());
+						rss.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
+						rss.setType(Rss.Type_Private);
+						rss.setCreatestaffid(bundle.getCreatestaffid());
+						rss.setUrl(temp.getUrl());
+						rssMapper.insertSelective(rss);
+						bundledtl.setObjid(rss.getRssid());
+					} else {
+						bundledtl.setObjid(frombundledtl.getObjid());
 					}
 					bundledtlMapper.insertSelective(bundledtl);
 				}
@@ -1103,6 +1339,17 @@ public class BundleServiceImpl implements BundleService {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
 			if (device.getOnlineflag().equals("1")) {
 				Msgevent msgevent = new Msgevent();
+				msgevent.setMsgtype(Msgevent.MsgType_Schedule);
+				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+				msgevent.setObjid1(Integer.parseInt(bindid));
+				msgevent.setObjtype2(Msgevent.ObjType_2_None);
+				msgevent.setObjid2(0);
+				msgevent.setStatus(Msgevent.Status_Wait);
+				msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, bindid, null, null,
+						null);
+				msgeventMapper.insertSelective(msgevent);
+
+				msgevent = new Msgevent();
 				msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
 				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
 				msgevent.setObjid1(Integer.parseInt(bindid));
@@ -1118,6 +1365,17 @@ public class BundleServiceImpl implements BundleService {
 			for (Device device : devices) {
 				if (device.getOnlineflag().equals("1")) {
 					Msgevent msgevent = new Msgevent();
+					msgevent.setMsgtype(Msgevent.MsgType_Schedule);
+					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+					msgevent.setObjid1(device.getDeviceid());
+					msgevent.setObjtype2(Msgevent.ObjType_2_None);
+					msgevent.setObjid2(0);
+					msgevent.setStatus(Msgevent.Status_Wait);
+					msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device,
+							"" + device.getDeviceid(), null, null, null);
+					msgeventMapper.insertSelective(msgevent);
+
+					msgevent = new Msgevent();
 					msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
 					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
 					msgevent.setObjid1(device.getDeviceid());

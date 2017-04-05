@@ -21,6 +21,8 @@ public interface BundleService {
 
 	public void addBundle(Bundle bundle) throws Exception;
 
+	public void copyBundle(String frombundleid, Bundle bundle) throws Exception;
+
 	public void updateBundle(Bundle bundle);
 
 	public void deleteBundle(String bundleid);

@@ -124,6 +124,7 @@ var common = {
 		unknown: 'Unknown',
 		more: 'More',
 		empty: 'No data available in table',
+		blank: 'Blank',
 
 		page_add: 'Add Page',
 		pagepkg_edit: 'Edit Package',

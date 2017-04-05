@@ -57,6 +57,7 @@ import com.broadvideo.pixsignage.persistence.FlowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.WeatherService;
@@ -95,6 +96,8 @@ public class PixsignageService2 {
 
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+	private BundleService bundleService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -258,7 +261,7 @@ public class PixsignageService2 {
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
 
-			responseJson.put("device_grid_id", device.getDevicegridid());
+			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
 			responseJson.put("ypos", device.getYpos());
 			if (device.getXpos().intValue() == 0 && device.getYpos().intValue() == 0) {
@@ -280,6 +283,44 @@ public class PixsignageService2 {
 	public String getbundle(String request) {
 		try {
 			logger.info("Pixsignage Service get_bundle: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson;
+			if (device.getDevicegroupid() > 0) {
+				responseJson = bundleService.generateBundleScheduleJson("2", "" + device.getDevicegroupid());
+				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
+			} else {
+				responseJson = bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid());
+				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
+			}
+			responseJson.put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_bundle exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_schedule")
+	public String getschedule(String request) {
+		try {
+			logger.info("Pixsignage Service get_schedule: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -515,9 +556,13 @@ public class PixsignageService2 {
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
 				eventJsonArray.put(eventJson);
-				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
-					eventJson.put("event_type", "bundle");
+				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
+					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", deviceService.generateScheduleJson("" + device.getDeviceid()));
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
+					eventJson.put("event_type", "bundle");
+					eventJson.put("event_content",
+							bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();

@@ -462,17 +462,14 @@ create table bundleschedule(
    bundlescheduleid int not null auto_increment,
    bindtype char(1) not null,
    bindid int not null,
-   bundleid int not null,
    playmode char(1) not null,
    playdate date,
    starttime time,
    endtime time,
    createtime timestamp not null default current_timestamp,
-   primary key (bundlescheduleid),
-   foreign key (bundleid) references bundle(bundleid)
+   primary key (bundlescheduleid)
  )engine = innodb
 default character set utf8;
-alter table bundleschedule add foreign key bundleschedule_fk1(bundleid) references bundle(bundleid);
 alter table bundleschedule add index bundleschedule_index1(bindtype, bindid);
 
 create table bundlescheduledtl( 

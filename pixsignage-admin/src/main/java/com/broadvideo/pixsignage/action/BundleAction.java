@@ -115,7 +115,13 @@ public class BundleAction extends BaseDatatableAction {
 			} else {
 				bundle.setReviewflag(Bundle.REVIEW_PASSED);
 			}
-			bundleService.addBundle(bundle);
+
+			String frombundleid = getParameter("frombundleid");
+			if (frombundleid != null) {
+				bundleService.copyBundle(frombundleid, bundle);
+			} else {
+				bundleService.addBundle(bundle);
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doAdd exception, ", ex);

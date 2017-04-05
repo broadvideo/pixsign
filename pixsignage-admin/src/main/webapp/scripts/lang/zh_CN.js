@@ -124,6 +124,7 @@ var common = {
 		unknown: '未知',
 		more: '更多',
 		empty: '列表为空',
+		blank: '空白',
 		
 		page_add: '新增页面',
 		pagepkg_edit: '编辑包',

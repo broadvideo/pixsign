@@ -122,7 +122,7 @@ response.setDateHeader("Expires",0);
 		</div>
 
 		<div id="SubtempletModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -143,6 +143,13 @@ response.setDateHeader("Expires",0);
 										<div class="input-icon right">
 											<i class="fa"></i> <input type="text" class="form-control" name="templet.name" />
 										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.subtemplet"/></label>
+									<div class="col-md-9 pre-scrollable">
+										<table id="FromTempletTable">
+										</table>
 									</div>
 								</div>
 							</div>
@@ -871,7 +878,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-templet-touch.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-templet-touch.js?t=11"></script>
 <script src="${base_ctx}/scripts/pix-templet-wizard.js?t=10"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
 <script src="${base_ctx}/scripts/pix-templet-design1.js?t=10"></script>

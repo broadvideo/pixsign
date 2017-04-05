@@ -15,6 +15,8 @@ public interface TempletService {
 
 	public void addTemplet(Templet templet);
 
+	public void copyTemplet(String fromtempletid, Templet templet) throws Exception;
+
 	public void updateTemplet(Templet templet);
 
 	public void deleteTemplet(String templetid);

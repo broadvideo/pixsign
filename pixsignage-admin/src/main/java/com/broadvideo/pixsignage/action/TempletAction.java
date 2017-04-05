@@ -83,7 +83,13 @@ public class TempletAction extends BaseDatatableAction {
 			templet.setOrgid(getLoginStaff().getOrgid());
 			templet.setCreatestaffid(getLoginStaff().getStaffid());
 			templet.setUuid(UUID.randomUUID().toString().replace("-", ""));
-			templetService.addTemplet(templet);
+
+			String fromtempletid = getParameter("fromtempletid");
+			if (fromtempletid != null) {
+				templetService.copyTemplet(fromtempletid, templet);
+			} else {
+				templetService.addTemplet(templet);
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("TempletAction doAdd exception, ", ex);

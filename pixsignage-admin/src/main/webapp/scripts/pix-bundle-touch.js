@@ -142,9 +142,9 @@ $('#MyTable').dataTable({
 								openEffect	: 'none',
 								closeEffect	: 'none',
 								closeBtn : false,
-						        padding : 0,
-						        content: '<div id="BundlePreview"></div>',
-						    });
+								padding : 0,
+								content: '<div id="BundlePreview"></div>',
+							});
 							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
 						} else {
 							bootbox.alert(common.tips.error + data.errormsg);
@@ -154,7 +154,7 @@ $('#MyTable').dataTable({
 						console.log('failue');
 					}
 				});
-			    return false;
+				return false;
 			})
 		});
 	},
@@ -237,11 +237,11 @@ $('#TempletTable').dataTable({
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
-		$('.thumbs').each(function(i) {
+		$('#TempletContainer .thumbs').each(function(i) {
 			$(this).width($(this).parent().closest('div').width());
 			$(this).height($(this).parent().closest('div').width());
 		});
-		$('.fancybox').each(function(index,item) {
+		$('#TempletContainer .fancybox').each(function(index,item) {
 			$(this).click(function() {
 				var templetid = $(this).attr('templetid');
 				$.ajax({
@@ -254,9 +254,9 @@ $('#TempletTable').dataTable({
 								openEffect	: 'none',
 								closeEffect	: 'none',
 								closeBtn : false,
-						        padding : 0,
-						        content: '<div id="TempletPreview"></div>',
-						    });
+								padding : 0,
+								content: '<div id="TempletPreview"></div>',
+							});
 							redrawTempletPreview($('#TempletPreview'), data.templet, 800, 1);
 						} else {
 							bootbox.alert(common.tips.error + data.errormsg);
@@ -266,7 +266,7 @@ $('#TempletTable').dataTable({
 						console.log('failue');
 					}
 				});
-			    return false;
+				return false;
 			})
 		});
 	},
@@ -293,6 +293,75 @@ function refreshTemplet() {
 		$('#TempletTable').dataTable().fnDraw(true);
 	}
 }
+
+
+function refreshFromBundleTable() {
+	var width = 100/(CurrentSubBundles.length+1);
+	var fromBundleTableHtml = '';
+	fromBundleTableHtml += '<tr>';
+	fromBundleTableHtml += '<td style="padding: 0px 20px 0px 0px;" width="' + width + '%">';
+	fromBundleTableHtml += '<div class="thumbs" style="width:100px; height:100px;">';
+	fromBundleTableHtml += '</div></td>';
+	for (var i=0; i<CurrentSubBundles.length; i++) {
+		var frombundle = CurrentSubBundles[i];
+		fromBundleTableHtml += '<td style="padding: 0px 20px 0px 0px;" width="' + width + '%">';
+		fromBundleTableHtml += '<a href="javascript:;" frombundleid="' + frombundle.bundleid + '" class="fancybox">';
+		fromBundleTableHtml += '<div class="thumbs" style="width:100px; height:100px;">';
+		if (frombundle.snapshot != null) {
+			var thumbwidth = frombundle.width > frombundle.height? 100 : 100*frombundle.width/frombundle.height;
+			fromBundleTableHtml += '<img src="/pixsigdata' + frombundle.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + frombundle.name + '" />';
+		}
+		fromBundleTableHtml += '</div></a></td>';
+	}
+	fromBundleTableHtml += '</tr>';
+	fromBundleTableHtml += '<tr>';
+	fromBundleTableHtml += '<td>';
+	fromBundleTableHtml += '<label class="radio-inline">';
+	fromBundleTableHtml += '<input type="radio" name="frombundleid" value="0" checked>';
+	fromBundleTableHtml += common.view.blank + '</label>';
+	fromBundleTableHtml += '</td>';
+	for (var i=0; i<CurrentSubBundles.length; i++) {
+		var frombundle = CurrentSubBundles[i];
+		fromBundleTableHtml += '<td>';
+		fromBundleTableHtml += '<label class="radio-inline">';
+		fromBundleTableHtml += '<input type="radio" name="frombundleid" value="' + frombundle.bundleid + '">';
+		fromBundleTableHtml += frombundle.name + '</label>';
+		fromBundleTableHtml += '</td>';
+	}
+	fromBundleTableHtml += '</tr>';
+	$('#FromBundleTable').html(fromBundleTableHtml);
+	$('#FromBundleTable').width(120 * (CurrentSubBundles.length+1));
+
+	$('#FromBundleTable .fancybox').each(function(index,item) {
+		$(this).click(function() {
+			var bundleid = $(this).attr('frombundleid');
+			$.ajax({
+				type : 'GET',
+				url : 'bundle!get.action',
+				data : {bundleid: bundleid},
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						$.fancybox({
+							openEffect	: 'none',
+							closeEffect	: 'none',
+							closeBtn : false,
+							padding : 0,
+							content: '<div id="BundlePreview"></div>',
+						});
+						redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
+			return false;
+		})
+	});
+}
+
 
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
@@ -350,13 +419,16 @@ $('body').on('click', '.pix-subbundle-add', function(event) {
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	var bundle = $('#MyTable').dataTable().fnGetData(index);
+	CurrentBundle = $('#MyTable').dataTable().fnGetData(index);
+	CurrentBundleid = CurrentBundle.bundleid;
+	CurrentSubBundles = CurrentBundle.subbundles;
 	var formdata = new Object();
 	formdata['bundle.name'] = '';
-	formdata['bundle.homebundleid'] = bundle.bundleid;
+	formdata['bundle.homebundleid'] = CurrentBundleid;
 	formdata['bundle.homeflag'] = '0';
-	formdata['bundle.ratio'] = bundle.ratio;
+	formdata['bundle.ratio'] = CurrentBundle.ratio;
 	$('#SubbundleForm').loadJSON(formdata);
+	refreshFromBundleTable();
 	$('#SubbundleModal').modal();
 });			
 $('[type=submit]', $('#SubbundleModal')).on('click', function(event) {

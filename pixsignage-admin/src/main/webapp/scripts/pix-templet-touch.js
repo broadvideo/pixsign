@@ -152,6 +152,75 @@ jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input
 jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 jQuery('#MyTable_wrapper .dataTables_length select').select2();
 
+
+function refreshFromTempletTable() {
+	var width = 100/(CurrentSubTemplets.length+1);
+	var fromTempletTableHtml = '';
+	fromTempletTableHtml += '<tr>';
+	fromTempletTableHtml += '<td style="padding: 0px 20px 0px 0px;" width="' + width + '%">';
+	fromTempletTableHtml += '<div class="thumbs" style="width:100px; height:100px;">';
+	fromTempletTableHtml += '</div></td>';
+	for (var i=0; i<CurrentSubTemplets.length; i++) {
+		var fromtemplet = CurrentSubTemplets[i];
+		fromTempletTableHtml += '<td style="padding: 0px 20px 0px 0px;" width="' + width + '%">';
+		fromTempletTableHtml += '<a href="javascript:;" fromtempletid="' + fromtemplet.templetid + '" class="fancybox">';
+		fromTempletTableHtml += '<div class="thumbs" style="width:100px; height:100px;">';
+		if (fromtemplet.snapshot != null) {
+			var thumbwidth = fromtemplet.width > fromtemplet.height? 100 : 100*fromtemplet.width/fromtemplet.height;
+			fromTempletTableHtml += '<img src="/pixsigdata' + fromtemplet.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + fromtemplet.name + '" />';
+		}
+		fromTempletTableHtml += '</div></a></td>';
+	}
+	fromTempletTableHtml += '</tr>';
+	fromTempletTableHtml += '<tr>';
+	fromTempletTableHtml += '<td>';
+	fromTempletTableHtml += '<label class="radio-inline">';
+	fromTempletTableHtml += '<input type="radio" name="fromtempletid" value="0" checked>';
+	fromTempletTableHtml += common.view.blank + '</label>';
+	fromTempletTableHtml += '</td>';
+	for (var i=0; i<CurrentSubTemplets.length; i++) {
+		var fromtemplet = CurrentSubTemplets[i];
+		fromTempletTableHtml += '<td>';
+		fromTempletTableHtml += '<label class="radio-inline">';
+		fromTempletTableHtml += '<input type="radio" name="fromtempletid" value="' + fromtemplet.templetid + '">';
+		fromTempletTableHtml += fromtemplet.name + '</label>';
+		fromTempletTableHtml += '</td>';
+	}
+	fromTempletTableHtml += '</tr>';
+	$('#FromTempletTable').html(fromTempletTableHtml);
+	$('#FromTempletTable').width(120 * (CurrentSubTemplets.length+1));
+
+	$('#FromTempletTable .fancybox').each(function(index,item) {
+		$(this).click(function() {
+			var templetid = $(this).attr('fromtempletid');
+			$.ajax({
+				type : 'GET',
+				url : 'templet!get.action',
+				data : {templetid: templetid},
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						$.fancybox({
+							openEffect	: 'none',
+							closeEffect	: 'none',
+							closeBtn : false,
+							padding : 0,
+							content: '<div id="TempletPreview"></div>',
+						});
+						redrawTempletPreview($('#TempletPreview'), data.templet, 800, 1);
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
+			return false;
+		})
+	});
+}
+
+
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
 FormValidateOption.rules = {};
@@ -196,13 +265,16 @@ $('body').on('click', '.pix-subtemplet-add', function(event) {
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	var templet = $('#MyTable').dataTable().fnGetData(index);
+	CurrentTemplet = $('#MyTable').dataTable().fnGetData(index);
+	CurrentTempletid = CurrentTemplet.templetid;
+	CurrentSubTemplets = CurrentTemplet.subtemplets;
 	var formdata = new Object();
 	formdata['templet.name'] = '';
-	formdata['templet.hometempletid'] = templet.templetid;
+	formdata['templet.hometempletid'] = CurrentTempletid;
 	formdata['templet.homeflag'] = '0';
-	formdata['templet.ratio'] = templet.ratio;
+	formdata['templet.ratio'] = CurrentTemplet.ratio;
 	$('#SubtempletForm').loadJSON(formdata);
+	refreshFromTempletTable();
 	$('#SubtempletModal').modal();
 });			
 $('[type=submit]', $('#SubtempletModal')).on('click', function(event) {
