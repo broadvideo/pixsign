@@ -2,10 +2,10 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Bundleschedule;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Staff;
@@ -33,11 +33,7 @@ public interface BundleService {
 
 	public void handleWizard(Staff staff, Bundle bundle, Device[] devices, Devicegroup[] devicegroups) throws Exception;
 
-	public void addBundleschedules(Bundleschedule[] bundleschedules);
-
 	public void syncBundleByTemplet(String templetid) throws Exception;
-
-	public void syncBundle(String bundleid) throws Exception;
 
 	public void setBundleReviewWait(String bundleid);
 
@@ -45,7 +41,5 @@ public interface BundleService {
 
 	public JSONObject generateBundleJson(String bundleid);
 
-	public void syncBundleSchedule(String bindtype, String bindid) throws Exception;
-
-	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
+	public JSONArray generateBundleJsonArray(List<Integer> bundleids);
 }

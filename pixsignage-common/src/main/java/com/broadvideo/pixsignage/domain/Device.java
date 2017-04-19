@@ -82,7 +82,7 @@ public class Device {
 
 	private Devicegroup devicegroup;
 
-	private List<Bundleschedule> bundleschedules;
+	private List<Schedule> schedules;
 
 	public Integer getDeviceid() {
 		return deviceid;
@@ -394,11 +394,11 @@ public class Device {
 		this.devicegroup = devicegroup;
 	}
 
-	public List<Bundleschedule> getBundleschedules() {
-		return bundleschedules;
+	public List<Schedule> getSchedules() {
+		return schedules;
 	}
 
-	public void setBundleschedules(List<Bundleschedule> bundleschedules) {
-		this.bundleschedules = bundleschedules;
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
 	}
 }

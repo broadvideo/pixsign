@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Devicegrid;
-import com.broadvideo.pixsignage.domain.Gridschedule;
 import com.broadvideo.pixsignage.service.DevicegridService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -21,10 +21,11 @@ public class DevicegridAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Devicegrid devicegrid;
-	private Gridschedule[] gridschedules;
 
 	@Autowired
 	private DevicegridService devicegridService;
+	@Autowired
+	private ScheduleService scheduleService;
 
 	public String doList() {
 		try {
@@ -112,23 +113,11 @@ public class DevicegridAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegridid = getParameter("devicegridid");
-			devicegridService.syncSchedule(devicegridid);
+			scheduleService.syncSchedule("3", devicegridid);
 			logger.info("Devicegrid schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Devicegrid schedule sync error: " + ex.getMessage());
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doSchedulesAdd() {
-		try {
-			devicegridService.addSchedules(gridschedules);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("DevicegridAction doSchedulesAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -141,13 +130,5 @@ public class DevicegridAction extends BaseDatatableAction {
 
 	public void setDevicegrid(Devicegrid devicegrid) {
 		this.devicegrid = devicegrid;
-	}
-
-	public Gridschedule[] getGridschedules() {
-		return gridschedules;
-	}
-
-	public void setGridschedules(Gridschedule[] gridschedules) {
-		this.gridschedules = gridschedules;
 	}
 }

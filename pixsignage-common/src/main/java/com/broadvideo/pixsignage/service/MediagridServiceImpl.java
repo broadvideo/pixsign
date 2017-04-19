@@ -11,24 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
-import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Gridlayout;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Mediagrid;
 import com.broadvideo.pixsignage.domain.Mediagriddtl;
 import com.broadvideo.pixsignage.domain.Mmedia;
 import com.broadvideo.pixsignage.domain.Mmediadtl;
-import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Video;
-import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.GridlayoutMapper;
-import com.broadvideo.pixsignage.persistence.GridscheduleMapper;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.MediagridMapper;
 import com.broadvideo.pixsignage.persistence.MediagriddtlMapper;
 import com.broadvideo.pixsignage.persistence.MmediaMapper;
 import com.broadvideo.pixsignage.persistence.MmediadtlMapper;
-import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 
 @Service("mediagridService")
@@ -48,12 +43,6 @@ public class MediagridServiceImpl implements MediagridService {
 	private VideoMapper videoMapper;
 	@Autowired
 	private ImageMapper imageMapper;
-	@Autowired
-	private DeviceMapper deviceMapper;
-	@Autowired
-	private GridscheduleMapper gridscheduleMapper;
-	@Autowired
-	private MsgeventMapper msgeventMapper;
 
 	public Mediagrid selectByPrimaryKey(String mediagridid) {
 		return mediagridMapper.selectByPrimaryKey(mediagridid);
@@ -217,28 +206,6 @@ public class MediagridServiceImpl implements MediagridService {
 		mediagrid.setSnapshot(snapshotFilePath);
 		mediagridMapper.updateByPrimaryKeySelective(mediagrid);
 		checkStatus();
-	}
-
-	@Transactional
-	public void syncSchedule(String mediagridid) {
-		List<Integer> devicegridids = gridscheduleMapper.selectDevicegridByMediagrid(mediagridid);
-		for (int devicegridid : devicegridids) {
-			List<Device> devices = deviceMapper.selectByDevicegrid("" + devicegridid);
-			for (Device device : devices) {
-				if (device.getOnlineflag().equals("1")) {
-					Msgevent msgevent = new Msgevent();
-					msgevent.setMsgtype(Msgevent.MsgType_Grid_Schedule);
-					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-					msgevent.setObjid1(device.getDeviceid());
-					msgevent.setObjtype2(Msgevent.ObjType_2_None);
-					msgevent.setObjid2(0);
-					msgevent.setStatus(Msgevent.Status_Wait);
-					msgeventMapper.deleteByDtl(Msgevent.MsgType_Grid_Schedule, Msgevent.ObjType_1_Device,
-							"" + device.getDeviceid(), null, null, null);
-					msgeventMapper.insertSelective(msgevent);
-				}
-			}
-		}
 	}
 
 	@Transactional

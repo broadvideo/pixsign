@@ -174,6 +174,11 @@ response.setDateHeader("Expires",0);
 																<label class="radio-inline page-ctrl">
 																	<input type="radio" name="objtype" value="3"> <spring:message code="global.page"/>
 																</label>
+																<!-- 
+																<label class="radio-inline bundle-ctrl">
+																	<input type="radio" name="objtype" value="4"> <spring:message code="global.bundle"/>
+																</label>
+																 -->
 															</div>
 														</div>
 														<div class="form-group mediagrid-ctl last">
@@ -306,7 +311,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-mediagrid.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-mediagrid.js?t=2"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Bundleschedule;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
@@ -28,6 +27,7 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.ImageService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
@@ -40,7 +40,6 @@ public class BundleAction extends BaseDatatableAction {
 	private Bundle bundle;
 	private Device[] devices;
 	private Devicegroup[] devicegroups;
-	private Bundleschedule[] bundleschedules;
 
 	private String exportname;
 	private InputStream inputStream;
@@ -51,6 +50,8 @@ public class BundleAction extends BaseDatatableAction {
 	private VideoService videoService;
 	@Autowired
 	private ImageService imageService;
+	@Autowired
+	private ScheduleService scheduleService;
 
 	public String doGet() {
 		try {
@@ -58,7 +59,7 @@ public class BundleAction extends BaseDatatableAction {
 			bundle = bundleService.selectByPrimaryKey(bundleid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("OrgAction doGet exception, ", ex);
+			logger.error("BundleAction doGet exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -158,7 +159,7 @@ public class BundleAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String bundleid = getParameter("bundleid");
-			bundleService.syncBundle(bundleid);
+			scheduleService.syncScheduleByBundle(bundleid);
 			logger.info("Bundle sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -220,18 +221,6 @@ public class BundleAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doWizard exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doBundleschedulesAdd() {
-		try {
-			bundleService.addBundleschedules(bundleschedules);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("BundleAction doBundleschedulesAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -361,14 +350,6 @@ public class BundleAction extends BaseDatatableAction {
 
 	public void setDevicegroups(Devicegroup[] devicegroups) {
 		this.devicegroups = devicegroups;
-	}
-
-	public Bundleschedule[] getBundleschedules() {
-		return bundleschedules;
-	}
-
-	public void setBundleschedules(Bundleschedule[] bundleschedules) {
-		this.bundleschedules = bundleschedules;
 	}
 
 	public String getExportname() {

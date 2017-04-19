@@ -315,7 +315,7 @@ function initUploadModal() {
 		//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 		disableImageResize: true,
 		maxFileSize: 10240000,
-		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png)$/i,
+		acceptFileTypes: /(\.|\/)(bmp|jpe?g|png|gif)$/i,
 		// Uncomment the following to send cross-domain cookies:
 		//xhrFields: {withCredentials: true},				
 	});

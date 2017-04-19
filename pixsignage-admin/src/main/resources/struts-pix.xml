@@ -889,16 +889,6 @@
 				<param name="includeProperties">dataid,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="bundle!addbundleschedules" method="doBundleschedulesAdd" class="bundleAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
 		<action name="bundle!export" method="doExport" class="bundleAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
@@ -964,6 +954,17 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="schedule!batch" method="doBatch" class="scheduleAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
 
@@ -1366,6 +1367,12 @@
 			</result>
 		</action>
 
+		<action name="mediagrid!get" method="doGet" class="mediagridAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">mediagrid.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="mediagrid!list" method="doList" class="mediagridAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1442,16 +1449,6 @@
 			</result>
 		</action>
 		<action name="devicegrid!sync" method="doSync" class="devicegridAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="devicegrid!addgridschedules" method="doSchedulesAdd" class="devicegridAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

@@ -17,8 +17,8 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
 		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegrid" />
-	<collection property="gridschedules" ofType="com.broadvideo.pixsignage.domain.Gridschedule"
-		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.GridscheduleMapper.selectListByDevicegrid" />
+	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
+		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevicegrid" />
   </resultMap>
   
   <sql id="Base_Column_List" >

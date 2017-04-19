@@ -623,8 +623,8 @@ public class PageAction extends BaseDatatableAction {
 			file.delete();
 		}
 
-		RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
-				.setConnectionRequestTimeout(30000).build();
+		RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(60000)
+				.setConnectionRequestTimeout(60000).build();
 		CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
 		try {
 			HttpGet httpget = new HttpGet(url);

@@ -6,6 +6,7 @@ public class Mediagriddtl {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
 	public final static String ObjType_Page = "3";
+	public final static String ObjType_Bundle = "4";
 
 	private Integer mediagriddtlid;
 
@@ -32,6 +33,8 @@ public class Mediagriddtl {
 	private Image image;
 
 	private Page page;
+
+	private Bundle bundle;
 
 	public Integer getMediagriddtlid() {
 		return mediagriddtlid;
@@ -135,5 +138,13 @@ public class Mediagriddtl {
 
 	public void setPage(Page page) {
 		this.page = page;
+	}
+
+	public Bundle getBundle() {
+		return bundle;
+	}
+
+	public void setBundle(Bundle bundle) {
+		this.bundle = bundle;
 	}
 }

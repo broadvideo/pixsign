@@ -46,6 +46,7 @@ import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Flowlog;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
@@ -55,8 +56,8 @@ import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.FlowlogMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.DevicefileService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
@@ -90,7 +91,7 @@ public class PixsignageService {
 	private FlowlogMapper flowlogMapper;
 
 	@Autowired
-	private BundleService bundleService;
+	private ScheduleService scheduleService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -372,12 +373,11 @@ public class PixsignageService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson;
+			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
+					"" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
-				responseJson = bundleService.generateBundleScheduleJson("2", "" + device.getDevicegroupid());
 				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
 			} else {
-				responseJson = bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid());
 				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
 			}
 			responseJson.put("code", 0).put("message", "成功");
@@ -417,6 +417,7 @@ public class PixsignageService {
 	@Path("report_status")
 	public String reportstatus(String request) {
 		try {
+			long l1 = Calendar.getInstance().getTimeInMillis();
 			logger.info("Pixsignage Service report_status: {}", request);
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
@@ -476,6 +477,11 @@ public class PixsignageService {
 			 */
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+
+			long l2 = Calendar.getInstance().getTimeInMillis();
+			long duration = l2 - l1;
+			logger.info("report_status exec time: {}", duration);
+
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_status exception", e);

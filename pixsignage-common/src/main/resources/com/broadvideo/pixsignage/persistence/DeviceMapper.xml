@@ -40,8 +40,8 @@
     <result column="xpos" property="xpos" jdbcType="INTEGER" />
     <result column="ypos" property="ypos" jdbcType="INTEGER" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
-	<collection property="bundleschedules" ofType="com.broadvideo.pixsignage.domain.Bundleschedule"
-		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.BundlescheduleMapper.selectListByDevice" />
+	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
+		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
   </resultMap>
   
   <sql id="Base_Column_List" >

@@ -16,23 +16,26 @@
 	</bean>
 	 -->
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://pixsignage-db:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
 		<property name="username" value="pixsignage" />
 		<property name="password" value="pixsignage@01" />
-		<property name="initialSize" value="50" />
+		<property name="initialSize" value="20" />
 		<property name="maxActive" value="100" />
-		<property name="maxIdle" value="50" />
 		<property name="minIdle" value="20" />
-		<property name="maxWait" value="500" />
-		<property name="defaultAutoCommit" value="true" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="select 1 from dual" />
 		<property name="testWhileIdle" value="true" />
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
-		<property name="validationQuery" value="select 1 from dual" />
-		<property name="timeBetweenEvictionRunsMillis" value="30000" />
-		<property name="numTestsPerEvictionRun" value="100" />
+
+		<property name="poolPreparedStatements" value="false" />
+
+		<property name="filters" value="stat" />
 	</bean>
 
 	<bean id="transactionManager"

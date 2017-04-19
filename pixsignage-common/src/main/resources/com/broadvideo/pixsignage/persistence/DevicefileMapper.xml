@@ -75,32 +75,36 @@
     select t2.deviceid,'1',t2.videoid,t2.size,0,'0',SYSDATE() from
     (select * from devicefile df where df.objtype=1 and df.deviceid=#{deviceid}) t1
     right join
-    (select distinct bs.bindid as deviceid,v.videoid,v.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, video v
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
+    (select distinct s.bindid as deviceid,v.videoid,v.size from schedule s, scheduledtl sd, bundledtl bd, medialistdtl mld, video v
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=1
       and mld.objid=v.videoid 
       and v.status=1 
-      and bs.bindtype=1 
-      and bs.bindid=#{deviceid}) t2
+      and s.bindtype=1 
+      and s.bindid=#{deviceid}) t2
     on t1.objid=t2.videoid
     where t1.objid is null;
   </insert>
   <delete id="deleteDeviceVideoFiles" >
     delete df from devicefile df
     left join
-    (select distinct bs.bindid as deviceid,v.videoid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, video v
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
+    (select distinct s.bindid as deviceid,v.videoid from schedule s, scheduledtl sd, bundledtl bd, medialistdtl mld, video v
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=1
       and mld.objid=v.videoid 
       and v.status=1 
-      and bs.bindtype=1 
-      and bs.bindid=#{deviceid}) t
+      and s.bindtype=1 
+      and s.bindid=#{deviceid}) t
     on df.objid=t.videoid
     where df.objtype=1 and df.deviceid=#{deviceid} and t.videoid is null;
   </delete>
@@ -110,32 +114,36 @@
     select t2.deviceid,'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
     (select * from devicefile df where df.objtype=2 and df.deviceid=#{deviceid}) t1
     right join
-    (select distinct bs.bindid as deviceid,i.imageid,i.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, image i
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
+    (select distinct s.bindid as deviceid,i.imageid,i.size from schedule s, scheduledtl sd, bundledtl bd, medialistdtl mld, image i
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=2
       and mld.objid=i.imageid 
       and i.status=1 
-      and bs.bindtype=1 
-      and bs.bindid=#{deviceid}) t2
+      and s.bindtype=1 
+      and s.bindid=#{deviceid}) t2
     on t1.objid=t2.imageid
     where t1.objid is null;
   </insert>
   <delete id="deleteDeviceImageFiles" >
     delete df from devicefile df
     left join 
-    (select distinct bs.bindid as deviceid,i.imageid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, medialistdtl mld, image i
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
+    (select distinct s.bindid as deviceid,i.imageid from schedule s, scheduledtl sd, bundledtl bd, medialistdtl mld, image i
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
       and mld.objtype=2 
       and mld.objid=i.imageid 
       and i.status=1 
-      and bs.bindtype=1 
-      and bs.bindid=#{deviceid}) t
+      and s.bindtype=1 
+      and s.bindid=#{deviceid}) t
     on df.objid=t.imageid 
     where df.objtype=2 and df.deviceid=#{deviceid} and t.imageid is null;
   </delete>
@@ -145,11 +153,13 @@
     select t2.deviceid,'1',t2.videoid,t2.size,0,'0',SYSDATE() from 
     (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=1 and d.devicegroupid=#{devicegroupid}) t1
     right join
-    (select distinct d.deviceid,v.videoid,v.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, video v 
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
-      and bs.bindtype=2 
-      and bs.bindid=#{devicegroupid} 
+    (select distinct d.deviceid,v.videoid,v.size from schedule s, scheduledtl sd, bundledtl bd, device d, medialistdtl mld, video v 
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
+      and s.bindtype=2 
+      and s.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
@@ -162,11 +172,13 @@
   <delete id="deleteDevicegroupVideoFiles" >
     delete df from device d, devicefile df
     left join 
-    (select distinct d.deviceid,v.videoid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, video v 
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
-      and bs.bindtype=2 
-      and bs.bindid=#{devicegroupid} 
+    (select distinct d.deviceid,v.videoid from schedule s, scheduledtl sd, bundledtl bd, device d, medialistdtl mld, video v 
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
+      and s.bindtype=2 
+      and s.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
@@ -182,11 +194,13 @@
     select t2.deviceid,'2',t2.imageid,t2.size,0,'0',SYSDATE() from 
     (select df.objid,df.deviceid from devicefile df, device d where df.deviceid=d.deviceid and df.objtype=2 and d.devicegroupid=#{devicegroupid}) t1
     right join
-    (select distinct d.deviceid,i.imageid,i.size from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, image i
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
-      and bs.bindtype=2 
-      and bs.bindid=#{devicegroupid} 
+    (select distinct d.deviceid,i.imageid,i.size from schedule s, scheduledtl sd, bundledtl bd, device d, medialistdtl mld, image i
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
+      and s.bindtype=2 
+      and s.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
       and bd.objtype=1 
       and bd.objid=mld.medialistid 
@@ -199,11 +213,13 @@
   <delete id="deleteDevicegroupImageFiles" >
     delete df from device d, devicefile df
     left join 
-    (select distinct d.deviceid,i.imageid from bundleschedule bs, bundlescheduledtl bsd, bundledtl bd, device d, medialistdtl mld, image i
-      where bs.bundlescheduleid=bsd.bundlescheduleid
-      and bsd.bundleid=bd.homebundleid 
-      and bs.bindtype=2 
-      and bs.bindid=#{devicegroupid} 
+    (select distinct d.deviceid,i.imageid from schedule s, scheduledtl sd, bundledtl bd, device d, medialistdtl mld, image i
+      where s.scheduleid=sd.scheduleid
+      and s.scheduletype = 1
+      and sd.objtype = 1
+      and sd.objid=bd.homebundleid 
+      and s.bindtype=2 
+      and s.bindid=#{devicegroupid} 
       and d.devicegroupid=#{devicegroupid} 
       and bd.objtype=1
       and bd.objid=mld.medialistid 

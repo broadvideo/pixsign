@@ -12,8 +12,8 @@
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegroup" />
-	<collection property="bundleschedules" ofType="com.broadvideo.pixsignage.domain.Bundleschedule"
-		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.BundlescheduleMapper.selectListByDevicegroup" />
+	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
+		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevicegroup" />
   </resultMap>
   
   <sql id="Base_Column_List" >

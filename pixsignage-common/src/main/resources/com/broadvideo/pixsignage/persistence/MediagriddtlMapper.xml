@@ -15,6 +15,7 @@
     <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
     <association property="page" column="{objtype=objtype,pageid=objid}" select="selectPageid" />
+    <association property="bundle" column="{objtype=objtype,bundleid=objid}" select="selectBundleid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -35,6 +36,11 @@
   <select id="selectPageid" resultMap="com.broadvideo.pixsignage.persistence.PageMapper.BaseResultMap" >
     select * from page
     where '${objtype}' = '3' and pageid = #{pageid}
+  </select>
+  
+  <select id="selectBundleid" resultMap="com.broadvideo.pixsignage.persistence.BundleMapper.BaseResultMap" >
+    select * from bundle
+    where '${objtype}' = '4' and bundleid = #{bundleid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

@@ -1,10 +1,10 @@
 var currentDevicegrid;
 var currentDevicegridid;
-var currentGridschedules;
+var currentSchedules;
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
-}
+}			
 
 $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -16,7 +16,7 @@ $('#MyTable').dataTable({
 	'sAjaxSource' : 'devicegrid!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.detail, 'mData' : 'devicegridid', 'bSortable' : false, 'sWidth' : '15%' },
-					{'sTitle' : common.view.gridschedule, 'mData' : 'devicegridid', 'bSortable' : false, 'sWidth' : '65%' }, 
+					{'sTitle' : common.view.schedule, 'mData' : 'devicegridid', 'bSortable' : false, 'sWidth' : '65%' }, 
 					{'sTitle' : '', 'mData' : 'devicegridid', 'bSortable' : false, 'sWidth' : '5%' }, 
 					{'sTitle' : '', 'mData' : 'devicegridid', 'bSortable' : false, 'sWidth' : '5%' }],
 	'iDisplayLength' : 10,
@@ -25,53 +25,59 @@ $('#MyTable').dataTable({
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		$('td:eq(1)', nRow).html('<div id="DevicegridDiv-'+ aData.devicegridid + '"></div>');
 		
-		var gridschedulehtml = '';
-		if (aData.gridschedules.length > 0) {
-			for (var i=0; i<aData.gridschedules.length; i++) {
-				var schedule = aData.gridschedules[i];
-				gridschedulehtml += '<div class="row">';
-				gridschedulehtml += '<div class="col-md-2 col-xs-2">';
-				gridschedulehtml += '<h3>' + schedule.starttime.substring(0,5) + ' </h3>';
-				gridschedulehtml += '</div>';
-				gridschedulehtml += '<div class="col-md-10 col-xs-10">';
-				for (var j=0; j<schedule.gridscheduledtls.length; j++) {
-					var gridscheduledtl = schedule.gridscheduledtls[j];
+		var schedulehtml = '';
+		if (aData.schedules.length > 0) {
+			for (var i=0; i<aData.schedules.length; i++) {
+				var schedule = aData.schedules[i];
+				schedulehtml += '<div class="row">';
+				schedulehtml += '<div class="col-md-2 col-xs-2">';
+				schedulehtml += '<h3>' + schedule.starttime.substring(0,5) + ' </h3>';
+				schedulehtml += '</div>';
+				schedulehtml += '<div class="col-md-10 col-xs-10">';
+				for (var j=0; j<schedule.scheduledtls.length; j++) {
+					var scheduledtl = schedule.scheduledtls[j];
 					if (j % 4 == 0) {
-						gridschedulehtml += '<div class="row" >';
+						schedulehtml += '<div class="row" >';
 					}
-					gridschedulehtml += '<div class="col-md-3 col-xs-3">';
-					var thumbwidth = gridscheduledtl.mediagrid.width > gridscheduledtl.mediagrid.height? 100 : 100*gridscheduledtl.mediagrid.width/gridscheduledtl.mediagrid.height;
-					gridschedulehtml += '<div class="thumbs">';
-					gridschedulehtml += '<img src="/pixsigdata' + gridscheduledtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + gridscheduledtl.mediagrid.name + '" />';
-					gridschedulehtml += '</div>';
-					gridschedulehtml += '<h6 class="pixtitle">' + gridscheduledtl.mediagrid.name + '</h6>';
-					gridschedulehtml += '</div>';
-					if ((j+1) % 4 == 0 || (j+1) == schedule.gridscheduledtls.length) {
-						gridschedulehtml += '</div>';
+					schedulehtml += '<div class="col-md-3 col-xs-3">';
+					var thumbwidth = scheduledtl.mediagrid.width > scheduledtl.mediagrid.height? 100 : 100*scheduledtl.mediagrid.width/scheduledtl.mediagrid.height;
+
+					schedulehtml += '<a href="javascript:;" mediagridid="' + scheduledtl.objid + '" class="fancybox">';
+					schedulehtml += '<div class="thumbs">';
+					schedulehtml += '<img src="/pixsigdata' + scheduledtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + scheduledtl.mediagrid.name + '" />';
+					schedulehtml += '</div>';
+					schedulehtml += '</a>';
+					schedulehtml += '<h6 class="pixtitle">' + scheduledtl.mediagrid.name + '</h6>';
+					schedulehtml += '</div>';
+					if ((j+1) % 4 == 0 || (j+1) == schedule.scheduledtls.length) {
+						schedulehtml += '</div>';
 					}
 				}
-				gridschedulehtml += '</div>';
-				gridschedulehtml += '</div>';
+				schedulehtml += '</div>';
+				schedulehtml += '</div>';
 			}
 		} else {
-			gridschedulehtml = '';
+			schedulehtml = '';
 		}
-		$('td:eq(2)', nRow).html(gridschedulehtml);
+		$('td:eq(2)', nRow).html(schedulehtml);
 		
-		$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-gridschedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>');
+		$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-schedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>');
 		$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
 
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
 		$('#MyTable .thumbs').each(function(i) {
-			$(this).height($(this).parent().width());
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
 		});
 
 		for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 			var devicegrid = $('#MyTable').dataTable().fnGetData(i);
 			redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().width()));
 		}
+		
+		refreshFancybox();
 	},
 	'fnServerParams': function(aoData) { 
 		//aoData.push({'name':'branchid','value':CurBranchid });
@@ -173,13 +179,13 @@ $('body').on('click', '.pix-sync', function(event) {
 });
 
 
-//Gridschedule Edit
-function refreshGridscheduleDetail() {
-	$('#GridscheduleDetail').empty();
-	if (currentGridschedules.length > 0) {
+//Schedule Edit
+function refreshScheduleDetail() {
+	$('#ScheduleDetail').empty();
+	if (currentSchedules.length > 0) {
 		var scheduleTabHtml = '<h3></h3><ul class="timeline">';
-		for (var i=0; i<currentGridschedules.length; i++) {
-			var schedule = currentGridschedules[i];
+		for (var i=0; i<currentSchedules.length; i++) {
+			var schedule = currentSchedules[i];
 			scheduleTabHtml += '<li class="timeline-grey">';
 			scheduleTabHtml += '<div class="timeline-time">';
 			scheduleTabHtml += '<span class="time">' + schedule.starttime.substring(0,5) + ' </span>';
@@ -188,31 +194,31 @@ function refreshGridscheduleDetail() {
 			scheduleTabHtml += '<div class="timeline-body">';
 			scheduleTabHtml += '<div class="timeline-content">';
 			scheduleTabHtml += '<div class="row"><div class="col-md-10 col-sm-10">';
-			for (var j=0; j<schedule.gridscheduledtls.length; j++) {
-				var gridscheduledtl = schedule.gridscheduledtls[j];
+			for (var j=0; j<schedule.scheduledtls.length; j++) {
+				var scheduledtl = schedule.scheduledtls[j];
 				if (j % 4 == 0) {
 					scheduleTabHtml += '<div class="row" >';
 				}
 				scheduleTabHtml += '<div class="col-md-3 col-xs-3">';
-				var thumbwidth = gridscheduledtl.mediagrid.width > gridscheduledtl.mediagrid.height? 100 : 100*gridscheduledtl.mediagrid.width/gridscheduledtl.mediagrid.height;
+				var thumbwidth = scheduledtl.mediagrid.width > scheduledtl.mediagrid.height? 100 : 100*scheduledtl.mediagrid.width/scheduledtl.mediagrid.height;
 				scheduleTabHtml += '<div class="thumbs">';
-				scheduleTabHtml += '<img src="/pixsigdata' + gridscheduledtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + gridscheduledtl.mediagrid.name + '" />';
+				scheduleTabHtml += '<img src="/pixsigdata' + scheduledtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" />';
 				scheduleTabHtml += '<div class="mask">';
 				scheduleTabHtml += '<div>';
-				scheduleTabHtml += '<br/><a href="javascript:;" class="btn default btn-sm red pix-del-gridscheduledtl" gridscheduleid="' + i + '" gridscheduledtlid="' + j + '"><i class="fa fa-trash-o"></i></a>';
+				scheduleTabHtml += '<br/><a href="javascript:;" class="btn default btn-sm red pix-del-scheduledtl" scheduleid="' + i + '" scheduledtlid="' + j + '"><i class="fa fa-trash-o"></i></a>';
 				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '</div>';
-				scheduleTabHtml += '<h6 class="pixtitle">' + gridscheduledtl.mediagrid.name + '</h6>';
+				scheduleTabHtml += '<h6 class="pixtitle">' + scheduledtl.mediagrid.name + '</h6>';
 				scheduleTabHtml += '</div>';
-				if ((j+1) % 4 == 0 || (j+1) == schedule.gridscheduledtls.length) {
+				if ((j+1) % 4 == 0 || (j+1) == schedule.scheduledtls.length) {
 					scheduleTabHtml += '</div>';
 				}
 			}
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '<div class="col-md-2 col-sm-2">';
-			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-add-gridscheduledtl" data-id="'+ i + '">' + common.view.add + '<i class="fa fa-plus"></i></a>';
-			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-del-gridschedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
+			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm green pull-right pix-add-scheduledtl" data-id="'+ i + '">' + common.view.add + '<i class="fa fa-plus"></i></a>';
+			scheduleTabHtml += '<a href="javascript:;" class="btn btn-sm red pull-right pix-del-schedule" data-id="'+ i + '">' + common.view.remove + '<i class="fa fa-trash-o"></i></a>';
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
 			scheduleTabHtml += '</div>';
@@ -223,8 +229,8 @@ function refreshGridscheduleDetail() {
 	} else {
 		var scheduleTabHtml = '<h3>' + common.tips.devicegrid_schedule_zero + '</h3>';
 	}
-	$('#GridscheduleDetail').html(scheduleTabHtml);
-	$('#GridscheduleDetail .thumbs').each(function(i) {
+	$('#ScheduleDetail').html(scheduleTabHtml);
+	$('#ScheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
 		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
@@ -246,7 +252,9 @@ function refreshMediagridTable() {
 				for (var i=0; i<Mediagrids.length; i++) {
 					var thumbwidth = Mediagrids[i].width > Mediagrids[i].height? 100 : 100*Mediagrids[i].width/Mediagrids[i].height;
 					mediagridTableHtml += '<td style="padding: 0px 20px 0px 0px;" width="' + (100/Mediagrids.length) + '%"><div class="thumbs" style="width:200px; height:200px;">';
+					mediagridTableHtml += '<a href="javascript:;" mediagridid="' + Mediagrids[i].mediagridid + '" class="fancybox">';
 					mediagridTableHtml += '<img src="/pixsigdata' + Mediagrids[i].snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + Mediagrids[i].name + '" />';
+					mediagridTableHtml += '</a>';
 					mediagridTableHtml += '</div></td>';
 				}
 				mediagridTableHtml += '</tr>';
@@ -265,6 +273,7 @@ function refreshMediagridTable() {
 				mediagridTableHtml += '</tr>';
 				$('#MediagridTable').html(mediagridTableHtml);
 				$('#MediagridTable').width(220 * Mediagrids.length);
+				refreshFancybox();
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);
 			}
@@ -275,36 +284,36 @@ function refreshMediagridTable() {
 	});
 }
 
-$('body').on('click', '.pix-gridschedule', function(event) {
+$('body').on('click', '.pix-schedule', function(event) {
 	var index = $(event.target).attr('data-id');
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
 	currentDevicegrid = $('#MyTable').dataTable().fnGetData(index);
 	currentDevicegridid = currentDevicegrid.devicegridid;
-	currentGridschedules = currentDevicegrid.gridschedules;
+	currentSchedules = currentDevicegrid.schedules;
 
-	$('.gridschedule-edit').css('display', 'none');
-	$('.gridschedule-add').css('display', 'none');
-	$('.gridschedule-view').css('display', 'block');				
-	refreshGridscheduleDetail();
+	$('.schedule-edit').css('display', 'none');
+	$('.schedule-add').css('display', 'none');
+	$('.schedule-view').css('display', 'block');				
+	refreshScheduleDetail();
 	refreshMediagridTable();
-	$('#GridscheduleModal').modal();
+	$('#ScheduleModal').modal();
 });
-$('#GridscheduleModal').on('shown.bs.modal', function (e) {
-	$('#GridscheduleDetail .thumbs').each(function(i) {
+$('#ScheduleModal').on('shown.bs.modal', function (e) {
+	$('#ScheduleDetail .thumbs').each(function(i) {
 		$(this).height($(this).parent().width());
 		$(this).find('.mask').height($(this).parent().width() + 2);
 	});
 })
 
-$('body').on('click', '.pix-add-gridschedule', function(event) {
-	$('.gridschedule-edit').css('display', 'block');
-	$('.gridschedule-add').css('display', 'block');
-	$('.gridschedule-view').css('display', 'none');				
+$('body').on('click', '.pix-add-schedule', function(event) {
+	$('.schedule-edit').css('display', 'block');
+	$('.schedule-add').css('display', 'block');
+	$('.schedule-view').css('display', 'none');				
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	$('#GridscheduleForm input[name="starttime"]').attr('value', '');
+	$('#ScheduleForm input[name="starttime"]').attr('value', '');
 });
 
 FormValidateOption.rules = {};
@@ -312,124 +321,133 @@ FormValidateOption.rules['starttime'] = {};
 FormValidateOption.rules['starttime']['required'] = true;
 FormValidateOption.rules['mediagridid'] = {};
 FormValidateOption.rules['mediagridid']['required'] = true;
-$('#GridscheduleForm').validate(FormValidateOption);
-$.extend($('#GridscheduleForm').validate().settings, {
+$('#ScheduleForm').validate(FormValidateOption);
+$.extend($('#ScheduleForm').validate().settings, {
 	rules: FormValidateOption.rules
 });
-$('#GridscheduleForm .pix-ok').on('click', function(event) {
-	var mediagridid = $('#GridscheduleForm input[name=mediagridid]:checked').attr("value");
+$('#ScheduleForm .pix-ok').on('click', function(event) {
+	var mediagridid = $('#ScheduleForm input[name=mediagridid]:checked').attr("value");
 	var mediagridsels = Mediagrids.filter(function (el) {
 		return (el.mediagridid == mediagridid);
 	});
-	if ($('#GridscheduleForm').valid() && mediagridsels.length > 0) {
-		$('.gridschedule-edit').css('display', 'none');
-		$('.gridschedule-add').css('display', 'none');
-		$('.gridschedule-view').css('display', 'block');
+	if ($('#ScheduleForm').valid() && mediagridsels.length > 0) {
+		$('.schedule-edit').css('display', 'none');
+		$('.schedule-add').css('display', 'none');
+		$('.schedule-view').css('display', 'block');
 		
-		var starttime = $('#GridscheduleForm input[name=starttime]').val();
-		var gridschedules = currentGridschedules.filter(function (el) {
+		var starttime = $('#ScheduleForm input[name=starttime]').val();
+		var schedules = currentSchedules.filter(function (el) {
 			return (el.starttime == starttime);
 		});
-		if (gridschedules.length > 0) {
-			gridschedules[0].playmode = $('#GridscheduleForm input[name=playmode]:checked').attr("value");
-			gridschedules[0].mediagridid = mediagridid;
-			gridschedules[0].mediagrid = mediagridsels[0];
-			var gridscheduledtl = {};
-			gridscheduledtl.gridscheduledtlid = 'D' + Math.round(Math.random()*100000000);
-			gridscheduledtl.gridscheduleid = gridschedules[0].gridscheduleid;
-			gridscheduledtl.mediagridid = mediagridid;
-			gridscheduledtl.mediagrid = mediagridsels[0];
-			gridscheduledtl.sequence = gridschedules[0].gridscheduledtls.length + 1;
-			gridschedules[0].gridscheduledtls.push(gridscheduledtl);
-			//gridschedules[0].gridscheduledtls[0] = gridscheduledtl;
+		if (schedules.length > 0) {
+			schedules[0].playmode = $('#ScheduleForm input[name=playmode]:checked').attr("value");
+			var scheduledtl = {};
+			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
+			scheduledtl.scheduleid = schedules[0].scheduleid;
+			scheduledtl.objtype = 9;
+			scheduledtl.objid = mediagridid;
+			scheduledtl.mediagrid = mediagridsels[0];
+			scheduledtl.sequence = schedules[0].scheduledtls.length + 1;
+			schedules[0].scheduledtls.push(scheduledtl);
+			//schedules[0].scheduledtls[0] = scheduledtl;
 		} else {
-			var gridschedule = {};
-			gridschedule.gridscheduleid = 'B' + Math.round(Math.random()*100000000);
-			gridschedule.devicegridid = currentDevicegridid;
-			gridschedule.mediagridid = mediagridid;
-			gridschedule.playmode = $('#GridscheduleForm input[name=playmode]:checked').attr("value");
-			gridschedule.starttime = $('#GridscheduleForm input[name=starttime]').val();
-			gridschedule.mediagrid = mediagridsels[0];
-			gridschedule.gridscheduledtls = [];
-			var gridscheduledtl = {};
-			gridscheduledtl.gridscheduledtlid = 'D' + Math.round(Math.random()*100000000);
-			gridscheduledtl.gridscheduleid = gridschedule.gridscheduleid;
-			gridscheduledtl.mediagridid = mediagridid;
-			gridscheduledtl.mediagrid = mediagridsels[0];
-			gridscheduledtl.sequence = 1;
-			gridschedule.gridscheduledtls.push(gridscheduledtl);
-			currentGridschedules.push(gridschedule);
+			var schedule = {};
+			schedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
+			schedule.scheduletype = 2;
+			schedule.bindtype = 3;
+			schedule.bindid = currentDevicegridid;
+			schedule.playmode = $('#ScheduleForm input[name=playmode]:checked').attr("value");
+			schedule.starttime = $('#ScheduleForm input[name=starttime]').val();
+			schedule.scheduledtls = [];
+			var scheduledtl = {};
+			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
+			scheduledtl.scheduleid = schedule.scheduleid;
+			scheduledtl.objtype = 9;
+			scheduledtl.objid = mediagridid;
+			scheduledtl.mediagrid = mediagridsels[0];
+			scheduledtl.sequence = 1;
+			schedule.scheduledtls.push(scheduledtl);
+			currentSchedules.push(schedule);
 		}
 		
-		currentGridschedules.sort(function(a, b) {
+		currentSchedules.sort(function(a, b) {
 			return (a.starttime > b.starttime);
 		});
-		refreshGridscheduleDetail();
+		refreshScheduleDetail();
 	}
 });
-$('#GridscheduleForm .pix-cancel').on('click', function(event) {
-	$('.gridschedule-edit').css('display', 'none');
-	$('.gridschedule-add').css('display', 'none');
-	$('.gridschedule-view').css('display', 'block');				
+$('#ScheduleForm .pix-cancel').on('click', function(event) {
+	$('.schedule-edit').css('display', 'none');
+	$('.schedule-add').css('display', 'none');
+	$('.schedule-view').css('display', 'block');				
 });
 
-$('body').on('click', '.pix-del-gridscheduledtl', function(event) {
-	var i = $(event.target).attr('gridscheduleid');
-	var j = $(event.target).attr('gridscheduledtlid');
+$('body').on('click', '.pix-del-scheduledtl', function(event) {
+	var i = $(event.target).attr('scheduleid');
+	var j = $(event.target).attr('scheduledtlid');
 	if (i == undefined) {
-		i = $(event.target).parent().attr('gridscheduleid');
-		j = $(event.target).parent().attr('gridscheduledtlid');
+		i = $(event.target).parent().attr('scheduleid');
+		j = $(event.target).parent().attr('scheduledtlid');
 	}
-	currentGridschedules[i].gridscheduledtls.splice(j, 1);
-	refreshGridscheduleDetail();
+	currentSchedules[i].scheduledtls.splice(j, 1);
+	refreshScheduleDetail();
 });
 
-$('body').on('click', '.pix-add-gridscheduledtl', function(event) {
+$('body').on('click', '.pix-add-scheduledtl', function(event) {
 	var index = $(event.target).attr('data-id');
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	var gridschedule = currentGridschedules[index];
+	var schedule = currentSchedules[index];
 	
-	$('.gridschedule-edit').css('display', 'block');
-	$('.gridschedule-add').css('display', 'none');
-	$('.gridschedule-view').css('display', 'none');				
+	$('.schedule-edit').css('display', 'block');
+	$('.schedule-add').css('display', 'none');
+	$('.schedule-view').css('display', 'none');				
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	$('#GridscheduleForm input[name="starttime"]').attr('value', gridschedule.starttime);
+	$('#ScheduleForm input[name="starttime"]').attr('value', schedule.starttime);
 });
 
-$('body').on('click', '.pix-del-gridschedule', function(event) {
+$('body').on('click', '.pix-del-schedule', function(event) {
 	var index = $(event.target).attr('data-id');
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	currentGridschedules.splice(index, 1);
-	refreshGridscheduleDetail();
+	currentSchedules.splice(index, 1);
+	refreshScheduleDetail();
 });
 
-$('[type=submit]', $('#GridscheduleModal')).on('click', function(event) {
-	for (var i=0; i<currentGridschedules.length; i++) {
-		var gridschedule = currentGridschedules[i];
-		gridschedule.mediagrid = undefined;
-		if (('' + gridschedule.gridscheduleid).indexOf('B') == 0) {
-			gridschedule.gridscheduleid = '0';
+$('[type=submit]', $('#ScheduleModal')).on('click', function(event) {
+	for (var i=0; i<currentSchedules.length; i++) {
+		var schedule = currentSchedules[i];
+		if (i == currentSchedules.length - 1) {
+			schedule.endtime = currentSchedules[0].starttime;
+		} else {
+			schedule.endtime = currentSchedules[i+1].starttime;
 		}
-		for (var j=0; j<gridschedule.gridscheduledtls.length; j++) {
-			var gridscheduledtl = gridschedule.gridscheduledtls[j];
-			gridscheduledtl.mediagrid = undefined;
-			if (('' + gridscheduledtl.gridscheduleid).indexOf('B') == 0) {
-				gridscheduledtl.gridscheduleid = '0';
+		if (('' + schedule.scheduleid).indexOf('B') == 0) {
+			schedule.scheduleid = '0';
+		}
+		for (var j=0; j<schedule.scheduledtls.length; j++) {
+			var scheduledtl = schedule.scheduledtls[j];
+			scheduledtl.mediagrid = undefined;
+			if (('' + scheduledtl.scheduleid).indexOf('B') == 0) {
+				scheduledtl.scheduleid = '0';
 			}
-			if (('' + gridscheduledtl.gridscheduledtlid).indexOf('D') == 0) {
-				gridscheduledtl.gridscheduledtlid = '0';
+			if (('' + scheduledtl.scheduledtlid).indexOf('D') == 0) {
+				scheduledtl.scheduledtlid = '0';
 			}
 		}
 	}
+	var data = {};
+	data.scheduletype = 2;
+	data.bindtype = 3;
+	data.bindid = currentDevicegridid;
+	data.schedules = currentSchedules;
 	$.ajax({
 		type : 'POST',
-		url : 'devicegrid!addgridschedules.action',
-		data : '{"gridschedules":' + $.toJSON(currentGridschedules) + '}',
+		url : 'schedule!batch.action',
+		data : $.toJSON(data),
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		beforeSend: function ( xhr ) {
@@ -437,7 +455,7 @@ $('[type=submit]', $('#GridscheduleModal')).on('click', function(event) {
 		},
 		success : function(data, status) {
 			Metronic.stopPageLoading();
-			$('#GridscheduleModal').modal('hide');
+			$('#ScheduleModal').modal('hide');
 			if (data.errorcode == 0) {
 				bootbox.alert(common.tips.success);
 				$('#MyTable').dataTable()._fnAjaxUpdate();
@@ -446,13 +464,45 @@ $('[type=submit]', $('#GridscheduleModal')).on('click', function(event) {
 			}
 		},
 		error : function() {
-			$('#GridscheduleModal').modal('hide');
+			$('#ScheduleModal').modal('hide');
 			console.log('failue');
 		}
 	});
 
 	event.preventDefault();
 });	
+
+
+function refreshFancybox() {
+	$('.fancybox').each(function(index,item) {
+		$(this).click(function() {
+			var mediagridid = $(this).attr('mediagridid');
+			$.ajax({
+				type : 'GET',
+				url : 'mediagrid!get.action',
+				data : {mediagridid: mediagridid},
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						$.fancybox({
+							openEffect	: 'none',
+							closeEffect	: 'none',
+							closeBtn : false,
+					        padding : 0,
+					        content: '<div id="MediagridPreview"></div>',
+					    });
+						redrawMediagridPreview($('#MediagridPreview'), data.mediagrid, 800);
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
+		    return false;
+		})
+	});
+}
 
 
 $('.form_time').datetimepicker({

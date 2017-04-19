@@ -102,6 +102,9 @@ var common = {
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
 
+		play_period: 'Play Period',
+		valid_period: 'Effective Period',
+
 		operation: 'Operation',
 		add: 'Add',
 		edit: 'Edit',
@@ -227,8 +230,8 @@ var common = {
 		detail_select: 'Please select',
 		device_missed: 'Device or device group should be selected',
 			
-		device_bundleschedule_zero: 'Current device has no schedules',
-		devicegp_bundleschedule_zero: 'Current device group has no schedules',
+		device_schedule_zero: 'Current device has no schedules',
+		devicegp_schedule_zero: 'Current device group has no schedules',
 		devicegrid_schedule_zero: 'Current device grid has no schedules',
 
 		username_required: 'Username required',

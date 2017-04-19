@@ -61,6 +61,8 @@ public class SystemInitServlet extends HttpServlet {
 				logger.info("system dockerid: {}", dockerid);
 				type = "2";
 				key = dockerid;
+			} else {
+				logger.info("failed to get systemid.");
 			}
 			if (key.length() > 0) {
 				String checkcode = CommonUtil.getMd5(type + key, "pixsign");
@@ -91,8 +93,9 @@ public class SystemInitServlet extends HttpServlet {
 						String vspflag = dataJson.getString("vspflag");
 						String reviewflag = dataJson.getString("reviewflag");
 						String touchflag = dataJson.getString("touchflag");
-						String liftflag = dataJson.getString("liftflag");
 						String calendarflag = dataJson.getString("calendarflag");
+						String mscreenflag = dataJson.getString("mscreenflag");
+						String liftflag = dataJson.getString("liftflag");
 						String streamflag = dataJson.getString("streamflag");
 						String dvbflag = dataJson.getString("dvbflag");
 						String videoinflag = dataJson.getString("videoinflag");
@@ -105,8 +108,9 @@ public class SystemInitServlet extends HttpServlet {
 						vsp.setMaxstorage(maxvspstorage);
 						vsp.setReviewflag(reviewflag);
 						vsp.setTouchflag(touchflag);
-						vsp.setLiftflag(liftflag);
 						vsp.setCalendarflag(calendarflag);
+						vsp.setMscreenflag(mscreenflag);
+						vsp.setLiftflag(liftflag);
 						vsp.setStreamflag(streamflag);
 						vsp.setDvbflag(dvbflag);
 						vsp.setVideoinflag(videoinflag);
@@ -115,8 +119,9 @@ public class SystemInitServlet extends HttpServlet {
 						org.setMaxstorage(maxorgstorage);
 						org.setReviewflag(reviewflag);
 						org.setTouchflag(touchflag);
-						org.setLiftflag(liftflag);
 						org.setCalendarflag(calendarflag);
+						org.setMscreenflag(mscreenflag);
+						org.setLiftflag(liftflag);
 						org.setStreamflag(streamflag);
 						org.setDvbflag(dvbflag);
 						org.setVideoinflag(videoinflag);

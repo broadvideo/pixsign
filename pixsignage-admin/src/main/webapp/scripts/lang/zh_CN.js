@@ -102,6 +102,9 @@ var common = {
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
 
+		play_period: '播放时间段',
+		valid_period: '生效期',
+
 		operation: '操作',
 		add: '新增',
 		edit: '编辑',
@@ -227,8 +230,8 @@ var common = {
 		detail_select: '请选择对应内容',
 		device_missed: '需要选择终端或者终端组',
 		
-		device_bundleschedule_zero: '当前终端没有播出计划，请新增',
-		devicegp_bundleschedule_zero: '当前终端组没有播出计划，请新增',
+		device_schedule_zero: '当前终端没有播出计划，请新增',
+		devicegp_schedule_zero: '当前终端组没有播出计划，请新增',
 		devicegrid_schedule_zero: '当前终端格没有播出计划，请新增',
 		
 		username_required: '必须输入用户名',

@@ -36,13 +36,14 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/admin/pages/css/timeline-old.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div id="GridscheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -55,15 +56,15 @@ response.setDateHeader("Expires",0);
 									<div class="portlet-title">
 										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.gridschedule"/></div>
 										<div class="actions">
-											<a class="btn default btn-sm yellow pix-add-gridschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
+											<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
 										</div>
 									</div>
-									<div class="portlet-body form gridschedule-edit">
+									<div class="portlet-body form schedule-edit">
 										<div class="row">
 											<div class="col-md-12 col-sm-12">
-												<form id="GridscheduleForm" class="form-horizontal">
+												<form id="ScheduleForm" class="form-horizontal">
 													<div class="form-body">
-														<div class="form-group gridschedule-add">
+														<div class="form-group schedule-add">
 															<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -71,7 +72,7 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group gridschedule-add">
+														<div class="form-group schedule-add">
 															<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
 															<div class="col-md-9">
 																<div class="input-group date form_time">                                       
@@ -97,9 +98,9 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 									</div>
-									<div class="portlet-body gridschedule-view">
+									<div class="portlet-body schedule-view">
 										<div class="row">
-											<div class="col-md12 col-sm-12" id="GridscheduleDetail">
+											<div class="col-md12 col-sm-12" id="ScheduleDetail">
 											</div>
 										</div>
 										
@@ -108,7 +109,7 @@ response.setDateHeader("Expires",0);
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer gridschedule-view">
+					<div class="modal-footer schedule-view">
 						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
 						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 					</div>
@@ -202,6 +203,7 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
 
@@ -210,7 +212,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-gridschedule.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-gridschedule.js?t=4"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

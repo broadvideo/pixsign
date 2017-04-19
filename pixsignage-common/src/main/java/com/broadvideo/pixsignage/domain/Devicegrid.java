@@ -32,7 +32,7 @@ public class Devicegrid {
 
 	private List<Device> devices;
 
-	private List<Gridschedule> gridschedules;
+	private List<Schedule> schedules;
 
 	public Integer getDevicegridid() {
 		return devicegridid;
@@ -146,11 +146,11 @@ public class Devicegrid {
 		this.devices = devices;
 	}
 
-	public List<Gridschedule> getGridschedules() {
-		return gridschedules;
+	public List<Schedule> getSchedules() {
+		return schedules;
 	}
 
-	public void setGridschedules(List<Gridschedule> gridschedules) {
-		this.gridschedules = gridschedules;
+	public void setSchedules(List<Schedule> schedules) {
+		this.schedules = schedules;
 	}
 }

@@ -59,13 +59,21 @@ function initMyTable() {
 				thumbnail = '/pixsigdata' + aData.thumbnail;
 				thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 			}
-			var videourl = '/pixsigdata/video/preview/' + aData.videoid + '.mp4';
 			videohtml += '<div id="VideoThumb" class="thumbs">';
 			videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 			videohtml += '<div class="mask">';
 			videohtml += '<div>';
 			if (aData.filepath != null && aData.previewflag == 1) {
-				videohtml += '<a class="btn default btn-sm green fancybox" href="' + videourl + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
+				var previewwidth = 760;
+				if (aData.width > aData.height) {
+					previewwidth = 760;
+					previewheight = previewwidth * aData.height / aData.width;
+				} else {
+					previewheight = 760;
+					previewwidth = previewheight * aData.width / aData.height;
+				}
+				var videourl = '/pixsigdata/video/preview/' + aData.videoid + '.mp4';
+				videohtml += '<a class="btn default btn-sm green fancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '"><i class="fa fa-search"></i></a>';
 			}
 			if (CurBranchid == MyBranchid) {
 				videohtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
@@ -86,14 +94,21 @@ function initMyTable() {
 					thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
 					thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
 				}
-				var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
 				if (aData.relate.filepath == null || aData.relate.previewflag != 1) {
 					videohtml += '<div id="RelateThumb" class="thumbs">';
 					videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					videohtml += '</div>';
 				} else {
+					var previewwidth = 760;
+					if (aData.relate.width > aData.relate.height) {
+						previewwidth = 760;
+						previewheight = previewwidth * aData.relate.height / aData.relate.width;
+					} else {
+						previewheight = 760;
+						previewwidth = previewheight * aData.relate.width / aData.relate.height;
+					}
 					var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
-					videohtml += '<a class="fancybox" href="' + videourl + '" title="' + aData.relate.name + '">';
+					videohtml += '<a class="fancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '">';
 					videohtml += '<div id="RelateThumb" class="thumbs">';
 					videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					videohtml += '</div>';
@@ -149,7 +164,9 @@ function initMyTable() {
 				$('#MediaContainer').append(videohtml);
 			}
 			$('.fancybox').click(function() {
-				var myVideo = this.href;
+				var href = this.href;
+				var previewwidth = $(this).attr('previewwidth');
+				var previewheight = $(this).attr('previewheight');
 				$.fancybox({
 					openEffect	: 'none',
 					closeEffect	: 'none',
@@ -161,9 +178,9 @@ function initMyTable() {
 		                jwplayer('video_container').setup({ 
 		                	stretching: 'fill',
 		                	image: '/pixres/global/plugins/jwplayer/preview.jpg',
-		                    file: myVideo,
-		                    width: 760,
-		                    height: 428,
+		                    file: href,
+		                    width: previewwidth,
+		                    height: previewheight,
 		                    autostart: true,
 		                    primary: 'flash', 
 		                    bufferlength:10,

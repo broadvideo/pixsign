@@ -473,3 +473,57 @@ function getTempletdtlPreviewHtml(templet, templetdtlindex, dynamic) {
 	return templetdtlhtml;
 }
 
+function redrawMediagridPreview(div, mediagrid, maxsize) {
+	div.empty();
+	div.attr('mediagridid', mediagrid.mediagridid);
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
+	for (var i=0; i<mediagrid.mediagriddtls.length; i++) {
+		var mediagriddtl = mediagrid.mediagriddtls[i];
+		var mediagriddtlhtml = '';
+		mediagriddtlhtml += '<div style="position: absolute; width:' + 100*mediagriddtl.xcount/mediagrid.xcount;
+		mediagriddtlhtml += '%; height:' + 100*mediagriddtl.ycount/mediagrid.ycount;
+		mediagriddtlhtml += '%; top: ' + 100*mediagriddtl.ypos/mediagrid.ycount;
+		mediagriddtlhtml += '%; left: ' + 100*mediagriddtl.xpos/mediagrid.xcount;
+		mediagriddtlhtml += '%; border: 1px solid #000; ">';
+		var bgimage;
+		if (mediagriddtl.video != null) {
+			bgimage = '/pixsigdata' + mediagriddtl.video.thumbnail;
+		} else if (mediagriddtl.image != null) {
+			bgimage = '/pixsigdata' + mediagriddtl.image.thumbnail;
+		} else if (mediagriddtl.page != null) {
+			bgimage = '/pixsigdata' + mediagriddtl.page.snapshot;
+		} else if (mediagriddtl.bundle != null) {
+			bgimage = '/pixsigdata' + mediagriddtl.bundle.snapshot;
+		}
+		mediagriddtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
+		if (bgimage != null) {
+			mediagriddtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+		}
+		mediagriddtlhtml += '</div>';
+		mediagriddtlhtml += '</div>';
+		div.append(mediagriddtlhtml);
+	}
+	for (var i=0; i<mediagrid.xcount; i++) {
+		for (var j=0; j<mediagrid.ycount; j++) {
+			var html = '<div style="position: absolute; width:' + (100/mediagrid.xcount);
+			html += '%; height:' + (100/mediagrid.ycount);
+			html += '%; left: ' + (i*100/mediagrid.xcount);
+			html += '%; top: ' + (j*100/mediagrid.ycount);
+			html += '%; border: 1px dotted #000; ">';
+			div.append(html);
+		}
+	}
+
+	if (mediagrid.width > mediagrid.height ) {
+		width = maxsize;
+		scale = mediagrid.width / width;
+		height = mediagrid.height / scale;
+	} else {
+		height = maxsize * 9 / 16;
+		scale = mediagrid.height / height;
+		width = mediagrid.width / scale;
+	}
+	div.css('width' , width);
+	div.css('height' , height);
+}
+

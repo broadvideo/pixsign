@@ -37,7 +37,7 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.service.DevicegridService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 
 @Component
@@ -63,7 +63,7 @@ public class MultisignService {
 	private CrashreportMapper crashreportMapper;
 
 	@Autowired
-	private DevicegridService devicegridService;
+	private ScheduleService scheduleService;
 
 	@POST
 	@Path("init")
@@ -197,8 +197,11 @@ public class MultisignService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson = devicegridService.generateScheduleJson("" + device.getDeviceid());
+			JSONArray multiJSONArray = scheduleService.generateScheduleJson("" + device.getDeviceid())
+					.getJSONArray("multi_schedules");
+			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("schedules", multiJSONArray);
 			logger.info("Multisign Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -330,14 +333,17 @@ public class MultisignService {
 			JSONArray eventJsonArray = new JSONArray();
 			responseJson.put("events", eventJsonArray);
 			if (device.getDevicegridid() > 0) {
-				List<Msgevent> msgevents = msgeventMapper.selectList(Msgevent.MsgType_Grid_Schedule,
+				List<Msgevent> msgevents = msgeventMapper.selectList(Msgevent.MsgType_Schedule,
 						Msgevent.ObjType_1_Device, "" + device.getDeviceid(), null, Msgevent.Status_Wait);
 				if (msgevents.size() > 0) {
 					Msgevent msgevent = msgevents.get(0);
 					JSONObject eventJson = new JSONObject();
 					eventJsonArray.put(eventJson);
 					eventJson.put("event_type", "schedule");
-					eventJson.put("event_content", devicegridService.generateScheduleJson("" + device.getDeviceid()));
+					JSONObject contentJson = new JSONObject();
+					contentJson.put("schedules", scheduleService.generateScheduleJson("" + device.getDeviceid())
+							.getJSONArray("multi_schedules"));
+					eventJson.put("event_content", contentJson);
 					msgevent.setStatus(Msgevent.Status_Sent);
 					msgeventMapper.updateByPrimaryKeySelective(msgevent);
 				}

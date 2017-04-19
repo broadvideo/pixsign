@@ -1,7 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -21,16 +20,15 @@ import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Audio;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Bundledtl;
-import com.broadvideo.pixsignage.domain.Bundleschedule;
-import com.broadvideo.pixsignage.domain.Bundlescheduledtl;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
-import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Rss;
+import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Stream;
 import com.broadvideo.pixsignage.domain.Templet;
@@ -40,19 +38,16 @@ import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundledtlMapper;
-import com.broadvideo.pixsignage.persistence.BundlescheduleMapper;
-import com.broadvideo.pixsignage.persistence.BundlescheduledtlMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
-import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MedialistMapper;
 import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
-import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.RssMapper;
+import com.broadvideo.pixsignage.persistence.ScheduleMapper;
+import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.persistence.StreamMapper;
 import com.broadvideo.pixsignage.persistence.TempletMapper;
 import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.persistence.WidgetMapper;
-import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("bundleService")
@@ -65,11 +60,9 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private TempletMapper templetMapper;
 	@Autowired
-	private BundlescheduleMapper bundlescheduleMapper;
+	private ScheduleMapper scheduleMapper;
 	@Autowired
-	private BundlescheduledtlMapper bundlescheduledtlMapper;
-	@Autowired
-	private DeviceMapper deviceMapper;
+	private ScheduledtlMapper scheduledtlMapper;
 	@Autowired
 	private MedialistMapper medialistMapper;
 	@Autowired
@@ -82,8 +75,6 @@ public class BundleServiceImpl implements BundleService {
 	private WidgetMapper widgetMapper;
 	@Autowired
 	private RssMapper rssMapper;
-	@Autowired
-	private MsgeventMapper msgeventMapper;
 	@Autowired
 	private ConfigMapper configMapper;
 
@@ -99,6 +90,8 @@ public class BundleServiceImpl implements BundleService {
 	private RssService rssService;
 	@Autowired
 	private DevicefileService devicefileService;
+	@Autowired
+	private ScheduleService scheduleService;
 
 	public Bundle selectByPrimaryKey(String bundleid) {
 		return bundleMapper.selectByPrimaryKey(bundleid);
@@ -759,9 +752,10 @@ public class BundleServiceImpl implements BundleService {
 			bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
 		}
 
-		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getBundleid());
+		List<HashMap<String, Object>> bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Bundle,
+				"" + bundle.getBundleid());
 		if (bundle.getHomeflag().equals("0")) {
-			bindList = bundlescheduleMapper.selectBindListByBundle("" + bundle.getHomebundleid());
+			bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Bundle, "" + bundle.getHomebundleid());
 		}
 		for (HashMap<String, Object> bindObj : bindList) {
 			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
@@ -780,61 +774,64 @@ public class BundleServiceImpl implements BundleService {
 
 	@Transactional
 	public void push(Bundle bundle, Device[] devices, Devicegroup[] devicegroups) throws Exception {
-		// Handle device bundleschedule
+		// Handle device schedule
 		for (int i = 0; i < devices.length; i++) {
 			Device device = devices[i];
 
-			bundlescheduledtlMapper.deleteByDtl(Bundleschedule.BindType_Device, "" + device.getDeviceid(), null, null,
-					null);
-			bundlescheduleMapper.deleteByDtl(Bundleschedule.BindType_Device, "" + device.getDeviceid(), null, null,
-					null);
-			Bundleschedule bundleschedule = new Bundleschedule();
-			bundleschedule.setBindtype(Bundleschedule.BindType_Device);
-			bundleschedule.setBindid(device.getDeviceid());
-			bundleschedule.setPlaymode(Bundleschedule.PlayMode_Daily);
-			bundleschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-			bundlescheduleMapper.insertSelective(bundleschedule);
+			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Device,
+					"" + device.getDeviceid(), null, null);
+			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Device, "" + device.getDeviceid(),
+					null, null);
+			Schedule schedule = new Schedule();
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setBindtype(Schedule.BindType_Device);
+			schedule.setBindid(device.getDeviceid());
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			scheduleMapper.insertSelective(schedule);
 
-			Bundlescheduledtl bundlescheduledtl = new Bundlescheduledtl();
-			bundlescheduledtl.setBundlescheduleid(bundleschedule.getBundlescheduleid());
-			bundlescheduledtl.setBundleid(bundle.getBundleid());
-			bundlescheduledtl.setSequence(1);
-			bundlescheduledtlMapper.insertSelective(bundlescheduledtl);
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduleid(schedule.getScheduleid());
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(bundle.getBundleid());
+			scheduledtl.setSequence(1);
+			scheduledtlMapper.insertSelective(scheduledtl);
 
-			devicefileService.refreshDevicefiles(Bundleschedule.BindType_Device, "" + device.getDeviceid());
+			devicefileService.refreshDevicefiles(Schedule.BindType_Device, "" + device.getDeviceid());
 		}
 
-		// Handle devicegroup bundleschedule
+		// Handle devicegroup schedule
 		for (int i = 0; i < devicegroups.length; i++) {
 			Devicegroup devicegroup = devicegroups[i];
 
-			bundlescheduledtlMapper.deleteByDtl(Bundleschedule.BindType_DeviceGroup,
-					"" + devicegroup.getDevicegroupid(), null, null, null);
-			bundlescheduleMapper.deleteByDtl(Bundleschedule.BindType_DeviceGroup, "" + devicegroup.getDevicegroupid(),
-					null, null, null);
-			Bundleschedule bundleschedule = new Bundleschedule();
-			bundleschedule.setBindtype(Bundleschedule.BindType_DeviceGroup);
-			bundleschedule.setBindid(devicegroup.getDevicegroupid());
-			bundleschedule.setPlaymode(Bundleschedule.PlayMode_Daily);
-			bundleschedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-			bundlescheduleMapper.insertSelective(bundleschedule);
+			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+					"" + devicegroup.getDevicegroupid(), null, null);
+			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+					"" + devicegroup.getDevicegroupid(), null, null);
+			Schedule schedule = new Schedule();
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setBindtype(Schedule.BindType_Devicegroup);
+			schedule.setBindid(devicegroup.getDevicegroupid());
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			scheduleMapper.insertSelective(schedule);
 
-			Bundlescheduledtl bundlescheduledtl = new Bundlescheduledtl();
-			bundlescheduledtl.setBundlescheduleid(bundleschedule.getBundlescheduleid());
-			bundlescheduledtl.setBundleid(bundle.getBundleid());
-			bundlescheduledtl.setSequence(1);
-			bundlescheduledtlMapper.insertSelective(bundlescheduledtl);
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduleid(schedule.getScheduleid());
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(bundle.getBundleid());
+			scheduledtl.setSequence(1);
+			scheduledtlMapper.insertSelective(scheduledtl);
 
-			devicefileService.refreshDevicefiles(Bundleschedule.BindType_DeviceGroup,
-					"" + devicegroup.getDevicegroupid());
+			devicefileService.refreshDevicefiles(Schedule.BindType_Devicegroup, "" + devicegroup.getDevicegroupid());
 		}
 
 		// Handle sync
 		for (int i = 0; i < devices.length; i++) {
-			syncBundleSchedule("1", "" + devices[i].getDeviceid());
+			scheduleService.syncSchedule("1", "" + devices[i].getDeviceid());
 		}
 		for (int i = 0; i < devicegroups.length; i++) {
-			syncBundleSchedule("2", "" + devicegroups[i].getDevicegroupid());
+			scheduleService.syncSchedule("2", "" + devicegroups[i].getDevicegroupid());
 		}
 	}
 
@@ -926,33 +923,7 @@ public class BundleServiceImpl implements BundleService {
 		push(bundle, devices, devicegroups);
 	}
 
-	@Transactional
-	public void addBundleschedules(Bundleschedule[] bundleschedules) {
-		if (bundleschedules.length > 0) {
-			String bindtype = bundleschedules[0].getBindtype();
-			String bindid = "" + bundleschedules[0].getBindid();
-			bundlescheduledtlMapper.deleteByDtl(bindtype, bindid, null, null, null);
-			bundlescheduleMapper.deleteByDtl(bindtype, bindid, null, null, null);
-			for (int i = 0; i < bundleschedules.length; i++) {
-				bundlescheduleMapper.insertSelective(bundleschedules[i]);
-				List<Bundlescheduledtl> bundlescheduledtls = bundleschedules[i].getBundlescheduledtls();
-				for (Bundlescheduledtl bundlescheduledtl : bundlescheduledtls) {
-					bundlescheduledtl.setBundlescheduleid(bundleschedules[i].getBundlescheduleid());
-					bundlescheduledtlMapper.insertSelective(bundlescheduledtl);
-				}
-			}
-			devicefileService.refreshDevicefiles(bindtype, bindid);
-		}
-	}
-
 	public void syncBundleByTemplet(String templetid) throws Exception {
-	}
-
-	public void syncBundle(String bundleid) throws Exception {
-		List<HashMap<String, Object>> bindList = bundlescheduleMapper.selectBindListByBundle(bundleid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncBundleSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-		}
 	}
 
 	public void setBundleReviewWait(String bundleid) {
@@ -1333,123 +1304,25 @@ public class BundleServiceImpl implements BundleService {
 		return responseJson;
 	}
 
-	@Transactional
-	public void syncBundleSchedule(String bindtype, String bindid) throws Exception {
-		if (bindtype.equals(Msgevent.ObjType_1_Device)) {
-			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals("1")) {
-				Msgevent msgevent = new Msgevent();
-				msgevent.setMsgtype(Msgevent.MsgType_Schedule);
-				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-				msgevent.setObjid1(Integer.parseInt(bindid));
-				msgevent.setObjtype2(Msgevent.ObjType_2_None);
-				msgevent.setObjid2(0);
-				msgevent.setStatus(Msgevent.Status_Wait);
-				msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, bindid, null, null,
-						null);
-				msgeventMapper.insertSelective(msgevent);
-
-				msgevent = new Msgevent();
-				msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
-				msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-				msgevent.setObjid1(Integer.parseInt(bindid));
-				msgevent.setObjtype2(Msgevent.ObjType_2_None);
-				msgevent.setObjid2(0);
-				msgevent.setStatus(Msgevent.Status_Wait);
-				msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device, bindid, null,
-						null, null);
-				msgeventMapper.insertSelective(msgevent);
-			}
-		} else if (bindtype.equals(Msgevent.ObjType_1_Devicegroup)) {
-			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
-			for (Device device : devices) {
-				if (device.getOnlineflag().equals("1")) {
-					Msgevent msgevent = new Msgevent();
-					msgevent.setMsgtype(Msgevent.MsgType_Schedule);
-					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-					msgevent.setObjid1(device.getDeviceid());
-					msgevent.setObjtype2(Msgevent.ObjType_2_None);
-					msgevent.setObjid2(0);
-					msgevent.setStatus(Msgevent.Status_Wait);
-					msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device,
-							"" + device.getDeviceid(), null, null, null);
-					msgeventMapper.insertSelective(msgevent);
-
-					msgevent = new Msgevent();
-					msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
-					msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-					msgevent.setObjid1(device.getDeviceid());
-					msgevent.setObjtype2(Msgevent.ObjType_2_None);
-					msgevent.setObjid2(0);
-					msgevent.setStatus(Msgevent.Status_Wait);
-					msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device,
-							"" + device.getDeviceid(), null, null, null);
-					msgeventMapper.insertSelective(msgevent);
-				}
-			}
-		}
-
-		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
-		JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
-		msgJson.put("msg_body", msgBodyJson);
-		String topic = "";
-		if (bindtype.equals(Msgevent.ObjType_1_Device)) {
-			topic = "device-" + bindid;
-		} else if (bindtype.equals(Msgevent.ObjType_1_Devicegroup)) {
-			topic = "group-" + bindid;
-		}
-		ActiveMQUtil.publish(topic, msgJson.toString());
-	}
-
-	public JSONObject generateBundleScheduleJson(String bindtype, String bindid) {
-		// bindtype: 1-device 2-devicegroup
-		if (bindtype.equals("1")) {
-			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getDevicegroup() != null) {
-				bindtype = "2";
-				bindid = "" + device.getDevicegroupid();
-			}
-		}
-
+	public JSONArray generateBundleJsonArray(List<Integer> bundleids) {
 		HashMap<Integer, JSONObject> bundleHash = new HashMap<Integer, JSONObject>();
-
-		JSONObject responseJson = new JSONObject();
-		JSONArray bundleJsonArray = new JSONArray();
-		responseJson.put("bundles", bundleJsonArray);
-		JSONArray scheduleJsonArray = new JSONArray();
-		responseJson.put("bundle_schedules", scheduleJsonArray);
-
-		// generate final json
-		List<Bundleschedule> bundlescheduleList = bundlescheduleMapper.selectList(bindtype, bindid, "2", null, null);
-		for (Bundleschedule bundleschedule : bundlescheduleList) {
-			JSONObject scheduleJson = new JSONObject();
-			// scheduleJson.put("bundle_id",
-			// bundleschedule.getBundle().getBundleid());
-			scheduleJson.put("playmode", "daily");
-			scheduleJson.put("start_time",
-					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(bundleschedule.getStarttime()));
-			JSONArray bundleidJsonArray = new JSONArray();
-			scheduleJson.put("bundles", bundleidJsonArray);
-			for (Bundlescheduledtl bundlescheduledtl : bundleschedule.getBundlescheduledtls()) {
-				bundleidJsonArray.put(bundlescheduledtl.getBundleid());
-				if (bundleHash.get(bundlescheduledtl.getBundleid()) == null) {
-					JSONObject bundleJson = generateBundleJson("" + bundlescheduledtl.getBundleid());
-					bundleJsonArray.put(bundleJson);
-					bundleHash.put(bundlescheduledtl.getBundleid(), bundleJson);
-				}
-				List<Bundle> subbundles = bundleMapper.selectSubList("" + bundlescheduledtl.getBundleid());
-				for (Bundle subbundle : subbundles) {
-					if (bundleHash.get(subbundle.getBundleid()) == null) {
-						JSONObject bundleJson = generateBundleJson("" + subbundle.getBundleid());
-						bundleJsonArray.put(bundleJson);
-						bundleHash.put(subbundle.getBundleid(), bundleJson);
-					}
+		JSONArray bundleJSONArray = new JSONArray();
+		for (Integer bundleid : bundleids) {
+			if (bundleHash.get(bundleid) == null) {
+				JSONObject bundleJson = generateBundleJson("" + bundleid);
+				bundleJSONArray.put(bundleJson);
+				bundleHash.put(bundleid, bundleJson);
+			}
+			List<Bundle> subbundles = bundleMapper.selectSubList("" + bundleid);
+			for (Bundle subbundle : subbundles) {
+				if (bundleHash.get(subbundle.getBundleid()) == null) {
+					JSONObject bundleJson = generateBundleJson("" + subbundle.getBundleid());
+					bundleJSONArray.put(bundleJson);
+					bundleHash.put(subbundle.getBundleid(), bundleJson);
 				}
 			}
-			scheduleJsonArray.put(scheduleJson);
 		}
-
-		return responseJson;
+		return bundleJSONArray;
 	}
 
 }

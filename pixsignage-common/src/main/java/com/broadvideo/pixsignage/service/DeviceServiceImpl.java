@@ -1,7 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -19,7 +18,6 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
-import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("deviceService")
 public class DeviceServiceImpl implements DeviceService {
@@ -32,11 +30,6 @@ public class DeviceServiceImpl implements DeviceService {
 	private ConfigMapper configMapper;
 	@Autowired
 	private OrgMapper orgMapper;
-
-	@Autowired
-	private BundleService bundleService;
-	@Autowired
-	private DevicegridService devicegridService;
 
 	public int selectCount(String orgid, String branchid, String status, String onlineflag, String devicegroupid,
 			String search) {
@@ -332,50 +325,6 @@ public class DeviceServiceImpl implements DeviceService {
 
 		String topic = "org-" + orgid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
-	}
-
-	public JSONObject generateScheduleJson(String deviceid) {
-		JSONObject json1 = devicegridService.generateScheduleJson(deviceid);
-		JSONArray schedulesArray1 = json1.getJSONArray("schedules");
-		JSONObject json2 = bundleService.generateBundleScheduleJson("1", deviceid);
-		JSONArray schedulesArray2 = json2.getJSONArray("bundle_schedules");
-
-		JSONArray scheduleArray3 = new JSONArray();
-		for (int i = 0; i < schedulesArray1.length(); i++) {
-			JSONObject scheduleJson = schedulesArray1.getJSONObject(i);
-			String starttime1 = scheduleJson.getString("start_time");
-			Date d1 = CommonUtil.parseDate(starttime1, CommonConstants.DateFormat_Time);
-			for (int j = 0; j < schedulesArray2.length(); j++) {
-				JSONObject bundlescheduleJson = schedulesArray2.getJSONObject(j);
-				String starttime2 = bundlescheduleJson.getString("start_time");
-				Date d2 = CommonUtil.parseDate(starttime2, CommonConstants.DateFormat_Time);
-				if (d2.getTime() < d1.getTime()) {
-					JSONObject newScheduleJson = new JSONObject();
-					newScheduleJson.put("schedule_id", 0);
-					newScheduleJson.put("playmode", "daily");
-					newScheduleJson.put("start_time", starttime2);
-					newScheduleJson.put("multi_flag", "0");
-					JSONArray scheduledtlJsonArray = new JSONArray();
-					JSONArray bundleidArray = bundlescheduleJson.getJSONArray("bundles");
-					for (int k = 0; k < bundleidArray.length(); k++) {
-						int bundleid = bundleidArray.getInt(k);
-						JSONObject scheduledtlJson = new JSONObject();
-						scheduledtlJson.put("scheduledtl_id", 0);
-						scheduledtlJson.put("media_type", "bundle");
-						scheduledtlJson.put("media_id", bundleid);
-						scheduledtlJsonArray.put(scheduledtlJson);
-					}
-					newScheduleJson.put("scheduledtls", scheduledtlJsonArray);
-					scheduleArray3.put(newScheduleJson);
-				} else {
-					break;
-				}
-			}
-			scheduleArray3.put(scheduleJson);
-		}
-
-		json2.put("schedules", scheduleArray3);
-		return json2;
 	}
 
 }

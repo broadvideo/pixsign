@@ -21,11 +21,11 @@
 		<property name="url" value="jdbc:mysql://pixsignage-db:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
 		<property name="username" value="pixsignage" />
 		<property name="password" value="pixsignage@01" />
-		<property name="initialSize" value="10" />
-		<property name="maxActive" value="50" />
+		<property name="initialSize" value="50" />
+		<property name="maxActive" value="500" />
 		<property name="maxIdle" value="20" />
 		<property name="minIdle" value="10" />
-		<property name="maxWait" value="500" />
+		<property name="maxWait" value="10000" />
 		<property name="defaultAutoCommit" value="true" />
 		<property name="testWhileIdle" value="true" />
 		<property name="testOnBorrow" value="false" />

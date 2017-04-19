@@ -184,63 +184,13 @@ function redrawGridlayout(div, gridlayout, maxsize) {
 	}
 }
 
-function redrawMediagridPreview(div, mediagrid, maxsize) {
-	div.empty();
-	div.attr('mediagridid', mediagrid.mediagridid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
-	for (var i=0; i<mediagrid.mediagriddtls.length; i++) {
-		var mediagriddtl = mediagrid.mediagriddtls[i];
-		var mediagriddtlhtml = '';
-		mediagriddtlhtml += '<div style="position: absolute; width:' + 100*mediagriddtl.xcount/mediagrid.xcount;
-		mediagriddtlhtml += '%; height:' + 100*mediagriddtl.ycount/mediagrid.ycount;
-		mediagriddtlhtml += '%; top: ' + 100*mediagriddtl.ypos/mediagrid.ycount;
-		mediagriddtlhtml += '%; left: ' + 100*mediagriddtl.xpos/mediagrid.xcount;
-		mediagriddtlhtml += '%; border: 1px solid #000; ">';
-		var bgimage;
-		if (mediagriddtl.video != null) {
-			bgimage = '/pixsigdata' + mediagriddtl.video.thumbnail;
-		} else if (mediagriddtl.image != null) {
-			bgimage = '/pixsigdata' + mediagriddtl.image.thumbnail;
-		} else if (mediagriddtl.page != null) {
-			bgimage = '/pixsigdata' + mediagriddtl.page.snapshot;
-		}
-		mediagriddtlhtml += ' <div style="position:absolute; width:100%; height:100%; ">';
-		if (bgimage != null) {
-			mediagriddtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
-		}
-		mediagriddtlhtml += '</div>';
-		mediagriddtlhtml += '</div>';
-		div.append(mediagriddtlhtml);
-	}
-	for (var i=0; i<mediagrid.xcount; i++) {
-		for (var j=0; j<mediagrid.ycount; j++) {
-			var html = '<div style="position: absolute; width:' + (100/mediagrid.xcount);
-			html += '%; height:' + (100/mediagrid.ycount);
-			html += '%; left: ' + (i*100/mediagrid.xcount);
-			html += '%; top: ' + (j*100/mediagrid.ycount);
-			html += '%; border: 1px dotted #000; ">';
-			div.append(html);
-		}
-	}
-
-	if (mediagrid.width > mediagrid.height ) {
-		width = maxsize;
-		scale = mediagrid.width / width;
-		height = mediagrid.height / scale;
-	} else {
-		height = maxsize * 9 / 16;
-		scale = mediagrid.height / height;
-		width = mediagrid.width / scale;
-	}
-	div.css('width' , width);
-	div.css('height' , height);
-}
-
 function redrawMediagrid(div, mediagrid, mediagriddtl) {
 	if (mediagriddtl != null && (mediagriddtl.xcount > 1 || mediagriddtl.ycount > 1)) {
 		$('.page-ctrl').css('display', 'none');
+		$('.bundle-ctrl').css('display', 'none');
 	} else {
 		$('.page-ctrl').css('display', '');
+		$('.bundle-ctrl').css('display', '');
 	}
 	div.empty();
 	div.css('position', 'relative');
@@ -300,6 +250,8 @@ function redrawMediagriddtl(div, mediagrid, mediagriddtl, selected) {
 		bgimage = '/pixsigdata' + mediagriddtl.image.thumbnail;
 	} else if (mediagriddtl.page != null) {
 		bgimage = '/pixsigdata' + mediagriddtl.page.snapshot;
+	} else if (mediagriddtl.bundle != null) {
+		bgimage = '/pixsigdata' + mediagriddtl.bundle.snapshot;
 	}
 
 	mediagriddtlhtml += '<div style="position:absolute; width:100%; height:100%; "></div>';
@@ -573,6 +525,7 @@ $('#MediagriddtlEditForm input[name=objtype]').change(function(e) {
 	CurrentMediagriddtl.video = null;
 	CurrentMediagriddtl.image = null;
 	CurrentMediagriddtl.page = null;
+	CurrentMediagriddtl.bundle = null;
 	refreshMediaSelect();
 	redrawMediagrid($('#MediagridDiv'), CurrentMediagrid, CurrentMediagriddtl);
 });
@@ -584,14 +537,22 @@ $('#MediaSelect').on('change', function(e) {
 			CurrentMediagriddtl.video = $('#MediaSelect').select2('data').video;
 			CurrentMediagriddtl.image = null;
 			CurrentMediagriddtl.page = null;
+			CurrentMediagriddtl.bundle = null;
 		} else if (CurrentMediagriddtl.objtype == 2) {
 			CurrentMediagriddtl.image = $('#MediaSelect').select2('data').image;
 			CurrentMediagriddtl.video = null;
 			CurrentMediagriddtl.page = null;
+			CurrentMediagriddtl.bundle = null;
 		} else if (CurrentMediagriddtl.objtype == 3) {
 			CurrentMediagriddtl.page = $('#MediaSelect').select2('data').page;
 			CurrentMediagriddtl.video = null;
 			CurrentMediagriddtl.image = null;
+			CurrentMediagriddtl.bundle = null;
+		} else if (CurrentMediagriddtl.objtype == 4) {
+			CurrentMediagriddtl.bundle = $('#MediaSelect').select2('data').bundle;
+			CurrentMediagriddtl.video = null;
+			CurrentMediagriddtl.image = null;
+			CurrentMediagriddtl.page = null;
 		}
 	}
 	redrawMediagrid($('#MediagridDiv'), CurrentMediagrid, CurrentMediagriddtl);
@@ -767,6 +728,63 @@ function refreshMediaSelect() {
 			initSelection: function(element, callback) {
 				if (CurrentMediagriddtl != null && CurrentMediagriddtl.page != null) {
 					callback({id: CurrentMediagriddtl.page.pageid, text: CurrentMediagriddtl.page.name, page: CurrentMediagriddtl.page });
+				}
+			},
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
+	} else if (CurrentMediagriddtl != null && CurrentMediagriddtl.objtype == 4) {
+		$("#MediaSelect").select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: {
+				url: 'bundle!list.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term,
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.name, 
+								id:item.bundleid, 
+								bundle:item, 
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function(data) {
+				var width = 40;
+				var height = 40 * data.bundle.height / data.bundle.width;
+				if (data.bundle.width < data.bundle.height) {
+					height = 40;
+					width = 40 * data.bundle.width / data.bundle.height;
+				}
+				var html = '<span><img src="/pixsigdata' + data.bundle.snapshot + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.bundle.name + '</span>'
+				return html;
+			},
+			formatSelection: function(data) {
+				var width = 30;
+				var height = 30 * height / width;
+				if (data.bundle.width < data.bundle.height) {
+					height = 30;
+					width = 30 * width / height;
+				}
+				var html = '<span><img src="/pixsigdata' + data.bundle.snapshot + '" width="' + width + 'px" height="' + height + 'px"/></span>'
+				return html;
+			},
+			initSelection: function(element, callback) {
+				if (CurrentMediagriddtl != null && CurrentMediagriddtl.bundle != null) {
+					callback({id: CurrentMediagriddtl.bundle.bundleid, text: CurrentMediagriddtl.bundle.name, bundle: CurrentMediagriddtl.bundle });
 				}
 			},
 			dropdownCssClass: "bigdrop", 

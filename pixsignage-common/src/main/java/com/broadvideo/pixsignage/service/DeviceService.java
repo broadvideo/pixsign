@@ -2,8 +2,6 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.broadvideo.pixsignage.domain.Device;
 
 public interface DeviceService {
@@ -47,6 +45,4 @@ public interface DeviceService {
 			String bgcolor, String opacity) throws Exception;
 
 	public void ucancel(String orgid) throws Exception;
-
-	public JSONObject generateScheduleJson(String deviceid);
 }

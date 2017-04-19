@@ -47,6 +47,7 @@ import com.broadvideo.pixsignage.domain.Flowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
@@ -57,9 +58,8 @@ import com.broadvideo.pixsignage.persistence.FlowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.service.BundleService;
-import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.DevicefileService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
@@ -95,9 +95,7 @@ public class PixsignageService2 {
 	private FlowlogMapper flowlogMapper;
 
 	@Autowired
-	private DeviceService deviceService;
-	@Autowired
-	private BundleService bundleService;
+	private ScheduleService scheduleService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -193,6 +191,7 @@ public class PixsignageService2 {
 			device.setMac(mac);
 			device.setOstype(ostype);
 			device.setAppname(appname);
+			device.setSign(sign);
 			device.setVname(vname);
 			device.setVcode(vcode);
 			device.setMtype(mtype);
@@ -299,12 +298,11 @@ public class PixsignageService2 {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson;
+			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
+					"" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
-				responseJson = bundleService.generateBundleScheduleJson("2", "" + device.getDevicegroupid());
 				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
 			} else {
-				responseJson = bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid());
 				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
 			}
 			responseJson.put("code", 0).put("message", "成功");
@@ -338,7 +336,7 @@ public class PixsignageService2 {
 			}
 
 			JSONObject responseJson;
-			responseJson = deviceService.generateScheduleJson("" + device.getDeviceid());
+			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
 				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
 			} else {
@@ -558,11 +556,11 @@ public class PixsignageService2 {
 				eventJsonArray.put(eventJson);
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
-					eventJson.put("event_content", deviceService.generateScheduleJson("" + device.getDeviceid()));
+					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
 					eventJson.put("event_type", "bundle");
-					eventJson.put("event_content",
-							bundleService.generateBundleScheduleJson("1", "" + device.getDeviceid()));
+					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
+							"" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();

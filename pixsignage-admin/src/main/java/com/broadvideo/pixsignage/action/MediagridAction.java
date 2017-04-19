@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.domain.Mediagrid;
 import com.broadvideo.pixsignage.domain.Mediagriddtl;
 import com.broadvideo.pixsignage.service.MediagridService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -24,6 +25,21 @@ public class MediagridAction extends BaseDatatableAction {
 
 	@Autowired
 	private MediagridService mediagridService;
+	@Autowired
+	private ScheduleService scheduleService;
+
+	public String doGet() {
+		try {
+			String mediagridid = getParameter("mediagridid");
+			mediagrid = mediagridService.selectByPrimaryKey(mediagridid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("MediagridAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
 
 	public String doList() {
 		try {
@@ -102,7 +118,7 @@ public class MediagridAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String mediagridid = getParameter("mediagridid");
-			mediagridService.syncSchedule(mediagridid);
+			scheduleService.syncScheduleByMediagrid(mediagridid);
 			logger.info("Mediagrid sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

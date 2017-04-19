@@ -235,8 +235,8 @@ function redrawBundle(div, bundle, bundledtl) {
 	div.css('margin-left', 'auto');
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
-	if (bundle.layout.bgimage != null) {
-		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.layout.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
+	if (bundle.bgimage != null) {
+		div.append('<img class="layout-bg" src="/pixsigdata' + bundle.bgimage.thumbnail + '" width="100%" height="100%" style="right: 0; bottom: 0; position: absolute; top: 0; left: 0; z-index: 0" />');
 	}
 	for (var i=0; i<bundle.bundledtls.length; i++) {
 		div.append('<div id="BundledtlDiv' + bundle.bundledtls[i].bundledtlid + '"></div>');
@@ -248,16 +248,16 @@ function redrawBundle(div, bundle, bundledtl) {
 	}
 
 	var width = Math.floor(div.parent().width());
-	var scale = bundle.layout.width / width;
-	var height = bundle.layout.height / scale;
+	var scale = bundle.width / width;
+	var height = bundle.height / scale;
 	div.css('width' , width);
 	div.css('height' , height);
 	$(div).find('.bundle-font').each(function() {
 		var bundledtl = bundle.bundledtls[$(this).attr('bundledtlindex')];
-		var fontsize = bundledtl.layoutdtl.size * bundledtl.layoutdtl.height / 100 / scale;
+		var fontsize = bundledtl.size * bundledtl.height / 100 / scale;
 		var text = $(this).html();
 		$(this).css('font-size', fontsize + 'px');
-		$(this).css('line-height', bundledtl.layoutdtl.height / scale + 'px');
+		$(this).css('line-height', bundledtl.height / scale + 'px');
 		if (fontsize < 9) {
 			$(this).html('');
 			$(this).find('img').each(function() {
@@ -277,34 +277,34 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 	div.attr("class", "region");
 	div.attr('bundledtlid', bundledtl.bundledtlid);
 	div.css('position', 'absolute');
-	div.css('width', 100*bundledtl.layoutdtl.width/bundle.layout.width + '%');
-	div.css('height', 100*bundledtl.layoutdtl.height/bundle.layout.height + '%');
-	div.css('top', 100*bundledtl.layoutdtl.topoffset/bundle.layout.height + '%');
-	div.css('left', 100*bundledtl.layoutdtl.leftoffset/bundle.layout.width + '%');
+	div.css('width', 100*bundledtl.width/bundle.width + '%');
+	div.css('height', 100*bundledtl.height/bundle.height + '%');
+	div.css('top', 100*bundledtl.topoffset/bundle.height + '%');
+	div.css('left', 100*bundledtl.leftoffset/bundle.width + '%');
 
 	var bgimage = null;
-	if (bundledtl.layoutdtl.bgimage != null) {
-		bgimage = '/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail;
-	} else if (bundledtl.layoutdtl.mainflag == 1) {
+	if (bundledtl.bgimage != null) {
+		bgimage = '/pixsigdata' + bundledtl.bgimage.thumbnail;
+	} else if (bundledtl.mainflag == 1) {
 		bgimage = '../img/region/region-play-main.jpg';
-	} else if (bundledtl.layoutdtl.type == '0') {
+	} else if (bundledtl.type == '0') {
 		bgimage = '../img/region/region-play.jpg';
-	} else if (bundledtl.layoutdtl.type == '4') {
+	} else if (bundledtl.type == '4') {
 		bgimage = '../img/region/region-videoin.jpg';
-	} else if (bundledtl.layoutdtl.type == '5') {
+	} else if (bundledtl.type == '5') {
 		bgimage = '../img/region/region-dvb.jpg';
-	} else if (bundledtl.layoutdtl.type == '6') {
+	} else if (bundledtl.type == '6') {
 		bgimage = '../img/region/region-stream.jpg';
-	} else if (bundledtl.layoutdtl.type == '8') {
-		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
+	} else if (bundledtl.type == '8') {
+		if (bundledtl.width > bundledtl.height) {
 			bgimage = '../img/region/region-navigate-h.jpg';
 		} else {
 			bgimage = '../img/region/region-navigate-v.jpg';
 		}
-	} else if (bundledtl.layoutdtl.type == '9') {
+	} else if (bundledtl.type == '9') {
 		bgimage = '../img/region/region-qrcode.jpg';
 	}
-	if (bundledtl.layoutdtl.type == '0') {
+	if (bundledtl.type == '0') {
 		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
 			var medialistdtl = bundledtl.medialist.medialistdtls[0];
 			if (medialistdtl.objtype == 1 && medialistdtl.video.thumbnail != null) {
@@ -328,47 +328,47 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		border = '3px solid #FF0000';
 	}
 	var bundledtlindex = bundle.bundledtls.indexOf(bundledtl);
-	if (bundledtl.layoutdtl.type == '0' || bundledtl.layoutdtl.type == '4' || bundledtl.layoutdtl.type == '5' || bundledtl.layoutdtl.type == '6' || bundledtl.layoutdtl.type == '8' || bundledtl.layoutdtl.type == '9') {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	if (bundledtl.type == '0' || bundledtl.type == '4' || bundledtl.type == '5' || bundledtl.type == '6' || bundledtl.type == '8' || bundledtl.type == '9') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == '1') {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	} else if (bundledtl.type == '1') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		if (bundledtl.layoutdtl.direction == 4) {
-			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		if (bundledtl.direction == 4) {
+			bundledtlhtml += '<marquee class="bundle-font" bundledtlindex="' + bundledtlindex + '" direction="left" behavior="scroll" scrollamount="1" scrolldelay="0" loop="-1" style="color:' + bundledtl.color + '; font-size:12px; ">';
 			bundledtlhtml += text;
 			bundledtlhtml += '</marquee>';
 		} else {
-			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+			bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
 			bundledtlhtml += text;
 			bundledtlhtml += '</p>';
 		}
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == '2') {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	} else if (bundledtl.type == '2') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += new Date().pattern(bundledtl.layoutdtl.dateformat);
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += new Date().pattern(bundledtl.dateformat);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == '3') {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	} else if (bundledtl.type == '3') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
 		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/day/duoyun.png" />';
 		bundledtlhtml += '<img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 		bundledtlhtml += '</div>';
-	} else if (bundledtl.layoutdtl.type == '7') {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+	} else if (bundledtl.type == '7') {
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 		if (bgimage != '') {
 			bundledtlhtml += '<img src="' + bgimage + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
 		}
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
 		if (bundledtl.touchlabel != null) {
 			bundledtlhtml += bundledtl.touchlabel;
 		} else {
@@ -377,10 +377,10 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
 	} else {
-		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.layoutdtl.bgcolor + '; opacity:' + bundledtl.layoutdtl.opacity/255 + '; "></div>';
+		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; background:' + bundledtl.bgcolor + '; opacity:' + bundledtl.opacity/255 + '; "></div>';
 		bundledtlhtml += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
-		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.layoutdtl.color + '; font-size:12px; ">';
-		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type);
+		bundledtlhtml += '<p class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; ">';
+		bundledtlhtml += eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type);
 		bundledtlhtml += '</p>';
 		bundledtlhtml += '</div>';
 	}
@@ -390,7 +390,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 function enterBundledtlFocus(bundledtl) {
 	redrawBundle($('#BundleDiv'), CurrentBundle, bundledtl);
 	$('#BundledtlEditForm').css('display' , 'block');
-	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.layoutdtl.mainflag) + eval('common.view.region_type_' + bundledtl.layoutdtl.type));
+	$('.bundledtl-title').html(eval('common.view.region_mainflag_' + bundledtl.mainflag) + eval('common.view.region_type_' + bundledtl.type));
 	
 	if (CurrentBundledtl.objtype == 1) {
 		$('.bundledtl-objtype').html(common.view.medialist);
@@ -480,21 +480,21 @@ function enterBundledtlFocus(bundledtl) {
 }
 
 $('#BundleDiv').click(function(e){
-	var scale = CurrentBundle.layout.width / $('#BundleDiv').width();
+	var scale = CurrentBundle.width / $('#BundleDiv').width();
 	var offset = $(this).offset();
 	var posX = (e.pageX - offset.left) * scale;
 	var posY = (e.pageY - offset.top) * scale;
 	
 	var bundledtls = CurrentBundle.bundledtls.filter(function (el) {
-		var width = parseInt(el.layoutdtl.width);
-		var height = parseInt(el.layoutdtl.height);
-		var leftoffset = parseInt(el.layoutdtl.leftoffset);
-		var topoffset = parseInt(el.layoutdtl.topoffset);
+		var width = parseInt(el.width);
+		var height = parseInt(el.height);
+		var leftoffset = parseInt(el.leftoffset);
+		var topoffset = parseInt(el.topoffset);
 		return (posX > leftoffset) && (posX < (leftoffset + width)) && (posY > topoffset) && (posY < (topoffset + height));
 	});
 	if (bundledtls.length > 0) {
 		bundledtls.sort(function(a, b) {
-			return (a.layoutdtl.width + a.layoutdtl.height - b.layoutdtl.width - b.layoutdtl.height);
+			return (a.width + a.height - b.width - b.height);
 		});
 
 		//CurrentBundledtl = bundledtls[0];

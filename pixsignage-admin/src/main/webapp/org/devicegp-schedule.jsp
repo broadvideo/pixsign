@@ -36,13 +36,14 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/admin/pages/css/timeline-old.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div id="BundleScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -55,15 +56,15 @@ response.setDateHeader("Expires",0);
 									<div class="portlet-title">
 										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.bundleschedule"/></div>
 										<div class="actions">
-											<a class="btn default btn-sm yellow pix-add-bundleschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
+											<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
 										</div>
 									</div>
-									<div class="portlet-body form bundleschedule-edit">
+									<div class="portlet-body form schedule-edit">
 										<div class="row">
 											<div class="col-md-12 col-sm-12">
-												<form id="BundleScheduleForm" class="form-horizontal">
+												<form id="ScheduleForm" class="form-horizontal">
 													<div class="form-body">
-														<div class="form-group bundleschedule-add">
+														<div class="form-group schedule-add">
 															<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 															<div class="col-md-9 radio-list">
 																<label class="radio-inline">
@@ -71,7 +72,7 @@ response.setDateHeader("Expires",0);
 																</label>
 															</div>
 														</div>
-														<div class="form-group bundleschedule-add">
+														<div class="form-group schedule-add">
 															<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
 															<div class="col-md-9">
 																<div class="input-group date form_time">                                       
@@ -97,9 +98,9 @@ response.setDateHeader("Expires",0);
 											</div>
 										</div>
 									</div>
-									<div class="portlet-body bundleschedule-view">
+									<div class="portlet-body schedule-view">
 										<div class="row">
-											<div class="col-md12 col-sm-12" id="BundleScheduleDetail">
+											<div class="col-md12 col-sm-12" id="ScheduleDetail">
 											</div>
 										</div>
 										
@@ -108,191 +109,13 @@ response.setDateHeader("Expires",0);
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer bundleschedule-view">
+					<div class="modal-footer schedule-view">
 						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
 						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div id="LayoutScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-12 col-sm-12">
-								<div class="portlet box purple">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layoutschedule"/></div>
-										<div class="actions">
-											<a class="btn default btn-sm yellow pix-add-layoutschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
-										</div>
-									</div>
-									<div class="portlet-body form layout-edit">
-										<div class="row">
-											<div class="col-md-12 col-sm-12">
-												<form id="LayoutScheduleForm" class="form-horizontal">
-													<div class="form-body">
-														<div class="form-group">
-															<label class="control-label col-md-3"><spring:message code="global.option"/></label>
-															<div class="col-md-9 radio-list">
-																<label class="radio-inline">
-																	<input type="radio" name="playmode" value="2" checked> <spring:message code="global.daily"/>
-																</label>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
-															<div class="col-md-9">
-																<div class="input-group date form_time">                                       
-																	<input type="text" size="16" readonly class="form-control" name="starttime">
-																	<span class="input-group-btn">
-																	<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="col-md-3 control-label"><spring:message code="global.layout"/><span class="required">*</span></label>
-															<div class="col-md-9 pre-scrollable">
-																<table id="LayoutTable" class="table-striped"></table>
-															</div>
-														</div>
-													</div>
-													<div class="form-actions right">
-														<a class="btn green pix-ok"><spring:message code="global.ok"/></a>
-														<a class="btn default pix-cancel"><spring:message code="global.cancel"/></a>
-													</div>
-												</form>
-											</div>
-										</div>
-									</div>
-									<div class="portlet-body layout-view">
-										<div class="row">
-											<div class="col-md12 col-sm-12" id="LayoutScheduleDetail">
-											</div>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer layout-view">
-						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="RegionScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-12 col-sm-12">
-								<div class="portlet box purple">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.regionschedule"/></div>
-										<div class="actions">
-											<a class="btn default btn-sm yellow pix-add-regionschedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
-										</div>
-									</div>
-									<div class="portlet-body form region-edit">
-										<div class="row">
-											<div class="col-md-12 col-sm-12">
-												<form id="RegionScheduleForm" class="form-horizontal">
-													<div class="form-group">
-														<label class="control-label col-md-3"><spring:message code="global.option"/></label>
-														<div class="col-md-9 radio-list">
-															<label class="radio-inline">
-																<input type="radio" name="playmode" value="2" checked> <spring:message code="global.daily"/>
-															</label>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
-														<div class="col-md-9">
-															<div class="input-group date form_time">                                       
-																<input type="text" size="16" readonly class="form-control" name="starttime">
-																<span class="input-group-btn">
-																<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-																</span>
-															</div>
-														</div>
-													</div>
-			
-													<div class="form-group objtype-0">
-														<label class="control-label col-md-3"><spring:message code="global.type"/></label>
-														<div class="col-md-9 radio-list">
-															<label class="radio-inline">
-																<input type="radio" name="objtype" value="1" checked> <spring:message code="global.medialist"/>
-															</label>
-															<label class="radio-inline">
-																<input type="radio" name="objtype" value="3"> <spring:message code="global.stream"/>
-															</label>
-															<label class="radio-inline hide-orgtype-2">
-																<input type="radio" name="objtype" value="4"> <spring:message code="global.dvb"/>
-															</label>
-															<label class="radio-inline">
-																<input type="radio" name="objtype" value="5"> <spring:message code="global.widget"/>
-															</label>
-														</div>
-													</div>
-													<div class="form-group objtype-1">
-														<label class="control-label col-md-3"><spring:message code="global.type"/></label>
-														<div class="col-md-9 radio-list">
-															<label class="radio-inline">
-																<input type="radio" name="objtype" value="2"> <spring:message code="global.text"/>
-															</label>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.detail"/><span class="required">*</span></label>
-														<div class="col-md-9">
-															<input type="hidden" id="RegionDtlSelect" class="form-control select2" name="objid" />
-														</div>
-													</div>
-													<div class="form-actions right">
-														<a class="btn green pix-ok"><spring:message code="global.ok"/></a>
-														<a class="btn default pix-cancel"><spring:message code="global.cancel"/></a>
-													</div>
-												</form>
-											</div>
-										</div>
-									</div>
-									<div class="portlet-body region-view">
-										<div class="row">
-											<div id="LeftTab" class="col-md-2 col-sm-2 col-xs-2">
-											</div>
-											<div class="col-md-10 col-sm-10 col-xs-10">
-												<div class="tab-content">
-													<div id="RegionScheduleDetail" class="tab-pane active">
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer region-view">
-						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
@@ -382,6 +205,7 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
 
@@ -391,7 +215,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-devicegp-schedule.js?t=1"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-devicegp-schedule.js?t=3"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

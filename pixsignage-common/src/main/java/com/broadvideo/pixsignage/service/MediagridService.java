@@ -23,8 +23,6 @@ public interface MediagridService {
 
 	public void design(Mediagrid mediagrid) throws Exception;
 
-	public void syncSchedule(String mediagridid);
-
 	public void checkStatus();
 
 }

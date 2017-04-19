@@ -334,7 +334,7 @@ $('body').on('click', '.pix-sync', function(event) {
 	}
 	CurrentDevicegrid = $('#MyTable').dataTable().fnGetData(index);
 	CurrentDevicegridid = CurrentDevicegrid.devicegridid;
-	bootbox.confirm(common.tips.syncdevicegrid, function(result) {
+	bootbox.confirm(common.tips.sync + CurrentDevicegrid.name, function(result) {
 		if (result == true) {
 			$.ajax({
 				type : 'GET',
