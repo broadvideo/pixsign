@@ -95,7 +95,8 @@ public class MediagridServiceImpl implements MediagridService {
 	}
 
 	private void checkMmedia(Mediagriddtl mediagriddtl) {
-		if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Page)) {
+		if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Page)
+				|| mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Bundle)) {
 			return;
 		}
 		if (mediagriddtl.getObjid().intValue() > 0) {

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.ScheduleService;
@@ -149,7 +150,7 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");
-			scheduleService.syncSchedule("1", deviceid);
+			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

@@ -21,7 +21,6 @@ import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicegridMapper;
-import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
@@ -40,8 +39,6 @@ public class CtrlService {
 	private DeviceMapper deviceMapper;
 	@Autowired
 	private DevicegridMapper devicegridMapper;
-	@Autowired
-	private OrgMapper orgMapper;
 
 	// ==============================================================================
 	// System Interface
@@ -124,7 +121,7 @@ public class CtrlService {
 			}
 
 			List<Devicegrid> devicegrids = devicegridMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(),
-					null, start, length);
+					null, null, null, start, length);
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

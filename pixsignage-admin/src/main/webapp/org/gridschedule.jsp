@@ -43,8 +43,8 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
+		<div id="ScheduleModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-full">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -84,9 +84,72 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-3 control-label"><spring:message code="global.mediagrid"/><span class="required">*</span></label>
+															<label class="col-md-3 control-label"><spring:message code="global.selected"/></label>
 															<div class="col-md-9 pre-scrollable">
-																<table id="MediagridTable" class="table-striped"></table>
+																<table id="SelectedTable" class="table-striped"></table>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.resource.warehouse"/></label>
+															<div class="col-md-9">
+																<div class="portlet box blue">
+																	<div class="portlet-title">
+																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																		<ul class="nav nav-tabs">
+																			<li id="nav_tab4" class="pageflag">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solopage"/></a>
+																			</li>
+																			<li id="nav_tab3" class="imageflag">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.soloimage"/></a>
+																			</li>
+																			<li id="nav_tab2" class="videoflag">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solovideo"/></a>
+																			</li>
+																			<li id="nav_tab1" class="mediagridflag active">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.mediagrid"/></a>
+																			</li>
+																		</ul>
+																	</div>
+																	<div class="portlet-body">
+																		<div class="tab-content">
+																			<div class="tab-pane active" id="portlet_tab">
+																				<div class="row">
+																					<div class="col-md-3">
+																						<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
+																						<hr/>
+																						<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+																					</div>
+																					<div class="col-md-9">
+																						<div id="MediagridDiv">
+																							<table id="MediagridTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																						<div id="VideoDiv" style="display:none">
+																							<table id="VideoTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																						<div id="ImageDiv" style="display:none">
+																							<table id="ImageTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																						<div id="PageDiv" style="display:none">
+																							<table id="PageTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -138,13 +201,23 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-title">
 								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="menu.devicegpschedule"/></div>
 								<div class="tools">
-									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+									<a href="javascript:;" onClick="refreshSchedule();" class="reload"></a>
 								</div>
+								<ul class="nav nav-tabs" style="margin-right: 30px;">
+									<li id="DevicegridgroupNav"><a href="#DevicegridgroupTab" data-toggle="tab"><spring:message code="global.devicegridgroup"/></a></li>
+									<li id="DevicegridNav" class="active"><a href="#DevicegridTab" data-toggle="tab"><spring:message code="global.devicegrid"/></a></li>
+								</ul>
 							</div>
 							<div class="portlet-body">
-								<div class="row">
-									<div class="col-md-12">
-										<table id="MyTable" class="table table-striped table-bordered table-hover">
+								<div class="tab-content">
+									<div class="tab-pane" id="DevicegridgroupTab">
+										<table id="DevicegridgroupTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+									<div class="tab-pane active" id="DevicegridTab">
+										<table id="DevicegridTable" class="table table-striped table-bordered table-hover">
 											<thead></thead>
 											<tbody></tbody>
 										</table>
@@ -212,7 +285,8 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=11"></script>
 <script src="${base_ctx}/scripts/pix-gridschedule.js?t=4"></script>
 <script>
 jQuery(document).ready(function() {

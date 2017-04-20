@@ -12,6 +12,8 @@
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -22,8 +24,8 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    devicegridid, orgid, branchid, name, gridlayoutcode, xcount, ycount, ratio, width, height, status, 
-    description, createtime
+    devicegridid, orgid, branchid, name, gridlayoutcode, xcount, ycount, ratio, width, height, 
+    snapshot, devicegroupid, status, description, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -37,13 +39,19 @@
     select count(1) from devicegrid 
     where status = 1
     <if test="orgid != null">
-      and orgid = '${orgid}'
+      and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = '${branchid}'
+      and branchid = #{branchid}
+    </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
+    </if>
+    <if test="devicegroupid != null">
+      and devicegroupid = #{devicegroupid}
     </if>
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
   </select>
 
@@ -51,13 +59,19 @@
     select * from devicegrid
     where status=1
     <if test="orgid != null">
-      and orgid = '${orgid}'
+      and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = '${branchid}'
+      and branchid = #{branchid}
+    </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
+    </if>
+    <if test="devicegroupid != null">
+      and devicegroupid = #{devicegroupid}
     </if>
     <if test="search != null">
-      and name like '%${search}%'
+      and name like #{search}
     </if>
     order by devicegridid desc 
     <if test="start != null and length != null">
@@ -65,11 +79,23 @@
     </if>
   </select>
 
+  <select id="selectByDevicegroup" resultMap="BaseResultMap">
+    select * from devicegrid
+    where devicegroupid = #{devicegroupid}
+    order by devicegridid
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     delete from devicegrid
     where devicegridid = #{devicegridid}
   </delete>
   
+  <update id="updateDevicegroup" >
+    update devicegrid
+    set devicegroupid = #{devicegroupid} 
+    where devicegridid = #{devicegridid}
+  </update>
+
   <update id="unbindDevices" >
     update device
     set devicegridid = 0,
@@ -84,10 +110,12 @@
     insert into devicegrid (orgid, branchid, name, 
       gridlayoutcode, xcount, ycount, 
       ratio, width, height, 
+      snapshot, devicegroupid, 
       status, description, createtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{gridlayoutcode,jdbcType=VARCHAR}, #{xcount,jdbcType=INTEGER}, #{ycount,jdbcType=INTEGER}, 
       #{ratio,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+      #{snapshot,jdbcType=VARCHAR}, #{devicegroupid,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Devicegrid" >
@@ -122,6 +150,12 @@
       </if>
       <if test="height != null" >
         height,
+      </if>
+      <if test="snapshot != null" >
+        snapshot,
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid,
       </if>
       <if test="status != null" >
         status,
@@ -160,6 +194,12 @@
       </if>
       <if test="height != null" >
         #{height,jdbcType=INTEGER},
+      </if>
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        #{devicegroupid,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -202,6 +242,12 @@
       <if test="height != null" >
         height = #{height,jdbcType=INTEGER},
       </if>
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -225,6 +271,8 @@
       ratio = #{ratio,jdbcType=CHAR},
       width = #{width,jdbcType=INTEGER},
       height = #{height,jdbcType=INTEGER},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
+      devicegroupid = #{devicegroupid,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP}

@@ -18,6 +18,10 @@ var common = {
 		stream: '视频流',
 		dvb: '数字频道',
 		layout: '布局',
+		solovideo: '单屏视频',
+		soloimage: '单屏图片',
+		solopage: '单屏页面',
+		mediagrid: '联屏媒体',
 
 		bundle: '单屏节目',
 		subbundle: '子节目',
@@ -232,7 +236,7 @@ var common = {
 		
 		device_schedule_zero: '当前终端没有播出计划，请新增',
 		devicegp_schedule_zero: '当前终端组没有播出计划，请新增',
-		devicegrid_schedule_zero: '当前终端格没有播出计划，请新增',
+		schedule_zero: '播出计划空白',
 		
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',

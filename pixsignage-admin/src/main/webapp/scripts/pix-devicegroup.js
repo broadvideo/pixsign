@@ -50,6 +50,7 @@ function initMyTable() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
+			aoData.push({'name':'type','value':'1' });
 		}
 	});
 
@@ -58,23 +59,21 @@ function initMyTable() {
 	$('#MyTable_wrapper .dataTables_length select').select2();
 	$('#MyTable').css('width', '100%');
 
-	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		currentItem = item;
+		CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
 		
-		bootbox.confirm(common.tips.remove + currentItem.name + '"', function(result) {
+		bootbox.confirm(common.tips.remove + CurrentDevicegroup.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
 					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'devicegroup.devicegroupid': currentItem['devicegroupid']
+						devicegroupid: CurrentDevicegroup.devicegroupid,
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -98,15 +97,15 @@ function initMyTable() {
 			target = $(event.target).parent();
 			index = $(event.target).parent().attr('data-id');
 		}
-		currentItem = $('#MyTable').dataTable().fnGetData(index);
-		bootbox.confirm(common.tips.sync + currentItem.name + '"', function(result) {
+		CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.sync + CurrentDevicegroup.name + '"', function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'GET',
 					url : myurls['devicegroup.sync'],
 					cache: false,
 					data : {
-						devicegroupid: currentItem.devicegroupid,
+						devicegroupid: CurrentDevicegroup.devicegroupid,
 					},
 					dataType : 'json',
 					contentType : 'application/json;charset=utf-8',
@@ -136,7 +135,6 @@ function initMyEditModal() {
 	
 	FormValidateOption.rules['devicegroup.name'] = {};
 	FormValidateOption.rules['devicegroup.name']['required'] = true;
-	FormValidateOption.rules['devicegroup.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
 		$.ajax({
 			type : 'POST',
@@ -340,7 +338,6 @@ function initDevicegpDtlModal() {
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurBranchid });
 			aoData.push({'name':'devicegroupid','value':currentDevicegroupid });
-			aoData.push({'name':'type','value':'1' });
 		} 
 	});
 
@@ -415,7 +412,7 @@ function initDevicegpDtlModal() {
 		$.ajax({
 			type : 'POST',
 			url : myurls['devicegroup.adddevices'],
-			data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "deviceids":' + $.toJSON(selectedDevices) + '}',
+			data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevices) + '}',
 			dataType : 'json',
 			contentType : 'application/json;charset=utf-8',
 			success : function(data, status) {
@@ -441,7 +438,7 @@ function initDevicegpDtlModal() {
 		$.ajax({
 			type : 'POST',
 			url : myurls['devicegroup.deletedevices'],
-			data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "deviceids":' + $.toJSON(selectedDevicegpDtls) + '}',
+			data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevicegpDtls) + '}',
 			dataType : 'json',
 			contentType : 'application/json;charset=utf-8',
 			success : function(data, status) {

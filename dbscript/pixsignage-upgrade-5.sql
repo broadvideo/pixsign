@@ -231,13 +231,6 @@ insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) val
 insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('1-3-1', 1, 3, 1, 1920, 3240);
 insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('2-2-1', 2, 2, 1, 3840, 2160);
 
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(306,2,0,'menu.mscreen','','fa-codepen',1,7,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30601,2,306,'menu.page','page.jsp','',1,1,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30602,2,306,'menu.mediagrid','mediagrid.jsp','',1,2,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30603,2,306,'menu.device','mdevice.jsp','',1,3,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30604,2,306,'menu.devicegrid','devicegrid.jsp','',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30605,2,306,'menu.gridschedule','gridschedule.jsp','',1,5,'12');
-
 ############################################################
 ## post script  ############################################
 ############################################################

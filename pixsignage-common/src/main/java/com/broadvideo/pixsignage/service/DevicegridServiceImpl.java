@@ -23,12 +23,17 @@ public class DevicegridServiceImpl implements DevicegridService {
 	@Autowired
 	private DeviceMapper deviceMapper;
 
-	public int selectCount(String orgid, String branchid, String search) {
-		return devicegridMapper.selectCount(orgid, branchid, search);
+	public Devicegrid selectByPrimaryKey(String devicegridid) {
+		return devicegridMapper.selectByPrimaryKey(devicegridid);
 	}
 
-	public List<Devicegrid> selectList(String orgid, String branchid, String search, String start, String length) {
-		return devicegridMapper.selectList(orgid, branchid, search, start, length);
+	public int selectCount(String orgid, String branchid, String gridlayoutcode, String devicegroupid, String search) {
+		return devicegridMapper.selectCount(orgid, branchid, gridlayoutcode, devicegroupid, search);
+	}
+
+	public List<Devicegrid> selectList(String orgid, String branchid, String gridlayoutcode, String devicegroupid,
+			String search, String start, String length) {
+		return devicegridMapper.selectList(orgid, branchid, gridlayoutcode, devicegroupid, search, start, length);
 	}
 
 	@Transactional

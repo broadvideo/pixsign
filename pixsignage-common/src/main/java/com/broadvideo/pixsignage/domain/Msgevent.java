@@ -25,8 +25,8 @@ public class Msgevent {
 	public final static String ObjType_1_None = "0";
 	public final static String ObjType_1_Device = "1";
 	public final static String ObjType_1_Devicegroup = "2";
-	public final static String ObjType_1_VChannel = "3";
-	public final static String ObjType_1_Devicegrid = "4";
+	public final static String ObjType_1_Devicegrid = "3";
+	public final static String ObjType_1_VChannel = "4";
 
 	public final static String ObjType_2_None = "0";
 	public final static String ObjType_2_Region = "1";

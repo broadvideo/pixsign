@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Devicegrid;
+import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.service.DevicegridService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -27,6 +28,19 @@ public class DevicegridAction extends BaseDatatableAction {
 	@Autowired
 	private ScheduleService scheduleService;
 
+	public String doGet() {
+		try {
+			String devicegridid = getParameter("devicegridid");
+			devicegrid = devicegridService.selectByPrimaryKey(devicegridid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegridAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
@@ -34,18 +48,21 @@ public class DevicegridAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String gridlayoutcode = getParameter("gridlayoutcode");
+			String devicegroupid = getParameter("devicegroupid");
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			int count = devicegridService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = devicegridService.selectCount("" + getLoginStaff().getOrgid(), branchid, gridlayoutcode,
+					devicegroupid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Devicegrid> devicegridList = devicegridService.selectList("" + getLoginStaff().getOrgid(), branchid,
-					search, start, length);
+					gridlayoutcode, devicegroupid, search, start, length);
 			for (int i = 0; i < devicegridList.size(); i++) {
 				aaData.add(devicegridList.get(i));
 			}
@@ -113,7 +130,7 @@ public class DevicegridAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegridid = getParameter("devicegridid");
-			scheduleService.syncSchedule("3", devicegridid);
+			scheduleService.syncSchedule(Schedule.BindType_Devicegrid, devicegridid);
 			logger.info("Devicegrid schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

@@ -24,6 +24,10 @@ public class Devicegrid {
 
 	private Integer height;
 
+	private String snapshot;
+
+	private Integer devicegroupid;
+
 	private String status;
 
 	private String description;
@@ -112,6 +116,22 @@ public class Devicegrid {
 
 	public void setHeight(Integer height) {
 		this.height = height;
+	}
+
+	public String getSnapshot() {
+		return snapshot;
+	}
+
+	public void setSnapshot(String snapshot) {
+		this.snapshot = snapshot;
+	}
+
+	public Integer getDevicegroupid() {
+		return devicegroupid;
+	}
+
+	public void setDevicegroupid(Integer devicegroupid) {
+		this.devicegroupid = devicegroupid;
 	}
 
 	public String getStatus() {

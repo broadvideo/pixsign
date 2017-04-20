@@ -18,6 +18,10 @@ var common = {
 		stream: 'Stream',
 		dvb: 'DVB',
 		layout: 'Layout',
+		solovideo: 'Video',
+		soloimage: 'Image',
+		solopage: 'Page',
+		mediagrid: 'Media Grid',
 
 		bundle: 'Program',
 		subbundle: 'Sub-Program',
@@ -232,7 +236,7 @@ var common = {
 			
 		device_schedule_zero: 'Current device has no schedules',
 		devicegp_schedule_zero: 'Current device group has no schedules',
-		devicegrid_schedule_zero: 'Current device grid has no schedules',
+		schedule_zero: 'Blank Schedules',
 
 		username_required: 'Username required',
 		password_required: 'Password required',

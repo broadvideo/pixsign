@@ -165,28 +165,6 @@ update bundledtl b, layoutdtl l set b.type=l.type, b.mainflag=l.mainflag, b.heig
 insert into hourplaylog(orgid, branchid, deviceid, mediatype, mediaid, starttime, total) select orgid, branchid, deviceid, mediatype, mediaid, concat(date_format(starttime,'%Y-%m-%d %H'),':00:00'), count(1) from playlog group by orgid, branchid, deviceid, mediatype, mediaid, date_format(starttime,'%Y%m%d%H');
 
 
-delete from privilege where parentid=109;
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10901,0,109,'menu.config','config.jsp','',1,1,'0');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10902,0,109,'menu.debug','debugreport.jsp','',1,2,'0');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10903,0,109,'menu.crash','crashreport.jsp','',1,3,'0');
-
-delete from privilege where parentid=303;
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30302,2,303,'menu.bundle','bundle.jsp','',1,2,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30303,2,303,'menu.touchbundle','bundle-touch.jsp','',1,3,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30304,2,303,'menu.deviceschedule','device-schedule.jsp','',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30305,2,303,'menu.devicegpschedule','devicegp-schedule.jsp','',1,5,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30306,2,303,'menu.templet','templet.jsp','',1,6,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30307,2,303,'menu.touchtemplet','templet-touch.jsp','',1,7,'12');
-
-delete from privilege where parentid=306;
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30601,2,306,'menu.page','page.jsp','',1,1,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30602,2,306,'menu.mediagrid','mediagrid.jsp','',1,2,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30603,2,306,'menu.devicegrid','devicegrid.jsp','',1,4,'12');
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30604,2,306,'menu.gridschedule','gridschedule.jsp','',1,5,'12');
-
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(30822,2,308,'menu.flowlog','flowlog.jsp','',1,22,'12');
-
-
 ############################################################
 ## post script  ############################################
 ############################################################

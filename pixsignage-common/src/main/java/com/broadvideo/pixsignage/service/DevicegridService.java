@@ -5,9 +5,12 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Devicegrid;
 
 public interface DevicegridService {
-	public int selectCount(String orgid, String branchid, String search);
+	public Devicegrid selectByPrimaryKey(String devicegridid);
 
-	public List<Devicegrid> selectList(String orgid, String branchid, String search, String start, String length);
+	public int selectCount(String orgid, String branchid, String gridlayoutcode, String devicegroupid, String search);
+
+	public List<Devicegrid> selectList(String orgid, String branchid, String gridlayoutcode, String devicegroupid,
+			String search, String start, String length);
 
 	public void design(Devicegrid devicegrid);
 

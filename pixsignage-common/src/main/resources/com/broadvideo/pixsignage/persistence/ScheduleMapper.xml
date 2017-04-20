@@ -46,8 +46,7 @@
     select 
     <include refid="Base_Column_List" />
     from schedule
-    where scheduletype = 1
-    and bindtype = 2 
+    where bindtype = 2 
     and bindid = #{devicegroupid}
     order by starttime
   </select>

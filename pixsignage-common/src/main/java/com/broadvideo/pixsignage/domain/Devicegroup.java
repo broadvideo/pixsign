@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Devicegroup {
+	public final static String Type_Device = "1";
+	public final static String Type_Devicegrid = "2";
+
 	private Integer devicegroupid;
 
 	private Integer orgid;
@@ -13,6 +16,20 @@ public class Devicegroup {
 	private Integer branchid;
 
 	private String name;
+
+	private String type;
+
+	private String gridlayoutcode;
+
+	private Integer xcount;
+
+	private Integer ycount;
+
+	private String ratio;
+
+	private Integer width;
+
+	private Integer height;
 
 	private String status;
 
@@ -23,6 +40,8 @@ public class Devicegroup {
 	private Integer createstaffid;
 
 	private List<Device> devices;
+
+	private List<Devicegrid> devicegrids;
 
 	private List<Schedule> schedules;
 
@@ -56,6 +75,62 @@ public class Devicegroup {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getGridlayoutcode() {
+		return gridlayoutcode;
+	}
+
+	public void setGridlayoutcode(String gridlayoutcode) {
+		this.gridlayoutcode = gridlayoutcode;
+	}
+
+	public Integer getXcount() {
+		return xcount;
+	}
+
+	public void setXcount(Integer xcount) {
+		this.xcount = xcount;
+	}
+
+	public Integer getYcount() {
+		return ycount;
+	}
+
+	public void setYcount(Integer ycount) {
+		this.ycount = ycount;
+	}
+
+	public String getRatio() {
+		return ratio;
+	}
+
+	public void setRatio(String ratio) {
+		this.ratio = ratio;
+	}
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 
 	public String getStatus() {
@@ -98,6 +173,14 @@ public class Devicegroup {
 
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
+	}
+
+	public List<Devicegrid> getDevicegrids() {
+		return devicegrids;
+	}
+
+	public void setDevicegrids(List<Devicegrid> devicegrids) {
+		this.devicegrids = devicegrids;
 	}
 
 	public List<Schedule> getSchedules() {

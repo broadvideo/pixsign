@@ -482,8 +482,8 @@ function redrawMediagridPreview(div, mediagrid, maxsize) {
 		var mediagriddtlhtml = '';
 		mediagriddtlhtml += '<div style="position: absolute; width:' + 100*mediagriddtl.xcount/mediagrid.xcount;
 		mediagriddtlhtml += '%; height:' + 100*mediagriddtl.ycount/mediagrid.ycount;
-		mediagriddtlhtml += '%; top: ' + 100*mediagriddtl.ypos/mediagrid.ycount;
 		mediagriddtlhtml += '%; left: ' + 100*mediagriddtl.xpos/mediagrid.xcount;
+		mediagriddtlhtml += '%; top: ' + 100*mediagriddtl.ypos/mediagrid.ycount;
 		mediagriddtlhtml += '%; border: 1px solid #000; ">';
 		var bgimage;
 		if (mediagriddtl.video != null) {
@@ -522,6 +522,48 @@ function redrawMediagridPreview(div, mediagrid, maxsize) {
 		height = maxsize * 9 / 16;
 		scale = mediagrid.height / height;
 		width = mediagrid.width / scale;
+	}
+	div.css('width' , width);
+	div.css('height' , height);
+}
+
+function redrawSologridPreview(div, grid, thumbnail, maxsize) {
+	div.empty();
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
+	for (var i=0; i<grid.xcount; i++) {
+		for (var j=0; j<grid.ycount; j++) {
+			var html = '';
+			html += '<div style="position: absolute; width:' + 100/grid.xcount;
+			html += '%; height:' + 100/grid.ycount;
+			html += '%; left: ' + 100*i/grid.xcount;
+			html += '%; top: ' + 100*j/grid.ycount;
+			html += '%; border: 1px solid #000; ">';
+			html += ' <div style="position:absolute; width:100%; height:100%; ">';
+			html += '<img src="' + thumbnail + '" width="100%" height="100%" style="position: absolute; right: 0; bottom: 0; top: 0; left: 0; z-index: 0" />';
+			html += '</div>';
+			html += '</div>';
+			div.append(html);
+		}
+	}
+	for (var i=0; i<grid.xcount; i++) {
+		for (var j=0; j<grid.ycount; j++) {
+			var html = '<div style="position: absolute; width:' + (100/grid.xcount);
+			html += '%; height:' + (100/grid.ycount);
+			html += '%; left: ' + (i*100/grid.xcount);
+			html += '%; top: ' + (j*100/grid.ycount);
+			html += '%; border: 1px dotted #000; ">';
+			div.append(html);
+		}
+	}
+
+	if (grid.width > grid.height ) {
+		width = maxsize;
+		scale = grid.width / width;
+		height = grid.height / scale;
+	} else {
+		height = maxsize * 9 / 16;
+		scale = grid.height / height;
+		width = grid.width / scale;
 	}
 	div.css('width' , width);
 	div.css('height' , height);

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Devicegroup;
+import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.service.DevicegroupService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -21,12 +22,25 @@ public class DevicegroupAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Devicegroup devicegroup;
-	private String[] deviceids;
+	private String[] detailids;
 
 	@Autowired
 	private DevicegroupService devicegroupService;
 	@Autowired
 	private ScheduleService scheduleService;
+
+	public String doGet() {
+		try {
+			String devicegroupid = getParameter("devicegroupid");
+			devicegroup = devicegroupService.selectByPrimaryKey(devicegroupid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegroupAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
 
 	public String doList() {
 		try {
@@ -35,18 +49,19 @@ public class DevicegroupAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String type = getParameter("type");
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Devicegroup> devicegroupList = devicegroupService.selectList("" + getLoginStaff().getOrgid(), branchid,
-					search, start, length);
+					type, search, start, length);
 			for (int i = 0; i < devicegroupList.size(); i++) {
 				aaData.add(devicegroupList.get(i));
 			}
@@ -54,7 +69,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doList exception", ex);
+			logger.error("DevicegroupAction doList exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -68,7 +83,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroupService.addDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doAdd exception", ex);
+			logger.error("DevicegroupAction doAdd exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -80,7 +95,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 			devicegroupService.updateDevicegroup(devicegroup);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doUpdate exception", ex);
+			logger.error("DevicegroupAction doUpdate exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -89,10 +104,11 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			devicegroupService.deleteDevicegroup("" + devicegroup.getDevicegroupid());
+			String devicegroupid = getParameter("devicegroupid");
+			devicegroupService.deleteDevicegroup(devicegroupid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doDelete exception", ex);
+			logger.error("DevicegroupAction doDelete exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -101,10 +117,10 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 	public String doAddDevices() {
 		try {
-			devicegroupService.addDevices(devicegroup, deviceids);
+			devicegroupService.addDevices(devicegroup, detailids);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doAddDevices exception", ex);
+			logger.error("DevicegroupAction doAddDevices exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -113,10 +129,34 @@ public class DevicegroupAction extends BaseDatatableAction {
 
 	public String doDeleteDevices() {
 		try {
-			devicegroupService.deleteDevices(devicegroup, deviceids);
+			devicegroupService.deleteDevices(devicegroup, detailids);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doDeleteDevices exception", ex);
+			logger.error("DevicegroupAction doDeleteDevices exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doAddDevicegrids() {
+		try {
+			devicegroupService.addDevicegrids(devicegroup, detailids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegroupAction doAddDevicegrids exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doDeleteDevicegrids() {
+		try {
+			devicegroupService.deleteDevicegrids(devicegroup, detailids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegroupAction doDeleteDevicegrids exception", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -126,11 +166,11 @@ public class DevicegroupAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
-			scheduleService.syncSchedule("2", devicegroupid);
+			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
 			logger.info("Devicegroup schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Devicegroup schedule sync error: " + ex.getMessage());
+			logger.error("DevicegroupAction doSync exception" + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -145,11 +185,11 @@ public class DevicegroupAction extends BaseDatatableAction {
 		this.devicegroup = devicegroup;
 	}
 
-	public String[] getDeviceids() {
-		return deviceids;
+	public String[] getDetailids() {
+		return detailids;
 	}
 
-	public void setDeviceids(String[] deviceids) {
-		this.deviceids = deviceids;
+	public void setDetailids(String[] detailids) {
+		this.detailids = detailids;
 	}
 }
