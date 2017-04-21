@@ -605,6 +605,7 @@ function initTab5() {
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'branchid','value':CurrentDeviceBranchid });
+			aoData.push({'name':'type','value':'1' });
 		}
 	});
 	jQuery('#DeviceGroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');

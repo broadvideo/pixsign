@@ -600,6 +600,12 @@
 			</result>
 		</action>
 
+		<action name="device!get" method="doGet" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">device.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="device!list" method="doList" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -629,12 +635,6 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="device!get" method="doGet" class="deviceAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">device.*,errorcode,errormsg</param>
 			</result>
 		</action>
 		<action name="device!sync" method="doSync" class="deviceAction">

@@ -24,6 +24,7 @@ var common = {
 		mediagrid: 'Media Grid',
 
 		bundle: 'Program',
+		touchbundle: 'Interactive Program',
 		subbundle: 'Sub-Program',
 		subtemplet: 'Sub-Templet',
 		schedule: 'Schedule',

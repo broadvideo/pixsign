@@ -1,8 +1,8 @@
 var myurls = {
-	'common.list' : 'devicegroup!list.action',
-	'common.add' : 'devicegroup!add.action',
-	'common.update' : 'devicegroup!update.action',
-	'common.delete' : 'devicegroup!delete.action',
+	'devicegroup.list' : 'devicegroup!list.action',
+	'devicegroup.add' : 'devicegroup!add.action',
+	'devicegroup.update' : 'devicegroup!update.action',
+	'devicegroup.delete' : 'devicegroup!delete.action',
 	'device.list' : 'device!list.action',
 	'devicegroup.adddevices' : 'devicegroup!adddevices.action',
 	'devicegroup.deletedevices' : 'devicegroup!deletedevices.action',
@@ -23,7 +23,7 @@ function initMyTable() {
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : myurls['common.list'],
+		'sAjaxSource' : myurls['devicegroup.list'],
 		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '65%' },
 						{'sTitle' : common.view.position, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }, 
@@ -70,7 +70,7 @@ function initMyTable() {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : myurls['common.delete'],
+					url : myurls['devicegroup.delete'],
 					cache: false,
 					data : {
 						devicegroupid: CurrentDevicegroup.devicegroupid,
@@ -163,7 +163,7 @@ function initMyEditModal() {
 	});
 	
 	$('body').on('click', '.pix-add', function(event) {
-		var action = myurls['common.add'];
+		var action = myurls['devicegroup.add'];
 		refreshForm('MyEditForm');
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="devicegroup.branchid"]').val(CurBranchid);
@@ -183,7 +183,7 @@ function initMyEditModal() {
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
-		$('#MyEditForm').attr('action', myurls['common.update']);
+		$('#MyEditForm').attr('action', myurls['devicegroup.update']);
 		$('#MyEditModal').modal();
 	});
 

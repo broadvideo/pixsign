@@ -53,6 +53,19 @@ public class DeviceAction extends BaseDatatableAction {
 	@Autowired
 	private ScheduleService scheduleService;
 
+	public String doGet() {
+		try {
+			String deviceid = getParameter("deviceid");
+			device = deviceService.selectByPrimaryKey(deviceid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));
@@ -128,19 +141,6 @@ public class DeviceAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
-	public String doGet() {
-		try {
-			int deviceid = device.getDeviceid();
-			device = deviceService.selectByPrimaryKey("" + deviceid);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("DeviceAction doGet exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

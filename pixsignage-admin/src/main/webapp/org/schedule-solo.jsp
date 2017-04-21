@@ -44,7 +44,7 @@ response.setDateHeader("Expires",0);
 <%@ include file="/common/common2.jsp"%>
 
 		<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-full">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -54,7 +54,7 @@ response.setDateHeader("Expires",0);
 							<div class="col-md-12 col-sm-12">
 								<div class="portlet box purple">
 									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.bundleschedule"/></div>
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.schedule"/></div>
 										<div class="actions">
 											<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
 										</div>
@@ -84,9 +84,49 @@ response.setDateHeader("Expires",0);
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-3 control-label"><spring:message code="global.bundle"/><span class="required">*</span></label>
+															<label class="col-md-3 control-label"><spring:message code="global.selected"/></label>
 															<div class="col-md-9 pre-scrollable">
-																<table id="BundleTable" class="table-striped"></table>
+																<table id="SelectedTable" class="table-striped"></table>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-3 control-label"><spring:message code="global.bundle"/><span class="required">*</span></label>
+															<div class="col-md-9">
+																<div class="portlet box blue">
+																	<div class="portlet-title">
+																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																		<ul class="nav nav-tabs">
+																			<li id="nav_tab2" class="touch-ctrl">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.touchbundle"/></a>
+																			</li>
+																			<li id="nav_tab1" class="active">
+																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.bundle"/></a>
+																			</li>
+																		</ul>
+																	</div>
+																	<div class="portlet-body">
+																		<div class="tab-content">
+																			<div class="tab-pane active" id="portlet_tab">
+																				<div class="row">
+																					<div class="col-md-12">
+																						<div id="BundleDiv">
+																							<table id="BundleTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																						<div id="TouchbundleDiv" style="display:none">
+																							<table id="TouchbundleTable" class="table table-condensed table-hover">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -119,7 +159,7 @@ response.setDateHeader("Expires",0);
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
-				<h3 class="page-title"><spring:message code="menu.devicegpschedule"/></h3>
+				<h3 class="page-title"><spring:message code="menu.schedule"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -127,7 +167,7 @@ response.setDateHeader("Expires",0);
 						</li>
 						<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.devicegpschedule"/></a>
+						<li><a href="#"><spring:message code="menu.schedule"/></a>
 						</li>
 					</ul>
 				</div>
@@ -136,20 +176,34 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="menu.devicegpschedule"/></div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="menu.schedule"/></div>
 								<div class="tools">
-									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+									<a href="javascript:;" onClick="refreshSchedule();" class="reload"></a>
 								</div>
+								<ul class="nav nav-tabs" style="margin-right: 30px;">
+									<li id="DevicegroupNav"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
+									<li id="DeviceNav" class="active"><a href="#DeviceTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
+								</ul>
 							</div>
 							<div class="portlet-body">
 								<div class="row">
 									<div class="col-md-2" id="BranchTreeDiv">
 									</div>
 									<div class="col-md-10" id="BranchContentDiv">
-										<table id="MyTable" class="table table-striped table-bordered table-hover">
-											<thead></thead>
-											<tbody></tbody>
-										</table>
+										<div class="tab-content">
+											<div class="tab-pane" id="DevicegroupTab">
+												<table id="DevicegroupTable" class="table table-striped table-bordered table-hover">
+													<thead></thead>
+													<tbody></tbody>
+												</table>
+											</div>
+											<div class="tab-pane active" id="DeviceTab">
+												<table id="DeviceTable" class="table table-striped table-bordered table-hover">
+													<thead></thead>
+													<tbody></tbody>
+												</table>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -216,8 +270,10 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-devicegp-schedule.js?t=3"></script>
+<script src="${base_ctx}/scripts/pix-schedule-solo.js?t=0"></script>
 <script>
+var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

@@ -129,6 +129,7 @@ function initDevicefiles() {
 					sSearch: term,
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
+					type: 1,
 				};
 			},
 			results: function (data, page) {

@@ -24,6 +24,7 @@ var common = {
 		mediagrid: '联屏媒体',
 
 		bundle: '单屏节目',
+		touchbundle: '互动节目',
 		subbundle: '子节目',
 		subtemplet: '子模板',
 		schedule: '计划',

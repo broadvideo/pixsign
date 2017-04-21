@@ -407,15 +407,15 @@ $('#MediagridTable tbody').css('display', 'none');
 var mediagridhtml = '';
 $('#MediagridTable').dataTable({
 	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-					  [ 18, 30, 48, 96 ] 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
 					],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'mediagrid!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'mediagridid', 'bSortable' : false }],
-	'iDisplayLength' : 18,
+	'iDisplayLength' : 12,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
@@ -475,21 +475,21 @@ $('#MediagridTable_wrapper .dataTables_filter input').addClass("form-control inp
 $('#MediagridTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#MediagridTable').css('width', '100%');
 
-//本地视频table初始化
+//视频table初始化
 $('#VideoTable thead').css('display', 'none');
 $('#VideoTable tbody').css('display', 'none');	
 var videohtml = '';
 $('#VideoTable').dataTable({
 	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-					  [ 18, 30, 48, 96 ] 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
 					],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'video!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'videoid', 'bSortable' : false }],
-	'iDisplayLength' : 18,
+	'iDisplayLength' : 12,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
@@ -559,15 +559,15 @@ $('#ImageTable tbody').css('display', 'none');
 var imagehtml = '';
 $('#ImageTable').dataTable({
 	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-					  [ 18, 30, 48, 96 ] 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
 					],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'image!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'imageid', 'bSortable' : false }],
-	'iDisplayLength' : 18,
+	'iDisplayLength' : 12,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
@@ -625,21 +625,21 @@ $('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-m
 $('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#ImageTable').css('width', '100%');
 
-//图片table初始化
+//页面table初始化
 $('#PageTable thead').css('display', 'none');
 $('#PageTable tbody').css('display', 'none');	
 var pagehtml = '';
 $('#PageTable').dataTable({
 	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-					  [ 18, 30, 48, 96 ] 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
 					],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'page!pagelist.action',
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
-	'iDisplayLength' : 18,
+	'iDisplayLength' : 12,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
@@ -897,14 +897,12 @@ $('body').on('click', '.pix-del-schedule', function(event) {
 FormValidateOption.rules = {};
 FormValidateOption.rules['starttime'] = {};
 FormValidateOption.rules['starttime']['required'] = true;
-FormValidateOption.rules['mediagridid'] = {};
-FormValidateOption.rules['mediagridid']['required'] = true;
 $('#ScheduleForm').validate(FormValidateOption);
 $.extend($('#ScheduleForm').validate().settings, {
 	rules: FormValidateOption.rules
 });
 $('#ScheduleForm .pix-ok').on('click', function(event) {
-	if ($('#ScheduleForm').valid() ) {
+	if ($('#ScheduleForm').valid()) {
 		$('.schedule-edit').css('display', 'none');
 		$('.schedule-add').css('display', 'none');
 		$('.schedule-view').css('display', 'block');
@@ -1102,9 +1100,9 @@ function refreshFancybox() {
 				openEffect	: 'none',
 				closeEffect	: 'none',
 				closeBtn : false,
-		        padding : 0,
-		        content: '<div id="MediagridPreview"></div>',
-		    });
+				padding : 0,
+				content: '<div id="MediagridPreview"></div>',
+			});
 			if (scheduledtl.objtype == 9) {
 				redrawMediagridPreview($('#MediagridPreview'), scheduledtl.mediagrid, 800);
 			} else {
@@ -1121,7 +1119,7 @@ function refreshFancybox() {
 				redrawSologridPreview($('#MediagridPreview'), grid, thumbnail, 800);
 			}
 			
-		    return false;
+			return false;
 		})
 	});
 }
