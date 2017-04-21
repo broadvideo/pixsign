@@ -9,6 +9,8 @@ var CurrentScheduledtls;
 var CurrentMediaBranchid;
 var CurrentMediaFolderid;
 
+var timestamp = new Date().getTime();
+
 function refreshDevicegridTable() {
 	$('#DevicegridTable').dataTable()._fnAjaxUpdate();
 }			
@@ -42,8 +44,13 @@ $('#DevicegridTable').dataTable({
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		$('td:eq(1)', nRow).html('<div id="DevicegridDiv-'+ aData.devicegridid + '"></div>');
-		
+		var devicegridhtml = '';
+		devicegridhtml += '<a href="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="gridfancybox">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		devicegridhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '" />';
+		devicegridhtml += '</a>';
+		$('td:eq(1)', nRow).html(devicegridhtml);
+	
 		var schedulehtml = '';
 		if (aData.schedules.length > 0) {
 			for (var i=0; i<aData.schedules.length; i++) {
@@ -104,16 +111,15 @@ $('#DevicegridTable').dataTable({
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
+		$(".gridfancybox").fancybox({
+			openEffect	: 'none',
+			closeEffect	: 'none',
+			closeBtn : false,
+		});
 		$('#DevicegridTable .thumbs').each(function(i) {
 			$(this).width($(this).parent().closest('div').width());
 			$(this).height($(this).parent().closest('div').width());
 		});
-
-		for (var i=0; i<$('#DevicegridTable').dataTable().fnGetData().length; i++) {
-			var devicegrid = $('#DevicegridTable').dataTable().fnGetData(i);
-			redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().width()));
-		}
-		
 		refreshFancybox();
 	},
 	'fnServerParams': function(aoData) { 
@@ -230,56 +236,6 @@ $('#DevicegridgroupTable_wrapper .dataTables_filter input').addClass('form-contr
 $('#DevicegridgroupTable_wrapper .dataTables_length select').addClass('form-control input-small');
 $('#DevicegridgroupTable_wrapper .dataTables_length select').select2();
 $('#DevicegridgroupTable').css('width', '100%');
-
-function redrawDevicegridPreview(div, devicegrid, maxsize) {
-	div.empty();
-	div.attr('devicegridid', devicegrid.devicegridid);
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
-
-	for (var i=0; i<devicegrid.xcount; i++) {
-		for (var j=0; j<devicegrid.ycount; j++) {
-			var terminalid = '';
-			for (var k=0; k<devicegrid.devices.length; k++) {
-				var device = devicegrid.devices[k];
-				if (device.xpos == i && device.ypos == j) {
-					terminalid = device.terminalid;
-					terminalid = terminalid.substr(terminalid.length-5,5);
-				}
-			}
-			var html = '<div style="position: absolute; width:' + (100/devicegrid.xcount);
-			html += '%; height:' + (100/devicegrid.ycount);
-			html += '%; left: ' + (i*100/devicegrid.xcount);
-			html += '%; top: ' + (j*100/devicegrid.ycount);
-			html += '%; border: 1px solid #000; ">';
-			html += '<div style="position:absolute; width:100%; height:100%; ">';
-			html += '<p class="grid-font" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:#000; font-size:12px; ">';
-			html += terminalid;
-			html += '</p>';
-			html += '</div>';
-			html += '</div>';
-			div.append(html);
-		}
-	}
-
-	var width, scale, height;
-	if (devicegrid.width > devicegrid.height ) {
-		width = maxsize;
-		scale = devicegrid.width / width;
-		height = devicegrid.height / scale;
-	} else {
-		height = maxsize * 9 / 16;
-		scale = devicegrid.height / height;
-		width = devicegrid.width / scale;
-	}
-	div.css('width' , width);
-	div.css('height' , height);
-	$(div).find('.grid-font').each(function() {
-		var lineheight = devicegrid.height / devicegrid.ycount / scale;
-		var text = $(this).html();
-		$(this).css('font-size', 0.2 * lineheight + 'px');
-		$(this).css('line-height', lineheight + 'px');
-	});
-}
 
 $('body').on('click', '.pix-sync', function(event) {
 	var index = $(event.target).attr('data-id');

@@ -89,6 +89,7 @@ response.setDateHeader("Expires",0);
 						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 							<input type="hidden" name="devicegrid.devicegridid" value="0" />
 							<input type="hidden" name="devicegrid.status" value="1" />
+							<input type="hidden" name="devicegrid.snapshotdtl" value="" />
 							<div class="form-body">
 								<div class="form-group">
 									<label class="col-md-3 control-label"><spring:message code="global.name"/></label>

@@ -1,11 +1,15 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Gridlayout;
@@ -37,16 +41,27 @@ public class DevicegridServiceImpl implements DevicegridService {
 	}
 
 	@Transactional
-	public void design(Devicegrid devicegrid) {
+	public void design(Devicegrid devicegrid) throws Exception {
 		devicegridMapper.unbindDevices("" + devicegrid.getDevicegridid());
 		List<Device> devices = devicegrid.getDevices();
 		for (Device device : devices) {
 			deviceMapper.updateByPrimaryKeySelective(device);
 		}
+
+		String snapshotdtl = devicegrid.getSnapshotdtl();
+		if (snapshotdtl.startsWith("data:image/png;base64,")) {
+			snapshotdtl = snapshotdtl.substring(22);
+		}
+		String snapshotFilePath = "/devicegrid/" + devicegrid.getDevicegridid() + "/snapshot/"
+				+ devicegrid.getDevicegridid() + ".png";
+		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+		devicegrid.setSnapshot(snapshotFilePath);
+		devicegridMapper.updateByPrimaryKeySelective(devicegrid);
 	}
 
 	@Transactional
-	public void addDevicegrid(Devicegrid devicegrid) {
+	public void addDevicegrid(Devicegrid devicegrid) throws Exception {
 		Gridlayout gridlayout = gridlayoutMapper.selectByCode(devicegrid.getGridlayoutcode());
 		devicegrid.setXcount(gridlayout.getXcount());
 		devicegrid.setYcount(gridlayout.getYcount());
@@ -54,6 +69,17 @@ public class DevicegridServiceImpl implements DevicegridService {
 		devicegrid.setWidth(gridlayout.getWidth());
 		devicegrid.setHeight(gridlayout.getHeight());
 		devicegridMapper.insertSelective(devicegrid);
+
+		String snapshotdtl = devicegrid.getSnapshotdtl();
+		if (snapshotdtl.startsWith("data:image/png;base64,")) {
+			snapshotdtl = snapshotdtl.substring(22);
+		}
+		String snapshotFilePath = "/devicegrid/" + devicegrid.getDevicegridid() + "/snapshot/"
+				+ devicegrid.getDevicegridid() + ".png";
+		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
+		devicegrid.setSnapshot(snapshotFilePath);
+		devicegridMapper.updateByPrimaryKeySelective(devicegrid);
 	}
 
 	@Transactional

@@ -1,3 +1,4 @@
+var submitflag = false;
 var myurls = {
 	'common.list' : 'devicegrid!list.action',
 	'common.add' : 'devicegrid!add.action',
@@ -11,6 +12,7 @@ var CurrentDevicegridid = 0;
 var CurrentDevicegrid;
 var CurrentXPos = -1;
 var CurrentYPos = -1;
+var Gridlayouts = [];
 
 $(window).resize(function(e) {
 	if (CurrentDevicegrid != null && e.target == this) {
@@ -22,7 +24,7 @@ $(window).resize(function(e) {
 	}
 	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 		var devicegrid = $('#MyTable').dataTable().fnGetData(i);
-		redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().width()));
+		redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()));
 	}
 });
 
@@ -50,11 +52,11 @@ var oTable = $('#MyTable').dataTable({
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 3 == 0) {
+		if (iDisplayIndex % 4 == 0) {
 			devicegridhtml = '';
 			devicegridhtml += '<div class="row" >';
 		}
-		devicegridhtml += '<div class="col-md-4 col-xs-4">';
+		devicegridhtml += '<div class="col-md-3 col-xs-3">';
 		devicegridhtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 		devicegridhtml += '<h6><span class="label label-sm label-info">' + aData.xcount + 'x' + aData.ycount + '</span>';
 		if (aData.ratio == 1) {
@@ -64,41 +66,53 @@ var oTable = $('#MyTable').dataTable({
 		} else {
 			devicegridhtml += ' <span class="label label-sm label-default">' + common.view.unknown + '</span></h6>';
 		}
+	
 		devicegridhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="fancybox">';
-		devicegridhtml += '<div id="DevicegridDiv-'+ aData.devicegridid + '"></div></a>';
+		devicegridhtml += '<div class="thumbs">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		devicegridhtml += '<div id="DevicegridDiv-'+ aData.devicegridid + '" class="imgthumb" style="width: ' + thumbwidth + '%"></div>';
+		devicegridhtml += '</div></a>';
+		
 		devicegridhtml += '<div privilegeid="101010">';
 		devicegridhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-devicegrid"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 		devicegridhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 		devicegridhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
 
 		devicegridhtml += '</div>';
-		if ((iDisplayIndex+1) % 3 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
+		if ((iDisplayIndex+1) % 4 == 0 || (iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 			devicegridhtml += '</div>';
 			if ((iDisplayIndex+1) != $('#MyTable').dataTable().fnGetData().length) {
 				devicegridhtml += '<hr/>';
 			}
 			$('#DevicegridContainer').append(devicegridhtml);
 		}
+
 		if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 			for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 				var devicegrid = $('#MyTable').dataTable().fnGetData(i);
-				redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().width()));
-				$('.fancybox').each(function(index,item) {
-					$(this).click(function() {
-						var index = $(this).attr('data-id');
-						var devicegrid = $('#MyTable').dataTable().fnGetData(index);
-						$.fancybox({
-					        padding : 0,
-					        content: '<div id="DevicegridPreview"></div>',
-					    });
-						redrawDevicegridPreview($('#DevicegridPreview'), devicegrid, 800);
-					    return false;
-					})
-				});
+				redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()));
 			}
 		}
 		return nRow;
-	}
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('.thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+		$('.fancybox').each(function(index,item) {
+			$(this).click(function() {
+				var index = $(this).attr('data-id');
+				var devicegrid = $('#MyTable').dataTable().fnGetData(index);
+				$.fancybox({
+			        padding : 0,
+			        content: '<div id="DevicegridPreview"></div>',
+			    });
+				redrawDevicegridPreview($('#DevicegridPreview'), devicegrid, 640);
+			    return false;
+			})
+		});
+	},
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
@@ -110,33 +124,33 @@ $.ajax({
 	data : {},
 	success : function(data, status) {
 		if (data.errorcode == 0) {
-			var gridlayouts = data.aaData;
+			Gridlayouts = data.aaData;
 			var gridlayoutTableHtml = '';
 			gridlayoutTableHtml += '<tr>';
-			for (var i=0; i<gridlayouts.length; i++) {
-				gridlayoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><div id="GridlayoutDiv-' + gridlayouts[i].gridlayoutid + '"></div></td>';
+			for (var i=0; i<Gridlayouts.length; i++) {
+				gridlayoutTableHtml += '<td style="padding: 0px 20px 0px 0px;"><div id="GridlayoutDiv-' + Gridlayouts[i].gridlayoutid + '"></div></td>';
 			}
 			gridlayoutTableHtml += '</tr>';
 			gridlayoutTableHtml += '<tr>';
-			for (var i=0; i<gridlayouts.length; i++) {
+			for (var i=0; i<Gridlayouts.length; i++) {
 				gridlayoutTableHtml += '<td>';
 				gridlayoutTableHtml += '<label class="radio-inline">';
 				if (i == 0) {
-					gridlayoutTableHtml += '<input type="radio" name="devicegrid.gridlayoutcode" value="' + gridlayouts[i].gridlayoutcode + '" checked>';
+					gridlayoutTableHtml += '<input type="radio" name="devicegrid.gridlayoutcode" value="' + Gridlayouts[i].gridlayoutcode + '" checked>';
 				} else {
-					gridlayoutTableHtml += '<input type="radio" name="devicegrid.gridlayoutcode" value="' +gridlayouts[i].gridlayoutcode + '">';
+					gridlayoutTableHtml += '<input type="radio" name="devicegrid.gridlayoutcode" value="' +Gridlayouts[i].gridlayoutcode + '">';
 				}
-				if (gridlayouts[i].ratio == 1) {
-					gridlayoutTableHtml += gridlayouts[i].xcount + 'x' + gridlayouts[i].ycount + '(16:9)';
+				if (Gridlayouts[i].ratio == 1) {
+					gridlayoutTableHtml += Gridlayouts[i].xcount + 'x' + Gridlayouts[i].ycount + '(16:9)';
 				} else {
-					gridlayoutTableHtml += gridlayouts[i].xcount + 'x' + gridlayouts[i].ycount + '(9:16)';
+					gridlayoutTableHtml += Gridlayouts[i].xcount + 'x' + Gridlayouts[i].ycount + '(9:16)';
 				}
 				gridlayoutTableHtml += '</label></td>';
 			}
 			gridlayoutTableHtml += '</tr>';
 			$('#GridlayoutTable').html(gridlayoutTableHtml);
-			for (var i=0; i<gridlayouts.length; i++) {
-				var gridlayout = gridlayouts[i];
+			for (var i=0; i<Gridlayouts.length; i++) {
+				var gridlayout = Gridlayouts[i];
 				redrawGridlayout($('#GridlayoutDiv-' + gridlayout.gridlayoutid), gridlayout, 200);
 			}
 		} else {
@@ -150,14 +164,14 @@ $.ajax({
 
 function redrawGridlayout(div, gridlayout, maxsize) {
 	div.empty();
-	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 0px solid #000; background:#FFFFFF;');
+	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
 	for (var i=0; i<gridlayout.xcount; i++) {
 		for (var j=0; j<gridlayout.ycount; j++) {
 			var html = '<div style="position: absolute; width:' + (100/gridlayout.xcount);
 			html += '%; height:' + (100/gridlayout.ycount);
 			html += '%; left: ' + (i*100/gridlayout.xcount);
 			html += '%; top: ' + (j*100/gridlayout.ycount);
-			html += '%; border: 1px dotted #000; ">';
+			html += '%; border: 1px solid #000; ">';
 			div.append(html);
 		}
 	}
@@ -166,14 +180,14 @@ function redrawGridlayout(div, gridlayout, maxsize) {
 		width = maxsize;
 		scale = gridlayout.width / width;
 		height = gridlayout.height / scale;
-		div.css('width' , width);
-		div.css('height' , height);
+		div.css('width', width);
+		div.css('height', height);
 	} else {
 		height = maxsize;
 		scale = gridlayout.height / height;
 		width = gridlayout.width / scale;
-		div.css('width' , width);
-		div.css('height' , height);
+		div.css('width', width);
+		div.css('height', height);
 	}
 }
 
@@ -213,16 +227,18 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 		scale = devicegrid.width / width;
 		height = devicegrid.height / scale;
 	} else {
-		height = maxsize * 9 / 16;
+		height = maxsize;
 		scale = devicegrid.height / height;
 		width = devicegrid.width / scale;
 	}
+	console.log(maxsize, width, height);
 	div.css('width' , width);
 	div.css('height' , height);
+
 	$(div).find('.grid-font').each(function() {
 		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.2 * lineheight + 'px');
+		$(this).css('font-size', 0.3 * lineheight + 'px');
 		$(this).css('line-height', lineheight + 'px');
 	});
 }
@@ -287,23 +303,44 @@ OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 FormValidateOption.rules['devicegrid.name'] = {};
 FormValidateOption.rules['devicegrid.name']['required'] = true;
 FormValidateOption.submitHandler = function(form) {
-	$.ajax({
-		type : 'POST',
-		url : $('#MyEditForm').attr('action'),
-		data : $('#MyEditForm').serialize(),
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				$('#MyEditModal').modal('hide');
-				bootbox.alert(common.tips.success);
-				$('#MyTable').dataTable()._fnAjaxUpdate();
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
+	var gridlayoutcode = $('input[name="devicegrid.gridlayoutcode"]:checked').val();
+	var gridlayout = Gridlayouts.filter(function (el) {
+		return (el.gridlayoutcode == gridlayoutcode);
+	})[0];
+	$('#snapshot_div').show();
+	redrawGridlayout($('#snapshot_div'), gridlayout, 512);	
+	
+	html2canvas($('#snapshot_div'), {
+		onrendered: function(canvas) {
+			console.log(canvas.toDataURL());
+			$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL());
+			$('#snapshot_div').hide();
+
+			$.ajax({
+				type : 'POST',
+				url : $('#MyEditForm').attr('action'),
+				data : $('#MyEditForm').serialize(),
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						submitflag = false;
+						Metronic.unblockUI();
+						$('#MyEditModal').modal('hide');
+						bootbox.alert(common.tips.success);
+						$('#MyTable').dataTable()._fnAjaxUpdate();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					submitflag = false;
+					Metronic.unblockUI();
+					$('#MyEditModal').modal('hide');
+					console.log('failue');
+				}
+			});
 		}
 	});
+
 };
 $('#MyEditForm').validate(FormValidateOption);
 
@@ -423,7 +460,7 @@ function validDevicegrid() {
 	if ($('#DevicegridEditForm').valid()) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
-		CurrentDevicegrid.name = $('#DevicegridEditForm input[name="devicegrid.name"]').attr('value');
+		CurrentDevicegrid.name = $('#DevicegridEditForm input[name="name"]').attr('value');
 		return true;
 	}
 	return false;
@@ -555,12 +592,22 @@ $('#DevicegridModal').on('shown.bs.modal', function (e) {
 //在设计对话框中进行提交
 $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 	if (CurrentXPos == -1 && CurrentYPos == -1 && validDevicegrid() || CurrentXPos >=0 && CurrentYPos >= 0 && validDevicegriddtl()) {
+		if (submitflag) {
+			return;
+		}
+		submitflag = true;
+		Metronic.blockUI({
+			zIndex: 20000,
+			animate: true
+		});
+
 		CurrentDevicegrid.devices = [];
 		for (var i=0; i<CurrentDevicegrid.xcount; i++) {
 			for (var j=0; j<CurrentDevicegrid.ycount; j++) {
 				if (CurrentDevicegrid.devicearray[i][j] != null) {
 					var device = {};
 					device.deviceid = CurrentDevicegrid.devicearray[i][j].deviceid;
+					device.terminalid = CurrentDevicegrid.devicearray[i][j].terminalid;
 					device.devicegridid = CurrentDevicegrid.devicegridid;
 					device.xpos = i;
 					device.ypos = j;
@@ -569,28 +616,38 @@ $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 			}
 		}
 		
-		$.ajax({
-			type : 'POST',
-			url : myurls['devicegrid.design'],
-			data : '{"devicegrid":' + $.toJSON(CurrentDevicegrid) + '}',
-			dataType : 'json',
-			contentType : 'application/json;charset=utf-8',
-			beforeSend: function ( xhr ) {
-				Metronic.startPageLoading({animate: true});
-			},
-			success : function(data, status) {
-				Metronic.stopPageLoading();
-				$('#DevicegridModal').modal('hide');
-				if (data.errorcode == 0) {
-					bootbox.alert(common.tips.success);
-					$('#MyTable').dataTable()._fnAjaxUpdate();
-				} else {
-					bootbox.alert(common.tips.error + data.errormsg);
-				}
-			},
-			error : function() {
-				$('#DevicegridModal').modal('hide');
-				console.log('failue');
+		$('#snapshot_div').show();
+		redrawDevicegridPreview($('#snapshot_div'), CurrentDevicegrid, 512);
+		html2canvas($('#snapshot_div'), {
+			onrendered: function(canvas) {
+				console.log(canvas.toDataURL());
+				CurrentDevicegrid.snapshotdtl = canvas.toDataURL();
+				$('#snapshot_div').hide();
+
+				$.ajax({
+					type : 'POST',
+					url : myurls['devicegrid.design'],
+					data : '{"devicegrid":' + $.toJSON(CurrentDevicegrid) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						submitflag = false;
+						Metronic.unblockUI();
+						$('#DevicegridModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#MyTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						submitflag = false;
+						Metronic.unblockUI();
+						$('#DevicegridModal').modal('hide');
+						console.log('failue');
+					}
+				});
 			}
 		});
 

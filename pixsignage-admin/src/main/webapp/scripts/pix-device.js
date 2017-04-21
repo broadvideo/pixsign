@@ -114,7 +114,8 @@ function initMyTable() {
 		'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false }, 
-						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }],
+						{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false },
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
@@ -124,6 +125,7 @@ function initMyTable() {
 			} else {
 				$('td:eq(2)', nRow).html('');
 			}
+			$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update2"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -488,6 +490,26 @@ function initMyEditModal() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+		var formdata = new Object();
+		for (var name in CurrentDevice) {
+			formdata['device.' + name] = CurrentDevice[name];
+		}
+		refreshForm('MyEditForm');
+		$('#MyEditForm').loadJSON(formdata);
+		$('#MyEditForm').attr('action', myurls['device.update']);
+		currentEditBranchid = CurrentDevice.branchid;
+		createEditBranchTree(currentEditBranchTreeData);
+		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
+		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+		$('#MyEditModal').modal();
+	});
+
+	$('body').on('click', '.pix-update2', function(event) {
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			index = $(event.target).parent().attr('data-id');
+		}
+		CurrentDevice = $('#UnDeviceTable').dataTable().fnGetData(index);
 		var formdata = new Object();
 		for (var name in CurrentDevice) {
 			formdata['device.' + name] = CurrentDevice[name];

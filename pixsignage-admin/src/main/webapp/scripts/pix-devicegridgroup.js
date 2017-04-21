@@ -14,6 +14,9 @@ function refreshMyTable() {
 }			
 
 var CurrentDevicegroup;
+var CurrentDevicegroupid = 0;
+
+var timestamp = new Date().getTime();
 
 var oTable = $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -35,7 +38,22 @@ var oTable = $('#MyTable').dataTable({
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		var listhtml = '';
 		for (var i=0; i<aData.devicegrids.length; i++) {
-			listhtml += aData.devicegrids[i].name + ' ';
+			var devicegrid = aData.devicegrids[i];
+			if (i % 6 == 0) {
+				listhtml += '<div class="row" >';
+			}
+			listhtml += '<div class="col-md-2 col-xs-2">';
+			listhtml += '<a href="/pixsigdata' + devicegrid.snapshot + '?t=' + timestamp + '" class="fancybox">';
+			listhtml += '<div class="thumbs">';
+			var thumbwidth = devicegrid.width > devicegrid.height? 100 : 100*devicegrid.width/devicegrid.height;
+			listhtml += '<img src="/pixsigdata' + devicegrid.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
+			listhtml += '</div>';
+			listhtml += '</a>';
+			listhtml += '<h6 class="pixtitle">' + devicegrid.name + '</h6>';
+			listhtml += '</div>';
+			if ((i+1) % 6 == 0 || (i+1) == aData.devicegrids.length) {
+				listhtml += '</div>';
+			}
 		}
 		$('td:eq(1)', nRow).html(listhtml);
 		
@@ -44,6 +62,17 @@ var oTable = $('#MyTable').dataTable({
 		$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 		$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('#MyTable .thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+		$("#MyTable .fancybox").fancybox({
+			openEffect	: 'none',
+			closeEffect	: 'none',
+			closeBtn : false,
+		});
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'branchid','value':CurBranchid });
@@ -135,6 +164,7 @@ $('body').on('click', '.pix-delete', function(event) {
 		index = $(event.target).parent().attr('data-id');
 	}
 	CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+	CurrentDevicegroupid = CurrentDevicegroup.devicegroupid;
 	
 	bootbox.confirm(common.tips.remove + CurrentDevicegroup.name + '"', function(result) {
 		if (result == true) {
@@ -168,6 +198,7 @@ $('body').on('click', '.pix-sync', function(event) {
 		index = $(event.target).parent().attr('data-id');
 	}
 	CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+	CurrentDevicegroupid = CurrentDevicegroup.devicegroupid;
 	bootbox.confirm(common.tips.sync + CurrentDevicegroup.name + '"', function(result) {
 		if (result == true) {
 			$.ajax({
@@ -246,6 +277,7 @@ $('body').on('click', '.pix-update', function(event) {
 		index = $(event.target).parent().attr('data-id');
 	}
 	CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+	CurrentDevicegroupid = CurrentDevicegroup.devicegroupid;
 	var formdata = new Object();
 	for (var name in CurrentDevicegroup) {
 		formdata['devicegroup.' + name] = CurrentDevicegroup[name];
@@ -258,7 +290,6 @@ $('body').on('click', '.pix-update', function(event) {
 });
 
 //==============================终端组明细对话框====================================			
-var currentDevicegroupid = 0;
 var selectedDevicegrids = [];
 var selectedDevicegpDtls = [];
 
@@ -267,8 +298,8 @@ $('body').on('click', '.pix-detail', function(event) {
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	var data = $('#MyTable').dataTable().fnGetData(index);
-	currentDevicegroupid = data.devicegroupid;
+	CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+	CurrentDevicegroupid = CurrentDevicegroup.devicegroupid;
 	
 	selectedDevicegrids = [];
 	selectedDevicegpDtls = [];
@@ -300,7 +331,22 @@ $('#DevicegridTable').dataTable({
 		} else {
 			$('td:eq(0)', nRow).html('<input type="checkbox" id="DevicegridCheck' + aData.devicegridid + '" />');
 		}
+		var detailhtml = '';
+		detailhtml += '<a href="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="fancybox">';
+		detailhtml += '<div class="thumbs">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		detailhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '" />';
+		detailhtml += '</div>';
+		detailhtml += '</a>';
+		$('td:eq(2)', nRow).html(detailhtml);
 		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$("#DevicegridTable .fancybox").fancybox({
+			openEffect	: 'none',
+			closeEffect	: 'none',
+			closeBtn : false,
+		});
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'branchid','value':CurBranchid });
@@ -333,14 +379,29 @@ $('#DevicegpDtlTable').dataTable({
 		} else {
 			$('td:eq(0)', nRow).html('<input type="checkbox" id="DevicegpDtlCheck' + aData.devicegridid + '" />');
 		}
+		var detailhtml = '';
+		detailhtml += '<a href="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="fancybox">';
+		detailhtml += '<div class="thumbs">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		detailhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '" />';
+		detailhtml += '</div>';
+		detailhtml += '</a>';
+		$('td:eq(2)', nRow).html(detailhtml);
 		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$("#DevicegpDtlTable .fancybox").fancybox({
+			openEffect	: 'none',
+			closeEffect	: 'none',
+			closeBtn : false,
+		});
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'branchid','value':CurBranchid });
 		if (CurrentDevicegroup != null) {
 			aoData.push({'name':'gridlayoutcode','value':CurrentDevicegroup.gridlayoutcode });
 		}
-		aoData.push({'name':'devicegroupid','value':currentDevicegroupid });
+		aoData.push({'name':'devicegroupid','value':CurrentDevicegroupid });
 	} 
 });
 
@@ -415,7 +476,7 @@ $('body').on('click', '.pix-adddevicegpdtl', function(event) {
 	$.ajax({
 		type : 'POST',
 		url : myurls['devicegroup.adddevicegrids'],
-		data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevicegrids) + '}',
+		data : '{"devicegroup":{"devicegroupid":' + CurrentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevicegrids) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		success : function(data, status) {
@@ -441,7 +502,7 @@ $('body').on('click', '.pix-deletedevicegpdtl', function(event) {
 	$.ajax({
 		type : 'POST',
 		url : myurls['devicegroup.deletedevicegrids'],
-		data : '{"devicegroup":{"devicegroupid":' + currentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevicegpDtls) + '}',
+		data : '{"devicegroup":{"devicegroupid":' + CurrentDevicegroupid + '}, "detailids":' + $.toJSON(selectedDevicegpDtls) + '}',
 		dataType : 'json',
 		contentType : 'application/json;charset=utf-8',
 		success : function(data, status) {

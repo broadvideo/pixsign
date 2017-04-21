@@ -34,6 +34,8 @@ public class Devicegrid {
 
 	private Date createtime;
 
+	private String snapshotdtl;
+
 	private List<Device> devices;
 
 	private List<Schedule> schedules;
@@ -156,6 +158,14 @@ public class Devicegrid {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getSnapshotdtl() {
+		return snapshotdtl;
+	}
+
+	public void setSnapshotdtl(String snapshotdtl) {
+		this.snapshotdtl = snapshotdtl;
 	}
 
 	public List<Device> getDevices() {
