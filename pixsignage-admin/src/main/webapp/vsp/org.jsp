@@ -73,14 +73,25 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group pix-ctrl">
-											<label class="col-md-3 control-label"><spring:message code="global.org.type"/><span class="required">*</span></label>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.org.sscreenflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="1"> <spring:message code="global.org.orgtype_1"/>
+													<input type="radio" name="org.sscreenflag" value="0" checked> <spring:message code="global.off"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.orgtype" value="2" checked> <spring:message code="global.org.orgtype_2"/>
+													<input type="radio" name="org.sscreenflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group mscreen-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.mscreenflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.mscreenflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.mscreenflag" value="1"> <spring:message code="global.on"/>
 												</label>
 											</div>
 										</div>
@@ -117,17 +128,6 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
-										<div class="form-group mscreen-ctrl">
-											<label class="col-md-3 control-label"><spring:message code="global.org.mscreenflag"/><span class="required">*</span></label>
-											<div class="col-md-9 radio-list">
-												<label class="radio-inline">
-													<input type="radio" name="org.mscreenflag" value="0" checked> <spring:message code="global.off"/>
-												</label>
-												<label class="radio-inline">
-													<input type="radio" name="org.mscreenflag" value="1"> <spring:message code="global.on"/>
-												</label>
-											</div>
-										</div>
 										<div class="form-group lift-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.org.liftflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
@@ -136,6 +136,20 @@ response.setDateHeader("Expires",0);
 												</label>
 												<label class="radio-inline">
 													<input type="radio" name="org.liftflag" value="1"> <spring:message code="global.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group flowrate-ctrl">
+											<label class="col-md-3 control-label"><spring:message code="global.org.flowrateflag"/><span class="required">*</span></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.flowrateflag" value="0" checked> <spring:message code="global.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.flowrateflag" value="1"> <spring:message code="global.org.flowrate_1"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.flowrateflag" value="2"> <spring:message code="global.org.flowrate_2"/>
 												</label>
 											</div>
 										</div>
@@ -330,6 +344,7 @@ var TouchCtrl = <%=(session_vsp != null && session_vsp.getTouchflag().equals("1"
 var CalendarCtrl = <%=(session_vsp != null && session_vsp.getCalendarflag().equals("1"))%>;
 var MscreenCtrl = <%=(session_vsp != null && session_vsp.getMscreenflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
+var FlowrateCtrl = <%=(session_vsp != null && session_vsp.getFlowrateflag().equals("1"))%>;
 var StreamCtrl = <%=(session_vsp != null && session_vsp.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_vsp != null && session_vsp.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_vsp != null && session_vsp.getVideoinflag().equals("1"))%>;

@@ -60,14 +60,9 @@
 
 <style type="text/css">
 .hide-orgtype-1 { 
-<% if (session_org != null && session_org.getOrgtype().equals("1")) {%>
-  display: none !important; 
-<% } %>  
 } 
 .hide-orgtype-2 {
-<% if (session_org != null && session_org.getOrgtype().equals("2")) {%>
   display: none !important; 
-<% } %>  
 } 
 </style>
 

@@ -59,11 +59,11 @@ public class PixOppUtil {
 		return dockerid;
 	}
 
-	public static String init(String type, String key, String checkcode, String svrversion, String dbversion) {
+	public static String refresh(String type, String key, String checkcode, String svrversion, String dbversion) {
 		try {
-			logger.info("send init message type={}, key={}, checkcode={}, svrversion={}, dbversion={}", type, key,
+			logger.info("send refresh message type={}, key={}, checkcode={}, svrversion={}, dbversion={}", type, key,
 					checkcode, svrversion, dbversion);
-			String url = "http://180.96.19.239/pixopp/rest/pixsign/init?type=" + type + "&key=" + key + "&checkcode="
+			String url = "http://180.96.19.239/pixopp/rest/pixsign/refresh?type=" + type + "&key=" + key + "&checkcode="
 					+ checkcode + "&svrversion=" + svrversion + "&dbversion=" + dbversion;
 
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
@@ -75,15 +75,15 @@ public class PixOppUtil {
 			if (status == 200) {
 				String s = EntityUtils.toString(response.getEntity());
 				httpclient.close();
-				logger.info("Get init response: {}", s);
+				logger.info("Get refresh response: {}", s);
 				return new JSONObject(s).toString();
 			} else {
 				httpclient.close();
-				logger.error("Get init response code: {}", status);
+				logger.error("Get refresh response code: {}", status);
 				return "";
 			}
 		} catch (Exception e) {
-			logger.error("Get init response error", e);
+			logger.error("Get refresh response error", e);
 			return "";
 		}
 	}

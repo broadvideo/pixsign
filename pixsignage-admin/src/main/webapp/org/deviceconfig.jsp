@@ -88,7 +88,7 @@ response.setDateHeader("Expires",0);
 												<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group sscreen-ctrl">
 											<label class="col-md-3 control-label"><spring:message code="global.powerflag"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
@@ -99,7 +99,7 @@ response.setDateHeader("Expires",0);
 												</label>
 											</div>
 										</div>
-										<div class="form-group powerflag">
+										<div class="form-group sscreen-ctrl powerflag">
 											<label class="col-md-3 control-label"><spring:message code="global.poweron"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_time">                                       
@@ -110,7 +110,7 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
-										<div class="form-group powerflag">
+										<div class="form-group sscreen-ctrl powerflag">
 											<label class="col-md-3 control-label"><spring:message code="global.poweroff"/><span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="input-group date form_time">                                       
@@ -228,6 +228,9 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-deviceconfig.js?t=0"></script>
 <script>
+var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
+$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

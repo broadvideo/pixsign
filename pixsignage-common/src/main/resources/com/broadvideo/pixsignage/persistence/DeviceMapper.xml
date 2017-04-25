@@ -118,7 +118,7 @@
   <select id="selectByDevicegrid" resultMap="BaseResultMap">
     select * from device
     where devicegridid = #{devicegridid}
-    order by xpos, ypos
+    order by ypos, xpos
   </select>
 
   <select id="selectByHardkey" resultMap="BaseResultMap">

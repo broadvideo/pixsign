@@ -204,10 +204,10 @@ insert into app(appid,name,mainboard,subdir,description) values(304,'DigitalBox_
 insert into app(appid,name,mainboard,subdir,description) values(400,'DigitalBox_APP_VE','RK3368','3368','通用APP版');
 insert into app(appid,name,mainboard,subdir,description) values(401,'DigitalBox_LAUNCHER_VE','RK3368','3368','通用Launcher版');
 
-insert into config(configid, code, name, value, refer) values(101, 'ServerIP', 'config.server.ip', '127.0.0.1', '');
-insert into config(configid, code, name, value, refer) values(102, 'ServerPort', 'config.server.port', '80', '');
-insert into config(configid, code, name, value, refer) values(201, 'PixedxIP', 'config.pixedx.ip', '127.0.0.1', '');
-insert into config(configid, code, name, value, refer) values(202, 'PixedxPort', 'config.pixedx.port', '80', '');
+insert into config(configid, code, name, value, refer, type) values(101, 'ServerIP', 'config.server.ip', '127.0.0.1', '', '1');
+insert into config(configid, code, name, value, refer, type) values(102, 'ServerPort', 'config.server.port', '80', '', '1');
+insert into config(configid, code, name, value, refer, type) values(201, 'PixedxIP', 'config.pixedx.ip', '127.0.0.1', '', '1');
+insert into config(configid, code, name, value, refer, type) values(202, 'PixedxPort', 'config.pixedx.port', '80', '', '1');
 
 ############################################################
 ## post script  ############################################

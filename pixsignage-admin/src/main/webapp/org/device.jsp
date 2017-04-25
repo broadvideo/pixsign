@@ -35,6 +35,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
@@ -64,28 +65,18 @@ response.setDateHeader("Expires",0);
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 					</div>
 					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-5">
-								<div class="portlet box blue">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.screenlist"/></div>
-									</div>
-									<div class="portlet-body">
-										<table id="ScreenTable" class="table table-condensed table-hover">
-											<thead></thead>
-											<tbody></tbody>
-										</table>
-									</div>
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.screenlist"/></div>
+								<div class="tools">
+									<a href="javascript:;" class="reload pix-ScreenReload"></a>
 								</div>
 							</div>
-							<div class="col-md-7">
-								<div class="portlet box green">
-									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.detail"/></div>
-									</div>
-									<div id="ScreenPreview" class="portlet-body">
-									</div>
-								</div>
+							<div class="portlet-body">
+								<table id="ScreenTable" class="table table-condensed table-hover">
+									<thead></thead>
+									<tbody></tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -342,7 +333,7 @@ response.setDateHeader("Expires",0);
 									</div>
 									<div class="tab-content col-md-10" id="BranchContentDiv">
 										<div class="tab-pane active" id="portlet_device1">
-											<div class="table-toolbar">
+											<div class="table-toolbar sscreen-ctrl" style="display:none;">
 												<div class="btn-group">
 													<button class="btn green pix-allmap"><spring:message code="global.device.map"/> <i class="fa fa-map-marker"></i></button>
 												</div>
@@ -429,6 +420,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 
+<script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
@@ -439,9 +431,11 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=3" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-device.js?t=5"></script>
+<script src="${base_ctx}/scripts/pix-device.js?t=7"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
+$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 
 jQuery(document).ready(function() {
 	Metronic.init();

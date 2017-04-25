@@ -21,8 +21,6 @@ public class Org {
 
 	private String status;
 
-	private String orgtype;
-
 	private String reviewflag;
 
 	private String touchflag;
@@ -31,7 +29,11 @@ public class Org {
 
 	private String calendarflag;
 
+	private String sscreenflag;
+
 	private String mscreenflag;
+
+	private String flowrateflag;
 
 	private String videoflag;
 
@@ -139,14 +141,6 @@ public class Org {
 		this.status = status == null ? null : status.trim();
 	}
 
-	public String getOrgtype() {
-		return orgtype;
-	}
-
-	public void setOrgtype(String orgtype) {
-		this.orgtype = orgtype == null ? null : orgtype.trim();
-	}
-
 	public String getReviewflag() {
 		return reviewflag;
 	}
@@ -179,12 +173,28 @@ public class Org {
 		this.calendarflag = calendarflag;
 	}
 
+	public String getSscreenflag() {
+		return sscreenflag;
+	}
+
+	public void setSscreenflag(String sscreenflag) {
+		this.sscreenflag = sscreenflag;
+	}
+
 	public String getMscreenflag() {
 		return mscreenflag;
 	}
 
 	public void setMscreenflag(String mscreenflag) {
 		this.mscreenflag = mscreenflag;
+	}
+
+	public String getFlowrateflag() {
+		return flowrateflag;
+	}
+
+	public void setFlowrateflag(String flowrateflag) {
+		this.flowrateflag = flowrateflag;
 	}
 
 	public String getVideoflag() {

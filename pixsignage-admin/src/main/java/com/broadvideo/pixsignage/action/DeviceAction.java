@@ -276,7 +276,7 @@ public class DeviceAction extends BaseDatatableAction {
 				Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
 
 				for (int i = 0; i < files.length; i++) {
-					if (i >= 10) {
+					if (i >= 12) {
 						break;
 					}
 					HashMap<String, String> screen = new HashMap<String, String>();

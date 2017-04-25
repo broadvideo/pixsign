@@ -41,8 +41,8 @@ function initMyTable() {
 						{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : common.view.config, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : common.view.control, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : common.view.screen, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
@@ -577,6 +577,9 @@ function initScreenModal() {
 		$('#ScreenModal').modal();
 	});
 
+	$('#ScreenTable thead').css('display', 'none');
+	$('#ScreenTable tbody').css('display', 'none');	
+	var screenhtml = '';
 	$('#ScreenTable').dataTable({
 		'sDom' : 'rt',
 		'bProcessing' : true,
@@ -586,35 +589,60 @@ function initScreenModal() {
 						{'sTitle' : common.view.screen, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
-		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			var screenhtml = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="pix-screen-big"><img src="/pixsigdata' + aData.screen + '" class="imgthumb" width="100%"></a>';
-			$('td:eq(1)', nRow).html(screenhtml);
-
-			if (iDisplayIndex == 0) {
-				var html = '<h3>' + aData.createtime + '</h3>';
-				html += '<img src="/pixsigdata' + aData.screen + '" width="100%"></img>';
-				$('#ScreenPreview').html(html);
+		'fnPreDrawCallback': function (oSettings) {
+			if ($('#ScreenContainer').length < 1) {
+				$('#ScreenTable').append('<div id="ScreenContainer"></div>');
 			}
-			
+			$('#ScreenContainer').html(''); 
+			return true;
+		},
+		'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+			if (iDisplayIndex % 6 == 0) {
+				screenhtml = '';
+				screenhtml += '<div class="row" >';
+			}
+			screenhtml += '<div class="col-md-2 col-xs-2">';
+
+			screenhtml += '<h6>' + aData.createtime + '</h6>';
+			screenhtml += '<a href="/pixsigdata' + aData.screen + '" class="fancybox">';
+			screenhtml += '<div class="thumbs">';
+			screenhtml += '<img src="/pixsigdata' + aData.screen + '" class="imgthumb" width="' + 100 + '%" />';
+			screenhtml += '</div>';
+			screenhtml += '</a>';
+
+			screenhtml += '</div>';
+			if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ScreenTable').dataTable().fnGetData().length) {
+				screenhtml += '</div>';
+				if ((iDisplayIndex+1) != $('#ScreenTable').dataTable().fnGetData().length) {
+					screenhtml += '<hr/>';
+				}
+				$('#ScreenContainer').append(screenhtml);
+			}
 			return nRow;
+		},
+		'fnDrawCallback': function(oSettings, json) {
+			$("#ScreenTable .fancybox").fancybox({
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				closeBtn : false,
+			});
+			$('#ScreenTable .thumbs').each(function(i) {
+				//$(this).width($(this).parent().closest('div').width());
+				//$(this).height($(this).parent().closest('div').width());
+			});
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'deviceid','value':CurrentDeviceid });
-		} 
+		},
 	});
-	$('#ScreenTable').css('width', '100%').css('table-layout', 'fixed');
+	$('#ScreenTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+	$('#ScreenTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+	$('#ScreenTable').css('width', '100%');
+	//$('#ScreenTable').css('width', '100%').css('table-layout', 'fixed');
 
-	$('body').on('click', '.pix-screen-big', function(event) {
-		var rowIndex = $(event.target).attr("data-id");
-		if (rowIndex == undefined) {
-			rowIndex = $(event.target).parent().attr('data-id');
-		}
-		var data = $('#ScreenTable').dataTable().fnGetData(rowIndex);
-		
-		var html = '<h3>' + data.createtime + '</h3>';
-		html += '<img src="/pixsigdata' + data.screen + '" width="100%"></img>';
-		$('#ScreenPreview').html(html);
-	});
+	$('body').on('click', '.pix-ScreenReload', function(event) {
+		$('#ScreenTable').dataTable()._fnAjaxUpdate();
+	});			
 }
 
 function initDeviceFileModal() {

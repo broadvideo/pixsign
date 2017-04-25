@@ -8,11 +8,11 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
-    <result column="orgtype" property="orgtype" jdbcType="CHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
     <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
+    <result column="sscreenflag" property="sscreenflag" jdbcType="CHAR" />
     <result column="mscreenflag" property="mscreenflag" jdbcType="CHAR" />
     <result column="videoflag" property="videoflag" jdbcType="CHAR" />
     <result column="imageflag" property="imageflag" jdbcType="CHAR" />
@@ -46,7 +46,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, topbranchid, name, code, status, orgtype, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, 
+    orgid, vspid, topbranchid, name, code, status, reviewflag, touchflag, liftflag, calendarflag, sscreenflag, mscreenflag, flowrateflag, 
     videoflag, imageflag, textflag, streamflag, dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, currentdevices, 
     currentdeviceidx, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, apps, createtime, createstaffid
@@ -105,9 +105,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into org (vspid, topbranchid, name, 
-      code, status, orgtype, 
+      code, status, 
       reviewflag, touchflag, liftflag, 
-      calendarflag, mscreenflag, videoflag, 
+      calendarflag, sscreenflag, mscreenflag, 
+      flowrateflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, videoinflag, widgetflag, 
       expireflag, expiretime, maxdevices, 
@@ -118,9 +119,10 @@
       devicepassflag, devicepass, upgradeflag, apps, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{orgtype,jdbcType=CHAR}, 
+      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
       #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, 
-      #{calendarflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+      #{calendarflag,jdbcType=CHAR}, #{sscreenflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, 
+      #{flowrateflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
@@ -152,9 +154,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="orgtype != null" >
-        orgtype,
-      </if>
       <if test="reviewflag != null" >
         reviewflag,
       </if>
@@ -167,8 +166,14 @@
       <if test="calendarflag != null" >
         calendarflag,
       </if>
+      <if test="sscreenflag != null" >
+        sscreenflag,
+      </if>
       <if test="mscreenflag != null" >
         mscreenflag,
+      </if>
+      <if test="flowrateflag != null" >
+        flowrateflag,
       </if>
       <if test="videoflag != null" >
         videoflag,
@@ -268,9 +273,6 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
-      <if test="orgtype != null" >
-        #{orgtype,jdbcType=CHAR},
-      </if>
       <if test="reviewflag != null" >
         #{reviewflag,jdbcType=CHAR},
       </if>
@@ -283,8 +285,14 @@
       <if test="calendarflag != null" >
         #{calendarflag,jdbcType=CHAR},
       </if>
+      <if test="sscreenflag != null" >
+        #{sscreenflag,jdbcType=CHAR},
+      </if>
       <if test="mscreenflag != null" >
         #{mscreenflag,jdbcType=CHAR},
+      </if>
+      <if test="flowrateflag != null" >
+        #{flowrateflag,jdbcType=CHAR},
       </if>
       <if test="videoflag != null" >
         #{videoflag,jdbcType=CHAR},
@@ -387,9 +395,6 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
-      <if test="orgtype != null" >
-        orgtype = #{orgtype,jdbcType=CHAR},
-      </if>
       <if test="reviewflag != null" >
         reviewflag = #{reviewflag,jdbcType=CHAR},
       </if>
@@ -402,8 +407,14 @@
       <if test="calendarflag != null" >
         calendarflag = #{calendarflag,jdbcType=CHAR},
       </if>
+      <if test="sscreenflag != null" >
+        sscreenflag = #{sscreenflag,jdbcType=CHAR},
+      </if>
       <if test="mscreenflag != null" >
         mscreenflag = #{mscreenflag,jdbcType=CHAR},
+      </if>
+      <if test="flowrateflag != null" >
+        flowrateflag = #{flowrateflag,jdbcType=CHAR},
       </if>
       <if test="videoflag != null" >
         videoflag = #{videoflag,jdbcType=CHAR},
@@ -496,12 +507,13 @@
       name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
-      orgtype = #{orgtype,jdbcType=CHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},
       calendarflag = #{calendarflag,jdbcType=CHAR},
+      sscreenflag = #{sscreenflag,jdbcType=CHAR},
       mscreenflag = #{mscreenflag,jdbcType=CHAR},
+      flowrateflag = #{flowrateflag,jdbcType=CHAR},
       videoflag = #{videoflag,jdbcType=CHAR},
       imageflag = #{imageflag,jdbcType=CHAR},
       textflag = #{textflag,jdbcType=CHAR},

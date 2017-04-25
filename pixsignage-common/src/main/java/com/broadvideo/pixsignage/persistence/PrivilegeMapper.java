@@ -13,5 +13,5 @@ public interface PrivilegeMapper {
 
 	List<Privilege> selectVspTreeList();
 
-	List<Privilege> selectOrgTreeList(@Param(value = "orgtype") String orgtype);
+	List<Privilege> selectOrgTreeList();
 }

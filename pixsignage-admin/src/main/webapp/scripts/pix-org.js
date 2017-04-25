@@ -333,6 +333,7 @@ function initMyEditModal() {
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+		$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
@@ -383,6 +384,7 @@ function initMyEditModal() {
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+		$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');

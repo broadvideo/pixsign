@@ -35,14 +35,16 @@ function refreshMyTable() {
 				} else {
 					$('#MyTable').dataTable().fnAddData([common.view.backupvideo, '']);
 				}
-				if (CurrentOrg.powerflag == 1) {
-					var powerhtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
-					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
-					$('#MyTable').dataTable().fnAddData([common.view.poweron, CurrentOrg.poweron]);
-					$('#MyTable').dataTable().fnAddData([common.view.poweroff, CurrentOrg.poweroff]);
-				} else {
-					var powerhtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
-					$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
+				if (SscreenCtrl) {
+					if (CurrentOrg.powerflag == 1) {
+						var powerhtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
+						$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
+						$('#MyTable').dataTable().fnAddData([common.view.poweron, CurrentOrg.poweron]);
+						$('#MyTable').dataTable().fnAddData([common.view.poweroff, CurrentOrg.poweroff]);
+					} else {
+						var powerhtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
+						$('#MyTable').dataTable().fnAddData([common.view.powerflag, powerhtml]);
+					}
 				}
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);

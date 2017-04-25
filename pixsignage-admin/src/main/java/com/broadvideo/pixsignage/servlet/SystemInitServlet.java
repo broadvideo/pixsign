@@ -3,26 +3,22 @@ package com.broadvideo.pixsignage.servlet;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
-import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Vsp;
+import com.broadvideo.pixsignage.domain.Config;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DbversionMapper;
-import com.broadvideo.pixsignage.service.OrgService;
-import com.broadvideo.pixsignage.service.VspService;
-import com.broadvideo.pixsignage.util.CommonUtil;
-import com.broadvideo.pixsignage.util.PixOppUtil;
 
 @SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
@@ -41,98 +37,28 @@ public class SystemInitServlet extends HttpServlet {
 
 			ServletContext servletContext = this.getServletContext();
 			WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+			ConfigMapper configMapper = (ConfigMapper) ctx.getBean("configMapper");
+			Config config = configMapper.selectByCode("APPVersion");
+			config.setValue(CommonConfig.CURRENT_APPVERSION);
+			configMapper.updateByPrimaryKeySelective(config);
+
+			config = configMapper.selectByCode("SystemID");
+			String systemid = config.getValue();
+			if (config.getValue().equals("")) {
+				systemid = UUID.randomUUID().toString().replace("-", "");
+				config.setValue(systemid);
+				configMapper.updateByPrimaryKeySelective(config);
+			}
+			CommonConfig.SYSTEM_ID = systemid;
+
 			DbversionMapper dbversionMapper = (DbversionMapper) ctx.getBean("dbversionMapper");
 			CommonConfig.CURRENT_DBVERSION = "" + dbversionMapper.selectCurrentVersion().getVersion();
+
+			logger.info("System ID: {}", CommonConfig.SYSTEM_ID);
+			logger.info("APP Version: {}", CommonConfig.CURRENT_APPVERSION);
+			logger.info("DB Version: {}", CommonConfig.CURRENT_DBVERSION);
 		} catch (Exception ex) {
 			CommonConfig.CURRENT_DBVERSION = "0";
-			logger.error("", ex);
-		}
-
-		try {
-			String hostid = PixOppUtil.getHostID();
-			String dockerid = PixOppUtil.getDockerID();
-			String type = "0";
-			String key = "";
-			if (hostid.length() > 0) {
-				logger.info("system hostid: {}", hostid);
-				type = "1";
-				key = hostid;
-			} else if (dockerid.length() > 0) {
-				logger.info("system dockerid: {}", dockerid);
-				type = "2";
-				key = dockerid;
-			} else {
-				logger.info("failed to get systemid.");
-			}
-			if (key.length() > 0) {
-				String checkcode = CommonUtil.getMd5(type + key, "pixsign");
-				CommonConfig.SYSTEM_ID = checkcode;
-				String s = PixOppUtil.init(type, key, checkcode, CommonConfig.CURRENT_APPVERSION,
-						CommonConfig.CURRENT_DBVERSION);
-				if (!s.equals("")) {
-					JSONObject dataJson = new JSONObject(s).getJSONObject("data");
-					if (dataJson != null) {
-						String svrurl = dataJson.getString("svrurl");
-						if (svrurl.length() > 0) {
-							// String shell = "/usr/local/bin/pixsignage-install
-							// " + svrurl + " "
-							// + CommonConfig.CURRENT_DBVERSION + "
-							// pixsignage-db";
-							// logger.info("begin to run {}", shell);
-							// CommonUtil.execCommand(shell);
-						}
-
-						ServletContext servletContext = this.getServletContext();
-						WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-						VspService vspService = (VspService) ctx.getBean("vspService");
-						Vsp vsp = vspService.selectByCode("default");
-						OrgService orgService = (OrgService) ctx.getBean("orgService");
-						Org org = orgService.selectByCode("default");
-
-						String name = dataJson.getString("name");
-						String vspflag = dataJson.getString("vspflag");
-						String reviewflag = dataJson.getString("reviewflag");
-						String touchflag = dataJson.getString("touchflag");
-						String calendarflag = dataJson.getString("calendarflag");
-						String mscreenflag = dataJson.getString("mscreenflag");
-						String liftflag = dataJson.getString("liftflag");
-						String streamflag = dataJson.getString("streamflag");
-						String dvbflag = dataJson.getString("dvbflag");
-						String videoinflag = dataJson.getString("videoinflag");
-
-						int maxvspdevices = dataJson.getInt("maxvspdevices");
-						long maxvspstorage = dataJson.getLong("maxvspstorage");
-						int maxorgdevices = dataJson.getInt("maxorgdevices");
-						long maxorgstorage = dataJson.getLong("maxorgstorage");
-						vsp.setMaxdevices(maxvspdevices);
-						vsp.setMaxstorage(maxvspstorage);
-						vsp.setReviewflag(reviewflag);
-						vsp.setTouchflag(touchflag);
-						vsp.setCalendarflag(calendarflag);
-						vsp.setMscreenflag(mscreenflag);
-						vsp.setLiftflag(liftflag);
-						vsp.setStreamflag(streamflag);
-						vsp.setDvbflag(dvbflag);
-						vsp.setVideoinflag(videoinflag);
-
-						org.setMaxdevices(maxorgdevices);
-						org.setMaxstorage(maxorgstorage);
-						org.setReviewflag(reviewflag);
-						org.setTouchflag(touchflag);
-						org.setCalendarflag(calendarflag);
-						org.setMscreenflag(mscreenflag);
-						org.setLiftflag(liftflag);
-						org.setStreamflag(streamflag);
-						org.setDvbflag(dvbflag);
-						org.setVideoinflag(videoinflag);
-
-						vspService.updateVsp(vsp);
-						orgService.updateOrg(org);
-					}
-
-				}
-			}
-		} catch (Exception ex) {
 			logger.error("", ex);
 		}
 

@@ -10,7 +10,7 @@ public class CommonConfig {
 
 	public static String CONFIG_VCSS_SERVER = "http://127.0.0.1:6060/";
 
-	public static String SYSTEM_ID = "UNKNOWN";
+	public static String SYSTEM_ID = "";
 
 	public static String CURRENT_APPVERSION;
 	public static String CURRENT_DBVERSION;

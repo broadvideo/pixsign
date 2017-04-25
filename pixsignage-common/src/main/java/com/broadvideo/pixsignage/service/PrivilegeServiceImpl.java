@@ -40,7 +40,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 	}
 
 	public List<Privilege> selectOrgTreeList(Org org) {
-		List<Privilege> privilegeList = privilegeMapper.selectOrgTreeList(org.getOrgtype());
+		List<Privilege> privilegeList = privilegeMapper.selectOrgTreeList();
 		buildOrgTree(org, privilegeList);
 		return privilegeList;
 	}
@@ -56,6 +56,26 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30303
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30307
+					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
+					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
+					|| org.getFlowrateflag().equals("1") && p.getPrivilegeid().intValue() == 30822
+					|| org.getFlowrateflag().equals("2") && p.getPrivilegeid().intValue() == 30821
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30101
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30202
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30203
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
+					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
 					|| org.getStreamflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
 					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108) {
 				logger.info("remove privilege {}", p.getPrivilegeid());

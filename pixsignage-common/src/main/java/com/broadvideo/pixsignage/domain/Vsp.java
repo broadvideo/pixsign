@@ -22,6 +22,8 @@ public class Vsp {
 
 	private String mscreenflag;
 
+	private String flowrateflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -110,6 +112,14 @@ public class Vsp {
 
 	public void setMscreenflag(String mscreenflag) {
 		this.mscreenflag = mscreenflag;
+	}
+
+	public String getFlowrateflag() {
+		return flowrateflag;
+	}
+
+	public void setFlowrateflag(String flowrateflag) {
+		this.flowrateflag = flowrateflag;
 	}
 
 	public String getStreamflag() {

@@ -20,10 +20,6 @@ public class Privilege {
 
 	private String type;
 
-	private String orgtype;
-
-	private String temporgtype;
-
 	private Integer sequence;
 
 	private Date createtime;
@@ -86,22 +82,6 @@ public class Privilege {
 
 	public void setType(String type) {
 		this.type = type == null ? null : type.trim();
-	}
-
-	public String getOrgtype() {
-		return orgtype;
-	}
-
-	public void setOrgtype(String orgtype) {
-		this.orgtype = orgtype == null ? null : orgtype.trim();
-	}
-
-	public String getTemporgtype() {
-		return temporgtype;
-	}
-
-	public void setTemporgtype(String temporgtype) {
-		this.temporgtype = temporgtype;
 	}
 
 	public Integer getSequence() {

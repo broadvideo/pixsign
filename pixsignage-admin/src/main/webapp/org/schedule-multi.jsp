@@ -43,6 +43,34 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
+		<div id="ScheduledtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static" style="z-index: 10051;">
+			<div class="modal-dialog modal-wide">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<form id="ScheduledtlForm" class="form-horizontal" method="POST">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.duration"/><span class="required">*</span></label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i> <input type="text" class="form-control" name="duration" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div id="ScheduleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-full">
 				<div class="modal-content">
@@ -96,9 +124,11 @@ response.setDateHeader("Expires",0);
 																	<div class="portlet-title">
 																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
 																		<ul class="nav nav-tabs">
+																			<!-- 
 																			<li id="nav_tab4" class="pageflag">
 																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solopage"/></a>
 																			</li>
+																			 -->
 																			<li id="nav_tab3" class="imageflag">
 																				<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.soloimage"/></a>
 																			</li>
@@ -287,7 +317,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=0"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=11"></script>
-<script src="${base_ctx}/scripts/pix-schedule-multi.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-schedule-multi.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

@@ -5,6 +5,7 @@ var CurrentBindid;
 var CurrentSchedules;
 var CurrentSchedule;
 var CurrentScheduledtls;
+var CurrentScheduledtl;
 
 var CurrentMediaBranchid;
 var CurrentMediaFolderid;
@@ -49,6 +50,9 @@ $('#DevicegridTable').dataTable({
 		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 		devicegridhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '" />';
 		devicegridhtml += '</a>';
+		for (var i=0; i<aData.devices.length; i++) {
+			devicegridhtml += '<br/>' + aData.devices[i].terminalid;
+		}
 		$('td:eq(1)', nRow).html(devicegridhtml);
 	
 		var schedulehtml = '';
@@ -92,6 +96,9 @@ $('#DevicegridTable').dataTable({
 					schedulehtml += '</div>';
 					schedulehtml += '</a>';
 					schedulehtml += '<h6 class="pixtitle">' + name + '</h6>';
+					if (scheduledtl.duration > 0) {
+						schedulehtml += '<h6 class="pixtitle">' + transferIntToTime(scheduledtl.duration) + '</h6>';
+					}
 					schedulehtml += '</div>';
 					if ((j+1) % 4 == 0 || (j+1) == schedule.scheduledtls.length) {
 						schedulehtml += '</div>';
@@ -325,6 +332,9 @@ function refreshScheduleDetail() {
 				}
 				scheduleTabHtml += '</div>';
 				scheduleTabHtml += '<h6 class="pixtitle">' + name + '</h6>';
+				if (scheduledtl.duration > 0) {
+					scheduleTabHtml += '<h6 class="pixtitle">' + transferIntToTime(scheduledtl.duration) + '</h6>';
+				}
 				scheduleTabHtml += '</div>';
 				if ((j+1) % 6 == 0 || (j+1) == schedule.scheduledtls.length) {
 					scheduleTabHtml += '</div>';
@@ -711,6 +721,11 @@ function refreshSelectedTable() {
 		selectedTableHtml += '<div class="mask">';
 		selectedTableHtml += '<div>';
 		selectedTableHtml += '<h6 class="pixtitle" style="color:white;">' + name + '</h6>';
+		if (scheduledtl.objtype == 2 || scheduledtl.objtype == 4 
+				|| scheduledtl.objtype == 9 
+				&& (scheduledtl.mediagrid.mediagriddtls[0].objtype == 2 || scheduledtl.mediagrid.mediagriddtls[0].objtype == 3)) {
+			selectedTableHtml += '<a href="javascript:;" class="btn default btn-sm blue pix-scheduledtl-update" index="' + i + '"><i class="fa fa-edit"></i></a>';
+		}
 		selectedTableHtml += '<a href="javascript:;" class="btn default btn-sm red pix-scheduledtl-del" index="' + i + '"><i class="fa fa-trash-o"></i></a>';
 		selectedTableHtml += '</div>';
 		selectedTableHtml += '</div>';
@@ -729,6 +744,16 @@ function refreshSelectedTable() {
 			selectedTableHtml += '<h6 class="pixtitle">' + common.view.soloimage + '</h6>';
 		} else if (scheduledtl.objtype == 9) {
 			selectedTableHtml += '<h6 class="pixtitle">' + common.view.mediagrid + '</h6>';
+		}
+		selectedTableHtml += '</div></td>';
+	}
+	selectedTableHtml += '</tr>';
+	selectedTableHtml += '<tr>';
+	for (var i=0; i<CurrentScheduledtls.length; i++) {
+		var scheduledtl = CurrentScheduledtls[i];
+		selectedTableHtml += '<td>';
+		if (scheduledtl.duration > 0) {
+			selectedTableHtml += '<h6 class="pixtitle">' + transferIntToTime(scheduledtl.duration) + '</h6>';
 		}
 		selectedTableHtml += '</div></td>';
 	}
@@ -908,6 +933,13 @@ $('body').on('click', '.pix-scheduledtl-mediagrid-add', function(event) {
 	scheduledtl.objid = data.mediagridid;
 	scheduledtl.mediagrid = data;
 	scheduledtl.sequence = CurrentScheduledtls.length + 1;
+	if (scheduledtl.mediagrid.mediagriddtls[0].objtype == 2) {
+		scheduledtl.duration = 10;
+	} else if (scheduledtl.mediagrid.mediagriddtls[0].objtype == 3) {
+		scheduledtl.duration = 30;
+	} else {
+		scheduledtl.duration = 0;
+	}
 	CurrentScheduledtls.push(scheduledtl);
 	refreshSelectedTable();
 });
@@ -925,6 +957,7 @@ $('body').on('click', '.pix-scheduledtl-video-add', function(event) {
 	scheduledtl.objid = data.videoid;
 	scheduledtl.video = data;
 	scheduledtl.sequence = CurrentScheduledtls.length + 1;
+	scheduledtl.duration = 0;
 	CurrentScheduledtls.push(scheduledtl);
 	refreshSelectedTable();
 });
@@ -942,6 +975,7 @@ $('body').on('click', '.pix-scheduledtl-image-add', function(event) {
 	scheduledtl.objid = data.imageid;
 	scheduledtl.image = data;
 	scheduledtl.sequence = CurrentScheduledtls.length + 1;
+	scheduledtl.duration = 10;
 	CurrentScheduledtls.push(scheduledtl);
 	refreshSelectedTable();
 });
@@ -959,9 +993,31 @@ $('body').on('click', '.pix-scheduledtl-page-add', function(event) {
 	scheduledtl.objid = data.pageid;
 	scheduledtl.page = data;
 	scheduledtl.sequence = CurrentScheduledtls.length + 1;
+	scheduledtl.duration = 30;
 	CurrentScheduledtls.push(scheduledtl);
 	refreshSelectedTable();
 });
+FormValidateOption.rules['duration'] = {};
+FormValidateOption.rules['duration']['required'] = true;
+FormValidateOption.rules['duration']['number'] = true;
+$('#ScheduledtlForm').validate(FormValidateOption);
+//编辑SelectedTable
+$('body').on('click', '.pix-scheduledtl-update', function(event) {
+	var index = $(event.target).attr('index');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('index');
+	}
+	CurrentScheduledtl = CurrentScheduledtls[index];
+	$('#ScheduledtlForm input[name=duration]').val(CurrentScheduledtl.duration);
+	$('#ScheduledtlModal').modal();
+});
+$('[type=submit]', $('#ScheduledtlModal')).on('click', function(event) {
+	if ($('#ScheduledtlForm').valid()) {
+		CurrentScheduledtl.duration = $('#ScheduledtlForm input[name=duration]').val();
+		$('#ScheduledtlModal').modal('hide');
+		refreshSelectedTable();
+	}
+});	
 //删除SelectedTable
 $('body').on('click', '.pix-scheduledtl-del', function(event) {
 	var index = $(event.target).attr('index');

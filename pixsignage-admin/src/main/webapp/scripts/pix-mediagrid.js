@@ -33,15 +33,15 @@ $("#MyTable tbody").css("display", "none");
 var mediagridhtml = '';
 var oTable = $('#MyTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 16, 36, 72, 108 ],
-						[ 16, 36, 72, 108 ] 
+	'aLengthMenu' : [ [ 15, 30, 70, 100 ],
+						[ 15, 30, 70, 100 ] 
 						],
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : myurls['common.list'],
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'mediagridid', 'bSortable' : false }],
-	'iDisplayLength' : 16,
+	'iDisplayLength' : 15,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
