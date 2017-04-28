@@ -114,7 +114,7 @@ response.setDateHeader("Expires",0);
 	<div class="footer">
 		<div class="footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;${global_copyright}
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>

@@ -311,7 +311,7 @@ public class PixsignageService {
 				subdir = "/" + subdir;
 			}
 
-			File dir = new File("/opt/pixdata/app" + subdir);
+			File dir = new File("/pixdata/pixsignage/app" + subdir);
 			File[] files = dir.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
@@ -326,7 +326,7 @@ public class PixsignageService {
 			if (files.length > 0) {
 				String filename = files[0].getName();
 				url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-						+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/" + filename;
+						+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata/app" + subdir + "/" + filename;
 				String[] apks = filename.split("-");
 				if (apks.length >= 3) {
 					vname = apks[1];

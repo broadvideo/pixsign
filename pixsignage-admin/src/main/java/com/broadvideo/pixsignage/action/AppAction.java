@@ -99,7 +99,7 @@ public class AppAction extends BaseDatatableAction {
 		app.put("vcode", "");
 		app.put("time", "");
 
-		File dir = new File("/opt/pixdata/app/" + subdir);
+		File dir = new File("/pixdata/pixsignage/app/" + subdir);
 		File[] files = dir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -123,10 +123,11 @@ public class AppAction extends BaseDatatableAction {
 			}
 
 			app.put("file", files[0].getName());
-			app.put("url", "/pixdata/app/" + subdir + "/" + files[0].getName());
+			app.put("url", "/pixsigdata/app/" + subdir + "/" + files[0].getName());
 			app.put("vname", vname);
 			app.put("vcode", vcode);
-			app.put("time", "" + new File("/opt/pixdata/app/" + subdir + "/" + files[0].getName()).lastModified());
+			app.put("time",
+					"" + new File("/pixdata/pixsignage/app/" + subdir + "/" + files[0].getName()).lastModified());
 		}
 		return app;
 	}

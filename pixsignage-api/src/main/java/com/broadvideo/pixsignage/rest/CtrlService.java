@@ -234,7 +234,7 @@ public class CtrlService {
 		try {
 			logger.info("Ctrl getversion: appname={}", appname);
 
-			File dir = new File("/opt/pixdata/app");
+			File dir = new File("/pixdata/pixsignage/app");
 			File[] files = dir.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
@@ -248,7 +248,7 @@ public class CtrlService {
 			String url = "";
 			if (files.length > 0) {
 				String filename = files[0].getName();
-				url = "/pixdata/app/" + filename;
+				url = "/pixsigdata/app/" + filename;
 				String[] apks = filename.split("-");
 				if (apks.length >= 3) {
 					vname = apks[1];

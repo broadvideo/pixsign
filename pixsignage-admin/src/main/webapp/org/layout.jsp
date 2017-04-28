@@ -528,7 +528,7 @@ response.setDateHeader("Expires",0);
 	<div class="page-footer">
 		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>

@@ -207,10 +207,6 @@ function validBundledtl(bundledtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		if (CurrentBundle.homeflag == 0) {
-			CurrentBundle.homeidletime = $('#BundledtlEditForm input[name="bundle.homeidletime"]').val();
-		}
-		
 		if (CurrentBundledtl.type < 2) {
 			var referflag = $('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val();
 			var objtype = $('#BundledtlEditForm input[name="bundledtl.objtype"]:checked').val();
@@ -360,7 +356,6 @@ function enterBundledtlFocus(bundledtl) {
 		$('#BundledtlEditForm input[name="bundledtl.rss.url"]').val(CurrentBundledtl.rss0.url);
 	}
 
-	$('#BundledtlEditForm input[name="bundle.homeidletime"]').val(CurrentBundle.homeidletime);
 	$('#BundledtlEditForm input[name="bundledtl.touchlabel"]').val(CurrentBundledtl.touchlabel);
 	$('#BundledtlEditForm input[name="bundledtl.touchapk"]').val(CurrentBundledtl.touchapk);
 	
@@ -459,11 +454,6 @@ function refreshBundledtlEdit() {
 	}
 
 	FormValidateOption.rules = {};
-	if (CurrentBundle.homeflag == 0) {
-		FormValidateOption.rules['bundle.homeidletime'] = {};
-		FormValidateOption.rules['bundle.homeidletime']['required'] = true;
-		FormValidateOption.rules['bundle.homeidletime']['number'] = true;
-	}
 	if ($('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val() == 1) {
 		FormValidateOption.rules['bundledtl.objid'] = {};
 		FormValidateOption.rules['bundledtl.objid']['required'] = true;

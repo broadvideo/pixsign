@@ -294,7 +294,7 @@ public class MultisignService {
 						logger.info("sign {} unrecognized, set as debug", sign);
 					}
 					subdir = "/" + subdir;
-					File dir = new File("/opt/pixdata/app" + subdir);
+					File dir = new File("/pixdata/pixsignage/app" + subdir);
 					File[] files = dir.listFiles(new FilenameFilter() {
 						@Override
 						public boolean accept(File dir, String name) {
@@ -305,7 +305,7 @@ public class MultisignService {
 						Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
 						String filename = files[0].getName();
 						url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-								+ configMapper.selectValueByCode("ServerPort") + "/pixdata/app" + subdir + "/"
+								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata/app" + subdir + "/"
 								+ filename;
 						String[] apks = filename.split("-");
 						if (apks.length >= 3) {

@@ -113,7 +113,7 @@ response.setDateHeader("Expires",0);
 							<div class="portlet-title">
 								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.config"/></div>
 								<div class="tools">
-									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+									<a href="javascript:;" onClick="refreshMyTable();" class="reload"></a>
 								</div>
 							</div>
 							<div class="portlet-body">
@@ -138,7 +138,7 @@ response.setDateHeader("Expires",0);
 	<div class="page-footer">
 		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<spring:message code="global.copyright"/>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>

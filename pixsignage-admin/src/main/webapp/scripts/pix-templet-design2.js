@@ -198,10 +198,6 @@ function validBundledtl(templetdtl) {
 		$('.form-group').removeClass('has-error');
 		$('.help-block').remove();
 
-		if (CurrentTemplet.homeflag == 0) {
-			CurrentTemplet.homeidletime = $('#BundledtlEditForm input[name="templet.homeidletime"]').val();
-		}
-		
 		if (CurrentTempletdtl.type == 0) {
 			var objtype = $('#BundledtlEditForm input[name="templetdtl.objtype"]:checked').val();
 			if (objtype == undefined) {
@@ -290,7 +286,6 @@ function enterBundledtlFocus(templetdtl) {
 		$('#BundledtlEditForm input[name="templetdtl.rss.url"]').val(CurrentTempletdtl.rss.url);
 	}
 
-	$('#BundledtlEditForm input[name="templet.homeidletime"]').val(CurrentTemplet.homeidletime);
 	$('#BundledtlEditForm input[name="templetdtl.touchlabel"]').val(CurrentTempletdtl.touchlabel);
 	$('#BundledtlEditForm input[name="templetdtl.touchapk"]').val(CurrentTempletdtl.touchapk);
 	
@@ -353,11 +348,6 @@ function refreshBundledtlEdit() {
 	}
 
     FormValidateOption.rules = {};
-	if (CurrentTemplet.homeflag == 0) {
-    	FormValidateOption.rules['templet.homeidletime'] = {};
-    	FormValidateOption.rules['templet.homeidletime']['required'] = true;
-    	FormValidateOption.rules['templet.homeidletime']['number'] = true;
-	}
 	if (CurrentTempletdtl.type == 0 && $('#BundledtlEditForm input[name="templetdtl.objtype"]:checked').val() == 5) {
     	FormValidateOption.rules['templetdtl.widget.url'] = {};
     	FormValidateOption.rules['templetdtl.widget.url']['required'] = true;

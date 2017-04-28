@@ -100,8 +100,8 @@ function refreshVsp(org) {
 		dataType: "json",
 		success : function(data, status) {
 			if (data.errorcode == 0) {
-				var max1 = parseInt(data.vsp.maxdevices - data.vsp.currentdevices);
-				var max2 = parseInt(data.vsp.maxstorage - data.vsp.currentstorage);
+				var max1 = parseInt(data.vsp.maxdevices) - parseInt(data.vsp.currentdevices);
+				var max2 = parseInt(data.vsp.maxstorage) - parseInt(data.vsp.currentstorage);
 				if (org != null) {
 					max1 += org.maxdevices;
 					max2 += org.maxstorage;

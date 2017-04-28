@@ -17,7 +17,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/install</directory>
+			<directory>${project.parent.basedir}/pixsignage-task/install</directory>
 			<outputDirectory>.</outputDirectory>
 			<lineEnding>unix</lineEnding>
 			<fileMode>0755</fileMode>

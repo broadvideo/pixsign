@@ -119,7 +119,7 @@
 	<div class="copyright">
 		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
 		<%if (sdomain == null || sdomain.getDescription() == null) { %>
-		Powered by BroadVideo 粤ICP备14037592号-1<br/>	
+		<%=CommonConfig.SYSTEM_COPYRIGHT%> <%=CommonConfig.SYSTEM_ICP%><br/>	
 		<%} else { %>
 		©<%=sdomain.getDescription()%>
 		<%} %>

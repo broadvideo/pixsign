@@ -77,10 +77,10 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.org.sscreenflag"/><span class="required">*</span></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="org.sscreenflag" value="0" checked> <spring:message code="global.off"/>
+													<input type="radio" name="org.sscreenflag" value="0"> <spring:message code="global.off"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.sscreenflag" value="1"> <spring:message code="global.on"/>
+													<input type="radio" name="org.sscreenflag" value="1" checked> <spring:message code="global.on"/>
 												</label>
 											</div>
 										</div>
@@ -286,7 +286,7 @@ response.setDateHeader("Expires",0);
 	<div class="footer">
 		<div class="footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<spring:message code="global.copyright"/>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>

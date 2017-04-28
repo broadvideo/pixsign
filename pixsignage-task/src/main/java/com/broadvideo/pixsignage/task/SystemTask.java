@@ -10,8 +10,8 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Vsp;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
-import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.VspMapper;
+import com.broadvideo.pixsignage.service.OrgService;
+import com.broadvideo.pixsignage.service.VspService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.PixOppUtil;
 
@@ -22,9 +22,9 @@ public class SystemTask extends Thread {
 	@Autowired
 	private ConfigMapper configMapper;
 	@Autowired
-	private VspMapper vspMapper;
+	private VspService vspService;
 	@Autowired
-	private OrgMapper orgMapper;
+	private OrgService orgService;
 
 	public void run() {
 		logger.info("Start System Task.");
@@ -51,8 +51,8 @@ public class SystemTask extends Thread {
 								// CommonUtil.execCommand(shell);
 							}
 
-							Vsp vsp = vspMapper.selectByCode("default");
-							Org org = orgMapper.selectByCode("default");
+							Vsp vsp = vspService.selectByCode("default");
+							Org org = orgService.selectByCode("default");
 
 							String name = dataJson.getString("name");
 							String vspflag = dataJson.getString("vspflag");
@@ -107,8 +107,8 @@ public class SystemTask extends Thread {
 							org.setMaxdevices(maxdevices2);
 							org.setMaxstorage(maxstorage2);
 
-							vspMapper.updateByPrimaryKeySelective(vsp);
-							orgMapper.updateByPrimaryKeySelective(org);
+							vspService.updateVsp(vsp);
+							orgService.updateOrg(org);
 						}
 
 					}

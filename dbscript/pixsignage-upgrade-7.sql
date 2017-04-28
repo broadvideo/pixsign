@@ -35,6 +35,8 @@ alter table org add flowrateflag char(1) default '0';
 update config set type = '1';
 insert into config(configid, code, name, value, refer, type) values(1, 'SystemID', 'system.id', '', '', '0');
 insert into config(configid, code, name, value, refer, type) values(2, 'APPVersion', 'app.version', '', '', '0');
+insert into config(configid, code, name, value, refer, type) values(3, 'Copyright', 'system.copyright', 'Powered by BroadVideo', '', '0');
+insert into config(configid, code, name, value, refer, type) values(4, 'ICP', 'system.icp', '', '', '0');
 
 create table schedule( 
    scheduleid int not null auto_increment,

@@ -51,6 +51,15 @@ public class SystemInitServlet extends HttpServlet {
 			}
 			CommonConfig.SYSTEM_ID = systemid;
 
+			CommonConfig.SYSTEM_COPYRIGHT = configMapper.selectValueByCode("Copyright");
+			if (CommonConfig.SYSTEM_COPYRIGHT == null) {
+				CommonConfig.SYSTEM_COPYRIGHT = "";
+			}
+			CommonConfig.SYSTEM_ICP = configMapper.selectValueByCode("ICP");
+			if (CommonConfig.SYSTEM_ICP == null) {
+				CommonConfig.SYSTEM_ICP = "";
+			}
+
 			DbversionMapper dbversionMapper = (DbversionMapper) ctx.getBean("dbversionMapper");
 			CommonConfig.CURRENT_DBVERSION = "" + dbversionMapper.selectCurrentVersion().getVersion();
 
@@ -68,6 +77,14 @@ public class SystemInitServlet extends HttpServlet {
 			}
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/a83t"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/3288"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/3368"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/bv"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/changhong"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/debug"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/windows"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/combine"));

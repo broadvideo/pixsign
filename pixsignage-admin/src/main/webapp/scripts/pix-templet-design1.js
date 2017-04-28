@@ -6,7 +6,7 @@ RegionLimits['3'] = 1;
 RegionLimits['4'] = 1;
 RegionLimits['5'] = 1;
 RegionLimits['6'] = 4;
-RegionLimits['7'] = 10;
+RegionLimits['7'] = 40;
 RegionLimits['8'] = 1;
 RegionLimits['9'] = 1;
 RegionLimits['10'] = 1;
@@ -543,6 +543,7 @@ function validTempletOption(templet) {
 		$('.help-block').remove();
 
 		templet.name = $('#TempletOptionForm input[name=name]').attr('value');
+		templet.homeidletime = $('#TempletOptionForm input[name=homeidletime]').attr('value');
 		if ($('#LayoutBgImageSelect2').select2('data') != null) {
 			templet.bgimageid =  $('#LayoutBgImageSelect2').select2('data').id;
 			templet.bgimage = $('#LayoutBgImageSelect2').select2('data').image;
