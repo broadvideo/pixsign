@@ -20,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Hourplaylog;
+import com.broadvideo.pixsignage.domain.Mmedia;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.HourplaylogMapper;
+import com.broadvideo.pixsignage.persistence.MmediaMapper;
 
 public class PlaylogTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -30,6 +32,8 @@ public class PlaylogTask {
 
 	@Autowired
 	private HourplaylogMapper hourplaylogMapper;
+	@Autowired
+	private MmediaMapper mmediaMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -75,7 +79,7 @@ public class PlaylogTask {
 	}
 
 	private void handleZipFile(File zipfile, Device device) throws Exception {
-		logger.info("Beging to handle {}", zipfile.getAbsolutePath());
+		logger.info("Begin to handle {}", zipfile.getAbsolutePath());
 		ZipInputStream zin = new ZipInputStream(new FileInputStream(zipfile));
 		BufferedInputStream Bin = new BufferedInputStream(zin);
 		String temp = "/pixdata/pixsignage/playlog/temp";
@@ -122,10 +126,31 @@ public class PlaylogTask {
 							continue;
 						}
 						String mediatype = "1";
-						if (ss[3].equals("image")) {
-							mediatype = "2";
-						} else if (ss[3].equals("video")) {
+						String mediaid = ss[4];
+						if (ss[3].equals("video")) {
 							if (duration == 0) {
+								continue;
+							}
+							mediatype = "1";
+						} else if (ss[3].equals("image")) {
+							mediatype = "2";
+						} else if (ss[3].equals("cropvideo")) {
+							if (duration == 0) {
+								continue;
+							}
+							mediatype = "1";
+							Mmedia mmedia = mmediaMapper.selectByMmediadtlid(mediaid);
+							if (mmedia != null) {
+								mediaid = "" + mmedia.getObjid();
+							} else {
+								continue;
+							}
+						} else if (ss[3].equals("cropimage")) {
+							mediatype = "2";
+							Mmedia mmedia = mmediaMapper.selectByMmediadtlid(mediaid);
+							if (mmedia != null) {
+								mediaid = "" + mmedia.getObjid();
+							} else {
 								continue;
 							}
 						} else {
@@ -133,7 +158,7 @@ public class PlaylogTask {
 						}
 
 						Hourplaylog hourplaylog = hourplaylogMapper.selectByDetail("" + device.getDeviceid(), mediatype,
-								ss[4], new SimpleDateFormat("yyyyMMddHH").format(c1.getTime()));
+								mediaid, new SimpleDateFormat("yyyyMMddHH").format(c1.getTime()));
 						if (hourplaylog != null) {
 							hourplaylog.setTotal(hourplaylog.getTotal() + 1);
 							hourplaylogMapper.updateByPrimaryKeySelective(hourplaylog);
@@ -143,7 +168,7 @@ public class PlaylogTask {
 							hourplaylog.setBranchid(device.getBranchid());
 							hourplaylog.setDeviceid(device.getDeviceid());
 							hourplaylog.setMediatype(mediatype);
-							hourplaylog.setMediaid(Integer.parseInt(ss[4]));
+							hourplaylog.setMediaid(Integer.parseInt(mediaid));
 							c1.set(Calendar.MINUTE, 0);
 							c1.set(Calendar.SECOND, 0);
 							c1.set(Calendar.MILLISECOND, 0);

@@ -26,7 +26,7 @@ var common = {
 		bundle: 'Program',
 		touchbundle: 'Interactive Program',
 		subbundle: 'Sub-Program',
-		subtemplet: 'Sub-Templet',
+		subtemplet: 'Sub-Template',
 		schedule: 'Schedule',
 		layoutschedule: 'Layout Schedule',
 		regionschedule: 'Region Schedule',

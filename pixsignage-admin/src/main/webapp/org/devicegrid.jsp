@@ -41,7 +41,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
-<link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pix.css?t=2" rel="stylesheet"/>
 
 <style type="text/css">
 .modal-layout1 { 
@@ -278,7 +278,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-devicegrid.js?t=0"></script>
+<script src="${base_ctx}/scripts/pix-devicegrid.js?t=1"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

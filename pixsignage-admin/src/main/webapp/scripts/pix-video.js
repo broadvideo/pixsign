@@ -351,55 +351,71 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', myurls['common.update']);
 		currentEditFolderid = CurrentVideo.folderid;
 		createEditFolderTree(currentEditFolderTreeData);
-
-		$("#RelateVideoSelect").select2({
-			placeholder: common.tips.detail_select,
-			minimumInputLength: 0,
-			ajax: { 
-				url: 'video!list.action',
-				type: 'GET',
-				dataType: 'json',
-				data: function (term, page) {
-					return {
-						sSearch: term, 
-						iDisplayStart: (page-1)*10,
-						iDisplayLength: 10,
-					};
-				},
-				results: function (data, page) {
-					var more = (page * 10) < data.iTotalRecords; 
-					return {
-						results : $.map(data.aaData, function (item) { 
-							return { 
-								text:item.name, 
-								id:item.videoid,
-								thumbnail:item.thumbnail
-							};
-						}),
-						more: more
-					};
-				}
-			},
-			formatResult: function (video) {
-				var html = '<span><img src="/pixsigdata' + video.thumbnail + '" height="25" /> ' + video.text + '</span>'
-				return html;
-			},
-			formatSelection: function (video) {
-				var html = '<span><img src="/pixsigdata' + video.thumbnail + '" height="25" /> ' + video.text + '</span>'
-				return html;
-			},
-			initSelection: function(element, callback) {
-				if (CurrentVideo.relate != null) {
-					callback({id: CurrentVideo.relateid, text: CurrentVideo.relate.name, thumbnail: CurrentVideo.relate.thumbnail });
-				}
-			},
-			dropdownCssClass: "bigdrop", 
-			escapeMarkup: function (m) { return m; } 
-		});
+		refreshRelateVideoSelect();
 
 		$('#MyEditModal').modal();
 	});
 
+}
+
+function refreshRelateVideoSelect(folderid) {
+	$("#RelateVideoSelect").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		ajax: {
+			url: 'video!list.action',
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term,
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+					folderid: folderid,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.videoid, 
+							video:item, 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.video.height / data.video.width;
+			if (data.video.width < data.video.height) {
+				height = 40;
+				width = 40 * data.video.width / data.video.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.video.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.video.name + '</span>'
+			return html;
+		},
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.video.width < data.video.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.video.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/></span>'
+			return html;
+		},
+		initSelection: function(element, callback) {
+			if (CurrentVideo != null && CurrentVideo.relate != null) {
+				callback({id: CurrentVideo.relateid, text: CurrentVideo.relate.name, video: CurrentVideo.relate });
+			}
+		},
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
+	});
 }
 
 function initUploadModal() {
@@ -466,6 +482,63 @@ function initUploadModal() {
 	$('body').on('click', '.pix-upload-close', function(event) {
 		refreshMyTable();
 	});
-	
-	
 }
+
+
+$.ajax({
+	type : 'POST',
+	url : 'folder!list.action',
+	data : { },
+	success : function(data, status) {
+		if (data.errorcode == 0) {
+			var folders = data.aaData;
+			var folderid = folders[0].folderid;			
+			var folderTreeDivData = [];
+			createFolderTreeData(folders, folderTreeDivData);
+			$('.foldertree').each(function() {
+				$(this).jstree('destroy');
+				$(this).jstree({
+					'core' : {
+						'multiple' : false,
+						'data' : folderTreeDivData
+					},
+					'plugins' : ['unique', 'types'],
+					'types' : {
+						'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
+					},
+				});
+				$(this).on('loaded.jstree', function() {
+					$(this).jstree('select_node', folderid);
+				});
+				$(this).on('select_node.jstree', function(event, data) {
+					folderid = data.instance.get_node(data.selected[0]).id;
+					refreshRelateVideoSelect(folderid);
+				});
+			});
+		} else {
+			bootbox.alert(common.tips.error + data.errormsg);
+		}
+	},
+	error : function() {
+		console.log('failue');
+	}
+});
+function createFolderTreeData(folders, treeData) {
+	if (folders == null) return;
+	for (var i=0; i<folders.length; i++) {
+		treeData[i] = {};
+		treeData[i].id = folders[i].folderid;
+		treeData[i].text = folders[i].name;
+		treeData[i].state = {
+			opened: true,
+		}
+		treeData[i].children = [];
+		createFolderTreeData(folders[i].children, treeData[i].children);
+	}
+}
+$('#RelateVideoRemove').on('click', function(e) {
+	$('#RelateVideoSelect').select2('val', '');
+	$('#RelateVideoSelect').val('0');
+	CurrentVideo.relateid = 0;
+	CurrentVideo.relate = null;
+});	

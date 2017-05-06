@@ -15,6 +15,7 @@
     <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByPrimaryKey" />
     <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
+    <association property="mmediadtl" column="{objtype=objtype,mmediadtlid=objid}" select="selectMmediadtlid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -32,26 +33,33 @@
     where '${objtype}' = '2' and imageid = '${imageid}'
   </select>
   
+  <select id="selectMmediadtlid" resultMap="com.broadvideo.pixsignage.persistence.MmediadtlMapper.BaseResultMap" >
+    select * from mmediadtl
+    where ('${objtype}' = '8' or '${objtype}' = '9') and mmediadtlid = '${mmediadtlid}'
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from devicefile
-    where devicefileid = '${devicefileid}'
+    where devicefileid = #{devicefileid}
   </select>
   
   <select id="selectCount" resultType="Integer">
     select count(1) from devicefile
-    where objtype = '${objtype}' and deviceid = #{deviceid}
+    where objtype = #{objtype} 
+    and deviceid = #{deviceid}
     <if test="status != null">
-      and status = '${status}'
+      and status = #{status}
     </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from devicefile
-    where objtype = '${objtype}' and deviceid = #{deviceid}
+    where objtype = #{objtype} 
+    and deviceid = #{deviceid}
     <if test="status != null">
-      and status = '${status}'
+      and status = #{status}
     </if>
     order by devicefileid desc 
     <if test="start != null and length != null">
@@ -61,12 +69,15 @@
 
   <select id="selectByDeviceMedia" resultMap="BaseResultMap">
     select * from devicefile
-    where deviceid = #{deviceid} and objtype = '${objtype}' and objid = '${objid}'
+    where deviceid = #{deviceid}
+    and objtype = #{objtype}
+    and objid = #{objid}
   </select>
 
   <select id="selectDownloading" resultMap="BaseResultMap">
     select * from devicefile
-    where deviceid = #{deviceid} and progress != 100
+    where deviceid = #{deviceid} 
+    and progress != 100
     order by devicefileid desc 
   </select>
 
@@ -232,12 +243,18 @@
 
   <delete id="deleteByPrimaryKey" >
     delete from devicefile
-    where devicefileid = '${devicefileid}'
+    where devicefileid = #{devicefileid}
   </delete>
   
-  <delete id="deleteByObj" >
+  <delete id="clearByDevice" >
     delete from devicefile
-    where objtype = '${objtype}' and objid = '${objid}'
+    where deviceid = #{deviceid} 
+  </delete>
+
+  <delete id="clearByMedia" >
+    delete from devicefile
+    where objtype = #{objtype} 
+    and objid = #{objid}
   </delete>
 
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicefile" >

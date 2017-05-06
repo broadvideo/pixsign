@@ -19,5 +19,7 @@ public interface DevicefileService {
 
 	public void deleteDevicefile(String devicefileid);
 
+	public void clearByDevice(String deviceid);
+
 	public void refreshDevicefiles(String bindtype, String bindid);
 }

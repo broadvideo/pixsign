@@ -39,6 +39,12 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
+<style type="text/css">
+.dropdown-menu li > a {
+  padding: 0px !important; 
+  display: inline !important;
+}
+</style>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
@@ -129,7 +135,19 @@ response.setDateHeader("Expires",0);
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.relateimage"/></label>
 											<div class="col-md-9">
-												<input type="hidden" id="RelateImageSelect" class="form-control select2" name="image.relateid">
+												<div class="input-group">
+													<span class="input-group-btn">
+														<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+														<ul class="dropdown-menu" role="menu">
+															<div class="pre-scrollable foldertree">
+															</div>
+														</ul>
+													</span>
+													<input type="hidden" id="RelateImageSelect" class="form-control select2" name="image.relateid">
+													<span class="input-group-btn">
+														<button class="btn default" type="button" id="RelateImageRemove"><i class="fa fa-trash-o"/></i></button>
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -387,7 +405,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-datainit.js"></script>
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
 <script src="${base_ctx}/scripts/pix-foldertree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-image.js?t=7"></script>
+<script src="${base_ctx}/scripts/pix-image.js?t=8"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

@@ -85,7 +85,7 @@ public class CtrlService {
 			}
 
 			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(), status,
-					null, null, null, start, length, "deviceid");
+					null, null, null, null, start, length, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

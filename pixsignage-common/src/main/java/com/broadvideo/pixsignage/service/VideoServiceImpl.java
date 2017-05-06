@@ -58,7 +58,7 @@ public class VideoServiceImpl implements VideoService {
 	public void deleteVideo(String videoid) {
 		medialistdtlMapper.deleteByObj(Medialistdtl.ObjType_Video, videoid);
 		playlistdtlMapper.deleteByDtl(videoid);
-		devicefileMapper.deleteByObj(Devicefile.ObjType_Video, videoid);
+		devicefileMapper.clearByMedia(Devicefile.ObjType_Video, videoid);
 		videoMapper.deleteByPrimaryKey(videoid);
 	}
 

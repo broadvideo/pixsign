@@ -14,6 +14,8 @@ public interface MmediaMapper {
 	Mmedia select(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid,
 			@Param(value = "xcount") String xcount, @Param(value = "ycount") String ycount);
 
+	Mmedia selectByMmediadtlid(@Param(value = "mmediadtlid") String mmediadtlid);
+
 	int deleteByPrimaryKey(@Param(value = "mmediaid") String mmediaid);
 
 	// int insert(Mmedia record);

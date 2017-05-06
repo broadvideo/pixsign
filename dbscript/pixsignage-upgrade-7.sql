@@ -99,7 +99,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(302,2,0,'menu.devicemanage','','fa-desktop',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30201,2,302,'menu.device','device.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30202,2,302,'menu.devicegroup','devicegroup.jsp','',1,2);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30203,2,302,'menu.devicefile','devicefile.jsp','',1,3);
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30203,2,302,'menu.devicefile','devicefile.jsp','',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30204,2,302,'menu.deviceconfig','deviceconfig.jsp','',1,4);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(303,2,0,'menu.schedulemanage','','fa-calendar',1,4);

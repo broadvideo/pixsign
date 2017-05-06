@@ -288,7 +288,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 						JSONObject scheduledtlJson = new JSONObject();
 						scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
 						scheduledtlJson.put("media_type", "page");
-						scheduledtlJson.put("media_crop", "0");
+						scheduledtlJson.put("media_master", "1");
 						scheduledtlJson.put("media_id", scheduledtl.getObjid());
 						scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
 						scheduledtlJson.put("file", zipFile.getName());
@@ -307,7 +307,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					Video video = scheduledtl.getVideo();
 					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
 					scheduledtlJson.put("media_type", "video");
-					scheduledtlJson.put("media_crop", "0");
+					scheduledtlJson.put("media_master", "1");
 					scheduledtlJson.put("media_id", scheduledtl.getObjid());
 					scheduledtlJson.put("url",
 							"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
@@ -319,8 +319,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 					JSONObject scheduledtlJson = new JSONObject();
 					Image image = scheduledtl.getImage();
 					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
-					scheduledtlJson.put("media_type", "video");
-					scheduledtlJson.put("media_crop", "0");
+					scheduledtlJson.put("media_type", "image");
+					scheduledtlJson.put("media_master", "1");
 					scheduledtlJson.put("media_id", scheduledtl.getObjid());
 					scheduledtlJson.put("url",
 							"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
@@ -340,6 +340,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 						continue;
 					}
 					List<Mediagriddtl> mediagriddtls = mediagrid.getMediagriddtls();
+
+					Mediagriddtl mastergriddtl = null;
+					for (Mediagriddtl mediagriddtl : mediagriddtls) {
+						if (mediagriddtl.getXpos().intValue() == 0 && mediagriddtl.getYpos().intValue() == 0) {
+							mastergriddtl = mediagriddtl;
+							break;
+						}
+					}
+
 					for (Mediagriddtl mediagriddtl : mediagriddtls) {
 						int x = xpos - mediagriddtl.getXpos().intValue();
 						int y = ypos - mediagriddtl.getYpos().intValue();
@@ -353,7 +362,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 									JSONObject scheduledtlJson = new JSONObject();
 									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
 									scheduledtlJson.put("media_type", "page");
-									scheduledtlJson.put("media_crop", "0");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
 									scheduledtlJson.put("media_id", mediagriddtl.getObjid());
 									scheduledtlJson.put("url",
 											"http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
@@ -374,8 +390,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 								if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Video)) {
 									JSONObject scheduledtlJson = new JSONObject();
 									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
-									scheduledtlJson.put("media_type", "video");
-									scheduledtlJson.put("media_crop", "1");
+									scheduledtlJson.put("media_type", "cropvideo");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
 									scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
 									scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
 											+ mmediadtl.getFilepath());
@@ -387,8 +410,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
 									JSONObject scheduledtlJson = new JSONObject();
 									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
-									scheduledtlJson.put("media_type", "image");
-									scheduledtlJson.put("media_crop", "1");
+									scheduledtlJson.put("media_type", "cropimage");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
 									scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
 									scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
 											+ mmediadtl.getFilepath());
@@ -420,6 +450,215 @@ public class ScheduleServiceImpl implements ScheduleService {
 		JSONArray multiJSONArray = new JSONArray();
 		if (device.getDevicegridid().intValue() > 0) {
 			multiJSONArray = generateMultiScheduleJson(deviceid).getJSONArray("multi_schedules");
+		}
+		response.put("multi_schedules", multiJSONArray);
+		return response;
+	}
+
+	private JSONObject generateMultiScheduleJson_old(String deviceid) {
+		JSONObject responseJson = new JSONObject();
+		JSONArray scheduleJsonArray = new JSONArray();
+		responseJson.put("multi_schedules", scheduleJsonArray);
+
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		String devicegridid = "" + device.getDevicegridid();
+		int xpos = device.getXpos();
+		int ypos = device.getYpos();
+
+		if (device.getDevicegridid().intValue() == 0) {
+			return responseJson;
+		}
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+
+		// generate final json
+		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Multi,
+				Schedule.BindType_Devicegrid, devicegridid, Schedule.PlayMode_Daily);
+		for (Schedule schedule : scheduleList) {
+			JSONObject scheduleJson = new JSONObject();
+			scheduleJsonArray.put(scheduleJson);
+			scheduleJson.put("schedule_id", schedule.getScheduleid());
+			scheduleJson.put("playmode", "daily");
+			scheduleJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+			if (schedule.getEndtime() != null) {
+				scheduleJson.put("end_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getEndtime()));
+			}
+			scheduleJson.put("interval", schedule.getIntervaltime());
+			JSONArray scheduledtlJsonArray = new JSONArray();
+			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
+			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Page)) {
+					String zipPath = "/page/" + scheduledtl.getObjid() + "/page-" + scheduledtl.getObjid() + ".zip";
+					File zipFile = new File("/pixdata/pixsignage" + zipPath);
+					if (zipFile.exists()) {
+						JSONObject scheduledtlJson = new JSONObject();
+						scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+						scheduledtlJson.put("media_type", "page");
+						scheduledtlJson.put("media_master", "1");
+						scheduledtlJson.put("media_id", scheduledtl.getObjid());
+						scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+						scheduledtlJson.put("file", zipFile.getName());
+						scheduledtlJson.put("size", FileUtils.sizeOf(zipFile));
+						if (scheduledtl.getDuration() > 0) {
+							scheduledtlJson.put("duration", scheduledtl.getDuration());
+						} else if (xpos == 0 && ypos == 0) {
+							scheduledtlJson.put("duration", 30);
+						} else {
+							scheduledtlJson.put("duration", 0);
+						}
+						scheduledtlJsonArray.put(scheduledtlJson);
+					}
+				} else if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Video)) {
+					JSONObject scheduledtlJson = new JSONObject();
+					Video video = scheduledtl.getVideo();
+					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+					scheduledtlJson.put("media_type", "video");
+					scheduledtlJson.put("media_master", "1");
+					scheduledtlJson.put("media_id", scheduledtl.getObjid());
+					scheduledtlJson.put("url",
+							"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+					scheduledtlJson.put("file", video.getFilename());
+					scheduledtlJson.put("size", video.getSize());
+					scheduledtlJson.put("duration", scheduledtl.getDuration());
+					scheduledtlJsonArray.put(scheduledtlJson);
+				} else if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Image)) {
+					JSONObject scheduledtlJson = new JSONObject();
+					Image image = scheduledtl.getImage();
+					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+					scheduledtlJson.put("media_type", "image");
+					scheduledtlJson.put("media_master", "1");
+					scheduledtlJson.put("media_id", scheduledtl.getObjid());
+					scheduledtlJson.put("url",
+							"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
+					scheduledtlJson.put("file", image.getFilename());
+					scheduledtlJson.put("size", image.getSize());
+					if (scheduledtl.getDuration() > 0) {
+						scheduledtlJson.put("duration", scheduledtl.getDuration());
+					} else if (xpos == 0 && ypos == 0) {
+						scheduledtlJson.put("duration", 10);
+					} else {
+						scheduledtlJson.put("duration", 0);
+					}
+					scheduledtlJsonArray.put(scheduledtlJson);
+				} else if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Mediagrid)) {
+					Mediagrid mediagrid = scheduledtl.getMediagrid();
+					if (!mediagrid.getStatus().equals(Mediagrid.Status_Active)) {
+						continue;
+					}
+					List<Mediagriddtl> mediagriddtls = mediagrid.getMediagriddtls();
+
+					Mediagriddtl mastergriddtl = null;
+					for (Mediagriddtl mediagriddtl : mediagriddtls) {
+						if (mediagriddtl.getXpos().intValue() == 0 && mediagriddtl.getYpos().intValue() == 0) {
+							mastergriddtl = mediagriddtl;
+							break;
+						}
+					}
+
+					for (Mediagriddtl mediagriddtl : mediagriddtls) {
+						int x = xpos - mediagriddtl.getXpos().intValue();
+						int y = ypos - mediagriddtl.getYpos().intValue();
+						if (x >= 0 && x < mediagriddtl.getXcount().intValue() && y >= 0
+								&& y < mediagriddtl.getYcount().intValue()) {
+							if (mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Page)) {
+								String zipPath = "/page/" + mediagriddtl.getObjid() + "/page-" + mediagriddtl.getObjid()
+										+ ".zip";
+								File zipFile = new File("/pixdata/pixsignage" + zipPath);
+								if (zipFile.exists()) {
+									JSONObject scheduledtlJson = new JSONObject();
+									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+									scheduledtlJson.put("media_type", "page");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
+									scheduledtlJson.put("media_id", mediagriddtl.getObjid());
+									scheduledtlJson.put("url",
+											"http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+									scheduledtlJson.put("file", zipFile.getName());
+									scheduledtlJson.put("size", FileUtils.sizeOf(zipFile));
+									if (scheduledtl.getDuration() > 0) {
+										scheduledtlJson.put("duration", scheduledtl.getDuration());
+									} else if (xpos == 0 && ypos == 0) {
+										scheduledtlJson.put("duration", 30);
+									} else {
+										scheduledtlJson.put("duration", 0);
+									}
+									scheduledtlJsonArray.put(scheduledtlJson);
+								}
+							} else {
+								Mmediadtl mmediadtl = mmediadtlMapper.selectByPos("" + mediagriddtl.getMmediaid(),
+										"" + x, "" + y);
+								if (mmediadtl != null && mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Video)) {
+									JSONObject scheduledtlJson = new JSONObject();
+									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+									scheduledtlJson.put("media_type", "video");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
+									scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
+									scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+											+ mmediadtl.getFilepath());
+									scheduledtlJson.put("file", mmediadtl.getFilename());
+									scheduledtlJson.put("size", mmediadtl.getSize());
+									scheduledtlJson.put("duration", scheduledtl.getDuration());
+									scheduledtlJsonArray.put(scheduledtlJson);
+								} else if (mmediadtl != null
+										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
+									JSONObject scheduledtlJson = new JSONObject();
+									scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
+									scheduledtlJson.put("media_type", "image");
+									if (mastergriddtl != null
+											&& mastergriddtl.getObjtype().equals(mediagriddtl.getObjtype())
+											&& mastergriddtl.getObjid().intValue() == mediagriddtl.getObjid()
+													.intValue()) {
+										scheduledtlJson.put("media_master", "1");
+									} else {
+										scheduledtlJson.put("media_master", "0");
+									}
+									scheduledtlJson.put("media_id", mmediadtl.getMmediadtlid());
+									scheduledtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+											+ mmediadtl.getFilepath());
+									scheduledtlJson.put("file", mmediadtl.getFilename());
+									scheduledtlJson.put("size", mmediadtl.getSize());
+									if (scheduledtl.getDuration() > 0) {
+										scheduledtlJson.put("duration", scheduledtl.getDuration());
+									} else if (xpos == 0 && ypos == 0) {
+										scheduledtlJson.put("duration", 10);
+									} else {
+										scheduledtlJson.put("duration", 0);
+									}
+									scheduledtlJsonArray.put(scheduledtlJson);
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		return responseJson;
+	}
+
+	public JSONObject generateScheduleJson_old(String deviceid) {
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		JSONObject response = generateSoloScheduleJson(deviceid);
+		JSONArray multiJSONArray = new JSONArray();
+		if (device.getDevicegridid().intValue() > 0) {
+			multiJSONArray = generateMultiScheduleJson_old(deviceid).getJSONArray("multi_schedules");
 		}
 		response.put("multi_schedules", multiJSONArray);
 		return response;

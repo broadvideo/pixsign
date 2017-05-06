@@ -35,6 +35,12 @@
     and ycount = #{ycount}
   </select>
   
+  <select id="selectByMmediadtlid" resultMap="BaseResultMap">
+    select mm.* from mmedia mm, mmediadtl mmd
+    where mm.mmediaid = mmd.mmediaid
+    and mmd.mmediadtlid = #{mmediadtlid}
+  </select>
+  
   <delete id="deleteByPrimaryKey" >
     delete from mmedia
     where mmediaid = #{mmediaid}

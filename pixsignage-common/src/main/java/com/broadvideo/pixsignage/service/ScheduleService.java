@@ -20,4 +20,6 @@ public interface ScheduleService {
 	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
 
 	public JSONObject generateScheduleJson(String deviceid);
+
+	public JSONObject generateScheduleJson_old(String deviceid);
 }

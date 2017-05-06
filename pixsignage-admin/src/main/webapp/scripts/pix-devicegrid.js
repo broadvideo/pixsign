@@ -196,6 +196,10 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 	div.attr('devicegridid', devicegrid.devicegridid);
 	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
 
+	var rotate90 = '';
+	if (devicegrid.ratio == 2) {
+		rotate90 = 'rotate90';
+	}
 	for (var i=0; i<devicegrid.xcount; i++) {
 		for (var j=0; j<devicegrid.ycount; j++) {
 			var terminalid = '';
@@ -210,7 +214,7 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 			html += '%; left: ' + (i*100/devicegrid.xcount);
 			html += '%; top: ' + (j*100/devicegrid.ycount);
 			html += '%; border: 1px solid #000; ">';
-			html += '<div style="position:absolute; width:100%; height:100%; ">';
+			html += '<div class="' + rotate90 + '" style="position:absolute; width:100%; height:100%; ">';
 			html += '<p class="grid-font" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:#000; font-size:12px; ">';
 			html += terminalid;
 			html += '</p>';
@@ -231,15 +235,27 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 		scale = devicegrid.height / height;
 		width = devicegrid.width / scale;
 	}
-	console.log(maxsize, width, height);
 	div.css('width' , width);
 	div.css('height' , height);
 
 	$(div).find('.grid-font').each(function() {
-		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.3 * lineheight + 'px');
-		$(this).css('line-height', lineheight + 'px');
+		if (devicegrid.ratio == 1) {
+			var lineheight = devicegrid.height / devicegrid.ycount / scale;
+			$(this).css('font-size', 0.3 * lineheight + 'px');
+			$(this).css('line-height', lineheight + 'px');
+		} else {
+			var lineheight = devicegrid.width / devicegrid.xcount / scale;
+			$(this).css('font-size', 0.3 * lineheight + 'px');
+			$(this).css('line-height', lineheight + 'px');
+		}	
+	});
+
+	$(div).find('.rotate90').each(function() {
+		$(this).css('width', $(this).parent().height());
+		$(this).css('height', $(this).parent().width());
+		$(this).css('top', ($(this).parent().height()-$(this).parent().width())/2);
+		$(this).css('left', ($(this).parent().width()-$(this).parent().height())/2);
 	});
 }
 
@@ -249,6 +265,10 @@ function redrawDevicegrid(div, devicegrid) {
 	div.css('margin-left', 'auto');
 	div.css('margin-right', 'auto');
 	div.css('border', '1px solid #000');
+	var rotate90 = '';
+	if (devicegrid.ratio == 2) {
+		rotate90 = 'rotate90';
+	}
 	for (var i=0; i<devicegrid.xcount; i++) {
 		for (var j=0; j<devicegrid.ycount; j++) {
 			var terminalid = '';
@@ -269,7 +289,7 @@ function redrawDevicegrid(div, devicegrid) {
 				border = '3px solid #FF0000';
 			}
 			html += '<div style="position:absolute; width:100%; height:100%; "></div>';
-			html += '<div style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
+			html += '<div class="' + rotate90 + '" style="position:absolute; width:100%; height:100%; border:' + border + '; ">';
 			html += '<p class="grid-font" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:#000; font-size:12px; ">';
 			html += terminalid;
 			html += '</p>';
@@ -291,10 +311,23 @@ function redrawDevicegrid(div, devicegrid) {
 	div.css('width' , width);
 	div.css('height' , height);
 	$(div).find('.grid-font').each(function() {
-		var lineheight = devicegrid.height / devicegrid.ycount / scale;
 		var text = $(this).html();
-		$(this).css('font-size', 0.2 * lineheight + 'px');
-		$(this).css('line-height', lineheight + 'px');
+		if (devicegrid.ratio == 1) {
+			var lineheight = devicegrid.height / devicegrid.ycount / scale;
+			$(this).css('font-size', 0.3 * lineheight + 'px');
+			$(this).css('line-height', lineheight + 'px');
+		} else {
+			var lineheight = devicegrid.width / devicegrid.xcount / scale;
+			$(this).css('font-size', 0.3 * lineheight + 'px');
+			$(this).css('line-height', lineheight + 'px');
+		}
+	});
+
+	$(div).find('.rotate90').each(function() {
+		$(this).css('width', $(this).parent().height());
+		$(this).css('height', $(this).parent().width());
+		$(this).css('top', ($(this).parent().height()-$(this).parent().width())/2);
+		$(this).css('left', ($(this).parent().width()-$(this).parent().height())/2);
 	});
 }
 
@@ -503,6 +536,7 @@ function refreshDeviceSelect() {
 					sSearch: term,
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
+					devicegridid: 0,
 				};
 			},
 			results: function (data, page) {

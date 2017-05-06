@@ -656,6 +656,8 @@ function initDeviceFileModal() {
 		
 		$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 		$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
+		$('#GridVideoTable').dataTable()._fnAjaxUpdate();
+		$('#GridImageTable').dataTable()._fnAjaxUpdate();
 		
 		$('#DeviceFileModal').modal();
 	});
@@ -696,9 +698,8 @@ function initDeviceFileModal() {
 						{'name':'objtype','value':'1' });
 		} 
 	});
-
-	jQuery('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
-	jQuery('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	$('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	$('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#DeviceVideoTable').css('width', '100%').css('table-layout', 'fixed');
 
 	$('#DeviceImageTable').dataTable({
@@ -737,16 +738,99 @@ function initDeviceFileModal() {
 						{'name':'objtype','value':'2' });
 		} 
 	});
-
-	jQuery('#DeviceImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
-	jQuery('#DeviceImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	$('#DeviceImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	$('#DeviceImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#DeviceImageTable').css('width', '100%').css('table-layout', 'fixed');
+
+	$('#GridVideoTable').dataTable({
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+						[ 10, 25, 50, 100 ]
+						],
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['devicefile.list'],
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+			$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
+			$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.video.thumbnail + '" width="40px"></img>');
+			$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
+			$('td:eq(3)', nRow).html(transferIntToComma(aData.mmediadtl.size));
+			if (aData.progress == 0) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
+			} else if (aData['progress'] == 100) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData.progress + '%</span>');
+			} else {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData.progress + '%</span>');
+			}
+			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'deviceid','value':CurrentDeviceid },
+						{'name':'objtype','value':'8' });
+		} 
+	});
+	$('#GridVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	$('#GridVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	$('#GridVideoTable').css('width', '100%').css('table-layout', 'fixed');
+
+	$('#GridImageTable').dataTable({
+		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+		'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+						[ 10, 25, 50, 100 ]
+						],
+		'bProcessing' : true,
+		'bServerSide' : true,
+		'sAjaxSource' : myurls['devicefile.list'],
+		'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
+						{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
+						{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+		'iDisplayLength' : 10,
+		'sPaginationType' : 'bootstrap',
+		'oLanguage' : DataTableLanguage,
+		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+			$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
+			$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.image.thumbnail + '" width="40px"></img>');
+			$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
+			$('td:eq(3)', nRow).html(transferIntToComma(aData.mmediadtl.size));
+			if (aData.progress == 0) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
+			} else if (aData['progress'] == 100) {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-success">' + aData.progress + '%</span>');
+			} else {
+				$('td:eq(4)', nRow).html('<span class="label label-sm label-warning">' + aData.progress + '%</span>');
+			}
+			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'deviceid','value':CurrentDeviceid },
+						{'name':'objtype','value':'9' });
+		} 
+	});
+	$('#GridImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+	$('#GridImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+	$('#GridImageTable').css('width', '100%').css('table-layout', 'fixed');
 
 	$('body').on('click', '.pix-DeviceFileReload', function(event) {
 		if ($('#portlet_tab1').hasClass('active')) {
 			$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 		} else if ($('#portlet_tab2').hasClass('active')) {
 			$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
+		} else if ($('#portlet_tab3').hasClass('active')) {
+			$('#GridVideoTable').dataTable()._fnAjaxUpdate();
+		} else if ($('#portlet_tab4').hasClass('active')) {
+			$('#GridImageTable').dataTable()._fnAjaxUpdate();
 		}
 	});			
 }

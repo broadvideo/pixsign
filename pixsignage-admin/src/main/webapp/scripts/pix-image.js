@@ -258,56 +258,73 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', myurls['common.update']);
 		currentEditFolderid = CurrentImage.folderid;
 		createEditFolderTree(currentEditFolderTreeData);
-
-		$("#RelateImageSelect").select2({
-			placeholder: common.tips.detail_select,
-			minimumInputLength: 0,
-			ajax: { 
-				url: 'image!list.action',
-				type: 'GET',
-				dataType: 'json',
-				data: function (term, page) {
-					return {
-						sSearch: term, 
-						iDisplayStart: (page-1)*10,
-						iDisplayLength: 10,
-					};
-				},
-				results: function (data, page) {
-					var more = (page * 10) < data.iTotalRecords; 
-					return {
-						results : $.map(data.aaData, function (item) { 
-							return { 
-								text:item.name, 
-								id:item.imageid,
-								thumbnail:item.thumbnail
-							};
-						}),
-						more: more
-					};
-				}
-			},
-			formatResult: function (image) {
-				var html = '<span><img src="/pixsigdata' + image.thumbnail + '" height="25" /> ' + image.text + '</span>'
-				return html;
-			},
-			formatSelection: function (image) {
-				var html = '<span><img src="/pixsigdata' + image.thumbnail + '" height="25" /> ' + image.text + '</span>'
-				return html;
-			},
-			initSelection: function(element, callback) {
-				if (CurrentImage.relate != null) {
-					callback({id: CurrentImage.relateid, text: CurrentImage.relate.name, thumbnail: CurrentImage.relate.thumbnail });
-				}
-			},
-			dropdownCssClass: "bigdrop", 
-			escapeMarkup: function (m) { return m; } 
-		});
+		refreshRelateImageSelect();
 
 		$('#MyEditModal').modal();
 	});
 
 }
+
+function refreshRelateImageSelect(folderid) {
+	$("#RelateImageSelect").select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		ajax: {
+			url: 'image!list.action',
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term,
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+					folderid: folderid,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.imageid, 
+							image:item, 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.image.height / data.image.width;
+			if (data.image.width < data.image.height) {
+				height = 40;
+				width = 40 * data.image.width / data.image.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.image.name + '</span>'
+			return html;
+		},
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.image.width < data.image.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.image.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/></span>'
+			return html;
+		},
+		initSelection: function(element, callback) {
+			if (CurrentImage != null && CurrentImage.relate != null) {
+				callback({id: CurrentImage.relateid, text: CurrentImage.relate.name, image: CurrentImage.relate });
+			}
+		},
+		dropdownCssClass: "bigdrop", 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+
 
 function initUploadModal() {
 	$('#UploadForm').fileupload({
@@ -362,17 +379,71 @@ function initUploadModal() {
 	   data.formData = inputs.serializeArray();
    }); 
 
-
 	$('body').on('click', '.pix-add', function(event) {
 		$('#UploadForm').find('.cancel').click();
 		$('#UploadForm .files').html('');
 		$('#UploadModal').modal();
 	});			
 
-	
 	$('body').on('click', '.pix-upload-close', function(event) {
 		refreshMyTable();
 	});
-	
-	
 }
+
+$.ajax({
+	type : 'POST',
+	url : 'folder!list.action',
+	data : { },
+	success : function(data, status) {
+		if (data.errorcode == 0) {
+			var folders = data.aaData;
+			var folderid = folders[0].folderid;			
+			var folderTreeDivData = [];
+			createFolderTreeData(folders, folderTreeDivData);
+			$('.foldertree').each(function() {
+				$(this).jstree('destroy');
+				$(this).jstree({
+					'core' : {
+						'multiple' : false,
+						'data' : folderTreeDivData
+					},
+					'plugins' : ['unique', 'types'],
+					'types' : {
+						'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
+					},
+				});
+				$(this).on('loaded.jstree', function() {
+					$(this).jstree('select_node', folderid);
+				});
+				$(this).on('select_node.jstree', function(event, data) {
+					folderid = data.instance.get_node(data.selected[0]).id;
+					refreshRelateImageSelect(folderid);
+				});
+			});
+		} else {
+			bootbox.alert(common.tips.error + data.errormsg);
+		}
+	},
+	error : function() {
+		console.log('failue');
+	}
+});
+function createFolderTreeData(folders, treeData) {
+	if (folders == null) return;
+	for (var i=0; i<folders.length; i++) {
+		treeData[i] = {};
+		treeData[i].id = folders[i].folderid;
+		treeData[i].text = folders[i].name;
+		treeData[i].state = {
+			opened: true,
+		}
+		treeData[i].children = [];
+		createFolderTreeData(folders[i].children, treeData[i].children);
+	}
+}
+$('#RelateImageRemove').on('click', function(e) {
+	$('#RelateImageSelect').select2('val', '');
+	$('#RelateImageSelect').val('0');
+	CurrentImage.relateid = 0;
+	CurrentImage.relate = null;
+});	

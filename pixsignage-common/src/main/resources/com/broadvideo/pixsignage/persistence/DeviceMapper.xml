@@ -72,6 +72,9 @@
     <if test="devicegroupid != null">
       and devicegroupid = #{devicegroupid}
     </if>
+    <if test="devicegridid != null">
+      and devicegridid = #{devicegridid}
+    </if>
     <if test="search != null">
       and (terminalid like #{search} or name like #{search})
     </if>
@@ -94,6 +97,9 @@
     </if>
     <if test="devicegroupid != null">
       and devicegroupid = #{devicegroupid}
+    </if>
+    <if test="devicegridid != null">
+      and devicegridid = #{devicegridid}
     </if>
     <if test="search != null">
       and (terminalid like #{search} or name like #{search})

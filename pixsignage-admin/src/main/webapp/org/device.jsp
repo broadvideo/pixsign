@@ -104,6 +104,8 @@ response.setDateHeader("Expires",0);
 									<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
 								</div>
 								<ul class="nav nav-tabs" style="margin-right: 30px;">
+									<li id="nav_tab4 mscreen-ctrl"><a href="#portlet_tab4" data-toggle="tab"><spring:message code="global.gridimage"/></a></li>
+									<li id="nav_tab3 mscreen-ctrl"><a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.gridvideo"/></a></li>
 									<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
 									<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
 								</ul>
@@ -118,6 +120,18 @@ response.setDateHeader("Expires",0);
 									</div>
 									<div class="tab-pane" id="portlet_tab2">
 										<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+									<div class="tab-pane" id="portlet_tab3">
+										<table id="GridVideoTable" class="table table-striped table-bordered table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+									<div class="tab-pane" id="portlet_tab4">
+										<table id="GridImageTable" class="table table-striped table-bordered table-hover">
 											<thead></thead>
 											<tbody></tbody>
 										</table>
@@ -436,6 +450,8 @@ response.setDateHeader("Expires",0);
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
+var MscreenCtrl = <%=(session_org != null && session_org.getMscreenflag().equals("1"))%>;
+$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 
 jQuery(document).ready(function() {
 	Metronic.init();

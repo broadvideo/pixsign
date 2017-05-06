@@ -109,7 +109,7 @@ response.setDateHeader("Expires",0);
 		
 				<div class="clearfix"></div>
 				<div class="row">
-					<div class="col-md-12 col-sm-12">
+					<div class="col-md-6 col-sm-6">
 						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
 								<div class="caption">
@@ -127,7 +127,6 @@ response.setDateHeader("Expires",0);
 						</div>
 					</div>
 					
-					<!-- 
 					<div class="col-md-6 col-sm-6">
 						<div class="portlet solid bordered light-grey">
 							<div class="portlet-title">
@@ -145,7 +144,6 @@ response.setDateHeader("Expires",0);
 							</div>
 						</div>
 					</div>
-					 -->
 				</div>
 
 				<div class="clearfix"></div>

@@ -11,11 +11,27 @@
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="video" column="{mmediaid=mmediaid}" select="selectVideoid" />
+    <association property="image" column="{mmediaid=mmediaid}" select="selectImageid" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     mmediadtlid, mmediaid, xpos, ypos, fileidx, filepath, filename, size, createtime
   </sql>
+  
+  <select id="selectVideoid" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
+    select v.* from video v, mmedia mm
+    where v.videoid = mm.objid
+    and mm.objtype = '1' 
+    and mm.mmediaid = '${mmediaid}'
+  </select>
+
+  <select id="selectImageid" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
+    select i.* from image i, mmedia mm
+    where i.imageid = mm.objid
+    and mm.objtype = '2' 
+    and mm.mmediaid = '${mmediaid}'
+  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 

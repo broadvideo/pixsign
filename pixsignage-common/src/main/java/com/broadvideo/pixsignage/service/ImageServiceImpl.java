@@ -50,7 +50,7 @@ public class ImageServiceImpl implements ImageService {
 	@Transactional
 	public void deleteImage(String imageid) {
 		medialistdtlMapper.deleteByObj(Medialistdtl.ObjType_Image, imageid);
-		devicefileMapper.deleteByObj(Devicefile.ObjType_Image, imageid);
+		devicefileMapper.clearByMedia(Devicefile.ObjType_Image, imageid);
 		imageMapper.deleteByPrimaryKey(imageid);
 	}
 

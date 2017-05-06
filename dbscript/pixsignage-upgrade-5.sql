@@ -230,6 +230,8 @@ default character set utf8;
 insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('3-1-1', 3, 1, 1, 5760, 1080);
 insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('1-3-1', 1, 3, 1, 1920, 3240);
 insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('2-2-1', 2, 2, 1, 3840, 2160);
+insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('2-1-1', 2, 1, 1, 3840, 1080);
+insert into gridlayout(gridlayoutcode, xcount, ycount, ratio, width, height) values('4-1-2', 4, 1, 2, 4320, 1920);
 
 ############################################################
 ## post script  ############################################

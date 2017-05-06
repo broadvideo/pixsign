@@ -13,7 +13,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Pix Signage</title>
+<title>Digital Signage</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">
@@ -33,58 +33,32 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
-				<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-				<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">Modal title</h4>
-							</div>
-							<div class="modal-body">
-								Widget settings form goes here
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn blue">Save changes</button>
-								<button type="button" class="btn default" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-						<!-- /.modal-content -->
-					</div>
-					<!-- /.modal-dialog -->
-				</div>
-				<!-- /.modal -->
-				<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	
 				<div class="clearfix"></div>
-	
 			</div>
 		</div>
 
 	</div>
-	<!-- END CONTAINER -->
-	<!-- BEGIN FOOTER -->
-	<div class="footer">
-		<div class="footer-inner">
+	
+	<div class="page-footer">
+		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<spring:message code="global.copyright"/>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>
 		</div>
-		<div class="footer-tools">
-			<span class="go-top">
-			<i class="fa fa-angle-up"></i>
-			</span>
+		<div class="scroll-to-top">
+			<i class="icon-arrow-up"></i>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->   

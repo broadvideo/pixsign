@@ -8,6 +8,8 @@ public class Devicefile {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
 	public final static String ObjType_Audio = "3";
+	public final static String ObjType_CropVideo = "8";
+	public final static String ObjType_CropImage = "9";
 
 	private Integer devicefileid;
 
@@ -34,6 +36,8 @@ public class Devicefile {
 	private Video video;
 
 	private Image image;
+
+	private Mmediadtl mmediadtl;
 
 	public Integer getDevicefileid() {
 		return devicefileid;
@@ -141,5 +145,13 @@ public class Devicefile {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public Mmediadtl getMmediadtl() {
+		return mmediadtl;
+	}
+
+	public void setMmediadtl(Mmediadtl mmediadtl) {
+		this.mmediadtl = mmediadtl;
 	}
 }

@@ -33,6 +33,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
@@ -71,7 +72,7 @@ response.setDateHeader("Expires",0);
 	<div class="page-footer">
 		<div class="page-footer-inner">
 			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
-			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
 			<%} else { %>
 			©<%=session_org.getCopyright()%>
 			<%} %>

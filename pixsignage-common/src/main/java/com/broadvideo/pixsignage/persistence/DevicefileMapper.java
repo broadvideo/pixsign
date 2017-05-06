@@ -39,7 +39,9 @@ public interface DevicefileMapper {
 
 	int deleteByPrimaryKey(@Param(value = "devicefileid") String devicefileid);
 
-	int deleteByObj(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
+	int clearByDevice(@Param(value = "deviceid") String deviceid);
+
+	int clearByMedia(@Param(value = "objtype") String objtype, @Param(value = "objid") String objid);
 
 	// int insert(Devicefile record);
 

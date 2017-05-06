@@ -48,7 +48,7 @@ public class AudioServiceImpl implements AudioService {
 	@Transactional
 	public void deleteAudio(String audioid) {
 		medialistdtlMapper.deleteByObj(Medialistdtl.ObjType_Audio, audioid);
-		devicefileMapper.deleteByObj(Devicefile.ObjType_Audio, audioid);
+		devicefileMapper.clearByMedia(Devicefile.ObjType_Audio, audioid);
 		audioMapper.deleteByPrimaryKey(audioid);
 	}
 

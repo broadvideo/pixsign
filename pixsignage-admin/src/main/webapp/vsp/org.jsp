@@ -13,7 +13,7 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8" />
-<title>Pix Signage</title>
+<title>Digital Signage</title>
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">

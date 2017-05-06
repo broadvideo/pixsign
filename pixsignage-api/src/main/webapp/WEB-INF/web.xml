@@ -60,7 +60,7 @@
 		</init-param>
 		<init-param>
 		   <param-name>jersey.config.server.provider.classnames</param-name>
-		   <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature;com.broadvideo.pixsignage.rest.PixsignageService;com.broadvideo.pixsignage.rest.PixsignageService2;com.broadvideo.pixsignage.rest.MultisignService</param-value>
+		   <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature;com.broadvideo.pixsignage.rest.PixsignageService;com.broadvideo.pixsignage.rest.PixsignageService2;com.broadvideo.pixsignage.rest.PixsignageService21;com.broadvideo.pixsignage.rest.MultisignService</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

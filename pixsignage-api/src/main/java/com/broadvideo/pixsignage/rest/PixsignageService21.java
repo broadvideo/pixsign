@@ -69,8 +69,8 @@ import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
 @Component
 @Consumes("application/json;charset=UTF-8")
 @Produces("application/json;charset=UTF-8")
-@Path("/v2.0")
-public class PixsignageService2 {
+@Path("/v2.1")
+public class PixsignageService21 {
 	private static Hashtable<String, String> CONFIG_SIGNATURE = new Hashtable<String, String>();
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -336,7 +336,7 @@ public class PixsignageService2 {
 			}
 
 			JSONObject responseJson;
-			responseJson = scheduleService.generateScheduleJson_old("" + device.getDeviceid());
+			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
 				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
 			} else {
