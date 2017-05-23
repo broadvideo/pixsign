@@ -876,13 +876,13 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-templet-touch.js?t=11"></script>
-<script src="${base_ctx}/scripts/pix-templet-wizard.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-templet-design1.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-templet-design2.js?t=10"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-templet-touch.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-templet-wizard.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-templet-design1.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-templet-design2.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;

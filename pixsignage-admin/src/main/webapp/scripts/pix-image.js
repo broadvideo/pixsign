@@ -59,10 +59,8 @@ function initMyTable() {
 			imagehtml += '<div class="mask">';
 			imagehtml += '<div>';
 			imagehtml += '<a class="btn default btn-sm green fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
-			if (CurBranchid == MyBranchid) {
-				imagehtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
-				imagehtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
-			}
+			imagehtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
+			imagehtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
 			imagehtml += '</div>';
 			imagehtml += '</div>';
 			imagehtml += '</div>';

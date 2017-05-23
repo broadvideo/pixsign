@@ -37,6 +37,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-fileupload/bootstrap-fileupload.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -52,7 +53,7 @@ response.setDateHeader("Expires",0);
 								<h4 class="modal-title"><spring:message code="global.org"/></h4>
 							</div>
 							<div class="modal-body">
-								<form id="MyEditForm" class="form-horizontal" method="POST">
+								<form id="MyEditForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
 									<input type="hidden" name="org.orgid" value="0" />
 									<input type="hidden" name="org.status" value="1" />
 									<input type="hidden" name="org.apps" value="" />
@@ -124,7 +125,10 @@ response.setDateHeader("Expires",0);
 													<input type="radio" name="org.calendarflag" value="0" checked> <spring:message code="global.off"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.calendarflag" value="1"> <spring:message code="global.on"/>
+													<input type="radio" name="org.calendarflag" value="1"> <spring:message code="global.org.calendarflag_1"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.calendarflag" value="2"> <spring:message code="global.org.calendarflag_2"/>
 												</label>
 											</div>
 										</div>
@@ -210,6 +214,27 @@ response.setDateHeader("Expires",0);
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="org.copyright" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group pix-control">
+											<label class="col-md-3 control-label">Logo</label>
+											<div class="col-md-9">
+												<div class="fileupload fileupload-new" data-provides="fileupload">
+													<div class="input-group">
+														<span class="input-group-btn">
+															<span class="uneditable-input">
+																<i class="fa fa-file fileupload-exists"></i>
+																<span class="fileupload-preview"></span>
+															</span>
+														</span>
+														<span class="btn default btn-file">
+															<span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select</span>
+															<span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+															<input type="file" class="default" name="logo" />
+														</span>
+														<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -330,13 +355,14 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="${static_ctx}/global/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-org.js?t=3"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-org.js?t=${timestamp}"></script>
 <script>
 var PixCtrl = <%=(session_vsp != null && session_vsp.getCode().equals("default"))%>;
 var ReviewCtrl = <%=(session_vsp != null && session_vsp.getReviewflag().equals("1"))%>;

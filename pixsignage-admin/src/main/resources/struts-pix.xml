@@ -119,16 +119,26 @@
 			</result>
 		</action>
 		<action name="org!add" method="doAdd" class="orgAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
+			<result name="input" type="json"></result>
 		</action>
 		<action name="org!update" method="doUpdate" class="orgAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
+			<result name="input" type="json"></result>
 		</action>
 		<action name="org!delete" method="doDelete" class="orgAction">
 			<result name="success" type="json">
@@ -637,6 +647,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!updateupgradeflag" method="doUpdateUpgradeflag" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="device!sync" method="doSync" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -796,6 +812,33 @@
 			</result>
 		</action>
 		<action name="devicefile!delete" method="doDelete" class="devicefileAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="appfile!list" method="doList" class="appfileAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="appfile!upload" method="doUpload" class="appfileAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">102400000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="appfile!update" method="doUpdate" class="appfileAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="appfile!delete" method="doDelete" class="appfileAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

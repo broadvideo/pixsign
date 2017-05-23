@@ -9,12 +9,21 @@ function refreshMyTable() {
 				CurrentOrg = data.org;
 				$('#MyTable').dataTable().fnClearTable();
 
+				/*
 				if (CurrentOrg.upgradeflag == 1) {
 					var upgradehtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.upgradeflag, upgradehtml]);
 				} else {
 					var upgradehtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
 					$('#MyTable').dataTable().fnAddData([common.view.upgradeflag, upgradehtml]);
+				}*/
+				if (CurrentOrg.volumeflag == 1) {
+					var volumehtml = '<span class="label label-xs label-success">' + common.view.volumeflag_on + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.volumeflag, volumehtml]);
+					$('#MyTable').dataTable().fnAddData([common.view.volume, CurrentOrg.volume]);
+				} else {
+					var volumehtml = '<span class="label label-xs label-warning">' + common.view.volumeflag_off + '</span>';
+					$('#MyTable').dataTable().fnAddData([common.view.volumeflag, volumehtml]);
 				}
 				if (CurrentOrg.devicepassflag == 1) {
 					var devicepasshtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
@@ -124,6 +133,12 @@ $('body').on('click', '.pix-update', function(event) {
 		}
 	});
 
+	if ($('input[name="org.volumeflag"]:checked').val() == 0) {
+		$('.volumeflag').css('display', 'none');
+	} else {
+		$('.volumeflag').css('display', '');
+	}
+
 	if ($('input[name="org.devicepassflag"]:checked').val() == 0) {
 		$('.devicepassflag').css('display', 'none');
 	} else {
@@ -197,6 +212,17 @@ $('body').on('click', '.pix-update', function(event) {
 	$('#MyEditModal').modal();
 });
 
+$('#MyEditModal').on('shown.bs.modal', function (e) {
+	$(".volumeRange").ionRangeSlider({
+		min: 0,
+		max: 100,
+		from: CurrentOrg.volume,
+		type: 'single',
+		step: 5,
+		hasGrid: false
+	});
+})
+
 $('body').on('click', '.pix-push', function(event) {
 	bootbox.confirm(common.tips.pushall, function(result) {
 		if (result == true) {
@@ -227,6 +253,13 @@ $('body').on('click', '.pix-push', function(event) {
 	});
 });
 
+$('input[name="org.volumeflag"]').click(function(e) {
+	if ($('input[name="org.volumeflag"]:checked').val() == 0) {
+		$('.volumeflag').css('display', 'none');
+	} else {
+		$('.volumeflag').css('display', '');
+	}
+});  
 $('input[name="org.devicepassflag"]').click(function(e) {
 	if ($('input[name="org.devicepassflag"]:checked').val() == 0) {
 		$('.devicepassflag').css('display', 'none');

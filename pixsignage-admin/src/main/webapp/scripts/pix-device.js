@@ -44,7 +44,6 @@ function initMyTable() {
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
-						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
 						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
 		'aoColumnDefs': [
 	 					{'bSortable': false, 'aTargets': [ 0 ] }
@@ -71,7 +70,7 @@ function initMyTable() {
 			} else if (aData.onlineflag == 1) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (aData.onlineflag == 0) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			} else if (aData.onlineflag == 9) {
 				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}
@@ -84,8 +83,9 @@ function initMyTable() {
 			html += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.view + '</a>';
 			$('td:eq(9)', nRow).html(html);
 			$('td:eq(10)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
-			$('td:eq(11)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-			$('td:eq(12)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>');
+			html = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			html += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
+			$('td:eq(11)', nRow).html(html);
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
@@ -148,9 +148,11 @@ function initMyTable() {
 		}
 		sOut += '</tr>';
 		sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
+		sOut += '<tr><td>' + common.view.storage + ':</td><td>' + transferIntToByte(aData.storageused) + '/' + transferIntToByte(aData.storageavail) + '</td></tr>';
 		sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
 		sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
+		sOut += '<tr><td>' + common.view.boardinfo + ':</td><td class="autowrap">' + aData.boardinfo + '</td></tr>';
 		sOut += '<tr><td>' + common.view.refreshtime + ':</td><td>' + aData.refreshtime + '</td></tr>';
 		sOut += '<tr><td>' + common.view.activetime + ':</td><td>' + aData.activetime + '</td></tr>';
 		sOut += '</table>';

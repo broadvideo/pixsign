@@ -84,7 +84,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/bv"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/changhong"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/debug"));
-			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/windows"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/winx86"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/combine"));
@@ -106,6 +106,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/pflow/temp"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/temp"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/org"));
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/mediagrid"));
 		} catch (Exception ex) {

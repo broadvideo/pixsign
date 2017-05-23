@@ -2,6 +2,8 @@ package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
 
+import org.apache.struts2.json.annotations.JSON;
+
 public class Audio {
 	private Integer audioid;
 
@@ -107,10 +109,12 @@ public class Audio {
 		this.description = description == null ? null : description.trim();
 	}
 
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
 	}
 
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}

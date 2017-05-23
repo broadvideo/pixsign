@@ -32,13 +32,8 @@ function initMyTable() {
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-			if (CurBranchid == MyBranchid) {
-				$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
-			} else {
-				$('td:eq(2)', nRow).html('');
-				$('td:eq(3)', nRow).html('');
-			}
+			$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+			$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -122,6 +117,7 @@ function initMyEditModal() {
 	
 	$('body').on('click', '.pix-add', function(event) {
 		refreshForm('MyEditForm');
+		$('#MyEditForm input[name="text.branchid"').val(CurBranchid);
 		$('#MyEditForm textarea[name="text.text"]').val('');
 		$('#MyEditForm').attr('action', myurls['common.add']);
 		$('#MyEditModal').modal();

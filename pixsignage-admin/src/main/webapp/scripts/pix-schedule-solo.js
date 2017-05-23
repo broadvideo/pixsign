@@ -49,7 +49,7 @@ $('#DeviceTable').dataTable({
 		} else if (aData.onlineflag == 1) {
 			$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 		} else if (aData.onlineflag == 0) {
-			$('td:eq(1)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+			$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 		}
 		
 		var schedulehtml = '';
@@ -126,7 +126,7 @@ $('#DevicegroupTable').dataTable({
 					{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '55%' }, 
 					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }, 
 					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }],
-	'iDisplayLength' : 10,
+	'iDisplayLength' : 20,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

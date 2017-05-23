@@ -25,7 +25,9 @@ public interface DeviceService {
 
 	public void updateDeviceSelective(Device device);
 
-	public void deleteDevice(String deviceid);
+	public void unbind(String deviceid);
+
+	public void updateUpgradeflag(String orgid, String branchid, String upgradeflag);
 
 	public void updateOnlineflag();
 

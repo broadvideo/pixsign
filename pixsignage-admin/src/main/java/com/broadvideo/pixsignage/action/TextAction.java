@@ -49,7 +49,7 @@ public class TextAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("TextAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -59,12 +59,11 @@ public class TextAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			text.setOrgid(getLoginStaff().getOrgid());
-			text.setBranchid(getLoginStaff().getBranchid());
 			text.setCreatestaffid(getLoginStaff().getStaffid());
 			textService.addText(text);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("TextAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -76,7 +75,7 @@ public class TextAction extends BaseDatatableAction {
 			textService.updateText(text);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("TextAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -88,7 +87,7 @@ public class TextAction extends BaseDatatableAction {
 			textService.deleteText("" + text.getTextid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("TextAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

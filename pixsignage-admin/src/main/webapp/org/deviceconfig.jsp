@@ -33,6 +33,8 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
+<link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
@@ -52,6 +54,7 @@ response.setDateHeader("Expires",0);
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="org.orgid" value="0" />
 									<div class="form-body">
+										<!-- 
 										<div class="form-group">
 											<label class="col-md-3 control-label"><spring:message code="global.upgradeflag"/></label>
 											<div class="col-md-9 radio-list">
@@ -61,6 +64,24 @@ response.setDateHeader("Expires",0);
 												<label class="radio-inline">
 													<input type="radio" name="org.upgradeflag" value="1"> <spring:message code="global.on"/>
 												</label>
+											</div>
+										</div>
+										 -->
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.volumeflag"/></label>
+											<div class="col-md-9 radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="org.volumeflag" value="0" checked> <spring:message code="global.volumeflag.off"/>
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="org.volumeflag" value="1"> <spring:message code="global.volumeflag.on"/>
+												</label>
+											</div>
+										</div>
+										<div class="form-group volumeflag">
+											<label class="col-md-3 control-label"><spring:message code="global.volume"/></label>
+											<div class="col-md-9">
+												<input class="volumeRange" type="text" name="org.volume" value="50"/>
 											</div>
 										</div>
 										<div class="form-group">
@@ -217,6 +238,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
@@ -224,9 +246,9 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-deviceconfig.js?t=0"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-deviceconfig.js?t=${timestamp}"></script>
 <script>
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');

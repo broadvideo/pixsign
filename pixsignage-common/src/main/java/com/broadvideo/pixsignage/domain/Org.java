@@ -83,7 +83,13 @@ public class Org {
 
 	private String upgradeflag;
 
+	private String volumeflag;
+
+	private Integer volume;
+
 	private String apps;
+
+	private String logo;
 
 	private Date createtime;
 
@@ -395,12 +401,36 @@ public class Org {
 		this.upgradeflag = upgradeflag;
 	}
 
+	public String getVolumeflag() {
+		return volumeflag;
+	}
+
+	public void setVolumeflag(String volumeflag) {
+		this.volumeflag = volumeflag;
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
+	}
+
 	public String getApps() {
 		return apps;
 	}
 
 	public void setApps(String apps) {
 		this.apps = apps;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

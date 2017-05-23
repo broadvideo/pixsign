@@ -59,7 +59,6 @@ public class WidgetAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			widget.setOrgid(getLoginStaff().getOrgid());
-			widget.setBranchid(getLoginStaff().getBranchid());
 			widget.setCreatestaffid(getLoginStaff().getStaffid());
 			widgetService.addWidget(widget);
 			return SUCCESS;

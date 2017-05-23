@@ -53,7 +53,7 @@ function refreshMyTable() {
 			}
 
 			tbodyhtml += '<td>';
-			if (treedata[i].parentid == 0 || treedata[i].parent.parentid == 0) {
+			if (treedata[i].parentid == 0 || treedata[i].parent.parentid == 0 || treedata[i].parent.parent.parentid == 0) {
 				tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (currentTreeData.length-1) + '" class="btn default btn-xs blue pix-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
 			}
 			tbodyhtml += '</td><td>'

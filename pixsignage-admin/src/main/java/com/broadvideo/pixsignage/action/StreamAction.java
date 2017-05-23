@@ -49,7 +49,7 @@ public class StreamAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StreamAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -59,12 +59,11 @@ public class StreamAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			stream.setOrgid(getLoginStaff().getOrgid());
-			stream.setBranchid(getLoginStaff().getBranchid());
 			stream.setCreatestaffid(getLoginStaff().getStaffid());
 			streamService.addStream(stream);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StreamAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -76,7 +75,7 @@ public class StreamAction extends BaseDatatableAction {
 			streamService.updateStream(stream);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StreamAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -88,7 +87,7 @@ public class StreamAction extends BaseDatatableAction {
 			streamService.deleteStream("" + stream.getStreamid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("StreamAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

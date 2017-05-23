@@ -578,7 +578,7 @@ public class JSONObject {
 		try {
 			return object instanceof Number ? ((Number) object).longValue() : Long.parseLong((String) object);
 		} catch (Exception e) {
-			throw new JSONException("JSONObject[" + quote(key) + "] is not a long.");
+			return 0L;
 		}
 	}
 

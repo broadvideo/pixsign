@@ -1,14 +1,18 @@
 package com.broadvideo.pixsignage.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.service.OrgService;
 
@@ -19,6 +23,10 @@ public class OrgAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Org org;
+
+	private File logo;
+	private String logoContentType;
+	private String logoFileName;
 
 	@Autowired
 	private OrgService orgService;
@@ -52,6 +60,16 @@ public class OrgAction extends BaseDatatableAction {
 			org.setCurrentdevices(0);
 			org.setCurrentstorage((long) 0);
 			orgService.addOrg(org);
+			if (logo != null) {
+				logger.info("Begin handle logo, {}", logoFileName);
+				String newFileName = "/org/" + org.getOrgid() + "." + FilenameUtils.getExtension(logoFileName);
+				File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + newFileName);
+				if (fileToCreate.exists()) {
+					fileToCreate.delete();
+				}
+				FileUtils.moveFile(logo, fileToCreate);
+				org.setLogo(newFileName);
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("OrgAction doAdd exception, ", ex);
@@ -63,6 +81,16 @@ public class OrgAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
+			if (logo != null) {
+				logger.info("Begin handle logo, {}", logoFileName);
+				String newFileName = "/org/" + org.getOrgid() + "." + FilenameUtils.getExtension(logoFileName);
+				File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + newFileName);
+				if (fileToCreate.exists()) {
+					fileToCreate.delete();
+				}
+				FileUtils.moveFile(logo, fileToCreate);
+				org.setLogo(newFileName);
+			}
 			orgService.updateOrg(org);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -132,5 +160,29 @@ public class OrgAction extends BaseDatatableAction {
 
 	public void setOrg(Org org) {
 		this.org = org;
+	}
+
+	public File getLogo() {
+		return logo;
+	}
+
+	public void setLogo(File logo) {
+		this.logo = logo;
+	}
+
+	public String getLogoContentType() {
+		return logoContentType;
+	}
+
+	public void setLogoContentType(String logoContentType) {
+		this.logoContentType = logoContentType;
+	}
+
+	public String getLogoFileName() {
+		return logoFileName;
+	}
+
+	public void setLogoFileName(String logoFileName) {
+		this.logoFileName = logoFileName;
 	}
 }

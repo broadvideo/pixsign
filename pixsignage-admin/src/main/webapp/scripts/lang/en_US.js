@@ -54,15 +54,20 @@ var common = {
 		branch: 'Branch',
 		versionname: 'Version Name',
 		versioncode: 'Version Code',
+		mtype: 'Type',
+		appname: 'App Name',
+		latest: 'Latest',
 		expiretime: 'Expiration Date',
 		maxdevices: 'Max Device Amount',
 		currentdevices: 'Current Device Amount',
+		storage: 'Storage',
 		maxstorage: 'Max Storage',
 		currentstorage: 'Storage Used',
+		boardinfo: 'Board Info',
 		createtime: 'Create Time',
 		updatetime: 'Update Time',
 		uploadtime: 'Upload Time',
-		refreshtime: 'Refresh Time',
+		refreshtime: 'Online Time',
 		activetime: 'Active Time',
 		playtime: 'Play TIme',
 		screentime: 'Screen Shot Time',
@@ -155,6 +160,10 @@ var common = {
 		template_type_1: 'Public',
 
 		upgradeflag: 'Auto Upgrade Flag',
+		volumeflag: 'System Volume Flag',
+		volumeflag_off: 'Default',
+		volumeflag_on: 'Setting',
+		volume: 'System Volume',
 		devicepassflag: 'Maintain Password Flag',
 		devicepass: 'Maintain Password',
 		backupvideo: 'Backup Video',
@@ -169,6 +178,11 @@ var common = {
 		description: 'Description',
 		download: 'Download',
 		
+		upgradeflag: 'Upgrade Policy',
+		upgradeflag_0: 'Upgrade Disabled',
+		upgradeflag_1: 'Upgrade Auto',
+		upgradeflag_2: 'Upgrade To',
+
 		current_hour: 'Current Hour',
 		previous_hour: 'Previous Hour',
 		today: 'Today',
@@ -257,5 +271,7 @@ var common = {
 		org_full: 'Org devices or storage reaches the limit',
 
 		maxorgs: 'Org count reaches the limit',
+
+		session_timeout: 'Session timeout, please login again',
 	},
 };

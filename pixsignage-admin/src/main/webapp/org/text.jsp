@@ -51,6 +51,7 @@ response.setDateHeader("Expires",0);
 							<div class="modal-body">
 								<form id="MyEditForm" class="form-horizontal" method="POST">
 									<input type="hidden" name="text.textid" value="0" />
+									<input type="hidden" name="text.branchid" value="0" />
 									<input type="hidden" name="text.status" value="1" />
 									<div class="form-body">
 										<div class="form-group">
@@ -173,10 +174,10 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-text.js?t=5"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-text.js?t=${timestamp}"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

@@ -104,7 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void syncSchedule(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Schedule.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals("1")) {
+			if (device.getOnlineflag().equals(Device.Online)) {
 				generateSyncEvent(Integer.parseInt(bindid));
 			}
 			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
@@ -115,7 +115,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		} else if (bindtype.equals(Schedule.BindType_Devicegroup)) {
 			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
 			for (Device device : devices) {
-				if (device.getOnlineflag().equals("1")) {
+				if (device.getOnlineflag().equals(Device.Online)) {
 					generateSyncEvent(device.getDeviceid());
 				}
 			}
@@ -123,7 +123,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			for (Devicegrid devicegrid : devicegrids) {
 				devices = devicegrid.getDevices();
 				for (Device device : devices) {
-					if (device.getOnlineflag().equals("1")) {
+					if (device.getOnlineflag().equals(Device.Online)) {
 						generateSyncEvent(device.getDeviceid());
 					}
 				}
@@ -136,7 +136,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		} else if (bindtype.equals(Schedule.BindType_Devicegrid)) {
 			List<Device> devices = deviceMapper.selectByDevicegrid(bindid);
 			for (Device device : devices) {
-				if (device.getOnlineflag().equals("1")) {
+				if (device.getOnlineflag().equals(Device.Online)) {
 					generateSyncEvent(device.getDeviceid());
 				}
 			}

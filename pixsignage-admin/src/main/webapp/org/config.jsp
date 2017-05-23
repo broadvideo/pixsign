@@ -183,9 +183,9 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js"></script>
-<script src="${base_ctx}/scripts/pix-config.js?t=3"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-config.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
 

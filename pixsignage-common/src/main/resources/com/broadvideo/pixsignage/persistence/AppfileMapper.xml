@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AppfileMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Appfile" >
+    <id column="appfileid" property="appfileid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="vname" property="vname" jdbcType="VARCHAR" />
+    <result column="vcode" property="vcode" jdbcType="INTEGER" />
+    <result column="mtype" property="mtype" jdbcType="VARCHAR" />
+    <result column="latestflag" property="latestflag" jdbcType="CHAR" />
+    <result column="filepath" property="filepath" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    appfileid, name, vname, vcode, mtype, latestflag, filepath, filename, size, md5, 
+    description, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from appfile
+    where appfileid = #{appfileid}
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from appfile
+    where 1=1
+    <if test="name != null" >
+      and name = #{name}
+    </if>
+    <if test="mtype != null" >
+      and mtype = #{mtype}
+    </if>
+    order by latestflag desc, appfileid desc 
+  </select>
+
+  <select id="select" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from appfile
+    where name = #{name}
+    and mtype = #{mtype}
+    and vcode = #{vcode}
+  </select>
+
+  <select id="selectLatest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from appfile
+    where name = #{name}
+    and mtype = #{mtype}
+    and latestflag = 1
+  </select>
+
+  <delete id="update2outdate" >
+    update appfile
+    set latestflag=0
+    where name = #{name}
+    and mtype = #{mtype}
+  </delete>
+  
+  <delete id="update2latest" >
+    update appfile
+    set latestflag=1
+    where name = #{name}
+    and mtype = #{mtype}
+    order by vcode desc
+    limit 1
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from appfile
+    where appfileid = #{appfileid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Appfile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="appfileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into appfile (name, vname, vcode, 
+      mtype, latestflag, filepath, 
+      filename, size, md5, 
+      description, createtime)
+    values (#{name,jdbcType=VARCHAR}, #{vname,jdbcType=VARCHAR}, #{vcode,jdbcType=INTEGER}, 
+      #{mtype,jdbcType=VARCHAR}, #{latestflag,jdbcType=CHAR}, #{filepath,jdbcType=VARCHAR}, 
+      #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Appfile" >
+    <selectKey resultType="java.lang.Integer" keyProperty="appfileid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into appfile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="vname != null" >
+        vname,
+      </if>
+      <if test="vcode != null" >
+        vcode,
+      </if>
+      <if test="mtype != null" >
+        mtype,
+      </if>
+      <if test="latestflag != null" >
+        latestflag,
+      </if>
+      <if test="filepath != null" >
+        filepath,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="vname != null" >
+        #{vname,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        #{vcode,jdbcType=INTEGER},
+      </if>
+      <if test="mtype != null" >
+        #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="latestflag != null" >
+        #{latestflag,jdbcType=CHAR},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Appfile" >
+    update appfile
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="vname != null" >
+        vname = #{vname,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        vcode = #{vcode,jdbcType=INTEGER},
+      </if>
+      <if test="mtype != null" >
+        mtype = #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="latestflag != null" >
+        latestflag = #{latestflag,jdbcType=CHAR},
+      </if>
+      <if test="filepath != null" >
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where appfileid = #{appfileid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Appfile" >
+    update appfile
+    set name = #{name,jdbcType=VARCHAR},
+      vname = #{vname,jdbcType=VARCHAR},
+      vcode = #{vcode,jdbcType=INTEGER},
+      mtype = #{mtype,jdbcType=VARCHAR},
+      latestflag = #{latestflag,jdbcType=CHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
+      size = #{size,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where appfileid = #{appfileid,jdbcType=INTEGER}
+  </update>
+</mapper>

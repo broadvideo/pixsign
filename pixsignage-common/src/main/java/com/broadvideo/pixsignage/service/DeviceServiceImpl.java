@@ -75,8 +75,13 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Transactional
-	public void deleteDevice(String deviceid) {
-		deviceMapper.deleteByPrimaryKey(deviceid);
+	public void unbind(String deviceid) {
+		deviceMapper.unbind(deviceid);
+	}
+
+	@Transactional
+	public void updateUpgradeflag(String orgid, String branchid, String upgradeflag) {
+		deviceMapper.updateUpgradeflag(orgid, branchid, upgradeflag);
 	}
 
 	@Transactional
@@ -121,6 +126,12 @@ public class DeviceServiceImpl implements DeviceService {
 			msgBodyJson.put("backup_media", backupvideoJson);
 		}
 
+		if (org.getVolumeflag().equals("0")) {
+			msgBodyJson.put("volume", -1);
+		} else {
+			msgBodyJson.put("volume", org.getVolume());
+		}
+
 		msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 		if (org.getPowerflag().equals("1")) {
 			msgBodyJson.put("power_on_time",
@@ -139,7 +150,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void config(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		if (device.getOnlineflag().equals("1")) {
+		if (device.getOnlineflag().equals(Device.Online)) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
 			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
@@ -178,6 +189,12 @@ public class DeviceServiceImpl implements DeviceService {
 			msgBodyJson.put("backup_media", backupvideoJson);
 		}
 
+		if (org.getVolumeflag().equals("0")) {
+			msgBodyJson.put("volume", -1);
+		} else {
+			msgBodyJson.put("volume", org.getVolume());
+		}
+
 		msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 		if (org.getPowerflag().equals("1")) {
 			msgBodyJson.put("power_on_time",
@@ -196,7 +213,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void reboot(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		if (device.getOnlineflag().equals("1")) {
+		if (device.getOnlineflag().equals(Device.Online)) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Reboot);
 			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
@@ -220,7 +237,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void poweroff(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		if (device.getOnlineflag().equals("1")) {
+		if (device.getOnlineflag().equals(Device.Online)) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Poweroff);
 			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
@@ -243,7 +260,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void screen(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		if (device.getOnlineflag().equals("1")) {
+		if (device.getOnlineflag().equals(Device.Online)) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Screen);
 			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
@@ -270,7 +287,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void debug(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		if (device.getOnlineflag().equals("1")) {
+		if (device.getOnlineflag().equals(Device.Online)) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Debug);
 			msgevent.setObjtype1(Msgevent.ObjType_1_Device);

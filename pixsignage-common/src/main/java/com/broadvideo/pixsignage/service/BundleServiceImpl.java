@@ -132,9 +132,9 @@ public class BundleServiceImpl implements BundleService {
 				bundle.setWidth(1440);
 				bundle.setHeight(1920);
 			} else if (bundle.getRatio().equals("5")) {
-				// 32:9
+				// 16:3
 				bundle.setWidth(1920);
-				bundle.setHeight(540);
+				bundle.setHeight(360);
 			}
 			bundleMapper.insertSelective(bundle);
 
@@ -156,12 +156,8 @@ public class BundleServiceImpl implements BundleService {
 			bundledtl.setHeight((int) (bundle.getHeight() / 2));
 			bundledtl.setTopoffset((int) (bundle.getHeight() / 4));
 			bundledtl.setLeftoffset((int) (bundle.getWidth() / 4));
-			bundledtl.setBgcolor("#000000");
-			if (bundledtl.getBgimageid() != null && bundledtl.getBgimageid() > 0) {
-				bundledtl.setOpacity(0);
-			} else {
-				bundledtl.setOpacity(255);
-			}
+			bundledtl.setBgcolor("#FFFFFF");
+			bundledtl.setOpacity(0);
 			bundledtl.setZindex(0);
 			bundledtl.setSleeptime(0);
 			bundledtl.setIntervaltime(10);
@@ -369,9 +365,9 @@ public class BundleServiceImpl implements BundleService {
 				bundle.setWidth(1440);
 				bundle.setHeight(1920);
 			} else if (bundle.getRatio().equals("5")) {
-				// 32:9
+				// 16:3
 				bundle.setWidth(1920);
-				bundle.setHeight(540);
+				bundle.setHeight(360);
 			}
 			bundleMapper.insertSelective(bundle);
 

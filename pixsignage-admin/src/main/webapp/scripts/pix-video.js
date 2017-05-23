@@ -75,10 +75,8 @@ function initMyTable() {
 				var videourl = '/pixsigdata/video/preview/' + aData.videoid + '.mp4';
 				videohtml += '<a class="btn default btn-sm green fancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '"><i class="fa fa-search"></i></a>';
 			}
-			if (CurBranchid == MyBranchid) {
-				videohtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
-				videohtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
-			}
+			videohtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
+			videohtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
 			videohtml += '</div>';
 			videohtml += '</div>';
 			videohtml += '</div>';
@@ -151,7 +149,7 @@ function initMyTable() {
 			
 			videohtml += '</div>';
 			
-			videohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
+			videohtml += '<h6 class="pixtitle"><a href="/pixsigdata' + aData.filepath + '">' + aData.name + '</a><br>';
 			var filesize = parseInt(aData['size'] / 1024);
 			videohtml += '(' + aData.videoid + ') ' + transferIntToComma(filesize) + ' KB</h6>';
 			videohtml += '</div>';

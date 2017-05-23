@@ -30,7 +30,10 @@ public interface DeviceMapper {
 
 	List<Device> selectByOrgtype(@Param(value = "orgtype") String orgtype);
 
-	int deleteByPrimaryKey(@Param(value = "deviceid") String deviceid);
+	int unbind(@Param(value = "deviceid") String deviceid);
+
+	int updateUpgradeflag(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "upgradeflag") String upgradeflag);
 
 	// int insert(Device record);
 
@@ -52,4 +55,6 @@ public interface DeviceMapper {
 	int checkDevicegroup();
 
 	int updateOnlineflag();
+
+	int checkAppfile(@Param(value = "appfileid") String appfileid);
 }

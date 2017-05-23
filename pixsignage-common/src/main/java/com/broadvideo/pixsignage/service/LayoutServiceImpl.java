@@ -67,9 +67,9 @@ public class LayoutServiceImpl implements LayoutService {
 			layout.setWidth(600);
 			layout.setHeight(800);
 		} else if (layout.getRatio().equals("5")) {
-			// 32:9
+			// 16:3
 			layout.setWidth(1920);
-			layout.setHeight(540);
+			layout.setHeight(360);
 		}
 		layoutMapper.insertSelective(layout);
 

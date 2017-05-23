@@ -142,6 +142,10 @@ function hasPrivilege(privilegeid) {
 				%>
 				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
 				<%
+					} else if (session_org != null && session_org.getLogo().length() > 0) {
+				%>
+				<img src="/pixsigdata<%=session_org.getLogo()%>" height="40" alt="logo" />
+				<%
 					} else {
 				%>
 				<img src="${base_ctx}/img/logo-default.png?t=1" height="40" alt="logo" />

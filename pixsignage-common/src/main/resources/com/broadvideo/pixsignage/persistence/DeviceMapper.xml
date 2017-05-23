@@ -39,7 +39,18 @@
     <result column="devicegridid" property="devicegridid" jdbcType="INTEGER" />
     <result column="xpos" property="xpos" jdbcType="INTEGER" />
     <result column="ypos" property="ypos" jdbcType="INTEGER" />
+    <result column="powerflag" property="powerflag" jdbcType="CHAR" />
+    <result column="poweron" property="poweron" jdbcType="TIME" />
+    <result column="poweroff" property="poweroff" jdbcType="TIME" />
+    <result column="volumeflag" property="volumeflag" jdbcType="CHAR" />
+    <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="boardinfo" property="boardinfo" jdbcType="VARCHAR" />
+    <result column="storageused" property="storageused" jdbcType="BIGINT" />
+    <result column="storageavail" property="storageavail" jdbcType="BIGINT" />
+    <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
+    <result column="appfileid" property="appfileid" jdbcType="INTEGER" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
+    <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
   </resultMap>
@@ -47,9 +58,9 @@
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
     filestatus, status, description, onlineflag, appname, sign, vname, vcode, mtype, type, ostype, 
-    devicegroupid, lontitude, latitude, 
-    city, addr1, addr2, externalid, externalname, other, createtime, activetime, refreshtime,
-    devicegridid, xpos, ypos
+    devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
+    createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
+    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -107,8 +118,8 @@
     <if test="order != null and order == 'deviceid'">
       order by deviceid
     </if>
-    <if test="order != null and order == 'onlineflag'">
-      order by onlineflag, status desc, deviceid
+    <if test="order != null and order == 'refreshtime'">
+      order by refreshtime desc
     </if>
     <if test="start != null and length != null">
       limit ${start}, ${length}
@@ -147,12 +158,36 @@
     order by deviceid
   </select>
 
-  <delete id="deleteByPrimaryKey" >
+  <delete id="unbind" >
     update device 
     set status = '0',
-    hardkey = null
+    hardkey = null,
+    ip = '',
+    iip = '',
+    mac = '',
+    appname = '',
+    sign = '',
+    vname = '',
+    vcode = 0,
+    mtype = '',
+    lontitude = '',
+    latitude = '',
+    city = '',
+    addr1 = '',
+    addr2 = '',
+    boardinfo = '',
+    upgradeflag = '0',
+    appfileid = 0
     where deviceid = #{deviceid}
   </delete>
+
+  <update id="updateUpgradeflag" >
+    update device
+    set upgradeflag = #{upgradeflag},
+    appfileid = 0
+    where orgid = #{orgid}
+    and branchid = #{branchid}
+  </update>
 
   <update id="updateDevicegroup" >
     update device
@@ -181,9 +216,17 @@
 
   <update id="updateOnlineflag" >
     update device
-    set onlineflag = 9 
+    set onlineflag = 0 
     where refreshtime is null 
     or (unix_timestamp()-unix_timestamp(refreshtime) > 60)
+  </update>
+
+  <update id="checkAppfile" >
+    update device
+    set appfileid = 0, 
+    upgradeflag = '0'
+    where upgradeflag = '2' 
+    and appfileid = #{appfileid}
   </update>
 
   <insert id="insertList">
@@ -214,7 +257,11 @@
       addr1, addr2, externalid, 
       externalname, other, 
       createtime, activetime, refreshtime,
-      devicegridid, xpos, ypos)
+      devicegridid, xpos, ypos,
+      powerflag, poweron, 
+      poweroff, volumeflag, volume, 
+      boardinfo, storageused, storageavail, 
+      upgradeflag, appfileid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -226,7 +273,11 @@
       #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{externalid,jdbcType=VARCHAR}, 
       #{externalname,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, #{refreshtime,jdbcType=TIMESTAMP},
-      #{devicegridid,jdbcType=INTEGER}, #{xpos,jdbcType=INTEGER}, #{ypos,jdbcType=INTEGER})
+      #{devicegridid,jdbcType=INTEGER}, #{xpos,jdbcType=INTEGER}, #{ypos,jdbcType=INTEGER},
+      #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, 
+      #{poweroff,jdbcType=TIME}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
+      #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
+      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -342,6 +393,36 @@
       <if test="ypos != null" >
         ypos,
       </if>
+      <if test="powerflag != null" >
+        powerflag,
+      </if>
+      <if test="poweron != null" >
+        poweron,
+      </if>
+      <if test="poweroff != null" >
+        poweroff,
+      </if>
+      <if test="volumeflag != null" >
+        volumeflag,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="boardinfo != null" >
+        boardinfo,
+      </if>
+      <if test="storageused != null" >
+        storageused,
+      </if>
+      <if test="storageavail != null" >
+        storageavail,
+      </if>
+      <if test="upgradeflag != null" >
+        upgradeflag,
+      </if>
+      <if test="appfileid != null" >
+        appfileid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -451,6 +532,36 @@
       </if>
       <if test="ypos != null" >
         #{ypos,jdbcType=INTEGER},
+      </if>
+      <if test="powerflag != null" >
+        #{powerflag,jdbcType=CHAR},
+      </if>
+      <if test="poweron != null" >
+        #{poweron,jdbcType=TIME},
+      </if>
+      <if test="poweroff != null" >
+        #{poweroff,jdbcType=TIME},
+      </if>
+      <if test="volumeflag != null" >
+        #{volumeflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="boardinfo != null" >
+        #{boardinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="storageused != null" >
+        #{storageused,jdbcType=BIGINT},
+      </if>
+      <if test="storageavail != null" >
+        #{storageavail,jdbcType=BIGINT},
+      </if>
+      <if test="upgradeflag != null" >
+        #{upgradeflag,jdbcType=CHAR},
+      </if>
+      <if test="appfileid != null" >
+        #{appfileid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -565,6 +676,36 @@
       <if test="ypos != null" >
         ypos = #{ypos,jdbcType=INTEGER},
       </if>
+      <if test="powerflag != null" >
+        powerflag = #{powerflag,jdbcType=CHAR},
+      </if>
+      <if test="poweron != null" >
+        poweron = #{poweron,jdbcType=TIME},
+      </if>
+      <if test="poweroff != null" >
+        poweroff = #{poweroff,jdbcType=TIME},
+      </if>
+      <if test="volumeflag != null" >
+        volumeflag = #{volumeflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="boardinfo != null" >
+        boardinfo = #{boardinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="storageused != null" >
+        storageused = #{storageused,jdbcType=BIGINT},
+      </if>
+      <if test="storageavail != null" >
+        storageavail = #{storageavail,jdbcType=BIGINT},
+      </if>
+      <if test="upgradeflag != null" >
+        upgradeflag = #{upgradeflag,jdbcType=CHAR},
+      </if>
+      <if test="appfileid != null" >
+        appfileid = #{appfileid,jdbcType=INTEGER},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -605,7 +746,17 @@
       refreshtime = #{refreshtime,jdbcType=TIMESTAMP},
       devicegridid = #{devicegridid,jdbcType=INTEGER},
       xpos = #{xpos,jdbcType=INTEGER},
-      ypos = #{ypos,jdbcType=INTEGER}
+      ypos = #{ypos,jdbcType=INTEGER},
+      powerflag = #{powerflag,jdbcType=CHAR},
+      poweron = #{poweron,jdbcType=TIME},
+      poweroff = #{poweroff,jdbcType=TIME},
+      volumeflag = #{volumeflag,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      boardinfo = #{boardinfo,jdbcType=VARCHAR},
+      storageused = #{storageused,jdbcType=BIGINT},
+      storageavail = #{storageavail,jdbcType=BIGINT},
+      upgradeflag = #{upgradeflag,jdbcType=CHAR},
+      appfileid = #{appfileid,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
 </mapper>

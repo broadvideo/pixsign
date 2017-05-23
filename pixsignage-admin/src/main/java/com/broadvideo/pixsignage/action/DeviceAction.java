@@ -138,10 +138,25 @@ public class DeviceAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			deviceService.deleteDevice("" + device.getDeviceid());
+			deviceService.unbind("" + device.getDeviceid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUpdateUpgradeflag() {
+		try {
+			String orgid = "" + getLoginStaff().getOrgid();
+			String branchid = getParameter("branchid");
+			String upgradeflag = getParameter("upgradeflag");
+			deviceService.updateUpgradeflag(orgid, branchid, upgradeflag);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdateUpgradeflag exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -226,9 +241,25 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
 
-			String pixedxip = configMapper.selectValueByCode("PixedxIP");
-			String pixedxport = configMapper.selectValueByCode("PixedxPort");
-			if (pixedxip.equals("www.jzjyy.cn")) {
+			String calendarflag = getLoginStaff().getOrg().getCalendarflag();
+			if (calendarflag.equals("1")) {
+				// PIX
+				String pixedxip = configMapper.selectValueByCode("ServerIP");
+				String pixedxport = configMapper.selectValueByCode("ServerPort");
+				String server = "http://" + pixedxip + ":" + pixedxport;
+				String s = PixedxUtil.classrooms(server, getLoginStaff().getOrg().getCode());
+				if (s.length() > 0) {
+					JSONObject json = new JSONObject(s);
+					JSONArray roomJsonArray = json.getJSONArray("data");
+					for (int i = 0; i < roomJsonArray.length(); i++) {
+						HashMap<String, String> room = new HashMap<String, String>();
+						room.put("id", "" + roomJsonArray.getJSONObject(i).getInt("id"));
+						room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
+						aaData.add(room);
+					}
+				}
+			} else if (calendarflag.equals("2")) {
+				// JYY
 				String s = EduCloudUtil.getClassList(getLoginStaff().getOrg().getCode());
 				if (s.length() > 0) {
 					JSONObject json = new JSONObject(s);
@@ -240,19 +271,6 @@ public class DeviceAction extends BaseDatatableAction {
 							room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
 							aaData.add(room);
 						}
-					}
-				}
-			} else {
-				String server = "http://" + pixedxip + ":" + pixedxport;
-				String s = PixedxUtil.classrooms(server);
-				if (s.length() > 0) {
-					JSONObject json = new JSONObject(s);
-					JSONArray roomJsonArray = json.getJSONArray("data");
-					for (int i = 0; i < roomJsonArray.length(); i++) {
-						HashMap<String, String> room = new HashMap<String, String>();
-						room.put("id", "" + roomJsonArray.getJSONObject(i).getInt("id"));
-						room.put("name", roomJsonArray.getJSONObject(i).getString("name"));
-						aaData.add(room);
 					}
 				}
 			}

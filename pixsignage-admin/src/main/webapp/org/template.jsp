@@ -202,9 +202,9 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js?t=1" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-template.js?t=1"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-template.js?t=${timestamp}"></script>
 
 <script>
 jQuery(document).ready(function() {    

@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 public class PixedxUtil {
 	private static Logger logger = LoggerFactory.getLogger(PixedxUtil.class);
 
-	public static String classrooms(String server) {
+	public static String classrooms(String server, String orgcode) {
 		try {
-			String url = server + "/pixedxapi/lms/classrooms";
+			String url = server + "/pixschedule-api/classrooms?org_code=" + orgcode;
 			logger.info("get classrooms from pixedx: {}", url);
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
 					.setConnectionRequestTimeout(30000).build();
@@ -39,10 +39,9 @@ public class PixedxUtil {
 		}
 	}
 
-	public static String schedules(String server, String classroom, String starttime, String endtime) {
+	public static String schedules(String server, String classroom) {
 		try {
-			String url = server + "/pixedxapi/lms/classrooms/" + classroom + "/schedules?start_time=" + starttime
-					+ "&end_time=" + endtime;
+			String url = server + "/pixschedule-api/classrooms/" + classroom + "/schedules";
 			logger.info("get schedules from pixedx: {}", url);
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
 					.setConnectionRequestTimeout(30000).build();

@@ -44,7 +44,12 @@ public class SecurityFilter implements Filter {
 
 		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
 				|| session.getAttribute(CommonConstants.SESSION_SUBSYSTEM) == null) {
-			response.sendRedirect(request.getContextPath() + redirectURL);
+			if (request.getHeader("x-requested-with") != null
+					&& request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
+				response.setHeader("sessionstatus", "timeout");
+			} else {
+				response.sendRedirect(request.getContextPath() + redirectURL);
+			}
 			return;
 		}
 
@@ -65,6 +70,7 @@ public class SecurityFilter implements Filter {
 		}
 
 		chain.doFilter(request, response);
+
 	}
 
 	public void destroy() {

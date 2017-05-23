@@ -1,5 +1,8 @@
 package com.broadvideo.pixsignage.common;
 
+import java.util.Calendar;
+import java.util.Hashtable;
+
 public class CommonConfig {
 	public static String CONFIG_ACTIVEMQ_SERVER = "pixsignage-mq";
 	public static String CONFIG_PIXBOX_SERVER = "pixbox";
@@ -16,6 +19,10 @@ public class CommonConfig {
 
 	public static String CURRENT_APPVERSION;
 	public static String CURRENT_DBVERSION;
+
+	public static long Timestamp = Calendar.getInstance().getTimeInMillis();
+
+	public static Hashtable<String, String> CONFIG_SIGNATURE;
 
 	// public static boolean LICENSE = false;
 	// public static boolean LICENSE_HOSTID_VERIFY = false;

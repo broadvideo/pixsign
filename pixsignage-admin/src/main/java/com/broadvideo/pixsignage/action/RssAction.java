@@ -58,7 +58,6 @@ public class RssAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			rss.setOrgid(getLoginStaff().getOrgid());
-			rss.setBranchid(getLoginStaff().getBranchid());
 			rss.setCreatestaffid(getLoginStaff().getStaffid());
 			rssService.addRss(rss);
 			return SUCCESS;

@@ -181,6 +181,7 @@ update bundledtl set homebundleid=bundleid;
 
 update bundle b, bundledtl bd, layoutdtl ld set bd.layoutdtlid=ld.layoutdtlid where b.bundleid=bd.bundleid and b.layoutid=ld.layoutid and bd.regionid=ld.regionid;
 
+drop table region;
 alter table layoutdtl drop regionid;
 alter table bundledtl drop regionid;
 

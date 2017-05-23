@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Device {
+	public final static String Online = "1";
+	public final static String Offline = "0";
+
 	private Integer deviceid;
 
 	private Integer orgid;
@@ -80,7 +83,29 @@ public class Device {
 
 	private Integer ypos;
 
+	private String powerflag;
+
+	private Date poweron;
+
+	private Date poweroff;
+
+	private String volumeflag;
+
+	private Integer volume;
+
+	private String boardinfo;
+
+	private Long storageused;
+
+	private Long storageavail;
+
+	private String upgradeflag;
+
+	private Integer appfileid;
+
 	private Devicegroup devicegroup;
+
+	private Appfile appfile;
 
 	private List<Schedule> schedules;
 
@@ -386,12 +411,100 @@ public class Device {
 		this.ypos = ypos;
 	}
 
+	public String getPowerflag() {
+		return powerflag;
+	}
+
+	public void setPowerflag(String powerflag) {
+		this.powerflag = powerflag == null ? null : powerflag.trim();
+	}
+
+	public Date getPoweron() {
+		return poweron;
+	}
+
+	public void setPoweron(Date poweron) {
+		this.poweron = poweron;
+	}
+
+	public Date getPoweroff() {
+		return poweroff;
+	}
+
+	public void setPoweroff(Date poweroff) {
+		this.poweroff = poweroff;
+	}
+
+	public String getVolumeflag() {
+		return volumeflag;
+	}
+
+	public void setVolumeflag(String volumeflag) {
+		this.volumeflag = volumeflag == null ? null : volumeflag.trim();
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
+	}
+
+	public String getBoardinfo() {
+		return boardinfo;
+	}
+
+	public void setBoardinfo(String boardinfo) {
+		this.boardinfo = boardinfo == null ? null : boardinfo.trim();
+	}
+
+	public Long getStorageused() {
+		return storageused;
+	}
+
+	public void setStorageused(Long storageused) {
+		this.storageused = storageused;
+	}
+
+	public Long getStorageavail() {
+		return storageavail;
+	}
+
+	public void setStorageavail(Long storageavail) {
+		this.storageavail = storageavail;
+	}
+
+	public String getUpgradeflag() {
+		return upgradeflag;
+	}
+
+	public void setUpgradeflag(String upgradeflag) {
+		this.upgradeflag = upgradeflag == null ? null : upgradeflag.trim();
+	}
+
+	public Integer getAppfileid() {
+		return appfileid;
+	}
+
+	public void setAppfileid(Integer appfileid) {
+		this.appfileid = appfileid;
+	}
+
 	public Devicegroup getDevicegroup() {
 		return devicegroup;
 	}
 
 	public void setDevicegroup(Devicegroup devicegroup) {
 		this.devicegroup = devicegroup;
+	}
+
+	public Appfile getAppfile() {
+		return appfile;
+	}
+
+	public void setAppfile(Appfile appfile) {
+		this.appfile = appfile;
 	}
 
 	public List<Schedule> getSchedules() {

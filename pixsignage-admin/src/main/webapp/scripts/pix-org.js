@@ -47,11 +47,10 @@ function initMyTable() {
 			return nRow;
 		}
 	});
-
-	jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
-	jQuery('#MyTable_wrapper .dataTables_length select').select2();
-	
+	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
+	$('#MyTable_wrapper .dataTables_length select').select2();
+	$('#MyTable').css('width', '100%');
 	
 	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
@@ -277,11 +276,26 @@ function initMyEditModal() {
 					return {"name": this.name, "value": this.value};
 				}).get()
 		);
+
+		var formData = new FormData();
+		var inputs = $(':input', '#MyEditForm');
+		$.each(data, function (i, val) {
+			formData.append(val.name, val.value);
+		});
+		$.each($('#MyEditForm').find("input[type='file']"), function(i, tag) {
+			$.each($(tag)[0].files, function(i, file) {
+				formData.append(tag.name, file);
+			});
+		});
+		console.log(formData);
 		
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
-			data : data,
+			data : formData,
+			contentType: false,
+			cache: false,
+			processData: false,
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					$('#MyEditModal').modal('hide');

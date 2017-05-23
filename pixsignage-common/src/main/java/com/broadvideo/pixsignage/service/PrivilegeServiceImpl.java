@@ -80,6 +80,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
+			} else if (!org.getCode().equals("default") && p.getPrivilegeid().intValue() == 30205) {
+				logger.info("remove privilege {}", p.getPrivilegeid());
+				it.remove();
 			} else if (!org.getCode().equals("default") && p.getPrivilegeid().intValue() == 30909) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();

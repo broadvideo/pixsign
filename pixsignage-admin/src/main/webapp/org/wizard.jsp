@@ -932,12 +932,12 @@ response.setDateHeader("Expires",0);
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lang/${locale}.js" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=1"></script>
-<script src="${base_ctx}/scripts/pix-wizard.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-preview.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design1.js?t=10"></script>
-<script src="${base_ctx}/scripts/pix-bundle-design2.js?t=10"></script>
+<script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-wizard.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design1.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-bundle-design2.js?t=${timestamp}"></script>
 <script>
 var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';

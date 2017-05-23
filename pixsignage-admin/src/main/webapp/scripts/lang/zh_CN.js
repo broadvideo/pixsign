@@ -54,15 +54,20 @@ var common = {
 		branch: '分支机构',
 		versionname: '版本名称',
 		versioncode: '版本号',
+		mtype: '型号',
+		appname: '软件名',
+		latest: '最新',
 		expiretime: '过期时间',
 		maxdevices: '终端上限',
 		currentdevices: '注册终端',
+		storage: '存储',
 		maxstorage: '存储上限',
 		currentstorage: '已用存储',
+		boardinfo: '硬件信息',
 		createtime: '创建时间',
 		updatetime: '更新时间',
 		uploadtime: '上载时间',
-		refreshtime: '最新访问',
+		refreshtime: '最新在线',
 		activetime: '激活时间',
 		playtime: '播放时间',
 		screentime: '截屏时间',
@@ -155,6 +160,10 @@ var common = {
 		template_type_1: '公共模板',
 
 		upgradeflag: '自动升级开关',
+		volumeflag: '系统音量开关',
+		volumeflag_off: '默认音量',
+		volumeflag_on: '设置音量',
+		volume: '系统音量',
 		devicepassflag: '终端密码开关',
 		devicepass: '终端密码',
 		backupvideo: '默认垫片',
@@ -169,6 +178,11 @@ var common = {
 		description: '描述',
 		download: '下载',
 		
+		upgradeflag: '升级策略',
+		upgradeflag_0: '不升级',
+		upgradeflag_1: '自动升级',
+		upgradeflag_2: '指定版本',
+
 		current_hour: '当前小时',
 		previous_hour: '上一小时',
 		today: '今日',
@@ -257,5 +271,7 @@ var common = {
 		org_full: '企业终端或存储已达上限，无法创建',
 
 		maxorgs: '企业数量已达上限',
+		
+		session_timeout: '登录已失效，请重新登录',
 	},
 };

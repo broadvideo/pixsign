@@ -34,7 +34,7 @@ function initMyTable() {
 			if (aData.onlineflag == 1) {
 				$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (aData.onlineflag == 0) {
-				$('td:eq(1)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+				$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			} else if (aData.onlineflag == 9) {
 				$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}

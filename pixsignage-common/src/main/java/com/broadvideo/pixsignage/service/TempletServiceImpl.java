@@ -97,9 +97,9 @@ public class TempletServiceImpl implements TempletService {
 			templet.setWidth(1440);
 			templet.setHeight(1920);
 		} else if (templet.getRatio().equals("5")) {
-			// 32:9
+			// 16:3
 			templet.setWidth(1920);
-			templet.setHeight(540);
+			templet.setHeight(360);
 		}
 		templetMapper.insertSelective(templet);
 
@@ -175,9 +175,9 @@ public class TempletServiceImpl implements TempletService {
 				templet.setWidth(1440);
 				templet.setHeight(1920);
 			} else if (templet.getRatio().equals("5")) {
-				// 32:9
+				// 16:3
 				templet.setWidth(1920);
-				templet.setHeight(540);
+				templet.setHeight(360);
 			}
 			templetMapper.insertSelective(templet);
 

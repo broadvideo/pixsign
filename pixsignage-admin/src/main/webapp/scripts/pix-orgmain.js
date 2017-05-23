@@ -75,14 +75,14 @@ function initDeviceTable() {
 			} else if (aData.onlineflag == 1) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 			} else if (aData.onlineflag == 0) {
-				$('td:eq(2)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			} else if (aData.onlineflag == 9) {
 				$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 			}
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'order','value':'onlineflag' });
+			aoData.push({'name':'order','value':'refreshtime' });
 		}
 	});
 	
