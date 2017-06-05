@@ -54,6 +54,7 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.DevicefileService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
@@ -91,6 +92,8 @@ public class PixsignageService21 {
 
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -251,10 +254,16 @@ public class PixsignageService21 {
 				}
 			}
 
-			if (org.getVolumeflag().equals("0")) {
+			if (device.getVolumeflag().equals("0")) {
 				responseJson.put("volume", -1);
+			} else if (device.getVolumeflag().equals("1")) {
+				responseJson.put("volume", device.getVolume());
 			} else {
-				responseJson.put("volume", org.getVolume());
+				if (org.getVolumeflag().equals("0")) {
+					responseJson.put("volume", -1);
+				} else {
+					responseJson.put("volume", org.getVolume());
+				}
 			}
 
 			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
@@ -268,6 +277,7 @@ public class PixsignageService21 {
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
 
+			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
 			responseJson.put("ypos", device.getYpos());
@@ -345,16 +355,43 @@ public class PixsignageService21 {
 
 			JSONObject responseJson;
 			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
-			if (device.getDevicegroupid() > 0) {
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
 			responseJson.put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_schedule exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_plan")
+	public String getplan(String request) {
+		try {
+			logger.info("Pixsignage Service get_plan: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson;
+			responseJson = planService.generatePlanJson("" + device.getDeviceid());
+			responseJson.put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service get_plan response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_plan exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -483,6 +520,7 @@ public class PixsignageService21 {
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {
 				responseJson.put("version_name", "");
@@ -537,6 +575,9 @@ public class PixsignageService21 {
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
+					eventJson.put("event_type", "plan");
+					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
 					eventJson.put("event_type", "bundle");
 					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
@@ -555,6 +596,17 @@ public class PixsignageService21 {
 						backupvideoJson.put("file", org.getBackupvideo().getFilename());
 						backupvideoJson.put("size", org.getBackupvideo().getSize());
 						contentJson.put("backup_media", backupvideoJson);
+					}
+					if (device.getVolumeflag().equals("0")) {
+						contentJson.put("volume", -1);
+					} else if (device.getVolumeflag().equals("1")) {
+						contentJson.put("volume", device.getVolume());
+					} else {
+						if (org.getVolumeflag().equals("0")) {
+							contentJson.put("volume", -1);
+						} else {
+							contentJson.put("volume", org.getVolume());
+						}
 					}
 					contentJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 					if (org.getPowerflag().equals("1")) {
@@ -884,7 +936,8 @@ public class PixsignageService21 {
 							Calendar c = Calendar.getInstance();
 							c.setFirstDayOfWeek(Calendar.MONDAY);
 							c.setTimeInMillis(t);
-							int workday = c.get(Calendar.DAY_OF_WEEK);
+							int workday = c.get(Calendar.DAY_OF_WEEK) - 1;
+							logger.info("Current timestamp={}, workday={}", t, workday);
 							for (int i = 0; i < dataJsonArray.length(); i++) {
 								JSONObject dataJson = dataJsonArray.getJSONObject(i);
 								if (dataJson.getInt("workday") == workday) {
@@ -940,6 +993,7 @@ public class PixsignageService21 {
 				}
 			}
 
+			logger.info("Pixsignage Service get_calendar response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_calendar exception", e);

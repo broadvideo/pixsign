@@ -17,6 +17,8 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Devicegrid" extends="BaseResultMap" >
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
 		column="{devicegridid=devicegridid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegrid" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
@@ -28,7 +30,7 @@
     snapshot, devicegroupid, status, description, createtime
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select 
     <include refid="Base_Column_List" />
     from devicegrid
@@ -55,7 +57,7 @@
     </if>
   </select>
 
-  <select id="selectList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="FullResultMap">
     select * from devicegrid
     where status=1
     <if test="orgid != null">
@@ -79,7 +81,7 @@
     </if>
   </select>
 
-  <select id="selectByDevicegroup" resultMap="BaseResultMap">
+  <select id="selectByDevicegroup" resultMap="FullResultMap">
     select * from devicegrid
     where devicegroupid = #{devicegroupid}
     order by devicegridid

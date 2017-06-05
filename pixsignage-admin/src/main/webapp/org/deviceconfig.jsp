@@ -71,10 +71,10 @@ response.setDateHeader("Expires",0);
 											<label class="col-md-3 control-label"><spring:message code="global.volumeflag"/></label>
 											<div class="col-md-9 radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="org.volumeflag" value="0" checked> <spring:message code="global.volumeflag.off"/>
+													<input type="radio" name="org.volumeflag" value="0" checked> <spring:message code="global.volumeflag_0"/>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="org.volumeflag" value="1"> <spring:message code="global.volumeflag.on"/>
+													<input type="radio" name="org.volumeflag" value="1"> <spring:message code="global.volumeflag_1"/>
 												</label>
 											</div>
 										</div>

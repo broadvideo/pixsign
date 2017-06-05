@@ -251,10 +251,16 @@ public class PixsignageService2 {
 				}
 			}
 
-			if (org.getVolumeflag().equals("0")) {
+			if (device.getVolumeflag().equals("0")) {
 				responseJson.put("volume", -1);
+			} else if (device.getVolumeflag().equals("1")) {
+				responseJson.put("volume", device.getVolume());
 			} else {
-				responseJson.put("volume", org.getVolume());
+				if (org.getVolumeflag().equals("0")) {
+					responseJson.put("volume", -1);
+				} else {
+					responseJson.put("volume", org.getVolume());
+				}
 			}
 
 			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
@@ -268,6 +274,7 @@ public class PixsignageService2 {
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
 
+			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
 			responseJson.put("ypos", device.getYpos());
@@ -483,6 +490,7 @@ public class PixsignageService2 {
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {
 				responseJson.put("version_name", "");
@@ -555,6 +563,17 @@ public class PixsignageService2 {
 						backupvideoJson.put("file", org.getBackupvideo().getFilename());
 						backupvideoJson.put("size", org.getBackupvideo().getSize());
 						contentJson.put("backup_media", backupvideoJson);
+					}
+					if (device.getVolumeflag().equals("0")) {
+						contentJson.put("volume", -1);
+					} else if (device.getVolumeflag().equals("1")) {
+						contentJson.put("volume", device.getVolume());
+					} else {
+						if (org.getVolumeflag().equals("0")) {
+							contentJson.put("volume", -1);
+						} else {
+							contentJson.put("volume", org.getVolume());
+						}
 					}
 					contentJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
 					if (org.getPowerflag().equals("1")) {
@@ -884,7 +903,8 @@ public class PixsignageService2 {
 							Calendar c = Calendar.getInstance();
 							c.setFirstDayOfWeek(Calendar.MONDAY);
 							c.setTimeInMillis(t);
-							int workday = c.get(Calendar.DAY_OF_WEEK);
+							int workday = c.get(Calendar.DAY_OF_WEEK) - 1;
+							logger.info("Current timestamp={}, workday={}", t, workday);
 							for (int i = 0; i < dataJsonArray.length(); i++) {
 								JSONObject dataJson = dataJsonArray.getJSONObject(i);
 								if (dataJson.getInt("workday") == workday) {
@@ -940,6 +960,7 @@ public class PixsignageService2 {
 				}
 			}
 
+			logger.info("Pixsignage Service get_calendar response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_calendar exception", e);

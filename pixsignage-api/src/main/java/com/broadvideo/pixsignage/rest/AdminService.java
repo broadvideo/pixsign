@@ -230,7 +230,7 @@ public class AdminService {
 			}
 
 			List<Devicegroup> devicegroups = devicegroupMapper.selectList("" + staff.getOrgid(),
-					"" + staff.getBranchid(), Devicegroup.Type_Device, null, start, length);
+					"" + staff.getBranchid(), Devicegroup.Type_Device, null, null, start, length);
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

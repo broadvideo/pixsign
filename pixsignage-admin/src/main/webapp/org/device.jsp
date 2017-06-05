@@ -149,6 +149,52 @@ response.setDateHeader("Expires",0);
 			</div>
 		</div>
 		
+		<div id="VolumeModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					</div>
+					<div class="modal-body">
+						<form id="VolumeForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+							<input type="hidden" name="device.deviceid" value="0" />
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
+									<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label"><spring:message code="global.volumeflag"/></label>
+									<div class="col-md-9 radio-list">
+										<label class="radio-inline">
+											<input type="radio" name="device.volumeflag" value="0"> <spring:message code="global.volumeflag_0"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="device.volumeflag" value="1"> <spring:message code="global.volumeflag_1"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="device.volumeflag" value="2" checked> <spring:message code="global.volumeflag_2"/>
+										</label>
+									</div>
+								</div>
+								<div class="form-group volumeflag">
+									<label class="col-md-3 control-label"><spring:message code="global.volume"/></label>
+									<div class="col-md-9">
+										<input class="volumeRange" type="text" name="device.volume" value="50"/>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+						<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -447,7 +493,7 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-device.js?t=${timestamp}"></script>
 <script>
-var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 var MscreenCtrl = <%=(session_org != null && session_org.getMscreenflag().equals("1"))%>;
@@ -460,6 +506,7 @@ jQuery(document).ready(function() {
 	initBranchTree();
 	initMyTable();
 	initMyEditModal();
+	initVolumeModal();
 	initScreenModal();
 	initDeviceFileModal();
 	initMapModal();

@@ -7,10 +7,10 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 public interface DevicegroupService {
 	public Devicegroup selectByPrimaryKey(String devicegroupid);
 
-	public int selectCount(String orgid, String branchid, String type, String search);
+	public int selectCount(String orgid, String branchid, String type, String gridlayoutcode, String search);
 
-	public List<Devicegroup> selectList(String orgid, String branchid, String type, String search, String start,
-			String length);
+	public List<Devicegroup> selectList(String orgid, String branchid, String type, String gridlayoutcode,
+			String search, String start, String length);
 
 	public void addDevices(Devicegroup devicegroup, String[] deviceids);
 

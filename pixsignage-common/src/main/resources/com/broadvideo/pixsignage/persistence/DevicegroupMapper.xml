@@ -17,6 +17,8 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Devicegroup" extends="BaseResultMap" >
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegroup" />
 	<collection property="devicegrids" ofType="com.broadvideo.pixsignage.domain.Devicegrid"
@@ -30,7 +32,7 @@
     status, description, createtime, createstaffid
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select 
     <include refid="Base_Column_List" />
     from devicegroup
@@ -47,12 +49,15 @@
     <if test="branchid != null">
       and branchid = #{branchid}
     </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
   </select>
 
-  <select id="selectList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="FullResultMap">
     select * from devicegroup
     where status=1
     and type = #{type}
@@ -61,6 +66,9 @@
     </if>
     <if test="branchid != null">
       and branchid = #{branchid}
+    </if>
+    <if test="gridlayoutcode != null">
+      and gridlayoutcode = #{gridlayoutcode}
     </if>
     <if test="search != null">
       and name like #{search}

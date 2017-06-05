@@ -22,9 +22,11 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Planbind;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.broadvideo.pixsignage.util.PixedxUtil;
@@ -52,6 +54,8 @@ public class DeviceAction extends BaseDatatableAction {
 	private DeviceService deviceService;
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 
 	public String doGet() {
 		try {
@@ -167,6 +171,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
+			planService.syncPlan(Planbind.BindType_Device, deviceid);
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

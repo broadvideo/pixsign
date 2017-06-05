@@ -656,7 +656,6 @@ function refreshSubBundleSelect() {
 		var touchbundles = CurrentSubBundles.filter(function (el) {
 			return el.bundleid == CurrentBundledtl.touchbundleid;
 		});
-		console.log(touchbundles.length);
 		if (touchbundles.length > 0) {
 			$('#SubBundleSelect').select2('data', {id: touchbundles[0].bundleid, name: touchbundles[0].name, bundle: touchbundles[0] });
 		}

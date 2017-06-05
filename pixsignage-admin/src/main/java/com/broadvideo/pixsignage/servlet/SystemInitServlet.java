@@ -19,6 +19,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DbversionMapper;
+import com.broadvideo.pixsignage.service.PlanService;
 
 @SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
@@ -63,6 +64,10 @@ public class SystemInitServlet extends HttpServlet {
 			DbversionMapper dbversionMapper = (DbversionMapper) ctx.getBean("dbversionMapper");
 			CommonConfig.CURRENT_DBVERSION = "" + dbversionMapper.selectCurrentVersion().getVersion();
 
+			PlanService planService = (PlanService) ctx.getBean("planService");
+			logger.info("begin to upgrade2multiplan");
+			planService.upgrade2multiplan();
+
 			logger.info("System ID: {}", CommonConfig.SYSTEM_ID);
 			logger.info("APP Version: {}", CommonConfig.CURRENT_APPVERSION);
 			logger.info("DB Version: {}", CommonConfig.CURRENT_DBVERSION);
@@ -78,9 +83,9 @@ public class SystemInitServlet extends HttpServlet {
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app"));
-			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/a83t"));
-			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/3288"));
-			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/3368"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/rk44"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/rk51"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/uwin"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/bv"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/changhong"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/debug"));

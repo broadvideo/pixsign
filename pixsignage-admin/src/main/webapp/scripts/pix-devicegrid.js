@@ -24,7 +24,7 @@ $(window).resize(function(e) {
 	}
 	for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 		var devicegrid = $('#MyTable').dataTable().fnGetData(i);
-		redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()));
+		redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()), true);
 	}
 });
 
@@ -90,7 +90,7 @@ var oTable = $('#MyTable').dataTable({
 		if ((iDisplayIndex+1) == $('#MyTable').dataTable().fnGetData().length) {
 			for (var i=0; i<$('#MyTable').dataTable().fnGetData().length; i++) {
 				var devicegrid = $('#MyTable').dataTable().fnGetData(i);
-				redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()));
+				redrawDevicegridPreview($('#DevicegridDiv-' + devicegrid.devicegridid), devicegrid, Math.floor($('#DevicegridDiv-' + devicegrid.devicegridid).parent().parent().parent().width()), true);
 			}
 		}
 		return nRow;
@@ -108,7 +108,7 @@ var oTable = $('#MyTable').dataTable({
 			        padding : 0,
 			        content: '<div id="DevicegridPreview"></div>',
 			    });
-				redrawDevicegridPreview($('#DevicegridPreview'), devicegrid, 640);
+				redrawDevicegridPreview($('#DevicegridPreview'), devicegrid, 640, true);
 			    return false;
 			})
 		});
@@ -191,7 +191,7 @@ function redrawGridlayout(div, gridlayout, maxsize) {
 	}
 }
 
-function redrawDevicegridPreview(div, devicegrid, maxsize) {
+function redrawDevicegridPreview(div, devicegrid, maxsize, fbgcolor) {
 	div.empty();
 	div.attr('devicegridid', devicegrid.devicegridid);
 	div.attr('style', 'position:relative; margin-left:0; margin-right:auto; border: 1px solid #000; background:#FFFFFF;');
@@ -203,18 +203,29 @@ function redrawDevicegridPreview(div, devicegrid, maxsize) {
 	for (var i=0; i<devicegrid.xcount; i++) {
 		for (var j=0; j<devicegrid.ycount; j++) {
 			var terminalid = '';
+			var bgcolor = '#FFFFFF';
 			for (var k=0; k<devicegrid.devices.length; k++) {
 				var device = devicegrid.devices[k];
 				if (device.xpos == i && device.ypos == j) {
 					terminalid = device.terminalid;
+					if (device.status == 0) {
+						bgcolor = '#FFFFFF';
+					} else if (device.onlineflag == 1) {
+						bgcolor = '#35aa47';
+					} else {
+						bgcolor = '#C6C6C6';
+					}
 				}
+			}
+			if (!fbgcolor) {
+				bgcolor = '#FFFFFF';
 			}
 			var html = '<div style="position: absolute; width:' + (100/devicegrid.xcount);
 			html += '%; height:' + (100/devicegrid.ycount);
 			html += '%; left: ' + (i*100/devicegrid.xcount);
 			html += '%; top: ' + (j*100/devicegrid.ycount);
 			html += '%; border: 1px solid #000; ">';
-			html += '<div class="' + rotate90 + '" style="position:absolute; width:100%; height:100%; ">';
+			html += '<div class="' + rotate90 + '" style="position:absolute; width:100%; height:100%; background:' + bgcolor + '">';
 			html += '<p class="grid-font" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:#000; font-size:12px; ">';
 			html += terminalid;
 			html += '</p>';
@@ -651,7 +662,7 @@ $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 		}
 		
 		$('#snapshot_div').show();
-		redrawDevicegridPreview($('#snapshot_div'), CurrentDevicegrid, 512);
+		redrawDevicegridPreview($('#snapshot_div'), CurrentDevicegrid, 512, false);
 		html2canvas($('#snapshot_div'), {
 			onrendered: function(canvas) {
 				console.log(canvas.toDataURL());

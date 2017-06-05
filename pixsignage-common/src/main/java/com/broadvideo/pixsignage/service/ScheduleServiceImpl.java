@@ -104,7 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void syncSchedule(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Schedule.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals(Device.Online)) {
+			if (device.getOnlineflag().equals(Device.Online) && device.getDevicegridid() == 0) {
 				generateSyncEvent(Integer.parseInt(bindid));
 			}
 			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
@@ -119,27 +119,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 					generateSyncEvent(device.getDeviceid());
 				}
 			}
-			List<Devicegrid> devicegrids = devicegridMapper.selectByDevicegroup(bindid);
-			for (Devicegrid devicegrid : devicegrids) {
-				devices = devicegrid.getDevices();
-				for (Device device : devices) {
-					if (device.getOnlineflag().equals(Device.Online)) {
-						generateSyncEvent(device.getDeviceid());
-					}
-				}
-			}
 			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
 			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "group-" + bindid;
 			ActiveMQUtil.publish(topic, msgJson.toString());
-		} else if (bindtype.equals(Schedule.BindType_Devicegrid)) {
-			List<Device> devices = deviceMapper.selectByDevicegrid(bindid);
-			for (Device device : devices) {
-				if (device.getOnlineflag().equals(Device.Online)) {
-					generateSyncEvent(device.getDeviceid());
-				}
-			}
 		}
 
 	}
@@ -264,8 +248,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 		String serverport = configMapper.selectValueByCode("ServerPort");
 
 		// generate final json
-		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Multi,
-				Schedule.BindType_Devicegrid, devicegridid, Schedule.PlayMode_Daily);
+		List<Schedule> scheduleList;
+		Devicegrid devicegrid = devicegridMapper.selectByPrimaryKey(devicegridid);
+		if (devicegrid.getDevicegroupid().intValue() == 0) {
+			scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Multi, Schedule.BindType_Devicegrid,
+					devicegridid, Schedule.PlayMode_Daily);
+		} else {
+			scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Multi, Schedule.BindType_Devicegroup,
+					"" + devicegrid.getDevicegroupid(), Schedule.PlayMode_Daily);
+		}
 		for (Schedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJsonArray.put(scheduleJson);

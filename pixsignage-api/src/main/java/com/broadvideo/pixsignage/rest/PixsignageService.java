@@ -252,10 +252,16 @@ public class PixsignageService {
 				}
 			}
 
-			if (org.getVolumeflag().equals("0")) {
+			if (device.getVolumeflag().equals("0")) {
 				responseJson.put("volume", -1);
+			} else if (device.getVolumeflag().equals("1")) {
+				responseJson.put("volume", device.getVolume());
 			} else {
-				responseJson.put("volume", org.getVolume());
+				if (org.getVolumeflag().equals("0")) {
+					responseJson.put("volume", -1);
+				} else {
+					responseJson.put("volume", org.getVolume());
+				}
 			}
 
 			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
@@ -756,7 +762,8 @@ public class PixsignageService {
 							Calendar c = Calendar.getInstance();
 							c.setFirstDayOfWeek(Calendar.MONDAY);
 							c.setTimeInMillis(t);
-							int workday = c.get(Calendar.DAY_OF_WEEK);
+							int workday = c.get(Calendar.DAY_OF_WEEK) - 1;
+							logger.info("Current timestamp={}, workday={}", t, workday);
 							for (int i = 0; i < dataJsonArray.length(); i++) {
 								JSONObject dataJson = dataJsonArray.getJSONObject(i);
 								if (dataJson.getInt("workday") == workday) {
@@ -812,6 +819,7 @@ public class PixsignageService {
 				}
 			}
 
+			logger.info("Pixsignage Service get_calendar response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_calendar exception", e);

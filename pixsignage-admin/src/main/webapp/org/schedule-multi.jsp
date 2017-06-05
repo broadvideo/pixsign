@@ -82,7 +82,7 @@ response.setDateHeader("Expires",0);
 							<div class="col-md-12 col-sm-12">
 								<div class="portlet box purple">
 									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.gridschedule"/></div>
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.multiplan"/></div>
 										<div class="actions">
 											<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
 										</div>
@@ -212,7 +212,7 @@ response.setDateHeader("Expires",0);
 
 		<div class="page-content-wrapper">
 			<div class="page-content">
-				<h3 class="page-title"><spring:message code="menu.gridschedule"/></h3>
+				<h3 class="page-title"><spring:message code="menu.multiplan"/></h3>
 				<div class="page-bar">
 					<ul class="page-breadcrumb">
 						<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -220,7 +220,7 @@ response.setDateHeader("Expires",0);
 						</li>
 						<li><a href="#"><spring:message code="menu.mscreen"/></a><i class="fa fa-angle-right"></i>
 						</li>
-						<li><a href="#"><spring:message code="menu.gridschedule"/></a>
+						<li><a href="#"><spring:message code="menu.multiplan"/></a>
 						</li>
 					</ul>
 				</div>
@@ -229,7 +229,7 @@ response.setDateHeader("Expires",0);
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.gridschedule"/></div>
+								<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.multiplan"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="refreshSchedule();" class="reload"></a>
 								</div>

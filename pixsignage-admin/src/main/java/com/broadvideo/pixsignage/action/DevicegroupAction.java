@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Devicegroup;
+import com.broadvideo.pixsignage.domain.Planbind;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.service.DevicegroupService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
@@ -28,6 +30,8 @@ public class DevicegroupAction extends BaseDatatableAction {
 	private DevicegroupService devicegroupService;
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 
 	public String doGet() {
 		try {
@@ -50,18 +54,20 @@ public class DevicegroupAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 			String type = getParameter("type");
+			String gridlayoutcode = getParameter("gridlayoutcode");
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, search);
+			int count = devicegroupService.selectCount("" + getLoginStaff().getOrgid(), branchid, type, gridlayoutcode,
+					search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Devicegroup> devicegroupList = devicegroupService.selectList("" + getLoginStaff().getOrgid(), branchid,
-					type, search, start, length);
+					type, gridlayoutcode, search, start, length);
 			for (int i = 0; i < devicegroupList.size(); i++) {
 				aaData.add(devicegroupList.get(i));
 			}
@@ -167,6 +173,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
 			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
+			planService.syncPlan(Planbind.BindType_Devicegroup, devicegroupid);
 			logger.info("Devicegroup schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

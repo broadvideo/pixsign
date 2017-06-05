@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Devicegrid;
-import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Planbind;
 import com.broadvideo.pixsignage.service.DevicegridService;
-import com.broadvideo.pixsignage.service.ScheduleService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -26,7 +26,7 @@ public class DevicegridAction extends BaseDatatableAction {
 	@Autowired
 	private DevicegridService devicegridService;
 	@Autowired
-	private ScheduleService scheduleService;
+	private PlanService planService;
 
 	public String doGet() {
 		try {
@@ -130,11 +130,11 @@ public class DevicegridAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegridid = getParameter("devicegridid");
-			scheduleService.syncSchedule(Schedule.BindType_Devicegrid, devicegridid);
-			logger.info("Devicegrid schedule sync success");
+			planService.syncPlan(Planbind.BindType_Devicegrid, devicegridid);
+			logger.info("Devicegrid plan sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Devicegrid schedule sync error: " + ex.getMessage());
+			logger.error("Devicegrid plan sync error: " + ex.getMessage());
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

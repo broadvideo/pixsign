@@ -10,11 +10,13 @@ public interface DevicegroupMapper {
 	Devicegroup selectByPrimaryKey(@Param(value = "devicegroupid") String devicegroupid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "type") String type, @Param(value = "search") String search);
+			@Param(value = "type") String type, @Param(value = "gridlayoutcode") String gridlayoutcode,
+			@Param(value = "search") String search);
 
 	List<Devicegroup> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "type") String type, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "type") String type, @Param(value = "gridlayoutcode") String gridlayoutcode,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "devicegroupid") String devicegroupid);
 

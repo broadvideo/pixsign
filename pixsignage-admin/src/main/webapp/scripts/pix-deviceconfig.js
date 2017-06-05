@@ -133,12 +133,6 @@ $('body').on('click', '.pix-update', function(event) {
 		}
 	});
 
-	if ($('input[name="org.volumeflag"]:checked').val() == 0) {
-		$('.volumeflag').css('display', 'none');
-	} else {
-		$('.volumeflag').css('display', '');
-	}
-
 	if ($('input[name="org.devicepassflag"]:checked').val() == 0) {
 		$('.devicepassflag').css('display', 'none');
 	} else {
@@ -221,6 +215,11 @@ $('#MyEditModal').on('shown.bs.modal', function (e) {
 		step: 5,
 		hasGrid: false
 	});
+	if ($('input[name="org.volumeflag"]:checked').val() == 1) {
+		$('.volumeflag').css('display', '');
+	} else {
+		$('.volumeflag').css('display', 'none');
+	}
 })
 
 $('body').on('click', '.pix-push', function(event) {
@@ -254,10 +253,10 @@ $('body').on('click', '.pix-push', function(event) {
 });
 
 $('input[name="org.volumeflag"]').click(function(e) {
-	if ($('input[name="org.volumeflag"]:checked').val() == 0) {
-		$('.volumeflag').css('display', 'none');
-	} else {
+	if ($('input[name="org.volumeflag"]:checked').val() == 1) {
 		$('.volumeflag').css('display', '');
+	} else {
+		$('.volumeflag').css('display', 'none');
 	}
 });  
 $('input[name="org.devicepassflag"]').click(function(e) {

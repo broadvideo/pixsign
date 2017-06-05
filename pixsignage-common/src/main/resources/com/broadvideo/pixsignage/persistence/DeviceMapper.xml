@@ -49,6 +49,8 @@
     <result column="storageavail" property="storageavail" jdbcType="BIGINT" />
     <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="appfileid" property="appfileid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
@@ -63,7 +65,7 @@
     volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="FullResultMap">
     select * from device
     where deviceid = #{deviceid}
   </select>
@@ -91,7 +93,7 @@
     </if>
   </select>
 
-  <select id="selectList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="FullResultMap">
     select * from device
     where 1 = 1
     <if test="orgid != null">
@@ -126,31 +128,31 @@
     </if>
   </select>
 
-  <select id="selectByDevicegroup" resultMap="BaseResultMap">
+  <select id="selectByDevicegroup" resultMap="FullResultMap">
     select * from device
     where devicegroupid = #{devicegroupid}
     order by deviceid
   </select>
 
-  <select id="selectByDevicegrid" resultMap="BaseResultMap">
+  <select id="selectByDevicegrid" resultMap="FullResultMap">
     select * from device
     where devicegridid = #{devicegridid}
     order by ypos, xpos
   </select>
 
-  <select id="selectByHardkey" resultMap="BaseResultMap">
+  <select id="selectByHardkey" resultMap="FullResultMap">
     select * from device
     where status = 1 
     and hardkey = #{hardkey}
   </select>
 
-  <select id="selectByTerminalid" resultMap="BaseResultMap">
+  <select id="selectByTerminalid" resultMap="FullResultMap">
     select * from device
     where terminalid = #{terminalid}
     order by deviceid
   </select>
 
-  <select id="selectByOrgtype" resultMap="BaseResultMap">
+  <select id="selectByOrgtype" resultMap="FullResultMap">
     select d.* from device d, org o
     where d.orgid = o.orgid 
     and o.orgtype = '${orgtype}' 

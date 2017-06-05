@@ -965,7 +965,7 @@ response.setDateHeader("Expires",0);
 
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
-var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var LiftCtrl = <%=(session_org != null && session_org.getLiftflag().equals("1"))%>;
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;

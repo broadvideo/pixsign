@@ -22,7 +22,7 @@
     select 
     <include refid="Base_Column_List" />
     from rss
-    where rssid = '${rssid}'
+    where rssid = #{rssid}
   </select>
   
   <select id="selectCount" resultType="Integer">
@@ -54,7 +54,7 @@
   <delete id="deleteByPrimaryKey" >
     update rss
     set status='9'
-    where rssid = '${rssid}'
+    where rssid = #{rssid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Rss" >

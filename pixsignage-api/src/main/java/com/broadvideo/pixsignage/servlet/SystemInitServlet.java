@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.servlet;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -33,6 +34,8 @@ public class SystemInitServlet extends HttpServlet {
 				CommonConfig.CONFIG_SIGNATURE.put(entry.getValue().toString(), entry.getKey().toString());
 			}
 			is.close();
+
+			Locale.setDefault(Locale.CHINA);
 		} catch (Exception ex) {
 			logger.error("", ex);
 		}

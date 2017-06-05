@@ -29,13 +29,13 @@ public class DevicegroupServiceImpl implements DevicegroupService {
 		return devicegroupMapper.selectByPrimaryKey(devicegroupid);
 	}
 
-	public int selectCount(String orgid, String branchid, String type, String search) {
-		return devicegroupMapper.selectCount(orgid, branchid, type, search);
+	public int selectCount(String orgid, String branchid, String type, String gridlayoutcode, String search) {
+		return devicegroupMapper.selectCount(orgid, branchid, type, gridlayoutcode, search);
 	}
 
-	public List<Devicegroup> selectList(String orgid, String branchid, String type, String search, String start,
-			String length) {
-		return devicegroupMapper.selectList(orgid, branchid, type, search, start, length);
+	public List<Devicegroup> selectList(String orgid, String branchid, String type, String gridlayoutcode,
+			String search, String start, String length) {
+		return devicegroupMapper.selectList(orgid, branchid, type, gridlayoutcode, search, start, length);
 	}
 
 	@Transactional

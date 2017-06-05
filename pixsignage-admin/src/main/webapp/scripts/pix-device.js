@@ -34,17 +34,10 @@ function initMyTable() {
 		'bServerSide' : true,
 		'sAjaxSource' : myurls['device.list'],
 		'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
-						{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
+						{'sTitle' : common.view.device, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
 						{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
 						{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
-						{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : common.view.config, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
-						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' },
-						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
+						{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '40%' }],
 		'aoColumnDefs': [
 	 					{'bSortable': false, 'aTargets': [ 0 ] }
 	 				],
@@ -57,35 +50,53 @@ function initMyTable() {
 		},
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			CurrentDevices.push(aData);
-			if (aData.devicegroupid > 0) {
-				$('td:eq(3)', nRow).html(aData.devicegroup.name);
+			var devicehtml = '';
+			if (aData.status == 0) {
+				devicehtml += '<span class="label label-sm label-default">' + common.view.unregister + '</span> ';
+			} else if (aData.onlineflag == 1) {
+				devicehtml += '<span class="label label-sm label-success">' + common.view.online + '</span> ';
+			} else if (aData.onlineflag == 0) {
+				devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
+			} else if (aData.onlineflag == 9) {
+				devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
+			}
+			if (aData.name != aData.terminalid) {
+				devicehtml += aData.terminalid + '/' + aData.name;
 			} else {
-				$('td:eq(3)', nRow).html('');
+				devicehtml += aData.terminalid + '';
+			}
+			$('td:eq(1)', nRow).html(devicehtml);
+			
+			if (aData.devicegroupid > 0) {
+				$('td:eq(2)', nRow).html(aData.devicegroup.name);
+			} else {
+				$('td:eq(2)', nRow).html('');
 			}
 			if (aData.lontitude > 0 && aData.latitude > 0) {
-				$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
-			}
-			if (aData.status == 0) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
-			} else if (aData.onlineflag == 1) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
-			} else if (aData.onlineflag == 0) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
-			} else if (aData.onlineflag == 9) {
-				$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+				$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 			}
 			
-			$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-			$('td:eq(7)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.push + '</a>');
-			$('td:eq(8)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>'
-					+ '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-poweroff"><i class="fa fa-power-off"></i> ' + common.view.shutdown + '</a>');
-			var html = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-screen"><i class="fa fa-camera"></i> ' + common.view.screen + '</a>';
-			html += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.view + '</a>';
-			$('td:eq(9)', nRow).html(html);
-			$('td:eq(10)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.file + '</a>');
-			html = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-			html += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
-			$('td:eq(11)', nRow).html(html);
+			var buttonhtml = '';
+			buttonhtml += '<div class="util-btn-margin-bottom-5">';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-volume"><i class="fa fa-volume-up"></i> ' + common.view.volume + ' </a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-poweroff"><i class="fa fa-power-off"></i> ' + common.view.shutdown + '</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
+			buttonhtml += '</div>';
+			
+			buttonhtml += '<div class="util-btn-margin-bottom-5">';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-screen"><i class="fa fa-camera"></i> ' + common.view.screen + '</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.screenview + '</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.fileview + '</a>';
+			buttonhtml += '</div>';
+			
+			buttonhtml += '<div class="util-btn-margin-bottom-5">';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + ' </a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.syncconfig + '</a>';
+			buttonhtml += '</div>';
+
+			$('td:eq(4)', nRow).html(buttonhtml);
 
 			var rowdetail = '<span class="row-details row-details-close"></span>';
 			$('td:eq(0)', nRow).html(rowdetail);
@@ -525,6 +536,64 @@ function initMyEditModal() {
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
 	});
+}
+
+function initVolumeModal() {
+	$('body').on('click', '.pix-volume', function(event) {
+		var index = $(event.target).attr('data-id');
+		if (index == undefined) {
+			index = $(event.target).parent().attr('data-id');
+		}
+		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+		var formdata = new Object();
+		for (var name in CurrentDevice) {
+			formdata['device.' + name] = CurrentDevice[name];
+		}
+		$('#VolumeForm').loadJSON(formdata);
+		$('#VolumeModal').modal();
+	});
+	$('[type=submit]', $('#VolumeModal')).on('click', function(event) {
+		$.ajax({
+			type : 'POST',
+			url : myurls['device.update'],
+			data : $('#VolumeForm').serialize(),
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					$('#VolumeModal').modal('hide');
+					bootbox.alert(common.tips.success);
+					refreshMyTable();
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				console.log('failue');
+			}
+		});
+	});
+
+	$('#VolumeModal').on('shown.bs.modal', function (e) {
+		$(".volumeRange").ionRangeSlider({
+			min: 0,
+			max: 100,
+			from: CurrentDevice.volume,
+			type: 'single',
+			step: 5,
+			hasGrid: false
+		});
+		if ($('input[name="device.volumeflag"]:checked').val() == 1) {
+			$('.volumeflag').css('display', '');
+		} else {
+			$('.volumeflag').css('display', 'none');
+		}
+	})
+	$('input[name="device.volumeflag"]').click(function(e) {
+		if ($('input[name="device.volumeflag"]:checked').val() == 1) {
+			$('.volumeflag').css('display', '');
+		} else {
+			$('.volumeflag').css('display', 'none');
+		}
+	});  
 }
 
 function initScreenModal() {
