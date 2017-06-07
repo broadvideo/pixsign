@@ -78,7 +78,8 @@ function initMyTable() {
 			
 			var buttonhtml = '';
 			buttonhtml += '<div class="util-btn-margin-bottom-5">';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-volume"><i class="fa fa-volume-up"></i> ' + common.view.volume + ' </a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-config"><i class="fa fa-cog"></i> ' + common.view.config + ' </a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-pushconfig"><i class="fa fa-rss"></i> ' + common.view.syncconfig + ' </a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-poweroff"><i class="fa fa-power-off"></i> ' + common.view.shutdown + '</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
@@ -86,14 +87,10 @@ function initMyTable() {
 			buttonhtml += '</div>';
 			
 			buttonhtml += '<div class="util-btn-margin-bottom-5">';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + ' </a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-screen"><i class="fa fa-camera"></i> ' + common.view.screen + '</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-screenlist"><i class="fa fa-list-ol"></i> ' + common.view.screenview + '</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.fileview + '</a>';
-			buttonhtml += '</div>';
-			
-			buttonhtml += '<div class="util-btn-margin-bottom-5">';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + ' </a>';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-config"><i class="fa fa-cog"></i> ' + common.view.syncconfig + '</a>';
 			buttonhtml += '</div>';
 
 			$('td:eq(4)', nRow).html(buttonhtml);
@@ -170,7 +167,6 @@ function initMyTable() {
 		 
 		return sOut;
 	}
-
 
 	$('#DeviceTable').on('click', ' tbody td .row-details', function () {
 		var nTr = $(this).parents('tr')[0];
@@ -257,7 +253,7 @@ function initMyTable() {
 		});
 	});
 
-	$('body').on('click', '.pix-config', function(event) {
+	$('body').on('click', '.pix-pushconfig', function(event) {
 		var target = $(event.target);
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
@@ -538,8 +534,8 @@ function initMyEditModal() {
 	});
 }
 
-function initVolumeModal() {
-	$('body').on('click', '.pix-volume', function(event) {
+function initConfigModal() {
+	$('body').on('click', '.pix-config', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
@@ -549,17 +545,28 @@ function initVolumeModal() {
 		for (var name in CurrentDevice) {
 			formdata['device.' + name] = CurrentDevice[name];
 		}
-		$('#VolumeForm').loadJSON(formdata);
-		$('#VolumeModal').modal();
+		$('#ConfigForm').loadJSON(formdata);
+		if ($('input[name="device.powerflag"]:checked').val() == 1) {
+			if ($('input[name="device.poweron"]').val() == '') {
+				$('input[name="device.poweron"]').val('07:00:00');
+			}
+			if ($('input[name="device.poweroff"]').val() == '') {
+				$('input[name="device.poweroff"]').val('20:00:00');
+			}
+			$('.powerflag').css('display', '');
+		} else {
+			$('.powerflag').css('display', 'none');
+		}
+		$('#ConfigModal').modal();
 	});
-	$('[type=submit]', $('#VolumeModal')).on('click', function(event) {
+	$('[type=submit]', $('#ConfigModal')).on('click', function(event) {
 		$.ajax({
 			type : 'POST',
 			url : myurls['device.update'],
-			data : $('#VolumeForm').serialize(),
+			data : $('#ConfigForm').serialize(),
 			success : function(data, status) {
 				if (data.errorcode == 0) {
-					$('#VolumeModal').modal('hide');
+					$('#ConfigModal').modal('hide');
 					bootbox.alert(common.tips.success);
 					refreshMyTable();
 				} else {
@@ -572,7 +579,7 @@ function initVolumeModal() {
 		});
 	});
 
-	$('#VolumeModal').on('shown.bs.modal', function (e) {
+	$('#ConfigModal').on('shown.bs.modal', function (e) {
 		$(".volumeRange").ionRangeSlider({
 			min: 0,
 			max: 100,
@@ -592,6 +599,19 @@ function initVolumeModal() {
 			$('.volumeflag').css('display', '');
 		} else {
 			$('.volumeflag').css('display', 'none');
+		}
+	});
+	$('input[name="device.powerflag"]').click(function(e) {
+		if ($('input[name="device.powerflag"]:checked').val() == 1) {
+			if ($('input[name="device.poweron"]').val() == '') {
+				$('input[name="device.poweron"]').val('07:00:00');
+			}
+			if ($('input[name="device.poweroff"]').val() == '') {
+				$('input[name="device.poweroff"]').val('20:00:00');
+			}
+			$('.powerflag').css('display', '');
+		} else {
+			$('.powerflag').css('display', 'none');
 		}
 	});  
 }
@@ -917,17 +937,25 @@ function initMapModal() {
 		CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
 		CurrentDeviceid = CurrentDevice.deviceid;
 		MapType = 0;
-		$('#DeviceMapModal').modal();
+		if (MapSource) {
+			$('#GoogleMapModal').modal();
+		} else {
+			$('#BaiduMapModal').modal();
+		}
 	});
 
 	$('body').on('click', '.pix-allmap', function(event) {
 		MapType = 1;
-		$('#DeviceMapModal').modal();
+		if (MapSource) {
+			$('#GoogleMapModal').modal();
+		} else {
+			$('#BaiduMapModal').modal();
+		}
 	});
 
-	$('#DeviceMapModal').on('shown.bs.modal', function (e) {
+	$('#BaiduMapModal').on('shown.bs.modal', function (e) {
 		if (CurrentMap == null) {
-			CurrentMap = new BMap.Map("DeviceMapDiv", {enableMapClick:false});
+			CurrentMap = new BMap.Map("BaiduMapDiv", {enableMapClick:false});
 			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));
 			var point = new BMap.Point(114, 30);
 			CurrentMap.centerAndZoom(point, 1);
@@ -973,6 +1001,79 @@ function initMapModal() {
 				}
 			}
 			CurrentMap.setViewport(points);
+		}
+	})
+
+	var GoogleMarkers = [];
+	var PreInfoWindow = null;
+	$('#GoogleMapModal').on('shown.bs.modal', function (e) {
+		if (CurrentMap == null) {
+			CurrentMap = new google.maps.Map(document.getElementById('GoogleMapDiv'), {
+				zoom: 4,
+				center: new google.maps.LatLng(35, 103)
+			});			
+		}
+		for (var i = 0; i < GoogleMarkers.length; i++) {
+			GoogleMarkers[i].setMap(null);
+		}
+		GoogleMarkers = [];
+		if (MapType == 0) {
+			var point = new google.maps.LatLng(parseFloat(CurrentDevice.latitude), parseFloat(CurrentDevice.lontitude));
+			var marker = new google.maps.Marker({
+				position: point,
+				map: CurrentMap,
+				title: CurrentDevice.terminalid
+			});
+			GoogleMarkers.push(marker);
+			var sContent =
+				'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
+				'<p>' + CurrentDevice.addr1 + '</p>' + 
+				'</div>';
+			var infowindow = new google.maps.InfoWindow({
+				content: sContent
+			});
+			CurrentMap.setCenter(point);
+			CurrentMap.setZoom(15);
+			marker.addListener('click', function() {
+				if (PreInfoWindow != null) PreInfoWindow.close();
+				PreInfoWindow = infowindow;
+				infowindow.open(CurrentMap, marker);
+			});
+			PreInfoWindow = infowindow;
+			infowindow.open(CurrentMap, marker);
+		} else {
+			var bounds = new google.maps.LatLngBounds();
+			for (var i=0; i<CurrentDevices.length; i++) {
+				var device = CurrentDevices[i];
+				if (device.lontitude > 0 && device.latitude > 0) {
+					var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.lontitude));
+					var marker = new google.maps.Marker({
+						position: point,
+						map: CurrentMap,
+						title: device.terminalid
+					});
+					GoogleMarkers.push(marker);
+					marker.addListener('click', function() {
+						var terminalid = this.getTitle();
+						 var ds = CurrentDevices.filter(function (el) {
+							return (el.terminalid == terminalid);
+						});
+						var sContent =
+							'<div><h4>' + ds[0].terminalid + ' - ' + ds[0].name + '</h4>' + 
+							'<p>' + ds[0].addr1 + '</p>' + 
+							'</div>';
+						var infowindow = new google.maps.InfoWindow({
+							content: sContent
+						});
+						if (PreInfoWindow != null) PreInfoWindow.close();
+						PreInfoWindow = infowindow;
+						infowindow.open(CurrentMap, this);
+					});
+					bounds.extend(point);
+					PreInfoWindow = null;
+				}
+			}
+			CurrentMap.fitBounds(bounds);
 		}
 	})
 }
@@ -1113,5 +1214,17 @@ function initUTextModal() {
 		 });
 		
 	});
-
 }
+
+$('.form_time').datetimepicker({
+	autoclose: true,
+	isRTL: Metronic.isRTL(),
+	format: 'hh:ii:ss',
+	pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+	language: 'zh-CN',
+	minuteStep: 5,
+	startView: 1,
+	maxView: 1,
+	formatViewType: 'time'
+});
+

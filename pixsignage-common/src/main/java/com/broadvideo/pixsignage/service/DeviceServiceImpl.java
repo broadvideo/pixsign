@@ -189,18 +189,36 @@ public class DeviceServiceImpl implements DeviceService {
 			msgBodyJson.put("backup_media", backupvideoJson);
 		}
 
-		if (org.getVolumeflag().equals("0")) {
+		if (device.getVolumeflag().equals("0")) {
 			msgBodyJson.put("volume", -1);
+		} else if (device.getVolumeflag().equals("1")) {
+			msgBodyJson.put("volume", device.getVolume());
 		} else {
-			msgBodyJson.put("volume", org.getVolume());
+			if (org.getVolumeflag().equals("0")) {
+				msgBodyJson.put("volume", -1);
+			} else {
+				msgBodyJson.put("volume", org.getVolume());
+			}
 		}
 
-		msgBodyJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
-		if (org.getPowerflag().equals("1")) {
+		if (device.getPowerflag().equals("0")) {
+			msgBodyJson.put("power_flag", 0);
+		} else if (device.getPowerflag().equals("1")) {
+			msgBodyJson.put("power_flag", 1);
 			msgBodyJson.put("power_on_time",
-					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweron()));
 			msgBodyJson.put("power_off_time",
-					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweroff()));
+		} else {
+			if (org.getPowerflag().equals("0")) {
+				msgBodyJson.put("power_flag", 0);
+			} else {
+				msgBodyJson.put("power_flag", 1);
+				msgBodyJson.put("power_on_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+				msgBodyJson.put("power_off_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+			}
 		}
 
 		msgBodyJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));

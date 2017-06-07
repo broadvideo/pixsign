@@ -220,7 +220,7 @@
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/pixsignage-static/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="/pixsignage-static/scripts/app.js"></script>

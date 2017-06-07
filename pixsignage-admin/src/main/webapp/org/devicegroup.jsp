@@ -39,14 +39,30 @@ response.setDateHeader("Expires",0);
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div id="DeviceMapModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+		<div id="BaiduMapModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 					</div>
 					<div class="modal-body">
-						<div id="DeviceMapDiv" style="width:100%; height:600px;"></div>
+						<div id="BaiduMapDiv" style="width:100%; height:600px;"></div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="GoogleMapModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div id="GoogleMapDiv" style="width:100%; height:600px;"></div>
 					</div>
 					<div class="modal-footer">
 						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
@@ -239,7 +255,11 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
+<% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
+<% } %>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -250,6 +270,8 @@ response.setDateHeader("Expires",0);
 <script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-devicegroup.js?t=${timestamp}"></script>
 <script>
+var MapSource = <%=(session_org != null && !session_org.getTimezone().equals("Asia/Shanghai"))%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

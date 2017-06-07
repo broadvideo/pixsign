@@ -68,11 +68,10 @@ response.setDateHeader("Expires",0);
   border-right: 1px solid;
 }
 
-.dropdown-menu li > a {
+.jstree-children li > a {
   padding: 0px !important; 
   display: inline !important;
 }
-
 </style>
 <!-- END PAGE LEVEL STYLES -->
 
@@ -924,7 +923,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>

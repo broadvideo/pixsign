@@ -40,6 +40,7 @@
     <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="volumeflag" property="volumeflag" jdbcType="CHAR" />
     <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="timezone" property="timezone" jdbcType="VARCHAR" />
     <result column="apps" property="apps" jdbcType="VARCHAR" />
     <result column="logo" property="logo" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -53,7 +54,7 @@
     mscreenflag, flowrateflag, videoflag, imageflag, textflag, streamflag, dvbflag, videoinflag, widgetflag, 
     expireflag, expiretime, maxdevices, currentdevices, currentdeviceidx, maxstorage, currentstorage, copyright, 
     description, backupvideoid, powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, 
-    volumeflag, volume, apps, logo, createtime, createstaffid
+    volumeflag, volume, timezone, apps, logo, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -122,7 +123,7 @@
       powerflag, poweron, poweroff, 
       qrcodeflag, devicepassflag, devicepass, 
       upgradeflag, volumeflag, volume, 
-      apps, logo, 
+      timezone, apps, logo, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
@@ -138,7 +139,7 @@
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, 
       #{qrcodeflag,jdbcType=CHAR}, #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, 
       #{upgradeflag,jdbcType=CHAR}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
-      #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
+      #{timezone,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
@@ -260,6 +261,9 @@
       </if>
       <if test="volume != null" >
         volume,
+      </if>
+      <if test="timezone != null" >
+        timezone,
       </if>
       <if test="apps != null" >
         apps,
@@ -388,6 +392,9 @@
       </if>
       <if test="volume != null" >
         #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="timezone != null" >
+        #{timezone,jdbcType=VARCHAR},
       </if>
       <if test="apps != null" >
         #{apps,jdbcType=VARCHAR},
@@ -520,6 +527,9 @@
       <if test="volume != null" >
         volume = #{volume,jdbcType=INTEGER},
       </if>
+      <if test="timezone != null" >
+        timezone = #{timezone,jdbcType=VARCHAR},
+      </if>
       <if test="apps != null" >
         apps = #{apps,jdbcType=VARCHAR},
       </if>
@@ -575,6 +585,7 @@
       upgradeflag = #{upgradeflag,jdbcType=CHAR},
       volumeflag = #{volumeflag,jdbcType=CHAR},
       volume = #{volume,jdbcType=INTEGER},
+      timezone = #{timezone,jdbcType=VARCHAR},
       apps = #{apps,jdbcType=VARCHAR},
       logo = #{logo,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

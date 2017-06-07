@@ -67,7 +67,7 @@ response.setDateHeader("Expires",0);
   border-right: 1px solid;
 }
 
-.dropdown-menu li > a {
+.jstree-children li > a {
   padding: 0px !important; 
   display: inline !important;
 }

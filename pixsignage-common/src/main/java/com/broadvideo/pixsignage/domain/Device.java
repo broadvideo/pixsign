@@ -419,18 +419,22 @@ public class Device {
 		this.powerflag = powerflag == null ? null : powerflag.trim();
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public Date getPoweron() {
 		return poweron;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public void setPoweron(Date poweron) {
 		this.poweron = poweron;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public Date getPoweroff() {
 		return poweroff;
 	}
 
+	@JSON(format = "HH:mm:ss")
 	public void setPoweroff(Date poweroff) {
 		this.poweroff = poweroff;
 	}

@@ -198,12 +198,16 @@ function initMapModal() {
 			index = $(event.target).parent().attr('data-id');
 		}
 		CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
-		$('#DeviceMapModal').modal();
+		if (MapSource) {
+			$('#GoogleMapModal').modal();
+		} else {
+			$('#BaiduMapModal').modal();
+		}
 	});
 
-	$('#DeviceMapModal').on('shown.bs.modal', function (e) {
+	$('#BaiduMapModal').on('shown.bs.modal', function (e) {
 		if (CurrentMap == null) {
-			CurrentMap = new BMap.Map("DeviceMapDiv", {enableMapClick:false});
+			CurrentMap = new BMap.Map("BaiduMapDiv", {enableMapClick:false});
 			CurrentMap.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));
 			var point = new BMap.Point(114, 30);
 			CurrentMap.centerAndZoom(point, 1);
@@ -232,6 +236,55 @@ function initMapModal() {
 			}
 		}
 		CurrentMap.setViewport(points);
+	})
+
+	var GoogleMarkers = [];
+	var PreInfoWindow = null;
+	$('#GoogleMapModal').on('shown.bs.modal', function (e) {
+		if (CurrentMap == null) {
+			CurrentMap = new google.maps.Map(document.getElementById('GoogleMapDiv'), {
+				zoom: 1,
+				center: new google.maps.LatLng(30, 114)
+			});
+		}
+		for (var i = 0; i < GoogleMarkers.length; i++) {
+			GoogleMarkers[i].setMap(null);
+		}
+		GoogleMarkers = [];
+		var bounds = new google.maps.LatLngBounds();
+		CurrentMap.setCenter(new google.maps.LatLng(30, 114));
+		CurrentMap.setZoom(1);
+		for (var i=0; i<CurrentDevicegroup.devices.length; i++) {
+			var device = CurrentDevicegroup.devices[i];
+			if (device.lontitude > 0 && device.latitude > 0) {
+				var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.lontitude));
+				var marker = new google.maps.Marker({
+					position: point,
+					map: CurrentMap,
+					title: device.terminalid
+				});
+				GoogleMarkers.push(marker);
+				marker.addListener('click', function() {
+					var terminalid = this.getTitle();
+					 var ds = CurrentDevicegroup.devices.filter(function (el) {
+						return (el.terminalid == terminalid);
+					});
+					var sContent =
+						'<div><h4>' + ds[0].terminalid + ' - ' + ds[0].name + '</h4>' + 
+						'<p>' + ds[0].addr1 + '</p>' + 
+						'</div>';
+					var infowindow = new google.maps.InfoWindow({
+						content: sContent
+					});
+					if (PreInfoWindow != null) PreInfoWindow.close();
+					PreInfoWindow = infowindow;
+					infowindow.open(CurrentMap, this);
+				});
+				bounds.extend(point);
+				PreInfoWindow = null;
+				CurrentMap.fitBounds(bounds);
+			}
+		}
 	})
 }
 

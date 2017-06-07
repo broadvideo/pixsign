@@ -34,6 +34,7 @@ $('#PlanTable').dataTable({
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		var playtimehtml = '';
+		playtimehtml += '<h4><b>Plan-' + aData.planid + '</b></h4><hr/>';
 		if (aData.startdate == '1970-01-01') {
 			playtimehtml += common.view.unlimited;
 		} else {

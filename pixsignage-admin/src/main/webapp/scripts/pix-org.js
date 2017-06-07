@@ -13,6 +13,7 @@ function refreshMyTable() {
 }
 
 var CurrentVsp;
+var CurrentOrg;
 function initMyTable() {
 	var oTable = $('#MyTable').dataTable({
 		'sDom' : 'rt',
@@ -52,24 +53,20 @@ function initMyTable() {
 	$('#MyTable_wrapper .dataTables_length select').select2();
 	$('#MyTable').css('width', '100%');
 	
-	var currentItem;
 	$('body').on('click', '.pix-delete', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
-		var action = myurls['common.delete'];
-		currentItem = item;
-		
-		bootbox.confirm(common.tips.remove + currentItem.name, function(result) {
+		CurrentOrg = $('#MyTable').dataTable().fnGetData(index);
+		bootbox.confirm(common.tips.remove + CurrentOrg.name, function(result) {
 			if (result == true) {
 				$.ajax({
 					type : 'POST',
-					url : action,
+					url : myurls['common.delete'],
 					cache: false,
 					data : {
-						'org.orgid': currentItem['orgid']
+						'org.orgid': CurrentOrg.orgid
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -176,6 +173,50 @@ function initMyEditModal() {
 				'tie_selection' : false,
 			},
 			'plugins' : ['checkbox'],
+		});
+	}
+	
+	function refreshTimezone() {
+		$('#TimezoneSelect').select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: { 
+				url: 'timezone!list.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term, 
+						iDisplayStart: (page-1)*20,
+						iDisplayLength: 20,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.name, 
+								id:item.name,
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function (data) {
+				return data.text;
+			},
+			formatSelection: function (data) {
+				return data.text;
+			},
+			initSelection: function(element, callback) {
+				if (CurrentOrg != null) {
+					callback({id: CurrentOrg.timezone, text: CurrentOrg.timezone });
+				}
+			},
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
 		});
 	}
 
@@ -340,7 +381,7 @@ function initMyEditModal() {
 		}
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="org.code"]').removeAttr('readonly');
-
+		
 		$('.pix-ctrl').css('display', PixCtrl?'':'none');
 		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
@@ -355,6 +396,11 @@ function initMyEditModal() {
 		currentApps = {};
 		refreshAppTreeData(currentAppTreeData);
 		createAppTree(currentAppTreeData);
+		refreshTimezone();
+		$('#TimezoneSelect').select2('data', {
+			id: 'Asia/Shanghai', 
+			text: 'Asia/Shanghai'
+		});
 		
 		$('#MyEditModal').modal();
 	});			
@@ -364,14 +410,14 @@ function initMyEditModal() {
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
-		var item = $('#MyTable').dataTable().fnGetData(index);
+		CurrentOrg = $('#MyTable').dataTable().fnGetData(index);
 
-		refreshVsp(item);
+		refreshVsp(CurrentOrg);
 		
 		var action = myurls['common.update'];
 		var formdata = new Object();
-		for (var name in item) {
-			formdata['org.' + name] = item[name];
+		for (var name in CurrentOrg) {
+			formdata['org.' + name] = CurrentOrg[name];
 		}
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
@@ -404,13 +450,14 @@ function initMyEditModal() {
 		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
 		
 		currentApps = {};
-		if (item.applist != null) {
-			for (var i=0; i<item.applist.length; i++) {
-				currentApps[item.applist[i].appid] = item.applist[i];
+		if (CurrentOrg.applist != null) {
+			for (var i=0; i<CurrentOrg.applist.length; i++) {
+				currentApps[CurrentOrg.applist[i].appid] = CurrentOrg.applist[i];
 			}
 		}
 		refreshAppTreeData(currentAppTreeData);
 		createAppTree(currentAppTreeData);
+		refreshTimezone();
 		
 		$('#MyEditModal').modal();
 	});

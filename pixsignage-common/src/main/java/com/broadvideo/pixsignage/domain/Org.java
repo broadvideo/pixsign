@@ -87,6 +87,8 @@ public class Org {
 
 	private Integer volume;
 
+	private String timezone;
+
 	private String apps;
 
 	private String logo;
@@ -415,6 +417,14 @@ public class Org {
 
 	public void setVolume(Integer volume) {
 		this.volume = volume;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
 	}
 
 	public String getApps() {

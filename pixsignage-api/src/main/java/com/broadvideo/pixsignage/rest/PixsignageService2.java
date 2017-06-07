@@ -263,12 +263,24 @@ public class PixsignageService2 {
 				}
 			}
 
-			responseJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
-			if (org.getPowerflag().equals("1")) {
+			if (device.getPowerflag().equals("0")) {
+				responseJson.put("power_flag", 0);
+			} else if (device.getPowerflag().equals("1")) {
+				responseJson.put("power_flag", 1);
 				responseJson.put("power_on_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweron()));
 				responseJson.put("power_off_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweroff()));
+			} else {
+				if (org.getPowerflag().equals("0")) {
+					responseJson.put("power_flag", 0);
+				} else {
+					responseJson.put("power_flag", 1);
+					responseJson.put("power_on_time",
+							new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+					responseJson.put("power_off_time",
+							new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+				}
 			}
 
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
@@ -575,12 +587,24 @@ public class PixsignageService2 {
 							contentJson.put("volume", org.getVolume());
 						}
 					}
-					contentJson.put("power_flag", Integer.parseInt(org.getPowerflag()));
-					if (org.getPowerflag().equals("1")) {
+					if (device.getPowerflag().equals("0")) {
+						contentJson.put("power_flag", 0);
+					} else if (device.getPowerflag().equals("1")) {
+						contentJson.put("power_flag", 1);
 						contentJson.put("power_on_time",
-								new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+								new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweron()));
 						contentJson.put("power_off_time",
-								new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+								new SimpleDateFormat(CommonConstants.DateFormat_Time).format(device.getPoweroff()));
+					} else {
+						if (org.getPowerflag().equals("0")) {
+							contentJson.put("power_flag", 0);
+						} else {
+							contentJson.put("power_flag", 1);
+							contentJson.put("power_on_time",
+									new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweron()));
+							contentJson.put("power_off_time",
+									new SimpleDateFormat(CommonConstants.DateFormat_Time).format(org.getPoweroff()));
+						}
 					}
 					contentJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 					contentJson.put("password", org.getDevicepass());

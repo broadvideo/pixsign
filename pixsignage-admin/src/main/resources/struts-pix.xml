@@ -61,6 +61,13 @@
 			</result>
 		</action>
 
+		<action name="timezone!list" method="doList" class="timezoneAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="vsp!list" method="doList" class="vspAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>

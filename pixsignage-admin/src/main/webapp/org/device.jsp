@@ -37,19 +37,20 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 <!-- END PAGE LEVEL STYLES -->
 
 <%@ include file="/common/common2.jsp"%>
 
-		<div id="DeviceMapModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+		<div id="BaiduMapModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 					</div>
 					<div class="modal-body">
-						<div id="DeviceMapDiv" style="width:100%; height:600px;"></div>
+						<div id="BaiduMapDiv" style="width:100%; height:600px;"></div>
 					</div>
 					<div class="modal-footer">
 						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
@@ -58,7 +59,23 @@ response.setDateHeader("Expires",0);
 			</div>
 		</div>
 
-		<div id="ScreenModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+		<div id="GoogleMapModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</div>
+					<div class="modal-body">
+						<div id="GoogleMapDiv" style="width:100%; height:600px;"></div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="ScreenModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -149,7 +166,7 @@ response.setDateHeader("Expires",0);
 			</div>
 		</div>
 		
-		<div id="VolumeModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div id="ConfigModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -157,7 +174,7 @@ response.setDateHeader("Expires",0);
 						<h4 class="modal-title"><spring:message code="global.device"/></h4>
 					</div>
 					<div class="modal-body">
-						<form id="VolumeForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+						<form id="ConfigForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
 							<input type="hidden" name="device.deviceid" value="0" />
 							<div class="form-body">
 								<div class="form-group">
@@ -182,6 +199,42 @@ response.setDateHeader("Expires",0);
 									<label class="col-md-3 control-label"><spring:message code="global.volume"/></label>
 									<div class="col-md-9">
 										<input class="volumeRange" type="text" name="device.volume" value="50"/>
+									</div>
+								</div>
+								<div class="form-group sscreen-ctrl">
+									<label class="col-md-3 control-label"><spring:message code="global.powerflag"/></label>
+									<div class="col-md-9 radio-list">
+										<label class="radio-inline">
+											<input type="radio" name="device.powerflag" value="0"> <spring:message code="global.powerflag_0"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="device.powerflag" value="1" > <spring:message code="global.powerflag_1"/>
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="device.powerflag" value="2" checked> <spring:message code="global.powerflag_2"/>
+										</label>
+									</div>
+								</div>
+								<div class="form-group sscreen-ctrl powerflag">
+									<label class="col-md-3 control-label"><spring:message code="global.poweron"/></label>
+									<div class="col-md-9">
+										<div class="input-group date form_time">                                       
+											<input type="text" size="16" readonly class="form-control" name="device.poweron">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group sscreen-ctrl powerflag">
+									<label class="col-md-3 control-label"><spring:message code="global.poweroff"/></label>
+									<div class="col-md-9">
+										<div class="input-group date form_time">                                       
+											<input type="text" size="16" readonly class="form-control" name="device.poweroff">
+											<span class="input-group-btn">
+											<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -482,7 +535,13 @@ response.setDateHeader("Expires",0);
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
+<% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
+<% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
+<% } %>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -498,6 +557,7 @@ var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 var MscreenCtrl = <%=(session_org != null && session_org.getMscreenflag().equals("1"))%>;
 $('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
+var MapSource = <%=(session_org != null && !session_org.getTimezone().equals("Asia/Shanghai"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
@@ -506,7 +566,7 @@ jQuery(document).ready(function() {
 	initBranchTree();
 	initMyTable();
 	initMyEditModal();
-	initVolumeModal();
+	initConfigModal();
 	initScreenModal();
 	initDeviceFileModal();
 	initMapModal();

@@ -209,6 +209,12 @@ response.setDateHeader("Expires",0);
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.timezone"/></label>
+											<div class="col-md-9">
+												<input type="hidden" id="TimezoneSelect" class="form-control select2" name="org.timezone">
+											</div>
+										</div>
 										<div class="form-group pix-control">
 											<label class="col-md-3 control-label"><spring:message code="global.org.copyright"/></label>
 											<div class="col-md-9">
@@ -353,7 +359,7 @@ response.setDateHeader("Expires",0);
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
