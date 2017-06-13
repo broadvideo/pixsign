@@ -1,16 +1,51 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/common/taglibs.jsp"%> 
+<%@include file="/common/session.jsp"%>
+
+<%
+response.setHeader("Cache-Control","no-store");
+response.setHeader("Pragrma","no-cache");
+response.setDateHeader("Expires",0);
+%>
+
 <%@page import="java.util.List"%> 
 <%@page import="java.util.ArrayList"%> 
-<%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Privilege"%>
-<%@page import="com.broadvideo.pixsignage.domain.Vsp"%> 
-<%@page import="com.broadvideo.pixsignage.domain.Org"%> 
-<%@page import="com.broadvideo.pixsignage.common.CommonConstants"%> 
 <%@page import="com.broadvideo.pixsignage.common.CommonConfig"%> 
 
 <%@page import="org.springframework.web.context.WebApplicationContext"%> 
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%> 
 <%@page import="com.broadvideo.pixsignage.domain.Sdomain"%> 
 <%@page import="com.broadvideo.pixsignage.service.SdomainService"%> 
+
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8" />
+<title>Digital Signage</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="description" />
+<meta content="" name="author" />
+<meta name="MobileOptimized" content="320">
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="${static_ctx}/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+<sitemesh:write property='head'/>
+<!-- END PAGE LEVEL STYLES -->
 
 <%
 	ServletContext servletContext = this.getServletContext();
@@ -22,10 +57,6 @@
 	if (sdomain != null) {
 		theme = "light.css";
 	}
-	
-	Vsp session_vsp = (Vsp)session.getAttribute(CommonConstants.SESSION_VSP);
-	Org session_org = (Org)session.getAttribute(CommonConstants.SESSION_ORG);
-	Staff session_staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
 	
 	String currentPrivilegeid = request.getParameter("CurrentP");
 	if (currentPrivilegeid == null) {
@@ -287,3 +318,42 @@ function hasPrivilege(privilegeid) {
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
+
+		<sitemesh:write property='body'/>
+	</div>
+	
+	<div class="page-footer">
+		<div class="page-footer-inner">
+			<%if (session_org == null || session_org.getCopyright() == null || session_org.getCopyright().equals("")) { %>
+			©<%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%>&nbsp;<%=CommonConfig.SYSTEM_COPYRIGHT%>
+			<%} else { %>
+			©<%=session_org.getCopyright()%>
+			<%} %>
+		</div>
+		<div class="scroll-to-top">
+			<i class="icon-arrow-up"></i>
+		</div>
+	</div>
+	
+<!-- BEGIN CORE PLUGINS -->   
+<!--[if lt IE 9]>
+<script src="${static_ctx}/global/plugins/respond.min.js"></script>
+<script src="${static_ctx}/global/plugins/excanvas.min.js"></script> 
+<![endif]-->   
+<script src="${static_ctx}/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+
+<sitemesh:write property='div.SiteMethJavaScript'/>
+	 
+</body>
+</html>

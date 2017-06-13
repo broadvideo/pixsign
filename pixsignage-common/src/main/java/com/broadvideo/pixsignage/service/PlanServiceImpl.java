@@ -215,7 +215,8 @@ public class PlanServiceImpl implements PlanService {
 			JSONObject planJson = new JSONObject();
 			planJsonArray.put(planJson);
 			planJson.put("plan_id", plan.getPlanid());
-			planJson.put("playmode", "daily");
+			planJson.put("priority", plan.getPriority());
+			planJson.put("play_mode", "daily");
 			planJson.put("start_date",
 					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
 			planJson.put("end_date", new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));

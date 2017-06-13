@@ -41,7 +41,7 @@ function initMyTable() {
 				$('td:eq(2)', nRow).html(aData.onlinelog[0].onlinetime);
 				if (aData.onlinelog[0].offlinetime != null) {
 					$('td:eq(3)', nRow).html(aData.onlinelog[0].offlinetime);
-					$('td:eq(4)', nRow).html(aData.onlinelog[0].duration);
+					$('td:eq(4)', nRow).html(transferIntToTime(aData.onlinelog[0].duration));
 				}
 			}
 			$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.more + '</a>');
@@ -89,6 +89,7 @@ function initDetailModal() {
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 			$('td:eq(0)', nRow).html(CurrentDevice.terminalid + '(' + CurrentDevice.name + ')');
+			$('td:eq(3)', nRow).html(transferIntToTime(aData.duration));
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

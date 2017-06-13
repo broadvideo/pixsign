@@ -165,6 +165,9 @@ var common = {
 		template_ratio_2: '1080x1920',
 		template_type_0: 'Private',
 		template_type_1: 'Public',
+		
+		plan_priority_0: 'Common Priority',
+		plan_priority_1: 'High Priority',
 
 		upgradeflag: 'Auto Upgrade Flag',
 		volumeflag: 'System Volume Flag',

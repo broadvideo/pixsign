@@ -53,6 +53,7 @@ create table plan(
    branchid int,
    plantype char(1) not null,
    gridlayoutcode varchar(32) default '',
+   priority tinyint default 0,
    startdate date,
    enddate date,
    starttime time,

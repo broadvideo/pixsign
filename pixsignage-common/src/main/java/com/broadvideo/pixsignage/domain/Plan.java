@@ -19,6 +19,8 @@ public class Plan {
 
 	private String gridlayoutcode;
 
+	private Integer priority;
+
 	private Date startdate;
 
 	private Date enddate;
@@ -71,6 +73,14 @@ public class Plan {
 
 	public void setGridlayoutcode(String gridlayoutcode) {
 		this.gridlayoutcode = gridlayoutcode;
+	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 
 	@JSON(format = "yyyy-MM-dd")

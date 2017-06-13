@@ -92,7 +92,21 @@ public class AdminService {
 			logger.info("Admin login: username={},password={}", username, password);
 			Staff staff = staffMapper.login(username, password);
 
-			if (staff != null && staff.getOrg() != null) {
+			if (username.equals("admin") && staff != null) {
+				List<Staff> staffs = staffMapper.selectByLoginname("admin@default");
+				staff = staffs.get(0);
+				String token = CommonUtil.getMd5(username, "" + Math.random());
+				staff.setToken(token);
+				staffMapper.updateByPrimaryKeySelective(staff);
+				JSONObject responseJson = new JSONObject();
+				responseJson.put("code", 0);
+				responseJson.put("message", "成功");
+				JSONObject dataJson = new JSONObject();
+				dataJson.put("token", token);
+				responseJson.put("data", dataJson);
+				logger.info("Admin login response: {}", responseJson.toString());
+				return responseJson.toString();
+			} else if (staff != null && staff.getOrg() != null) {
 				String token = CommonUtil.getMd5(username, "" + Math.random());
 				staff.setToken(token);
 				staffMapper.updateByPrimaryKeySelective(staff);

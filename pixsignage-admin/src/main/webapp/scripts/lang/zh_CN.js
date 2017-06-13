@@ -166,6 +166,9 @@ var common = {
 		template_type_0: '内部模板',
 		template_type_1: '公共模板',
 
+		plan_priority_0: '普通',
+		plan_priority_1: '插播',
+
 		upgradeflag: '自动升级开关',
 		volumeflag: '系统音量开关',
 		volumeflag_off: '默认音量',

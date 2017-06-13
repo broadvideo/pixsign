@@ -34,7 +34,13 @@ $('#PlanTable').dataTable({
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		var playtimehtml = '';
-		playtimehtml += '<h4><b>Plan-' + aData.planid + '</b></h4><hr/>';
+		console.log(aData.priority);
+		if (aData.priority == 0) {
+			playtimehtml += '<span class="label label-sm label-success">' + common.view.plan_priority_0 + '</span>';
+		} else {
+			playtimehtml += '<span class="label label-sm label-danger">' + common.view.plan_priority_1 + '</span>';
+		}
+		playtimehtml += '<span><h4><b>Plan-' + aData.planid + '</b></h4></span><hr/>';
 		if (aData.startdate == '1970-01-01') {
 			playtimehtml += common.view.unlimited;
 		} else {
@@ -1018,7 +1024,11 @@ function initTab1() {
 }
 
 function initData1() {
-	$('#PlanOptionForm').loadJSON(CurrentPlan);
+	var formdata = new Object();
+	for (var name in CurrentPlan) {
+		formdata['plan.' + name] = CurrentPlan[name];
+	}
+	$('#PlanOptionForm').loadJSON(formdata);
 	if (CurrentPlan.startdate == '1970-01-01') {
 		$('input[name="plan.startdate.unlimited"]').attr('checked', 'checked');
 		$('input[name="plan.startdate.unlimited"]').parent().addClass('checked');
@@ -1127,6 +1137,7 @@ function validPlanOption() {
 		CurrentPlandtls = [];
 		CurrentPlanbinds = [];
 	}
+	CurrentPlan.priority = $('input[name="plan.priority"]:checked').val();
 	if ($('input[name="plan.startdate.unlimited"]').attr('checked')) {
 		CurrentPlan.startdate = '1970-01-01';
 	} else {
