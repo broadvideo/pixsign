@@ -2785,8 +2785,10 @@ function common_rotatable() {
 	} else if (isChrome || isSafari) {
 		tr = $img.css('-webkit-transform').replace("matrix(", "").replace(")", "");
 	}
+	console.log(tr);
 	$(".select_layer").find(".ui-rotatable-handle").remove();
 	$img.rotatable({mtx: [tr], onrotate: function (a) {
+			console.log(a);
 			set_rotation_angle_spinner_value(a);
 		}
 //		, stop: function(event, ui) {

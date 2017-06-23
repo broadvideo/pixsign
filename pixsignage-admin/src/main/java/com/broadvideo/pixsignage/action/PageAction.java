@@ -231,22 +231,22 @@ public class PageAction extends BaseDatatableAction {
 						tz.setStatus("0");
 					}
 					if (tz.getType().equals("1")) {
-						tz.setHeight(zoneStrucJson.getString("img_height"));
-						tz.setWidth(zoneStrucJson.getString("img_width"));
-						tz.setTopoffset(zoneStrucJson.getString("img_top"));
-						tz.setLeftoffset(zoneStrucJson.getString("img_left"));
+						tz.setHeight(Integer.parseInt(zoneStrucJson.getString("img_height")));
+						tz.setWidth(Integer.parseInt(zoneStrucJson.getString("img_width")));
+						tz.setTopoffset(Integer.parseInt(zoneStrucJson.getString("img_top")));
+						tz.setLeftoffset(Integer.parseInt(zoneStrucJson.getString("img_left")));
 						tz.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
 						tz.setTransform(zoneStrucJson.getString("img_transform"));
 						tz.setBdcolor(zoneStrucJson.getString("img_border_color"));
 						tz.setBdstyle(zoneStrucJson.getString("img_border_style"));
-						tz.setBdwidth(zoneStrucJson.getString("img_border_width"));
-						tz.setBdtl(zoneStrucJson.getString("border_top_left"));
-						tz.setBdtr(zoneStrucJson.getString("border_top_right"));
-						tz.setBdbl(zoneStrucJson.getString("border_bottom_left"));
-						tz.setBdbr(zoneStrucJson.getString("border_bottom_right"));
+						tz.setBdwidth(Integer.parseInt(zoneStrucJson.getString("img_border_width")));
+						tz.setBdtl(Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", "")));
+						tz.setBdtr(Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", "")));
+						tz.setBdbl(Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", "")));
+						tz.setBdbr(Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", "")));
 						tz.setBgcolor(zoneStrucJson.getString("img_background_color"));
 						tz.setOpacity(Integer.parseInt(zoneStrucJson.getString("img_opacity")));
-						tz.setPadding(zoneStrucJson.getString("img_padding"));
+						tz.setPadding(Integer.parseInt(zoneStrucJson.getString("img_padding").replace("px", "")));
 						tz.setShadow(zoneStrucJson.getString("img_shadow"));
 						if (zoneContent.equals("no")) {
 							zoneContent = "";
@@ -307,33 +307,34 @@ public class PageAction extends BaseDatatableAction {
 							}
 						}
 					} else if (tz.getType().equals("0")) {
-						tz.setHeight(zoneStrucJson.getString("text_height"));
-						tz.setWidth(zoneStrucJson.getString("text_width"));
-						tz.setTopoffset(zoneStrucJson.getString("text_top"));
-						tz.setLeftoffset(zoneStrucJson.getString("text_left"));
+						tz.setHeight(Integer.parseInt(zoneStrucJson.getString("text_height")));
+						tz.setWidth(Integer.parseInt(zoneStrucJson.getString("text_width")));
+						tz.setTopoffset(Integer.parseInt(zoneStrucJson.getString("text_top")));
+						tz.setLeftoffset(Integer.parseInt(zoneStrucJson.getString("text_left")));
 						tz.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
 						tz.setTransform(zoneStrucJson.getString("text_transform"));
 						tz.setBdcolor(zoneStrucJson.getString("text_border_color"));
 						tz.setBdstyle(zoneStrucJson.getString("text_border_style"));
-						tz.setBdwidth(zoneStrucJson.getString("text_border_width"));
-						tz.setBdtl(zoneStrucJson.getString("border_top_left"));
-						tz.setBdtr(zoneStrucJson.getString("border_top_right"));
-						tz.setBdbl(zoneStrucJson.getString("border_bottom_left"));
-						tz.setBdbr(zoneStrucJson.getString("border_bottom_right"));
+						tz.setBdwidth(Integer.parseInt(zoneStrucJson.getString("text_border_width")));
+						tz.setBdtl(Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", "")));
+						tz.setBdtr(Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", "")));
+						tz.setBdbl(Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", "")));
+						tz.setBdbr(Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", "")));
 						tz.setBgcolor(zoneStrucJson.getString("text_background_color"));
-						tz.setPadding(zoneStrucJson.getString("text_padding"));
+						tz.setPadding(Integer.parseInt(zoneStrucJson.getString("text_padding").replace("px", "")));
 						tz.setShadow(zoneStrucJson.getString("text_shadow"));
 						tz.setColor(zoneStrucJson.getString("text_color"));
 						String fontfamily = zoneStrucJson.getString("text_font_family");
 						if (fontfamily != null) {
 							tz.setFontfamily(fontfamily.replaceAll("'", ""));
 						}
-						tz.setFontsize(zoneStrucJson.getString("text_font_size"));
+						tz.setFontsize(Integer.parseInt(zoneStrucJson.getString("text_font_size").replace("px", "")));
 						tz.setFontweight(zoneStrucJson.getString("text_font_weight"));
 						tz.setFontstyle(zoneStrucJson.getString("text_font_style"));
 						tz.setDecoration(zoneStrucJson.getString("text_decoration"));
 						tz.setAlign(zoneStrucJson.getString("text_align"));
-						tz.setLineheight(zoneStrucJson.getString("text_line_height"));
+						tz.setLineheight(
+								Integer.parseInt(zoneStrucJson.getString("text_line_height").replace("px", "")));
 						tz.setContent(zoneContent);
 					}
 					pageService.addPagezone(tz);

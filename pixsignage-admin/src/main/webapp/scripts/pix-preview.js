@@ -569,3 +569,254 @@ function redrawSologridPreview(div, grid, thumbnail, maxsize) {
 	div.css('height' , height);
 }
 
+//Page & Ptemplet Preview
+function redrawPtempletPreview(container, ptemplet, maxsize) {
+	$(container).empty();
+	var scale, width, height;
+	if (ptemplet.width > ptemplet.height ) {
+		width = maxsize;
+		scale = ptemplet.width / width;
+		height = ptemplet.height / scale;
+		$(container).css('width' , width);
+		$(container).css('height' , height);
+	} else {
+		height = maxsize;
+		scale = ptemplet.height / height;
+		width = ptemplet.width / scale;
+		$(container).css('width' , width);
+		$(container).css('height' , height);
+	}
+	for (var i = 0; i < ptemplet.ptempletzones.length; i++) {
+		var ptempletzone = ptemplet.ptempletzones[i];
+		if (ptempletzone.type == 0) {
+			var ptempletzone_div = document.createElement('div');
+			var background_div = document.createElement('div');
+			var inner_div = document.createElement('div');
+			var p_element = document.createElement('p');
+			p_element.innerHTML = ptempletzone.content;
+			$(inner_div).append(p_element);
+			$(ptempletzone_div).append(background_div);
+			$(ptempletzone_div).append(inner_div);
+			$(container).append(ptempletzone_div);
+			
+			$(ptempletzone_div).css({
+				'position': 'absolute',
+				'width': 100*ptempletzone.width/ptemplet.width + '%',
+				'height': 100*ptempletzone.height/ptemplet.height + '%',
+				'top': 100*ptempletzone.topoffset/ptemplet.height + '%', 
+				'left': 100*ptempletzone.leftoffset/ptemplet.width + '%', 
+				'z-index': ptempletzone.zindex,
+				'-moz-transform': ptempletzone.transform,
+				'-webkit-transform': ptempletzone.transform,
+			});
+			$(background_div).css({
+				'position': 'absolute',
+				'width': '100%',
+				'height': '100%',
+				'background': ptempletzone.bgcolor, 
+				'opacity': parseInt(ptempletzone.bgopacity)/255, 
+			});
+			$(inner_div).css({
+				'position': 'absolute',
+				'height': '100%', 
+				'width': '100%', 
+				'color': ptempletzone.color, 
+				'font-family': ptempletzone.fontfamily, 
+				'font-size': (parseInt(ptempletzone.fontsize) / scale) + 'px', 
+				'text-decoration': ptempletzone.decoration, 
+				'text-align': ptempletzone.align, 
+				'font-weight': ptempletzone.fontweight, 
+				'font-style': ptempletzone.fontstyle, 
+				'line-height': (parseInt(ptempletzone.lineheight) / scale) + 'px', 
+				'text-shadow': ptempletzone.shadow, 
+				'border-color': ptempletzone.bdcolor, 
+				'border-style': ptempletzone.bdstyle, 
+				'border-width': (parseInt(ptempletzone.bdwidth) / scale) + 'px', 
+				'padding': (parseInt(ptempletzone.padding) / scale) + 'px', 
+				'border-top-right-radius': (parseInt(ptempletzone.bdtr) / scale) + 'px', 
+				'border-top-left-radius': (parseInt(ptempletzone.bdtl) / scale) + 'px', 
+				'border-bottom-left-radius': (parseInt(ptempletzone.bdbl) / scale) + 'px', 
+				'border-bottom-right-radius': (parseInt(ptempletzone.bdbr) / scale) + 'px',
+				'word-wrap': 'break-word',
+			});
+			$(p_element).css({
+				'word-wrap': 'break-word',
+				'white-space': 'pre-wrap',
+				'text-decoration': ptempletzone.decoration,
+			});
+		} else if (ptempletzone.type == '1') {
+			var ptempletzone_div = document.createElement('div');
+			var background_div = document.createElement('div');
+			var inner_div = document.createElement('div');
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+			$(ptempletzone_div).append(background_div);
+			$(ptempletzone_div).append(inner_div);
+			$(container).append(ptempletzone_div);
+
+			$(ptempletzone_div).css({
+				'position': 'absolute',
+				'width': 100*ptempletzone.width/CurrentPtemplet.width + '%',
+				'height': 100*ptempletzone.height/CurrentPtemplet.height + '%',
+				'top': 100*ptempletzone.topoffset/CurrentPtemplet.height + '%', 
+				'left': 100*ptempletzone.leftoffset/CurrentPtemplet.width + '%', 
+				'z-index': ptempletzone.zindex,
+				'-moz-transform': ptempletzone.transform,
+				'-webkit-transform': ptempletzone.transform,
+			});
+			$(background_div).css({
+				'position': 'absolute',
+				'width': '100%',
+				'height': '100%',
+				'background': ptempletzone.bgcolor, 
+				'opacity': parseInt(ptempletzone.bgopacity)/255, 
+			});
+			$(inner_div).css({
+				'position': 'absolute',
+				'height': '100%', 
+				'width': '100%', 
+				'border-color': ptempletzone.bdcolor, 
+				'border-style': ptempletzone.bdstyle, 
+				'border-width': ptempletzone.bdwidth, 
+				'padding': (parseInt(ptempletzone.padding) / scale) + 'px', 
+				'box-shadow': ptempletzone.shadow, 
+				'border-top-right-radius': (parseInt(ptempletzone.bdtr) / scale) + 'px', 
+				'border-top-left-radius': (parseInt(ptempletzone.bdtl) / scale) + 'px', 
+				'border-bottom-left-radius': (parseInt(ptempletzone.bdbl) / scale) + 'px', 
+				'border-bottom-right-radius': (parseInt(ptempletzone.bdbr) / scale) + 'px', 
+				'opacity': parseInt(ptempletzone.opacity)/255,
+			});
+			if (ptempletzone.content != '' && ptempletzone.content != 'no' && ptempletzone.content != 'non') {
+				$(ptempletzone_div).find('img').attr('src', '/pixsigdata' + ptempletzone.content);
+				$(ptempletzone_div).find('img').attr('width', '100%');
+				$(ptempletzone_div).find('img').attr('height', '100%');
+			}
+		}
+	}
+}
+
+function redrawPagePreview(container, page, maxsize) {
+	$(container).empty();
+	var scale, width, height;
+	if (page.width > page.height ) {
+		width = maxsize;
+		scale = page.width / width;
+		height = page.height / scale;
+		$(container).css('width' , width);
+		$(container).css('height' , height);
+	} else {
+		height = maxsize;
+		scale = page.height / height;
+		width = page.width / scale;
+		$(container).css('width' , width);
+		$(container).css('height' , height);
+	}
+	for (var i = 0; i < page.pagezones.length; i++) {
+		var pagezone = page.pagezones[i];
+		if (pagezone.type == 0) {
+			var pagezone_div = document.createElement('div');
+			var background_div = document.createElement('div');
+			var inner_div = document.createElement('div');
+			var p_element = document.createElement('p');
+			p_element.innerHTML = pagezone.content;
+			$(inner_div).append(p_element);
+			$(pagezone_div).append(background_div);
+			$(pagezone_div).append(inner_div);
+			$(container).append(pagezone_div);
+			
+			$(pagezone_div).css({
+				'position': 'absolute',
+				'width': 100*pagezone.width/page.width + '%',
+				'height': 100*pagezone.height/page.height + '%',
+				'top': 100*pagezone.topoffset/page.height + '%', 
+				'left': 100*pagezone.leftoffset/page.width + '%', 
+				'z-index': pagezone.zindex,
+				'-moz-transform': pagezone.transform,
+				'-webkit-transform': pagezone.transform,
+			});
+			$(background_div).css({
+				'position': 'absolute',
+				'width': '100%',
+				'height': '100%',
+				'background': pagezone.bgcolor, 
+				'opacity': parseInt(pagezone.bgopacity)/255, 
+			});
+			$(inner_div).css({
+				'position': 'absolute',
+				'height': '100%', 
+				'width': '100%', 
+				'color': pagezone.color, 
+				'font-family': pagezone.fontfamily, 
+				'font-size': (parseInt(pagezone.fontsize) / scale) + 'px', 
+				'text-decoration': pagezone.decoration, 
+				'text-align': pagezone.align, 
+				'font-weight': pagezone.fontweight, 
+				'font-style': pagezone.fontstyle, 
+				'line-height': (parseInt(pagezone.lineheight) / scale) + 'px', 
+				'text-shadow': pagezone.shadow, 
+				'border-color': pagezone.bdcolor, 
+				'border-style': pagezone.bdstyle, 
+				'border-width': (parseInt(pagezone.bdwidth) / scale) + 'px', 
+				'padding': (parseInt(pagezone.padding) / scale) + 'px', 
+				'border-top-right-radius': (parseInt(pagezone.bdtr) / scale) + 'px', 
+				'border-top-left-radius': (parseInt(pagezone.bdtl) / scale) + 'px', 
+				'border-bottom-left-radius': (parseInt(pagezone.bdbl) / scale) + 'px', 
+				'border-bottom-right-radius': (parseInt(pagezone.bdbr) / scale) + 'px',
+				'word-wrap': 'break-word',
+			});
+			$(p_element).css({
+				'word-wrap': 'break-word',
+				'white-space': 'pre-wrap',
+				'text-decoration': pagezone.decoration,
+			});
+		} else if (pagezone.type == '1') {
+			var pagezone_div = document.createElement('div');
+			var background_div = document.createElement('div');
+			var inner_div = document.createElement('div');
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+			$(pagezone_div).append(background_div);
+			$(pagezone_div).append(inner_div);
+			$(container).append(pagezone_div);
+
+			$(pagezone_div).css({
+				'position': 'absolute',
+				'width': 100*pagezone.width/CurrentPage.width + '%',
+				'height': 100*pagezone.height/CurrentPage.height + '%',
+				'top': 100*pagezone.topoffset/CurrentPage.height + '%', 
+				'left': 100*pagezone.leftoffset/CurrentPage.width + '%', 
+				'z-index': pagezone.zindex,
+				'-moz-transform': pagezone.transform,
+				'-webkit-transform': pagezone.transform,
+			});
+			$(background_div).css({
+				'position': 'absolute',
+				'width': '100%',
+				'height': '100%',
+				'background': pagezone.bgcolor, 
+				'opacity': parseInt(pagezone.bgopacity)/255, 
+			});
+			$(inner_div).css({
+				'position': 'absolute',
+				'height': '100%', 
+				'width': '100%', 
+				'border-color': pagezone.bdcolor, 
+				'border-style': pagezone.bdstyle, 
+				'border-width': pagezone.bdwidth, 
+				'padding': (parseInt(pagezone.padding) / scale) + 'px', 
+				'box-shadow': pagezone.shadow, 
+				'border-top-right-radius': (parseInt(pagezone.bdtr) / scale) + 'px', 
+				'border-top-left-radius': (parseInt(pagezone.bdtl) / scale) + 'px', 
+				'border-bottom-left-radius': (parseInt(pagezone.bdbl) / scale) + 'px', 
+				'border-bottom-right-radius': (parseInt(pagezone.bdbr) / scale) + 'px', 
+				'opacity': parseInt(pagezone.opacity)/255,
+			});
+			if (pagezone.content != '' && pagezone.content != 'no' && pagezone.content != 'non') {
+				$(pagezone_div).find('img').attr('src', '/pixsigdata' + pagezone.content);
+				$(pagezone_div).find('img').attr('width', '100%');
+				$(pagezone_div).find('img').attr('height', '100%');
+			}
+		}
+	}
+}
+

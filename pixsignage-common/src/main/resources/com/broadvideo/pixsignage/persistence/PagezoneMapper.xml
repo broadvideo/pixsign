@@ -7,31 +7,32 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
-    <result column="height" property="height" jdbcType="VARCHAR" />
-    <result column="width" property="width" jdbcType="VARCHAR" />
-    <result column="topoffset" property="topoffset" jdbcType="VARCHAR" />
-    <result column="leftoffset" property="leftoffset" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
+    <result column="leftoffset" property="leftoffset" jdbcType="INTEGER" />
     <result column="zindex" property="zindex" jdbcType="INTEGER" />
     <result column="transform" property="transform" jdbcType="VARCHAR" />
     <result column="bdcolor" property="bdcolor" jdbcType="VARCHAR" />
     <result column="bdstyle" property="bdstyle" jdbcType="VARCHAR" />
-    <result column="bdwidth" property="bdwidth" jdbcType="VARCHAR" />
-    <result column="bdtl" property="bdtl" jdbcType="VARCHAR" />
-    <result column="bdtr" property="bdtr" jdbcType="VARCHAR" />
-    <result column="bdbl" property="bdbl" jdbcType="VARCHAR" />
-    <result column="bdbr" property="bdbr" jdbcType="VARCHAR" />
+    <result column="bdwidth" property="bdwidth" jdbcType="INTEGER" />
+    <result column="bdtl" property="bdtl" jdbcType="INTEGER" />
+    <result column="bdtr" property="bdtr" jdbcType="INTEGER" />
+    <result column="bdbl" property="bdbl" jdbcType="INTEGER" />
+    <result column="bdbr" property="bdbr" jdbcType="INTEGER" />
     <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="bgopacity" property="bgopacity" jdbcType="INTEGER" />
     <result column="opacity" property="opacity" jdbcType="INTEGER" />
-    <result column="padding" property="padding" jdbcType="VARCHAR" />
+    <result column="padding" property="padding" jdbcType="INTEGER" />
     <result column="shadow" property="shadow" jdbcType="VARCHAR" />
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="fontfamily" property="fontfamily" jdbcType="VARCHAR" />
-    <result column="fontsize" property="fontsize" jdbcType="VARCHAR" />
+    <result column="fontsize" property="fontsize" jdbcType="INTEGER" />
     <result column="fontweight" property="fontweight" jdbcType="VARCHAR" />
     <result column="fontstyle" property="fontstyle" jdbcType="VARCHAR" />
     <result column="decoration" property="decoration" jdbcType="VARCHAR" />
     <result column="align" property="align" jdbcType="VARCHAR" />
-    <result column="lineheight" property="lineheight" jdbcType="VARCHAR" />
+    <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
     <result column="linkpageid" property="linkpageid" jdbcType="INTEGER" />
     <result column="imageid" property="imageid" jdbcType="VARCHAR" />
     <result column="videoid" property="videoid" jdbcType="VARCHAR" />
@@ -43,7 +44,7 @@
   
   <sql id="Base_Column_List" >
     pagezoneid, pageid, name, type, status, height, width, topoffset, leftoffset, zindex, 
-    transform, bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, opacity, padding, 
+    transform, bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, bgopacity, opacity, padding, 
     shadow, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, lineheight, 
     linkpageid, imageid, videoid, createtime
   </sql>
@@ -81,22 +82,22 @@
       transform, bdcolor, bdstyle, 
       bdwidth, bdtl, bdtr, 
       bdbl, bdbr, bgcolor, 
-      opacity, padding, shadow, 
+      bgopacity, opacity, padding, shadow, 
       color, fontfamily, fontsize, 
       fontweight, fontstyle, decoration, 
       align, lineheight, linkpageid, 
       imageid, videoid, createtime, 
       content)
     values (#{pageid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{status,jdbcType=CHAR}, #{height,jdbcType=VARCHAR}, #{width,jdbcType=VARCHAR}, 
-      #{topoffset,jdbcType=VARCHAR}, #{leftoffset,jdbcType=VARCHAR}, #{zindex,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, #{zindex,jdbcType=INTEGER}, 
       #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, #{bdstyle,jdbcType=VARCHAR}, 
-      #{bdwidth,jdbcType=VARCHAR}, #{bdtl,jdbcType=VARCHAR}, #{bdtr,jdbcType=VARCHAR}, 
-      #{bdbl,jdbcType=VARCHAR}, #{bdbr,jdbcType=VARCHAR}, #{bgcolor,jdbcType=VARCHAR}, 
-      #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=VARCHAR}, #{shadow,jdbcType=VARCHAR}, 
-      #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=VARCHAR}, 
+      #{bdwidth,jdbcType=INTEGER}, #{bdtl,jdbcType=INTEGER}, #{bdtr,jdbcType=INTEGER}, 
+      #{bdbl,jdbcType=INTEGER}, #{bdbr,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
+      #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, #{shadow,jdbcType=VARCHAR}, 
+      #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, 
       #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, 
-      #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=VARCHAR}, #{linkpageid,jdbcType=INTEGER}, 
+      #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, #{linkpageid,jdbcType=INTEGER}, 
       #{imageid,jdbcType=VARCHAR}, #{videoid,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
@@ -159,6 +160,9 @@
       </if>
       <if test="bgcolor != null" >
         bgcolor,
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity,
       </if>
       <if test="opacity != null" >
         opacity,
@@ -223,16 +227,16 @@
         #{status,jdbcType=CHAR},
       </if>
       <if test="height != null" >
-        #{height,jdbcType=VARCHAR},
+        #{height,jdbcType=INTEGER},
       </if>
       <if test="width != null" >
-        #{width,jdbcType=VARCHAR},
+        #{width,jdbcType=INTEGER},
       </if>
       <if test="topoffset != null" >
-        #{topoffset,jdbcType=VARCHAR},
+        #{topoffset,jdbcType=INTEGER},
       </if>
       <if test="leftoffset != null" >
-        #{leftoffset,jdbcType=VARCHAR},
+        #{leftoffset,jdbcType=INTEGER},
       </if>
       <if test="zindex != null" >
         #{zindex,jdbcType=INTEGER},
@@ -247,28 +251,31 @@
         #{bdstyle,jdbcType=VARCHAR},
       </if>
       <if test="bdwidth != null" >
-        #{bdwidth,jdbcType=VARCHAR},
+        #{bdwidth,jdbcType=INTEGER},
       </if>
       <if test="bdtl != null" >
-        #{bdtl,jdbcType=VARCHAR},
+        #{bdtl,jdbcType=INTEGER},
       </if>
       <if test="bdtr != null" >
-        #{bdtr,jdbcType=VARCHAR},
+        #{bdtr,jdbcType=INTEGER},
       </if>
       <if test="bdbl != null" >
-        #{bdbl,jdbcType=VARCHAR},
+        #{bdbl,jdbcType=INTEGER},
       </if>
       <if test="bdbr != null" >
-        #{bdbr,jdbcType=VARCHAR},
+        #{bdbr,jdbcType=INTEGER},
       </if>
       <if test="bgcolor != null" >
         #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        #{bgopacity,jdbcType=INTEGER},
       </if>
       <if test="opacity != null" >
         #{opacity,jdbcType=INTEGER},
       </if>
       <if test="padding != null" >
-        #{padding,jdbcType=VARCHAR},
+        #{padding,jdbcType=INTEGER},
       </if>
       <if test="shadow != null" >
         #{shadow,jdbcType=VARCHAR},
@@ -280,7 +287,7 @@
         #{fontfamily,jdbcType=VARCHAR},
       </if>
       <if test="fontsize != null" >
-        #{fontsize,jdbcType=VARCHAR},
+        #{fontsize,jdbcType=INTEGER},
       </if>
       <if test="fontweight != null" >
         #{fontweight,jdbcType=VARCHAR},
@@ -295,7 +302,7 @@
         #{align,jdbcType=VARCHAR},
       </if>
       <if test="lineheight != null" >
-        #{lineheight,jdbcType=VARCHAR},
+        #{lineheight,jdbcType=INTEGER},
       </if>
       <if test="linkpageid != null" >
         #{linkpageid,jdbcType=INTEGER},
@@ -330,16 +337,16 @@
         status = #{status,jdbcType=CHAR},
       </if>
       <if test="height != null" >
-        height = #{height,jdbcType=VARCHAR},
+        height = #{height,jdbcType=INTEGER},
       </if>
       <if test="width != null" >
-        width = #{width,jdbcType=VARCHAR},
+        width = #{width,jdbcType=INTEGER},
       </if>
       <if test="topoffset != null" >
-        topoffset = #{topoffset,jdbcType=VARCHAR},
+        topoffset = #{topoffset,jdbcType=INTEGER},
       </if>
       <if test="leftoffset != null" >
-        leftoffset = #{leftoffset,jdbcType=VARCHAR},
+        leftoffset = #{leftoffset,jdbcType=INTEGER},
       </if>
       <if test="zindex != null" >
         zindex = #{zindex,jdbcType=INTEGER},
@@ -354,28 +361,31 @@
         bdstyle = #{bdstyle,jdbcType=VARCHAR},
       </if>
       <if test="bdwidth != null" >
-        bdwidth = #{bdwidth,jdbcType=VARCHAR},
+        bdwidth = #{bdwidth,jdbcType=INTEGER},
       </if>
       <if test="bdtl != null" >
-        bdtl = #{bdtl,jdbcType=VARCHAR},
+        bdtl = #{bdtl,jdbcType=INTEGER},
       </if>
       <if test="bdtr != null" >
-        bdtr = #{bdtr,jdbcType=VARCHAR},
+        bdtr = #{bdtr,jdbcType=INTEGER},
       </if>
       <if test="bdbl != null" >
-        bdbl = #{bdbl,jdbcType=VARCHAR},
+        bdbl = #{bdbl,jdbcType=INTEGER},
       </if>
       <if test="bdbr != null" >
-        bdbr = #{bdbr,jdbcType=VARCHAR},
+        bdbr = #{bdbr,jdbcType=INTEGER},
       </if>
       <if test="bgcolor != null" >
         bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity = #{bgopacity,jdbcType=INTEGER},
       </if>
       <if test="opacity != null" >
         opacity = #{opacity,jdbcType=INTEGER},
       </if>
       <if test="padding != null" >
-        padding = #{padding,jdbcType=VARCHAR},
+        padding = #{padding,jdbcType=INTEGER},
       </if>
       <if test="shadow != null" >
         shadow = #{shadow,jdbcType=VARCHAR},
@@ -387,7 +397,7 @@
         fontfamily = #{fontfamily,jdbcType=VARCHAR},
       </if>
       <if test="fontsize != null" >
-        fontsize = #{fontsize,jdbcType=VARCHAR},
+        fontsize = #{fontsize,jdbcType=INTEGER},
       </if>
       <if test="fontweight != null" >
         fontweight = #{fontweight,jdbcType=VARCHAR},
@@ -402,7 +412,7 @@
         align = #{align,jdbcType=VARCHAR},
       </if>
       <if test="lineheight != null" >
-        lineheight = #{lineheight,jdbcType=VARCHAR},
+        lineheight = #{lineheight,jdbcType=INTEGER},
       </if>
       <if test="linkpageid != null" >
         linkpageid = #{linkpageid,jdbcType=INTEGER},
@@ -428,31 +438,32 @@
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
-      height = #{height,jdbcType=VARCHAR},
-      width = #{width,jdbcType=VARCHAR},
-      topoffset = #{topoffset,jdbcType=VARCHAR},
-      leftoffset = #{leftoffset,jdbcType=VARCHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
       zindex = #{zindex,jdbcType=INTEGER},
       transform = #{transform,jdbcType=VARCHAR},
       bdcolor = #{bdcolor,jdbcType=VARCHAR},
       bdstyle = #{bdstyle,jdbcType=VARCHAR},
-      bdwidth = #{bdwidth,jdbcType=VARCHAR},
-      bdtl = #{bdtl,jdbcType=VARCHAR},
-      bdtr = #{bdtr,jdbcType=VARCHAR},
-      bdbl = #{bdbl,jdbcType=VARCHAR},
-      bdbr = #{bdbr,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=INTEGER},
+      bdtl = #{bdtl,jdbcType=INTEGER},
+      bdtr = #{bdtr,jdbcType=INTEGER},
+      bdbl = #{bdbl,jdbcType=INTEGER},
+      bdbr = #{bdbr,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
       opacity = #{opacity,jdbcType=INTEGER},
       padding = #{padding,jdbcType=VARCHAR},
       shadow = #{shadow,jdbcType=VARCHAR},
       color = #{color,jdbcType=VARCHAR},
       fontfamily = #{fontfamily,jdbcType=VARCHAR},
-      fontsize = #{fontsize,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=INTEGER},
       fontweight = #{fontweight,jdbcType=VARCHAR},
       fontstyle = #{fontstyle,jdbcType=VARCHAR},
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
-      lineheight = #{lineheight,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=INTEGER},
       linkpageid = #{linkpageid,jdbcType=INTEGER},
       imageid = #{imageid,jdbcType=VARCHAR},
       videoid = #{videoid,jdbcType=VARCHAR},
@@ -466,31 +477,32 @@
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
-      height = #{height,jdbcType=VARCHAR},
-      width = #{width,jdbcType=VARCHAR},
-      topoffset = #{topoffset,jdbcType=VARCHAR},
-      leftoffset = #{leftoffset,jdbcType=VARCHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
       zindex = #{zindex,jdbcType=INTEGER},
       transform = #{transform,jdbcType=VARCHAR},
       bdcolor = #{bdcolor,jdbcType=VARCHAR},
       bdstyle = #{bdstyle,jdbcType=VARCHAR},
-      bdwidth = #{bdwidth,jdbcType=VARCHAR},
-      bdtl = #{bdtl,jdbcType=VARCHAR},
-      bdtr = #{bdtr,jdbcType=VARCHAR},
-      bdbl = #{bdbl,jdbcType=VARCHAR},
-      bdbr = #{bdbr,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=INTEGER},
+      bdtl = #{bdtl,jdbcType=INTEGER},
+      bdtr = #{bdtr,jdbcType=INTEGER},
+      bdbl = #{bdbl,jdbcType=INTEGER},
+      bdbr = #{bdbr,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
       opacity = #{opacity,jdbcType=INTEGER},
-      padding = #{padding,jdbcType=VARCHAR},
+      padding = #{padding,jdbcType=INTEGER},
       shadow = #{shadow,jdbcType=VARCHAR},
       color = #{color,jdbcType=VARCHAR},
       fontfamily = #{fontfamily,jdbcType=VARCHAR},
-      fontsize = #{fontsize,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=INTEGER},
       fontweight = #{fontweight,jdbcType=VARCHAR},
       fontstyle = #{fontstyle,jdbcType=VARCHAR},
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
-      lineheight = #{lineheight,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=INTEGER},
       linkpageid = #{linkpageid,jdbcType=INTEGER},
       imageid = #{imageid,jdbcType=VARCHAR},
       videoid = #{videoid,jdbcType=VARCHAR},

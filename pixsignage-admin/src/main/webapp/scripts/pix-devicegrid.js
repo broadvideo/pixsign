@@ -631,7 +631,7 @@ $('body').on('click', '.pix-devicegrid', function(event) {
 
 $('#DevicegridModal').on('shown.bs.modal', function (e) {
 	redrawDevicegrid($('#DevicegridDiv'), CurrentDevicegrid);
-})
+});
 
 
 //在设计对话框中进行提交

@@ -878,6 +878,19 @@ String currentPageid = "" + request.getParameter("pageid");
 							if (int_id > new_int_id) {
 								new_int_id = int_id;
 							}
+							
+							pagezone.height = pagezone.height / 1.875;
+							pagezone.width = pagezone.width / 1.875;
+							pagezone.topoffset = pagezone.topoffset / 1.875;
+							pagezone.leftoffset = pagezone.leftoffset / 1.875;
+							pagezone.bdwidth = pagezone.bdwidth / 1.875;
+							pagezone.fontsize = pagezone.fontsize / 1.875;
+							pagezone.lineheight = pagezone.lineheight / 1.875;
+							pagezone.padding = pagezone.padding / 1.875;
+							pagezone.bdtl = pagezone.bdtl / 1.875;
+							pagezone.bdtr = pagezone.bdtr / 1.875;
+							pagezone.bdbl = pagezone.bdbl / 1.875;
+							pagezone.bdbr = pagezone.bdbr / 1.875;
 						}
 
 						for (m = 0; m < pagezones.length; m++) {
@@ -910,12 +923,12 @@ String currentPageid = "" + request.getParameter("pageid");
 									'border-style': pagezone.bdstyle, 
 									'border-width': pagezone.bdwidth, 
 									'background-color': pagezone.bgcolor, 
-									'padding': pagezone.padding, 
+									'padding': pagezone.padding + 'px', 
 									'box-shadow': pagezone.shadow, 
-									'border-top-right-radius': pagezone.bdtr, 
-									'border-top-left-radius': pagezone.bdtl, 
-									'border-bottom-left-radius': pagezone.bdbl, 
-									'border-bottom-right-radius': pagezone.bdbr
+									'border-top-right-radius': pagezone.bdtr + 'px', 
+									'border-top-left-radius': pagezone.bdtl + 'px', 
+									'border-bottom-left-radius': pagezone.bdbl + 'px', 
+									'border-bottom-right-radius': pagezone.bdbr + 'px', 
 								});
 								if (pagezone.content != '' && pagezone.content != 'no' && pagezone.content != 'non' && !(pagezone.multiple_images_str)) {
 									element_layer_id.find('.inner_div').css('background-image', 'url(/pixsigdata' + pagezone.content + ')');
@@ -962,7 +975,7 @@ String currentPageid = "" + request.getParameter("pageid");
 									'width': pagezone.width + 'px', 
 									'color': pagezone.color, 
 									'font-family': pagezone.fontfamily, 
-									'font-size': pagezone.fontsize, 
+									'font-size': pagezone.fontsize + 'px', 
 									'text-decoration': pagezone.decoration, 
 									'text-align': pagezone.align, 
 									'font-weight': pagezone.fontweight, 
@@ -971,13 +984,13 @@ String currentPageid = "" + request.getParameter("pageid");
 									'border-style': pagezone.bdstyle, 
 									'border-width': pagezone.bdwidth + 'px', 
 									'background-color': pagezone.bgcolor, 
-									'padding': pagezone.padding, 
-									'line-height': pagezone.lineheight, 
+									'padding': pagezone.padding + 'px', 
+									'line-height': pagezone.lineheight + 'px', 
 									'text-shadow': pagezone.shadow, 
-									'border-top-right-radius': pagezone.bdtr, 
-									'border-top-left-radius': pagezone.bdtl, 
-									'border-bottom-left-radius': pagezone.bdbl, 
-									'border-bottom-right-radius': pagezone.bdbr
+									'border-top-right-radius': pagezone.bdtr + 'px', 
+									'border-top-left-radius': pagezone.bdtl + 'px', 
+									'border-bottom-left-radius': pagezone.bdbl + 'px', 
+									'border-bottom-right-radius': pagezone.bdbr + 'px', 
 								});
 								element_layer_id.find('#rotatable').find("p").css({'text-decoration': pagezone.decoration});
 								element_layer_id.find('#b_color').val(pagezone.bdcolor);
@@ -1004,14 +1017,14 @@ String currentPageid = "" + request.getParameter("pageid");
 									$('#textname_' + pagezone.pagezoneid).find('div.dv_my > .line10').removeClass('act').addClass('dact').css('background', 'url(../wysiwyg/images/editor/i-eye.png) -7px -3px no-repeat');
 								}
 								element_layer_id.find('#rotatable').css('background-color', pagezone.bgcolor);
-								element_layer_id.find('#rotatable').css('padding', pagezone.padding);
+								element_layer_id.find('#rotatable').css('padding', pagezone.padding + 'px');
 								element_layer_id.css('z-index', pagezone.zindex);
-								element_layer_id.find('#rotatable').css('line-height', pagezone.lineheight);
+								element_layer_id.find('#rotatable').css('line-height', pagezone.lineheight + 'px');
 								element_layer_id.find('#rotatable').css('text-shadow', pagezone.shadow);
-								element_layer_id.find('#rotatable').css('border-top-right-radius', pagezone.bdtr);
-								element_layer_id.find('#rotatable').css('border-top-left-radius', pagezone.bdtl);
-								element_layer_id.find('#rotatable').css('border-bottom-left-radius', pagezone.bdbl);
-								element_layer_id.find('#rotatable').css('border-bottom-right-radius', pagezone.bdbr);
+								element_layer_id.find('#rotatable').css('border-top-right-radius', pagezone.bdtr + 'px');
+								element_layer_id.find('#rotatable').css('border-top-left-radius', pagezone.bdtl + 'px');
+								element_layer_id.find('#rotatable').css('border-bottom-left-radius', pagezone.bdbl + 'px');
+								element_layer_id.find('#rotatable').css('border-bottom-right-radius', pagezone.bdbr + 'px');
 								element_layer_id.find('#rotatable').css('word-wrap', 'break-word');
 								if (pagezone.status == '1') {
 								} else if (pagezone.status == '0') {

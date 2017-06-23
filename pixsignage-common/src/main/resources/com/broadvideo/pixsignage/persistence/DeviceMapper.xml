@@ -49,6 +49,7 @@
     <result column="storageavail" property="storageavail" jdbcType="BIGINT" />
     <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="appfileid" property="appfileid" jdbcType="INTEGER" />
+    <result column="temperature" property="temperature" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
@@ -263,7 +264,7 @@
       powerflag, poweron, 
       poweroff, volumeflag, volume, 
       boardinfo, storageused, storageavail, 
-      upgradeflag, appfileid)
+      upgradeflag, appfileid, temperature)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -279,7 +280,7 @@
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, 
       #{poweroff,jdbcType=TIME}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
-      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER})
+      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{temperature,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -425,6 +426,9 @@
       <if test="appfileid != null" >
         appfileid,
       </if>
+      <if test="temperature != null" >
+        temperature,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -564,6 +568,9 @@
       </if>
       <if test="appfileid != null" >
         #{appfileid,jdbcType=INTEGER},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -708,6 +715,9 @@
       <if test="appfileid != null" >
         appfileid = #{appfileid,jdbcType=INTEGER},
       </if>
+      <if test="temperature != null" >
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -758,7 +768,8 @@
       storageused = #{storageused,jdbcType=BIGINT},
       storageavail = #{storageavail,jdbcType=BIGINT},
       upgradeflag = #{upgradeflag,jdbcType=CHAR},
-      appfileid = #{appfileid,jdbcType=INTEGER}
+      appfileid = #{appfileid,jdbcType=INTEGER},
+      temperature = #{temperature,jdbcType=VARCHAR}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
 </mapper>

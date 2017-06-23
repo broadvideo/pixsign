@@ -257,3 +257,11 @@ Date.prototype.pattern=function(fmt) {
 	}
 	return fmt;
 }
+
+var isOpera = !!(window.opera && window.opera.version);  // Opera 8.0+
+var isFirefox = testCSS('MozBoxSizing');				 // FF 0.8+
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+var isChrome = !isSafari && testCSS('WebkitTransform');  // Chrome 1+
+function testCSS(prop) {
+	return prop in document.documentElement.style;
+}

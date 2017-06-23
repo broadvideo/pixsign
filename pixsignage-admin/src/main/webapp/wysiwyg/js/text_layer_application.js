@@ -241,6 +241,7 @@ $(document).ready(function () {
 	});	   
 
 	function singleClick(e) {
+		console.log('single');
 		if (!e.ctrlKey) {
 			remove_all_selected_layers();
 			if (text_editable === 'click') {
@@ -299,8 +300,10 @@ $(document).ready(function () {
 
 	function doubleClick(e) {
 		if (!e.ctrlKey) {
+			console.log('double click');
 			//$('.select_layer').find('#rotatable').removeClass('dblclick');
 			if (!$(this).find('#rotatable').hasClass('dblclick')) {
+				console.log('hahahahaha');
 				text_editable = 'dblclick';
 				$(window).unbind('keydown');
 				$(this).find('#rotatable').css('cursor', 'text');

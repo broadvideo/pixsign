@@ -57,7 +57,7 @@
     <if test="branchid != null">
       and branchid = #{branchid}
     </if>
-    order by priority desc, startdate, starttime
+    order by planid desc
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>

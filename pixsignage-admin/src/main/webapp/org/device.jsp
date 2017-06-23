@@ -83,53 +83,53 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 				</div>
 				<div class="modal-body">
-			<div class="row">
-				<div class="col-md-12">
-	
-					<div class="portlet box blue tabbable">
-						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.devicefile"/></div>
-							<div class="tools">
-								<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
-							</div>
-							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="nav_tab4 mscreen-ctrl"><a href="#portlet_tab4" data-toggle="tab"><spring:message code="global.gridimage"/></a></li>
-								<li id="nav_tab3 mscreen-ctrl"><a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.gridvideo"/></a></li>
-								<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
-								<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
-							</ul>
-						</div>
-						<div class="portlet-body">
-							<div class="tab-content">
-								<div class="tab-pane active" id="portlet_tab1">
-									<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
-										<thead></thead>
-										<tbody></tbody>
-									</table>
+					<div class="row">
+						<div class="col-md-12">
+			
+							<div class="portlet box blue tabbable">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.devicefile"/></div>
+									<div class="tools">
+										<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
+									</div>
+									<ul class="nav nav-tabs" style="margin-right: 30px;">
+										<li id="nav_tab4 mscreen-ctrl"><a href="#portlet_tab4" data-toggle="tab"><spring:message code="global.gridimage"/></a></li>
+										<li id="nav_tab3 mscreen-ctrl"><a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.gridvideo"/></a></li>
+										<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
+										<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
+									</ul>
 								</div>
-								<div class="tab-pane" id="portlet_tab2">
-									<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
-										<thead></thead>
-										<tbody></tbody>
-									</table>
-								</div>
-								<div class="tab-pane" id="portlet_tab3">
-									<table id="GridVideoTable" class="table table-striped table-bordered table-hover">
-										<thead></thead>
-										<tbody></tbody>
-									</table>
-								</div>
-								<div class="tab-pane" id="portlet_tab4">
-									<table id="GridImageTable" class="table table-striped table-bordered table-hover">
-										<thead></thead>
-										<tbody></tbody>
-									</table>
+								<div class="portlet-body">
+									<div class="tab-content">
+										<div class="tab-pane active" id="portlet_tab1">
+											<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
+												<thead></thead>
+												<tbody></tbody>
+											</table>
+										</div>
+										<div class="tab-pane" id="portlet_tab2">
+											<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
+												<thead></thead>
+												<tbody></tbody>
+											</table>
+										</div>
+										<div class="tab-pane" id="portlet_tab3">
+											<table id="GridVideoTable" class="table table-striped table-bordered table-hover">
+												<thead></thead>
+												<tbody></tbody>
+											</table>
+										</div>
+										<div class="tab-pane" id="portlet_tab4">
+											<table id="GridImageTable" class="table table-striped table-bordered table-hover">
+												<thead></thead>
+												<tbody></tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>

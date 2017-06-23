@@ -69,6 +69,7 @@ var common = {
 		storage: 'Storage',
 		maxstorage: 'Max Storage',
 		currentstorage: 'Storage Used',
+		temperature: 'Temperature',
 		boardinfo: 'Board Info',
 		createtime: 'Create Time',
 		updatetime: 'Update Time',
@@ -118,6 +119,13 @@ var common = {
 		region_type_13: 'Audio',
 		region_type_A1: 'Lift Maintain',
 		region_type_A2: 'Lift Notice',
+
+		pagezone_type_0: 'Text Zone',
+		pagezone_type_1: 'Image Zone',
+		pagezone_type_2: 'Video Zone',
+		pagezone_type_11: 'Daily-Schedule Zone',
+		pagezone_type_12: 'Weekly-Schedule Zone',
+		pagezone_type_13: 'Sign-In Zone',
 
 		play_period: 'Play Period',
 		valid_period: 'Effective Period',

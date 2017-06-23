@@ -134,8 +134,12 @@ public class PixsignageService21 {
 			}
 
 			String mtype = null;
-			if (sign != null && sign.length() > 0) {
-				mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+			if (sign != null) {
+				if (sign.startsWith("win")) {
+					mtype = sign;
+				} else {
+					mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+				}
 			}
 			if (mtype == null) {
 				mtype = "debug";
@@ -490,6 +494,7 @@ public class PixsignageService21 {
 			JSONObject locationJson = requestJson.getJSONObject("location");
 			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
 			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
+			String temperature = requestJson.getString("temperature");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -525,6 +530,7 @@ public class PixsignageService21 {
 
 			device.setStorageavail(sdcard_free_bytes);
 			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setTemperature(temperature);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
@@ -542,11 +548,11 @@ public class PixsignageService21 {
 			} else {
 				String ostype = device.getOstype();
 				String appname = device.getAppname();
+				String sign = device.getSign();
 				String mtype = null;
 				if (ostype.equals("2")) {
-					mtype = "winx86";
+					mtype = sign;
 				} else {
-					String sign = device.getSign();
 					if (sign != null && sign.length() > 0) {
 						mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
 					}

@@ -17,13 +17,13 @@ public class Pagezone {
 
 	private String status;
 
-	private String height;
+	private Integer height;
 
-	private String width;
+	private Integer width;
 
-	private String topoffset;
+	private Integer topoffset;
 
-	private String leftoffset;
+	private Integer leftoffset;
 
 	private Integer zindex;
 
@@ -33,21 +33,23 @@ public class Pagezone {
 
 	private String bdstyle;
 
-	private String bdwidth;
+	private Integer bdwidth;
 
-	private String bdtl;
+	private Integer bdtl;
 
-	private String bdtr;
+	private Integer bdtr;
 
-	private String bdbl;
+	private Integer bdbl;
 
-	private String bdbr;
+	private Integer bdbr;
 
 	private String bgcolor;
 
+	private Integer bgopacity;
+
 	private Integer opacity;
 
-	private String padding;
+	private Integer padding;
 
 	private String shadow;
 
@@ -55,7 +57,7 @@ public class Pagezone {
 
 	private String fontfamily;
 
-	private String fontsize;
+	private Integer fontsize;
 
 	private String fontweight;
 
@@ -65,7 +67,7 @@ public class Pagezone {
 
 	private String align;
 
-	private String lineheight;
+	private Integer lineheight;
 
 	private Integer linkpageid;
 
@@ -117,36 +119,36 @@ public class Pagezone {
 		this.status = status == null ? null : status.trim();
 	}
 
-	public String getHeight() {
+	public Integer getHeight() {
 		return height;
 	}
 
-	public void setHeight(String height) {
-		this.height = height == null ? null : height.trim();
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 
-	public String getWidth() {
+	public Integer getWidth() {
 		return width;
 	}
 
-	public void setWidth(String width) {
-		this.width = width == null ? null : width.trim();
+	public void setWidth(Integer width) {
+		this.width = width;
 	}
 
-	public String getTopoffset() {
+	public Integer getTopoffset() {
 		return topoffset;
 	}
 
-	public void setTopoffset(String topoffset) {
-		this.topoffset = topoffset == null ? null : topoffset.trim();
+	public void setTopoffset(Integer topoffset) {
+		this.topoffset = topoffset;
 	}
 
-	public String getLeftoffset() {
+	public Integer getLeftoffset() {
 		return leftoffset;
 	}
 
-	public void setLeftoffset(String leftoffset) {
-		this.leftoffset = leftoffset == null ? null : leftoffset.trim();
+	public void setLeftoffset(Integer leftoffset) {
+		this.leftoffset = leftoffset;
 	}
 
 	public Integer getZindex() {
@@ -181,44 +183,44 @@ public class Pagezone {
 		this.bdstyle = bdstyle == null ? null : bdstyle.trim();
 	}
 
-	public String getBdwidth() {
+	public Integer getBdwidth() {
 		return bdwidth;
 	}
 
-	public void setBdwidth(String bdwidth) {
-		this.bdwidth = bdwidth == null ? null : bdwidth.trim();
+	public void setBdwidth(Integer bdwidth) {
+		this.bdwidth = bdwidth;
 	}
 
-	public String getBdtl() {
+	public Integer getBdtl() {
 		return bdtl;
 	}
 
-	public void setBdtl(String bdtl) {
-		this.bdtl = bdtl == null ? null : bdtl.trim();
+	public void setBdtl(Integer bdtl) {
+		this.bdtl = bdtl;
 	}
 
-	public String getBdtr() {
+	public Integer getBdtr() {
 		return bdtr;
 	}
 
-	public void setBdtr(String bdtr) {
-		this.bdtr = bdtr == null ? null : bdtr.trim();
+	public void setBdtr(Integer bdtr) {
+		this.bdtr = bdtr;
 	}
 
-	public String getBdbl() {
+	public Integer getBdbl() {
 		return bdbl;
 	}
 
-	public void setBdbl(String bdbl) {
-		this.bdbl = bdbl == null ? null : bdbl.trim();
+	public void setBdbl(Integer bdbl) {
+		this.bdbl = bdbl;
 	}
 
-	public String getBdbr() {
+	public Integer getBdbr() {
 		return bdbr;
 	}
 
-	public void setBdbr(String bdbr) {
-		this.bdbr = bdbr == null ? null : bdbr.trim();
+	public void setBdbr(Integer bdbr) {
+		this.bdbr = bdbr;
 	}
 
 	public String getBgcolor() {
@@ -229,6 +231,14 @@ public class Pagezone {
 		this.bgcolor = bgcolor == null ? null : bgcolor.trim();
 	}
 
+	public Integer getBgopacity() {
+		return bgopacity;
+	}
+
+	public void setBgopacity(Integer bgopacity) {
+		this.bgopacity = bgopacity;
+	}
+
 	public Integer getOpacity() {
 		return opacity;
 	}
@@ -237,12 +247,12 @@ public class Pagezone {
 		this.opacity = opacity;
 	}
 
-	public String getPadding() {
+	public Integer getPadding() {
 		return padding;
 	}
 
-	public void setPadding(String padding) {
-		this.padding = padding == null ? null : padding.trim();
+	public void setPadding(Integer padding) {
+		this.padding = padding;
 	}
 
 	public String getShadow() {
@@ -269,12 +279,12 @@ public class Pagezone {
 		this.fontfamily = fontfamily == null ? null : fontfamily.trim();
 	}
 
-	public String getFontsize() {
+	public Integer getFontsize() {
 		return fontsize;
 	}
 
-	public void setFontsize(String fontsize) {
-		this.fontsize = fontsize == null ? null : fontsize.trim();
+	public void setFontsize(Integer fontsize) {
+		this.fontsize = fontsize;
 	}
 
 	public String getFontweight() {
@@ -309,12 +319,12 @@ public class Pagezone {
 		this.align = align == null ? null : align.trim();
 	}
 
-	public String getLineheight() {
+	public Integer getLineheight() {
 		return lineheight;
 	}
 
-	public void setLineheight(String lineheight) {
-		this.lineheight = lineheight == null ? null : lineheight.trim();
+	public void setLineheight(Integer lineheight) {
+		this.lineheight = lineheight;
 	}
 
 	public Integer getLinkpageid() {

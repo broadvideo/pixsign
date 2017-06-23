@@ -103,6 +103,8 @@ public class Device {
 
 	private Integer appfileid;
 
+	private String temperature;
+
 	private Devicegroup devicegroup;
 
 	private Appfile appfile;
@@ -493,6 +495,14 @@ public class Device {
 
 	public void setAppfileid(Integer appfileid) {
 		this.appfileid = appfileid;
+	}
+
+	public String getTemperature() {
+		return temperature;
+	}
+
+	public void setTemperature(String temperature) {
+		this.temperature = temperature;
 	}
 
 	public Devicegroup getDevicegroup() {

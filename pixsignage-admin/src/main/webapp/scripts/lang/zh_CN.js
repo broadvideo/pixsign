@@ -69,6 +69,7 @@ var common = {
 		storage: '存储',
 		maxstorage: '存储上限',
 		currentstorage: '已用存储',
+		temperature: '温度',
 		boardinfo: '硬件信息',
 		createtime: '创建时间',
 		updatetime: '更新时间',
@@ -118,6 +119,13 @@ var common = {
 		region_type_13: '音频',
 		region_type_A1: '电梯维保',
 		region_type_A2: '电梯须知',
+
+		pagezone_type_0: '文本区',
+		pagezone_type_1: '图片区',
+		pagezone_type_2: '视频区',
+		pagezone_type_11: '今日排期区',
+		pagezone_type_12: '本周排期区',
+		pagezone_type_13: '刷卡签到区',
 
 		play_period: '播放时间段',
 		valid_period: '生效期',

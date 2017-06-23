@@ -42,6 +42,7 @@ alter table device add storageused bigint default 0;
 alter table device add storageavail bigint default 0;
 alter table device add upgradeflag char(1) default '0';
 alter table device add appfileid int default 0;
+alter table device add temperature varchar(16) default '';
 
 alter table org add volumeflag char(1) default '0';
 alter table org add volume int default 50;

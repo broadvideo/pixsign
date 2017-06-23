@@ -128,8 +128,12 @@ public class PixsignageService {
 			}
 
 			String mtype = null;
-			if (sign != null && sign.length() > 0) {
-				mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+			if (sign != null) {
+				if (sign.startsWith("win")) {
+					mtype = sign;
+				} else {
+					mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+				}
 			}
 			if (mtype == null) {
 				mtype = "debug";
@@ -317,8 +321,12 @@ public class PixsignageService {
 			String appname = requestJson.getString("app_name");
 			String sign = requestJson.getString("sign");
 			String mtype = null;
-			if (sign != null && sign.length() > 0) {
-				mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+			if (sign != null) {
+				if (sign.startsWith("win")) {
+					mtype = sign;
+				} else {
+					mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+				}
 			}
 			if (mtype == null) {
 				logger.info("sign {} unrecognized, set as debug", sign);
@@ -428,6 +436,7 @@ public class PixsignageService {
 			String terminalid = requestJson.getString("terminal_id");
 			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
 			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
+			String temperature = requestJson.getString("temperature");
 
 			JSONObject locationJson = requestJson.getJSONObject("location");
 
@@ -465,6 +474,7 @@ public class PixsignageService {
 
 			device.setStorageavail(sdcard_free_bytes);
 			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setTemperature(temperature);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);

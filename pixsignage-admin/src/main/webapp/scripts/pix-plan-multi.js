@@ -114,9 +114,9 @@ $('#PlanTable').dataTable({
 		var devicegrouphtml = '';
 		for (var i=0; i<aData.planbinds.length; i++) {
 			var planbind = aData.planbinds[i];
-			if (planbind.bindtype == 2) {
+			if (planbind.bindtype == 2 && planbind.devicegroup != null) {
 				devicegrouphtml += planbind.devicegroup.name + ' ';
-			} else if (planbind.bindtype == 3) {
+			} else if (planbind.bindtype == 3 && planbind.devicegrid != null) {
 				devicegridhtml += planbind.devicegrid.name + ' ';
 			}
 		}
@@ -1233,14 +1233,15 @@ function refreshSelectedBindTable() {
 		var bindtype = '';
 		var bindname = '';
 
-		if (planbind.bindtype == 2) {
+		if (planbind.bindtype == 2 && planbind.devicegroup != null) {
 			bindtype = common.view.devicegridgroup;
 			bindname = planbind.devicegroup.name;
-		} else if (planbind.bindtype == 3) {
+			$('#SelectedBindTable').dataTable().fnAddData([(i+1), bindtype, bindname, 0]);
+		} else if (planbind.bindtype == 3 && planbind.devicegrid != null) {
 			bindtype = common.view.devicegrid;
 			bindname = planbind.devicegrid.name;
+			$('#SelectedBindTable').dataTable().fnAddData([(i+1), bindtype, bindname, 0]);
 		}
-		$('#SelectedBindTable').dataTable().fnAddData([(i+1), bindtype, bindname, 0]);
 	}
 }
 
@@ -1367,7 +1368,7 @@ $('.form_time').datetimepicker({
 	autoclose: true,
 	isRTL: Metronic.isRTL(),
 	format: 'hh:ii:ss',
-	pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+	pickerPosition: (Metronic.isRTL() ? 'top-right' : 'top-left'),
 	language: 'zh-CN',
 	minuteStep: 5,
 	startView: 1,
@@ -1378,7 +1379,7 @@ $(".form_date").datetimepicker({
 	autoclose: true,
 	isRTL: Metronic.isRTL(),
 	format: "yyyy-mm-dd",
-	pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+	pickerPosition: (Metronic.isRTL() ? "top-right" : "top-left"),
 	language: "zh-CN",
 	minView: 'month',
 	todayBtn: true
