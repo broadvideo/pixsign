@@ -41,6 +41,28 @@
 											</div>
 										</div>
 									</div>
+									<div class="form-group bundle-ctrl">
+										<label class="col-md-3 control-label">BUNDLE<span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="vsp.bundleflag" value="0"> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="vsp.bundleflag" value="1" checked> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
+									<div class="form-group page-ctrl">
+										<label class="col-md-3 control-label">PAGE<span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="vsp.pageflag" value="0" checked> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="vsp.pageflag" value="1"> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
 									<div class="form-group mscreen-ctrl">
 										<label class="col-md-3 control-label"><spring:message code="global.org.mscreenflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">

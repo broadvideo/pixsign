@@ -1,0 +1,649 @@
+@charset "utf-8";
+/* CSS Document */
+
+html,body {
+	overflow:hidden;
+}
+
+
+@font-face {
+	font-family:'DroidSansBold';
+	src:url('../fonts/droidsans-bold-webfont.eot');
+	src:url('../fonts/droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/droidsans-bold-webfont.woff') format('woff'),
+		url('../fonts/droidsans-bold-webfont.ttf') format('truetype'),
+		url('../fonts/droidsans-bold-webfont.svg#DroidSansBold') format('svg');
+	font-weight:normal;
+	font-style:normal;
+
+}
+@font-face {
+	font-family:'Curlz_MT';
+	src:url('../fonts/Curlz.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Bebas';
+	src:url('../fonts/Bebas.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Futura_XBlk_BT';
+	src:url('../fonts/futuraxk.eot');
+	src:url('../fonts/futuraxk.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/futuraxk.woff') format('woff'),
+		url('../fonts/futuraxk.ttf') format('truetype'),
+		url('../fonts/futuraxk.svg#DroidSansBold') format('svg');
+	font-weight:normal;
+	font-style:normal;
+
+}
+@font-face {
+	font-family:'droidsans';
+	src:url('../fonts/DroidSans.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Taco_modern';
+	src:url('../fonts/Tacom.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Architects_Daughter';
+	src:url('../fonts/ArchitectsDaughter.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'AvantGardeLT_Bookoblique';
+	src:url('../fonts/ITCAvantGardeGothicLTBookOblique_0.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'AvantGardeLT_Demi';
+	src:url('../fonts/ITCAvantGardeGothicLTDemi_0.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'MV_Boli';
+	src:url('../fonts/mvboli.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Permanent_Marker';
+	src:url('../fonts/PermanentMarker.ttf') format('truetype');		 
+	font-weight:normal;
+	font-style:normal;
+
+}
+
+@font-face {
+	font-family:'ChaparralPro';
+	src:url('../fonts/ChaparralPro-Italic_0.otf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'ChaparralProBold';
+	src:url('../fonts/ChaparralPro-Bold.otf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'actor';
+	src:url('../fonts/Actor.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'advent_pro';
+	src:url('../fonts/AdventPro.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Architects_Daughter';
+	src:url('../fonts/ArchitectsDaughter.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'arizonia';
+	src:url('../fonts/Arizonia.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'armata';
+	src:url('../fonts/Armata.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'belgrano';
+	src:url('../fonts/Belgrano.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'belleza';
+	src:url('../fonts/Belleza.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'doppio_one';
+	src:url('../fonts/DoppioOne.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'electrolize';
+	src:url('../fonts/Electrolize.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'fredoka_one';
+	src:url('../fonts/FredokaOne.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'karla';
+	src:url('../fonts/Karla.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'londrina_solid';
+	src:url('../fonts/LondrinaSolid.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}@font-face {
+	font-family:'marven_pro';
+	src:url('../fonts/MavenPro.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'norican';
+	src:url('../fonts/Norican.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'nova_slim';
+	src:url('../fonts/NovaSlim.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'nunito';
+	src:url('../fonts/Nunito.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'orbitron';
+	src:url('../fonts/Orbitron.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'overlock';
+	src:url('../fonts/Overlock.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'parisienne';
+	src:url('../fonts/Parisienne.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Permanent_Marker';
+	src:url('../fonts/PermanentMarker.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'philosopher';
+	src:url('../fonts/Philosopher.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'pontano_sans';
+	src:url('../fonts/PontanoSans.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'prata';
+	src:url('../fonts/Prata.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'PT_sana_narrow';
+	src:url('../fonts/PTSansNarrow.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'quando';
+	src:url('../fonts/Quando.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'russo_one';
+	src:url('../fonts/RussoOne.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'sanchez';
+	src:url('../fonts/Sanchez.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'sarina';
+	src:url('../fonts/Sarina.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'signika';
+	src:url('../fonts/Signika.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'trocchi';
+	src:url('../fonts/Trocchi.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'yesteryear';
+	src:url('../fonts/Yesteryear.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Bebas';
+	src:url('../fonts/Bebas.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Diplomata';
+	src:url('../fonts/Diplomata.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'FrederickatheGreat';
+	src:url('../fonts/FrederickatheGreat.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'VastShadow';
+	src:url('../fonts/VastShadow.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'DiplomataSC';
+	src:url('../fonts/DiplomataSC.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Rye';
+	src:url('../fonts/Rye.woff') format('woff');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'GoboldBoldItalic';
+	src:url('../fonts/Gobold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'DJBAlmostPerfect';
+	src:url('../fonts/djb_almost_perfect.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'RobotoMedium';
+	src:url('../fonts/Roboto-Medium.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'Courgette-Regular';
+	src:url('../fonts/Courgette-Regular.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Century_Gothic';
+	src:url('../fonts/Century_Gothic.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Century_Gothic_Bold';
+	src:url('../fonts/Century_Gothic_Bold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'TwentyEightDaysLater';
+	src:url('../fonts/TwentyEightDaysLater.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'SegoeUI';
+	src:url('../fonts/SegoeUI.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'SegoeUIB';
+	src:url('../fonts/SegoeUIB.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'SketchBlock';
+	src:url('../fonts/SketchBlock.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+
+@font-face {
+	font-family:'RobotoMedium';
+	src:url('../fonts/RobotoMedium.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'RobotoBold';
+	src:url('../fonts/RobotoBold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'BankGothicMedium';
+	src:url('../fonts/BankGothicMedium.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'BankGothicBold';
+	src:url('../fonts/BankGothicBold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+
+@font-face {
+	font-family:'RobotoRegular';
+	src:url('../fonts/RobotoRegular.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'ComicSansMS';
+	src:url('../fonts/ComicSansMS.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Freeskpt';
+	src:url('../fonts/Freeskpt.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Forte';
+	src:url('../fonts/Forte.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'SegoePrint';
+	src:url('../fonts/SegoePrint.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Scandinavian';
+	src:url('../fonts/Scandinavian.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family:'MyriadPro';
+	src:url('../fonts/MyriadPro.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'RockwellExtraBold';
+	src:url('../fonts/RockwellExtraBold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'gadugi';
+	src:url('../fonts/gadugi.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Timesnewroman';
+	src:url('../fonts/Timesnewroman.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'candara';
+	src:url('../fonts/candara.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Cooper_Std_Black';
+	src:url('../fonts/Cooper_Std_Black.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'ArialRoundedMtBold';
+	src:url('../fonts/Arialroundedmtbold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'MfReallyAwesome';
+	src:url('../fonts/MfReallyAwesome.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'rockwell';
+	src:url('../fonts/rockwell.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'texgyreadventor-bold';
+	src:url('../fonts/texgyreadventor-bold.otf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Eras_BD';
+	src:url('../fonts/ERASBD.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Scandinavian_Black';
+	src:url('../fonts/SCANDINAVIANVIBLACK.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Humanist521';
+	src:url('../fonts/Humanist_521_Ultra_Bold.otf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'berlinsans';
+	src:url('../fonts/berlin-sans-fb-demi-bold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Bookman_old';
+	src:url('../fonts/BOOKOS.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Bookman_old_bold';
+	src:url('../fonts/BOOKOSB.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Bookman_old_bi';
+	src:url('../fonts/BOOKOSBI.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Bookman_old_italic';
+	src:url('../fonts/BOOKOSI.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Ariblk';
+	src:url('../fonts/ARIBLK.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Fradm';
+	src:url('../fonts/FRADM.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Fradmcn';
+	src:url('../fonts/FRADMCN.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Fradmit';
+	src:url('../fonts/FRADMIT.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Frahv';
+	src:url('../fonts/FRAHV.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Frahvit';
+	src:url('../fonts/FRAHVIT.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Framd';
+	src:url('../fonts/FRAMD.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Framdcn';
+	src:url('../fonts/FRAMDCN.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Framdit';
+	src:url('../fonts/FRAMDIT.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'twentyDaysLater';
+	src:url('../fonts/28DaysLater.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Gothambold';
+	src:url('../fonts/gothambold.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Gothambook';
+	src:url('../fonts/gothambook.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
+@font-face {
+	font-family:'Gothammedium';
+	src:url('../fonts/gothammedium.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;	
+}
