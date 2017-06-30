@@ -54,6 +54,7 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.DevicefileService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
@@ -91,6 +92,8 @@ public class PixsignageService2 {
 
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -367,17 +370,44 @@ public class PixsignageService2 {
 			}
 
 			JSONObject responseJson;
-			responseJson = scheduleService.generateScheduleJson_old("" + device.getDeviceid());
-			if (device.getDevicegroupid() > 0) {
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
+			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_schedule exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_plan")
+	public String getplan(String request) {
+		try {
+			logger.info("Pixsignage Service get_plan: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson;
+			responseJson = planService.generatePlanJson("" + device.getDeviceid());
+			responseJson.put("code", 0).put("message", "成功");
+			logger.info("Pixsignage Service get_plan response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_plan exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -466,6 +496,7 @@ public class PixsignageService2 {
 			JSONObject locationJson = requestJson.getJSONObject("location");
 			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
 			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
+			String temperature = requestJson.getString("temperature");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -501,6 +532,7 @@ public class PixsignageService2 {
 
 			device.setStorageavail(sdcard_free_bytes);
 			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setTemperature(temperature);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
@@ -562,7 +594,10 @@ public class PixsignageService2 {
 				eventJsonArray.put(eventJson);
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
-					eventJson.put("event_content", scheduleService.generateScheduleJson_old("" + device.getDeviceid()));
+					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
+					eventJson.put("event_type", "plan");
+					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
 					eventJson.put("event_type", "bundle");
 					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,

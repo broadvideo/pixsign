@@ -422,6 +422,7 @@ public class PixsignageService21 {
 			String terminalid = requestJson.getString("terminal_id");
 			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
 			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
+			String temperature = requestJson.getString("temperature");
 
 			JSONObject locationJson = requestJson.getJSONObject("location");
 
@@ -459,6 +460,7 @@ public class PixsignageService21 {
 
 			device.setStorageavail(sdcard_free_bytes);
 			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setTemperature(temperature);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
