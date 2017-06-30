@@ -1,6 +1,7 @@
 //日历初始化
 var CalendarList = function () {
-    var baseUrl = 'http://192.168.2.102/pixsignage-api/service'
+    var host = window.android && window.android.getHost() || '192.168.2.102'
+    var baseUrl = 'http://' + host + '/pixsignage-api/service'
     var terminalId = window.android && window.android.getTerminalId() || '00002'
     var classRoom = {}
     var timer, current = moment()
