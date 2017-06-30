@@ -12,19 +12,11 @@ public class Page {
 
 	private Integer branchid;
 
-	private Integer pagepkgid;
-
 	private Integer templateid;
-
-	private String templateflag;
 
 	private String name;
 
-	private String type;
-
-	private String status;
-
-	private String entry;
+	private String snapshot;
 
 	private String ratio;
 
@@ -32,7 +24,7 @@ public class Page {
 
 	private Integer width;
 
-	private String snapshot;
+	private String status;
 
 	private String description;
 
@@ -70,28 +62,12 @@ public class Page {
 		this.branchid = branchid;
 	}
 
-	public Integer getPagepkgid() {
-		return pagepkgid;
-	}
-
-	public void setPagepkgid(Integer pagepkgid) {
-		this.pagepkgid = pagepkgid;
-	}
-
 	public Integer getTemplateid() {
 		return templateid;
 	}
 
 	public void setTemplateid(Integer templateid) {
 		this.templateid = templateid;
-	}
-
-	public String getTemplateflag() {
-		return templateflag;
-	}
-
-	public void setTemplateflag(String templateflag) {
-		this.templateflag = templateflag;
 	}
 
 	public String getName() {
@@ -102,28 +78,12 @@ public class Page {
 		this.name = name == null ? null : name.trim();
 	}
 
-	public String getType() {
-		return type;
+	public String getSnapshot() {
+		return snapshot;
 	}
 
-	public void setType(String type) {
-		this.type = type == null ? null : type.trim();
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status == null ? null : status.trim();
-	}
-
-	public String getEntry() {
-		return entry;
-	}
-
-	public void setEntry(String entry) {
-		this.entry = entry == null ? null : entry.trim();
+	public void setSnapshot(String snapshot) {
+		this.snapshot = snapshot == null ? null : snapshot.trim();
 	}
 
 	public String getRatio() {
@@ -150,12 +110,12 @@ public class Page {
 		this.width = width;
 	}
 
-	public String getSnapshot() {
-		return snapshot;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setSnapshot(String snapshot) {
-		this.snapshot = snapshot == null ? null : snapshot.trim();
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
 	}
 
 	public String getDescription() {

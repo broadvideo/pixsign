@@ -15,11 +15,11 @@ public interface ScheduleService {
 
 	public void syncScheduleByBundle(String bundleid) throws Exception;
 
+	public void syncScheduleByPage(String pageid) throws Exception;
+
 	public void syncScheduleByMediagrid(String mediagridid) throws Exception;
 
 	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
 
 	public JSONObject generateScheduleJson(String deviceid);
-
-	public JSONObject generateScheduleJson_old(String deviceid);
 }
