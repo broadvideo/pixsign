@@ -7,3 +7,8 @@
 <c:set var="static_ctx" value="/pixres" />
 <c:set var="locale"><%=org.springframework.context.i18n.LocaleContextHolder.getLocale().toString() %></c:set>
 <c:set var="timestamp"><%=com.broadvideo.pixsignage.common.CommonConfig.Timestamp %></c:set>
+<script type="text/javascript">
+   var res="${static_ctx}";
+   var ctx="${base_ctx}";
+
+</script>

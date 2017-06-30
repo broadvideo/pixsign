@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,6 @@ import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.service.PrivilegeService;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.opensymphony.xwork2.ActionContext;
-
-import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")

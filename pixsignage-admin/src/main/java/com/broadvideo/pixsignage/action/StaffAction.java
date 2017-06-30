@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.StaffService;
 import com.broadvideo.pixsignage.util.SqlUtil;

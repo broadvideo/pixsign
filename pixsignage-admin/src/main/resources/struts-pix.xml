@@ -1676,6 +1676,129 @@
 			<result name="success">/org/main.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
+	    <action name="classroom!list" method="listClassrooms" class="classroomAction">
+	        <result name="error">/error.jsp</result>
+		</action>
+		<action name="classroom!add" method="addClassroom" class="classroomAction">
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="classroom!get" method="loadClassRoom"  class="classroomAction">
+		    <result name="error">/error.jsp</result>
+		</action>
+		<action name="classroom!add" method="addClassroom"  class="classroomAction">
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="classroom!update" method="updateClassroom" class="classroomAction">
+		    <result name="error">/error.jsp</result>
+		</action>
+		<action name="classroom!delete" method="deleteClassroom" class="classroomAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+	    <action name="courseschedule!add" method="addCourseSchedule" class="courseScheduleAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedule!update" method="updateCourseSchedule"  class="courseScheduleAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedule!classroomschedulelist" method="getClassroomSchedules" class="courseScheduleAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedule!delete" method="deleteCourseSchedule" class="courseScheduleAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!list" method="listCourseScheduleSchemes" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!getenable" method="getEnableCourseScheduleScheme" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!add" method="addCourseScheduleScheme" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!get" method="getCourseScheduleScheme" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+	    <action name="courseschedulescheme!update" method="updateCourseScheduleScheme" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!delete" method="deleteCourseScheduleScheme" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="courseschedulescheme!setflag" method="updateCourseScheduleSchemeFlag" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+	    <action name="courseschedulescheme!updateperiodtimedtl" method="updatePeriodTimeDtls" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+	    <action name="courseschedulescheme!addpreiodtimedtl" method="addPeriodTimeDtls" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+	    <action name="courseschedulescheme!getperiodtimedtl" method="getCourseScheduleSchemeDtl" class="courseScheduleSchemeAction">
+		   <result name="error">/error.jsp</result>
+		</action>
+		<action name="student!list" method="doList" class="studentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="student!add" method="doAdd" class="studentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="student!update" method="doUpdate" class="studentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="student!delete" method="doDelete" class="studentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="attendance!list" method="doList" class="attendanceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+	   <action name="attendance!delete" method="doDelete" class="attendanceAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		
+		
+		<action name="schoolclass!list" method="doList" class="schoolclassAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="schoolclass!add" method="doAdd" class="schoolclassAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="schoolclass!update" method="doUpdate" class="schoolclassAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="schoolclass!delete" method="doDelete" class="schoolclassAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		
 
 	</package>
 

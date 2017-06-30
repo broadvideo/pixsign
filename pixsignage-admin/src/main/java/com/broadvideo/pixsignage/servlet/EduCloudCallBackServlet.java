@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
-
-import net.sf.json.JSONObject;
 
 /**
  * 认证通过后的回调处理 Servlet implementation class AuthCallBackServlet

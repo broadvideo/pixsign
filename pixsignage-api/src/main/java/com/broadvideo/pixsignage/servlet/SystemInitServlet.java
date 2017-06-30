@@ -40,4 +40,5 @@ public class SystemInitServlet extends HttpServlet {
 			logger.error("", ex);
 		}
 	}
+
 }

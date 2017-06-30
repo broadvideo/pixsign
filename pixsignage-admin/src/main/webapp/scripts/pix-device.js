@@ -425,16 +425,16 @@ function initMyEditModal() {
 
 	$.ajax({
 		type : 'GET',
-		url : 'device!roomlist.action',
-		data : {},
+		url : 'classroom!list.action',
+		data : {pageSize: 9999},
 		dataType: 'json',
 		success : function(data, status) {
-			if (data.errorcode == 0) {
+			if (data.retcode == 1) {
 				var externallist = [];
-				for (var i=0; i<data.aaData.length; i++) {
+				for (var i=0; i<data.data.length; i++) {
 					externallist.push({
-						id: data.aaData[i].id,
-						text: data.aaData[i].name
+						id: data.data[i].id,
+						text: data.data[i].name
 					});
 				}
 				$("#ExternalSelect").select2({
@@ -445,7 +445,7 @@ function initMyEditModal() {
 					escapeMarkup: function (m) { return m; } 
 				});
 			} else {
-				bootbox.alert(data.errorcode + ": " + data.errormsg);
+				bootbox.alert(data.retcode + ": " + data.message);
 			}
 		},
 		error : function() {

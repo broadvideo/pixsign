@@ -54,6 +54,11 @@ public class BaseAction extends ActionSupport {
 		this.errormsg = errormsg;
 	}
 
+	public void renderError(int errorcode, String errormsg) {
+		setErrorcode(errorcode);
+		setErrormsg(errormsg);
+	}
+
 	/**
 	 * get http session.
 	 * 
@@ -96,5 +101,15 @@ public class BaseAction extends ActionSupport {
 	 */
 	public final Staff getLoginStaff() {
 		return (Staff) getSession().getAttribute(CommonConstants.SESSION_STAFF);
+	}
+
+	public final Integer getStaffid() {
+		return getLoginStaff().getStaffid();
+	}
+
+	public final Integer getStaffOrgid() {
+
+		return getLoginStaff().getOrgid();
+
 	}
 }
