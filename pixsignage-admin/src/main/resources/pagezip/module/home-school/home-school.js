@@ -52,7 +52,7 @@ var HomeSchool = function () {
                 var messages2 = JSON.parse(messages)
                 console.log(messages2)
                 var tpl = document.createElement('div')
-                $(tpl).load('home-school.tpl', function(){
+                $(tpl).load('module/home-school/home-school.tpl', function(){
                     var templ = doT.template(tpl.children[0].textContent)
                     var nodes = document.getElementsByClassName('home-school')
                     for (var i = 0; i < nodes.length; i++) {
@@ -67,6 +67,7 @@ var HomeSchool = function () {
     }
 
     var keyup = function (event) {
+        event.preventDefault()
         var st = students[Math.floor(Math.random() * 10)]
         $.ajax({ url: baseUrl + '/students/' + 11 + '/messages', dataType: 'text' }).then(function (res) {
             var messages = Base64.decode(res)
@@ -92,5 +93,4 @@ var HomeSchool = function () {
         keyup: keyup
     }
 }()
-HomeSchool.init()
 document.body.onkeyup = HomeSchool.keyup

@@ -20,7 +20,7 @@ var CalendarList = function () {
             header: {left: '', center: 'title', right: '', /*right: 'prev, month, agendaWeek, agendaDay, next'*/},
             lang: 'zh-cn',
             timezone: "local",
-            height: 600,
+            height: $(".calendar-list").height(),
             aspectRatio: 2,
             firstDay: 1,
             allDaySlot: false,
@@ -56,11 +56,22 @@ var CalendarList = function () {
                 }
             },
             eventRender: function (event, element, view) {
-                if (event.current) {
-                    $(element).addClass('current-time');
-                }
-                else {
-                    $(element).removeClass('current-time');
+                switch (event.status) {
+                    case 'after':
+                        $(element).addClass('after');
+                        $(element).removeClass('before');
+                        $(element).removeClass('current');
+                        break
+                    case 'before':
+                        $(element).removeClass('after');
+                        $(element).addClass('before');
+                        $(element).removeClass('current');
+                        break
+                    case 'current':
+                        $(element).removeClass('after');
+                        $(element).removeClass('before');
+                        $(element).addClass('current');
+                        break
                 }
             },
             eventAfterAllRender: function (view) {
@@ -73,7 +84,7 @@ var CalendarList = function () {
                             $('.calendar-list').fullCalendar('destroy');
                             Calendar.init();
                         }
-                    }, 10000);
+                    }, 60000);
                     current = moment();
                 }
             },
@@ -86,26 +97,23 @@ var CalendarList = function () {
                 }).then(function (res) {
                     if (res.retcode != 0) return callback([]);
                     var events = [];
-                    res.data.forEach(function (item) {
+                    res.data.filter(function(item){
+                        return moment().format('E') == item.workday
+                    }).forEach(function (item) {
                         var event = {
                             start: item['start_time'],
                             end: item['end_time'],
                             title: item['course_name'],
-                            host: item.instructor,
-                            current: false
+                            host: item.instructor
                         };
                         if (moment(event.start, 'HH:mm').isAfter(moment())) {
-                            event.color = eventColors.future.textColor;
-                            event.textColor = eventColors.future.textColor;
+                            event.status = 'after'
                         }
                         else if (moment(event.end, 'HH:mm').isBefore(moment())) {
-                            event.color = eventColors.before.textColor;
-                            event.textColor = eventColors.before.textColor;
+                            event.status = 'before'
                         }
                         else {
-                            event.color = eventColors.current.textColor;
-                            event.textColor = eventColors.current.textColor;
-                            event.current = true;
+                            event.status = 'current'
                         }
                         events.push(event);
                     });
@@ -134,6 +142,3 @@ var CalendarList = function () {
         init: init
     };
 }();
-window.onload = function () {
-    CalendarList.init();
-}

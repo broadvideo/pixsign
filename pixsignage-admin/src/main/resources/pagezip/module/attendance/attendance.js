@@ -108,5 +108,4 @@ var Attendance = function () {
         keyup: swipe2
     }
 }()
-Attendance.init()
 document.body.onkeyup = Attendance.keyup

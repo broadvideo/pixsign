@@ -15,6 +15,7 @@ var CalendarTable = function () {
             header: {left: '', center: 'title', right: '', /*right: 'prev, month, agendaWeek, agendaDay, next'*/},
             lang: 'zh-cn',
             timezone: "local",
+            height: $(".calendar-table").height(),
             aspectRatio: 1,
             firstDay: 1,
             allDaySlot: false,
@@ -78,7 +79,7 @@ var CalendarTable = function () {
                             $('.calendar-list').fullCalendar('destroy');
                             Calendar.init();
                         }
-                    }, 10000);
+                    }, 60000);
                     current = moment();
                 }
             },
@@ -91,17 +92,25 @@ var CalendarTable = function () {
                     if (res.retcode != 0) return callback([]);
                     var events = [];
                     res.data.forEach(function (item) {
+                        var startTime = item.start_time.split(':').map(function(time) {
+                            return parseInt(time)
+                        })
+                        var endTime = item.end_time.split(':').map(function(time) {
+                            return parseInt(time)
+                        })
+                        if (item.workday == 7) item.workday = 0
+                        var start = moment().day(item.workday).hour(startTime[0]).minute(startTime[1]);
+                        var end = moment().day(item.workday).hour(endTime[0]).minute(endTime[1]);
                         var event = {
-                            start: item['start_time'],
-                            end: item['end_time'],
+                            start: start,
+                            end: end,
                             title: item['course_name'],
-                            host: item.instructor,
-                            current: false
+                            host: item.instructor
                         };
-                        if (moment(event.start, 'HH:mm').isAfter(moment())) {
+                        if (start.isAfter(moment())) {
                             event.status = 'after'
                         }
-                        else if (moment(event.end, 'HH:mm').isBefore(moment())) {
+                        else if (end.isBefore(moment())) {
                             event.status = 'before'
                         }
                         else {
@@ -134,6 +143,3 @@ var CalendarTable = function () {
         init: init
     };
 }();
-window.onload = function () {
-    CalendarTable.init();
-}
