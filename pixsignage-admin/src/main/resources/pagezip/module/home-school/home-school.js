@@ -68,7 +68,6 @@ var HomeSchool = function () {
     }
 
     var keyup = function (event) {
-        event.preventDefault()
         var st = students[Math.floor(Math.random() * 10)]
         $.ajax({ url: baseUrl + '/students/' + 11 + '/messages', dataType: 'text' }).then(function (res) {
             var messages = Base64.decode(res)
@@ -94,4 +93,4 @@ var HomeSchool = function () {
         keyup: keyup
     }
 }()
-document.body.onkeyup = HomeSchool.keyup
+document.body.addEventListener('keyup', HomeSchool.keyup)
