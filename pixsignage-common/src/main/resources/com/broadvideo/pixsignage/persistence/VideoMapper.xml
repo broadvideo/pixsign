@@ -66,6 +66,9 @@
     <if test="previewflag != null">
       and previewflag=#{previewflag}
     </if>
+    <if test="format != null">
+      and format=#{format}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -88,6 +91,9 @@
     </if>
     <if test="previewflag != null">
       and previewflag=#{previewflag}
+    </if>
+    <if test="format != null">
+      and format=#{format}
     </if>
     <if test="search != null">
       and name like #{search}

@@ -48,7 +48,7 @@ public class VideoTask {
 			workflag = true;
 			logger.info("Start Video Quartz Task.");
 
-			List<Video> videos = videoMapper.selectList(null, null, null, null, "0", null, null, null);
+			List<Video> videos = videoMapper.selectList(null, null, null, null, "0", null, null, null, null);
 			for (Video video : videos) {
 				handleVideoPreview(video);
 			}

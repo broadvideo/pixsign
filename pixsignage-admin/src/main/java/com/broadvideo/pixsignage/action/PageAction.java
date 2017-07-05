@@ -26,6 +26,7 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
+import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.ScheduleService;
@@ -216,11 +217,12 @@ public class PageAction extends BaseDatatableAction {
 		ArrayList<String> fontList = new ArrayList<String>();
 		for (Pagezone pagezone : page.getPagezones()) {
 			if (pagezone.getType().equals(Pagezone.Type_Image)) {
-				Image image = imageService.selectByPrimaryKey(pagezone.getObjid());
-				if (image != null) {
-					pagezone.setContent("./image/" + image.getFilename());
-					File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
-					zip(out, imageFile, "image/" + image.getFilename());
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					Image image = pagezonedtl.getImage();
+					if (image != null) {
+						File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
+						zip(out, imageFile, "image/" + image.getFilename());
+					}
 				}
 			}
 			if (pagezone.getType().equals(Pagezone.Type_Text) && pagezone.getFontfamily().length() > 0) {

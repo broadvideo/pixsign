@@ -6,7 +6,8 @@
 
 	<link rel="stylesheet" href="plugin/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="plugin/animate.css/animate.min.css"/>
-	<link rel="stylesheet" href="plugin/fullcalendar/fullcalendar.css"/>
+	<link rel="stylesheet" href="plugin/fullcalendar/fullcalendar.min.css"/>
+	<link rel="stylesheet" href="plugin/bxslider/jquery.bxslider.min.css"/>
 
 	<link rel="stylesheet" href="module/attendance/attendance.css"/>
 	<link rel="stylesheet" href="module/calendar-list/calendar-list.css"/>
@@ -37,9 +38,9 @@
 	<script src="plugin/dot/doT.min.js"></script>
 	<script src="plugin/moment/moment.min.js"></script>
 	<script src="plugin/base64/base64.min.js"></script>
-
 	<script src="plugin/fullcalendar/fullcalendar.min.js"></script>
 	<script src="plugin/fullcalendar/zh-cn.js"></script>
+	<script src="plugin/bxslider/jquery.bxslider.min.js"></script>
 	
 	<script src="module/attendance/attendance.js"></script>
 	<script src="module/calendar-list/calendar-list.js"></script>
@@ -47,10 +48,14 @@
 	<script src="module/home-school/home-school.js"></script>
 
 	<script src="pixpage/pixpage.js" type="text/javascript"></script>
+	<script src="pixpage/module-image.js" type="text/javascript"></script>
+	<script src="pixpage/module-video.js" type="text/javascript"></script>
 	<script src="data.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
 		showPage();
+		ImageZone.init();
+		VideoZone.init();
 		
 		Attendance.init();
 		CalendarList.init();

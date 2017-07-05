@@ -26,6 +26,8 @@ public class Video {
 
 	private Integer height;
 
+	private String format;
+
 	private String filepath;
 
 	private String filename;
@@ -122,6 +124,14 @@ public class Video {
 
 	public void setHeight(Integer height) {
 		this.height = height;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 	public String getFilepath() {

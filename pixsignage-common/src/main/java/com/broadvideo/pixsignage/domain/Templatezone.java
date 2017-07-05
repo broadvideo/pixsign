@@ -1,9 +1,11 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.util.List;
+
 public class Templatezone {
-	public final static byte Type_TEXT = 0;
-	public final static byte Type_IMAGE = 1;
-	public final static byte Type_VIDEO = 2;
+	public final static byte Type_VIDEO = 1;
+	public final static byte Type_IMAGE = 2;
+	public final static byte Type_TEXT = 3;
 	public final static byte Type_CALENDAR_LIST = 10;
 	public final static byte Type_CALENDAR_TABLE = 11;
 	public final static byte Type_CALENDAR_SIGNIN = 12;
@@ -72,9 +74,9 @@ public class Templatezone {
 
 	private Integer lineheight;
 
-	private String objid;
-
 	private String content;
+
+	private List<Templatezonedtl> templatezonedtls;
 
 	public Integer getTemplatezoneid() {
 		return templatezoneid;
@@ -332,19 +334,19 @@ public class Templatezone {
 		this.lineheight = lineheight;
 	}
 
-	public String getObjid() {
-		return objid;
-	}
-
-	public void setObjid(String objid) {
-		this.objid = objid == null ? null : objid.trim();
-	}
-
 	public String getContent() {
 		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content == null ? null : content.trim();
+	}
+
+	public List<Templatezonedtl> getTemplatezonedtls() {
+		return templatezonedtls;
+	}
+
+	public void setTemplatezonedtls(List<Templatezonedtl> templatezonedtls) {
+		this.templatezonedtls = templatezonedtls;
 	}
 }

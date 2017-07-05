@@ -11,10 +11,11 @@ var Attendance = function () {
 
     var checkin = function (student) {
         if(!student.id) return
-        var nodes = document.getElementsByClassName('attendance-item')
+        var id = student.id
+        var nodes = document.getElementsByClassName('student')
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes.item(i)
-            if (node.dataset.id == student.id) {
+            if (node.dataset.id == id) {
                 node.getElementsByTagName('img').item(0).classList.remove('opacity')
                 node.classList.add('rubberBand')
                 setTimeout(function () {
@@ -55,7 +56,6 @@ var Attendance = function () {
     }
 
     var swipe = function (hardId) {
-        console.log(hardId)
         var student = students.filter(function (student) {
             return student['hard_id'] == hardId
         })
@@ -81,7 +81,7 @@ var Attendance = function () {
         }
     }
 
-    var keyup = function (hardId) {
+    var swipe2 = function (hardId) {
         var st = students[Math.floor(Math.random() * 10)]
         clearTimeout(timer)
         timer = setTimeout(checkin, 300, st)
@@ -106,7 +106,7 @@ var Attendance = function () {
     return {
         init: init,
         swipe: swipe,
-        keyup: keyup
+        keyup: swipe2
     }
 }()
-document.body.addEventListener('keyup', Attendance.keyup)
+document.body.onkeyup = Attendance.keyup

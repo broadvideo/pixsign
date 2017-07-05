@@ -42,6 +42,9 @@ function initMyTable() {
 			$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-statmonth"><i class="fa fa-list-ul"></i> ' + common.view.monthstat + '</a>');
 			$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-statperiod"><i class="fa fa-list-ul"></i> ' + common.view.periodstat + '</a>');
 			return nRow;
+		},
+		'fnServerParams': function(aoData) { 
+			aoData.push({'name':'branchid','value':CurBranchid });
 		}
 	});
 

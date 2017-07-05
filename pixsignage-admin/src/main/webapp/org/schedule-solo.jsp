@@ -67,13 +67,13 @@
 																<div class="portlet-title">
 																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
 																	<ul class="nav nav-tabs">
-																		<li id="nav_tab3" class="page-ctrl">
+																		<li id="nav_tab3" class="page-ctrl" style="display:none">
 																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.page"/></a>
 																		</li>
-																		<li id="nav_tab2" class="touch-ctrl">
+																		<li id="nav_tab2" class="bundle-ctrl touch-ctrl" style="display:none">
 																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.touchbundle"/></a>
 																		</li>
-																		<li id="nav_tab1" class="sscreen-ctrl active">
+																		<li id="nav_tab1" class="bundle-ctrl" style="display:none">
 																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.bundle"/></a>
 																		</li>
 																	</ul>
@@ -95,7 +95,7 @@
 																							<tbody></tbody>
 																						</table>
 																					</div>
-																					<div id="PageDiv" style="display:none">
+																					<div id="PageDiv">
 																						<table id="PageTable" class="table table-condensed table-hover">
 																							<thead></thead>
 																							<tbody></tbody>
@@ -220,7 +220,7 @@
 <script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-schedule-solo.js?t=${timestamp}"></script>
 <script>
-var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
+var BundleCtrl = <%=(session_org != null && session_org.getBundleflag().equals("1"))%>;
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
 var PageCtrl = true;
 

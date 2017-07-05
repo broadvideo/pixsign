@@ -63,13 +63,17 @@ public class OnlinelogAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = onlinelogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), null, search);
+			int count = onlinelogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 			List<HashMap<String, Object>> list = onlinelogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
-					null, search, start, length);
+					branchid, search, start, length);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}

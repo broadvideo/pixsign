@@ -34,7 +34,8 @@
     <result column="decoration" property="decoration" jdbcType="VARCHAR" />
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
-    <result column="objid" property="objid" jdbcType="VARCHAR" />
+	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
+		column="{pagezoneid=pagezoneid}" select="com.broadvideo.pixsignage.persistence.PagezonedtlMapper.selectList" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Pagezone" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -44,12 +45,21 @@
     pagezoneid, pageid, type, height, width, topoffset, leftoffset, zindex, transform, 
     bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, bgopacity, opacity, padding, 
     shadowh, shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, 
-    fontstyle, decoration, align, lineheight, objid
+    fontstyle, decoration, align, lineheight
   </sql>
   <sql id="Blob_Column_List" >
     content
   </sql>
   
+  <select id="selectVideo" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
+    select * from video
+    where '${objtype}' = '1' and videoid = #{videoid}
+  </select>
+  <select id="selectImage" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
+    select * from image
+    where '${objtype}' = '2' and imageid = #{imageid}
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
     select 
     <include refid="Base_Column_List" />
@@ -84,7 +94,7 @@
       shadowcolor, color, fontfamily, 
       fontsize, fontweight, fontstyle, 
       decoration, align, lineheight, 
-      objid, content)
+      content)
     values (#{pageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
@@ -95,7 +105,7 @@
       #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, 
       #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, 
       #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, 
-      #{objid,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -196,9 +206,6 @@
       <if test="lineheight != null" >
         lineheight,
       </if>
-      <if test="objid != null" >
-        objid,
-      </if>
       <if test="content != null" >
         content,
       </if>
@@ -296,9 +303,6 @@
       </if>
       <if test="lineheight != null" >
         #{lineheight,jdbcType=INTEGER},
-      </if>
-      <if test="objid != null" >
-        #{objid,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -401,9 +405,6 @@
       <if test="lineheight != null" >
         lineheight = #{lineheight,jdbcType=INTEGER},
       </if>
-      <if test="objid != null" >
-        objid = #{objid,jdbcType=VARCHAR},
-      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -443,7 +444,6 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
-      objid = #{objid,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
@@ -479,8 +479,7 @@
       fontstyle = #{fontstyle,jdbcType=VARCHAR},
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
-      lineheight = #{lineheight,jdbcType=INTEGER},
-      objid = #{objid,jdbcType=VARCHAR}
+      lineheight = #{lineheight,jdbcType=INTEGER}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,9 +1,11 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.util.List;
+
 public class Pagezone {
-	public final static byte Type_Text = 0;
-	public final static byte Type_Image = 1;
-	public final static byte Type_Video = 2;
+	public final static byte Type_Video = 1;
+	public final static byte Type_Image = 2;
+	public final static byte Type_Text = 3;
 	public final static byte Type_CALENDAR_LIST = 10;
 	public final static byte Type_CALENDAR_TABLE = 11;
 	public final static byte Type_CALENDAR_SIGNIN = 12;
@@ -72,9 +74,9 @@ public class Pagezone {
 
 	private Integer lineheight;
 
-	private String objid;
-
 	private String content;
+
+	private List<Pagezonedtl> pagezonedtls;
 
 	public Integer getPagezoneid() {
 		return pagezoneid;
@@ -332,19 +334,19 @@ public class Pagezone {
 		this.lineheight = lineheight;
 	}
 
-	public String getObjid() {
-		return objid;
-	}
-
-	public void setObjid(String objid) {
-		this.objid = objid == null ? null : objid.trim();
-	}
-
 	public String getContent() {
 		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content == null ? null : content.trim();
+	}
+
+	public List<Pagezonedtl> getPagezonedtls() {
+		return pagezonedtls;
+	}
+
+	public void setPagezonedtls(List<Pagezonedtl> pagezonedtls) {
+		this.pagezonedtls = pagezonedtls;
 	}
 }

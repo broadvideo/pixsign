@@ -82,9 +82,19 @@ create table templatezone(
    align varchar(32),
    lineheight int default 0,
    content longtext,
-   objid varchar(1024),
    primary key (templatezoneid),
    foreign key (templateid) references template(templateid)
+ )engine = innodb
+default character set utf8;
+
+create table templatezonedtl( 
+   templatezonedtlid int not null auto_increment,
+   templatezoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (templatezonedtlid),
+   foreign key (templatezoneid) references templatezone(templatezoneid)
  )engine = innodb
 default character set utf8;
 
@@ -141,11 +151,24 @@ create table pagezone(
    align varchar(32),
    lineheight int default 0,
    content longtext,
-   objid varchar(1024),
    primary key (pagezoneid),
    foreign key (pageid) references page(pageid)
  )engine = innodb
 default character set utf8;
+
+create table pagezonedtl( 
+   pagezonedtlid int not null auto_increment,
+   pagezoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (pagezonedtlid),
+   foreign key (pagezoneid) references pagezone(pagezoneid)
+ )engine = innodb
+default character set utf8;
+
+alter table video add format varchar(16) default '';
+update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;
 
@@ -208,6 +231,120 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30902,2,309,'menu.role','role.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30903,2,309,'menu.branch','branch.jsp','',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30909,2,309,'menu.config','config.jsp','',1,9);
+
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(307,2,0,'menu.classcard','','fa-group','1',0);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30701,2,307,'menu.classroom','classroom.jsp','','1',1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30702,2,307,'menu.schoolclass','schoolclass.jsp','','1',2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30703,2,307,'menu.student','student.jsp','','1',3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30711,2,307,'menu.courseschedulescheme','course-schedule-scheme.jsp','','1',11);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30712,2,307,'menu.coursescheduleset','course-schedule.jsp','','1',12);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30722,2,307,'menu.attendance','attendancelog.jsp','','1',22);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(3071101,2,30711,'menu.shemetimeconfig','period-time-dtl.jsp','','2',1);
+
+
+/* Create table in target */
+CREATE TABLE `classroom`(
+	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`seqno` int(11) NOT NULL  COMMENT '排序，自增ASC规则排序' , 
+	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局uuid' , 
+	`name` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '教室名称' , 
+	`description` varchar(1000) COLLATE utf8_general_ci NULL  COMMENT '教室说明信息' , 
+	`sourcetype` char(1) COLLATE utf8_general_ci NOT NULL  DEFAULT '0' COMMENT '数据来源：0：内部录入 1：外部导入' , 
+	`orgid` int(11) NOT NULL  COMMENT 'orgid' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
+	`updatetime` datetime NULL  COMMENT '修改时间' , 
+	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
+	PRIMARY KEY (`id`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+
+/* Create table in target */
+CREATE TABLE `courseschedule`(
+	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`courseid` int(11) NULL  COMMENT '课程id' , 
+	`coursename` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '课程名称' , 
+	`classroomid` int(11) NOT NULL  COMMENT '教室id' , 
+	`classroomname` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '教室名称' , 
+	`teacherid` int(11) NULL  COMMENT '老师id' , 
+	`teachername` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '老师姓名' , 
+	`coursescheduleschemeid` int(11) NOT NULL  COMMENT 'Ref:课表方案配置id' , 
+	`workday` int(11) NULL  COMMENT '工作日：1-7' , 
+	`periodtimedtlid` int(11) NULL  COMMENT 'Ref;period_time_dtl.id' , 
+	`orgid` int(11) NOT NULL  COMMENT 'orgId' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
+	`updatetime` datetime NULL  COMMENT '修改时间' , 
+	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
+	PRIMARY KEY (`id`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+
+/* Create table in target */
+CREATE TABLE `courseschedulescheme`(
+	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`name` varchar(500) COLLATE utf8_general_ci NULL  COMMENT '课表方案名称' , 
+	`description` varchar(1000) COLLATE utf8_general_ci NULL  COMMENT '备注信息' , 
+	`workdays` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '以逗号分隔形式存储:1,2,3,4,5  1:代表星期一' , 
+	`morningperiods` int(11) NOT NULL  COMMENT '上午节数' , 
+	`afternoonperiods` int(11) NOT NULL  COMMENT '下午节数' , 
+	`nightperiods` int(11) NOT NULL  COMMENT '晚上节数' , 
+	`periodduration` int(11) NULL  COMMENT '上课时长（秒）' , 
+	`enableflag` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '标记是否启用：0:禁用 1:启用' , 
+	`orgid` int(11) NOT NULL  COMMENT 'orgid' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
+	`updatetime` datetime NULL  COMMENT '修改时间' , 
+	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
+	PRIMARY KEY (`id`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+
+/* Create table in target */
+CREATE TABLE `periodtimedtl`(
+	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`type` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '类型：0-上午 1：中午 2：下午 3：晚上' , 
+	`periodnum` int(11) NOT NULL  COMMENT '第几节：1-n' , 
+	`periodname` varchar(100) COLLATE utf8_general_ci NOT NULL  COMMENT '节数别名' , 
+	`shortstarttime` varchar(50) COLLATE utf8_general_ci NULL  COMMENT '上课开始时间，格式：HH:mm:ss' , 
+	`shortendtime` varchar(50) COLLATE utf8_general_ci NULL  COMMENT '上课结束时间，格式：HH:mm:ss' , 
+	`duration` int(11) NOT NULL  COMMENT '上课时长：e.g. seconds' , 
+	`coursescheduleschemeid` int(11) NOT NULL  COMMENT '课表方案id' , 
+	`orgid` int(11) NOT NULL  COMMENT 'orgid' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
+	`updatetime` datetime NULL  COMMENT '修改时间' , 
+	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
+	PRIMARY KEY (`id`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+
+/* Create table in target */
+CREATE TABLE `schoolclass`(
+	`schoolclassid` int(11) NOT NULL  auto_increment COMMENT '班级id' , 
+	`orgid` int(11) NOT NULL  COMMENT '所属org' , 
+	`classroomid` int(11) NULL  COMMENT '关联教室' , 
+	`name` varchar(100) COLLATE utf8_general_ci NOT NULL  COMMENT '班级名称' , 
+	`description` varchar(500) COLLATE utf8_general_ci NULL  COMMENT '说明信息' , 
+	`createstaffid` int(11) NOT NULL  COMMENT '创建人' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	PRIMARY KEY (`schoolclassid`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+
+/* Create table in target */
+CREATE TABLE `student`(
+	`studentid` int(11) NOT NULL  auto_increment COMMENT '学生id' , 
+	`orgid` int(11) NULL  COMMENT '学校id' , 
+	`schoolclassid` int(11) NULL  COMMENT '班级id' , 
+	`studentno` varchar(200) COLLATE utf8_general_ci NOT NULL  COMMENT '学号' , 
+	`name` varchar(200) COLLATE utf8_general_ci NOT NULL  COMMENT '姓名' , 
+	`hardid` varchar(200) COLLATE utf8_general_ci NOT NULL  COMMENT '硬件id' , 
+	`avatar` varchar(200) COLLATE utf8_general_ci NULL  COMMENT '头像地址' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createstaffid` int(11) NOT NULL  COMMENT '创建操作员id' , 
+	PRIMARY KEY (`studentid`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 ############################################################
 ## post script  ############################################

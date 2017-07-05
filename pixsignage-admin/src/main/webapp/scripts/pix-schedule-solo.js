@@ -322,6 +322,7 @@ function refreshScheduleDetail() {
 
 function refreshMediaTable() {
 	$('#BundleTable').dataTable()._fnAjaxUpdate();
+	$('#PageTable').dataTable()._fnAjaxUpdate();
 }
 
 //Bundle table初始化
@@ -538,6 +539,7 @@ $('#PageTable').dataTable({
 	},
 	'fnDrawCallback': function(oSettings, json) {
 		$('#PageContainer .thumbs').each(function(i) {
+			console.log($(this).parent().width());
 			$(this).width($(this).parent().width());
 			$(this).height($(this).parent().width());
 		});
@@ -642,10 +644,23 @@ $('body').on('click', '.pix-schedule', function(event) {
 					CurrentSchedules = CurrentBind.schedules;
 					$('.schedule-edit').css('display', 'none');
 					$('.schedule-add').css('display', 'none');
-					$('.schedule-view').css('display', 'block');				
-					$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
-					$('.touch-ctrl').css('display', TouchCtrl?'':'none');
+					$('.schedule-view').css('display', 'block');
+					$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
 					$('.page-ctrl').css('display', PageCtrl?'':'none');
+					if (BundleCtrl) {
+						$('#nav_tab1').addClass('active');
+						$('#BundleDiv').css('display', '');
+						$('#PageDiv').css('display', 'none');
+						$('#BundleTable').dataTable()._fnAjaxUpdate();
+					} else if (PageCtrl) {
+						$('#nav_tab3').addClass('active');
+						$('#PageDiv').css('display', '');
+						$('#BundleDiv').css('display', 'none');
+						$('#PageTable').dataTable()._fnAjaxUpdate();
+					}
+					if (!TouchCtrl) {
+						$('.touch-ctrl').css('display', 'none');
+					}
 					refreshScheduleDetail();
 					$('#ScheduleModal').modal();
 				} else {

@@ -45,13 +45,17 @@ public class FlowlogAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = flowlogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), null, search);
+			int count = flowlogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 			List<HashMap<String, Object>> list = flowlogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
-					null, search, start, length);
+					branchid, search, start, length);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}
