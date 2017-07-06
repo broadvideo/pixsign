@@ -50,17 +50,23 @@
 	<script src="pixpage/pixpage.js" type="text/javascript"></script>
 	<script src="pixpage/module-image.js" type="text/javascript"></script>
 	<script src="pixpage/module-video.js" type="text/javascript"></script>
+	<script src="pixpage/module-text.js" type="text/javascript"></script>
+	<script src="pixpage/module-scroll.js" type="text/javascript"></script>
+	<script src="pixpage/module-date.js" type="text/javascript"></script>
+	<script src="pixpage/module-other.js" type="text/javascript"></script>
 	<script src="data.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-		showPage();
-		ImageZone.init();
-		VideoZone.init();
-		
+		PixPage.init();
+
 		Attendance.init();
 		CalendarList.init();
 		CalendarTable.init();
 		HomeSchool.init();
+
+		$(window).resize(function(e) {
+			PixPage.resize();
+		});
 	</script>
 
 </body>

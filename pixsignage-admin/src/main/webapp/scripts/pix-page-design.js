@@ -1,5 +1,5 @@
 var ZoneLimits = [];
-ZoneLimits['1'] = 100;
+ZoneLimits['1'] = 4;
 ZoneLimits['2'] = 100;
 ZoneLimits['3'] = 100;
 ZoneLimits['4'] = 5;
@@ -150,6 +150,10 @@ function createZone(pagezone) {
 		$(marquee_element).attr('scrolldelay', '0');
 		$(marquee_element).attr('loop', '-1');
 		$(inner_div).append(marquee_element);
+	} else if (pagezone.type == 5) {
+		//Date Zone
+		var p_element = document.createElement('p');
+		$(inner_div).append(p_element);
 	} else {
 		var p_element = document.createElement('p');
 		$(p_element).append(eval('common.view.pagezone_type_' + pagezone.type));
@@ -182,25 +186,24 @@ function refreshPagezone(pagezone) {
 		'position': 'absolute',
 		'height': '100%', 
 		'width': '100%', 
-		'border-color': pagezone.bdcolor, 
-		'border-style': pagezone.bdstyle, 
-		'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-		'border-top-right-radius': (parseInt(pagezone.bdtr) / PageScale) + 'px', 
-		'border-top-left-radius': (parseInt(pagezone.bdtl) / PageScale) + 'px', 
-		'border-bottom-left-radius': (parseInt(pagezone.bdbl) / PageScale) + 'px', 
-		'border-bottom-right-radius': (parseInt(pagezone.bdbr) / PageScale) + 'px', 
 		'padding': (parseInt(pagezone.padding) / PageScale) + 'px', 
 	});
+	var shadow = '';
+	shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
+	shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
+	shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
+	shadow += pagezone.shadowcolor;
 	if (pagezone.type == 1) {
 		//Video Zone
-		var shadow = '';
-		shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
-		shadow += pagezone.shadowcolor;
 		$(pagezoneDiv).find('#rotatable').css({
 			'box-shadow': shadow, 
 			'opacity': parseInt(pagezone.opacity)/255,
+		});
+		$(pagezoneDiv).find('img').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
 		});
 		if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].video != null) {
 			$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].video.thumbnail);
@@ -209,14 +212,15 @@ function refreshPagezone(pagezone) {
 		}
 	} else if (pagezone.type == 2) {
 		//Image Zone
-		var shadow = '';
-		shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
-		shadow += pagezone.shadowcolor;
 		$(pagezoneDiv).find('#rotatable').css({
 			'box-shadow': shadow, 
 			'opacity': parseInt(pagezone.opacity)/255,
+		});
+		$(pagezoneDiv).find('img').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
 		});
 		if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].image != null) {
 			$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].image.filepath);
@@ -225,12 +229,11 @@ function refreshPagezone(pagezone) {
 		}
 	} else if (pagezone.type == 3) {
 		//Text Zone
-		var shadow = '';
-		shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
-		shadow += pagezone.shadowcolor;
 		$(pagezoneDiv).find('#rotatable').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
 			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
@@ -256,12 +259,11 @@ function refreshPagezone(pagezone) {
 		$(pagezoneDiv).find('p').html(text_val);
 	} else if (pagezone.type == 4) {
 		//Scroll Zone
-		var shadow = '';
-		shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
-		shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
-		shadow += pagezone.shadowcolor;
 		$(pagezoneDiv).find('#rotatable').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
 			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
@@ -283,8 +285,34 @@ function refreshPagezone(pagezone) {
 			text_val = text_val.replace(/&nbsp;/g, ' ');
 		}
 		$(pagezoneDiv).find('marquee').html(text_val);
+	} else if (pagezone.type == 5) {
+		//Date Zone
+		$(pagezoneDiv).find('#rotatable').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'color': pagezone.color, 
+			'font-family': pagezone.fontfamily, 
+			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'text-decoration': pagezone.decoration, 
+			'text-align': pagezone.align, 
+			'font-weight': pagezone.fontweight, 
+			'font-style': pagezone.fontstyle, 
+			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'text-shadow': shadow,  
+			'word-wrap': 'break-word',
+		});
+		$(pagezoneDiv).find('p').css({
+			'text-decoration': pagezone.decoration,
+		});
+		$(pagezoneDiv).find('p').html(new Date().pattern(pagezone.dateformat));
 	} else {
 		$(pagezoneDiv).find('#rotatable').css({
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
 			'color': '#FFFFFF', 
 			'font-size': (50 / PageScale) + 'px', 
 			'word-wrap': 'break-word',
@@ -441,12 +469,7 @@ function enterPagezoneFocus(pagezone) {
 	$('#ZoneEditPanel').css('display' , '');
 	$('.zone-ctl').css('display', 'none');
 	$('.zonetype-' + pagezone.type).css('display', 'block');
-	$('#ZoneEditForm1').loadJSON(pagezone);
-	$('#ZoneEditForm2').loadJSON(pagezone);
-	$('#ZoneEditForm3').loadJSON(pagezone);
-	$('#ZoneEditForm4').loadJSON(pagezone);
-	$('#ZoneEditForm5').loadJSON(pagezone);
-	$('#ZoneEditForm6').loadJSON(pagezone);
+	$('.zoneform').loadJSON(pagezone);
 
 	$('.colorPick').wColorPicker({
 		theme			: 'classic',  // set theme
@@ -600,14 +623,8 @@ function enterPagezoneFocus(pagezone) {
 	
 	$('#spinner-bdwidth').spinner();
 	$('#spinner-bdwidth').spinner('setting', {value:parseInt(pagezone.bdwidth), step: 1, min: 0, max: 99});
-	$('#spinner-bdtl').spinner();
-	$('#spinner-bdtl').spinner('setting', {value:parseInt(pagezone.bdtl), step: 1, min: 0, max: 255});
-	$('#spinner-bdtr').spinner();
-	$('#spinner-bdtr').spinner('setting', {value:parseInt(pagezone.bdtr), step: 1, min: 0, max: 255});
-	$('#spinner-bdbl').spinner();
-	$('#spinner-bdbl').spinner('setting', {value:parseInt(pagezone.bdbl), step: 1, min: 0, max: 255});
-	$('#spinner-bdbr').spinner();
-	$('#spinner-bdbr').spinner('setting', {value:parseInt(pagezone.bdbr), step: 1, min: 0, max: 255});
+	$('#spinner-bdradius').spinner();
+	$('#spinner-bdradius').spinner('setting', {value:parseInt(pagezone.bdradius), step: 1, min: 0, max: 255});
 
 	refreshLocSpinners(pagezone);
 	refreshFontStyle();
@@ -643,10 +660,7 @@ $('.spinner').on('change', function(e) {
 	CurrentZone.shadowv = $('#spinner-shadowv').spinner('value');
 	CurrentZone.shadowblur = $('#spinner-shadowblur').spinner('value');
 	CurrentZone.bdwidth = $('#spinner-bdwidth').spinner('value');
-	CurrentZone.bdtl = $('#spinner-bdtl').spinner('value');
-	CurrentZone.bdtr = $('#spinner-bdtr').spinner('value');
-	CurrentZone.bdbl = $('#spinner-bdbl').spinner('value');
-	CurrentZone.bdbr = $('#spinner-bdbr').spinner('value');
+	CurrentZone.bdradius = $('#spinner-bdradius').spinner('value');
 	refreshPagezone(CurrentZone);
 });	
 
@@ -870,6 +884,12 @@ $('#BdstyleSelect').on('change', function(e) {
 	refreshPagezone(CurrentZone);
 });	
 
+$('.zoneform input,select').on('change', function(e) {
+	CurrentZone.dateformat = $('.zoneform select[name=dateformat]').val();
+	CurrentZone.zindex = $('.zoneform select[name=zindex]').val();
+	refreshPagezone(CurrentZone);
+});
+
 function validPagezone(pagezone) {
 	if (pagezone != null && pagezone.type == 3) {
 		var pagezoneDiv = $('#PagezoneDiv' + pagezone.pagezoneid);
@@ -916,10 +936,7 @@ $('body').on('click', '.pix-addzone', function(event) {
 	pagezone.bdcolor = '#000000';
 	pagezone.bdstyle = 'solid';
 	pagezone.bdwidth = 0;
-	pagezone.bdtl = 0;
-	pagezone.bdtr = 0;
-	pagezone.bdbl = 0;
-	pagezone.bdbr = 0;
+	pagezone.bdradius = 0;
 	pagezone.bgcolor = '#999999';
 	pagezone.bgopacity = 120;
 	pagezone.opacity = 255;
@@ -938,8 +955,11 @@ $('body').on('click', '.pix-addzone', function(event) {
 	pagezone.lineheight = 80;
 	pagezone.content = '';
 	pagezone.pagezonedtls = [];
+	if (pagezone.type == 5) {
+		pagezone.dateformat = 'yyyy-MM-dd HH:mm:ss';
+	}
 	
-	CurrentObj.pagezones[CurrentObj.pagezones.length] = pagezone;
+	CurrentObj.pagezones.push(pagezone);
 	
 	unselectAllZones();
 	CurrentZone = pagezone;

@@ -120,10 +120,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setBdcolor(fromtemplatezone.getBdcolor());
 				templatezone.setBdstyle(fromtemplatezone.getBdstyle());
 				templatezone.setBdwidth(fromtemplatezone.getBdwidth());
-				templatezone.setBdtl(fromtemplatezone.getBdtl());
-				templatezone.setBdtr(fromtemplatezone.getBdtr());
-				templatezone.setBdbl(fromtemplatezone.getBdbl());
-				templatezone.setBdbr(fromtemplatezone.getBdbr());
+				templatezone.setBdradius(fromtemplatezone.getBdradius());
 				templatezone.setBgcolor(fromtemplatezone.getBgcolor());
 				templatezone.setBgopacity(fromtemplatezone.getBgopacity());
 				templatezone.setOpacity(fromtemplatezone.getOpacity());

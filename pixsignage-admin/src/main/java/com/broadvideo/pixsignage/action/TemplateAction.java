@@ -158,14 +158,8 @@ public class TemplateAction extends BaseDatatableAction {
 						} catch (Exception e) {
 							templatezone.setBdwidth(0);
 						}
-						templatezone.setBdtl(Math.round(1.875f
+						templatezone.setBdradius(Math.round(1.875f
 								* Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", ""))));
-						templatezone.setBdtr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", ""))));
-						templatezone.setBdbl(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", ""))));
-						templatezone.setBdbr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", ""))));
 						templatezone.setBgcolor(zoneStrucJson.getString("img_background_color"));
 						templatezone.setOpacity(255 * Integer.parseInt(zoneStrucJson.getString("img_opacity")));
 						templatezone.setPadding(Math.round(
@@ -260,14 +254,8 @@ public class TemplateAction extends BaseDatatableAction {
 						} catch (Exception e) {
 							templatezone.setBdwidth(0);
 						}
-						templatezone.setBdtl(Math.round(1.875f
+						templatezone.setBdradius(Math.round(1.875f
 								* Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", ""))));
-						templatezone.setBdtr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", ""))));
-						templatezone.setBdbl(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", ""))));
-						templatezone.setBdbr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", ""))));
 						templatezone.setBgcolor(zoneStrucJson.getString("text_background_color"));
 						templatezone.setPadding(Math.round(
 								1.875f * Integer.parseInt(zoneStrucJson.getString("text_padding").replace("px", ""))));

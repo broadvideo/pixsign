@@ -14,10 +14,7 @@
     <result column="bdcolor" property="bdcolor" jdbcType="VARCHAR" />
     <result column="bdstyle" property="bdstyle" jdbcType="VARCHAR" />
     <result column="bdwidth" property="bdwidth" jdbcType="INTEGER" />
-    <result column="bdtl" property="bdtl" jdbcType="INTEGER" />
-    <result column="bdtr" property="bdtr" jdbcType="INTEGER" />
-    <result column="bdbl" property="bdbl" jdbcType="INTEGER" />
-    <result column="bdbr" property="bdbr" jdbcType="INTEGER" />
+    <result column="bdradius" property="bdradius" jdbcType="INTEGER" />
     <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
     <result column="bgopacity" property="bgopacity" jdbcType="INTEGER" />
     <result column="opacity" property="opacity" jdbcType="INTEGER" />
@@ -34,6 +31,7 @@
     <result column="decoration" property="decoration" jdbcType="VARCHAR" />
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
+    <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
 	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
 		column="{pagezoneid=pagezoneid}" select="com.broadvideo.pixsignage.persistence.PagezonedtlMapper.selectList" />
   </resultMap>
@@ -43,9 +41,9 @@
   
   <sql id="Base_Column_List" >
     pagezoneid, pageid, type, height, width, topoffset, leftoffset, zindex, transform, 
-    bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, bgopacity, opacity, padding, 
+    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, 
     shadowh, shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, 
-    fontstyle, decoration, align, lineheight
+    fontstyle, decoration, align, lineheight, dateformat
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -87,25 +85,25 @@
     insert into pagezone (pageid, type, height, 
       width, topoffset, leftoffset, 
       zindex, transform, bdcolor, 
-      bdstyle, bdwidth, bdtl, 
-      bdtr, bdbl, bdbr, bgcolor, 
+      bdstyle, bdwidth, bdradius, 
+      bgcolor, 
       bgopacity, opacity, padding, 
       shadowh, shadowv, shadowblur, 
       shadowcolor, color, fontfamily, 
       fontsize, fontweight, fontstyle, 
       decoration, align, lineheight, 
-      content)
+      dateformat, content)
     values (#{pageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
-      #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdtl,jdbcType=INTEGER}, 
-      #{bdtr,jdbcType=INTEGER}, #{bdbl,jdbcType=INTEGER}, #{bdbr,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
+      #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdradius,jdbcType=INTEGER}, 
+      #{bgcolor,jdbcType=VARCHAR}, 
       #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, 
       #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, #{shadowblur,jdbcType=INTEGER}, 
       #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, 
       #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, 
       #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{dateformat,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -146,17 +144,8 @@
       <if test="bdwidth != null" >
         bdwidth,
       </if>
-      <if test="bdtl != null" >
-        bdtl,
-      </if>
-      <if test="bdtr != null" >
-        bdtr,
-      </if>
-      <if test="bdbl != null" >
-        bdbl,
-      </if>
-      <if test="bdbr != null" >
-        bdbr,
+      <if test="bdradius != null" >
+        bdradius,
       </if>
       <if test="bgcolor != null" >
         bgcolor,
@@ -206,6 +195,9 @@
       <if test="lineheight != null" >
         lineheight,
       </if>
+      <if test="dateformat != null" >
+        dateformat,
+      </if>
       <if test="content != null" >
         content,
       </if>
@@ -244,17 +236,8 @@
       <if test="bdwidth != null" >
         #{bdwidth,jdbcType=INTEGER},
       </if>
-      <if test="bdtl != null" >
-        #{bdtl,jdbcType=INTEGER},
-      </if>
-      <if test="bdtr != null" >
-        #{bdtr,jdbcType=INTEGER},
-      </if>
-      <if test="bdbl != null" >
-        #{bdbl,jdbcType=INTEGER},
-      </if>
-      <if test="bdbr != null" >
-        #{bdbr,jdbcType=INTEGER},
+      <if test="bdradius != null" >
+        #{bdradius,jdbcType=INTEGER},
       </if>
       <if test="bgcolor != null" >
         #{bgcolor,jdbcType=VARCHAR},
@@ -304,6 +287,9 @@
       <if test="lineheight != null" >
         #{lineheight,jdbcType=INTEGER},
       </if>
+      <if test="dateformat != null" >
+        #{dateformat,jdbcType=VARCHAR},
+      </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -345,17 +331,8 @@
       <if test="bdwidth != null" >
         bdwidth = #{bdwidth,jdbcType=INTEGER},
       </if>
-      <if test="bdtl != null" >
-        bdtl = #{bdtl,jdbcType=INTEGER},
-      </if>
-      <if test="bdtr != null" >
-        bdtr = #{bdtr,jdbcType=INTEGER},
-      </if>
-      <if test="bdbl != null" >
-        bdbl = #{bdbl,jdbcType=INTEGER},
-      </if>
-      <if test="bdbr != null" >
-        bdbr = #{bdbr,jdbcType=INTEGER},
+      <if test="bdradius != null" >
+        bdradius = #{bdradius,jdbcType=INTEGER},
       </if>
       <if test="bgcolor != null" >
         bgcolor = #{bgcolor,jdbcType=VARCHAR},
@@ -405,6 +382,9 @@
       <if test="lineheight != null" >
         lineheight = #{lineheight,jdbcType=INTEGER},
       </if>
+      <if test="dateformat != null" >
+        dateformat = #{dateformat,jdbcType=VARCHAR},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -424,10 +404,7 @@
       bdcolor = #{bdcolor,jdbcType=VARCHAR},
       bdstyle = #{bdstyle,jdbcType=VARCHAR},
       bdwidth = #{bdwidth,jdbcType=INTEGER},
-      bdtl = #{bdtl,jdbcType=INTEGER},
-      bdtr = #{bdtr,jdbcType=INTEGER},
-      bdbl = #{bdbl,jdbcType=INTEGER},
-      bdbr = #{bdbr,jdbcType=INTEGER},
+      bdradius = #{bdradius,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
       bgopacity = #{bgopacity,jdbcType=INTEGER},
       opacity = #{opacity,jdbcType=INTEGER},
@@ -444,6 +421,7 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
@@ -460,10 +438,7 @@
       bdcolor = #{bdcolor,jdbcType=VARCHAR},
       bdstyle = #{bdstyle,jdbcType=VARCHAR},
       bdwidth = #{bdwidth,jdbcType=INTEGER},
-      bdtl = #{bdtl,jdbcType=INTEGER},
-      bdtr = #{bdtr,jdbcType=INTEGER},
-      bdbl = #{bdbl,jdbcType=INTEGER},
-      bdbr = #{bdbr,jdbcType=INTEGER},
+      bdradius = #{bdradius,jdbcType=INTEGER},
       bgcolor = #{bgcolor,jdbcType=VARCHAR},
       bgopacity = #{bgopacity,jdbcType=INTEGER},
       opacity = #{opacity,jdbcType=INTEGER},
@@ -479,7 +454,8 @@
       fontstyle = #{fontstyle,jdbcType=VARCHAR},
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
-      lineheight = #{lineheight,jdbcType=INTEGER}
+      lineheight = #{lineheight,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

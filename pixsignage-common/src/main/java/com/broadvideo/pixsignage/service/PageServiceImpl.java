@@ -129,10 +129,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setBdcolor(templatezone.getBdcolor());
 				pagezone.setBdstyle(templatezone.getBdstyle());
 				pagezone.setBdwidth(templatezone.getBdwidth());
-				pagezone.setBdtl(templatezone.getBdtl());
-				pagezone.setBdtr(templatezone.getBdtr());
-				pagezone.setBdbl(templatezone.getBdbl());
-				pagezone.setBdbr(templatezone.getBdbr());
+				pagezone.setBdradius(templatezone.getBdradius());
 				pagezone.setBgcolor(templatezone.getBgcolor());
 				pagezone.setBgopacity(templatezone.getBgopacity());
 				pagezone.setOpacity(templatezone.getOpacity());
@@ -220,10 +217,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setBdcolor(frompagezone.getBdcolor());
 				pagezone.setBdstyle(frompagezone.getBdstyle());
 				pagezone.setBdwidth(frompagezone.getBdwidth());
-				pagezone.setBdtl(frompagezone.getBdtl());
-				pagezone.setBdtr(frompagezone.getBdtr());
-				pagezone.setBdbl(frompagezone.getBdbl());
-				pagezone.setBdbr(frompagezone.getBdbr());
+				pagezone.setBdradius(frompagezone.getBdradius());
 				pagezone.setBgcolor(frompagezone.getBgcolor());
 				pagezone.setBgopacity(frompagezone.getBgopacity());
 				pagezone.setOpacity(frompagezone.getOpacity());

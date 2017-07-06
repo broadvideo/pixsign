@@ -34,13 +34,7 @@ public class Pagezone {
 
 	private Integer bdwidth;
 
-	private Integer bdtl;
-
-	private Integer bdtr;
-
-	private Integer bdbl;
-
-	private Integer bdbr;
+	private Integer bdradius;
 
 	private String bgcolor;
 
@@ -73,6 +67,8 @@ public class Pagezone {
 	private String align;
 
 	private Integer lineheight;
+
+	private String dateformat;
 
 	private String content;
 
@@ -174,36 +170,12 @@ public class Pagezone {
 		this.bdwidth = bdwidth;
 	}
 
-	public Integer getBdtl() {
-		return bdtl;
+	public Integer getBdradius() {
+		return bdradius;
 	}
 
-	public void setBdtl(Integer bdtl) {
-		this.bdtl = bdtl;
-	}
-
-	public Integer getBdtr() {
-		return bdtr;
-	}
-
-	public void setBdtr(Integer bdtr) {
-		this.bdtr = bdtr;
-	}
-
-	public Integer getBdbl() {
-		return bdbl;
-	}
-
-	public void setBdbl(Integer bdbl) {
-		this.bdbl = bdbl;
-	}
-
-	public Integer getBdbr() {
-		return bdbr;
-	}
-
-	public void setBdbr(Integer bdbr) {
-		this.bdbr = bdbr;
+	public void setBdradius(Integer bdradius) {
+		this.bdradius = bdradius;
 	}
 
 	public String getBgcolor() {
@@ -332,6 +304,14 @@ public class Pagezone {
 
 	public void setLineheight(Integer lineheight) {
 		this.lineheight = lineheight;
+	}
+
+	public String getDateformat() {
+		return dateformat;
+	}
+
+	public void setDateformat(String dateformat) {
+		this.dateformat = dateformat;
 	}
 
 	public String getContent() {
