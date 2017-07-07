@@ -214,16 +214,16 @@ insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, ty
 insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30701,2,307,'menu.classroom','classroom.jsp',NULL,'1',0,1);
 insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30702,2,307,'menu.schoolclass','schoolclass.jsp',NULL,'1',0,2);
 insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30703,2,307,'menu.student','student.jsp',NULL,'1',0,3);
-insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30711,2,307,'menu.courseschedulescheme','course-schedule-scheme.jsp',NULL,'1',0,11);
-insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30712,2,307,'menu.coursescheduleset','course-schedule.jsp',NULL,'1',0,12);
-insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30722,2,307,'menu.attendance','attendancelog.jsp',NULL,'1','0','22');
-insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(3071101,2,30711,'menu.shemetimeconfig','period-time-dtl.jsp',NULL,'2',0,1);
+insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30711,2,307,'menu.courseschedulescheme','courseschedulescheme.jsp',NULL,'1',0,11);
+insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30712,2,307,'menu.coursescheduleset','courseschedule.jsp',NULL,'1',0,12);
+insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(30722,2,307,'menu.attendance','attendance.jsp',NULL,'1','0','22');
+insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(3071101,2,30711,'menu.shemetimeconfig','periodtimedtl.jsp',NULL,'2',0,1);
 
 
 
 /* Create table in target */
 CREATE TABLE `classroom`(
-	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`classroomid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
 	`seqno` int(11) NOT NULL  COMMENT '排序，自增ASC规则排序' , 
 	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局uuid' , 
 	`name` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '教室名称' , 
@@ -234,12 +234,12 @@ CREATE TABLE `classroom`(
 	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
-	PRIMARY KEY (`id`) 
+	PRIMARY KEY (`classroomid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
 CREATE TABLE `courseschedule`(
-	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`coursescheduleid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
 	`courseid` int(11) NULL  COMMENT '课程id' , 
 	`coursename` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '课程名称' , 
 	`classroomid` int(11) NOT NULL  COMMENT '教室id' , 
@@ -254,12 +254,12 @@ CREATE TABLE `courseschedule`(
 	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
-	PRIMARY KEY (`id`) 
+	PRIMARY KEY (`coursescheduleid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
 CREATE TABLE `courseschedulescheme`(
-	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`coursescheduleschemeid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
 	`name` varchar(500) COLLATE utf8_general_ci NULL  COMMENT '课表方案名称' , 
 	`description` varchar(1000) COLLATE utf8_general_ci NULL  COMMENT '备注信息' , 
 	`workdays` varchar(500) COLLATE utf8_general_ci NOT NULL  COMMENT '以逗号分隔形式存储:1,2,3,4,5  1:代表星期一' , 
@@ -273,12 +273,12 @@ CREATE TABLE `courseschedulescheme`(
 	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
-	PRIMARY KEY (`id`) 
+	PRIMARY KEY (`coursescheduleschemeid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
 CREATE TABLE `periodtimedtl`(
-	`id` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`periodtimedtlid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
 	`type` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '类型：0-上午 1：中午 2：下午 3：晚上' , 
 	`periodnum` int(11) NOT NULL  COMMENT '第几节：1-n' , 
 	`periodname` varchar(100) COLLATE utf8_general_ci NOT NULL  COMMENT '节数别名' , 
@@ -291,7 +291,7 @@ CREATE TABLE `periodtimedtl`(
 	`createpsnid` int(11) NOT NULL  COMMENT '创建人员id' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatepsnid` int(11) NULL  COMMENT '修改人员id' , 
-	PRIMARY KEY (`id`) 
+	PRIMARY KEY (`periodtimedtlid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
@@ -320,17 +320,17 @@ CREATE TABLE `student`(
 	PRIMARY KEY (`studentid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
-CREATE TABLE `attendancelog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `studentid` int(11) NOT NULL COMMENT '学生id',
-  `orgid` int(11) NOT NULL COMMENT 'orgid',
-  `schoolclassid` int(11) DEFAULT NULL COMMENT '班级id',
-  `classroomid` int(11) NOT NULL COMMENT '教室id',
-  `coursescheduleid` int(11) DEFAULT NULL COMMENT '课表id',
-  `eventtime` datetime NOT NULL COMMENT '考勤时间',
-  `createtime` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8;
+CREATE TABLE `attendance`(
+	`attendanceid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
+	`studentid` int(11) NOT NULL  COMMENT '学生id' , 
+	`orgid` int(11) NOT NULL  COMMENT 'orgid' , 
+	`schoolclassid` int(11) NULL  COMMENT '班级id' , 
+	`classroomid` int(11) NOT NULL  COMMENT '教室id' , 
+	`coursescheduleid` int(11) NULL  COMMENT '课表id' , 
+	`eventtime` datetime NOT NULL  COMMENT '考勤时间' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	PRIMARY KEY (`attendanceid`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 ############################################################
 ## post script  ############################################
