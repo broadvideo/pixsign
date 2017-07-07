@@ -27,6 +27,9 @@
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 						<input type="hidden" name="template.templateid" value="0" />
+						<input type="hidden" name="template.hometemplateid" value="0" />
+						<input type="hidden" name="template.touchflag" value="0" />
+						<input type="hidden" name="template.homeflag" value="1" />
 						<input type="hidden" name="template.publicflag" value="1" />
 						<input type="hidden" name="template.status" value="1" />
 						<div class="form-body">
@@ -59,7 +62,7 @@
 		</div>
 	</div>
 
-	<div id="TemplateModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -69,12 +72,29 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="0">
-								<i class="fa fa-font"></i><div>文本</div>
-							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="1">
+								<i class="fa fa-video-camera"></i><div>视频</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="2">
 								<i class="fa fa-image"></i><div>图片</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="3">
+								<i class="fa fa-font"></i><div>文本</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="4">
+								<i class="fa fa-long-arrow-left"></i><div>滚动</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="5">
+								<i class="fa fa-history"></i><div>时间</div>
+							</a>
+							<!-- 
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
+								<i class="fa fa-sun-o"></i><div>天气</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
+								<i class="fa fa-hand-o-up"></i><div>按键</div>
+							</a>
+							 -->
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
@@ -92,19 +112,88 @@
 					<div class="row">
 						<div class="col-md-9">
 							<div style="text-align: center;">
-								<div id="TemplateDiv"></div>
+								<div id="PageDiv"></div>
 							</div>
 						</div>
 						<div class="col-md-3">
-							<div class="panel-group" id="TemplatezoneEditPanel">
-								<div class="panel panel-default templatezone-ctl zonetype-0">
+							<div class="panel-group" id="ZoneEditPanel">
+								<div class="panel panel-default zone-ctl zonetype-1">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#TemplatezoneEditPanel" href="#Collapse1">字体样式</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse1">视频设置</a>
 										</h4>
 									</div>
 									<div id="Collapse1" class="panel-collapse collapse in">
-										<form id="TemplatezoneEditForm1" class="form-horizontal pix-bordered">
+										<form id="ZoneEditForm1" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label"></label>
+													<div class="col-md-9">
+														<a href="javascript:;" class="btn default btn-xs blue pix-video-library"><i class="fa fa-video-camera"></i> 选择视频</a>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-2">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse2">图片设置</a>
+										</h4>
+									</div>
+									<div id="Collapse2" class="panel-collapse collapse in">
+										<form id="ZoneEditForm2" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label"></label>
+													<div class="col-md-9">
+														<a href="javascript:;" class="btn default btn-xs blue pix-image-library"><i class="fa fa-image"></i> 选择图片</a>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">透明</label>
+													<div class="col-md-9">
+														<input class="opacityRange" type="text" name="opacity" value=""/>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-5">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse3">日期时间</a>
+										</h4>
+									</div>
+									<div id="Collapse3" class="panel-collapse collapse">
+										<form id="ZoneEditForm3" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">格式</label>
+													<div class="col-md-9">
+														<select class="form-control" name="dateformat" tabindex="-1">
+															<option value="yyyy-MM-dd">2017-01-01</option>
+															<option value="HH:mm:ss">12:00:00</option>
+															<option value="ww">星期日</option>
+															<option value="yyyy-MM-dd HH:mm:ss">2017-01-01 12:00:00</option>
+															<option value="yyyy-MM-dd ww">2017-01-01 星期日</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse4">字体样式</a>
+										</h4>
+									</div>
+									<div id="Collapse4" class="panel-collapse collapse in">
+										<form id="ZoneEditForm4" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">字体</label>
@@ -179,42 +268,17 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default templatezone-ctl zonetype-1">
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#TemplatezoneEditPanel" href="#Collapse2">图片设置</a>
-										</h4>
-									</div>
-									<div id="Collapse2" class="panel-collapse collapse in">
-										<form id="TemplatezoneEditForm2" class="form-horizontal pix-bordered">
-											<div class="form-body">
-												<div class="form-group">
-													<label class="col-md-3 control-label">图片</label>
-													<div class="col-md-9">
-														<a href="javascript:;" class="btn default btn-sm blue pix-image-library"><i class="fa fa-image"></i> 选择图片</a>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-md-3 control-label">透明</label>
-													<div class="col-md-9">
-														<input class="opacityRange" type="text" name="opacity" value=""/>
-													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#TemplatezoneEditPanel" href="#Collapse3">背景阴影</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">背景阴影</a>
 										</h4>
 									</div>
-									<div id="Collapse3" class="panel-collapse collapse">
-										<form id="TemplatezoneEditForm3" class="form-horizontal pix-bordered">
+									<div id="Collapse5" class="panel-collapse collapse">
+										<form id="ZoneEditForm5" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
-													<label class="col-md-3 control-label">颜色</label>
+													<label class="col-md-3 control-label">背景</label>
 													<div class="col-md-9">
 														<div class="input-group colorpicker-component bgcolorPick">
 															<input type="text" name="bgcolor" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
@@ -298,11 +362,11 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#TemplatezoneEditPanel" href="#Collapse4">边框设置</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">边框设置</a>
 										</h4>
 									</div>
-									<div id="Collapse4" class="panel-collapse collapse">
-										<form id="TemplatezoneEditForm4" class="form-horizontal pix-bordered">
+									<div id="Collapse6" class="panel-collapse collapse">
+										<form id="ZoneEditForm6" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">颜色</label>
@@ -338,65 +402,11 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-3 control-label">左上</label>
+													<label class="col-md-3 control-label">圆角</label>
 													<div class="col-md-9">
-														<div class="spinner" id="spinner-bdtl">
+														<div class="spinner" id="spinner-bdradius">
 															<div class="input-group input-small">
-																<input type="text" class="spinner-input form-control" readonly name="bdtl" >
-																<div class="spinner-buttons input-group-btn btn-group-vertical">
-																	<button type="button" class="btn spinner-up btn-xs blue">
-																	<i class="fa fa-angle-up"></i>
-																	</button>
-																	<button type="button" class="btn spinner-down btn-xs blue">
-																	<i class="fa fa-angle-down"></i>
-																	</button>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-md-3 control-label">右上</label>
-													<div class="col-md-9">
-														<div class="spinner" id="spinner-bdtr">
-															<div class="input-group input-small">
-																<input type="text" class="spinner-input form-control" readonly name="bdtr" >
-																<div class="spinner-buttons input-group-btn btn-group-vertical">
-																	<button type="button" class="btn spinner-up btn-xs blue">
-																	<i class="fa fa-angle-up"></i>
-																	</button>
-																	<button type="button" class="btn spinner-down btn-xs blue">
-																	<i class="fa fa-angle-down"></i>
-																	</button>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-md-3 control-label">左下</label>
-													<div class="col-md-9">
-														<div class="spinner" id="spinner-bdbl">
-															<div class="input-group input-small">
-																<input type="text" class="spinner-input form-control" readonly name="bdbl" >
-																<div class="spinner-buttons input-group-btn btn-group-vertical">
-																	<button type="button" class="btn spinner-up btn-xs blue">
-																	<i class="fa fa-angle-up"></i>
-																	</button>
-																	<button type="button" class="btn spinner-down btn-xs blue">
-																	<i class="fa fa-angle-down"></i>
-																	</button>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="col-md-3 control-label">右下</label>
-													<div class="col-md-9">
-														<div class="spinner" id="spinner-bdbr">
-															<div class="input-group input-small">
-																<input type="text" class="spinner-input form-control" readonly name="bdbr" >
+																<input type="text" class="spinner-input form-control" readonly name="bdradius" >
 																<div class="spinner-buttons input-group-btn btn-group-vertical">
 																	<button type="button" class="btn spinner-up btn-xs blue">
 																	<i class="fa fa-angle-up"></i>
@@ -416,12 +426,22 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#TemplatezoneEditPanel" href="#Collapse5">大小位置</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse7">大小位置</a>
 										</h4>
 									</div>
-									<div id="Collapse5" class="panel-collapse collapse">
-										<form id="TemplatezoneEditForm5" class="form-horizontal pix-bordered">
+									<div id="Collapse7" class="panel-collapse collapse">
+										<form id="ZoneEditForm7" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">层叠</label>
+													<div class="col-md-9">
+														<select class="form-control" name="zindex" tabindex="-1">
+															<option value="50"><spring:message code="global.layout.region.zindex_0"/></option>
+															<option value="51"><spring:message code="global.layout.region.zindex_1"/></option>
+															<option value="52"><spring:message code="global.layout.region.zindex_2"/></option>
+														</select>
+													</div>
+												</div>
 												<div class="form-group">
 													<label class="col-md-3 control-label">边距</label>
 													<div class="col-md-9">
@@ -528,7 +548,7 @@
 		</div>
 	</div>
 		
-	<div id="ImageLibraryModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="LibraryModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -542,8 +562,11 @@
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
 									<ul class="nav nav-tabs" style="margin-left: 10px;">
-										<li id="public_tab" class="active">
+										<li class="image-ctl">
 											<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+										</li>
+										<li class="video-ctl">
+											<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.video"/></a>
 										</li>
 									</ul>
 								</div>
@@ -557,8 +580,14 @@
 													<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
 												</div>
 												<div class="col-md-9">
-													<div id="ImageDiv">
+													<div class="image-ctl">
 														<table id="ImageTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+													<div class="video-ctl">
+														<table id="VideoTable" class="table table-condensed table-hover">
 															<thead></thead>
 															<tbody></tbody>
 														</table>
@@ -571,15 +600,57 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<h3 class="page-title">选择图片</h3>
-							<div id="ImageLibraryPreview">
+							<div class="portlet box green">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-responsive">
+										<table id="PagezonedtlTable" class="table table-condensed table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="ScrollModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i>滚动</div>
+						</div>
+						<div class="portlet-body">
+							<form id="ScrollForm" class="form-horizontal" method="POST">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="global.resource.text"/><span class="required">*</span></label>
+										<div class="col-md-9">
+											<textarea class="form-control" rows="10" name="content"></textarea>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
 					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-					<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 				</div>
 			</div>
 		</div>
@@ -656,6 +727,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-template.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-page-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {    

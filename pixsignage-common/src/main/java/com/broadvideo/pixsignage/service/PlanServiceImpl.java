@@ -21,6 +21,9 @@ import com.broadvideo.pixsignage.domain.Mediagrid;
 import com.broadvideo.pixsignage.domain.Mediagriddtl;
 import com.broadvideo.pixsignage.domain.Mmediadtl;
 import com.broadvideo.pixsignage.domain.Msgevent;
+import com.broadvideo.pixsignage.domain.Page;
+import com.broadvideo.pixsignage.domain.Pagezone;
+import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Plan;
 import com.broadvideo.pixsignage.domain.Planbind;
 import com.broadvideo.pixsignage.domain.Plandtl;
@@ -33,6 +36,7 @@ import com.broadvideo.pixsignage.persistence.DevicegridMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MmediadtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
+import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.PlanbindMapper;
 import com.broadvideo.pixsignage.persistence.PlandtlMapper;
@@ -60,6 +64,8 @@ public class PlanServiceImpl implements PlanService {
 	private MmediadtlMapper mmediadtlMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
+	@Autowired
+	private PageMapper pageMapper;
 
 	@Autowired
 	private ScheduleMapper scheduleMapper;
@@ -185,10 +191,89 @@ public class PlanServiceImpl implements PlanService {
 		}
 	}
 
-	private JSONObject generateMultiPlanJson(String deviceid) {
-		JSONObject responseJson = new JSONObject();
+	private JSONArray generateSoloPlanJson(String deviceid) {
 		JSONArray planJsonArray = new JSONArray();
-		responseJson.put("multi_plans", planJsonArray);
+
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+
+		// generate final json
+		List<Plan> planList;
+		if (device.getDevicegroupid().intValue() == 0) {
+			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Device, deviceid);
+		} else {
+			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Devicegroup,
+					"" + device.getDevicegroupid());
+		}
+		for (Plan plan : planList) {
+			HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+
+			JSONObject planJson = new JSONObject();
+			planJsonArray.put(planJson);
+			planJson.put("plan_id", plan.getPlanid());
+			planJson.put("priority", plan.getPriority());
+			planJson.put("play_mode", "daily");
+			planJson.put("start_date",
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
+			planJson.put("end_date", new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));
+			planJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
+			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
+			JSONArray plandtlJsonArray = new JSONArray();
+			JSONArray videoJsonArray = new JSONArray();
+			for (Plandtl plandtl : plan.getPlandtls()) {
+				if (plandtl.getObjtype().equals(Plandtl.ObjType_Page)) {
+					Page page = pageMapper.selectByPrimaryKey("" + plandtl.getObjid());
+					for (Pagezone pagezone : page.getPagezones()) {
+						for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+							if (pagezonedtl.getVideo() != null) {
+								if (videoHash.get(pagezonedtl.getObjid()) == null) {
+									Video video = pagezonedtl.getVideo();
+									JSONObject videoJson = new JSONObject();
+									videoJson.put("id", video.getVideoid());
+									videoJson.put("name", video.getName());
+									videoJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+											+ video.getFilepath());
+									videoJson.put("file", video.getFilename());
+									videoJson.put("size", video.getSize());
+									videoJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+											+ video.getThumbnail());
+									videoHash.put(video.getVideoid(), videoJson);
+									videoJsonArray.put(videoJson);
+								}
+							}
+						}
+					}
+
+					String zipPath = "/page/" + plandtl.getObjid() + "/page-" + plandtl.getObjid() + ".zip";
+					File zipFile = new File("/pixdata/pixsignage" + zipPath);
+					if (zipFile.exists()) {
+						JSONObject plandtlJson = new JSONObject();
+						plandtlJson.put("plandtl_id", plandtl.getPlandtlid());
+						plandtlJson.put("media_type", "page");
+						plandtlJson.put("media_id", plandtl.getObjid());
+						plandtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+						plandtlJson.put("file", zipFile.getName());
+						plandtlJson.put("size", FileUtils.sizeOf(zipFile));
+						if (plandtl.getDuration() > 0) {
+							plandtlJson.put("duration", plandtl.getDuration());
+						}
+						plandtlJsonArray.put(plandtlJson);
+					}
+				}
+
+			}
+			planJson.put("plandtls", plandtlJsonArray);
+			planJson.put("videos", videoJsonArray);
+		}
+
+		return planJsonArray;
+	}
+
+	private JSONArray generateMultiPlanJson(String deviceid) {
+		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
 		String devicegridid = "" + device.getDevicegridid();
@@ -196,7 +281,7 @@ public class PlanServiceImpl implements PlanService {
 		int ypos = device.getYpos();
 
 		if (device.getDevicegridid().intValue() == 0) {
-			return responseJson;
+			return planJsonArray;
 		}
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
@@ -392,12 +477,14 @@ public class PlanServiceImpl implements PlanService {
 			}
 		}
 
-		return responseJson;
+		return planJsonArray;
 	}
 
 	public JSONObject generatePlanJson(String deviceid) {
-		JSONObject response = generateMultiPlanJson(deviceid);
-		return response;
+		JSONObject responseJson = new JSONObject();
+		responseJson.put("plans", generateSoloPlanJson(deviceid));
+		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));
+		return responseJson;
 	}
 
 	@Transactional

@@ -12,12 +12,14 @@ public interface VideoMapper {
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "folderid") String folderid, @Param(value = "type") String type,
-			@Param(value = "previewflag") String previewflag, @Param(value = "search") String search);
+			@Param(value = "previewflag") String previewflag, @Param(value = "format") String format,
+			@Param(value = "search") String search);
 
 	List<Video> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "folderid") String folderid, @Param(value = "type") String type,
-			@Param(value = "previewflag") String previewflag, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "previewflag") String previewflag, @Param(value = "format") String format,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	Video selectByUuid(@Param(value = "uuid") String uuid);
 

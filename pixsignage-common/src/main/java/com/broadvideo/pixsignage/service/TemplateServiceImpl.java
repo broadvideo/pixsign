@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
+import com.broadvideo.pixsignage.domain.Templatezonedtl;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
 import com.broadvideo.pixsignage.persistence.TemplatezoneMapper;
+import com.broadvideo.pixsignage.persistence.TemplatezonedtlMapper;
 
 @Service("templateService")
 public class TemplateServiceImpl implements TemplateService {
@@ -23,6 +25,8 @@ public class TemplateServiceImpl implements TemplateService {
 	private TemplateMapper templateMapper;
 	@Autowired
 	private TemplatezoneMapper templatezoneMapper;
+	@Autowired
+	private TemplatezonedtlMapper templatezonedtlMapper;
 
 	public Template selectByPrimaryKey(String templateid) {
 		return templateMapper.selectByPrimaryKey(templateid);
@@ -106,6 +110,11 @@ public class TemplateServiceImpl implements TemplateService {
 			for (Templatezone fromtemplatezone : fromtemplatezones) {
 				Templatezone templatezone = new Templatezone();
 				templatezone.setTemplateid(template.getTemplateid());
+				if (template.getHomeflag().equals("0")) {
+					templatezone.setHometemplateid(template.getHometemplateid());
+				} else {
+					templatezone.setHometemplateid(template.getTemplateid());
+				}
 				templatezone.setType(fromtemplatezone.getType());
 				templatezone.setHeight(fromtemplatezone.getHeight());
 				templatezone.setWidth(fromtemplatezone.getWidth());
@@ -116,10 +125,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setBdcolor(fromtemplatezone.getBdcolor());
 				templatezone.setBdstyle(fromtemplatezone.getBdstyle());
 				templatezone.setBdwidth(fromtemplatezone.getBdwidth());
-				templatezone.setBdtl(fromtemplatezone.getBdtl());
-				templatezone.setBdtr(fromtemplatezone.getBdtr());
-				templatezone.setBdbl(fromtemplatezone.getBdbl());
-				templatezone.setBdbr(fromtemplatezone.getBdbr());
+				templatezone.setBdradius(fromtemplatezone.getBdradius());
 				templatezone.setBgcolor(fromtemplatezone.getBgcolor());
 				templatezone.setBgopacity(fromtemplatezone.getBgopacity());
 				templatezone.setOpacity(fromtemplatezone.getOpacity());
@@ -137,9 +143,15 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setAlign(fromtemplatezone.getAlign());
 				templatezone.setLineheight(fromtemplatezone.getLineheight());
 				templatezone.setContent(fromtemplatezone.getContent());
-				templatezone.setObjid(fromtemplatezone.getObjid());
-
 				templatezoneMapper.insertSelective(templatezone);
+				for (Templatezonedtl fromtemplatezonedtl : fromtemplatezone.getTemplatezonedtls()) {
+					Templatezonedtl templatezonedtl = new Templatezonedtl();
+					templatezonedtl.setTemplatezoneid(templatezone.getTemplatezoneid());
+					templatezonedtl.setObjtype(fromtemplatezonedtl.getObjtype());
+					templatezonedtl.setObjid(fromtemplatezonedtl.getObjid());
+					templatezonedtl.setSequence(fromtemplatezonedtl.getSequence());
+					templatezonedtlMapper.insertSelective(templatezonedtl);
+				}
 			}
 		}
 	}
@@ -166,18 +178,33 @@ public class TemplateServiceImpl implements TemplateService {
 		List<Templatezone> oldtemplatezones = templatezoneMapper.selectList("" + templateid);
 		HashMap<Integer, Templatezone> hash = new HashMap<Integer, Templatezone>();
 		for (Templatezone templatezone : templatezones) {
-			if (templatezone.getTemplatezoneid() <= 0) {
-				templatezone.setTemplateid(templateid);
-				templatezoneMapper.insertSelective(templatezone);
-			} else {
-				templatezoneMapper.updateByPrimaryKeySelective(templatezone);
+			if (templatezone.getTemplatezoneid() > 0) {
 				hash.put(templatezone.getTemplatezoneid(), templatezone);
 			}
 		}
 		for (int i = 0; i < oldtemplatezones.size(); i++) {
 			Templatezone oldTemplatezone = oldtemplatezones.get(i);
 			if (hash.get(oldTemplatezone.getTemplatezoneid()) == null) {
+				templatezonedtlMapper.deleteByTemplatezone("" + oldtemplatezones.get(i).getTemplatezoneid());
 				templatezoneMapper.deleteByPrimaryKey("" + oldtemplatezones.get(i).getTemplatezoneid());
+			}
+		}
+		for (Templatezone templatezone : templatezones) {
+			if (template.getHomeflag().equals("0")) {
+				templatezone.setHometemplateid(template.getHometemplateid());
+			} else {
+				templatezone.setHometemplateid(template.getTemplateid());
+			}
+			if (templatezone.getTemplatezoneid() <= 0) {
+				templatezone.setTemplateid(templateid);
+				templatezoneMapper.insertSelective(templatezone);
+			} else {
+				templatezoneMapper.updateByPrimaryKeySelective(templatezone);
+				templatezonedtlMapper.deleteByTemplatezone("" + templatezone.getTemplatezoneid());
+			}
+			for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {
+				templatezonedtl.setTemplatezoneid(templatezone.getTemplatezoneid());
+				templatezonedtlMapper.insertSelective(templatezonedtl);
 			}
 		}
 

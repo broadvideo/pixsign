@@ -1,48 +1,48 @@
-/*考勤页面样式*/
-.attendance {
-    overflow: auto;
-}
-.attendance-item {
-    float: left;
-    margin: 5px;
-    background-color: #C2DACB;
-    box-shadow: 5px 5px 10px #444;
-    width: 105px;
-    height: 133px;
-    position: relative;
-}
-
-.attendance-avatar {
-    float: left;
-    width: 105px;
-    height: 113px;
-    position: relative;
-    overflow: hidden;
-}
-
-.attendance-avatar img {
-    background: #333;
-    width: 105px;
-    height: 113px;
-    top: 0;
-    left: 0;
-    position: absolute;
-}
-
-.opacity {
-    opacity: 0.2;
-}
-
-.attendance-info {
-    _margin-bottom: 3px;
-    padding-left: 0px;
-    width: 105px;
-    line-height: 20px;
-    color: #EA7500;
-}
-
-.attendance-info p {
-    width: 105px;
-    font-size: 14px;
-    text-align: center;
-}
+/*考勤页面样式*/
+.attendance {
+    overflow: auto;
+}
+.attendance-item {
+    float: left;
+    margin: 5px;
+    background-color: #C2DACB;
+    box-shadow: 5px 5px 10px #444;
+    width: 105px;
+    height: 133px;
+    position: relative;
+}
+
+.attendance-avatar {
+    float: left;
+    width: 105px;
+    height: 113px;
+    position: relative;
+    overflow: hidden;
+}
+
+.attendance-avatar img {
+    background: #333;
+    width: 105px;
+    height: 113px;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.opacity {
+    opacity: 0.2;
+}
+
+.attendance-info {
+    _margin-bottom: 3px;
+    padding-left: 0px;
+    width: 105px;
+    line-height: 20px;
+    color: #EA7500;
+}
+
+.attendance-info p {
+    width: 105px;
+    font-size: 14px;
+    text-align: center;
+}

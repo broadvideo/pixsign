@@ -24,6 +24,14 @@ public class Page {
 
 	private Integer width;
 
+	private String touchflag;
+
+	private String homeflag;
+
+	private Integer homepageid;
+
+	private Integer homeidletime;
+
 	private String status;
 
 	private String description;
@@ -108,6 +116,38 @@ public class Page {
 
 	public void setWidth(Integer width) {
 		this.width = width;
+	}
+
+	public String getTouchflag() {
+		return touchflag;
+	}
+
+	public void setTouchflag(String touchflag) {
+		this.touchflag = touchflag == null ? null : touchflag.trim();
+	}
+
+	public String getHomeflag() {
+		return homeflag;
+	}
+
+	public void setHomeflag(String homeflag) {
+		this.homeflag = homeflag == null ? null : homeflag.trim();
+	}
+
+	public Integer getHomepageid() {
+		return homepageid;
+	}
+
+	public void setHomepageid(Integer homepageid) {
+		this.homepageid = homepageid;
+	}
+
+	public Integer getHomeidletime() {
+		return homeidletime;
+	}
+
+	public void setHomeidletime(Integer homeidletime) {
+		this.homeidletime = homeidletime;
 	}
 
 	public String getStatus() {

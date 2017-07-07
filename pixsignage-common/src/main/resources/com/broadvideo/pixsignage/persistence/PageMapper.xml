@@ -11,6 +11,10 @@
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="touchflag" property="touchflag" jdbcType="CHAR" />
+    <result column="homeflag" property="homeflag" jdbcType="CHAR" />
+    <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
+    <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -28,6 +32,10 @@
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="touchflag" property="touchflag" jdbcType="CHAR" />
+    <result column="homeflag" property="homeflag" jdbcType="CHAR" />
+    <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
+    <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -37,8 +45,9 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, status, 
-    description, createtime, updatetime, createstaffid
+    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, touchflag, 
+    homeflag, homepageid, homeidletime, status, description, createtime, updatetime, 
+    createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -85,14 +94,16 @@
     </selectKey>
     insert into page (orgid, branchid, templateid, 
       name, snapshot, ratio, 
-      height, width, status, 
-      description, createtime, updatetime, 
-      createstaffid)
+      height, width, touchflag, 
+      homeflag, homepageid, homeidletime, 
+      status, description, createtime, 
+      updatetime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
-      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, 
-      #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER})
+      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{touchflag,jdbcType=CHAR}, 
+      #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Page" >
     <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
@@ -123,6 +134,18 @@
       </if>
       <if test="width != null" >
         width,
+      </if>
+      <if test="touchflag != null" >
+        touchflag,
+      </if>
+      <if test="homeflag != null" >
+        homeflag,
+      </if>
+      <if test="homepageid != null" >
+        homepageid,
+      </if>
+      <if test="homeidletime != null" >
+        homeidletime,
       </if>
       <if test="status != null" >
         status,
@@ -164,6 +187,18 @@
       </if>
       <if test="width != null" >
         #{width,jdbcType=INTEGER},
+      </if>
+      <if test="touchflag != null" >
+        #{touchflag,jdbcType=CHAR},
+      </if>
+      <if test="homeflag != null" >
+        #{homeflag,jdbcType=CHAR},
+      </if>
+      <if test="homepageid != null" >
+        #{homepageid,jdbcType=INTEGER},
+      </if>
+      <if test="homeidletime != null" >
+        #{homeidletime,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -209,6 +244,18 @@
       <if test="width != null" >
         width = #{width,jdbcType=INTEGER},
       </if>
+      <if test="touchflag != null" >
+        touchflag = #{touchflag,jdbcType=CHAR},
+      </if>
+      <if test="homeflag != null" >
+        homeflag = #{homeflag,jdbcType=CHAR},
+      </if>
+      <if test="homepageid != null" >
+        homepageid = #{homepageid,jdbcType=INTEGER},
+      </if>
+      <if test="homeidletime != null" >
+        homeidletime = #{homeidletime,jdbcType=INTEGER},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -237,6 +284,10 @@
       ratio = #{ratio,jdbcType=CHAR},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
+      touchflag = #{touchflag,jdbcType=CHAR},
+      homeflag = #{homeflag,jdbcType=CHAR},
+      homepageid = #{homepageid,jdbcType=INTEGER},
+      homeidletime = #{homeidletime,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

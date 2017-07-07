@@ -1,34 +1,34 @@
-.calendar-table {
-    font-size: 20px !important;
-}
-
-.calendar-table .fc-event.before {
-    background-color: #EEEEEE;
-    border-color: #EEEEEE;
-    color: #666666 !important;
-}
-
-.calendar-table .fc-event.after {
-    background-color: #22C65B;
-    border-color: #22C65B;
-    color: #ffffff !important;
-}
-
-.calendar-table .fc-event.current {
-    background-color: #FF3860;
-    border-color: #FF3860;
-    animation: colorCycle 5s infinite linear alternate;
-}
-
-@-webkit-keyframes colorCycle {
-    0% {
-        color: yellow;
-    }
-    50% {
-        color: green;
-    }
-
-    100% {
-        color: blue;
-    }
-}
+.calendar-table {
+    font-size: 20px !important;
+}
+
+.calendar-table .fc-event.before {
+    background-color: #EEEEEE;
+    border-color: #EEEEEE;
+    color: #666666 !important;
+}
+
+.calendar-table .fc-event.after {
+    background-color: #22C65B;
+    border-color: #22C65B;
+    color: #ffffff !important;
+}
+
+.calendar-table .fc-event.current {
+    background-color: #FF3860;
+    border-color: #FF3860;
+    animation: colorCycle 5s infinite linear alternate;
+}
+
+@-webkit-keyframes colorCycle {
+    0% {
+        color: yellow;
+    }
+    50% {
+        color: green;
+    }
+
+    100% {
+        color: blue;
+    }
+}

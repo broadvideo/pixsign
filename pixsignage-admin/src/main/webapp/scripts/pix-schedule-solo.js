@@ -72,9 +72,6 @@ $('#DeviceTable').dataTable({
 					if (scheduledtl.objtype == 1 && scheduledtl.bundle.snapshot != null) {
 						var thumbwidth = scheduledtl.bundle.width > scheduledtl.bundle.height? 100 : 100*scheduledtl.bundle.width/scheduledtl.bundle.height;
 						schedulehtml += '<img src="/pixsigdata' + scheduledtl.bundle.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
-					} else if (scheduledtl.objtype == 2 && scheduledtl.page.snapshot != null) {
-						var thumbwidth = scheduledtl.page.width > scheduledtl.page.height? 100 : 100*scheduledtl.page.width/scheduledtl.page.height;
-						schedulehtml += '<img src="/pixsigdata' + scheduledtl.page.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
 					} else {
 						schedulehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
 					}
@@ -82,8 +79,6 @@ $('#DeviceTable').dataTable({
 					schedulehtml += '</a>';
 					if (scheduledtl.objtype == 1) {
 						schedulehtml += '<h6 class="pixtitle">' + scheduledtl.bundle.name + '</h6>';
-					} else if (scheduledtl.objtype == 2) {
-						schedulehtml += '<h6 class="pixtitle">' + scheduledtl.page.name + '</h6>';
 					}
 					schedulehtml += '</div>';
 					if ((j+1) % 4 == 0 || (j+1) == schedule.scheduledtls.length) {
@@ -164,9 +159,6 @@ $('#DevicegroupTable').dataTable({
 					if (scheduledtl.objtype == 1 && scheduledtl.bundle.snapshot != null) {
 						var thumbwidth = scheduledtl.bundle.width > scheduledtl.bundle.height? 100 : 100*scheduledtl.bundle.width/scheduledtl.bundle.height;
 						schedulehtml += '<img src="/pixsigdata' + scheduledtl.bundle.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
-					} else if (scheduledtl.objtype == 2 && scheduledtl.page.snapshot != null) {
-						var thumbwidth = scheduledtl.page.width > scheduledtl.page.height? 100 : 100*scheduledtl.page.width/scheduledtl.page.height;
-						schedulehtml += '<img src="/pixsigdata' + scheduledtl.page.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
 					} else {
 						schedulehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
 					}
@@ -174,8 +166,6 @@ $('#DevicegroupTable').dataTable({
 					schedulehtml += '</a>';
 					if (scheduledtl.objtype == 1) {
 						schedulehtml += '<h6 class="pixtitle">' + scheduledtl.bundle.name + '</h6>';
-					} else if (scheduledtl.objtype == 2) {
-						schedulehtml += '<h6 class="pixtitle">' + scheduledtl.page.name + '</h6>';
 					}
 					schedulehtml += '</div>';
 					if ((j+1) % 4 == 0 || (j+1) == schedule.scheduledtls.length) {
@@ -283,17 +273,12 @@ function refreshScheduleDetail() {
 				if (scheduledtl.objtype == 1 && scheduledtl.bundle.snapshot != null) {
 					var thumbwidth = scheduledtl.bundle.width > scheduledtl.bundle.height? 100 : 100*scheduledtl.bundle.width/scheduledtl.bundle.height;
 					scheduleTabHtml += '<img src="/pixsigdata' + scheduledtl.bundle.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
-				} else if (scheduledtl.objtype == 2 && scheduledtl.page.snapshot != null) {
-					var thumbwidth = scheduledtl.page.width > scheduledtl.page.height? 100 : 100*scheduledtl.page.width/scheduledtl.page.height;
-					scheduleTabHtml += '<img src="/pixsigdata' + scheduledtl.page.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
 				} else {
 					scheduleTabHtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
 				}
 				scheduleTabHtml += '</div>';
 				if (scheduledtl.objtype == 1) {
 					scheduleTabHtml += '<h6 class="pixtitle">' + scheduledtl.bundle.name + '</h6>';
-				} else if (scheduledtl.objtype == 2) {
-					scheduleTabHtml += '<h6 class="pixtitle">' + scheduledtl.page.name + '</h6>';
 				}
 				scheduleTabHtml += '</div>';
 				if ((j+1) % 6 == 0 || (j+1) == schedule.scheduledtls.length) {
@@ -477,99 +462,15 @@ $('#TouchbundleTable_wrapper .dataTables_filter input').addClass("form-control i
 $('#TouchbundleTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#TouchbundleTable').css('width', '100%');
 
-//Page table初始化
-$('#PageTable thead').css('display', 'none');
-$('#PageTable tbody').css('display', 'none');	
-var pagehtml = '';
-$('#PageTable').dataTable({
-	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
-					  [ 12, 30, 48, 96 ] 
-					],
-	'bProcessing' : true,
-	'bServerSide' : true,
-	'sAjaxSource' : 'page!list.action',
-	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
-	'iDisplayLength' : 12,
-	'sPaginationType' : 'bootstrap',
-	'oLanguage' : DataTableLanguage,
-	'fnPreDrawCallback': function (oSettings) {
-		if ($('#PageContainer').length < 1) {
-			$('#PageTable').append('<div id="PageContainer"></div>');
-		}
-		$('#PageContainer').html(''); 
-		return true;
-	},
-	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 6 == 0) {
-			pagehtml = '';
-			pagehtml += '<div class="row" >';
-		}
-		pagehtml += '<div class="col-md-2 col-xs-2">';
-		
-		pagehtml += '<div id="ThumbContainer" style="position:relative">';
-		pagehtml += '<div id="PageThumb" class="thumbs">';
-		if (aData.snapshot != null) {
-			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-			pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-		} else {
-			pagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
-		}
-		pagehtml += '<div class="mask">';
-		pagehtml += '<div>';
-		pagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-		pagehtml += '<a class="btn default btn-sm green pix-scheduledtl-page-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-		pagehtml += '</div>';
-		pagehtml += '</div>';
-		pagehtml += '</div>';
-
-		pagehtml += '</div>';
-
-		pagehtml += '</div>';
-		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#PageTable').dataTable().fnGetData().length) {
-			pagehtml += '</div>';
-			if ((iDisplayIndex+1) != $('#PageTable').dataTable().fnGetData().length) {
-				pagehtml += '<hr/>';
-			}
-			$('#PageContainer').append(pagehtml);
-		}
-		return nRow;
-	},
-	'fnDrawCallback': function(oSettings, json) {
-		$('#PageContainer .thumbs').each(function(i) {
-			$(this).width($(this).parent().width());
-			$(this).height($(this).parent().width());
-		});
-		$('#PageContainer .mask').each(function(i) {
-			$(this).width($(this).parent().parent().width() + 2);
-			$(this).height($(this).parent().parent().width() + 2);
-		});
-	},
-	'fnServerParams': function(aoData) { 
-	}
-});
-$('#PageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-$('#PageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-$('#PageTable').css('width', '100%');
-
 $('#nav_tab1').click(function(event) {
 	$('#BundleDiv').css('display', '');
 	$('#TouchbundleDiv').css('display', 'none');
-	$('#PageDiv').css('display', 'none');
 	$('#BundleTable').dataTable()._fnAjaxUpdate();
 });
 $('#nav_tab2').click(function(event) {
 	$('#BundleDiv').css('display', 'none');
 	$('#TouchbundleDiv').css('display', '');
-	$('#PageDiv').css('display', 'none');
 	$('#TouchbundleTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_tab3').click(function(event) {
-	$('#BundleDiv').css('display', 'none');
-	$('#TouchbundleDiv').css('display', 'none');
-	$('#PageDiv').css('display', '');
-	$('#PageTable').dataTable()._fnAjaxUpdate();
 });
 
 function refreshSelectedTable() {
@@ -580,18 +481,11 @@ function refreshSelectedTable() {
 		var name = '';
 		if (scheduledtl.objtype == 1) {
 			name = scheduledtl.bundle.name;
-		} else if (scheduledtl.objtype == 2) {
-			name = scheduledtl.page.name;
 		}
-		console.log(scheduledtl);
-		console.log(name);
 		selectedTableHtml += '<td style="padding: 0px 10px 0px 0px;" width="' + (100/CurrentScheduledtls.length) + '%"><div class="thumbs" style="width:100px; height:100px;">';
 		if (scheduledtl.objtype == 1 && scheduledtl.bundle.snapshot != null) {
 			var thumbwidth = scheduledtl.bundle.width > scheduledtl.bundle.height? 100 : 100*scheduledtl.bundle.width/scheduledtl.bundle.height;
 			selectedTableHtml += '<img src="/pixsigdata' + scheduledtl.bundle.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
-		} else if (scheduledtl.objtype == 2 && scheduledtl.page.snapshot != null) {
-			var thumbwidth = scheduledtl.page.width > scheduledtl.page.height? 100 : 100*scheduledtl.page.width/scheduledtl.page.height;
-			selectedTableHtml += '<img src="/pixsigdata' + scheduledtl.page.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
 		} else {
 			selectedTableHtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
 		}
@@ -612,8 +506,6 @@ function refreshSelectedTable() {
 			selectedTableHtml += '<h6 class="pixtitle">' + common.view.bundle + '</h6>';
 		} else if (scheduledtl.objtype == 1 && scheduledtl.bundle.touchflag == 1) {
 			selectedTableHtml += '<h6 class="pixtitle">' + common.view.touchbundle + '</h6>';
-		} else if (scheduledtl.objtype == 2) {
-			selectedTableHtml += '<h6 class="pixtitle">' + common.view.solopage + '</h6>';
 		}
 		selectedTableHtml += '</div></td>';
 	}
@@ -642,10 +534,8 @@ $('body').on('click', '.pix-schedule', function(event) {
 					CurrentSchedules = CurrentBind.schedules;
 					$('.schedule-edit').css('display', 'none');
 					$('.schedule-add').css('display', 'none');
-					$('.schedule-view').css('display', 'block');				
-					$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
+					$('.schedule-view').css('display', 'block');
 					$('.touch-ctrl').css('display', TouchCtrl?'':'none');
-					$('.page-ctrl').css('display', PageCtrl?'':'none');
 					refreshScheduleDetail();
 					$('#ScheduleModal').modal();
 				} else {
@@ -815,23 +705,6 @@ $('body').on('click', '.pix-scheduledtl-touchbundle-add', function(event) {
 	CurrentScheduledtls.push(scheduledtl);
 	refreshSelectedTable();
 });
-//增加Page到SelectedTable
-$('body').on('click', '.pix-scheduledtl-page-add', function(event) {
-	var rowIndex = $(event.target).attr("data-id");
-	if (rowIndex == undefined) {
-		rowIndex = $(event.target).parent().attr('data-id');
-	}
-	var data = $('#PageTable').dataTable().fnGetData(rowIndex);
-	var scheduledtl = {};
-	scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
-	scheduledtl.scheduleid = CurrentSchedule.scheduleid;
-	scheduledtl.objtype = 2;
-	scheduledtl.objid = data.pageid;
-	scheduledtl.page = data;
-	scheduledtl.sequence = CurrentScheduledtls.length + 1;
-	CurrentScheduledtls.push(scheduledtl);
-	refreshSelectedTable();
-});
 
 //删除SelectedTable
 $('body').on('click', '.pix-scheduledtl-del', function(event) {
@@ -860,7 +733,6 @@ $('[type=submit]', $('#ScheduleModal')).on('click', function(event) {
 		for (var j=0; j<schedule.scheduledtls.length; j++) {
 			var scheduledtl = schedule.scheduledtls[j];
 			scheduledtl.bundle = undefined;
-			scheduledtl.page = undefined;
 			if (('' + scheduledtl.scheduleid).indexOf('B') == 0) {
 				scheduledtl.scheduleid = '0';
 			}
@@ -925,29 +797,6 @@ function refreshFancybox() {
 						        content: '<div id="BundlePreview"></div>',
 						    });
 							redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
-						} else {
-							bootbox.alert(common.tips.error + data.errormsg);
-						}
-					},
-					error : function() {
-						console.log('failue');
-					}
-				});
-			} else if (objtype ==2) {
-				$.ajax({
-					type : 'GET',
-					url : 'page!get.action',
-					data : {pageid: objid},
-					success : function(data, status) {
-						if (data.errorcode == 0) {
-							$.fancybox({
-								openEffect	: 'none',
-								closeEffect	: 'none',
-								closeBtn : false,
-						        padding : 0,
-						        content: '<div id="PagePreview"></div>',
-						    });
-							redrawPagePreview($('#PagePreview'), data.page, 800);
 						} else {
 							bootbox.alert(common.tips.error + data.errormsg);
 						}

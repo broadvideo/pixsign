@@ -22,13 +22,17 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
+import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
+import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
+import com.broadvideo.pixsignage.persistence.PagezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
@@ -42,6 +46,8 @@ public class PageServiceImpl implements PageService {
 	private PageMapper pageMapper;
 	@Autowired
 	private PagezoneMapper pagezoneMapper;
+	@Autowired
+	private PagezonedtlMapper pagezonedtlMapper;
 	@Autowired
 	private TemplateMapper templateMapper;
 	@Autowired
@@ -113,6 +119,11 @@ public class PageServiceImpl implements PageService {
 			for (Templatezone templatezone : templatezones) {
 				Pagezone pagezone = new Pagezone();
 				pagezone.setPageid(page.getPageid());
+				if (page.getHomeflag().equals("0")) {
+					pagezone.setHomepageid(page.getHomepageid());
+				} else {
+					pagezone.setHomepageid(page.getPageid());
+				}
 				pagezone.setType(templatezone.getType());
 				pagezone.setHeight(templatezone.getHeight());
 				pagezone.setWidth(templatezone.getWidth());
@@ -123,10 +134,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setBdcolor(templatezone.getBdcolor());
 				pagezone.setBdstyle(templatezone.getBdstyle());
 				pagezone.setBdwidth(templatezone.getBdwidth());
-				pagezone.setBdtl(templatezone.getBdtl());
-				pagezone.setBdtr(templatezone.getBdtr());
-				pagezone.setBdbl(templatezone.getBdbl());
-				pagezone.setBdbr(templatezone.getBdbr());
+				pagezone.setBdradius(templatezone.getBdradius());
 				pagezone.setBgcolor(templatezone.getBgcolor());
 				pagezone.setBgopacity(templatezone.getBgopacity());
 				pagezone.setOpacity(templatezone.getOpacity());
@@ -144,9 +152,15 @@ public class PageServiceImpl implements PageService {
 				pagezone.setAlign(templatezone.getAlign());
 				pagezone.setLineheight(templatezone.getLineheight());
 				pagezone.setContent(templatezone.getContent());
-				pagezone.setObjid(templatezone.getObjid());
-
 				pagezoneMapper.insertSelective(pagezone);
+				for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {
+					Pagezonedtl pagezonedtl = new Pagezonedtl();
+					pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+					pagezonedtl.setObjtype(templatezonedtl.getObjtype());
+					pagezonedtl.setObjid(templatezonedtl.getObjid());
+					pagezonedtl.setSequence(templatezonedtl.getSequence());
+					pagezonedtlMapper.insertSelective(pagezonedtl);
+				}
 			}
 
 		}
@@ -198,6 +212,11 @@ public class PageServiceImpl implements PageService {
 			for (Pagezone frompagezone : frompagezones) {
 				Pagezone pagezone = new Pagezone();
 				pagezone.setPageid(page.getPageid());
+				if (page.getHomeflag().equals("0")) {
+					pagezone.setHomepageid(page.getHomepageid());
+				} else {
+					pagezone.setHomepageid(page.getPageid());
+				}
 				pagezone.setType(frompagezone.getType());
 				pagezone.setHeight(frompagezone.getHeight());
 				pagezone.setWidth(frompagezone.getWidth());
@@ -208,10 +227,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setBdcolor(frompagezone.getBdcolor());
 				pagezone.setBdstyle(frompagezone.getBdstyle());
 				pagezone.setBdwidth(frompagezone.getBdwidth());
-				pagezone.setBdtl(frompagezone.getBdtl());
-				pagezone.setBdtr(frompagezone.getBdtr());
-				pagezone.setBdbl(frompagezone.getBdbl());
-				pagezone.setBdbr(frompagezone.getBdbr());
+				pagezone.setBdradius(frompagezone.getBdradius());
 				pagezone.setBgcolor(frompagezone.getBgcolor());
 				pagezone.setBgopacity(frompagezone.getBgopacity());
 				pagezone.setOpacity(frompagezone.getOpacity());
@@ -229,9 +245,15 @@ public class PageServiceImpl implements PageService {
 				pagezone.setAlign(frompagezone.getAlign());
 				pagezone.setLineheight(frompagezone.getLineheight());
 				pagezone.setContent(frompagezone.getContent());
-				pagezone.setObjid(frompagezone.getObjid());
-
 				pagezoneMapper.insertSelective(pagezone);
+				for (Pagezonedtl frompagezonedtl : frompagezone.getPagezonedtls()) {
+					Pagezonedtl pagezonedtl = new Pagezonedtl();
+					pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+					pagezonedtl.setObjtype(frompagezonedtl.getObjtype());
+					pagezonedtl.setObjid(frompagezonedtl.getObjid());
+					pagezonedtl.setSequence(frompagezonedtl.getSequence());
+					pagezonedtlMapper.insertSelective(pagezonedtl);
+				}
 			}
 		}
 	}
@@ -259,18 +281,33 @@ public class PageServiceImpl implements PageService {
 		List<Pagezone> oldpagezones = pagezoneMapper.selectList("" + pageid);
 		HashMap<Integer, Pagezone> hash = new HashMap<Integer, Pagezone>();
 		for (Pagezone pagezone : pagezones) {
-			if (pagezone.getPagezoneid() <= 0) {
-				pagezone.setPageid(pageid);
-				pagezoneMapper.insertSelective(pagezone);
-			} else {
-				pagezoneMapper.updateByPrimaryKeySelective(pagezone);
+			if (pagezone.getPagezoneid() > 0) {
 				hash.put(pagezone.getPagezoneid(), pagezone);
 			}
 		}
 		for (int i = 0; i < oldpagezones.size(); i++) {
 			Pagezone oldPagezone = oldpagezones.get(i);
 			if (hash.get(oldPagezone.getPagezoneid()) == null) {
+				pagezonedtlMapper.deleteByPagezone("" + oldpagezones.get(i).getPagezoneid());
 				pagezoneMapper.deleteByPrimaryKey("" + oldpagezones.get(i).getPagezoneid());
+			}
+		}
+		for (Pagezone pagezone : pagezones) {
+			if (page.getHomeflag().equals("0")) {
+				pagezone.setHomepageid(page.getHomepageid());
+			} else {
+				pagezone.setHomepageid(page.getPageid());
+			}
+			if (pagezone.getPagezoneid() <= 0) {
+				pagezone.setPageid(pageid);
+				pagezoneMapper.insertSelective(pagezone);
+			} else {
+				pagezoneMapper.updateByPrimaryKeySelective(pagezone);
+				pagezonedtlMapper.deleteByPagezone("" + pagezone.getPagezoneid());
+			}
+			for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+				pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+				pagezonedtlMapper.insertSelective(pagezonedtl);
 			}
 		}
 
@@ -349,6 +386,7 @@ public class PageServiceImpl implements PageService {
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
 		Page page = pageMapper.selectByPrimaryKey(pageid);
+		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("page_id", page.getPageid());
@@ -357,6 +395,32 @@ public class PageServiceImpl implements PageService {
 
 		JSONArray videoJsonArray = new JSONArray();
 		responseJson.put("videos", videoJsonArray);
+
+		for (Pagezone pagezone : page.getPagezones()) {
+			for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+				if (pagezonedtl.getVideo() != null) {
+					if (videoHash.get(pagezonedtl.getObjid()) == null) {
+						Video video = pagezonedtl.getVideo();
+						JSONObject videoJson = new JSONObject();
+						videoJson.put("id", video.getVideoid());
+						videoJson.put("name", video.getName());
+						videoJson.put("url",
+								"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+						videoJson.put("file", video.getFilename());
+						videoJson.put("size", video.getSize());
+						videoJson.put("thumbnail",
+								"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
+						if (video.getRelate() != null) {
+							videoJson.put("relate_id", video.getRelateid());
+						} else {
+							videoJson.put("relate_id", 0);
+						}
+						videoHash.put(video.getVideoid(), videoJson);
+						videoJsonArray.put(videoJson);
+					}
+				}
+			}
+		}
 
 		String zipPath = "/page/" + page.getPageid() + "/page-" + page.getPageid() + ".zip";
 		File zipFile = new File("/pixdata/pixsignage" + zipPath);

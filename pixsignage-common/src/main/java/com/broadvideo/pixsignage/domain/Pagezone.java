@@ -1,16 +1,24 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.util.List;
+
 public class Pagezone {
-	public final static byte Type_Text = 0;
-	public final static byte Type_Image = 1;
-	public final static byte Type_Video = 2;
-	public final static byte Type_CALENDAR_LIST = 10;
-	public final static byte Type_CALENDAR_TABLE = 11;
-	public final static byte Type_CALENDAR_SIGNIN = 12;
+	public final static byte Type_Video = 1;
+	public final static byte Type_Image = 2;
+	public final static byte Type_Text = 3;
+	public final static byte Type_Scroll = 4;
+	public final static byte Type_Date = 5;
+	public final static byte Type_Weather = 6;
+	public final static byte Type_Calendar_List = 11;
+	public final static byte Type_Calendar_Table = 12;
+	public final static byte Type_Attendance = 13;
+	public final static byte Type_Home_School = 14;
 
 	private Integer pagezoneid;
 
 	private Integer pageid;
+
+	private Integer homepageid;
 
 	private Byte type;
 
@@ -32,13 +40,7 @@ public class Pagezone {
 
 	private Integer bdwidth;
 
-	private Integer bdtl;
-
-	private Integer bdtr;
-
-	private Integer bdbl;
-
-	private Integer bdbr;
+	private Integer bdradius;
 
 	private String bgcolor;
 
@@ -72,9 +74,15 @@ public class Pagezone {
 
 	private Integer lineheight;
 
-	private String objid;
+	private String dateformat;
+
+	private String touchtype;
+
+	private Integer touchpageid;
 
 	private String content;
+
+	private List<Pagezonedtl> pagezonedtls;
 
 	public Integer getPagezoneid() {
 		return pagezoneid;
@@ -90,6 +98,14 @@ public class Pagezone {
 
 	public void setPageid(Integer pageid) {
 		this.pageid = pageid;
+	}
+
+	public Integer getHomepageid() {
+		return homepageid;
+	}
+
+	public void setHomepageid(Integer homepageid) {
+		this.homepageid = homepageid;
 	}
 
 	public Byte getType() {
@@ -172,36 +188,12 @@ public class Pagezone {
 		this.bdwidth = bdwidth;
 	}
 
-	public Integer getBdtl() {
-		return bdtl;
+	public Integer getBdradius() {
+		return bdradius;
 	}
 
-	public void setBdtl(Integer bdtl) {
-		this.bdtl = bdtl;
-	}
-
-	public Integer getBdtr() {
-		return bdtr;
-	}
-
-	public void setBdtr(Integer bdtr) {
-		this.bdtr = bdtr;
-	}
-
-	public Integer getBdbl() {
-		return bdbl;
-	}
-
-	public void setBdbl(Integer bdbl) {
-		this.bdbl = bdbl;
-	}
-
-	public Integer getBdbr() {
-		return bdbr;
-	}
-
-	public void setBdbr(Integer bdbr) {
-		this.bdbr = bdbr;
+	public void setBdradius(Integer bdradius) {
+		this.bdradius = bdradius;
 	}
 
 	public String getBgcolor() {
@@ -332,12 +324,28 @@ public class Pagezone {
 		this.lineheight = lineheight;
 	}
 
-	public String getObjid() {
-		return objid;
+	public String getDateformat() {
+		return dateformat;
 	}
 
-	public void setObjid(String objid) {
-		this.objid = objid == null ? null : objid.trim();
+	public void setDateformat(String dateformat) {
+		this.dateformat = dateformat == null ? null : dateformat.trim();
+	}
+
+	public String getTouchtype() {
+		return touchtype;
+	}
+
+	public void setTouchtype(String touchtype) {
+		this.touchtype = touchtype == null ? null : touchtype.trim();
+	}
+
+	public Integer getTouchpageid() {
+		return touchpageid;
+	}
+
+	public void setTouchpageid(Integer touchpageid) {
+		this.touchpageid = touchpageid;
 	}
 
 	public String getContent() {
@@ -346,5 +354,13 @@ public class Pagezone {
 
 	public void setContent(String content) {
 		this.content = content == null ? null : content.trim();
+	}
+
+	public List<Pagezonedtl> getPagezonedtls() {
+		return pagezonedtls;
+	}
+
+	public void setPagezonedtls(List<Pagezonedtl> pagezonedtls) {
+		this.pagezonedtls = pagezonedtls;
 	}
 }

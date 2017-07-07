@@ -34,6 +34,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
+import com.broadvideo.pixsignage.domain.Templatezonedtl;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.TemplateService;
 import com.broadvideo.pixsignage.util.CommonUtil;
@@ -129,51 +130,49 @@ public class TemplateAction extends BaseDatatableAction {
 					logger.info("zoneStructure: {}", zoneStructure);
 					logger.info("zoneContent: {}", zoneContent);
 					JSONObject zoneStrucJson = JSONObject.fromObject(zoneStructure);
-					Templatezone tz = new Templatezone();
-					tz.setTemplatezoneid(0);
-					tz.setTemplateid(template.getTemplateid());
+					Templatezone templatezone = new Templatezone();
+					templatezone.setTemplatezoneid(0);
+					templatezone.setTemplateid(template.getTemplateid());
 					if (zoneStrucJson.getString("img_name").equals("image")) {
-						tz.setType(Templatezone.Type_IMAGE);
+						templatezone.setType(Templatezone.Type_Image);
 					} else if (zoneStrucJson.getString("img_name").equals("text")) {
-						tz.setType(Templatezone.Type_TEXT);
+						templatezone.setType(Templatezone.Type_Text);
 					}
-					if (tz.getType() == Templatezone.Type_IMAGE) {
+					if (templatezone.getType() == Templatezone.Type_Image) {
 						logger.info("add template zone: {}", zoneStrucJson.getString("zone_name"));
-						tz.setHeight(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_height"))));
-						tz.setWidth(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_width"))));
-						tz.setTopoffset(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_top"))));
-						tz.setLeftoffset(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_left"))));
-						tz.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
-						tz.setTransform(zoneStrucJson.getString("img_transform"));
-						tz.setBdcolor(zoneStrucJson.getString("img_border_color"));
-						tz.setBdstyle(zoneStrucJson.getString("img_border_style"));
+						templatezone.setHeight(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_height"))));
+						templatezone
+								.setWidth(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_width"))));
+						templatezone.setTopoffset(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_top"))));
+						templatezone.setLeftoffset(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_left"))));
+						templatezone.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
+						templatezone.setTransform(zoneStrucJson.getString("img_transform"));
+						templatezone.setBdcolor(zoneStrucJson.getString("img_border_color"));
+						templatezone.setBdstyle(zoneStrucJson.getString("img_border_style"));
 						try {
-							tz.setBdwidth(
+							templatezone.setBdwidth(
 									Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_border_width"))));
 						} catch (Exception e) {
-							tz.setBdwidth(0);
+							templatezone.setBdwidth(0);
 						}
-						tz.setBdtl(Math.round(1.875f
+						templatezone.setBdradius(Math.round(1.875f
 								* Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", ""))));
-						tz.setBdtr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", ""))));
-						tz.setBdbl(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", ""))));
-						tz.setBdbr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", ""))));
-						tz.setBgcolor(zoneStrucJson.getString("img_background_color"));
-						tz.setOpacity(255 * Integer.parseInt(zoneStrucJson.getString("img_opacity")));
-						tz.setPadding(Math.round(
+						templatezone.setBgcolor(zoneStrucJson.getString("img_background_color"));
+						templatezone.setOpacity(255 * Integer.parseInt(zoneStrucJson.getString("img_opacity")));
+						templatezone.setPadding(Math.round(
 								1.875f * Integer.parseInt(zoneStrucJson.getString("img_padding").replace("px", ""))));
 						logger.info("image shadow: {}", zoneStrucJson.getString("img_shadow"));
-						tz.setShadowh(0);
-						tz.setShadowv(0);
-						tz.setShadowblur(0);
-						tz.setShadowcolor("#000000");
+						templatezone.setShadowh(0);
+						templatezone.setShadowv(0);
+						templatezone.setShadowblur(0);
+						templatezone.setShadowcolor("#000000");
 						if (zoneContent.equals("no")) {
 							zoneContent = "";
 						}
-						tz.setContent(zoneContent);
+						templatezone.setContent(zoneContent);
 						if (zoneContent.length() > 0) {
 							int statusCode = download2File(
 									"http://signagecreator.com/wysiwyg_editor/uploads/media/category/images/"
@@ -222,62 +221,68 @@ public class TemplateAction extends BaseDatatableAction {
 								fis.close();
 								image.setStatus("1");
 								imageService.updateImage(image);
-								tz.setObjid("" + image.getImageid());
-								tz.setContent(image.getFilepath());
+								templatezone.setContent(image.getFilepath());
+
+								Templatezonedtl templatezonedtl = new Templatezonedtl();
+								templatezonedtl.setTemplatezoneid(0);
+								templatezonedtl.setObjtype("2");
+								templatezonedtl.setObjid(image.getImageid());
+								List<Templatezonedtl> templatezonedtls = new ArrayList<Templatezonedtl>();
+								templatezonedtls.add(templatezonedtl);
+								templatezone.setTemplatezonedtls(templatezonedtls);
 							} else {
 								logger.error("download image error, return {}", statusCode);
 							}
 						}
-					} else if (tz.getType() == Templatezone.Type_TEXT) {
+					} else if (templatezone.getType() == Templatezone.Type_Text) {
 						logger.info("add template zone: {}", zoneStrucJson.getString("zone_name"));
-						tz.setHeight(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_height"))));
-						tz.setWidth(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_width"))));
-						tz.setTopoffset(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_top"))));
-						tz.setLeftoffset(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_left"))));
-						tz.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
-						tz.setTransform(zoneStrucJson.getString("text_transform"));
-						tz.setBdcolor(zoneStrucJson.getString("text_border_color"));
-						tz.setBdstyle(zoneStrucJson.getString("text_border_style"));
+						templatezone.setHeight(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_height"))));
+						templatezone
+								.setWidth(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_width"))));
+						templatezone.setTopoffset(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_top"))));
+						templatezone.setLeftoffset(
+								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_left"))));
+						templatezone.setZindex(Integer.parseInt(zoneStrucJson.getString("img_z_index")));
+						templatezone.setTransform(zoneStrucJson.getString("text_transform"));
+						templatezone.setBdcolor(zoneStrucJson.getString("text_border_color"));
+						templatezone.setBdstyle(zoneStrucJson.getString("text_border_style"));
 						try {
-							tz.setBdwidth(Math
+							templatezone.setBdwidth(Math
 									.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_border_width"))));
 						} catch (Exception e) {
-							tz.setBdwidth(0);
+							templatezone.setBdwidth(0);
 						}
-						tz.setBdtl(Math.round(1.875f
+						templatezone.setBdradius(Math.round(1.875f
 								* Integer.parseInt(zoneStrucJson.getString("border_top_left").replace("px", ""))));
-						tz.setBdtr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_top_right").replace("px", ""))));
-						tz.setBdbl(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_left").replace("px", ""))));
-						tz.setBdbr(Math.round(1.875f
-								* Integer.parseInt(zoneStrucJson.getString("border_bottom_right").replace("px", ""))));
-						tz.setBgcolor(zoneStrucJson.getString("text_background_color"));
-						tz.setPadding(Math.round(
+						templatezone.setBgcolor(zoneStrucJson.getString("text_background_color"));
+						templatezone.setPadding(Math.round(
 								1.875f * Integer.parseInt(zoneStrucJson.getString("text_padding").replace("px", ""))));
 						logger.info("text shadow: {}", zoneStrucJson.getString("text_shadow"));
-						tz.setShadowh(0);
-						tz.setShadowv(0);
-						tz.setShadowblur(0);
-						tz.setShadowcolor("#000000");
-						tz.setColor(zoneStrucJson.getString("text_color"));
+						templatezone.setShadowh(0);
+						templatezone.setShadowv(0);
+						templatezone.setShadowblur(0);
+						templatezone.setShadowcolor("#000000");
+						templatezone.setColor(zoneStrucJson.getString("text_color"));
 						String fontfamily = zoneStrucJson.getString("text_font_family");
 						if (fontfamily != null) {
-							tz.setFontfamily(fontfamily.replaceAll("'", "").replaceAll("\"", "").replaceAll(" ", "_"));
+							templatezone.setFontfamily(
+									fontfamily.replaceAll("'", "").replaceAll("\"", "").replaceAll(" ", "_"));
 						}
-						tz.setFontsize(Math.round(1.875f
+						templatezone.setFontsize(Math.round(1.875f
 								* Integer.parseInt(zoneStrucJson.getString("text_font_size").replace("px", ""))));
-						tz.setFontweight(zoneStrucJson.getString("text_font_weight"));
-						tz.setFontstyle(zoneStrucJson.getString("text_font_style"));
-						tz.setDecoration(zoneStrucJson.getString("text_decoration"));
-						tz.setAlign(zoneStrucJson.getString("text_align"));
-						tz.setLineheight(Math.round(1.875f
+						templatezone.setFontweight(zoneStrucJson.getString("text_font_weight"));
+						templatezone.setFontstyle(zoneStrucJson.getString("text_font_style"));
+						templatezone.setDecoration(zoneStrucJson.getString("text_decoration"));
+						templatezone.setAlign(zoneStrucJson.getString("text_align"));
+						templatezone.setLineheight(Math.round(1.875f
 								* Float.parseFloat(zoneStrucJson.getString("text_line_height").replace("px", ""))));
-						tz.setContent(zoneContent);
+						templatezone.setContent(zoneContent);
 					} else {
 						logger.error("unknown template zone type");
 					}
-					templatezones.add(tz);
+					templatezones.add(templatezone);
 					template.setTemplatezones(templatezones);
 					templateService.design(template);
 				}

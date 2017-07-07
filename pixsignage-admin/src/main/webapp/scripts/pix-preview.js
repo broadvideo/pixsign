@@ -592,9 +592,15 @@ function redrawPagePreview(container, page, maxsize) {
 	} else {
 		zones = page.templatezones;
 	}
-	console.log(zones);
 	for (var i = 0; i < zones.length; i++) {
 		var zone = zones[i];
+		var zonedtls;
+		if (typeof(zone.pagezonedtls) != 'undefined') {
+			zonedtls = zone.pagezonedtls;
+		} else {
+			zonedtls = zone.templatezonedtls;
+		}
+
 		var zone_div = document.createElement('div');
 		var background_div = document.createElement('div');
 		var inner_div = document.createElement('div');
@@ -619,20 +625,67 @@ function redrawPagePreview(container, page, maxsize) {
 			'background': zone.bgcolor, 
 			'opacity': parseInt(zone.bgopacity)/255, 
 		});
-		if (zone.type == 0) {
-			var p_element = document.createElement('p');
-			p_element.innerHTML = zone.content;
-			$(inner_div).append(p_element);
-			
-			var shadow = '';
-			shadow += (parseInt(zone.shadowh) / scale) + 'px ';
-			shadow += (parseInt(zone.shadowv) / scale) + 'px ';
-			shadow += (parseInt(zone.shadowblur) / scale) + 'px ';
-			shadow += zone.shadowcolor;
+		$(inner_div).css({
+			'position': 'absolute',
+			'height': '100%', 
+			'width': '100%', 
+			'padding': (parseInt(zone.padding) / scale) + 'px', 
+		});
+		var shadow = '';
+		shadow += (parseInt(zone.shadowh) / scale) + 'px ';
+		shadow += (parseInt(zone.shadowv) / scale) + 'px ';
+		shadow += (parseInt(zone.shadowblur) / scale) + 'px ';
+		shadow += zone.shadowcolor;
+		if (zone.type == 1) {
+			//Video Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
 			$(inner_div).css({
-				'position': 'absolute',
-				'height': '100%', 
-				'width': '100%', 
+				'box-shadow': shadow, 
+				'opacity': parseInt(zone.opacity)/255,
+			});
+			$(zone_div).find('img').css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+			});
+			if (zonedtls.length > 0 && zonedtls[0].video != null) {
+				$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].video.thumbnail);
+				$(zone_div).find('img').attr('width', '100%');
+				$(zone_div).find('img').attr('height', '100%');
+			}
+		} else if (zone.type == '2') {
+			//Image Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+			$(inner_div).css({
+				'box-shadow': shadow, 
+				'opacity': parseInt(zone.opacity)/255,
+			});
+			$(zone_div).find('img').css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+			});
+			if (zonedtls.length > 0 && zonedtls[0].image != null) {
+				$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].image.filepath);
+				$(zone_div).find('img').attr('width', '100%');
+				$(zone_div).find('img').attr('height', '100%');
+			}
+		} else if (zone.type == '3') {
+			var p_element = document.createElement('p');
+			$(p_element).html(zone.content);
+			$(inner_div).append(p_element);			
+			$(inner_div).css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
 				'color': zone.color, 
 				'font-family': zone.fontfamily, 
 				'font-size': (parseInt(zone.fontsize) / scale) + 'px', 
@@ -642,14 +695,6 @@ function redrawPagePreview(container, page, maxsize) {
 				'font-style': zone.fontstyle, 
 				'line-height': (parseInt(zone.lineheight) / scale) + 'px', 
 				'text-shadow': shadow, 
-				'padding': (parseInt(zone.padding) / scale) + 'px', 
-				'border-color': zone.bdcolor, 
-				'border-style': zone.bdstyle, 
-				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
-				'border-top-right-radius': (parseInt(zone.bdtr) / scale) + 'px', 
-				'border-top-left-radius': (parseInt(zone.bdtl) / scale) + 'px', 
-				'border-bottom-left-radius': (parseInt(zone.bdbl) / scale) + 'px', 
-				'border-bottom-right-radius': (parseInt(zone.bdbr) / scale) + 'px',
 				'word-wrap': 'break-word',
 			});
 			$(p_element).css({
@@ -657,56 +702,70 @@ function redrawPagePreview(container, page, maxsize) {
 				'white-space': 'pre-wrap',
 				'text-decoration': zone.decoration,
 			});
-		} else if (zone.type == '1') {
-			var img_element = document.createElement('img');
-			$(inner_div).append(img_element);
-
-			var shadow = '';
-			shadow += (parseInt(zone.shadowh) / scale) + 'px ';
-			shadow += (parseInt(zone.shadowv) / scale) + 'px ';
-			shadow += (parseInt(zone.shadowblur) / scale) + 'px ';
-			shadow += zone.shadowcolor;
+		} else if (zone.type == '4') {
+			var p_element = document.createElement('p');
+			$(p_element).html(zone.content);
+			$(inner_div).append(p_element);
 			$(inner_div).css({
-				'position': 'absolute',
-				'height': '100%', 
-				'width': '100%', 
-				'box-shadow': shadow, 
-				'padding': (parseInt(zone.padding) / scale) + 'px', 
-				'opacity': parseInt(zone.opacity)/255,
-			});
-			$(inner_div).find('img').css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
-				'border-top-right-radius': (parseInt(zone.bdtr) / scale) + 'px', 
-				'border-top-left-radius': (parseInt(zone.bdtl) / scale) + 'px', 
-				'border-bottom-left-radius': (parseInt(zone.bdbl) / scale) + 'px', 
-				'border-bottom-right-radius': (parseInt(zone.bdbr) / scale) + 'px', 
-			})
-			if (zone.content != '' && zone.content != 'no' && zone.content != 'non') {
-				$(zone_div).find('img').attr('src', '/pixsigdata' + zone.content);
-				$(zone_div).find('img').attr('width', '100%');
-				$(zone_div).find('img').attr('height', '100%');
-			}
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+				'color': zone.color, 
+				'font-family': zone.fontfamily, 
+				'font-size': (parseInt(zone.fontsize) / scale) + 'px', 
+				'text-decoration': zone.decoration, 
+				'text-align': zone.align, 
+				'font-weight': zone.fontweight, 
+				'font-style': zone.fontstyle, 
+				'line-height': (parseInt(zone.lineheight) / scale) + 'px', 
+				'text-shadow': shadow, 
+				'word-wrap': 'break-word',
+			});
+			$(p_element).css({
+				'word-wrap': 'break-word',
+				'white-space': 'pre-wrap',
+				'text-decoration': zone.decoration,
+			});
+		} else if (zone.type == '5') {
+			var p_element = document.createElement('p');
+			$(p_element).html(new Date().pattern(zone.dateformat));
+			$(inner_div).append(p_element);
+			$(inner_div).css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+				'color': zone.color, 
+				'font-family': zone.fontfamily, 
+				'font-size': (parseInt(zone.fontsize) / scale) + 'px', 
+				'text-decoration': zone.decoration, 
+				'text-align': zone.align, 
+				'font-weight': zone.fontweight, 
+				'font-style': zone.fontstyle, 
+				'line-height': (parseInt(zone.lineheight) / scale) + 'px', 
+				'text-shadow': shadow, 
+				'word-wrap': 'break-word',
+			});
+			$(p_element).css({
+				'word-wrap': 'break-word',
+				'white-space': 'pre-wrap',
+				'text-decoration': zone.decoration,
+			});
 		} else {
 			var p_element = document.createElement('p');
-			$(p_element).append(eval('common.view.pagezone_type_' + zone.type));
+			$(p_element).html(eval('common.view.pagezone_type_' + zone.type));
 			$(inner_div).append(p_element);
-			
 			$(inner_div).css({
-				'position': 'absolute',
-				'height': '100%', 
-				'width': '100%', 
-				'color': zone.color, 
-				'font-size': (60 / scale) + 'px', 
-				'padding': (parseInt(zone.padding) / scale) + 'px', 
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
-				'border-top-right-radius': (parseInt(zone.bdtr) / scale) + 'px', 
-				'border-top-left-radius': (parseInt(zone.bdtl) / scale) + 'px', 
-				'border-bottom-left-radius': (parseInt(zone.bdbl) / scale) + 'px', 
-				'border-bottom-right-radius': (parseInt(zone.bdbr) / scale) + 'px',
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+				'color': zone.color, 
+				'font-size': (60 / scale) + 'px', 
 				'word-wrap': 'break-word',
 			});
 			$(p_element).css({

@@ -50,27 +50,32 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		while (it.hasNext()) {
 			Privilege p = it.next();
 			if (org.getReviewflag().equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30120
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
 					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 304
 					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
+					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 30502
 					|| org.getReviewflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
 					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
 					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30302
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
+					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 307
+					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 307
 					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
 					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
 					|| org.getFlowrateflag().equals("1") && p.getPrivilegeid().intValue() == 30822
 					|| org.getFlowrateflag().equals("2") && p.getPrivilegeid().intValue() == 30821
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30120
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30202
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303

@@ -83,7 +83,8 @@ public class VideoAction extends BaseDatatableAction {
 					video.setProgress(0);
 					videoService.addVideo(video);
 
-					String newFileName = "" + video.getVideoid() + "." + FilenameUtils.getExtension(mymediaFileName[i]);
+					String format = FilenameUtils.getExtension(mymediaFileName[i]).toLowerCase();
+					String newFileName = "" + video.getVideoid() + "." + format;
 
 					File fileToCreate;
 
@@ -97,6 +98,7 @@ public class VideoAction extends BaseDatatableAction {
 
 					video.setFilepath("/video/upload/" + newFileName);
 					video.setFilename(newFileName);
+					video.setFormat(format);
 					try {
 						// Generate preview gif
 						FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
@@ -156,6 +158,7 @@ public class VideoAction extends BaseDatatableAction {
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
 			String type = getParameter("type");
+			String format = getParameter("format");
 			String branchid = getParameter("branchid");
 			if (branchid == null || branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
@@ -166,13 +169,13 @@ public class VideoAction extends BaseDatatableAction {
 			}
 
 			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, type, null,
-					search);
+					format, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid, type,
-					null, search, start, length);
+					null, format, search, start, length);
 			for (Video video : videoList) {
 				if (video.getWidth().intValue() == 0 || video.getHeight().intValue() == 0) {
 					File f = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail());

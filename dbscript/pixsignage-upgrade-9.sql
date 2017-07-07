@@ -39,6 +39,10 @@ create table template(
    ratio char(1) default '1',
    height int not null,
    width int not null,
+   touchflag char(1) default '0',
+   homeflag char(1) default '1',
+   hometemplateid int,
+   homeidletime int default 0,
    publicflag char(1) default '0',
    status char(1) default '1',
    description varchar(512),
@@ -51,6 +55,7 @@ default character set utf8;
 create table templatezone( 
    templatezoneid int not null auto_increment,
    templateid int not null,
+   hometemplateid int,
    type tinyint not null,
    height int not null,
    width int not null,
@@ -61,10 +66,7 @@ create table templatezone(
    bdcolor varchar(32) default '#000000',
    bdstyle varchar(128) default 'solid',
    bdwidth int default 0,
-   bdtl int default 0,
-   bdtr int default 0,
-   bdbl int default 0,
-   bdbr int default 0,
+   bdradius int default 0,
    bgcolor varchar(32) default '#FFFFFF',
    bgopacity int default 0,
    opacity int default 0,
@@ -81,10 +83,23 @@ create table templatezone(
    decoration varchar(32),
    align varchar(32),
    lineheight int default 0,
+   dateformat varchar(32) default '',
+   touchtype char(1) default 0,
+   touchtemplateid int default 0,
    content longtext,
-   objid varchar(1024),
    primary key (templatezoneid),
    foreign key (templateid) references template(templateid)
+ )engine = innodb
+default character set utf8;
+
+create table templatezonedtl( 
+   templatezonedtlid int not null auto_increment,
+   templatezoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (templatezonedtlid),
+   foreign key (templatezoneid) references templatezone(templatezoneid)
  )engine = innodb
 default character set utf8;
 
@@ -98,6 +113,10 @@ create table page(
    ratio char(1) default '1',
    height int not null,
    width int not null,
+   touchflag char(1) default '0',
+   homeflag char(1) default '1',
+   homepageid int,
+   homeidletime int default 0,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -110,6 +129,7 @@ default character set utf8;
 create table pagezone( 
    pagezoneid int not null auto_increment,
    pageid int not null,
+   homepageid int,
    type tinyint not null,
    height int not null,
    width int not null,
@@ -120,10 +140,7 @@ create table pagezone(
    bdcolor varchar(32) default '#000000',
    bdstyle varchar(128) default 'solid',
    bdwidth int default 0,
-   bdtl int default 0,
-   bdtr int default 0,
-   bdbl int default 0,
-   bdbr int default 0,
+   bdradius int default 0,
    bgcolor varchar(32) default '#FFFFFF',
    bgopacity int default 0,
    opacity int default 0,
@@ -140,12 +157,28 @@ create table pagezone(
    decoration varchar(32),
    align varchar(32),
    lineheight int default 0,
+   dateformat varchar(32) default '',
+   touchtype char(1) default 0,
+   touchpageid int default 0,
    content longtext,
-   objid varchar(1024),
    primary key (pagezoneid),
    foreign key (pageid) references page(pageid)
  )engine = innodb
 default character set utf8;
+
+create table pagezonedtl( 
+   pagezonedtlid int not null auto_increment,
+   pagezoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (pagezonedtlid),
+   foreign key (pagezoneid) references pagezone(pagezoneid)
+ )engine = innodb
+default character set utf8;
+
+alter table video add format varchar(16) default '';
+update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;
 
@@ -189,6 +222,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','schedule-solo.jsp','',1,1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.plan','plan-solo.jsp','',1,2);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mediagrid.jsp','',1,2);
@@ -305,7 +339,6 @@ CREATE TABLE `schoolclass`(
 	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
 	PRIMARY KEY (`schoolclassid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
-
 
 CREATE TABLE `student`(
 	`studentid` int(11) NOT NULL  auto_increment COMMENT '学生id' , 

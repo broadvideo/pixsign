@@ -26,6 +26,7 @@ import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
+import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.ScheduleService;
@@ -215,15 +216,16 @@ public class PageAction extends BaseDatatableAction {
 		ClassLoader classLoader = getClass().getClassLoader();
 		ArrayList<String> fontList = new ArrayList<String>();
 		for (Pagezone pagezone : page.getPagezones()) {
-			if (pagezone.getType().equals(Pagezone.Type_Image)) {
-				Image image = imageService.selectByPrimaryKey(pagezone.getObjid());
-				if (image != null) {
-					pagezone.setContent("./image/" + image.getFilename());
-					File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
-					zip(out, imageFile, "image/" + image.getFilename());
+			if (pagezone.getType() == Pagezone.Type_Image) {
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					Image image = pagezonedtl.getImage();
+					if (image != null) {
+						File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
+						zip(out, imageFile, "image/" + image.getFilename());
+					}
 				}
 			}
-			if (pagezone.getType().equals(Pagezone.Type_Text) && pagezone.getFontfamily().length() > 0) {
+			if (pagezone.getType() == Pagezone.Type_Text && pagezone.getFontfamily().length() > 0) {
 				String font = CONFIG_FONTS.get(pagezone.getFontfamily());
 				logger.info("Copy one font, family={}, file={}", pagezone.getFontfamily(), font);
 				if (font != null && fontList.indexOf(font) < 0) {
