@@ -134,11 +134,11 @@ public class TemplateAction extends BaseDatatableAction {
 					templatezone.setTemplatezoneid(0);
 					templatezone.setTemplateid(template.getTemplateid());
 					if (zoneStrucJson.getString("img_name").equals("image")) {
-						templatezone.setType(Templatezone.Type_IMAGE);
+						templatezone.setType(Templatezone.Type_Image);
 					} else if (zoneStrucJson.getString("img_name").equals("text")) {
-						templatezone.setType(Templatezone.Type_TEXT);
+						templatezone.setType(Templatezone.Type_Text);
 					}
-					if (templatezone.getType() == Templatezone.Type_IMAGE) {
+					if (templatezone.getType() == Templatezone.Type_Image) {
 						logger.info("add template zone: {}", zoneStrucJson.getString("zone_name"));
 						templatezone.setHeight(
 								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_height"))));
@@ -234,7 +234,7 @@ public class TemplateAction extends BaseDatatableAction {
 								logger.error("download image error, return {}", statusCode);
 							}
 						}
-					} else if (templatezone.getType() == Templatezone.Type_TEXT) {
+					} else if (templatezone.getType() == Templatezone.Type_Text) {
 						logger.info("add template zone: {}", zoneStrucJson.getString("zone_name"));
 						templatezone.setHeight(
 								Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("text_height"))));

@@ -39,11 +39,11 @@ var ImageZone = function (zonediv, zone) {
 			'opacity': parseInt(zone.opacity)/255,
 		});
 		$(zonediv).find('img').css({
+			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 
 			'border-width': (parseInt(zone.bdwidth) / scalew) + 'px', 
 			'border-radius': (parseInt(zone.bdradius) / scalew) + 'px', 
-			'box-sizing': 'border-box',
 		});
 
 		$(zonediv).find('.bx-wrapper').css({

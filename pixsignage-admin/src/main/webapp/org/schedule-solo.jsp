@@ -67,13 +67,10 @@
 																<div class="portlet-title">
 																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
 																	<ul class="nav nav-tabs">
-																		<li id="nav_tab3" class="page-ctrl" style="display:none">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.page"/></a>
-																		</li>
-																		<li id="nav_tab2" class="bundle-ctrl touch-ctrl" style="display:none">
+																		<li id="nav_tab2" class="touch-ctrl" style="display:none">
 																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.touchbundle"/></a>
 																		</li>
-																		<li id="nav_tab1" class="bundle-ctrl" style="display:none">
+																		<li id="nav_tab1" class="active">
 																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.bundle"/></a>
 																		</li>
 																	</ul>
@@ -91,12 +88,6 @@
 																					</div>
 																					<div id="TouchbundleDiv" style="display:none">
 																						<table id="TouchbundleTable" class="table table-condensed table-hover">
-																							<thead></thead>
-																							<tbody></tbody>
-																						</table>
-																					</div>
-																					<div id="PageDiv">
-																						<table id="PageTable" class="table table-condensed table-hover">
 																							<thead></thead>
 																							<tbody></tbody>
 																						</table>
@@ -220,9 +211,7 @@
 <script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-schedule-solo.js?t=${timestamp}"></script>
 <script>
-var BundleCtrl = <%=(session_org != null && session_org.getBundleflag().equals("1"))%>;
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
-var PageCtrl = true;
 
 jQuery(document).ready(function() {
 	Metronic.init();

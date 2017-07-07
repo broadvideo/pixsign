@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Pagezone" >
     <id column="pagezoneid" property="pagezoneid" jdbcType="INTEGER" />
     <result column="pageid" property="pageid" jdbcType="INTEGER" />
+    <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
@@ -32,6 +33,8 @@
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="touchtype" property="touchtype" jdbcType="CHAR" />
+    <result column="touchpageid" property="touchpageid" jdbcType="INTEGER" />
 	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
 		column="{pagezoneid=pagezoneid}" select="com.broadvideo.pixsignage.persistence.PagezonedtlMapper.selectList" />
   </resultMap>
@@ -40,10 +43,10 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    pagezoneid, pageid, type, height, width, topoffset, leftoffset, zindex, transform, 
-    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, 
-    shadowh, shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, 
-    fontstyle, decoration, align, lineheight, dateformat
+    pagezoneid, pageid, homepageid, type, height, width, topoffset, leftoffset, zindex, transform, 
+    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
+    shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, 
+    decoration, align, lineheight, dateformat, touchtype, touchpageid
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -82,28 +85,28 @@
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pagezone (pageid, type, height, 
+    insert into pagezone (pageid, homepageid, type, height, 
       width, topoffset, leftoffset, 
       zindex, transform, bdcolor, 
       bdstyle, bdwidth, bdradius, 
-      bgcolor, 
-      bgopacity, opacity, padding, 
-      shadowh, shadowv, shadowblur, 
-      shadowcolor, color, fontfamily, 
-      fontsize, fontweight, fontstyle, 
-      decoration, align, lineheight, 
-      dateformat, content)
-    values (#{pageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
+      bgcolor, bgopacity, opacity, 
+      padding, shadowh, shadowv, 
+      shadowblur, shadowcolor, color, 
+      fontfamily, fontsize, fontweight, 
+      fontstyle, decoration, align, 
+      lineheight, dateformat, touchtype, 
+      touchpageid, content)
+    values (#{pageid,jdbcType=INTEGER}, #{homepageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
       #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdradius,jdbcType=INTEGER}, 
-      #{bgcolor,jdbcType=VARCHAR}, 
-      #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, 
-      #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, #{shadowblur,jdbcType=INTEGER}, 
-      #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, 
-      #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, 
-      #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{bgcolor,jdbcType=VARCHAR}, #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, 
+      #{padding,jdbcType=INTEGER}, #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, 
+      #{shadowblur,jdbcType=INTEGER}, #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, 
+      #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
+      #{lineheight,jdbcType=INTEGER}, #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
+      #{touchpageid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -113,6 +116,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="pageid != null" >
         pageid,
+      </if>
+      <if test="homepageid != null" >
+        homepageid,
       </if>
       <if test="type != null" >
         type,
@@ -198,6 +204,12 @@
       <if test="dateformat != null" >
         dateformat,
       </if>
+      <if test="touchtype != null" >
+        touchtype,
+      </if>
+      <if test="touchpageid != null" >
+        touchpageid,
+      </if>
       <if test="content != null" >
         content,
       </if>
@@ -205,6 +217,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pageid != null" >
         #{pageid,jdbcType=INTEGER},
+      </if>
+      <if test="homepageid != null" >
+        #{homepageid,jdbcType=INTEGER},
       </if>
       <if test="type != null" >
         #{type,jdbcType=TINYINT},
@@ -290,6 +305,12 @@
       <if test="dateformat != null" >
         #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="touchtype != null" >
+        #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchpageid != null" >
+        #{touchpageid,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -300,6 +321,9 @@
     <set >
       <if test="pageid != null" >
         pageid = #{pageid,jdbcType=INTEGER},
+      </if>
+      <if test="homepageid != null" >
+        homepageid = #{homepageid,jdbcType=INTEGER},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
@@ -385,6 +409,12 @@
       <if test="dateformat != null" >
         dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="touchtype != null" >
+        touchtype = #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchpageid != null" >
+        touchpageid = #{touchpageid,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -394,6 +424,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     update pagezone
     set pageid = #{pageid,jdbcType=INTEGER},
+      homepageid = #{homepageid,jdbcType=INTEGER},
       type = #{type,jdbcType=TINYINT},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
@@ -422,12 +453,15 @@
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchpageid = #{touchpageid,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     update pagezone
     set pageid = #{pageid,jdbcType=INTEGER},
+      homepageid = #{homepageid,jdbcType=INTEGER},
       type = #{type,jdbcType=TINYINT},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
@@ -455,7 +489,9 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
-      dateformat = #{dateformat,jdbcType=VARCHAR}
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchpageid = #{touchpageid,jdbcType=INTEGER}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

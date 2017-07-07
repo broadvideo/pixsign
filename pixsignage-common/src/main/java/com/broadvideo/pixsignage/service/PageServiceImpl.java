@@ -119,6 +119,11 @@ public class PageServiceImpl implements PageService {
 			for (Templatezone templatezone : templatezones) {
 				Pagezone pagezone = new Pagezone();
 				pagezone.setPageid(page.getPageid());
+				if (page.getHomeflag().equals("0")) {
+					pagezone.setHomepageid(page.getHomepageid());
+				} else {
+					pagezone.setHomepageid(page.getPageid());
+				}
 				pagezone.setType(templatezone.getType());
 				pagezone.setHeight(templatezone.getHeight());
 				pagezone.setWidth(templatezone.getWidth());
@@ -207,6 +212,11 @@ public class PageServiceImpl implements PageService {
 			for (Pagezone frompagezone : frompagezones) {
 				Pagezone pagezone = new Pagezone();
 				pagezone.setPageid(page.getPageid());
+				if (page.getHomeflag().equals("0")) {
+					pagezone.setHomepageid(page.getHomepageid());
+				} else {
+					pagezone.setHomepageid(page.getPageid());
+				}
 				pagezone.setType(frompagezone.getType());
 				pagezone.setHeight(frompagezone.getHeight());
 				pagezone.setWidth(frompagezone.getWidth());
@@ -283,6 +293,11 @@ public class PageServiceImpl implements PageService {
 			}
 		}
 		for (Pagezone pagezone : pagezones) {
+			if (page.getHomeflag().equals("0")) {
+				pagezone.setHomepageid(page.getHomepageid());
+			} else {
+				pagezone.setHomepageid(page.getPageid());
+			}
 			if (pagezone.getPagezoneid() <= 0) {
 				pagezone.setPageid(pageid);
 				pagezoneMapper.insertSelective(pagezone);

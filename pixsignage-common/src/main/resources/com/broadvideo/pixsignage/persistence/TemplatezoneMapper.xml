@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Templatezone" >
     <id column="templatezoneid" property="templatezoneid" jdbcType="INTEGER" />
     <result column="templateid" property="templateid" jdbcType="INTEGER" />
+    <result column="hometemplateid" property="hometemplateid" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
@@ -32,6 +33,8 @@
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="touchtype" property="touchtype" jdbcType="CHAR" />
+    <result column="touchtemplateid" property="touchtemplateid" jdbcType="INTEGER" />
     <collection property="templatezonedtls" ofType="com.broadvideo.pixsignage.domain.Templatezonedtl"
 		column="{templatezoneid=templatezoneid}" select="com.broadvideo.pixsignage.persistence.TemplatezonedtlMapper.selectList" />
   </resultMap>
@@ -39,10 +42,10 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    templatezoneid, templateid, type, height, width, topoffset, leftoffset, zindex, transform, 
-    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, 
-    shadowh, shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, 
-    fontstyle, decoration, align, lineheight, dateformat
+    templatezoneid, templateid, hometemplateid, type, height, width, topoffset, leftoffset, zindex, transform, 
+    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
+    shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, 
+    decoration, align, lineheight, dateformat, touchtype, touchtemplateid
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -72,28 +75,28 @@
     <selectKey resultType="java.lang.Integer" keyProperty="templatezoneid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into templatezone (templateid, type, height, 
+    insert into templatezone (templateid, hometemplateid, type, height, 
       width, topoffset, leftoffset, 
       zindex, transform, bdcolor, 
       bdstyle, bdwidth, bdradius, 
-      bgcolor, 
-      bgopacity, opacity, padding, 
-      shadowh, shadowv, shadowblur, 
-      shadowcolor, color, fontfamily, 
-      fontsize, fontweight, fontstyle, 
-      decoration, align, lineheight, 
-      dateformat, content)
-    values (#{templateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
+      bgcolor, bgopacity, opacity, 
+      padding, shadowh, shadowv, 
+      shadowblur, shadowcolor, color, 
+      fontfamily, fontsize, fontweight, 
+      fontstyle, decoration, align, 
+      lineheight, dateformat, touchtype, 
+      touchtemplateid, content)
+    values (#{templateid,jdbcType=INTEGER}, #{hometemplateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
       #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdradius,jdbcType=INTEGER}, 
-      #{bgcolor,jdbcType=VARCHAR}, 
-      #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, 
-      #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, #{shadowblur,jdbcType=INTEGER}, 
-      #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, 
-      #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, 
-      #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{bgcolor,jdbcType=VARCHAR}, #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, 
+      #{padding,jdbcType=INTEGER}, #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, 
+      #{shadowblur,jdbcType=INTEGER}, #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, 
+      #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
+      #{lineheight,jdbcType=INTEGER}, #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
+      #{touchtemplateid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Templatezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="templatezoneid" order="AFTER" >
@@ -103,6 +106,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="templateid != null" >
         templateid,
+      </if>
+      <if test="hometemplateid != null" >
+        hometemplateid,
       </if>
       <if test="type != null" >
         type,
@@ -188,6 +194,12 @@
       <if test="dateformat != null" >
         dateformat,
       </if>
+      <if test="touchtype != null" >
+        touchtype,
+      </if>
+      <if test="touchtemplateid != null" >
+        touchtemplateid,
+      </if>
       <if test="content != null" >
         content,
       </if>
@@ -195,6 +207,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="templateid != null" >
         #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="hometemplateid != null" >
+        #{hometemplateid,jdbcType=INTEGER},
       </if>
       <if test="type != null" >
         #{type,jdbcType=TINYINT},
@@ -280,6 +295,12 @@
       <if test="dateformat != null" >
         #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="touchtype != null" >
+        #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchtemplateid != null" >
+        #{touchtemplateid,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -290,6 +311,9 @@
     <set >
       <if test="templateid != null" >
         templateid = #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="hometemplateid != null" >
+        hometemplateid = #{hometemplateid,jdbcType=INTEGER},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
@@ -375,6 +399,12 @@
       <if test="dateformat != null" >
         dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="touchtype != null" >
+        touchtype = #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchtemplateid != null" >
+        touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -384,6 +414,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Templatezone" >
     update templatezone
     set templateid = #{templateid,jdbcType=INTEGER},
+      hometemplateid = #{hometemplateid,jdbcType=INTEGER},
       type = #{type,jdbcType=TINYINT},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
@@ -412,12 +443,15 @@
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR}
     where templatezoneid = #{templatezoneid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Templatezone" >
     update templatezone
     set templateid = #{templateid,jdbcType=INTEGER},
+      hometemplateid = #{hometemplateid,jdbcType=INTEGER},
       type = #{type,jdbcType=TINYINT},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
@@ -445,7 +479,9 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
-      dateformat = #{dateformat,jdbcType=VARCHAR}
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchtemplateid = #{touchtemplateid,jdbcType=INTEGER}
     where templatezoneid = #{templatezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

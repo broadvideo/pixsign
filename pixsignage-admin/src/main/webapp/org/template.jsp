@@ -27,6 +27,9 @@
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 						<input type="hidden" name="template.templateid" value="0" />
+						<input type="hidden" name="template.hometemplateid" value="0" />
+						<input type="hidden" name="template.touchflag" value="0" />
+						<input type="hidden" name="template.homeflag" value="1" />
 						<input type="hidden" name="template.publicflag" value="1" />
 						<input type="hidden" name="template.status" value="1" />
 						<div class="form-body">
@@ -84,12 +87,14 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="5">
 								<i class="fa fa-history"></i><div>时间</div>
 							</a>
+							<!-- 
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
 								<i class="fa fa-sun-o"></i><div>天气</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
+							 -->
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>

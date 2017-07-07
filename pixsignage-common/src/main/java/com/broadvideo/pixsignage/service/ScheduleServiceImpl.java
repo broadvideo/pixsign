@@ -149,7 +149,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 
 		List<Integer> bundleids = new ArrayList<Integer>();
-		List<Integer> pageids = new ArrayList<Integer>();
 
 		JSONArray scheduleJsonArray = new JSONArray();
 		// generate final json
@@ -162,15 +161,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
 			JSONArray bundleidJsonArray = new JSONArray();
 			scheduleJson.put("bundles", bundleidJsonArray);
-			JSONArray pageidJsonArray = new JSONArray();
-			scheduleJson.put("pages", pageidJsonArray);
 			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
 				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
 					bundleidJsonArray.put(scheduledtl.getObjid());
 					bundleids.add(scheduledtl.getObjid());
-				} else if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Page)) {
-					pageidJsonArray.put(scheduledtl.getObjid());
-					pageids.add(scheduledtl.getObjid());
 				}
 			}
 			scheduleJsonArray.put(scheduleJson);
@@ -179,7 +173,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("bundle_schedules", scheduleJsonArray);
 		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
-		responseJson.put("pages", pageService.generatePageJsonArray(pageids));
 
 		return responseJson;
 	}
@@ -195,7 +188,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 
 		List<Integer> bundleids = new ArrayList<Integer>();
-		List<Integer> pageids = new ArrayList<Integer>();
 
 		JSONArray scheduleJsonArray = new JSONArray();
 		// generate final json
@@ -222,13 +214,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 					scheduledtlJson.put("media_id", scheduledtl.getObjid());
 					scheduledtlJsonArray.put(scheduledtlJson);
 					bundleids.add(scheduledtl.getObjid());
-				} else if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Page)) {
-					JSONObject scheduledtlJson = new JSONObject();
-					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
-					scheduledtlJson.put("media_type", "page");
-					scheduledtlJson.put("media_id", scheduledtl.getObjid());
-					scheduledtlJsonArray.put(scheduledtlJson);
-					pageids.add(scheduledtl.getObjid());
 				} else {
 					continue;
 				}
@@ -238,7 +223,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("schedules", scheduleJsonArray);
 		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
-		responseJson.put("pages", pageService.generatePageJsonArray(pageids));
 
 		return responseJson;
 	}

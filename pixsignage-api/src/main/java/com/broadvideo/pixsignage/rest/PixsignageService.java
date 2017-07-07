@@ -388,11 +388,6 @@ public class PixsignageService {
 
 			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
 					"" + device.getDeviceid());
-			if (device.getDevicegroupid() > 0) {
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
 			responseJson.put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());
 			return responseJson.toString();

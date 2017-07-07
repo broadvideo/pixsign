@@ -3,16 +3,22 @@ package com.broadvideo.pixsignage.domain;
 import java.util.List;
 
 public class Templatezone {
-	public final static byte Type_VIDEO = 1;
-	public final static byte Type_IMAGE = 2;
-	public final static byte Type_TEXT = 3;
-	public final static byte Type_CALENDAR_LIST = 10;
-	public final static byte Type_CALENDAR_TABLE = 11;
-	public final static byte Type_CALENDAR_SIGNIN = 12;
+	public final static byte Type_Video = 1;
+	public final static byte Type_Image = 2;
+	public final static byte Type_Text = 3;
+	public final static byte Type_Scroll = 4;
+	public final static byte Type_Date = 5;
+	public final static byte Type_Weather = 6;
+	public final static byte Type_Calendar_List = 11;
+	public final static byte Type_Calendar_Table = 12;
+	public final static byte Type_Attendance = 13;
+	public final static byte Type_Home_School = 14;
 
 	private Integer templatezoneid;
 
 	private Integer templateid;
+
+	private Integer hometemplateid;
 
 	private Byte type;
 
@@ -70,6 +76,10 @@ public class Templatezone {
 
 	private String dateformat;
 
+	private String touchtype;
+
+	private Integer touchtemplateid;
+
 	private String content;
 
 	private List<Templatezonedtl> templatezonedtls;
@@ -88,6 +98,14 @@ public class Templatezone {
 
 	public void setTemplateid(Integer templateid) {
 		this.templateid = templateid;
+	}
+
+	public Integer getHometemplateid() {
+		return hometemplateid;
+	}
+
+	public void setHometemplateid(Integer hometemplateid) {
+		this.hometemplateid = hometemplateid;
 	}
 
 	public Byte getType() {
@@ -311,7 +329,23 @@ public class Templatezone {
 	}
 
 	public void setDateformat(String dateformat) {
-		this.dateformat = dateformat;
+		this.dateformat = dateformat == null ? null : dateformat.trim();
+	}
+
+	public String getTouchtype() {
+		return touchtype;
+	}
+
+	public void setTouchtype(String touchtype) {
+		this.touchtype = touchtype == null ? null : touchtype.trim();
+	}
+
+	public Integer getTouchtemplateid() {
+		return touchtemplateid;
+	}
+
+	public void setTouchtemplateid(Integer touchtemplateid) {
+		this.touchtemplateid = touchtemplateid;
 	}
 
 	public String getContent() {

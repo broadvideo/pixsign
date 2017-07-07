@@ -216,7 +216,7 @@ public class PageAction extends BaseDatatableAction {
 		ClassLoader classLoader = getClass().getClassLoader();
 		ArrayList<String> fontList = new ArrayList<String>();
 		for (Pagezone pagezone : page.getPagezones()) {
-			if (pagezone.getType().equals(Pagezone.Type_Image)) {
+			if (pagezone.getType() == Pagezone.Type_Image) {
 				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
 					Image image = pagezonedtl.getImage();
 					if (image != null) {
@@ -225,7 +225,7 @@ public class PageAction extends BaseDatatableAction {
 					}
 				}
 			}
-			if (pagezone.getType().equals(Pagezone.Type_Text) && pagezone.getFontfamily().length() > 0) {
+			if (pagezone.getType() == Pagezone.Type_Text && pagezone.getFontfamily().length() > 0) {
 				String font = CONFIG_FONTS.get(pagezone.getFontfamily());
 				logger.info("Copy one font, family={}, file={}", pagezone.getFontfamily(), font);
 				if (font != null && fontList.indexOf(font) < 0) {

@@ -645,6 +645,7 @@ function redrawPagePreview(container, page, maxsize) {
 				'opacity': parseInt(zone.opacity)/255,
 			});
 			$(zone_div).find('img').css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
@@ -664,6 +665,7 @@ function redrawPagePreview(container, page, maxsize) {
 				'opacity': parseInt(zone.opacity)/255,
 			});
 			$(zone_div).find('img').css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
@@ -679,6 +681,7 @@ function redrawPagePreview(container, page, maxsize) {
 			$(p_element).html(zone.content);
 			$(inner_div).append(p_element);			
 			$(inner_div).css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
@@ -704,6 +707,7 @@ function redrawPagePreview(container, page, maxsize) {
 			$(p_element).html(zone.content);
 			$(inner_div).append(p_element);
 			$(inner_div).css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
@@ -729,6 +733,7 @@ function redrawPagePreview(container, page, maxsize) {
 			$(p_element).html(new Date().pattern(zone.dateformat));
 			$(inner_div).append(p_element);
 			$(inner_div).css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
@@ -754,6 +759,7 @@ function redrawPagePreview(container, page, maxsize) {
 			$(p_element).html(eval('common.view.pagezone_type_' + zone.type));
 			$(inner_div).append(p_element);
 			$(inner_div).css({
+				'box-sizing': 'border-box',
 				'border-color': zone.bdcolor, 
 				'border-style': zone.bdstyle, 
 				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 

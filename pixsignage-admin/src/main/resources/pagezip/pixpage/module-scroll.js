@@ -20,6 +20,7 @@ var ScrollZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
 		$(zonediv).find('#PagezoneCT').css({
+			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 
 			'border-width': (parseInt(zone.bdwidth) / scalew) + 'px', 
@@ -34,7 +35,6 @@ var ScrollZone = function (zonediv, zone) {
 			'line-height': (parseInt(zone.lineheight) / scaleh) + 'px', 
 			'text-shadow': shadow, 
 			'word-wrap': 'break-word',
-			'box-sizing': 'border-box',
 		});
 	};
 

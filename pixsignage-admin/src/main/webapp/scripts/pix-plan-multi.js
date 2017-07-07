@@ -34,7 +34,6 @@ $('#PlanTable').dataTable({
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		var playtimehtml = '';
-		console.log(aData.priority);
 		if (aData.priority == 0) {
 			playtimehtml += '<span class="label label-sm label-success">' + common.view.plan_priority_0 + '</span>';
 		} else {
@@ -1159,7 +1158,6 @@ function validPlanOption() {
 		bootbox.alert(common.tips.date_error);
 		return false;
 	}
-	console.log(CurrentPlan);
 	return true;
 }
 

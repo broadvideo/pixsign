@@ -200,6 +200,7 @@ function refreshPagezone(pagezone) {
 			'opacity': parseInt(pagezone.opacity)/255,
 		});
 		$(pagezoneDiv).find('img').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
@@ -217,6 +218,7 @@ function refreshPagezone(pagezone) {
 			'opacity': parseInt(pagezone.opacity)/255,
 		});
 		$(pagezoneDiv).find('img').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
@@ -230,6 +232,7 @@ function refreshPagezone(pagezone) {
 	} else if (pagezone.type == 3) {
 		//Text Zone
 		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
@@ -260,6 +263,7 @@ function refreshPagezone(pagezone) {
 	} else if (pagezone.type == 4) {
 		//Scroll Zone
 		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
@@ -288,6 +292,7 @@ function refreshPagezone(pagezone) {
 	} else if (pagezone.type == 5) {
 		//Date Zone
 		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
@@ -309,6 +314,7 @@ function refreshPagezone(pagezone) {
 		$(pagezoneDiv).find('p').html(new Date().pattern(pagezone.dateformat));
 	} else {
 		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
 			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 

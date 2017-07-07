@@ -21,6 +21,7 @@ var OtherZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
 		$(zonediv).find('#PagezoneCT').css({
+			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 
 			'border-width': (parseInt(zone.bdwidth) / scalew) + 'px', 
@@ -28,7 +29,6 @@ var OtherZone = function (zonediv, zone) {
 			'color': zone.color, 
 			'font-size': (60 / scalew) + 'px', 
 			'word-wrap': 'break-word',
-			'box-sizing': 'border-box',
 		});
 	};
 	

@@ -39,6 +39,10 @@ create table template(
    ratio char(1) default '1',
    height int not null,
    width int not null,
+   touchflag char(1) default '0',
+   homeflag char(1) default '1',
+   hometemplateid int,
+   homeidletime int default 0,
    publicflag char(1) default '0',
    status char(1) default '1',
    description varchar(512),
@@ -51,6 +55,7 @@ default character set utf8;
 create table templatezone( 
    templatezoneid int not null auto_increment,
    templateid int not null,
+   hometemplateid int,
    type tinyint not null,
    height int not null,
    width int not null,
@@ -79,6 +84,8 @@ create table templatezone(
    align varchar(32),
    lineheight int default 0,
    dateformat varchar(32) default '',
+   touchtype char(1) default 0,
+   touchtemplateid int default 0,
    content longtext,
    primary key (templatezoneid),
    foreign key (templateid) references template(templateid)
@@ -106,6 +113,10 @@ create table page(
    ratio char(1) default '1',
    height int not null,
    width int not null,
+   touchflag char(1) default '0',
+   homeflag char(1) default '1',
+   homepageid int,
+   homeidletime int default 0,
    status char(1) default '1',
    description varchar(512),
    createtime timestamp not null default current_timestamp,
@@ -118,6 +129,7 @@ default character set utf8;
 create table pagezone( 
    pagezoneid int not null auto_increment,
    pageid int not null,
+   homepageid int,
    type tinyint not null,
    height int not null,
    width int not null,
@@ -146,6 +158,8 @@ create table pagezone(
    align varchar(32),
    lineheight int default 0,
    dateformat varchar(32) default '',
+   touchtype char(1) default 0,
+   touchpageid int default 0,
    content longtext,
    primary key (pagezoneid),
    foreign key (pageid) references page(pageid)
@@ -208,6 +222,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','schedule-solo.jsp','',1,1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.plan','plan-solo.jsp','',1,2);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mediagrid.jsp','',1,2);

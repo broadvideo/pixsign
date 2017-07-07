@@ -110,6 +110,11 @@ public class TemplateServiceImpl implements TemplateService {
 			for (Templatezone fromtemplatezone : fromtemplatezones) {
 				Templatezone templatezone = new Templatezone();
 				templatezone.setTemplateid(template.getTemplateid());
+				if (template.getHomeflag().equals("0")) {
+					templatezone.setHometemplateid(template.getHometemplateid());
+				} else {
+					templatezone.setHometemplateid(template.getTemplateid());
+				}
 				templatezone.setType(fromtemplatezone.getType());
 				templatezone.setHeight(fromtemplatezone.getHeight());
 				templatezone.setWidth(fromtemplatezone.getWidth());
@@ -185,6 +190,11 @@ public class TemplateServiceImpl implements TemplateService {
 			}
 		}
 		for (Templatezone templatezone : templatezones) {
+			if (template.getHomeflag().equals("0")) {
+				templatezone.setHometemplateid(template.getHometemplateid());
+			} else {
+				templatezone.setHometemplateid(template.getTemplateid());
+			}
 			if (templatezone.getTemplatezoneid() <= 0) {
 				templatezone.setTemplateid(templateid);
 				templatezoneMapper.insertSelective(templatezone);
