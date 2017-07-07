@@ -10,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.common.JsonMapper;
-import com.broadvideo.pixsignage.common.ResponseUtil;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.Struts2Utils;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
+import com.broadvideo.pixsignage.domain.Courseschedule;
 import com.broadvideo.pixsignage.service.CourseScheduleService;
+import com.broadvideo.pixsignage.util.JsonMapper;
 
 @Scope("request")
 @Controller("courseScheduleAction")
@@ -27,91 +24,89 @@ public class CourseScheduleAction extends BaseDatatableAction {
 	 */
 	private static final long serialVersionUID = -22475458159844710L;
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private CourseSchedule schedule;
+	private Courseschedule courseschedule;
 	private JsonMapper jsonMapper = JsonMapper.nonNullMapper();
 	@Autowired
 	private CourseScheduleService scheduleService;
 
 	public String addCourseSchedule() throws Exception {
 
-		if (StringUtils.isBlank(schedule.getCoursename()) || StringUtils.isBlank(schedule.getTeachername())
-				|| schedule.getPeriodtimedtlid() == null || schedule.getClassroomid() == null
-				|| schedule.getCoursescheduleschemeid() == null) {
+		if (StringUtils.isBlank(courseschedule.getCoursename()) || StringUtils.isBlank(courseschedule.getTeachername())
+				|| courseschedule.getPeriodtimedtlid() == null || courseschedule.getClassroomid() == null
+				|| courseschedule.getCoursescheduleschemeid() == null) {
 
 			logger.error("添加课表失败:Invalid args.");
-			ResponseUtil.codeResponse(RetCodeEnum.INVALID_ARGS, "Invalid args.");
-			return NONE;
+			renderError(-1, "Invalid args.");
+			return ERROR;
 		}
-		schedule.setOrgid(getStaffOrgid());
-		schedule.setCreatepsnid(getStaffid());
+		courseschedule.setOrgid(getStaffOrgid());
+		courseschedule.setCreatepsnid(getStaffid());
 		try {
-			Integer id = this.scheduleService.addCourseSchedule(schedule);
-			ResponseUtil.idRetResonse(id, "");
-			return NONE;
+			Integer id = this.scheduleService.addCourseSchedule(courseschedule);
+			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("添加课表异常：", ex);
-			ResponseUtil.codeResponse(RetCodeEnum.EXCEPTION, ex.getMessage());
+			renderError(-1, ex.getMessage());
+			return ERROR;
 
 		}
 
-		return NONE;
 	}
 
 	public String updateCourseSchedule() throws Exception {
 
-		if (StringUtils.isBlank(schedule.getCoursename()) || StringUtils.isBlank(schedule.getTeachername())
-				|| schedule.getPeriodtimedtlid() == null || schedule.getClassroomid() == null
-				|| schedule.getCoursescheduleschemeid() == null || schedule.getId() == null) {
+		if (StringUtils.isBlank(courseschedule.getCoursename()) || StringUtils.isBlank(courseschedule.getTeachername())
+				|| courseschedule.getPeriodtimedtlid() == null || courseschedule.getClassroomid() == null
+				|| courseschedule.getCoursescheduleschemeid() == null || courseschedule.getCoursescheduleid() == null) {
 
 			logger.error("修改课表失败:Invalid args.");
-			ResponseUtil.codeResponse(RetCodeEnum.INVALID_ARGS, "Invalid args.");
-			return NONE;
+			logger.error("添加课表失败:Invalid args.");
+			renderError(-1, "Invalid args.");
+			return ERROR;
 
 		}
-		schedule.setOrgid(getStaffOrgid());
-		schedule.setUpdatepsnid(getStaffid());
+		courseschedule.setOrgid(getStaffOrgid());
+		courseschedule.setUpdatepsnid(getStaffid());
 		try {
-			this.scheduleService.updateCourseSchedule(schedule);
-			ResponseUtil.codeResponse(RetCodeEnum.SUCCESS, "");
-			return NONE;
+			this.scheduleService.updateCourseSchedule(courseschedule);
+			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("修改课表异常：", ex);
-			ResponseUtil.codeResponse(RetCodeEnum.EXCEPTION, ex.getMessage());
-
+			renderError(-1, ex.getMessage());
+			return ERROR;
 		}
 
-		return NONE;
 	}
 
 	public String getClassroomSchedules() throws Exception {
-		if (schedule.getClassroomid() == null || schedule.getCoursescheduleschemeid() == null) {
+		if (courseschedule.getClassroomid() == null || courseschedule.getCoursescheduleschemeid() == null) {
 			logger.error("获取教室schedule失败:Invalid args.");
-			ResponseUtil.codeResponse(RetCodeEnum.INVALID_ARGS, "Invalid args.");
-			return NONE;
+			renderError(-1, "获取教室schedule失败:Invalid args.");
+			return ERROR;
 		}
 		try {
-			List<CourseSchedule> schedules = this.scheduleService.getClassroomCourseSchedules(
-					schedule.getClassroomid(),
-					schedule.getCoursescheduleschemeid(), getStaffOrgid());
-			ResponseUtil.objectRetResponse(schedules, "");
-			return NONE;
+			List schedules = this.scheduleService.getClassroomCourseSchedules(
+					courseschedule.getClassroomid(),
+					courseschedule.getCoursescheduleschemeid(), getStaffOrgid());
+			this.setAaData(schedules);
+			return SUCCESS;
+
 		} catch (Exception ex) {
 
 			logger.error("获取教室Schedule异常：", ex);
-			ResponseUtil.codeResponse(RetCodeEnum.EXCEPTION, ex.getMessage());
+			renderError(-1, ex.getMessage());
+			return ERROR;
 		}
 
-
-		return NONE;
 	}
 
 	public String deleteCourseSchedule() throws ServiceException {
 
-		String commaSplitIds = Struts2Utils.getRequest().getParameter("ids");
+		String commaSplitIds = getParameter("ids");
 		if (StringUtils.isBlank(commaSplitIds)) {
 			logger.error("删除schedule失败:Invalid args.");
-			ResponseUtil.codeResponse(RetCodeEnum.INVALID_ARGS, "Invalid args.");
-			return NONE;
+			renderError(-1, "删除schedule失败:Invalid args.");
+			return ERROR;
 		}
 		String[] strIds = commaSplitIds.split(",");
         List<Integer> idList=new ArrayList<Integer>();
@@ -119,26 +114,25 @@ public class CourseScheduleAction extends BaseDatatableAction {
 			idList.add(Integer.parseInt(strId));
 		}
 		try {
-
 			scheduleService.deleteCourseSchedules(idList, getStaffid(), getStaffOrgid());
-			ResponseUtil.codeResponse(RetCodeEnum.SUCCESS, "");
-			return NONE;
+			return SUCCESS;
 
 		} catch (Exception ex) {
 			logger.error("删除Schedule异常！", ex);
-			ResponseUtil.codeResponse(RetCodeEnum.EXCEPTION, ex.getMessage());
+			renderError(-1, ex.getMessage());
+			return ERROR;
 		}
 
-		return NONE;
 	}
 
-	public CourseSchedule getSchedule() {
-		return schedule;
+	public Courseschedule getCourseschedule() {
+		return courseschedule;
 	}
 
-	public void setSchedule(CourseSchedule schedule) {
-		this.schedule = schedule;
+	public void setCourseschedule(Courseschedule courseschedule) {
+		this.courseschedule = courseschedule;
 	}
+
 
 
 

@@ -1,0 +1,32 @@
+/*家校互动页面样式*/
+.home-school-table {
+    border: none;
+    border-collapse:collapse;
+}
+.home-school-table tr {
+    border-top: solid 1px #bfbfbf;
+    border-bottom: solid 1px #bfbfbf;
+    border-left: none;
+    border-right: none;
+}
+
+.home-school-avatar>img {
+    height: 48px;
+    border-radius: 50%;
+}
+
+.home-school-name {
+    font-size: 18px;
+    color: indianred;
+}
+
+.home-school-message {
+    padding-left: 10px;
+    font-size: 18px;
+}
+
+.home-school-ts {
+    padding-left: 10px;
+    font-size: 14px;
+    color: #666666;
+}

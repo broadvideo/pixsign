@@ -1,21 +1,18 @@
 package com.broadvideo.pixsignage.domain;
 
-import java.util.Date;
-
 public class Pagezone {
-	public final static String Type_Text = "0";
-	public final static String Type_Image = "1";
-	public final static String Type_Video = "2";
+	public final static byte Type_Text = 0;
+	public final static byte Type_Image = 1;
+	public final static byte Type_Video = 2;
+	public final static byte Type_CALENDAR_LIST = 10;
+	public final static byte Type_CALENDAR_TABLE = 11;
+	public final static byte Type_CALENDAR_SIGNIN = 12;
 
 	private Integer pagezoneid;
 
 	private Integer pageid;
 
-	private String name;
-
-	private String type;
-
-	private String status;
+	private Byte type;
 
 	private Integer height;
 
@@ -51,7 +48,13 @@ public class Pagezone {
 
 	private Integer padding;
 
-	private String shadow;
+	private Integer shadowh;
+
+	private Integer shadowv;
+
+	private Integer shadowblur;
+
+	private String shadowcolor;
 
 	private String color;
 
@@ -69,13 +72,7 @@ public class Pagezone {
 
 	private Integer lineheight;
 
-	private Integer linkpageid;
-
-	private String imageid;
-
-	private String videoid;
-
-	private Date createtime;
+	private String objid;
 
 	private String content;
 
@@ -95,28 +92,12 @@ public class Pagezone {
 		this.pageid = pageid;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name == null ? null : name.trim();
-	}
-
-	public String getType() {
+	public Byte getType() {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type == null ? null : type.trim();
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status == null ? null : status.trim();
+	public void setType(Byte type) {
+		this.type = type;
 	}
 
 	public Integer getHeight() {
@@ -255,12 +236,36 @@ public class Pagezone {
 		this.padding = padding;
 	}
 
-	public String getShadow() {
-		return shadow;
+	public Integer getShadowh() {
+		return shadowh;
 	}
 
-	public void setShadow(String shadow) {
-		this.shadow = shadow == null ? null : shadow.trim();
+	public void setShadowh(Integer shadowh) {
+		this.shadowh = shadowh;
+	}
+
+	public Integer getShadowv() {
+		return shadowv;
+	}
+
+	public void setShadowv(Integer shadowv) {
+		this.shadowv = shadowv;
+	}
+
+	public Integer getShadowblur() {
+		return shadowblur;
+	}
+
+	public void setShadowblur(Integer shadowblur) {
+		this.shadowblur = shadowblur;
+	}
+
+	public String getShadowcolor() {
+		return shadowcolor;
+	}
+
+	public void setShadowcolor(String shadowcolor) {
+		this.shadowcolor = shadowcolor == null ? null : shadowcolor.trim();
 	}
 
 	public String getColor() {
@@ -327,36 +332,12 @@ public class Pagezone {
 		this.lineheight = lineheight;
 	}
 
-	public Integer getLinkpageid() {
-		return linkpageid;
+	public String getObjid() {
+		return objid;
 	}
 
-	public void setLinkpageid(Integer linkpageid) {
-		this.linkpageid = linkpageid;
-	}
-
-	public String getImageid() {
-		return imageid;
-	}
-
-	public void setImageid(String imageid) {
-		this.imageid = imageid == null ? null : imageid.trim();
-	}
-
-	public String getVideoid() {
-		return videoid;
-	}
-
-	public void setVideoid(String videoid) {
-		this.videoid = videoid == null ? null : videoid.trim();
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
+	public void setObjid(String objid) {
+		this.objid = objid == null ? null : objid.trim();
 	}
 
 	public String getContent() {

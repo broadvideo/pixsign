@@ -1,5 +1,4 @@
-var CurStudent = null;
-var CurClassid = null;
+var CurAttendance = null;
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
@@ -19,7 +18,7 @@ $('#MyTable').dataTable({
 	                {'sTitle' : '课程', 'mData' : 'coursename', 'bSortable' : false, 'sWidth' : '15%' },
 	                {'sTitle' : '姓名', 'mData' : 'studentname', 'bSortable' : false, 'sWidth' : '15%' },
 					{'sTitle' : '学号', 'mData' : 'studentno', 'bSortable' : false, 'sWidth' : '15%' },
-					{'sTitle' : '', 'mData' : 'id', 'bSortable' : false, 'sWidth' : '10%' }],
+					{'sTitle' : '', 'mData' : 'attendanceid', 'bSortable' : false, 'sWidth' : '10%' }],
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
@@ -29,9 +28,7 @@ $('#MyTable').dataTable({
 		return nRow;
 	},
 	'fnServerParams': function(aoData) { 
-		if (CurClassid != null) {
-			aoData.push({'name':'classid','value':CurClassid });
-		}
+	
 	}
 
 });
@@ -46,7 +43,7 @@ $('body').on('click', '.pix-delete', function(event) {
 	if (index == undefined) {
 		index = $(event.target).parent().attr('data-id');
 	}
-	CurAttendancelog = $('#MyTable').dataTable().fnGetData(index);
+	CurAttendance = $('#MyTable').dataTable().fnGetData(index);
 	bootbox.confirm(common.tips.remove, function(result) {
 		if (result == true) {
 			$.ajax({
@@ -54,7 +51,7 @@ $('body').on('click', '.pix-delete', function(event) {
 				url : 'attendance!delete.action',
 				cache: false,
 				data : {
-					'attendance.id': CurAttendancelog.id
+					'attendance.attendanceid': CurAttendance.attendanceid
 				},
 				success : function(data, status) {
 					if (data.errorcode == 0) {
@@ -109,55 +106,7 @@ $('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 	}
 });
 
-$('body').on('click', '.pix-add', function(event) {
-	refreshForm('MyEditForm');
-	$('#MyEditForm').attr('action', 'student!add.action');
-	$('#MyEditModal').modal();
-});			
 
 
-$('body').on('click', '.pix-update', function(event) {
-	var index = $(event.target).attr('data-id');
-	if (index == undefined) {
-		index = $(event.target).parent().attr('data-id');
-	}
-	var item = $('#MyTable').dataTable().fnGetData(index);
-	var formdata = new Object();
-	for (var name in item) {
-		formdata['student.' + name] = item[name];
-	}
-	refreshForm('MyEditForm');
-	$('#MyEditForm').loadJSON(formdata);
-	$('#MyEditForm').attr('action', 'student!update.action');
-	$('#MyEditModal').modal();
-});
 
-$.ajax({
-	type : 'GET',
-	url : 'classroom!list.action',
-	data : {'pageSize': 9999},
-	dataType: 'json',
-	success : function(data, status) {
-		if (data.retcode ==1) {
-			var classlist = [];
-			for (var i=0; i<data.data.length; i++) {
-				classlist.push({
-					id: data.data[i].id,
-					text: data.data[i].name
-				});
-			}
-			$("#ClassSelect").select2({
-				placeholder: common.tips.detail_select,
-				minimumInputLength: 0,
-				data: classlist,
-				dropdownCssClass: "bigdrop", 
-				escapeMarkup: function (m) { return m; } 
-			});
-		} else {
-			bootbox.alert(data.retcode + ": " + data.message);
-		}
-	},
-	error : function() {
-		bootbox.alert('failure');
-	}
-});
+

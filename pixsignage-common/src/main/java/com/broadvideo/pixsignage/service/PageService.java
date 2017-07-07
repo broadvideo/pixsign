@@ -2,31 +2,30 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
+import org.json.JSONArray;
+
+import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Page;
-import com.broadvideo.pixsignage.domain.Pagezone;
 
 public interface PageService {
 	public Page selectByPrimaryKey(String pageid);
 
-	public int selectTemplateCount(String search);
+	public int selectCount(String orgid, String branchid, String search);
 
-	public List<Page> selectTemplateList(String search, String start, String length);
+	public List<Page> selectList(String orgid, String branchid, String search, String start, String length);
 
-	public int selectPageCount(String orgid, String branchid, String search);
+	public void addPage(Page page) throws Exception;
 
-	public List<Page> selectPageList(String orgid, String branchid, String search, String start, String length);
-
-	public void addTemplatePage(Page page);
-
-	public void addCommonPage(Page page);
+	public void copyPage(String frompageid, Page page) throws Exception;
 
 	public void updatePage(Page page);
 
 	public void deletePage(String pageid);
 
-	public void addPagezone(Pagezone pagezone);
+	public void design(Page page) throws Exception;
 
-	public void deletePagezone(String pagezoneid);
+	public void push(Page page, Device[] devices, Devicegroup[] devicegroups) throws Exception;
 
-	public void savePage(Page page);
+	public JSONArray generatePageJsonArray(List<Integer> pageids);
 }

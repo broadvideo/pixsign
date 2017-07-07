@@ -5,19 +5,16 @@
     <id column="pageid" property="pageid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
-    <result column="pagepkgid" property="pagepkgid" jdbcType="INTEGER" />
     <result column="templateid" property="templateid" jdbcType="INTEGER" />
-    <result column="templateflag" property="templateflag" jdbcType="CHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="entry" property="entry" jdbcType="CHAR" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
-    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
   
@@ -25,17 +22,13 @@
     <id column="pageid" property="pageid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
-    <result column="pagepkgid" property="pagepkgid" jdbcType="INTEGER" />
     <result column="templateid" property="templateid" jdbcType="INTEGER" />
-    <result column="templateflag" property="templateflag" jdbcType="CHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="entry" property="entry" jdbcType="CHAR" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
-    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
@@ -44,8 +37,8 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    pageid, orgid, branchid, pagepkgid, templateid, templateflag, name, type, status, entry, ratio, height, width, 
-    snapshot, description, createtime, updatetime, createstaffid
+    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, status, 
+    description, createtime, updatetime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -55,21 +48,23 @@
     where pageid = #{pageid}
   </select>
   
-  <select id="selectTemplateCount" resultType="Integer">
+  <select id="selectCount" resultType="Integer" >
     select count(1) from page 
-    where status = 1
-    and templateflag = 1
+    where status = 1 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     <if test="search != null">
       and name like #{search}
     </if>
   </select>
 
-  <select id="selectTemplateList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from page
     where status = 1 
-    and templateflag = 1
+    and orgid = #{orgid}
+    and branchid = #{branchid}
     <if test="search != null">
       and name like #{search}
     </if>
@@ -77,46 +72,6 @@
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>
-  </select>
-
-  <select id="selectPageCount" resultType="Integer">
-    select count(1) from page 
-    where status = 1 
-    and orgid = #{orgid}
-    and branchid = #{branchid}
-    and templateflag = 0
-    and pagepkgid = 0
-    <if test="search != null">
-      and name like #{search}
-    </if>
-  </select>
-
-  <select id="selectPageList" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from page
-    where status = 1 
-    and orgid = #{orgid}
-    and branchid = #{branchid}
-    and templateflag = 0
-    and pagepkgid = 0
-    <if test="search != null">
-      and name like #{search}
-    </if>
-    order by pageid desc 
-    <if test="start != null and length != null">
-      limit ${start}, ${length}
-    </if>
-  </select>
-
-  <select id="selectPageListByPagepkg" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from page
-    where status = 1 
-    and templateflag = 0
-    and pagepkgid = #{pagepkgid}
-    order by pageid 
   </select>
 
   <delete id="deleteByPrimaryKey" >
@@ -128,18 +83,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into page (orgid, branchid, pagepkgid, 
-      templateid, templateflag, 
-      name, type, status, entry, 
-      ratio, height, width, 
-      snapshot, description, createtime, 
-      updatetime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{pagepkgid,jdbcType=INTEGER}, 
-      #{templateid,jdbcType=INTEGER}, #{templateflag,jdbcType=CHAR}, 
-      #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{entry,jdbcType=CHAR}, 
-      #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
-      #{snapshot,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+    insert into page (orgid, branchid, templateid, 
+      name, snapshot, ratio, 
+      height, width, status, 
+      description, createtime, updatetime, 
+      createstaffid)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
+      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Page" >
     <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
@@ -153,26 +106,14 @@
       <if test="branchid != null" >
         branchid,
       </if>
-      <if test="pagepkgid != null" >
-        pagepkgid,
-      </if>
       <if test="templateid != null" >
         templateid,
-      </if>
-      <if test="templateflag != null" >
-        templateflag,
       </if>
       <if test="name != null" >
         name,
       </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="entry != null" >
-        entry,
+      <if test="snapshot != null" >
+        snapshot,
       </if>
       <if test="ratio != null" >
         ratio,
@@ -183,8 +124,8 @@
       <if test="width != null" >
         width,
       </if>
-      <if test="snapshot != null" >
-        snapshot,
+      <if test="status != null" >
+        status,
       </if>
       <if test="description != null" >
         description,
@@ -206,26 +147,14 @@
       <if test="branchid != null" >
         #{branchid,jdbcType=INTEGER},
       </if>
-      <if test="pagepkgid != null" >
-        #{pagepkgid,jdbcType=INTEGER},
-      </if>
       <if test="templateid != null" >
         #{templateid,jdbcType=INTEGER},
-      </if>
-      <if test="templateflag != null" >
-        #{templateflag,jdbcType=CHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
-      </if>
-      <if test="entry != null" >
-        #{entry,jdbcType=CHAR},
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
       </if>
       <if test="ratio != null" >
         #{ratio,jdbcType=CHAR},
@@ -236,8 +165,8 @@
       <if test="width != null" >
         #{width,jdbcType=INTEGER},
       </if>
-      <if test="snapshot != null" >
-        #{snapshot,jdbcType=VARCHAR},
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -262,26 +191,14 @@
       <if test="branchid != null" >
         branchid = #{branchid,jdbcType=INTEGER},
       </if>
-      <if test="pagepkgid != null" >
-        pagepkgid = #{pagepkgid,jdbcType=INTEGER},
-      </if>
       <if test="templateid != null" >
         templateid = #{templateid,jdbcType=INTEGER},
-      </if>
-      <if test="templateflag != null" >
-        templateflag = #{templateflag,jdbcType=CHAR},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="entry != null" >
-        entry = #{entry,jdbcType=CHAR},
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
       </if>
       <if test="ratio != null" >
         ratio = #{ratio,jdbcType=CHAR},
@@ -292,8 +209,8 @@
       <if test="width != null" >
         width = #{width,jdbcType=INTEGER},
       </if>
-      <if test="snapshot != null" >
-        snapshot = #{snapshot,jdbcType=VARCHAR},
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
       </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
@@ -314,17 +231,13 @@
     update page
     set orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
-      pagepkgid = #{pagepkgid,jdbcType=INTEGER},
       templateid = #{templateid,jdbcType=INTEGER},
-      templateflag = #{templateflag,jdbcType=CHAR},
       name = #{name,jdbcType=VARCHAR},
-      type = #{type,jdbcType=CHAR},
-      status = #{status,jdbcType=CHAR},
-      entry = #{entry,jdbcType=CHAR},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
       ratio = #{ratio,jdbcType=CHAR},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
-      snapshot = #{snapshot,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},

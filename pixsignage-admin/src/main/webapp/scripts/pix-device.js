@@ -426,15 +426,15 @@ function initMyEditModal() {
 	$.ajax({
 		type : 'GET',
 		url : 'classroom!list.action',
-		data : {pageSize: 9999},
+		data : {"iDisplayStart" :0,"iDisplayLength" :999},
 		dataType: 'json',
 		success : function(data, status) {
-			if (data.retcode == 1) {
+			if (data.errorcode == 0) {
 				var externallist = [];
-				for (var i=0; i<data.data.length; i++) {
+				for (var i=0; i<data.aaData.length; i++) {
 					externallist.push({
-						id: data.data[i].id,
-						text: data.data[i].name
+						id: data.aaData[i].classroomid,
+						text: data.aaData[i].name
 					});
 				}
 				$("#ExternalSelect").select2({
@@ -445,7 +445,7 @@ function initMyEditModal() {
 					escapeMarkup: function (m) { return m; } 
 				});
 			} else {
-				bootbox.alert(data.retcode + ": " + data.message);
+				bootbox.alert(data.errorcode + ": " + data.errmsg);
 			}
 		},
 		error : function() {
@@ -512,6 +512,9 @@ function initMyEditModal() {
 		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
+	
+
+		
 	});
 
 	$('body').on('click', '.pix-update2', function(event) {
@@ -529,9 +532,10 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', myurls['device.update']);
 		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
-		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
+		//$("#ExternalSelect").select2('val', CurrentDevice.externalid);
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
+		$("#ExternalSelect").select2('val',CurrentDevice.externalid);
 	});
 }
 

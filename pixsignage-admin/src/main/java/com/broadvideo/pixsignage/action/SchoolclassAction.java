@@ -1,19 +1,16 @@
 package com.broadvideo.pixsignage.action;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.broadvideo.pixsignage.common.PageInfo;
+import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.domain.Schoolclass;
 import com.broadvideo.pixsignage.persistence.SchoolclassMapper;
+import com.broadvideo.pixsignage.service.SchoolclassService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -23,29 +20,22 @@ public class SchoolclassAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Schoolclass schoolclass;
+	@Autowired
+	private SchoolclassService schoolclassService;
 
 	@Autowired
 	private SchoolclassMapper schoolclassMapper;
 
 	public String doList() {
 		try {
-			this.setsEcho(getParameter("sEcho"));
-			String start = getParameter("iDisplayStart");
-			String length = getParameter("iDisplayLength");
+			PageInfo pageInfo=super.initPageInfo();
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
-			List<Object> aaData = new ArrayList<Object>();
-			int count = schoolclassMapper.selectCount(getLoginStaff().getOrgid(), search);
-			this.setiTotalRecords(count);
-			this.setiTotalDisplayRecords(count);
-			List<Map<String, Object>> schoolclassList = schoolclassMapper.selectList(getLoginStaff().getOrgid(),
-					search, NumberUtils.toInt(start), NumberUtils.toInt(length));
-			for (Map<String, Object> schoolclassMap : schoolclassList) {
-				aaData.add(schoolclassMap);
-			}
-
-			this.setAaData(aaData);
-
+			PageResult pageResult = this.schoolclassService.getSchoolclassList(search, pageInfo, getLoginStaff()
+					.getOrgid());
+			this.setiTotalRecords(pageResult.getTotalCount());
+			this.setiTotalDisplayRecords(pageResult.getTotalCount());
+			this.setAaData(pageResult.getResult());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doList exception, ", ex);
@@ -60,8 +50,7 @@ public class SchoolclassAction extends BaseDatatableAction {
 		try {
 			schoolclass.setOrgid(getLoginStaff().getOrgid());
 			schoolclass.setCreatestaffid(getLoginStaff().getStaffid());
-			schoolclass.setCreatetime(Calendar.getInstance().getTime());
-			schoolclassMapper.insertSelective(schoolclass);
+			schoolclassService.addSchoolclass(schoolclass);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doAdd exception, ", ex);
@@ -75,7 +64,7 @@ public class SchoolclassAction extends BaseDatatableAction {
 	public String doUpdate() {
 		try {
 
-			schoolclassMapper.updateByPrimaryKeySelective(schoolclass);
+			schoolclassService.upateSchoolclass(schoolclass);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doUpdate exception, ", ex);
@@ -87,7 +76,7 @@ public class SchoolclassAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			schoolclassMapper.deleteByPrimaryKey(schoolclass.getSchoolclassid());
+			schoolclassService.deleteSchoolclass(schoolclass.getSchoolclassid(), getLoginStaff().getOrgid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doDelete exception, ", ex);

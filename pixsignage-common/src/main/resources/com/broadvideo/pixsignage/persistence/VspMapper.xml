@@ -5,6 +5,8 @@
     <id column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="bundleflag" property="bundleflag" jdbcType="CHAR" />
+    <result column="pageflag" property="pageflag" jdbcType="CHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
@@ -26,8 +28,8 @@
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vspid, name, code, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, flowrateflag, 
-    streamflag, dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
+    vspid, name, code, bundleflag, pageflag, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, 
+    flowrateflag, streamflag, dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
     currentstorage, apps, status, description, createtime, createstaffid
   </sql>
   
@@ -79,21 +81,23 @@
     <selectKey resultType="java.lang.Integer" keyProperty="vspid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vsp (name, code, reviewflag, 
-      touchflag, liftflag, calendarflag, 
-      mscreenflag, flowrateflag, 
-      streamflag, dvbflag, 
+    insert into vsp (name, code, bundleflag, 
+      pageflag, reviewflag, touchflag, 
+      liftflag, calendarflag, mscreenflag, 
+      flowrateflag, streamflag, dvbflag, 
       videoinflag, maxdevices, maxstorage, 
-      currentdevices, currentstorage, apps, status, 
-      description, createtime, createstaffid
+      currentdevices, currentstorage, apps, 
+      status, description, createtime, 
+      createstaffid
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
-      #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, 
-      #{mscreenflag,jdbcType=CHAR}, #{flowrateflag,jdbcType=CHAR}, 
-      #{streamflag,jdbcType=CHAR}, #{dvbflag,jdbcType=CHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{bundleflag,jdbcType=CHAR}, 
+      #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
+      #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, 
+      #{flowrateflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, #{dvbflag,jdbcType=CHAR}, 
       #{videoinflag,jdbcType=CHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
-      #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Vsp" >
@@ -107,6 +111,12 @@
       </if>
       <if test="code != null" >
         code,
+      </if>
+      <if test="bundleflag != null" >
+        bundleflag,
+      </if>
+      <if test="pageflag != null" >
+        pageflag,
       </if>
       <if test="reviewflag != null" >
         reviewflag,
@@ -169,6 +179,12 @@
       </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bundleflag != null" >
+        #{bundleflag,jdbcType=CHAR},
+      </if>
+      <if test="pageflag != null" >
+        #{pageflag,jdbcType=CHAR},
       </if>
       <if test="reviewflag != null" >
         #{reviewflag,jdbcType=CHAR},
@@ -235,6 +251,12 @@
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
+      <if test="bundleflag != null" >
+        bundleflag = #{bundleflag,jdbcType=CHAR},
+      </if>
+      <if test="pageflag != null" >
+        pageflag = #{pageflag,jdbcType=CHAR},
+      </if>
       <if test="reviewflag != null" >
         reviewflag = #{reviewflag,jdbcType=CHAR},
       </if>
@@ -296,6 +318,8 @@
     update vsp
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
+      bundleflag = #{bundleflag,jdbcType=CHAR},
+      pageflag = #{pageflag,jdbcType=CHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},

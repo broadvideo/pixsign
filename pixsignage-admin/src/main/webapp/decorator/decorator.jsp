@@ -42,7 +42,11 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
+<script type="text/javascript">
+   var res="${static_ctx}";
+   var ctx="${base_ctx}";
 
+</script>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <sitemesh:write property='head'/>
 <!-- END PAGE LEVEL STYLES -->
@@ -85,7 +89,6 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/themes/<%=theme%>" rel="stylesheet" type="text/css" id="style_color" />
-<link href="${static_ctx}/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="../favicon.ico" />
 

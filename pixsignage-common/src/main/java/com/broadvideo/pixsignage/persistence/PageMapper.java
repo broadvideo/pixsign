@@ -9,15 +9,10 @@ import com.broadvideo.pixsignage.domain.Page;
 public interface PageMapper {
 	Page selectByPrimaryKey(@Param(value = "pageid") String pageid);
 
-	int selectTemplateCount(@Param(value = "search") String search);
-
-	List<Page> selectTemplateList(@Param(value = "search") String search, @Param(value = "start") String start,
-			@Param(value = "length") String length);
-
-	int selectPageCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search);
 
-	List<Page> selectPageList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+	List<Page> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 

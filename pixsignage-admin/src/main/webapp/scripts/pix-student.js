@@ -111,6 +111,8 @@ $('body').on('click', '.pix-add', function(event) {
 	refreshForm('MyEditForm');
 	$('#MyEditForm').attr('action', 'student!add.action');
 	$('#MyEditModal').modal();
+	$("#ClassSelect").select2('val','');
+
 });			
 
 
@@ -128,12 +130,14 @@ $('body').on('click', '.pix-update', function(event) {
 	$('#MyEditForm').loadJSON(formdata);
 	$('#MyEditForm').attr('action', 'student!update.action');
 	$('#MyEditModal').modal();
+	$("#ClassSelect").select2('val',item.schoolclassid);
+
 });
 
 $.ajax({
 	type : 'GET',
 	url : 'schoolclass!list.action',
-	data : {'pageSize': 999},
+	data : {"iDisplayStart" :0,"iDisplayLength" :999},
 	dataType: 'json',
 	success : function(data, status) {
 		if (data.errorcode ==0) {

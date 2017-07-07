@@ -29,11 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
-import com.broadvideo.pixsignage.domain.Attendancelog;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
-import com.broadvideo.pixsignage.domain.CourseScheduleScheme;
+import com.broadvideo.pixsignage.domain.Attendance;
+import com.broadvideo.pixsignage.domain.Courseschedule;
+import com.broadvideo.pixsignage.domain.Courseschedulescheme;
 import com.broadvideo.pixsignage.domain.Student;
-import com.broadvideo.pixsignage.persistence.AttendancelogMapper;
+import com.broadvideo.pixsignage.persistence.AttendanceMapper;
 import com.broadvideo.pixsignage.persistence.StudentMapper;
 import com.broadvideo.pixsignage.service.CourseScheduleSchemeService;
 import com.broadvideo.pixsignage.service.CourseScheduleService;
@@ -47,7 +47,7 @@ public class ResStudents {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	private AttendancelogMapper attendancelogMapper;
+	private AttendanceMapper attendancelogMapper;
 	@Autowired
 	private StudentMapper studentMapper;
 	@Autowired
@@ -71,19 +71,20 @@ public class ResStudents {
 		Long eventTimeTs = requestJson.getLong("event_time");
 
 			Student student = this.studentMapper.selectByPrimaryKey(studentId + "");
-		Attendancelog attendancelog = new Attendancelog();
+		Attendance attendancelog = new Attendance();
 		attendancelog.setClassroomid(classroomId);
 		attendancelog.setCoursescheduleid(courseScheduleId);
 			Date curDate = new Date();
 			attendancelog.setEventtime(curDate);
 		attendancelog.setStudentid(studentId);
 			attendancelog.setCreatetime(curDate);
-			CourseScheduleScheme scheme = courseScheduleSchemeService.getEnableScheme(student.getOrgid());
+			Courseschedulescheme scheme = courseScheduleSchemeService.getEnableScheme(student.getOrgid());
 			if (scheme != null) {
-				CourseSchedule courseSchedule = this.courseScheduleService.getCurCourseSchedule(scheme.getId(),
+				Courseschedule courseSchedule = this.courseScheduleService.getCurCourseSchedule(
+						scheme.getCoursescheduleschemeid(),
 						classroomId, curDate, student.getOrgid());
 				if (courseSchedule != null) {
-					attendancelog.setCoursescheduleid(courseSchedule.getId());
+					attendancelog.setCoursescheduleid(courseSchedule.getCoursescheduleid());
 				}
 
 			}

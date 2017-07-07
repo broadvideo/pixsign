@@ -4,9 +4,7 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Pagezone" >
     <id column="pagezoneid" property="pagezoneid" jdbcType="INTEGER" />
     <result column="pageid" property="pageid" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
@@ -24,7 +22,10 @@
     <result column="bgopacity" property="bgopacity" jdbcType="INTEGER" />
     <result column="opacity" property="opacity" jdbcType="INTEGER" />
     <result column="padding" property="padding" jdbcType="INTEGER" />
-    <result column="shadow" property="shadow" jdbcType="VARCHAR" />
+    <result column="shadowh" property="shadowh" jdbcType="INTEGER" />
+    <result column="shadowv" property="shadowv" jdbcType="INTEGER" />
+    <result column="shadowblur" property="shadowblur" jdbcType="INTEGER" />
+    <result column="shadowcolor" property="shadowcolor" jdbcType="VARCHAR" />
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="fontfamily" property="fontfamily" jdbcType="VARCHAR" />
     <result column="fontsize" property="fontsize" jdbcType="INTEGER" />
@@ -33,20 +34,17 @@
     <result column="decoration" property="decoration" jdbcType="VARCHAR" />
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
-    <result column="linkpageid" property="linkpageid" jdbcType="INTEGER" />
-    <result column="imageid" property="imageid" jdbcType="VARCHAR" />
-    <result column="videoid" property="videoid" jdbcType="VARCHAR" />
-    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="objid" property="objid" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Pagezone" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    pagezoneid, pageid, name, type, status, height, width, topoffset, leftoffset, zindex, 
-    transform, bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, bgopacity, opacity, padding, 
-    shadow, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, lineheight, 
-    linkpageid, imageid, videoid, createtime
+    pagezoneid, pageid, type, height, width, topoffset, leftoffset, zindex, transform, 
+    bdcolor, bdstyle, bdwidth, bdtl, bdtr, bdbl, bdbr, bgcolor, bgopacity, opacity, padding, 
+    shadowh, shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, 
+    fontstyle, decoration, align, lineheight, objid
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -76,30 +74,28 @@
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pagezone (pageid, name, type, 
-      status, height, width, 
-      topoffset, leftoffset, zindex, 
-      transform, bdcolor, bdstyle, 
-      bdwidth, bdtl, bdtr, 
-      bdbl, bdbr, bgcolor, 
-      bgopacity, opacity, padding, shadow, 
-      color, fontfamily, fontsize, 
-      fontweight, fontstyle, decoration, 
-      align, lineheight, linkpageid, 
-      imageid, videoid, createtime, 
-      content)
-    values (#{pageid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{status,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
-      #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, #{zindex,jdbcType=INTEGER}, 
-      #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, #{bdstyle,jdbcType=VARCHAR}, 
-      #{bdwidth,jdbcType=INTEGER}, #{bdtl,jdbcType=INTEGER}, #{bdtr,jdbcType=INTEGER}, 
-      #{bdbl,jdbcType=INTEGER}, #{bdbr,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
-      #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, #{shadow,jdbcType=VARCHAR}, 
-      #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, 
-      #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, 
-      #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, #{linkpageid,jdbcType=INTEGER}, 
-      #{imageid,jdbcType=VARCHAR}, #{videoid,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+    insert into pagezone (pageid, type, height, 
+      width, topoffset, leftoffset, 
+      zindex, transform, bdcolor, 
+      bdstyle, bdwidth, bdtl, 
+      bdtr, bdbl, bdbr, bgcolor, 
+      bgopacity, opacity, padding, 
+      shadowh, shadowv, shadowblur, 
+      shadowcolor, color, fontfamily, 
+      fontsize, fontweight, fontstyle, 
+      decoration, align, lineheight, 
+      objid, content)
+    values (#{pageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
+      #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
+      #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
+      #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdtl,jdbcType=INTEGER}, 
+      #{bdtr,jdbcType=INTEGER}, #{bdbl,jdbcType=INTEGER}, #{bdbr,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
+      #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, #{padding,jdbcType=INTEGER}, 
+      #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, #{shadowblur,jdbcType=INTEGER}, 
+      #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fontfamily,jdbcType=VARCHAR}, 
+      #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, #{fontstyle,jdbcType=VARCHAR}, 
+      #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, #{lineheight,jdbcType=INTEGER}, 
+      #{objid,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -110,14 +106,8 @@
       <if test="pageid != null" >
         pageid,
       </if>
-      <if test="name != null" >
-        name,
-      </if>
       <if test="type != null" >
         type,
-      </if>
-      <if test="status != null" >
-        status,
       </if>
       <if test="height != null" >
         height,
@@ -170,8 +160,17 @@
       <if test="padding != null" >
         padding,
       </if>
-      <if test="shadow != null" >
-        shadow,
+      <if test="shadowh != null" >
+        shadowh,
+      </if>
+      <if test="shadowv != null" >
+        shadowv,
+      </if>
+      <if test="shadowblur != null" >
+        shadowblur,
+      </if>
+      <if test="shadowcolor != null" >
+        shadowcolor,
       </if>
       <if test="color != null" >
         color,
@@ -197,17 +196,8 @@
       <if test="lineheight != null" >
         lineheight,
       </if>
-      <if test="linkpageid != null" >
-        linkpageid,
-      </if>
-      <if test="imageid != null" >
-        imageid,
-      </if>
-      <if test="videoid != null" >
-        videoid,
-      </if>
-      <if test="createtime != null" >
-        createtime,
+      <if test="objid != null" >
+        objid,
       </if>
       <if test="content != null" >
         content,
@@ -217,14 +207,8 @@
       <if test="pageid != null" >
         #{pageid,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
       <if test="type != null" >
-        #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
+        #{type,jdbcType=TINYINT},
       </if>
       <if test="height != null" >
         #{height,jdbcType=INTEGER},
@@ -277,8 +261,17 @@
       <if test="padding != null" >
         #{padding,jdbcType=INTEGER},
       </if>
-      <if test="shadow != null" >
-        #{shadow,jdbcType=VARCHAR},
+      <if test="shadowh != null" >
+        #{shadowh,jdbcType=INTEGER},
+      </if>
+      <if test="shadowv != null" >
+        #{shadowv,jdbcType=INTEGER},
+      </if>
+      <if test="shadowblur != null" >
+        #{shadowblur,jdbcType=INTEGER},
+      </if>
+      <if test="shadowcolor != null" >
+        #{shadowcolor,jdbcType=VARCHAR},
       </if>
       <if test="color != null" >
         #{color,jdbcType=VARCHAR},
@@ -304,17 +297,8 @@
       <if test="lineheight != null" >
         #{lineheight,jdbcType=INTEGER},
       </if>
-      <if test="linkpageid != null" >
-        #{linkpageid,jdbcType=INTEGER},
-      </if>
-      <if test="imageid != null" >
-        #{imageid,jdbcType=VARCHAR},
-      </if>
-      <if test="videoid != null" >
-        #{videoid,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="objid != null" >
+        #{objid,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -327,14 +311,8 @@
       <if test="pageid != null" >
         pageid = #{pageid,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
       <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
+        type = #{type,jdbcType=TINYINT},
       </if>
       <if test="height != null" >
         height = #{height,jdbcType=INTEGER},
@@ -387,8 +365,17 @@
       <if test="padding != null" >
         padding = #{padding,jdbcType=INTEGER},
       </if>
-      <if test="shadow != null" >
-        shadow = #{shadow,jdbcType=VARCHAR},
+      <if test="shadowh != null" >
+        shadowh = #{shadowh,jdbcType=INTEGER},
+      </if>
+      <if test="shadowv != null" >
+        shadowv = #{shadowv,jdbcType=INTEGER},
+      </if>
+      <if test="shadowblur != null" >
+        shadowblur = #{shadowblur,jdbcType=INTEGER},
+      </if>
+      <if test="shadowcolor != null" >
+        shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
       </if>
       <if test="color != null" >
         color = #{color,jdbcType=VARCHAR},
@@ -414,17 +401,8 @@
       <if test="lineheight != null" >
         lineheight = #{lineheight,jdbcType=INTEGER},
       </if>
-      <if test="linkpageid != null" >
-        linkpageid = #{linkpageid,jdbcType=INTEGER},
-      </if>
-      <if test="imageid != null" >
-        imageid = #{imageid,jdbcType=VARCHAR},
-      </if>
-      <if test="videoid != null" >
-        videoid = #{videoid,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        createtime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="objid != null" >
+        objid = #{objid,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -435,48 +413,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     update pagezone
     set pageid = #{pageid,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      type = #{type,jdbcType=CHAR},
-      status = #{status,jdbcType=CHAR},
-      height = #{height,jdbcType=INTEGER},
-      width = #{width,jdbcType=INTEGER},
-      topoffset = #{topoffset,jdbcType=INTEGER},
-      leftoffset = #{leftoffset,jdbcType=INTEGER},
-      zindex = #{zindex,jdbcType=INTEGER},
-      transform = #{transform,jdbcType=VARCHAR},
-      bdcolor = #{bdcolor,jdbcType=VARCHAR},
-      bdstyle = #{bdstyle,jdbcType=VARCHAR},
-      bdwidth = #{bdwidth,jdbcType=INTEGER},
-      bdtl = #{bdtl,jdbcType=INTEGER},
-      bdtr = #{bdtr,jdbcType=INTEGER},
-      bdbl = #{bdbl,jdbcType=INTEGER},
-      bdbr = #{bdbr,jdbcType=INTEGER},
-      bgcolor = #{bgcolor,jdbcType=VARCHAR},
-      bgopacity = #{bgopacity,jdbcType=INTEGER},
-      opacity = #{opacity,jdbcType=INTEGER},
-      padding = #{padding,jdbcType=VARCHAR},
-      shadow = #{shadow,jdbcType=VARCHAR},
-      color = #{color,jdbcType=VARCHAR},
-      fontfamily = #{fontfamily,jdbcType=VARCHAR},
-      fontsize = #{fontsize,jdbcType=INTEGER},
-      fontweight = #{fontweight,jdbcType=VARCHAR},
-      fontstyle = #{fontstyle,jdbcType=VARCHAR},
-      decoration = #{decoration,jdbcType=VARCHAR},
-      align = #{align,jdbcType=VARCHAR},
-      lineheight = #{lineheight,jdbcType=INTEGER},
-      linkpageid = #{linkpageid,jdbcType=INTEGER},
-      imageid = #{imageid,jdbcType=VARCHAR},
-      videoid = #{videoid,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
-    update pagezone
-    set pageid = #{pageid,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      type = #{type,jdbcType=CHAR},
-      status = #{status,jdbcType=CHAR},
+      type = #{type,jdbcType=TINYINT},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
       topoffset = #{topoffset,jdbcType=INTEGER},
@@ -494,7 +431,10 @@
       bgopacity = #{bgopacity,jdbcType=INTEGER},
       opacity = #{opacity,jdbcType=INTEGER},
       padding = #{padding,jdbcType=INTEGER},
-      shadow = #{shadow,jdbcType=VARCHAR},
+      shadowh = #{shadowh,jdbcType=INTEGER},
+      shadowv = #{shadowv,jdbcType=INTEGER},
+      shadowblur = #{shadowblur,jdbcType=INTEGER},
+      shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
       color = #{color,jdbcType=VARCHAR},
       fontfamily = #{fontfamily,jdbcType=VARCHAR},
       fontsize = #{fontsize,jdbcType=INTEGER},
@@ -503,10 +443,44 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
-      linkpageid = #{linkpageid,jdbcType=INTEGER},
-      imageid = #{imageid,jdbcType=VARCHAR},
-      videoid = #{videoid,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=TIMESTAMP}
+      objid = #{objid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
+    update pagezone
+    set pageid = #{pageid,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER},
+      transform = #{transform,jdbcType=VARCHAR},
+      bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=INTEGER},
+      bdtl = #{bdtl,jdbcType=INTEGER},
+      bdtr = #{bdtr,jdbcType=INTEGER},
+      bdbl = #{bdbl,jdbcType=INTEGER},
+      bdbr = #{bdbr,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
+      opacity = #{opacity,jdbcType=INTEGER},
+      padding = #{padding,jdbcType=INTEGER},
+      shadowh = #{shadowh,jdbcType=INTEGER},
+      shadowv = #{shadowv,jdbcType=INTEGER},
+      shadowblur = #{shadowblur,jdbcType=INTEGER},
+      shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=INTEGER},
+      fontweight = #{fontweight,jdbcType=VARCHAR},
+      fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      decoration = #{decoration,jdbcType=VARCHAR},
+      align = #{align,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=INTEGER},
+      objid = #{objid,jdbcType=VARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

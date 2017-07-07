@@ -7,23 +7,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.common.DateUtil;
 import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.PageInfo;
+import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.common.PeriodType;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.domain.CourseScheduleScheme;
-import com.broadvideo.pixsignage.domain.PeriodTimeDtl;
-import com.broadvideo.pixsignage.persistence.CourseScheduleSchemeMapper;
-import com.broadvideo.pixsignage.persistence.PeriodTimeDtlMapper;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.broadvideo.pixsignage.domain.Courseschedulescheme;
+import com.broadvideo.pixsignage.domain.Periodtimedtl;
+import com.broadvideo.pixsignage.persistence.CoursescheduleschemeMapper;
+import com.broadvideo.pixsignage.persistence.PeriodtimedtlMapper;
+import com.broadvideo.pixsignage.util.DateUtil;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 
 @Service
@@ -32,14 +32,14 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	private CourseScheduleSchemeMapper schemeMapper;
+	private CoursescheduleschemeMapper schemeMapper;
 	@Autowired
-	private PeriodTimeDtlMapper periodTimeDtlMapper;
+	private PeriodtimedtlMapper periodTimeDtlMapper;
 
 	@Override
-	public Integer addScheme(CourseScheduleScheme scheduleScheme) {
+	public Integer addScheme(Courseschedulescheme scheduleScheme) {
 
-		CourseScheduleScheme saveScheduleScheme = new CourseScheduleScheme();
+		Courseschedulescheme saveScheduleScheme = new Courseschedulescheme();
 		saveScheduleScheme.setName(scheduleScheme.getName());
 		saveScheduleScheme.setMorningperiods(scheduleScheme.getMorningperiods());
 		saveScheduleScheme.setAfternoonperiods(scheduleScheme.getAfternoonperiods());
@@ -52,40 +52,39 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 		saveScheduleScheme.setCreatetime(new Date());
 		this.schemeMapper.insertSelective(saveScheduleScheme);
 
-		return saveScheduleScheme.getId();
+		return saveScheduleScheme.getCoursescheduleschemeid();
 	}
 
 	@Override
-	public void getSchemes(String searchKey, PageInfo<CourseScheduleScheme> page, Integer orgId) {
+	public PageResult<Courseschedulescheme> getSchemes(String searchKey, PageInfo page, Integer orgId) {
 
-			PageBounds pageBounds = new PageBounds(page.getPageNo(), page.getPageSize());
-		List<CourseScheduleScheme> dataList = schemeMapper.selectCourseScheduleSchemes(searchKey, orgId,
-					pageBounds);
-			page.setResult(dataList);
-			PageList pageList = (PageList) dataList;
-			page.setTotalCount(pageList.getPaginator().getTotalCount());
+		RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
+		List<Courseschedulescheme> dataList = schemeMapper.selectCoursescheduleschemes(searchKey, orgId, rowBounds);
+		PageList pageList = (PageList) dataList;
+		int totalCount = pageList.getPaginator().getTotalCount();
+		return new PageResult<Courseschedulescheme>(totalCount, dataList, page);
 
 	}
 
 	@Override
-	public CourseScheduleScheme loadScheme(Integer id, Integer orgId) {
+	public Courseschedulescheme loadScheme(Integer id, Integer orgId) {
 
-		CourseScheduleScheme scheme = schemeMapper.selectCourseScheduleScheme(id, orgId);
+		Courseschedulescheme scheme = schemeMapper.selectCourseschedulescheme(id, orgId);
 		int dtlTotal = this.countSchemeDtl(id, scheme.getOrgid());
 
 		if (dtlTotal > 0) {
-			scheme.setPeriodInitFlag(true);
+			scheme.setPeriodinitflag(true);
 		} else {
-			scheme.setPeriodInitFlag(false);
+			scheme.setPeriodinitflag(false);
 		}
 		return scheme;
 
 	}
 
 	@Override
-	public void updateScheme(CourseScheduleScheme scheme) {
+	public void updateScheme(Courseschedulescheme scheme) {
 
-		CourseScheduleScheme uScheme = new CourseScheduleScheme();
+		Courseschedulescheme uScheme = new Courseschedulescheme();
 		uScheme.setName(scheme.getName());
 		if (StringUtils.isBlank(scheme.getDescription())) {
 			uScheme.setDescription("");
@@ -93,7 +92,7 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 			uScheme.setDescription(scheme.getDescription());
 		}
 		uScheme.setWorkdays(scheme.getWorkdays());
-		int total = this.countSchemeDtl(scheme.getId(), scheme.getOrgid());
+		int total = this.countSchemeDtl(scheme.getCoursescheduleschemeid(), scheme.getOrgid());
 		if (total == 0) {
 			uScheme.setMorningperiods(scheme.getMorningperiods());
 			uScheme.setAfternoonperiods(scheme.getAfternoonperiods());
@@ -102,7 +101,7 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 		uScheme.setUpdatepsnid(scheme.getUpdatepsnid());
 		uScheme.setUpdatetime(new Date());
 		uScheme.setOrgid(scheme.getOrgid());
-		uScheme.setId(scheme.getId());
+		uScheme.setCoursescheduleschemeid(scheme.getCoursescheduleschemeid());
 		schemeMapper.updateByPrimaryKeySelective(uScheme);
 
 
@@ -110,9 +109,9 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 
 	@Override
 	public void changeSchemeFlag(Integer id, String enableFlag, Integer psnId, Integer orgId) {
-		CourseScheduleScheme scheduleScheme = loadScheme(id, orgId);
+		Courseschedulescheme scheduleScheme = loadScheme(id, orgId);
 		if (scheduleScheme == null) {
-			throw new ServiceException(RetCodeEnum.EXCEPTION, "No record found!");
+			throw new ServiceException("No record found!");
 		}
 
 		if (enableFlag.equals(scheduleScheme.getEnableflag())) {
@@ -122,15 +121,15 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 		if (enableFlag.equals(GlobalFlag.YES)) {
 			int dtlTotal = this.countSchemeDtl(id, scheduleScheme.getOrgid());
 			if (dtlTotal <= 0) {
-				throw new ServiceException(RetCodeEnum.NONE_PERIOD_TIME_DTL, "课表方案时间配置缺少！");
+				throw new ServiceException("课表方案时间配置缺少！");
 			}
 
 		}
 		// 设置其他的课表方案为停用状态：
-		schemeMapper.disableCourseScheduleSchemes(id, psnId, orgId);
+		schemeMapper.disableCoursescheduleschemes(id, psnId, orgId);
 		// 设置当前的课表方案为启用状态
-		CourseScheduleScheme uScheme = new CourseScheduleScheme();
-		uScheme.setId(id);
+		Courseschedulescheme uScheme = new Courseschedulescheme();
+		uScheme.setCoursescheduleschemeid(id);
 		uScheme.setEnableflag(enableFlag);
 		uScheme.setUpdatepsnid(psnId);
 		uScheme.setUpdatetime(new Date());
@@ -141,36 +140,41 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 
 	@Override
 	public void deleteSchemes(List<Integer> ids, Integer optPsnId, Integer orgId) {
-		this.schemeMapper.batchDeleteCourseScheduleSchemes(ids, orgId);
+		this.schemeMapper.batchDeleteCoursescheduleschemes(ids, orgId);
 
 	}
 
 	@Override
-	public void addPeriodTimeDtls(CourseScheduleScheme newScheduleScheme, Integer optPsnId, Integer orgId) {
-		Integer scheduleSchemeId = newScheduleScheme.getId();
-		CourseScheduleScheme scheme = this.loadScheme(scheduleSchemeId, orgId);
+	public synchronized void addPeriodTimeDtls(Courseschedulescheme newScheduleScheme, Integer optPsnId, Integer orgId) {
+		Integer scheduleSchemeId = newScheduleScheme.getCoursescheduleschemeid();
+		Courseschedulescheme scheme = this.loadScheme(scheduleSchemeId, orgId);
 		// 检查课表的period是否匹配
-		if (!scheme.getMorningperiods().equals(newScheduleScheme.getMorningPeriodTimeDtls().size())
-				|| !scheme.getAfternoonperiods().equals(newScheduleScheme.getAfternoonPeriodTimeDtls().size())
-				|| !scheme.getNightperiods().equals(newScheduleScheme.getNightPeriodTimeDtls().size())) {
+		if (!scheme.getMorningperiods().equals(newScheduleScheme.getMorningperiodtimedtls().size())
+				|| !scheme.getAfternoonperiods().equals(newScheduleScheme.getAfternoonperiodtimedtls().size())
+				|| !scheme.getNightperiods().equals(newScheduleScheme.getNightperiodtimedtls().size())) {
 			logger.error("submit scheme.id={}的periods not match orginal defined!", scheduleSchemeId);
-			throw new ServiceException(RetCodeEnum.INVALID_ARGS, "Submit data is invalid.");
+			throw new ServiceException("Submit data is invalid.");
 		}
-		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.MORNING, newScheduleScheme.getMorningPeriodTimeDtls(),
+		if (scheme.isPeriodinitflag()) {
+			logger.info("Add failure,peroidtime has exists.");
+			return;
+		}
+		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.MORNING, newScheduleScheme.getMorningperiodtimedtls(),
 				optPsnId, orgId);
-		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.AFTERNOON, newScheduleScheme.getAfternoonPeriodTimeDtls(),
+		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.AFTERNOON, newScheduleScheme.getAfternoonperiodtimedtls(),
 				optPsnId, orgId);
-		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.NIGHT, newScheduleScheme.getNightPeriodTimeDtls(), optPsnId,
+		this.addPeriodTimeDtl(scheduleSchemeId, PeriodType.NIGHT, newScheduleScheme.getNightperiodtimedtls(), optPsnId,
 				orgId);
 
 
 	}
 
-	private void addPeriodTimeDtl(Integer scheduleSchemeId, String type, List<PeriodTimeDtl> dtls, Integer psnId,
+	private void addPeriodTimeDtl(Integer scheduleSchemeId, String type, List<Periodtimedtl> dtls,
+			Integer psnId,
 			Integer orgId) {
 
-		for (PeriodTimeDtl dtl : dtls) {
-			PeriodTimeDtl newPeriodTimeDtl = new PeriodTimeDtl();
+		for (Periodtimedtl dtl : dtls) {
+			Periodtimedtl newPeriodTimeDtl = new Periodtimedtl();
 			newPeriodTimeDtl.setCoursescheduleschemeid(scheduleSchemeId);
 			newPeriodTimeDtl.setType(type);
 			newPeriodTimeDtl.setPeriodname("");
@@ -196,22 +200,22 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 
 
 	@Override
-	public void updatePeriodTimeDtls(CourseScheduleScheme modifyScheme, Integer optPsnId, Integer orgId) {
-		Integer scheduleSchemeId = modifyScheme.getId();
-		CourseScheduleScheme scheme = loadScheme(scheduleSchemeId, orgId);
+	public void updatePeriodTimeDtls(Courseschedulescheme modifyScheme, Integer optPsnId, Integer orgId) {
+		Integer scheduleSchemeId = modifyScheme.getCoursescheduleschemeid();
+		Courseschedulescheme scheme = loadScheme(scheduleSchemeId, orgId);
 		// 检查课表的period是否匹配
-		if (!scheme.getMorningperiods().equals(modifyScheme.getMorningPeriodTimeDtls().size())
-				|| !scheme.getAfternoonperiods().equals(modifyScheme.getAfternoonPeriodTimeDtls().size())
-				|| !scheme.getNightperiods().equals(modifyScheme.getNightPeriodTimeDtls().size())) {
+		if (!scheme.getMorningperiods().equals(modifyScheme.getMorningperiodtimedtls().size())
+				|| !scheme.getAfternoonperiods().equals(modifyScheme.getAfternoonperiodtimedtls().size())
+				|| !scheme.getNightperiods().equals(modifyScheme.getNightperiodtimedtls().size())) {
 			logger.error("submit scheme.id={}的periods not match orginal defined!", scheduleSchemeId);
-			throw new ServiceException(RetCodeEnum.INVALID_ARGS, "Submit data is invalid.");
+			throw new ServiceException("Submit data is invalid.");
 		}
-		List<PeriodTimeDtl> dtls = new ArrayList<PeriodTimeDtl>();
-		dtls.addAll(modifyScheme.getMorningPeriodTimeDtls());
-		dtls.addAll(modifyScheme.getAfternoonPeriodTimeDtls());
-		dtls.addAll(modifyScheme.getNightPeriodTimeDtls());
-		for (PeriodTimeDtl dtl : dtls) {
-			PeriodTimeDtl record = new PeriodTimeDtl();
+		List<Periodtimedtl> dtls = new ArrayList<Periodtimedtl>();
+		dtls.addAll(modifyScheme.getMorningperiodtimedtls());
+		dtls.addAll(modifyScheme.getAfternoonperiodtimedtls());
+		dtls.addAll(modifyScheme.getNightperiodtimedtls());
+		for (Periodtimedtl dtl : dtls) {
+			Periodtimedtl record = new Periodtimedtl();
 			try {
 				record.setShortstarttime(DateUtil.formatShorttime(dtl.getShortstarttime(), null));
 				record.setShortendtime(DateUtil.formatShorttime(dtl.getShortendtime(), null));
@@ -221,7 +225,7 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 			}
 			record.setUpdatepsnid(optPsnId);
 			record.setUpdatetime(new Date());
-			record.setId(dtl.getId());
+			record.setPeriodtimedtlid(dtl.getPeriodtimedtlid());
 			record.setOrgid(orgId);
 			this.periodTimeDtlMapper.updateByPrimaryKeySelective(record);
 			}
@@ -231,14 +235,14 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 	}
 
 	@Override
-	public CourseScheduleScheme getSchemeDtl(Integer id, Integer orgId) {
+	public Courseschedulescheme getSchemeDtl(Integer id, Integer orgId) {
 
-		CourseScheduleScheme scheme = schemeMapper.selectCourseScheduleScheme(id, orgId);
-		List<PeriodTimeDtl> dtls = this.periodTimeDtlMapper.selectPeriodTimeDtls(id, orgId);
-		Collections.sort(dtls,new Comparator<PeriodTimeDtl>() {
+		Courseschedulescheme scheme = schemeMapper.selectCourseschedulescheme(id, orgId);
+		List<Periodtimedtl> dtls = this.periodTimeDtlMapper.selectPeriodTimeDtls(id, orgId);
+		Collections.sort(dtls,new Comparator<Periodtimedtl>() {
 
 			@Override
-			public int compare(PeriodTimeDtl o1, PeriodTimeDtl o2) {
+			public int compare(Periodtimedtl o1, Periodtimedtl o2) {
 				if (o1.getPeriodnum().intValue() < o2.getPeriodnum().intValue()) {
                 	  return -1;
 				} else if (o1.getPeriodnum().intValue() > o2.getPeriodnum().intValue()) {
@@ -249,17 +253,17 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 			}
 		});
 		if(dtls!=null){
-			for(PeriodTimeDtl dtl :dtls){
+			for(Periodtimedtl dtl :dtls){
 				
 				if(PeriodType.MORNING.equals(dtl.getType())){
 					
-					scheme.getMorningPeriodTimeDtls().add(dtl);
+					scheme.getMorningperiodtimedtls().add(dtl);
 					
 				} else if (PeriodType.AFTERNOON.equals(dtl.getType())) {
 
-					scheme.getAfternoonPeriodTimeDtls().add(dtl);
+					scheme.getAfternoonperiodtimedtls().add(dtl);
 				} else if (PeriodType.NIGHT.equals(dtl.getType())) {
-					scheme.getNightPeriodTimeDtls().add(dtl);
+					scheme.getNightperiodtimedtls().add(dtl);
 				}
 				
 				
@@ -273,9 +277,9 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 	}
 
 	@Override
-	public CourseScheduleScheme getEnableScheme(Integer orgId) {
+	public Courseschedulescheme getEnableScheme(Integer orgId) {
 
-		return this.schemeMapper.selectEnableCourseScheduleScheme(orgId);
+		return this.schemeMapper.selectEnableCourseschedulescheme(orgId);
 
 	}
 

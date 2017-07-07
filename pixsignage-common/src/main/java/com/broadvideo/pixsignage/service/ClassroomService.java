@@ -1,11 +1,11 @@
 package com.broadvideo.pixsignage.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.broadvideo.pixsignage.common.PageInfo;
+import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.domain.Classroom;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
+import com.broadvideo.pixsignage.domain.Courseschedule;
 
 
 /**
@@ -16,7 +16,7 @@ import com.broadvideo.pixsignage.domain.CourseSchedule;
  */
 public interface ClassroomService {
 
-	void getClassrooms(String searchKey, PageInfo<Map<String, Object>> page, Integer orgId);
+	PageResult getClassrooms(String search, PageInfo page, Integer orgId);
 
 	Integer addClassroom(Classroom classroom);
 
@@ -30,7 +30,7 @@ public interface ClassroomService {
 
 	List<Classroom> getClassrooms(Integer orgId);
 
-	List<CourseSchedule> getClassroomSchedules(Integer classroomId);
+	List<Courseschedule> getClassroomSchedules(Integer classroomId);
 
 
 }

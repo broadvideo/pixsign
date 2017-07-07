@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.PageInfo;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
+import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.UUIDUtils;
 import com.broadvideo.pixsignage.domain.Classroom;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
-import com.broadvideo.pixsignage.domain.CourseScheduleScheme;
+import com.broadvideo.pixsignage.domain.Courseschedule;
+import com.broadvideo.pixsignage.domain.Courseschedulescheme;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.persistence.ClassroomMapper;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.broadvideo.pixsignage.util.UUIDUtils;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 
 /**
- * 教室实现类
  * 
  * @author charles
  *
@@ -46,13 +44,14 @@ public class ClassroomServiceImpl implements ClassroomService {
 	private CourseScheduleService scheduleService;
 
 	@Override
-	public void getClassrooms(String searchKey, PageInfo<Map<String, Object>> page, Integer orgId) {
+	public PageResult getClassrooms(String search, PageInfo page, Integer orgid) {
 
-			PageBounds pageBounds = new PageBounds(page.getPageNo(), page.getPageSize());
-		List<Map<String, Object>> dataList = classroomMapper.selectClassrooms(searchKey, orgId, pageBounds);
-			page.setResult(dataList);
-			PageList pageList = (PageList) dataList;
-			page.setTotalCount(pageList.getPaginator().getTotalCount());
+		RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
+		List<Classroom> dataList = classroomMapper.selectClassrooms(search, orgid, rowBounds);
+		PageList pageList = (PageList) dataList;
+		int totalCount=pageList.getPaginator().getTotalCount();
+		return new PageResult(totalCount,dataList,page);
+			
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		Integer orgId = classroom.getOrgid();
 		if (hasNameExists(null, name, orgId)) {
 			logger.error("classroom.name={} is exists.", name);
-			throw new ServiceException(RetCodeEnum.EXIST, String.format("classroom name:%s is exists.", name));
+			throw new ServiceException(String.format("classroom name:%s is exists.", name));
 		}
 		Classroom nclassroom = new Classroom();
 		nclassroom.setName(name);
@@ -75,7 +74,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		nclassroom.setCreatetime(new Date());
 		nclassroom.setCreatepsnid(classroom.getCreatepsnid());
 		this.classroomMapper.insertSelective(nclassroom);
-		return classroom.getId();
+		return classroom.getClassroomid();
 	}
 
 	private boolean hasNameExists(Integer excludeId, String name, Integer orgId) {
@@ -105,13 +104,13 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 		String classroomName = classroom.getName();
 		String description = classroom.getDescription();
-		int id = classroom.getId();
+		int id = classroom.getClassroomid();
 		logger.info("Load classroom(id={}).... ", id);
 		Classroom updateClassroom = new Classroom();
 		if (StringUtils.isNotBlank(classroomName)) {
 			if (hasNameExists(id, classroomName, classroom.getOrgid())) {
 				logger.error("classroom.name={} has exists.", classroomName);
-				throw new ServiceException(RetCodeEnum.EXIST, String.format("classroom.name=%s exists.", classroomName));
+				throw new ServiceException(String.format("classroom.name=%s exists.", classroomName));
 			}
 			updateClassroom.setName(classroomName);
 		}
@@ -120,7 +119,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		} else {
 			updateClassroom.setDescription(description);
 		}
-		updateClassroom.setId(id);
+		updateClassroom.setClassroomid(id);
 		updateClassroom.setUpdatepsnid(classroom.getUpdatepsnid());
 		updateClassroom.setUpdatetime(new Date());
 		this.classroomMapper.updateByPrimaryKeySelective(updateClassroom);
@@ -148,22 +147,23 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 
 	@Override
-	public List<CourseSchedule> getClassroomSchedules(Integer classroomId) {
+	public List<Courseschedule> getClassroomSchedules(Integer classroomId) {
 		Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
-		CourseScheduleScheme scheme = schemeService.getEnableScheme(classroom.getOrgid());
+		Courseschedulescheme scheme = schemeService.getEnableScheme(classroom.getOrgid());
 		if (scheme == null) {
 			logger.error("classroomId:{} without enable scheme!", classroomId);
 			return null;
 		}
-		List<CourseSchedule> scheduleList = scheduleService.getClassroomCourseSchedules(classroomId, scheme.getId(),
+		List<Courseschedule> scheduleList = scheduleService.getClassroomCourseSchedules(classroomId,
+				scheme.getCoursescheduleschemeid(),
 				classroom.getOrgid());
-		Collections.sort(scheduleList, new Comparator<CourseSchedule>() {
+		Collections.sort(scheduleList, new Comparator<Courseschedule>() {
 
 			@Override
-			public int compare(CourseSchedule o1, CourseSchedule o2) {
+			public int compare(Courseschedule o1, Courseschedule o2) {
 
-				String sst1 = o1.getPeriodTimeDtl().getShortstarttime();
-				String sst2 = o2.getPeriodTimeDtl().getShortstarttime();
+				String sst1 = o1.getPeriodtimedtl().getShortstarttime();
+				String sst2 = o2.getPeriodtimedtl().getShortstarttime();
 				if (sst1.length() < 5) {
 					sst1 = "0" + sst1;
 				}

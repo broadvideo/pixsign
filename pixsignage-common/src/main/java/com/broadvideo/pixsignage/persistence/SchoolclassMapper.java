@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.broadvideo.pixsignage.domain.Schoolclass;
 
 public interface SchoolclassMapper {
-    int deleteByPrimaryKey(Integer schoolclassid);
+	int deleteByPrimaryKey(@Param("schoolclassid") Integer schoolclassid, @Param("orgid") Integer orgid);
 
     int insert(Schoolclass record);
 
@@ -21,8 +22,11 @@ public interface SchoolclassMapper {
 	int selectCount(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search);
 
 	List<Map<String, Object>> selectList(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search,
-			@Param(value = "start") Integer start, @Param(value = "length") Integer length);
+			RowBounds rowBounds);
     int updateByPrimaryKeySelective(Schoolclass record);
 
     int updateByPrimaryKey(Schoolclass record);
+
+	int countBindRecords(@Param("classroomid") Integer classroomid,
+			@Param("excludeschoolclassid") Integer excludeschoolclassid);
 }

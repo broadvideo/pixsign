@@ -45,7 +45,7 @@
       and st.schoolclassid = #{schoolclassid}
     </if>
     <if test="search != null">
-      and st.name like #{search}
+      and ( st.name like #{search} or st.studentno like #{search}  or st.hardid like #{search} or sc.name like #{search})
     </if>
     order by st.studentid desc 
     <if test="start != null and length != null">

@@ -23,16 +23,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
-import com.broadvideo.pixsignage.common.DateUtil;
 import com.broadvideo.pixsignage.domain.Classroom;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
+import com.broadvideo.pixsignage.domain.Config;
+import com.broadvideo.pixsignage.domain.Courseschedule;
 import com.broadvideo.pixsignage.domain.Schoolclass;
 import com.broadvideo.pixsignage.domain.Student;
 import com.broadvideo.pixsignage.persistence.ClassroomMapper;
+import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.SchoolclassMapper;
 import com.broadvideo.pixsignage.persistence.StudentMapper;
 import com.broadvideo.pixsignage.service.ClassroomService;
+import com.broadvideo.pixsignage.util.DateUtil;
 
 @Component
 @Path("/classrooms")
@@ -51,6 +53,8 @@ public class ResClassrooms {
 	private SchoolclassMapper schoolclassMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private ConfigMapper configMapper;
 
 
 	@GET
@@ -68,7 +72,7 @@ public class ResClassrooms {
 			if (classrooms != null) {
 				for (Classroom classroom : classrooms) {
 					Map<String, Object> classroomMap = new HashMap<String, Object>();
-					classroomMap.put("id", classroom.getId());
+					classroomMap.put("id", classroom.getClassroomid());
 					classroomMap.put("name", classroom.getName());
 					data.add(classroomMap);
 				}
@@ -92,21 +96,21 @@ public class ResClassrooms {
 			return this.handleResult(ApiRetCodeEnum.INVALID_ARGS, "classroom_id is null.");
 		}
 		try {
-			List<CourseSchedule> schedules = classroomService.getClassroomSchedules(classroomId);
+			List<Courseschedule> schedules = classroomService.getClassroomSchedules(classroomId);
 			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
 
 			if (schedules != null) {
-				for (CourseSchedule schedule : schedules) {
+				for (Courseschedule schedule : schedules) {
 					Map<String, Object> scheduleMap = new HashMap<String, Object>();
-					scheduleMap.put("id", schedule.getId());
+					scheduleMap.put("id", schedule.getCoursescheduleid());
 					scheduleMap.put("course_id", schedule.getCourseid());
 					scheduleMap.put("course_name", schedule.getCoursename());
 					scheduleMap.put("instructor", schedule.getTeachername());
 					scheduleMap.put("workday", schedule.getWorkday());
 					scheduleMap.put("start_time",
-							DateUtil.formatShorttime(schedule.getPeriodTimeDtl().getShortstarttime(), null));
+							DateUtil.formatShorttime(schedule.getPeriodtimedtl().getShortstarttime(), null));
 					scheduleMap.put("end_time",
-							DateUtil.formatShorttime(schedule.getPeriodTimeDtl().getShortendtime(), null));
+							DateUtil.formatShorttime(schedule.getPeriodtimedtl().getShortendtime(), null));
 					dataList.add(scheduleMap);
 				}
 
@@ -153,8 +157,14 @@ public class ResClassrooms {
 				dataMap.put("name", student.getName());
 				dataMap.put("student_no", student.getStudentno());
 				dataMap.put("hard_id", student.getHardid());
-				dataMap.put("avatar",
-						"http://" + req.getServerName() + "/pixsigdata/image/avatar/" + student.getStudentno() + ".jpg");
+				String serverIP = "192.168.0.71";
+				Config config = configMapper.selectByCode("ServerIP");
+				if (config != null) {
+					serverIP = config.getValue();
+				}
+
+				dataMap.put("avatar", "http://" + serverIP + "/pixsigdata/image/avatar/" + student.getStudentno()
+						+ ".jpg");
 				dataList.add(dataMap);
 			}
 

@@ -1,5 +1,5 @@
-var CurStudent = null;
-var CurClassid = null;
+var CurSchoolclass = null;
+var  CurClassid=null;
 
 function refreshMyTable() {
 	$('#MyTable').dataTable()._fnAjaxUpdate();
@@ -110,6 +110,8 @@ $('body').on('click', '.pix-add', function(event) {
 	refreshForm('MyEditForm');
 	$('#MyEditForm').attr('action', 'schoolclass!add.action');
 	$('#MyEditModal').modal();
+	$("#ClassSelect").select2('val','');
+
 });			
 
 
@@ -128,20 +130,22 @@ $('body').on('click', '.pix-update', function(event) {
 	$('#MyEditForm').loadJSON(formdata);
 	$('#MyEditForm').attr('action', 'schoolclass!update.action');
 	$('#MyEditModal').modal();
+	$("#ClassSelect").select2('val',item.classroomid);
+
 });
 
 $.ajax({
 	type : 'GET',
 	url : 'classroom!list.action',
-	data : {'pageSize': 999},
+	data : {"iDisplayStart" :0,"iDisplayLength" :999},
 	dataType: 'json',
 	success : function(data, status) {
-		if (data.retcode ==1) {
+		if (data.errorcode == 0) {
 			var classlist = [];
-			for (var i=0; i<data.data.length; i++) {
+			for (var i=0; i<data.aaData.length; i++) {
 				classlist.push({
-					id: data.data[i].id,
-					text: data.data[i].name
+					id: data.aaData[i].classroomid,
+					text: data.aaData[i].name
 				});
 			}
 			$("#ClassSelect").select2({
@@ -152,7 +156,7 @@ $.ajax({
 				escapeMarkup: function (m) { return m; } 
 			});
 		} else {
-			bootbox.alert(data.retcode + ": " + data.message);
+			bootbox.alert(data.errorcode + ": " + data.errmsg);
 		}
 	},
 	error : function() {

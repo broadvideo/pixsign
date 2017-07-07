@@ -117,8 +117,8 @@
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
-		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
 		<%if (sdomain == null || sdomain.getDescription() == null) { %>
+		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
 		<%=CommonConfig.SYSTEM_COPYRIGHT%> <%=CommonConfig.SYSTEM_ICP%><br/>	
 		<%} else { %>
 		©<%=sdomain.getDescription()%>

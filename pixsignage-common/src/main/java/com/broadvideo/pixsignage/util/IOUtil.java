@@ -83,7 +83,7 @@ public class IOUtil {
 		}
 	}
 
-	public static String findFile(File dir, String prefix) {
+	public static String findFile(File dir, final String prefix) {
 		File[] files = dir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {

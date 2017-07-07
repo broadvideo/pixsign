@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.common.DateUtil;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Classroom;
-import com.broadvideo.pixsignage.domain.CourseSchedule;
-import com.broadvideo.pixsignage.persistence.CourseScheduleMapper;
+import com.broadvideo.pixsignage.domain.Courseschedule;
+import com.broadvideo.pixsignage.persistence.CoursescheduleMapper;
+import com.broadvideo.pixsignage.util.DateUtil;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -25,10 +24,10 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 	@Autowired
 	private ClassroomService classroomService;
 	@Autowired
-	private CourseScheduleMapper courseScheduleMapper;
+	private CoursescheduleMapper courseScheduleMapper;
 
 	@Override
-	public Integer addCourseSchedule(CourseSchedule schedule) {
+	public Integer addCourseSchedule(Courseschedule schedule) {
 
 		// 检查schedule中，classroomId+periodTimeDtlId（第几节） +
 		// workday（工作日）+orgId（单位）是否已经占用，占用了则拒绝新增操作
@@ -36,22 +35,22 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 				schedule.getOrgid())) {
 			logger.error("schedule(classroomId:{},periodTimeDtlId:{},workday:{}) has exist.",
 					new Object[] { schedule.getClassroomid(), schedule.getClassroomid(), schedule.getWorkday() });
-			throw new ServiceException(RetCodeEnum.EXIST, "Record exist!");
+			throw new ServiceException("Record exist!");
 		}
-		CourseSchedule newSchedule = newCourseSchedule(schedule);
+		Courseschedule newSchedule = newCourseSchedule(schedule);
 		courseScheduleMapper.insertSelective(newSchedule);
-		return newSchedule.getId();
+		return newSchedule.getCoursescheduleid();
 	}
 
 	@Override
-	public void updateCourseSchedule(CourseSchedule schedule) {
+	public void updateCourseSchedule(Courseschedule schedule) {
 
-		CourseSchedule schedulePo = getCourseSchedule(schedule.getId(), schedule.getOrgid());
+		Courseschedule schedulePo = getCourseSchedule(schedule.getCoursescheduleid(), schedule.getOrgid());
 		if (schedulePo == null) {
 			throw new ServiceException("Not found record.");
 		}
-		CourseSchedule uSchedule = new CourseSchedule();
-		uSchedule.setId(schedule.getId());
+		Courseschedule uSchedule = new Courseschedule();
+		uSchedule.setCoursescheduleid(schedule.getCoursescheduleid());
 		uSchedule.setCoursename(schedule.getCoursename());
 		uSchedule.setTeachername(schedule.getTeachername());
 		uSchedule.setUpdatepsnid(schedule.getUpdatepsnid());
@@ -60,8 +59,8 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 
 	}
 
-	private CourseSchedule newCourseSchedule(CourseSchedule scheduleDto) {
-		CourseSchedule newSchedule = new CourseSchedule();
+	private Courseschedule newCourseSchedule(Courseschedule scheduleDto) {
+		Courseschedule newSchedule = new Courseschedule();
 		newSchedule.setClassroomid(scheduleDto.getClassroomid());
 		Integer orgId = scheduleDto.getOrgid();
 		Classroom classroom = classroomService.loadClassroom(scheduleDto.getClassroomid(), orgId);
@@ -85,22 +84,22 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 	}
 
 	@Override
-	public CourseSchedule getCourseSchedule(Integer id, Integer orgId) {
+	public Courseschedule getCourseSchedule(Integer id, Integer orgId) {
 
-		return this.courseScheduleMapper.selectCourseSchedule(id, orgId);
+		return this.courseScheduleMapper.selectCourseschedule(id, orgId);
 		}
 
 	@Override
-	public List<CourseSchedule> getClassroomCourseSchedules(Integer classroomId, Integer courseScheduleSchemeId,
+	public List<Courseschedule> getClassroomCourseSchedules(Integer classroomId, Integer courseScheduleSchemeId,
 			Integer orgId) {
 
-		return this.courseScheduleMapper.selectClassroomCourseSchedules(classroomId, courseScheduleSchemeId, orgId);
+		return this.courseScheduleMapper.selectClassroomCourseschedules(classroomId, courseScheduleSchemeId, orgId);
 	}
 
 	@Override
 	public void deleteCourseSchedule(Integer id, Integer optPsnId, Integer orgId) {
 
-		this.courseScheduleMapper.deleteCourseSchedule(optPsnId, orgId);
+		this.courseScheduleMapper.deleteCourseschedule(optPsnId, orgId);
 
 
 	}
@@ -108,23 +107,23 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 	@Override
 	public void deleteCourseSchedules(List<Integer> ids, Integer optPsnId, Integer orgId) {
 
-		this.courseScheduleMapper.batchDeleteCourseSchedules(ids, orgId);
+		this.courseScheduleMapper.batchDeleteCourseschedules(ids, orgId);
 
 	}
 
 	@Override
 	public void deleteCourseSchedulesByClassroomId(List<Integer> classroomIds, Integer optPsnId, Integer orgId) {
 
-		this.courseScheduleMapper.deleteClassroomCourseSchedules(classroomIds, orgId);
+		this.courseScheduleMapper.deleteClassroomCourseschedules(classroomIds, orgId);
 
 	}
 
 	@Override
-	public CourseSchedule getCurCourseSchedule(Integer schemeId, Integer classroomId, Date classTime, Integer orgId) {
+	public Courseschedule getCurCourseSchedule(Integer schemeId, Integer classroomId, Date classTime, Integer orgId) {
 
 
 		String shorttime = DateUtil.getDateStr(classTime, "HH:mm");
-		return this.courseScheduleMapper.selectCurCourseSchedule(schemeId, classroomId, getWorkday(classTime),
+		return this.courseScheduleMapper.selectCurCourseschedule(schemeId, classroomId, getWorkday(classTime),
 				shorttime, orgId);
 	}
 

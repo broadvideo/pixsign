@@ -49,7 +49,7 @@ public class ResTerminals {
 		responseJson.put("retcode", ApiRetCodeEnum.SUCCESS);
 		responseJson.put("message", "success");
 		JSONObject classroomJson = new JSONObject();
-		classroomJson.put("id", classroom.getId());
+			classroomJson.put("id", classroom.getClassroomid());
 		classroomJson.put("name", classroom.getName());
 		classroomJson.put("description", classroom.getDescription());
 			responseJson.put("classroom", classroomJson);

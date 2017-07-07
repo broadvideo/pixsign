@@ -8,6 +8,8 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="bundleflag" property="bundleflag" jdbcType="CHAR" />
+    <result column="pageflag" property="pageflag" jdbcType="CHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="liftflag" property="liftflag" jdbcType="CHAR" />
@@ -50,11 +52,12 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, topbranchid, name, code, status, reviewflag, touchflag, liftflag, calendarflag, sscreenflag, 
-    mscreenflag, flowrateflag, videoflag, imageflag, textflag, streamflag, dvbflag, videoinflag, widgetflag, 
-    expireflag, expiretime, maxdevices, currentdevices, currentdeviceidx, maxstorage, currentstorage, copyright, 
-    description, backupvideoid, powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, 
-    volumeflag, volume, timezone, apps, logo, createtime, createstaffid
+    orgid, vspid, topbranchid, name, code, status, bundleflag, pageflag, reviewflag, touchflag, liftflag, 
+    calendarflag, sscreenflag, mscreenflag, flowrateflag, videoflag, imageflag, textflag, streamflag, 
+    dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, currentdevices, currentdeviceidx, 
+    maxstorage, currentstorage, copyright, description, backupvideoid, powerflag, poweron, poweroff, 
+    qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, apps, logo, 
+    createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -110,10 +113,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into org (vspid, topbranchid, name, 
-      code, status, 
-      reviewflag, touchflag, liftflag, 
-      calendarflag, sscreenflag, mscreenflag, 
-      flowrateflag, videoflag, 
+      code, status, bundleflag, 
+      pageflag, reviewflag, touchflag, 
+      liftflag, calendarflag, sscreenflag, 
+      mscreenflag, flowrateflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, videoinflag, widgetflag, 
       expireflag, expiretime, maxdevices, 
@@ -126,10 +129,10 @@
       timezone, apps, logo, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, #{liftflag,jdbcType=CHAR}, 
-      #{calendarflag,jdbcType=CHAR}, #{sscreenflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, 
-      #{flowrateflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+      #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{bundleflag,jdbcType=CHAR}, 
+      #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
+      #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{sscreenflag,jdbcType=CHAR}, 
+      #{mscreenflag,jdbcType=CHAR}, #{flowrateflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
@@ -162,6 +165,12 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="bundleflag != null" >
+        bundleflag,
+      </if>
+      <if test="pageflag != null" >
+        pageflag,
       </if>
       <if test="reviewflag != null" >
         reviewflag,
@@ -293,6 +302,12 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
+      </if>
+      <if test="bundleflag != null" >
+        #{bundleflag,jdbcType=CHAR},
+      </if>
+      <if test="pageflag != null" >
+        #{pageflag,jdbcType=CHAR},
       </if>
       <if test="reviewflag != null" >
         #{reviewflag,jdbcType=CHAR},
@@ -428,6 +443,12 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="bundleflag != null" >
+        bundleflag = #{bundleflag,jdbcType=CHAR},
+      </if>
+      <if test="pageflag != null" >
+        pageflag = #{pageflag,jdbcType=CHAR},
+      </if>
       <if test="reviewflag != null" >
         reviewflag = #{reviewflag,jdbcType=CHAR},
       </if>
@@ -552,6 +573,8 @@
       name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
+      bundleflag = #{bundleflag,jdbcType=CHAR},
+      pageflag = #{pageflag,jdbcType=CHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       liftflag = #{liftflag,jdbcType=CHAR},

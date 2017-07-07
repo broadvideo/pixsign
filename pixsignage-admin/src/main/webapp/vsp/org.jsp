@@ -45,6 +45,28 @@
 											</div>
 										</div>
 									</div>
+									<div class="form-group bundle-ctrl">
+										<label class="col-md-3 control-label">BUNDLE<span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="org.bundleflag" value="0"> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="org.bundleflag" value="1" checked> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
+									<div class="form-group page-ctrl">
+										<label class="col-md-3 control-label">PAGE<span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="org.pageflag" value="0" checked> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="org.pageflag" value="1"> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-md-3 control-label"><spring:message code="global.org.sscreenflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
@@ -305,6 +327,8 @@
 <script src="${base_ctx}/scripts/pix-org.js?t=${timestamp}"></script>
 <script>
 var PixCtrl = <%=(session_vsp != null && session_vsp.getCode().equals("default"))%>;
+var BundleCtrl = <%=(session_vsp != null && session_vsp.getBundleflag().equals("1"))%>;
+var PageCtrl = <%=(session_vsp != null && session_vsp.getPageflag().equals("1"))%>;
 var ReviewCtrl = <%=(session_vsp != null && session_vsp.getReviewflag().equals("1"))%>;
 var TouchCtrl = <%=(session_vsp != null && session_vsp.getTouchflag().equals("1"))%>;
 var CalendarCtrl = <%=(session_vsp != null && session_vsp.getCalendarflag().equals("1"))%>;

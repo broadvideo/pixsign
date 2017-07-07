@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.domain.Attendancelog;
-import com.broadvideo.pixsignage.persistence.AttendancelogMapper;
+import com.broadvideo.pixsignage.domain.Attendance;
+import com.broadvideo.pixsignage.persistence.AttendanceMapper;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -22,10 +22,10 @@ import com.broadvideo.pixsignage.util.SqlUtil;
 public class AttendanceAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Attendancelog attendance;
+	private Attendance attendance;
 
 	@Autowired
-	private AttendancelogMapper attendancelogMapper;
+	private AttendanceMapper attendancelogMapper;
 
 	public String doList() {
 		try {
@@ -68,7 +68,7 @@ public class AttendanceAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			attendancelogMapper.deleteByPrimaryKey(attendance.getId());
+			attendancelogMapper.deleteByPrimaryKey(attendance.getAttendanceid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("AttendanceAction doDelete exception, ", ex);
@@ -78,11 +78,11 @@ public class AttendanceAction extends BaseDatatableAction {
 		}
 	}
 
-	public Attendancelog getAttendance() {
+	public Attendance getAttendance() {
 		return attendance;
 	}
 
-	public void setAttendance(Attendancelog attendance) {
+	public void setAttendance(Attendance attendance) {
 		this.attendance = attendance;
 	}
 

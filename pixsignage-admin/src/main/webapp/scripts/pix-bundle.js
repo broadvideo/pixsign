@@ -532,7 +532,7 @@ function initDeviceBranchTree() {
 	}	
 }
 
-//编制计划对话框中的设备table初始化
+//推送对话框中的设备table初始化
 $('#DeviceTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -560,7 +560,7 @@ $('#DeviceTable').dataTable({
 jQuery('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 jQuery('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
 
-//编制计划对话框中的设备组table初始化
+//推送对话框中的设备组table初始化
 $('#DeviceGroupTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -597,7 +597,7 @@ $('#nav_dtab2').click(function(event) {
 	$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
 });
 
-//编制计划对话框中的右侧设备选择列表初始化
+//推送对话框中的右侧设备选择列表初始化
 $('#SelectedDeviceTable').dataTable({
 	'sDom' : 't',
 	'iDisplayLength' : -1,
@@ -612,7 +612,7 @@ $('#SelectedDeviceTable').dataTable({
 	}
 });
 
-//编制计划对话框中的右侧设备组选择列表初始化
+//推送对话框中的右侧设备组选择列表初始化
 $('#SelectedDevicegroupTable').dataTable({
 	'sDom' : 't',
 	'iDisplayLength' : -1,
@@ -627,7 +627,7 @@ $('#SelectedDevicegroupTable').dataTable({
 	}
 });
 
-//编制计划对话框中，增加终端到终端列表
+//推送对话框中，增加终端到终端列表
 $('body').on('click', '.pix-adddevice', function(event) {
 	var data = $('#DeviceTable').dataTable().fnGetData($(event.target).attr('data-id'));
 	
@@ -646,7 +646,7 @@ $('body').on('click', '.pix-adddevice', function(event) {
 	}
 });
 
-//编制计划对话框中，增加终端组到终端组列表
+//推送对话框中，增加终端组到终端组列表
 $('body').on('click', '.pix-adddevicegroup', function(event) {
 	var data = $('#DeviceGroupTable').dataTable().fnGetData($(event.target).attr('data-id'));
 	
@@ -664,7 +664,7 @@ $('body').on('click', '.pix-adddevicegroup', function(event) {
 	}
 });
 
-//编制计划对话框中，删除设备列表某行
+//推送对话框中，删除设备列表某行
 $('body').on('click', '.pix-deletedevice', function(event) {
 	var rowIndex = $(event.target).attr('data-id');
 	for (var i=rowIndex; i<$('#SelectedDeviceTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {
@@ -679,7 +679,7 @@ $('body').on('click', '.pix-deletedevice', function(event) {
 	SelectedDeviceList.splice(rowIndex, 1);
 });
 
-//编制计划对话框中，删除设备组列表某行
+//推送对话框中，删除设备组列表某行
 $('body').on('click', '.pix-deletedevicegroup', function(event) {
 	var rowIndex = $(event.target).attr('data-id');
 	for (var i=rowIndex; i<$('#SelectedDevicegroupTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {

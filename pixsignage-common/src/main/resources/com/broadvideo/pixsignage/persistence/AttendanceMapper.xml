@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AttendanceMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Attendance" >
+    <id column="attendanceid" jdbcType="INTEGER" property="attendanceid" />
+    <result column="studentid" jdbcType="INTEGER" property="studentid" />
+    <result column="orgid" jdbcType="INTEGER" property="orgid" />
+    <result column="schoolclassid" jdbcType="INTEGER" property="schoolclassid" />
+    <result column="classroomid" jdbcType="INTEGER" property="classroomid" />
+    <result column="coursescheduleid" jdbcType="INTEGER" property="coursescheduleid" />
+    <result column="eventtime" jdbcType="TIMESTAMP" property="eventtime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attendanceid, studentid, orgid, schoolclassid, classroomid, coursescheduleid, eventtime, 
+    createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendance
+    where attendanceid = #{attendanceid,jdbcType=INTEGER}
+  </select>
+    <select id="selectCount" resultType="Integer">
+   	  select count(1)
+	  from attendance a
+	  left join student st
+	    on a.studentid = st.studentid
+	  left join schoolclass sc on a.schoolclassid=sc.schoolclassid
+	  left join classroom cr
+	    on a.classroomid = cr.classroomid
+	  left join courseschedule cs
+	    on a.coursescheduleid = cs.coursescheduleid
+    where a.orgid = #{orgid}
+    <if test="classroomid != null">
+      and a.classroomid = #{classroomid}
+    </if>
+    <if test="search != null">
+      and (st.name like #{search} or cr.name like #{search} or cs.coursename like #{search} or sc.name like #{search})
+    </if> 
+  </select>
+  <select id="selectList" resultType="map">
+  
+	  select a.attendanceid,a.eventtime,a.createtime,
+	        a.studentid,st.studentno,st.name as studentname,IFNULL(sc.name,'') as schoolclassname,
+	        cr.name as classroomname,IFNULL(cs.coursename,'') as coursename
+	  from attendance a
+	  left join student st
+	    on a.studentid = st.studentid
+	  left join schoolclass sc on a.schoolclassid=sc.schoolclassid
+	  left join classroom cr
+	    on a.classroomid = cr.classroomid
+	  left join courseschedule cs
+	    on a.coursescheduleid = cs.coursescheduleid
+    where a.orgid = #{orgid}
+    <if test="classroomid != null">
+      and a.classroomid = #{classroomid}
+    </if>
+    <if test="search != null">
+      and (st.name like #{search} or cr.name like #{search} or cs.coursename like #{search} or sc.name like #{search})
+    </if>
+    order by a.attendanceid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from attendance
+    where attendanceid = #{attendanceid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Attendance">
+    <selectKey resultType="java.lang.Integer" keyProperty="attendanceid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendance (studentid, orgid, schoolclassid, 
+      classroomid, coursescheduleid, eventtime, 
+      createtime)
+    values (#{studentid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, #{schoolclassid,jdbcType=INTEGER}, 
+      #{classroomid,jdbcType=INTEGER}, #{coursescheduleid,jdbcType=INTEGER}, #{eventtime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendance">
+    <selectKey resultType="java.lang.Integer" keyProperty="attendanceid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="studentid != null" >
+        studentid,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="schoolclassid != null" >
+        schoolclassid,
+      </if>
+      <if test="classroomid != null" >
+        classroomid,
+      </if>
+      <if test="coursescheduleid != null" >
+        coursescheduleid,
+      </if>
+      <if test="eventtime != null" >
+        eventtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="studentid != null">
+        #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null">
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolclassid != null">
+        #{schoolclassid,jdbcType=INTEGER},
+      </if>
+      <if test="classroomid != null">
+        #{classroomid,jdbcType=INTEGER},
+      </if>
+      <if test="coursescheduleid != null">
+        #{coursescheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="eventtime != null">
+        #{eventtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Attendance">
+    update attendance
+    <set>
+      <if test="studentid != null">
+        studentid = #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null">
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="schoolclassid != null">
+        schoolclassid = #{schoolclassid,jdbcType=INTEGER},
+      </if>
+      <if test="classroomid != null">
+        classroomid = #{classroomid,jdbcType=INTEGER},
+      </if>
+      <if test="coursescheduleid != null">
+        coursescheduleid = #{coursescheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="eventtime != null">
+        eventtime = #{eventtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where attendanceid = #{attendanceid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Attendance">
+    update attendance
+    set studentid = #{studentid,jdbcType=INTEGER},
+      orgid = #{orgid,jdbcType=INTEGER},
+      schoolclassid = #{schoolclassid,jdbcType=INTEGER},
+      classroomid = #{classroomid,jdbcType=INTEGER},
+      coursescheduleid = #{coursescheduleid,jdbcType=INTEGER},
+      eventtime = #{eventtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where attendanceid = #{attendanceid,jdbcType=INTEGER}
+  </update>
+</mapper>

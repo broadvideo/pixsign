@@ -12,6 +12,10 @@ public class Vsp {
 
 	private String code;
 
+	private String bundleflag;
+
+	private String pageflag;
+
 	private String reviewflag;
 
 	private String touchflag;
@@ -72,6 +76,22 @@ public class Vsp {
 
 	public void setCode(String code) {
 		this.code = code == null ? null : code.trim();
+	}
+
+	public String getBundleflag() {
+		return bundleflag;
+	}
+
+	public void setBundleflag(String bundleflag) {
+		this.bundleflag = bundleflag;
+	}
+
+	public String getPageflag() {
+		return pageflag;
+	}
+
+	public void setPageflag(String pageflag) {
+		this.pageflag = pageflag;
 	}
 
 	public String getReviewflag() {

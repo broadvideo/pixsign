@@ -19,18 +19,7 @@
     from schoolclass
     where schoolclassid = #{schoolclassid,jdbcType=INTEGER}
   </select>
-  <select id="selectCount" resultType="Integer">
-  select
-	  count(1)
-  from schoolclass sc
-	  left join classroom cr
-	    on sc.classroomid = cr.id
-   where sc.orgid = #{orgid}
-    <if test="search != null">
-      and (sc.name like #{search} or sc.description like #{search} or cr.name like #{search})
-    </if> 
-  
-  </select>
+
   <select id="selectList"  resultType="map" >
   
   select
@@ -41,11 +30,12 @@
 	  IFNULL(cr.name,'')        as classroomname
   from schoolclass sc
 	  left join classroom cr
-	    on sc.classroomid = cr.id
+	    on sc.classroomid = cr.classroomid
    where sc.orgid = #{orgid}
     <if test="search != null">
       and (sc.name like #{search} or sc.description like #{search} or cr.name like #{search})
     </if> 
+    order by sc.schoolclassid desc
   </select>
   
   <select id="selectByClassroomid" resultMap="BaseResultMap" >
@@ -56,9 +46,20 @@
   
   </select>
   
+  <select id="countBindRecords" resultType="java.lang.Integer">
+     select  count(1) 
+     from  schoolclass 
+     where classroomid=#{classroomid}
+     <if test="excludeschoolclassid != null">
+        and schoolclassid!=#{excludeschoolclassid}
+     
+     </if> 
+  
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from schoolclass
-    where schoolclassid = #{schoolclassid,jdbcType=INTEGER}
+    where schoolclassid = #{schoolclassid,jdbcType=INTEGER}  and orgid=#{orgid}
   </delete>
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Schoolclass" >
     <selectKey resultType="java.lang.Integer" keyProperty="schoolclassid" order="AFTER" >

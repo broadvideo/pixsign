@@ -383,6 +383,8 @@ function initMyEditModal() {
 		$('#MyEditForm input[name="org.code"]').removeAttr('readonly');
 		
 		$('.pix-ctrl').css('display', PixCtrl?'':'none');
+		$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
+		$('.page-ctrl').css('display', PageCtrl?'':'none');
 		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
@@ -439,6 +441,8 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', action);
 		$('#MyEditForm input[name="org.code"]').attr('readonly','readonly');
 		$('.pix-ctrl').css('display', PixCtrl?'':'none');
+		$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
+		$('.page-ctrl').css('display', PageCtrl?'':'none');
 		$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 		$('.touch-ctrl').css('display', TouchCtrl?'':'none');
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');

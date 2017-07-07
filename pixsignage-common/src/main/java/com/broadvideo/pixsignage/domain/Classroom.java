@@ -3,7 +3,7 @@ package com.broadvideo.pixsignage.domain;
 import java.util.Date;
 
 public class Classroom {
-    private Integer id;
+    private Integer classroomid;
 
     private Integer seqno;
 
@@ -25,15 +25,16 @@ public class Classroom {
 
     private Integer updatepsnid;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getClassroomid() {
+		return classroomid;
+	}
 
-    public Integer getSeqno() {
+	public void setClassroomid(Integer classroomid) {
+		this.classroomid = classroomid;
+	}
+
+	public Integer getSeqno() {
         return seqno;
     }
 

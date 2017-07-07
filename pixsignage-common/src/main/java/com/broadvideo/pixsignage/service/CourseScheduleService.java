@@ -3,17 +3,17 @@ package com.broadvideo.pixsignage.service;
 import java.util.Date;
 import java.util.List;
 
-import com.broadvideo.pixsignage.domain.CourseSchedule;
+import com.broadvideo.pixsignage.domain.Courseschedule;
 
 public interface CourseScheduleService {
 
-	Integer addCourseSchedule(CourseSchedule schedule);
+	Integer addCourseSchedule(Courseschedule schedule);
 
-	void updateCourseSchedule(CourseSchedule schedule);
+	void updateCourseSchedule(Courseschedule schedule);
 
-	CourseSchedule getCourseSchedule(Integer id, Integer orgId);
+	Courseschedule getCourseSchedule(Integer id, Integer orgId);
 
-	List<CourseSchedule> getClassroomCourseSchedules(Integer classroomId, Integer scheduleSchemeId, Integer orgId);
+	List<Courseschedule> getClassroomCourseSchedules(Integer classroomId, Integer scheduleSchemeId, Integer orgId);
 
 	void deleteCourseSchedule(Integer id, Integer optPsnId, Integer orgId);
 
@@ -29,7 +29,7 @@ public interface CourseScheduleService {
 	 * @param classTime
 	 * @return
 	 */
-	CourseSchedule getCurCourseSchedule(Integer schemeId, Integer classroomId, Date classTime, Integer orgId);
+	Courseschedule getCurCourseSchedule(Integer schemeId, Integer classroomId, Date classTime, Integer orgId);
 
 
 }

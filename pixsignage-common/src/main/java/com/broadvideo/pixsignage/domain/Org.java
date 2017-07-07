@@ -21,6 +21,10 @@ public class Org {
 
 	private String status;
 
+	private String bundleflag;
+
+	private String pageflag;
+
 	private String reviewflag;
 
 	private String touchflag;
@@ -147,6 +151,22 @@ public class Org {
 
 	public void setStatus(String status) {
 		this.status = status == null ? null : status.trim();
+	}
+
+	public String getBundleflag() {
+		return bundleflag;
+	}
+
+	public void setBundleflag(String bundleflag) {
+		this.bundleflag = bundleflag;
+	}
+
+	public String getPageflag() {
+		return pageflag;
+	}
+
+	public void setPageflag(String pageflag) {
+		this.pageflag = pageflag;
 	}
 
 	public String getReviewflag() {
