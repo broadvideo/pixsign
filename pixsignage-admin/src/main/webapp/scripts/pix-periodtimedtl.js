@@ -131,6 +131,7 @@ function  initPeriodtimedtl(){
           			bootbox.alert(result.errorcode + ": " + result.errormsg);
                     break;
                
+               
             }
         }
     });
@@ -140,11 +141,11 @@ function  initPeriodtimedtl(){
 
 //初始化操作栏按钮动作
 function initaction() {
-	
+
+
 	  initPeriodtimedtl();
 	
       $("#action_submit_add").click(function () {
-    	  
     	  $.ajax({
               url: 'courseschedulescheme!addpreiodtimedtl.action',
               type: 'POST',
@@ -165,7 +166,9 @@ function initaction() {
                       case -1:
                 			bootbox.alert(result.errorcode + ": " + result.errormsg);
                           break;
-                   
+                      case -3:
+  						bootbox.alert("数据校验失败，请填写表单!");
+                    	  break;
                   }
               }
           });
@@ -190,6 +193,9 @@ function initaction() {
                       case -1:
                     	  bootbox.alert(result.errorcode + ": " + result.errormsg);
                           break;
+                      case -3:
+  						bootbox.alert("数据校验失败，请填写表单!");
+                    	  break;
                  
                   }
               }

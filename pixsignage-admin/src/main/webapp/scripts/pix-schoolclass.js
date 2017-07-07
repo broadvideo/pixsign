@@ -73,12 +73,8 @@ OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
 //FormValidateOption.rules['student.classid'] = {};
 //FormValidateOption.rules['student.classid']['required'] = true;
-FormValidateOption.rules['student.studentno'] = {};
-FormValidateOption.rules['student.studentno']['required'] = true;
-FormValidateOption.rules['student.name'] = {};
-FormValidateOption.rules['student.name']['required'] = true;
-FormValidateOption.rules['student.hardid'] = {};
-FormValidateOption.rules['student.hardid']['required'] = true;
+FormValidateOption.rules['schoolclass.name'] = {};
+FormValidateOption.rules['schoolclass.name']['required'] = true;
 FormValidateOption.submitHandler = function(form) {
 	$.ajax({
 		type : 'POST',
@@ -89,6 +85,9 @@ FormValidateOption.submitHandler = function(form) {
 				$('#MyEditModal').modal('hide');
 				bootbox.alert(common.tips.success);
 				refreshMyTable();
+			} else if(data.errorcode==-3){
+				bootbox.alert("数据校验失败，请按要求填写表单!");
+
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);
 			}

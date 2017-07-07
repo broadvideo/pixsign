@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
+import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.domain.Classroom;
 import com.broadvideo.pixsignage.service.ClassroomService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -44,7 +45,7 @@ public class ClassroomAction extends BaseDatatableAction {
 
 		}catch(Exception ex){
 			logger.error("ClassroomAction listClassrooms exception, ", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -56,7 +57,7 @@ public class ClassroomAction extends BaseDatatableAction {
 		
 		if (StringUtils.isBlank(classroom.getName())) {
 			logger.error("classroom.name is empty.");
-			renderError(-1, "Invalid args");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
 			return ERROR;
 
 		}
@@ -67,7 +68,7 @@ public class ClassroomAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("ClassroomAction addClassroom exception.", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 		
@@ -80,7 +81,7 @@ public class ClassroomAction extends BaseDatatableAction {
 		if (classroom.getClassroomid() == null || StringUtils.isBlank(classroom.getName())) {
 
 			logger.error("修改教室失败：无效的参数！");
-			renderError(-1, "Invalid args");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
 			return ERROR;
 		}
 		classroom.setCreatepsnid(getStaffid());
@@ -91,7 +92,7 @@ public class ClassroomAction extends BaseDatatableAction {
 		} catch (Exception ex) {
 
 			logger.error("修改教师出现异常！", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -101,7 +102,7 @@ public class ClassroomAction extends BaseDatatableAction {
 
 		if (classroom.getClassroomid() == null) {
 			logger.error("删除教室缺少参数Ids！");
-			renderError(-1, "Invalid args");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
 			return ERROR;
 		}
 	
@@ -112,7 +113,7 @@ public class ClassroomAction extends BaseDatatableAction {
 		} catch (Exception ex) {
 
 			logger.error("删除教室异常!", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 

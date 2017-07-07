@@ -179,7 +179,7 @@ function initTab2(){
    var scheduleSchemeId= $("#schedule_scheme_list").val();
    var classroomId=$("#classroom_list").val();
    if(!validateTab1()){
-		toastr.warning("请选择课表方案和教室！");
+		bootbox.alert("请选择课表方案和教室！");
 		return;
    }
    $.ajax({
@@ -249,12 +249,12 @@ function initTab2(){
 			                	var  subjectName=$("#form_edit_period_info input[name='courseschedule.coursename']").val();
 			                	var  teacherName=$("#form_edit_period_info input[name='courseschedule.teachername']").val();
 			                	if(subjectName=="" || subjectName.trim().length==0){
-			                           toastr.warning("学科不允许为空！");
+			                		bootbox.alert("课程不允许为空！");
 			                           $("#form_edit_period_info input[name='courseschedule.coursename']").focus();
 			                           return false;
 			                	}
 			                	if(teacherName.trim().length==0){
-			                           toastr.warning("上课老师不允许为空！！");
+			                		bootbox.alert("上课老师不允许为空！！");
 			                           $("#form_edit_period_info input[name='courseschedule.teachername']").focus();
 			                           return false;
 			                	}
@@ -274,6 +274,9 @@ function initTab2(){
 			                        	bootbox.alert(result.errorcode + ": " + result.errormsg);
 			                            initClassroomSchedule(classroomId,scheduleSchemeId);
 			                            break;
+			                        case -3:
+			    						bootbox.alert("数据校验失败，请填写表单!");
+			                   	        break;
 			                       
 			                    }
 			                }

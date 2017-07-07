@@ -14,6 +14,7 @@ $("#afternoon_spinner").spinner("disable" );
 $("#night_spinner").spinner("disable");
 }		
 
+
 //初始化操作栏按钮动作
 function initaction() {
   $("#action_add_schedule_scheme").click(function () {
@@ -30,8 +31,9 @@ function initaction() {
               type: 'POST',
               contentType: 'application/x-www-form-urlencoded; charset=utf-8',
               beforeSubmit: function (data) {
+
               	   if ($('#form_add_schedule_scheme [name="courseschedulescheme.name"]').val() == '') {
-                         toastr.warning("请填写方案名称！");
+              		 bootbox.alert("请填写方案名称！");
                          $('#form_add_schedule_scheme [name="courseschedulescheme.name"]').focus();
                          return false;
                      }
@@ -47,7 +49,7 @@ function initaction() {
                   });
                   
                   if(!workdaysChecked){
-                      toastr.warning("请选择课表的工作日！");
+                	  bootbox.alert("请选择课表的工作日！");
                       return false;
                   }
                   workdays=workdayVals.substring(0,workdayVals.length-1);
@@ -70,7 +72,9 @@ function initaction() {
                           $("#modal_add_schedule_scheme").modal("toggle");
                           $('#scheduleSchemeList').DataTable().ajax.reload(null, false);
                           break;
-               
+                      case -3:
+  						bootbox.alert("数据校验失败，请填写表单!");
+                    	  break;
                       case -1:
                 			bootbox.alert(result.errorcode + ": " + result.errormsg);
                           break;
@@ -125,7 +129,7 @@ function initaction() {
                               dataType: 'json',
                               beforeSubmit: function (data) {
                               	if ($('#form_edit_schedule_scheme [name="courseschedulescheme.name"]').val() == '') {
-                                      toastr.warning("请填写方案名称！");
+                              		bootbox.alert("请填写方案名称！");
                                       $('#form_edit_schedule_scheme [name="courseschedulescheme.name"]').focus();
                                       return false;
                                   }
@@ -140,7 +144,7 @@ function initaction() {
                                	
                                });
                                if(!workdaysChecked){
-                                   toastr.warning("请选择课表的工作日！");
+                            	   bootbox.alert("请选择课表的工作日！");
                                    return false;
                                }
                                workdays=workdayVals.substring(0,workdayVals.length-1);
@@ -161,10 +165,14 @@ function initaction() {
                                           $("#modal_edit_schedule_scheme").modal("toggle");
                                           $('#scheduleSchemeList').DataTable().ajax.reload(null, false);
                                           break;
+                                    
                                      
                                       case -1:
                                           bootbox.alert("操作异常！");
                                           break;
+                                      case -3:
+                  						bootbox.alert("数据校验失败，请填写表单!");
+                                    	  break;
                                      
                                   }
                               }
@@ -254,7 +262,7 @@ function initaction() {
                           }
                       },
                       error: function (jqXHR, textStatus) {
-                          toastr.warning(courseList.tips.t08 + textStatus);
+                    	  bootbox.alert('请求异常：' + textStatus);
                       }
                   });
               }
@@ -459,4 +467,7 @@ $('#scheduleSchemeList_wrapper .dataTables_filter input').addClass('form-control
 $('#scheduleSchemeList_wrapper .dataTables_length select').addClass('form-control input-small');
 $('#scheduleSchemeList_wrapper .dataTables_length select').select2();
 $('#scheduleSchemeList').css('width', '100%').css('table-layout', 'fixed');
+
+
+
 

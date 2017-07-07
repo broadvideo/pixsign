@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
+import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Courseschedulescheme;
 import com.broadvideo.pixsignage.domain.Periodtimedtl;
@@ -72,7 +73,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 
 		if (StringUtils.isBlank(courseschedulescheme.getName()) || StringUtils.isBlank(courseschedulescheme.getWorkdays())) {
 			logger.error("添加课表方案失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		courseschedulescheme.setCreatepsnid(getStaffid());
@@ -83,7 +84,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("添加课表方案出现异常:", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 
 		}
@@ -95,7 +96,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		String id = Struts2Utils.getParameter("id");
 		if (StringUtils.isBlank(id) || !NumberUtils.isNumber(id)) {
 			logger.error("获取scheduleconfig参数id无效！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		try {
@@ -105,7 +106,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("获取课表方案明细出现异常！", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 
 		}
@@ -118,7 +119,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 				|| StringUtils.isBlank(courseschedulescheme.getWorkdays())) {
 
 			logger.error("修改课表方案失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 
 		}
@@ -132,7 +133,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		} catch (Exception ex) {
 
 			logger.error("修改课表方案出现异常：", ex.getMessage());
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -142,7 +143,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		String ids = Struts2Utils.getParameter("ids");
 		if (StringUtils.isBlank(ids)) {
 			logger.error("删除课表方案失败：缺少参数Ids！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 
@@ -158,7 +159,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("删除课表方案异常：", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 	}
@@ -168,7 +169,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 				|| StringUtils.isBlank(courseschedulescheme.getEnableflag())) {
 
 			logger.error("修改课表方案状态失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		try {
@@ -179,7 +180,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		} catch (Exception ex) {
 
 			logger.error("修改课表方案状态异常:", ex.getMessage());
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -192,7 +193,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		Courseschedulescheme scheduleScheme = jsonMapper.fromJson(requestBody, Courseschedulescheme.class);
 		if (!isPeriodTimesValidForUpdate(scheduleScheme)) {
 			logger.error("修改课表方案明细失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		try {
@@ -201,7 +202,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("修改上课时间明细异常！", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -215,7 +216,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 		Courseschedulescheme scheduleScheme = jsonMapper.fromJson(requestBody, Courseschedulescheme.class);
 		if (!isPeriodTimesValidForAdd(scheduleScheme)) {
 			logger.error("添加课表方案明细失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		try {
@@ -224,7 +225,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("添加上课时间明细异常！", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 
 		}
@@ -233,7 +234,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 	public String getCourseScheduleSchemeDtl() throws Exception {
 		if (courseschedulescheme.getCoursescheduleschemeid() == null) {
 			logger.error("获取课表方案详情失败：缺少必要参数！");
-			renderError(-1, "Invalid args.");
+			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args.");
 			return ERROR;
 		}
 		try {
@@ -243,7 +244,7 @@ public class CoursescheduleschemeAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("获取课表详情异常：", ex);
-			renderError(-1, ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 

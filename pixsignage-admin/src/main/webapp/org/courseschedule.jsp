@@ -70,7 +70,7 @@
 												   <p>先选择教室，进行课表查看和录入课表信息</p>
 												 </div>
 												 <div class="form-group row margin-top-20">
-												    <label class="col-md-2 control-label">当前课表方案 *</label>
+												    <label class="col-md-2 control-label">当前课表方案 <span class="required">*</span></label>
 												    <div class="col-md-4">  
 												        <select id="schedule_scheme_list" name="scheduleSchemeList" class="form-control">
 																<option>选择课表方案</option>
@@ -79,7 +79,7 @@
 												    </div>  
 												  </div>
 												  <div class="form-group row">
-												    <label class="col-md-2 control-label">选择教室 *</label>
+												    <label class="col-md-2 control-label">选择教室 <span class="required">*</span></label>
 												    <div class="col-md-4">  
 												        <select id="classroom_list" name="classroomList" class="form-control">
 																<option value="">选择教室</option>
@@ -206,8 +206,8 @@
 		   {#if $T.record.periodnum ==1}
 			  <tr height="80px;" data-period="{$T.record.periodnum}" data-id="{$T.record.periodtimedtlid}">
 				   <td rowspan="{$T.morningperiods}" style="width:20px;">上午</td>
-				   <td width="60px;">{$T.record.periodnum}</td>
-				   <td class="editable" data-workday="1" data-schedule-id={$T.record.} ></td>
+				   <td >{$T.record.periodnum}</td>
+				   <td class="editable" data-workday="1" ></td>
 				   <td class="editable" data-workday="2" ></td>
 				   <td class="editable" data-workday="3" ></td>
 				   <td class="editable" data-workday="4" ></td>
@@ -301,7 +301,7 @@
               <div class="row">
               	<div class="col-md-12">
                   <div class="form-group row">
-                    <label class="col-md-3 control-label">课程 *</label>
+                    <label class="col-md-3 control-label">课程 <span class="required">*</span></label>
                     <div class="col-md-9">
                     <input type="hidden" name="courseschedule.classroomid" value="{$T.classroomid}" />
                      <input type="hidden" name="courseschedule.workday"  value="{$T.workday}" />
@@ -312,7 +312,7 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-3 control-label">上课老师* </label>
+                    <label class="col-md-3 control-label">上课老师<span class="required">*</span> </label>
                     <div class="col-md-9">    
                        <input type="text" class="form-control" name="courseschedule.teachername" value="{$T.teachername}"/>                       
                     </div>  

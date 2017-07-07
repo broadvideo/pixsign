@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.action;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
+import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.domain.Schoolclass;
 import com.broadvideo.pixsignage.persistence.SchoolclassMapper;
 import com.broadvideo.pixsignage.service.SchoolclassService;
@@ -39,8 +41,7 @@ public class SchoolclassAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doList exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 	}
@@ -48,14 +49,17 @@ public class SchoolclassAction extends BaseDatatableAction {
 	public String doAdd() {
 
 		try {
+			if (schoolclass == null || StringUtils.isBlank(schoolclass.getName())) {
+				renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
+				return ERROR;
+			}
 			schoolclass.setOrgid(getLoginStaff().getOrgid());
 			schoolclass.setCreatestaffid(getLoginStaff().getStaffid());
 			schoolclassService.addSchoolclass(schoolclass);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doAdd exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 
@@ -63,19 +67,27 @@ public class SchoolclassAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
-
+			if (schoolclass == null || StringUtils.isBlank(schoolclass.getName())
+					|| schoolclass.getSchoolclassid() == null) {
+				renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
+				return ERROR;
+			}
 			schoolclassService.upateSchoolclass(schoolclass);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("SchoolclassAction doUpdate exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
 			return ERROR;
 		}
 	}
 
 	public String doDelete() {
 		try {
+			if (schoolclass == null
+					|| schoolclass.getSchoolclassid() == null) {
+				renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
+				return ERROR;
+			}
 			schoolclassService.deleteSchoolclass(schoolclass.getSchoolclassid(), getLoginStaff().getOrgid());
 			return SUCCESS;
 		} catch (Exception ex) {

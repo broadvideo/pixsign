@@ -68,7 +68,7 @@
 		<h4 class="form-section" >上午课时</h4>
 		{#foreach $T.morningperiodtimedtls as dtl}
 		<div class="form-group morning-periods-group">
-			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}</label>
+			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}<span class="required">*</span></label>
 			<input type="hidden" name="periodnum" value="{$T.dtl.periodnum }"/>
 			<input type="hidden" name="periodtimedtlid" value="{$T.dtl.periodtimedtlid}" />
 			<div class="col-md-3">
@@ -93,7 +93,7 @@
       <h4 class="form-section afternoon-periods-group">下午课时</h4>
 		{#foreach $T.afternoonperiodtimedtls as dtl}
 		<div class="form-group afternoon-periods-group">
-			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}</label>
+			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}<span class="required">*</span></label>
 		    <input type="hidden" name="periodnum" value="{$T.index}"/>
 		    <input type="hidden" name="periodtimedtlid" value="{$T.dtl.periodtimedtlid}" />
 			<div class="col-md-3">
@@ -120,7 +120,7 @@
 
 		{#foreach $T.nightperiodtimedtls as dtl}
 			<div class="form-group night-periods-group last">
-			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}</label>
+			<label class="control-label col-md-3">{#if $T.dtl.periodnum ==1 } 第一节 {#elseif $T.dtl.periodnum ==2}第二节{#elseif $T.dtl.periodnum ==3}第三节{#elseif $T.dtl.periodnum ==4}第四节{#elseif $T.dtl.periodnum ==5}第五节{#elseif $T.dtl.periodnum ==6}第六节{#/if}<span class="required">*</span></label>
 		        <input type="hidden" name="periodnum" value="{$T.index}"/>
 				<input type="hidden" name="periodtimedtlid" value="{$T.dtl.periodtimedtlid}" />
 				<div class="col-md-3">
@@ -166,7 +166,7 @@
 		<h4 class="form-section" >上午课时</h4>
 		{#for index = 1 to  $T.morningperiods}
 		<div class="form-group morning-periods-group">
-			<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}</label>
+			<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}<span class="required">*</span></label>
 			<input type="hidden" name="periodnum" value="{$T.index}"/>
 			<div class="col-md-3">
 				<div class="input-group">
@@ -190,7 +190,7 @@
       <h4 class="form-section afternoon-periods-group">下午课时</h4>
 		{#for index = 1 to  $T.afternoonperiods}
 		<div class="form-group afternoon-periods-group">
-			<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}</label>
+			<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}<span class="required">*</span></label>
 		    <input type="hidden" name="periodnum" value="{$T.index}"/>
 			<div class="col-md-3">
 				<div class="input-group">
@@ -216,7 +216,7 @@
 		  <h4 class="form-section">晚上课时</h4>
 		   {#for index = 1 to  $T.nightperiods}
 				<div class="form-group night-periods-group last">
-					<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}</label>
+					<label class="control-label col-md-3">{#if $T.index ==1 } 第一节 {#elseif $T.index==2}第二节{#elseif $T.index==3}第三节{#elseif $T.index==4}第四节{#elseif $T.index==5}第五节{#elseif $T.index==6}第六节{#/if}<span class="required">*</span></label>
 			        <input type="hidden" name="periodnum" value="{$T.index}"/>
 					
 					<div class="col-md-3">

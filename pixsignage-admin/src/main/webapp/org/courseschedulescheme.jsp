@@ -89,7 +89,7 @@
               <div class="row">
               	<div class="col-md-12">              	 
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">方案名称 *</label>
+                    <label class="col-md-2 control-label">方案名称 <span class="required">*</span></label>
                     <div class="col-md-10">
                       <input type="text" class="form-control" name="courseschedulescheme.name" value="" />
                     </div>
@@ -101,7 +101,7 @@
                     </div>  
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">工作日* </label>
+                    <label class="col-md-2 control-label">工作日<span class="required">*</span> </label>
                     <div class="col-md-10"  > 
                            <div class="col-md-6">
 		                         <div class="checkbox-list">
@@ -124,7 +124,7 @@
                     </div>  
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">上课节数* </label>
+                    <label class="col-md-2 control-label">上课节数<span class="required">*</span> </label>
                     <div class="col-md-10"  >
                             <div class="row margin-bottom-5">
 	                                <label class="col-md-2 control-label">上午 </label>
@@ -203,7 +203,7 @@
               <div class="row">
               	<div class="col-md-12">
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">方案名称 *</label>
+                    <label class="col-md-2 control-label">方案名称 <span class="required">*</span></label>
                     <div class="col-md-10">
                       <input type="hidden" name="courseschedulescheme.coursescheduleschemeid" value="{$T.coursescheduleschemeid}"/>
                       <input type="text" class="form-control" name="courseschedulescheme.name" value="{$T.name}" />
@@ -216,7 +216,7 @@
                     </div>  
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">工作日* </label>
+                    <label class="col-md-2 control-label">工作日<span class="required">*</span> </label>
                     <div class="col-md-10"  > 
                            <div class="col-md-6">
 		                         <div class="checkbox-list">
@@ -239,7 +239,7 @@
                     </div>  
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-2 control-label">上课节数* </label>
+                    <label class="col-md-2 control-label">上课节数<span class="required">*</span> </label>
                     <div class="col-md-10"  >
                             <div class="row margin-bottom-5">
 	                                <label class="col-md-2 control-label">上午 </label>
