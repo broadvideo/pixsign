@@ -76,16 +76,16 @@ String currentPageid = "" + request.getParameter("pageid");
 			
 								<div class="portlet box blue">
 									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+										<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 										<ul class="nav nav-tabs" style="margin-left: 10px;">
 											<li id="public_tab">
-												<a href="#portlet_tab" data-toggle="tab">公共<spring:message code="global.image"/></a>
+												<a href="#portlet_tab" data-toggle="tab">公共<spring:message code="pixsign.image"/></a>
 											</li>
 											<li id="template_tab">
-												<a href="#portlet_tab" data-toggle="tab">模板<spring:message code="global.image"/></a>
+												<a href="#portlet_tab" data-toggle="tab">模板<spring:message code="pixsign.image"/></a>
 											</li>
 											<li id="pagepkg_tab" class="active">
-												<a href="#portlet_tab" data-toggle="tab">页面包<spring:message code="global.image"/></a>
+												<a href="#portlet_tab" data-toggle="tab">页面包<spring:message code="pixsign.image"/></a>
 											</li>
 										</ul>
 									</div>

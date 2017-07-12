@@ -44,6 +44,8 @@ public class Template {
 
 	private List<Templatezone> templatezones;
 
+	private List<Template> subtemplates;
+
 	public Integer getTemplateid() {
 		return templateid;
 	}
@@ -196,5 +198,13 @@ public class Template {
 
 	public void setTemplatezones(List<Templatezone> templatezones) {
 		this.templatezones = templatezones;
+	}
+
+	public List<Template> getSubtemplates() {
+		return subtemplates;
+	}
+
+	public void setSubtemplates(List<Template> subtemplates) {
+		this.subtemplates = subtemplates;
 	}
 }

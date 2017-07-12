@@ -25,16 +25,16 @@
 					
 									<div class="portlet box blue">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 											<ul class="nav nav-tabs" style="margin-left: 10px;">
 												<li id="nav_tab3" class="imageflag">
-													<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+													<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.image"/></a>
 												</li>
 												<li id="nav_tab2" class="hide-orgtype-2">
-													<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+													<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.extvideo"/></a>
 												</li>
 												<li id="nav_tab1" class="videoflag active">
-													<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+													<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.video"/></a>
 												</li>
 											</ul>
 										</div>
@@ -104,7 +104,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.medialist"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.medialist"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -112,7 +112,7 @@
 								<input type="hidden" name="medialist.status" value="1" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="medialist.name" />
@@ -120,7 +120,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="4" name="medialist.description"></textarea>
 										</div>
@@ -153,7 +153,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.medialist"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.medialist"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

@@ -16,13 +16,13 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.debug.collect"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.debug.collect"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="DebugForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.device"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.device"/></label>
 										<div class="col-md-9">
 											<input type="hidden" id="DeviceSelect" class="form-control select2" name="deviceid" />
 										</div>
@@ -58,7 +58,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.debug"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.debug"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -66,7 +66,7 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button class="btn green pix-collect"><spring:message code="global.debug.collect"/> <i class="fa fa-crosshairs"></i></button>
+									<button class="btn green pix-collect"><spring:message code="pixsign.debug.collect"/> <i class="fa fa-crosshairs"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">

@@ -754,6 +754,38 @@ function redrawPagePreview(container, page, maxsize) {
 				'white-space': 'pre-wrap',
 				'text-decoration': zone.decoration,
 			});
+		} else if (zone.type == '7') {
+			var p_element = document.createElement('p');
+			$(p_element).html(zone.content);
+			$(inner_div).append(p_element);			
+			$(inner_div).css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+				'color': zone.color, 
+				'font-family': zone.fontfamily, 
+				'font-size': (parseInt(zone.fontsize) / scale) + 'px', 
+				'text-decoration': zone.decoration, 
+				'text-align': zone.align, 
+				'font-weight': zone.fontweight, 
+				'font-style': zone.fontstyle, 
+				'line-height': (parseInt(zone.lineheight) / scale) + 'px', 
+				'text-shadow': shadow, 
+				'word-wrap': 'break-word',
+			});
+			if (zonedtls.length > 0 && zonedtls[0].image != null) {
+				$(inner_div).css('background-image', 'url(/pixsigdata' + zonedtls[0].image.filepath + ')');
+				$(inner_div).css('background-size', '100% 100%');
+				$(inner_div).css('background-position', 'center');
+				$(inner_div).css('background-repeat', 'no-repeat');
+			}
+			$(p_element).css({
+				'word-wrap': 'break-word',
+				'white-space': 'pre-wrap',
+				'text-decoration': zone.decoration,
+			});
 		} else {
 			var p_element = document.createElement('p');
 			$(p_element).html(eval('common.view.pagezone_type_' + zone.type));

@@ -53,7 +53,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-						<h4 class="modal-title"><spring:message code="global.devicegrid"/></h4>
+						<h4 class="modal-title"><spring:message code="pixsign.devicegrid"/></h4>
 					</div>
 					<div class="modal-body">
 						<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
@@ -62,7 +62,7 @@
 							<input type="hidden" name="devicegrid.snapshotdtl" value="" />
 							<div class="form-body">
 								<div class="form-group">
-									<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+									<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 									<div class="col-md-9">
 										<div class="input-icon right">
 											<i class="fa"></i> <input type="text" class="form-control" name="devicegrid.name" />
@@ -70,7 +70,7 @@
 									</div>
 								</div>
 								<div class="form-group devicegrid-layout">
-									<label class="col-md-3 control-label"><spring:message code="global.layout"/><span class="required">*</span></label>
+									<label class="col-md-3 control-label"><spring:message code="pixsign.layout"/><span class="required">*</span></label>
 									<div class="col-md-9 pre-scrollable">
 										<table id="GridlayoutTable" class="table-striped"></table>
 									</div>
@@ -98,7 +98,7 @@
 							<div class="col-md-12 col-sm-12">
 								<div class="portlet box purple">
 									<div class="portlet-title">
-										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.devicegrid"/></div>
+										<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.devicegrid"/></div>
 									</div>
 									<div class="portlet-body form">
 										<div class="row">
@@ -112,7 +112,7 @@
 													<div class="form-body">
 														<label class="page-title devicegrid-title"></label>
 														<div class="form-group last">
-															<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+															<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 															<div class="col-md-9">
 																<div class="input-icon right">
 																	<i class="fa"></i> <input type="text" class="form-control" name="name" />
@@ -128,7 +128,7 @@
 															<h3 class="col-md-6 page-title font-red-sunglo devicegriddtl-title"></h3>
 														</div>
 														<div class="form-group devicegrid-ctl last">
-															<label class="col-md-3 control-label"><spring:message code="global.device"/></label>
+															<label class="col-md-3 control-label"><spring:message code="pixsign.device"/></label>
 															<div class="col-md-9">
 																<input type="hidden" id="DeviceSelect" class="form-control select2" name="deviceid" />
 															</div>
@@ -170,7 +170,7 @@
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.devicegrid"/></div>
+								<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.devicegrid"/></div>
 								<div class="tools">
 									<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 								</div>

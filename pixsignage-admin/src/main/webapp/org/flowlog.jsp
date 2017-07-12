@@ -15,13 +15,13 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.flowlog.statbyday.export"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.statbyday.export"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="DownloadByDayForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="flowlog!downloadbyday.action">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.statday"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.statday"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-group date form_datetime">                                       
 										<input type="text" size="16" readonly class="form-control" name="day">
@@ -47,13 +47,13 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.flowlog.statbymonth.export"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.statbymonth.export"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="DownloadByMonthForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="flowlog!downloadbymonth.action">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.statmonth"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.statmonth"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<input type="hidden" id="MonthSelect1" name="month" class="form-control select2">
 								</div>
@@ -81,7 +81,7 @@
 							<div class="portlet solid bordered light-grey">
 								<div class="portlet-title">
 									<div class="caption">
-										<i class="fa fa-bar-chart-o"></i><spring:message code="global.flowlog.statbyday"/>
+										<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.statbyday"/>
 									</div>
 								</div>
 								<div class="portlet-body">
@@ -120,7 +120,7 @@
 							<div class="portlet solid bordered light-grey">
 								<div class="portlet-title">
 									<div class="caption">
-										<i class="fa fa-bar-chart-o"></i><spring:message code="global.flowlog.statbymonth"/>
+										<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.statbymonth"/>
 									</div>
 								</div>
 								<div class="portlet-body">
@@ -181,7 +181,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.flowlog"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.flowlog"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -189,10 +189,10 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button class="btn green pix-downloadbyday"><spring:message code="global.flowlog.statbyday.export"/> <i class="fa fa-download"></i></button>
+									<button class="btn green pix-downloadbyday"><spring:message code="pixsign.statbyday.export"/> <i class="fa fa-download"></i></button>
 								</div>
 								<div class="btn-group">
-									<button class="btn green pix-downloadbymonth"><spring:message code="global.flowlog.statbymonth.export"/> <i class="fa fa-download"></i></button>
+									<button class="btn green pix-downloadbymonth"><spring:message code="pixsign.statbymonth.export"/> <i class="fa fa-download"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">

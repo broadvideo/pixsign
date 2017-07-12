@@ -7,10 +7,11 @@ import com.broadvideo.pixsignage.domain.Template;
 public interface TemplateService {
 	public Template selectByPrimaryKey(String templateid);
 
-	public int selectCount(String orgid, String ratio, String publicflag, String search);
+	public int selectCount(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search);
 
-	public List<Template> selectList(String orgid, String ratio, String publicflag, String search, String start,
-			String length);
+	public List<Template> selectList(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search, String start, String length);
 
 	public void addTemplate(Template template);
 

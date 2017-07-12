@@ -9,6 +9,7 @@ public class Pagezone {
 	public final static byte Type_Scroll = 4;
 	public final static byte Type_Date = 5;
 	public final static byte Type_Weather = 6;
+	public final static byte Type_Button = 7;
 	public final static byte Type_Calendar_List = 11;
 	public final static byte Type_Calendar_Table = 12;
 	public final static byte Type_Attendance = 13;

@@ -24,12 +24,12 @@
 								<div class="col-md-6">
 									<div class="portlet box blue">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device"/></div>
+											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device"/></div>
 										</div>
 										<div class="portlet-body">
 											<div class="table-toolbar">
 												<div class="btn-group pull-right">
-													<button class="btn btn-sm blue pix-left2right"><spring:message code="global.right"/> <i class="fa fa-arrow-right"></i></button>
+													<button class="btn btn-sm blue pix-left2right"><spring:message code="pixsign.tips.right"/> <i class="fa fa-arrow-right"></i></button>
 												</div>
 											</div>
 											<div class="row">
@@ -48,12 +48,12 @@
 								<div class="col-md-6">
 									<div class="portlet box green">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device"/></div>
+											<div class="caption"><i class="fa fa-picture"></i><spring:message code="pixsign.device"/></div>
 										</div>
 										<div class="portlet-body">
 											<div class="table-toolbar">
 												<div class="btn-group">
-													<button class="btn btn-sm green pix-right2left"><i class="fa fa-arrow-left"></i> <spring:message code="global.left"/></button>
+													<button class="btn btn-sm green pix-right2left"><i class="fa fa-arrow-left"></i> <spring:message code="pixsign.tips.left"/></button>
 												</div>
 											</div>
 											<div class="row">
@@ -92,7 +92,7 @@
 								<input type="hidden" name="branch.parentid" value="0" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="branch.name" />
@@ -100,7 +100,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="4" name="branch.description"></textarea>
 										</div>
@@ -141,7 +141,7 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button class="btn green pix-device"><spring:message code="global.device"/> <i class="fa fa-desktop"></i></button>
+									<button class="btn green pix-device"><spring:message code="pixsign.device"/> <i class="fa fa-desktop"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover tree">

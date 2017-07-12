@@ -32,13 +32,14 @@ public class TemplateServiceImpl implements TemplateService {
 		return templateMapper.selectByPrimaryKey(templateid);
 	}
 
-	public int selectCount(String orgid, String ratio, String publicflag, String search) {
-		return templateMapper.selectCount(orgid, ratio, publicflag, search);
+	public int selectCount(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search) {
+		return templateMapper.selectCount(orgid, ratio, touchflag, homeflag, publicflag, search);
 	}
 
-	public List<Template> selectList(String orgid, String ratio, String publicflag, String search, String start,
-			String length) {
-		return templateMapper.selectList(orgid, ratio, publicflag, search, start, length);
+	public List<Template> selectList(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search, String start, String length) {
+		return templateMapper.selectList(orgid, ratio, touchflag, homeflag, publicflag, search, start, length);
 	}
 
 	@Transactional
@@ -58,7 +59,7 @@ public class TemplateServiceImpl implements TemplateService {
 		templateMapper.insertSelective(template);
 
 		if (template.getName().equals("UNKNOWN")) {
-			template.setName("TEMPLET-" + template.getTemplateid());
+			template.setName("TEMPLATE-" + template.getTemplateid());
 		}
 		templateMapper.updateByPrimaryKeySelective(template);
 	}
@@ -83,7 +84,7 @@ public class TemplateServiceImpl implements TemplateService {
 			templateMapper.insertSelective(template);
 
 			if (template.getName().equals("UNKNOWN")) {
-				template.setName("TEMPLET-" + template.getTemplateid());
+				template.setName("TEMPLATE-" + template.getTemplateid());
 			}
 			templateMapper.updateByPrimaryKeySelective(template);
 		} else {
@@ -94,7 +95,7 @@ public class TemplateServiceImpl implements TemplateService {
 			template.setWidth(fromtemplate.getWidth());
 			templateMapper.insertSelective(template);
 			if (template.getName().equals("UNKNOWN")) {
-				template.setName("TEMPLET-" + template.getTemplateid());
+				template.setName("TEMPLATE-" + template.getTemplateid());
 			}
 			if (fromtemplate.getSnapshot() != null) {
 				String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/"

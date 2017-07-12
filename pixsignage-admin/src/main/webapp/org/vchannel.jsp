@@ -15,7 +15,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.text"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.text"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -23,7 +23,7 @@
 								<input type="hidden" name="vchannel.status" value="1" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="vchannel.name" />
@@ -32,14 +32,14 @@
 									</div>
 									<div class="form-body">
 										<div class="form-group">
-											<label class="col-md-3 control-label"><spring:message code="global.backupvideo"/></label>
+											<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
 											<div class="col-md-9">
 												<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="vchannel.backupvideoid">
 											</div>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="4" name="vchannel.description"></textarea>
 										</div>
@@ -72,7 +72,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.vchannel"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.vchannel"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

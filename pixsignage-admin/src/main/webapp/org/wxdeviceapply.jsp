@@ -17,14 +17,14 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.widget"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.widget"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="ApplyForm" class="form-horizontal" method="POST">
 								<input type="hidden" name="wxdeviceapply.wxdeviceapplyid" value="0" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.wxdeviceapply.count"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.wxdeviceapply.count"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="wxdeviceapply.count" />
@@ -32,7 +32,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.wxdeviceapply.reason"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.wxdeviceapply.reason"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="wxdeviceapply.reason" />
@@ -61,7 +61,7 @@
 								<div class="col-md-12">
 									<div class="portlet box blue">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device"/></div>
+											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device"/></div>
 										</div>
 										<div class="portlet-body">
 											<div class="table-responsive">
@@ -99,7 +99,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.wxdeviceapply"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.wxdeviceapply"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -107,7 +107,7 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button class="btn green pix-apply"><spring:message code="global.wxdeviceapply.apply"/> <i class="fa fa-asterisk"></i></button>
+									<button class="btn green pix-apply"><spring:message code="pixsign.wxdeviceapply.apply"/> <i class="fa fa-asterisk"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">

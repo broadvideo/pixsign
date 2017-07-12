@@ -338,6 +338,8 @@ public class TemplateAction extends BaseDatatableAction {
 			search = SqlUtil.likeEscapeH(search);
 			String ratio = getParameter("ratio");
 			String templateflag = getParameter("templateflag");
+			String touchflag = getParameter("touchflag");
+			String homeflag = getParameter("homeflag");
 			String publicflag = null;
 
 			String orgid = "" + getLoginStaff().getOrgid();
@@ -346,12 +348,13 @@ public class TemplateAction extends BaseDatatableAction {
 				publicflag = "1";
 			}
 
-			int count = templateService.selectCount(orgid, ratio, publicflag, search);
+			int count = templateService.selectCount(orgid, ratio, touchflag, homeflag, publicflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Template> templateList = templateService.selectList(orgid, ratio, publicflag, search, start, length);
+			List<Template> templateList = templateService.selectList(orgid, ratio, touchflag, homeflag, publicflag,
+					search, start, length);
 			for (int i = 0; i < templateList.size(); i++) {
 				aaData.add(templateList.get(i));
 			}

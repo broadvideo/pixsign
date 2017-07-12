@@ -23,7 +23,7 @@
 								<div class="col-md-12">
 									<div class="portlet box blue">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device"/></div>
+											<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device"/></div>
 										</div>
 										<div class="portlet-body">
 											<div class="table-responsive">
@@ -62,7 +62,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.wxdevice"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.wxdevice"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

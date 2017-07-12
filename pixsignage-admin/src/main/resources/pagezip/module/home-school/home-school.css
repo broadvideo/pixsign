@@ -1,32 +1,69 @@
-/*家校互动页面样式*/
-.home-school-table {
-    border: none;
-    border-collapse:collapse;
-}
-.home-school-table tr {
-    border-top: solid 1px #bfbfbf;
-    border-bottom: solid 1px #bfbfbf;
-    border-left: none;
-    border-right: none;
-}
-
-.home-school-avatar>img {
-    height: 48px;
-    border-radius: 50%;
-}
-
-.home-school-name {
-    font-size: 18px;
-    color: indianred;
-}
-
-.home-school-message {
-    padding-left: 10px;
-    font-size: 18px;
-}
-
-.home-school-ts {
-    padding-left: 10px;
-    font-size: 14px;
-    color: #666666;
+/*家校互动页面样式*/
+.home-school-table {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.home-school-table tr {
+    border-top: solid 1px #bfbfbf;
+    border-bottom: solid 1px #bfbfbf;
+    border-left: none;
+    border-right: none;
+}
+
+.home-school-avatar > img {
+    height: 48px;
+    border-radius: 50%;
+}
+
+.home-school-name {
+    font-size: 18px;
+    color: indianred;
+}
+
+.home-school-message {
+    padding-left: 10px;
+    font-size: 18px;
+}
+
+.home-school-ts {
+    padding-left: 10px;
+    font-size: 14px;
+    color: #666666;
+}
+
+.home-school-popup {
+    width: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #bfbfbf;
+    box-shadow: 0 0 5px #bfbfbf;
+    z-index: 500;
+    padding: 0;
+    background-color: white;
+}
+
+.home-school-popup table{
+    width: 100%;
+}
+
+.home-school-title {
+    margin: 5px 0;
+}
+
+.home-school-close {
+    float: right;
+    right: 5px;
+    top: 5px;
+}
+
+.home-school-audio {
+    font-size: 60px;
+    color: grey;
+}
+.home-school-audio.recording {
+    color: orangered;
 }

@@ -511,11 +511,91 @@ $('#PageTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'touchflag','value':'0' });
 	}
 });
 $('#PageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 $('#PageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#PageTable').css('width', '100%');
+
+//Touchpage table初始化
+$('#TouchpageTable thead').css('display', 'none');
+$('#TouchpageTable tbody').css('display', 'none');	
+var touchpagehtml = '';
+$('#TouchpageTable').dataTable({
+	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
+					],
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'page!list.action',
+	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+					{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
+	'iDisplayLength' : 12,
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnPreDrawCallback': function (oSettings) {
+		if ($('#TouchpageContainer').length < 1) {
+			$('#TouchpageTable').append('<div id="TouchpageContainer"></div>');
+		}
+		$('#TouchpageContainer').html(''); 
+		return true;
+	},
+	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		if (iDisplayIndex % 6 == 0) {
+			touchpagehtml = '';
+			touchpagehtml += '<div class="row" >';
+		}
+		touchpagehtml += '<div class="col-md-2 col-xs-2">';
+		
+		touchpagehtml += '<div id="ThumbContainer" style="position:relative">';
+		touchpagehtml += '<div id="TouchpageThumb" class="thumbs">';
+		if (aData.snapshot != null) {
+			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+			touchpagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		} else {
+			touchpagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
+		}
+		touchpagehtml += '<div class="mask">';
+		touchpagehtml += '<div>';
+		touchpagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		touchpagehtml += '<a class="btn default btn-sm green pix-plandtl-touchpage-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
+		touchpagehtml += '</div>';
+		touchpagehtml += '</div>';
+		touchpagehtml += '</div>';
+
+		touchpagehtml += '</div>';
+
+		touchpagehtml += '</div>';
+		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#TouchpageTable').dataTable().fnGetData().length) {
+			touchpagehtml += '</div>';
+			if ((iDisplayIndex+1) != $('#TouchpageTable').dataTable().fnGetData().length) {
+				touchpagehtml += '<hr/>';
+			}
+			$('#TouchpageContainer').append(touchpagehtml);
+		}
+		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('#TouchpageContainer .thumbs').each(function(i) {
+			console.log($(this).parent().width());
+			$(this).width($(this).parent().width());
+			$(this).height($(this).parent().width());
+		});
+		$('#TouchpageContainer .mask').each(function(i) {
+			$(this).width($(this).parent().parent().width() + 2);
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'touchflag','value':'1' });
+		aoData.push({'name':'homeflag','value':'1' });
+	}
+});
+$('#TouchpageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#TouchpageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#TouchpageTable').css('width', '100%');
 
 //SelectedDtlTable初始化
 $('#SelectedDtlTable').dataTable({
@@ -619,19 +699,29 @@ $('#nav_tab1').click(function(event) {
 	$('#BundleDiv').css('display', '');
 	$('#TouchbundleDiv').css('display', 'none');
 	$('#PageDiv').css('display', 'none');
+	$('#TouchpageDiv').css('display', 'none');
 	$('#BundleTable').dataTable()._fnAjaxUpdate();
 });
 $('#nav_tab2').click(function(event) {
 	$('#BundleDiv').css('display', 'none');
 	$('#TouchbundleDiv').css('display', '');
 	$('#PageDiv').css('display', 'none');
+	$('#TouchpageDiv').css('display', 'none');
 	$('#TouchbundleTable').dataTable()._fnAjaxUpdate();
 });
 $('#nav_tab3').click(function(event) {
 	$('#BundleDiv').css('display', 'none');
 	$('#TouchbundleDiv').css('display', 'none');
 	$('#PageDiv').css('display', '');
+	$('#TouchpageDiv').css('display', 'none');
 	$('#PageTable').dataTable()._fnAjaxUpdate();
+});
+$('#nav_tab4').click(function(event) {
+	$('#BundleDiv').css('display', 'none');
+	$('#TouchbundleDiv').css('display', 'none');
+	$('#PageDiv').css('display', 'none');
+	$('#TouchpageDiv').css('display', '');
+	$('#TouchpageTable').dataTable()._fnAjaxUpdate();
 });
 
 //增加Bundle到SelectedDtlTable
@@ -679,6 +769,25 @@ $('body').on('click', '.pix-plandtl-page-add', function(event) {
 		rowIndex = $(event.target).parent().attr('data-id');
 	}
 	var data = $('#PageTable').dataTable().fnGetData(rowIndex);
+	var plandtl = {};
+	plandtl.plandtlid = 0;
+	plandtl.planid = CurrentPlan.planid;
+	plandtl.objtype = 2;
+	plandtl.objid = data.pageid;
+	plandtl.page = data;
+	plandtl.sequence = CurrentPlandtls.length + 1;
+	plandtl.maxtimes = 0;
+	plandtl.duration = 60;
+	CurrentPlandtls.push(plandtl);
+	refreshSelectedDtlTable();
+});
+//增加Touchpage到SelectedDtlTable
+$('body').on('click', '.pix-plandtl-touchpage-add', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#TouchpageTable').dataTable().fnGetData(rowIndex);
 	var plandtl = {};
 	plandtl.plandtlid = 0;
 	plandtl.planid = CurrentPlan.planid;
@@ -1114,7 +1223,11 @@ function refreshSelectedDtlTable() {
 			}
 			mediatype = common.view.solopage;
 			medianame = plandtl.page.name;
-			mediatype = common.view.solopage;
+			if (plandtl.page.touchflag == 0) {
+				mediatype = common.view.solopage;
+			} else if (plandtl.page.touchflag == 1) {
+				mediatype = common.view.touchpage;
+			}
 		}
 		if (thumbnail != '') {
 			thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + medianame + '"></div>';

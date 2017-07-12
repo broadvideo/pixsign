@@ -1,48 +1,91 @@
-/*考勤页面样式*/
-.attendance {
-    overflow: auto;
-}
-.attendance-item {
-    float: left;
-    margin: 5px;
-    background-color: #C2DACB;
-    box-shadow: 5px 5px 10px #444;
-    width: 105px;
-    height: 133px;
-    position: relative;
-}
-
-.attendance-avatar {
-    float: left;
-    width: 105px;
-    height: 113px;
-    position: relative;
-    overflow: hidden;
-}
-
-.attendance-avatar img {
-    background: #333;
-    width: 105px;
-    height: 113px;
-    top: 0;
-    left: 0;
-    position: absolute;
-}
-
-.opacity {
-    opacity: 0.2;
-}
-
-.attendance-info {
-    _margin-bottom: 3px;
-    padding-left: 0px;
-    width: 105px;
-    line-height: 20px;
-    color: #EA7500;
-}
-
-.attendance-info p {
-    width: 105px;
-    font-size: 14px;
-    text-align: center;
-}
+/*考勤页面样式*/
+.attendance {
+    overflow: auto;
+}
+
+.opacity {
+    opacity: 0.2;
+}
+
+.attendance-item {
+    float: left;
+    margin: 5px;
+    background-color: #C2DACB;
+    box-shadow: 5px 5px 10px #444;
+    width: 105px;
+    height: 133px;
+    position: relative;
+}
+
+.attendance-item .attendance-avatar {
+    float: left;
+    width: 105px;
+    height: 113px;
+    position: relative;
+    overflow: hidden;
+}
+
+.attendance-item .attendance-avatar img {
+    background: #333;
+    width: 105px;
+    height: 113px;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.attendance-item .attendance-info {
+    _margin-bottom: 3px;
+    padding-left: 0px;
+    width: 105px;
+    line-height: 20px;
+    color: #EA7500;
+}
+
+.attendance-item .attendance-info p {
+    width: 105px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.attendance-popup {
+    width: 420px;
+    height: 532px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%) !important;
+    box-shadow: 0 0 5px #bfbfbf;
+    z-index: 500;
+}
+
+.attendance-popup .attendance-avatar {
+    float: left;
+    width: 420px;
+    height: 452px;
+    position: relative;
+    overflow: hidden;
+}
+
+.attendance-popup .attendance-avatar img {
+    background: #333;
+    width: 420px;
+    height: 452px;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.attendance-popup .attendance-info {
+    _margin-bottom: 3px;
+    padding-left: 0px;
+    width: 420px;
+    line-height: 80px;
+    color: #EA7500;
+}
+
+.attendance-popup .attendance-info p {
+    width: 420px;
+    font-size: 56px;
+    text-align: center;
+}

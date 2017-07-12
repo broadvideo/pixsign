@@ -1,21 +1,21 @@
-.calendar-list {
-    font-size: 20px !important;
-}
-
-.calendar-list .fc-list-item.current {
-    background-color: #FF3860;
-    border-color: #FF3860;
-    animation: colorCycle 5s infinite linear alternate;
-}
-@-webkit-keyframes colorCycle {
-    0% {
-        color: yellow;
-    }
-    50% {
-        color: green;
-    }
-    100% {
-        color: blue;
-    }
-}
-
+.calendar-list {
+    font-size: 20px !important;
+}
+
+.calendar-list .fc-list-item.current {
+    background-color: #FF3860;
+    border-color: #FF3860;
+    animation: colorCycle 5s infinite linear alternate;
+}
+@-webkit-keyframes colorCycle {
+    0% {
+        color: yellow;
+    }
+    50% {
+        color: green;
+    }
+    100% {
+        color: blue;
+    }
+}
+

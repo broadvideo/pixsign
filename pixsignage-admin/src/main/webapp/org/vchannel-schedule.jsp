@@ -29,12 +29,12 @@
 										<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
-												<input type="radio" name="vchannelschedule.playmode" value="2" checked> <spring:message code="global.daily"/>
+												<input type="radio" name="vchannelschedule.playmode" value="2" checked> <spring:message code="pixsign.daily"/>
 											</label>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.starttime"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-group date form_time">                                       
 												<input type="text" size="16" readonly class="form-control" name="vchannelschedule.starttime">
@@ -45,7 +45,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.playlist"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.playlist"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<input type="hidden" id="PlaylistSelect" class="form-control select2" name="vchannelschedule.playlistid" />
 										</div>
@@ -79,7 +79,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.vchannelschedule"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.vchannelschedule"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="refreshVchannelschedule();" class="reload"></a>
 							</div>
@@ -93,8 +93,8 @@
 										<div class="tab-pane active">
 											<div class="row">
 												<div class="col-md12 col-sm-12">
-													<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> <spring:message code="global.syncschedule"/></a>&nbsp;
-													<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> <spring:message code="global.addschedule"/></a>
+													<a class="btn purple pull-right pix-syncschedule" href="#"><i class="fa fa-rss"></i> <spring:message code="global.sync"/></a>&nbsp;
+													<a class="btn green pull-right pix-addschedule" href="#"><i class="fa fa-plus"></i> <spring:message code="global.add"/></a>
 												</div>
 											</div>
 											<br/>

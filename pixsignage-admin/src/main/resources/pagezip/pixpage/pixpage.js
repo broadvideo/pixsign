@@ -40,6 +40,10 @@ var PixPage = function () {
 				//Date Zone
 				var datezone = new DateZone($(zone_div), zone);
 				allzones.push(datezone);
+			} else if (zone.type == '7') {
+				//Button Zone
+				var buttonzone = new ButtonZone($(zone_div), zone);
+				allzones.push(buttonzone);
 			} else {
 				var otherzone = new OtherZone($(zone_div), zone);
 				allzones.push(otherzone);

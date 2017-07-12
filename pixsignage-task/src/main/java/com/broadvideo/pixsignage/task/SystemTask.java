@@ -58,6 +58,8 @@ public class SystemTask extends Thread {
 							String vspflag = dataJson.getString("vspflag");
 
 							JSONObject vspJson = dataJson.getJSONObject("vsp");
+							String bundleflag1 = vspJson.getString("bundleflag");
+							String pageflag1 = vspJson.getString("pageflag");
 							String reviewflag1 = vspJson.getString("reviewflag");
 							String touchflag1 = vspJson.getString("touchflag");
 							String calendarflag1 = vspJson.getString("calendarflag");
@@ -69,6 +71,8 @@ public class SystemTask extends Thread {
 							String videoinflag1 = vspJson.getString("videoinflag");
 							int maxdevices1 = vspJson.getInt("maxdevices");
 							long maxstorage1 = vspJson.getLong("maxstorage");
+							vsp.setBundleflag(bundleflag1);
+							vsp.setPageflag(pageflag1);
 							vsp.setReviewflag(reviewflag1);
 							vsp.setTouchflag(touchflag1);
 							vsp.setCalendarflag(calendarflag1);
@@ -82,6 +86,8 @@ public class SystemTask extends Thread {
 							vsp.setMaxstorage(maxstorage1);
 
 							JSONObject orgJson = dataJson.getJSONObject("org");
+							String bundleflag2 = orgJson.getString("bundleflag");
+							String pageflag2 = orgJson.getString("pageflag");
 							String reviewflag2 = orgJson.getString("reviewflag");
 							String touchflag2 = orgJson.getString("touchflag");
 							String calendarflag2 = orgJson.getString("calendarflag");
@@ -94,6 +100,8 @@ public class SystemTask extends Thread {
 							String videoinflag2 = orgJson.getString("videoinflag");
 							int maxdevices2 = orgJson.getInt("maxdevices");
 							long maxstorage2 = orgJson.getLong("maxstorage");
+							org.setBundleflag(bundleflag2);
+							org.setPageflag(pageflag2);
 							org.setReviewflag(reviewflag2);
 							org.setTouchflag(touchflag2);
 							org.setCalendarflag(calendarflag2);

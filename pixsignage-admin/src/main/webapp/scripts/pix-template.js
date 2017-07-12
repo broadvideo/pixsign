@@ -79,6 +79,9 @@ var oTable = $('#MyTable').dataTable({
 			});
 		}
 		return nRow;
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'touchflag','value':'0' });
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -193,7 +196,8 @@ $('body').on('click', '.pix-template', function(event) {
 				CurrentObj.pagezones = CurrentObj.templatezones;
 				for (var i=0; i<CurrentObj.pagezones.length; i++) {
 					CurrentObj.pagezones[i].pagezoneid = CurrentObj.pagezones[i].templatezoneid;
-					CurrentObj.pagezones[i].pageid = CurrentObj.pagezones.templateid;
+					CurrentObj.pagezones[i].pageid = CurrentObj.pagezones[i].templateid;
+					CurrentObj.pagezones[i].touchpageid = CurrentObj.pagezones[i].touchtemplateid;
 					CurrentObj.pagezones[i].pagezonedtls = CurrentObj.pagezones[i].templatezonedtls;
 					for (var j=0; j<CurrentObj.pagezones[i].pagezonedtls.length; j++) {
 						CurrentObj.pagezones[i].pagezonedtls[j].pagezonedtlid = CurrentObj.pagezones[i].pagezonedtls[j].templatezonedtlid;
@@ -237,8 +241,10 @@ $('[type=submit]', $('#PageModal')).on('click', function(event) {
 			for (var i=0; i<CurrentObj.templatezones.length; i++) {
 				CurrentObj.templatezones[i].templatezoneid = CurrentObj.templatezones[i].pagezoneid;
 				CurrentObj.templatezones[i].pagezoneid = undefined;
-				CurrentObj.templatezones[i].templateid = CurrentObj.templatezones.pageid;
+				CurrentObj.templatezones[i].templateid = CurrentObj.templatezones[i].pageid;
 				CurrentObj.templatezones[i].pageid = undefined;
+				CurrentObj.templatezones[i].touchtemplateid = CurrentObj.templatezones[i].touchpageid;
+				CurrentObj.templatezones[i].touchpageid = undefined;
 				CurrentObj.templatezones[i].templatezonedtls = CurrentObj.templatezones[i].pagezonedtls;
 				CurrentObj.templatezones[i].pagezonedtls = undefined;
 				for (var j=0; j<CurrentObj.templatezones[i].templatezonedtls.length; j++) {

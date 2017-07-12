@@ -47,7 +47,7 @@
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bell-o"></i><spring:message code="global.main.title1"/>
+								<i class="fa fa-bell-o"></i><spring:message code="pixsign.main.title1"/>
 							</div>
 							<div class="actions">
 								<a href="device.jsp?CurrentP=30201&ParentP=302" class="btn btn-sm default easy-pie-chart-reload"><i
@@ -67,7 +67,7 @@
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title2"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title2"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -84,7 +84,7 @@
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title3"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title3"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -102,7 +102,7 @@
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title4"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title4"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -122,7 +122,7 @@
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="global.main.title5"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title5"/>
 							</div>
 						</div>
 						<div class="portlet-body">

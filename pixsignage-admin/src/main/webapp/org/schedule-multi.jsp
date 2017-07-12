@@ -24,7 +24,7 @@
 					<form id="ScheduledtlForm" class="form-horizontal" method="POST">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.duration"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.duration"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="duration" />
@@ -53,9 +53,9 @@
 						<div class="col-md-12 col-sm-12">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.multiplan"/></div>
+									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.multiplan"/></div>
 									<div class="actions">
-										<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
+										<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="pixsign.addschedule"/></a>
 									</div>
 								</div>
 								<div class="portlet-body form schedule-edit">
@@ -67,12 +67,12 @@
 														<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 														<div class="col-md-9 radio-list">
 															<label class="radio-inline">
-																<input type="radio" name="playmode" value="2" checked> <spring:message code="global.daily"/>
+																<input type="radio" name="playmode" value="2" checked> <spring:message code="pixsign.daily"/>
 															</label>
 														</div>
 													</div>
 													<div class="form-group schedule-add">
-														<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.starttime"/><span class="required">*</span></label>
 														<div class="col-md-9">
 															<div class="input-group date form_time">
 																<input type="text" size="16" readonly class="form-control" name="starttime">
@@ -89,25 +89,25 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.resource.warehouse"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.warehouse"/></label>
 														<div class="col-md-9">
 															<div class="portlet box blue">
 																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																	<ul class="nav nav-tabs">
 																		<!-- 
 																		<li id="nav_tab4" class="pageflag">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solopage"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solopage"/></a>
 																		</li>
 																			 -->
 																		<li id="nav_tab3" class="imageflag">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.soloimage"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.soloimage"/></a>
 																		</li>
 																		<li id="nav_tab2" class="videoflag">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solovideo"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solovideo"/></a>
 																		</li>
 																		<li id="nav_tab1" class="mediagridflag active">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.mediagrid"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.mediagrid"/></a>
 																		</li>
 																	</ul>
 																</div>
@@ -200,13 +200,13 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.multiplan"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.multiplan"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="refreshSchedule();" class="reload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="DevicegridgroupNav"><a href="#DevicegridgroupTab" data-toggle="tab"><spring:message code="global.devicegridgroup"/></a></li>
-								<li id="DevicegridNav" class="active"><a href="#DevicegridTab" data-toggle="tab"><spring:message code="global.devicegrid"/></a></li>
+								<li id="DevicegridgroupNav"><a href="#DevicegridgroupTab" data-toggle="tab"><spring:message code="pixsign.devicegridgroup"/></a></li>
+								<li id="DevicegridNav" class="active"><a href="#DevicegridTab" data-toggle="tab"><spring:message code="pixsign.devicegrid"/></a></li>
 							</ul>
 						</div>
 						<div class="portlet-body">

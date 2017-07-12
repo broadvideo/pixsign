@@ -28,7 +28,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.image"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
 						</div>
 						<div class="modal-body">
 			
@@ -39,16 +39,16 @@
 										<!-- The fileinput-button span is used to style the file input field as button -->
 										<span class="btn green fileinput-button">
 										<i class="fa fa-plus"></i>
-										<span><spring:message code="global.resource.choose"/></span>
+										<span><spring:message code="pixsign.image"/></span>
 										<input type="file" name="mymedia" multiple>
 										</span>
 										<button type="submit" class="btn blue start">
 										<i class="fa fa-upload"></i>
-										<span><spring:message code="global.resource.uploadall"/></span>
+										<span><spring:message code="global.uploadall"/></span>
 										</button>
 										<button type="reset" class="btn yellow cancel">
 										<i class="fa fa-ban"></i>
-										<span><spring:message code="global.resource.uploadcancel"/></span>
+										<span><spring:message code="global.uploadcancel"/></span>
 										</button>
 										<!-- The global file processing state -->
 										<span class="fileupload-process"></span>
@@ -82,7 +82,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.image"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -90,7 +90,7 @@
 								<input type="hidden" name="image.folderid" value="0" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="image.name" />
@@ -104,7 +104,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.relateimage"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.relateimage"/></label>
 										<div class="col-md-9">
 											<div class="input-group">
 												<span class="input-group-btn">
@@ -149,7 +149,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.image"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.image"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -165,7 +165,7 @@
 									<div class="table-toolbar">
 										<!-- 
 										<div class="btn-group">
-											<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="global.branchselect"/> <i class="fa fa-angle-down"></i></a>
+											<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="pixsign.tips.branchselect"/> <i class="fa fa-angle-down"></i></a>
 											<ul class="dropdown-menu pull-right">
 												<div class="pre-scrollable" id="SelectBranchTree">
 												</div>
@@ -176,11 +176,11 @@
 										<%
 												if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
 											%>
-											<button privilegeid="201010" class="btn green pix-full"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
+											<button privilegeid="201010" class="btn green pix-full"><spring:message code="global.upload"/> <i class="fa fa-plus"></i></button>
 										<%
 												} else {
 											%>
-											<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
+											<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.upload"/> <i class="fa fa-plus"></i></button>
 										<%
 												}
 											%>
@@ -205,8 +205,8 @@
 </body>
 
 <div id="SiteMethJavaScript">
-<spring:message code="global.name" var="global_name"/>
-<spring:message code="global.resource.upload" var="global_resource_upload"/>
+<spring:message code="pixsign.prop.name" var="global_name"/>
+<spring:message code="global.upload" var="global_upload"/>
 <spring:message code="global.cancel" var="global_cancel"/>
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -234,7 +234,7 @@
 			{% if (!i && !o.options.autoUpload) { %}
 			<button class="btn blue start" disabled>
 				<i class="fa fa-upload"></i>
-				<span>${global_resource_upload}</span>
+				<span>${global_upload}</span>
 			</button>
 			{% } %}
 			{% if (!i) { %}
@@ -263,7 +263,7 @@
 				{% } %}
 		</p>
 			{% if (file.error) { %}
-			<div><span class="label label-danger"><spring:message code="global.error"/></span><spring:message code="global.resource.uploadfail"/></div>
+			<div><span class="label label-danger"><spring:message code="global.error"/></span><spring:message code="global.uploadfail"/></div>
 			{% } %}
 	</td>
 	<td>

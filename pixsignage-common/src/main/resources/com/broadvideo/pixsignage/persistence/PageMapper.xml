@@ -20,9 +20,10 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <collection property="subpages" ofType="com.broadvideo.pixsignage.domain.Page" column="{homepageid=pageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectSubList" />
   </resultMap>
   
-  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Page" >
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Page" extends="BaseResultMap" >
     <id column="pageid" property="pageid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
@@ -50,6 +51,13 @@
     createstaffid
   </sql>
   
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from page
+    where pageid = #{pageid}
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -62,6 +70,12 @@
     where status = 1 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="touchflag != null">
+      and touchflag = #{touchflag}
+    </if>
+    <if test="homeflag != null">
+      and homeflag = #{homeflag}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -74,6 +88,12 @@
     where status = 1 
     and orgid = #{orgid}
     and branchid = #{branchid}
+    <if test="touchflag != null">
+      and touchflag = #{touchflag}
+    </if>
+    <if test="homeflag != null">
+      and homeflag = #{homeflag}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -81,6 +101,13 @@
     <if test="start != null and length != null">
       limit ${start}, ${length}
     </if>
+  </select>
+
+  <select id="selectSubList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from page
+    where status=1
+    and homepageid = #{homepageid}
   </select>
 
   <delete id="deleteByPrimaryKey" >
