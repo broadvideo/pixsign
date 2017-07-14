@@ -15,6 +15,8 @@ public class Image {
 
 	private String name;
 
+	private String uuid;
+
 	private Integer width;
 
 	private Integer height;
@@ -83,6 +85,14 @@ public class Image {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Integer getWidth() {

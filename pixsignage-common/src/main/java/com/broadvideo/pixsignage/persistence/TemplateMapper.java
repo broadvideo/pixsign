@@ -9,6 +9,8 @@ import com.broadvideo.pixsignage.domain.Template;
 public interface TemplateMapper {
 	Template selectByPrimaryKey(@Param(value = "templateid") String templateid);
 
+	Template selectByUuid(@Param(value = "uuid") String uuid);
+
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "ratio") String ratio,
 			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
 			@Param(value = "publicflag") String publicflag, @Param(value = "search") String search);

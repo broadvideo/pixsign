@@ -136,6 +136,24 @@
 		</property>
 	</bean>
 
+	<bean id="importTask" class="com.broadvideo.pixsignage.task.ImportTask"></bean>
+	<bean id="importJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="importTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="importJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="importJob" />
+		</property>
+		<property name="cronExpression">
+			<value>40 * * * * ?</value>
+		</property>
+	</bean>
+
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -148,6 +166,7 @@
 				<ref bean="videoJobTrigger" />
 				<ref bean="playlogJobTrigger" />
 				<ref bean="pflowJobTrigger" />
+				<ref bean="importJobTrigger" />
 			</list>
 		</property>
 	</bean>

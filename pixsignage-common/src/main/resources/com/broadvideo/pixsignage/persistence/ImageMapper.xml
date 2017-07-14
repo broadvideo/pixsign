@@ -7,6 +7,7 @@
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="folderid" property="folderid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="filepath" property="filepath" jdbcType="VARCHAR" />
@@ -25,12 +26,12 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    imageid, orgid, branchid, folderid, name, width, height, filepath, filename, size, md5, status, objtype, objid, 
+    imageid, orgid, branchid, folderid, name, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
     description, thumbnail, relateid, createtime, createstaffid
   </sql>
   
   <select id="selectRelateImage" resultMap="BaseResultMap" >
-    select imageid, orgid, branchid, folderid, name, width, height, filepath, filename, size, md5, status, objtype, objid, 
+    select imageid, orgid, branchid, folderid, name, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
     description, thumbnail, 0 as relateid, createtime, createstaffid
     from image
     where imageid = #{imageid}
@@ -42,6 +43,14 @@
     <include refid="Base_Column_List" />
     from image
     where imageid = #{imageid}
+  </select>
+
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from image
+    where status = 1
+    and uuid = #{uuid}
   </select>
 
   <select id="selectCount" resultType="Integer">
@@ -104,14 +113,14 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into image (orgid, branchid, folderid, 
-      name, width, height, 
+      name, uuid, width, height, 
       filepath, filename, size, 
       md5, status, objtype, objid, 
       description, thumbnail, relateid, 
       createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, 
       #{md5,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
       #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
@@ -135,6 +144,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="uuid != null" >
+        uuid,
       </if>
       <if test="width != null" >
         width,
@@ -191,6 +203,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
       </if>
       <if test="width != null" >
         #{width,jdbcType=INTEGER},
@@ -251,6 +266,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="width != null" >
         width = #{width,jdbcType=INTEGER},
       </if>
@@ -302,6 +320,7 @@
       branchid = #{branchid,jdbcType=INTEGER},
       folderid = #{folderid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
       width = #{width,jdbcType=INTEGER},
       height = #{height,jdbcType=INTEGER},
       filepath = #{filepath,jdbcType=VARCHAR},

@@ -1,7 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
 import com.broadvideo.pixsignage.persistence.PagezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
+import com.broadvideo.pixsignage.util.CommonUtil;
 
 import net.sf.json.JSONObject;
 
@@ -368,7 +368,7 @@ public class PageServiceImpl implements PageService {
 		pageMapper.updateByPrimaryKeySelective(page);
 	}
 
-	public void makeZip(String pageid) throws Exception {
+	public void makeHtmlZip(String pageid) throws Exception {
 		if (CONFIG_FONTS.size() == 0) {
 			Properties properties = new Properties();
 			InputStream is = this.getClass().getResourceAsStream("/fonts.properties");
@@ -432,14 +432,14 @@ public class PageServiceImpl implements PageService {
 			Entry<Integer, Image> entry = iter.next();
 			Image image = entry.getValue();
 			File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
-			zip(out, imageFile, "image/" + image.getFilename());
+			CommonUtil.zip(out, imageFile, "image/" + image.getFilename());
 		}
 
 		ClassLoader classLoader = getClass().getClassLoader();
 		for (String font : fontList) {
 			if (classLoader.getResource("/pagezip/fonts/" + font) != null) {
 				File fontFile = new File(classLoader.getResource("/pagezip/fonts/" + font).getFile());
-				zip(out, fontFile, "fonts/" + font);
+				CommonUtil.zip(out, fontFile, "fonts/" + font);
 			} else {
 				logger.error("font file {} not exists", font);
 			}
@@ -449,7 +449,7 @@ public class PageServiceImpl implements PageService {
 			String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 			File dataFile = new File(pageDir, "" + p.getPageid() + ".js");
 			FileUtils.writeStringToFile(dataFile, "var Page=" + JSONObject.fromObject(p).toString(2), "UTF-8", false);
-			zip(out, dataFile, "" + p.getPageid() + ".js");
+			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
 
 			File htmlFile = new File(pageDir, "index.html");
 			String htmlContent = FileUtils
@@ -457,41 +457,16 @@ public class PageServiceImpl implements PageService {
 					.replaceFirst("data.js", "" + p.getPageid() + ".js");
 			FileUtils.writeStringToFile(htmlFile, htmlContent, "UTF-8", false);
 			if (p.getHomeflag().equals("1")) {
-				zip(out, htmlFile, "index.html");
+				CommonUtil.zip(out, htmlFile, "index.html");
 			} else {
-				zip(out, htmlFile, "" + p.getPageid() + ".html");
+				CommonUtil.zip(out, htmlFile, "" + p.getPageid() + ".html");
 			}
 		}
 
-		zip(out, new File(classLoader.getResource("/pagezip/pixpage").getFile()), "pixpage");
-		zip(out, new File(classLoader.getResource("/pagezip/module").getFile()), "module");
-		zip(out, new File(classLoader.getResource("/pagezip/plugin").getFile()), "plugin");
+		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/pixpage").getFile()), "pixpage");
+		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/module").getFile()), "module");
+		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/plugin").getFile()), "plugin");
 		out.close();
-	}
-
-	private void zip(ZipOutputStream out, File f, String base) throws Exception {
-		if (f.isDirectory()) {
-			File[] fl = f.listFiles();
-			if (fl.length == 0) {
-				out.putNextEntry(new ZipEntry(base + "/")); // 创建zip压缩进入点base
-			}
-			for (int i = 0; i < fl.length; i++) {
-				if (base.equals("")) {
-					zip(out, fl[i], fl[i].getName()); // 递归遍历子文件夹
-				} else {
-					zip(out, fl[i], base + "/" + fl[i].getName()); // 递归遍历子文件夹
-				}
-			}
-		} else {
-			out.putNextEntry(new ZipEntry(base)); // 创建zip压缩进入点base
-			FileInputStream in = new FileInputStream(f);
-			byte[] b = new byte[1000];
-			int len = -1;
-			while ((len = in.read(b)) != -1) {
-				out.write(b, 0, len);
-			}
-			in.close();
-		}
 	}
 
 }

@@ -30,6 +30,11 @@ alter table vsp add pageflag char(1) default '0';
 alter table org add bundleflag char(1) default '1';
 alter table org add pageflag char(1) default '0';
 
+alter table image add uuid varchar(64);
+update image set uuid=replace(uuid(), '-', '') where uuid is null;
+alter table video add format varchar(16) default '';
+update video set format=substring_index(filename, '.', -1);
+
 create table template( 
    templateid int not null auto_increment,
    uuid varchar(64) not null,
@@ -88,7 +93,7 @@ create table templatezone(
    touchtemplateid int default 0,
    content longtext,
    primary key (templatezoneid),
-   foreign key (templateid) references template(templateid)
+   constraint templatezone_ibfk_1 foreign key (templateid) references template(templateid) on delete cascade on update cascade
  )engine = innodb
 default character set utf8;
 
@@ -99,7 +104,7 @@ create table templatezonedtl(
    objid int not null,
    sequence int not null,
    primary key (templatezonedtlid),
-   foreign key (templatezoneid) references templatezone(templatezoneid)
+   constraint templatezonedtl_ibfk_1 foreign key (templatezoneid) references templatezone(templatezoneid) on delete cascade on update cascade
  )engine = innodb
 default character set utf8;
 
@@ -162,7 +167,7 @@ create table pagezone(
    touchpageid int default 0,
    content longtext,
    primary key (pagezoneid),
-   foreign key (pageid) references page(pageid)
+   constraint pagezone_ibfk_1 foreign key (pageid) references page(pageid) on delete cascade on update cascade
  )engine = innodb
 default character set utf8;
 
@@ -173,12 +178,9 @@ create table pagezonedtl(
    objid int not null,
    sequence int not null,
    primary key (pagezonedtlid),
-   foreign key (pagezoneid) references pagezone(pagezoneid)
+   constraint pagezonedtl_ibfk_1 foreign key (pagezoneid) references pagezone(pagezoneid) on delete cascade on update cascade
  )engine = innodb
 default character set utf8;
-
-alter table video add format varchar(16) default '';
-update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;
 

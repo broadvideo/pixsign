@@ -22,5 +22,5 @@ public interface PageService {
 
 	public void design(Page page) throws Exception;
 
-	public void makeZip(String pageid) throws Exception;
+	public void makeHtmlZip(String pageid) throws Exception;
 }

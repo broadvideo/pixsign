@@ -95,11 +95,10 @@ public class PageAction extends BaseDatatableAction {
 			} else {
 				pageService.addPage(page);
 			}
-
 			if (page.getHomeflag().equals("1")) {
-				pageService.makeZip("" + page.getPageid());
+				pageService.makeHtmlZip("" + page.getPageid());
 			} else {
-				pageService.makeZip("" + page.getHomepageid());
+				pageService.makeHtmlZip("" + page.getHomepageid());
 			}
 
 			return SUCCESS;
@@ -155,9 +154,9 @@ public class PageAction extends BaseDatatableAction {
 			page.setCreatestaffid(getLoginStaff().getStaffid());
 			pageService.design(page);
 			if (page.getHomeflag().equals("1")) {
-				pageService.makeZip("" + page.getPageid());
+				pageService.makeHtmlZip("" + page.getPageid());
 			} else {
-				pageService.makeZip("" + page.getHomepageid());
+				pageService.makeHtmlZip("" + page.getHomepageid());
 			}
 			return SUCCESS;
 		} catch (Exception ex) {

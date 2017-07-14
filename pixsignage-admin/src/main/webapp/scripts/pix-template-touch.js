@@ -41,7 +41,7 @@ var oTable = $('#MyTable').dataTable({
 		}
 		templatehtml += '<div privilegeid="101010">';
 		templatehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subtemplate-add"><i class="fa fa-plus"></i> ' + common.view.subtemplate + '</a>';
-		//templatehtml += '<a href="template!export.action?templateid=' + aData.templateid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+		//templatehtml += '<a href="template!export.action?templateid=' + aData.templateid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 		templatehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
 		templatehtml += '</div>';
 		templatehtml += '</div>';
@@ -287,6 +287,7 @@ $('body').on('click', '.pix-subtemplate-add', function(event) {
 	formdata['template.homeflag'] = '0';
 	formdata['template.ratio'] = CurrentObj.ratio;
 	$('#SubtemplateForm').loadJSON(formdata);
+	$('#SubtemplateForm').attr('action', 'template!add.action');
 	$('.hide-update').css('display', '');
 	refreshFromTemplateTable();
 	$('#SubtemplateModal').modal();

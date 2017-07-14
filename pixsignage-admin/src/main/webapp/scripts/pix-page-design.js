@@ -135,11 +135,11 @@ function createZone(pagezone) {
 			e.preventDefault();
 			// get text representation of clipboard
 			var text = e.clipboardData.getData('text/plain');
+			console.log(text);
 			// insert text manually
-			//document.execCommand('insertHTML', false, text);
-			document.execCommand('insertText', false, text);
+			document.execCommand('insertHTML', false, text);
+			//document.execCommand('insertText', false, text);
 		});
-
 		var p_element = document.createElement('p');
 		p_element.className = 'clstextedit';
 		$(inner_div).append(p_element);
@@ -158,6 +158,16 @@ function createZone(pagezone) {
 		$(inner_div).append(p_element);
 	} else if (pagezone.type == 7) {
 		//Button Zone
+		inner_div.addEventListener('paste', function(e) {
+			// cancel paste
+			e.preventDefault();
+			// get text representation of clipboard
+			var text = e.clipboardData.getData('text/plain');
+			console.log(text);
+			// insert text manually
+			document.execCommand('insertHTML', false, text);
+			//document.execCommand('insertText', false, text);
+		});
 		var p_element = document.createElement('p');
 		p_element.className = 'clstextedit';
 		$(inner_div).append(p_element);

@@ -61,6 +61,14 @@
     where templateid = #{templateid}
   </select>
   
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from template
+    where status = 1
+    and uuid = #{uuid}
+  </select>
+
   <select id="selectCount" resultType="Integer">
     select count(1) from template 
     where status = 1 
@@ -117,7 +125,7 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update template set status='9'
+    delete from template
     where templateid = #{templateid}
   </delete>
   

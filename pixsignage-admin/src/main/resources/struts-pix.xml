@@ -1072,6 +1072,14 @@
 				<param name="includeProperties">errorcode,errormsg,image.*</param>
 			</result>
 		</action>
+		<action name="template!export" method="doExport" class="templateAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
 
 		<action name="page!list" method="doList" class="pageAction">
 			<result name="success" type="json">
