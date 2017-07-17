@@ -112,7 +112,8 @@ public class ResStudents {
 		try {
 			try{
 		        Student student=this.studentMapper.selectByPrimaryKey(studentId+"");
-				String url = "http://school.wkmip.cn/mobile/interface/note?school_id="+student.getOrgid()+"&student_no="+student.getStudentno()+"&student_idcard=";
+				String url = "http://school.wkmip.cn/mobile/interface/note?school_id=1&student_no="
+						+ student.getStudentno() + "&student_idcard=";
 				logger.info("get messages from wkmip: {}", url);
 				RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
 						.setConnectionRequestTimeout(30000).build();

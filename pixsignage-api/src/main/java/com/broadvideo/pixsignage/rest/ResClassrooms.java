@@ -208,7 +208,7 @@ public class ResClassrooms {
 		try {
 			Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
 			Schoolclass schoolclass = this.schoolclassMapper.selectByClassroomid(classroom.getOrgid(), classroomId);
-			String url = "http://school.wkmip.cn/mobile/interface/statistics?school_id=" + classroom.getOrgid()
+			String url = "http://school.wkmip.cn/mobile/interface/statistics?school_id=1"
 					+ "&class_name=" + java.net.URLEncoder.encode(schoolclass.getName(), "UTF-8");
 			logger.info("get messagesum from wkmip: {}", url);
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
