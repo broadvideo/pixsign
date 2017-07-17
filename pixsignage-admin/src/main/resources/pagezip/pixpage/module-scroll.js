@@ -10,7 +10,7 @@ var ScrollZone = function (zonediv, zone) {
 		$(marquee_element).attr('scrolldelay', '0');
 		$(marquee_element).attr('loop', '-1');
 		$(marquee_element).html(zone.content);
-		$(zonediv).find('#PagezoneCT').append(marquee_element);
+		$(zonediv).append(marquee_element);
 	};
 
 	this.resize = function (scalew, scaleh) {
@@ -19,7 +19,7 @@ var ScrollZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowv) / scaleh) + 'px ';
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
-		$(zonediv).find('#PagezoneCT').css({
+		$(zonediv).css({
 			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 

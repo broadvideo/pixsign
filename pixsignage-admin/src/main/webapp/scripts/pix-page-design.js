@@ -171,6 +171,10 @@ function createZone(pagezone) {
 		var p_element = document.createElement('p');
 		p_element.className = 'clstextedit';
 		$(inner_div).append(p_element);
+	} else if (pagezone.type == 11 || pagezone.type == 12) {
+		//CalendarZone
+		var table = document.createElement('table');
+		$(inner_div).append(table);
 	} else {
 		var p_element = document.createElement('p');
 		$(p_element).append(eval('common.view.pagezone_type_' + pagezone.type));
@@ -203,12 +207,12 @@ function refreshPagezone(pagezone) {
 		'position': 'absolute',
 		'height': '100%', 
 		'width': '100%', 
-		'padding': (parseInt(pagezone.padding) / PageScale) + 'px', 
+		'padding': Math.ceil(pagezone.padding / PageScale) + 'px', 
 	});
 	var shadow = '';
-	shadow += (parseInt(pagezone.shadowh) / PageScale) + 'px ';
-	shadow += (parseInt(pagezone.shadowv) / PageScale) + 'px ';
-	shadow += (parseInt(pagezone.shadowblur) / PageScale) + 'px ';
+	shadow += Math.ceil(pagezone.shadowh / PageScale) + 'px ';
+	shadow += Math.ceil(pagezone.shadowv / PageScale) + 'px ';
+	shadow += Math.ceil(pagezone.shadowblur / PageScale) + 'px ';
 	shadow += pagezone.shadowcolor;
 	if (pagezone.type == 1) {
 		//Video Zone
@@ -220,8 +224,8 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 		});
 		if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].video != null) {
 			$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].video.thumbnail);
@@ -238,8 +242,8 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 		});
 		if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].image != null) {
 			$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].image.filepath);
@@ -252,16 +256,16 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
-			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
 			'text-decoration': pagezone.decoration, 
 			'text-align': pagezone.align, 
 			'font-weight': pagezone.fontweight, 
 			'font-style': pagezone.fontstyle, 
-			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
 			'text-shadow': shadow,  
 			'word-wrap': 'break-word',
 		});
@@ -283,16 +287,16 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
-			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
 			'text-decoration': pagezone.decoration, 
 			'text-align': pagezone.align, 
 			'font-weight': pagezone.fontweight, 
 			'font-style': pagezone.fontstyle, 
-			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
 			'text-shadow': shadow,  
 			'word-wrap': 'break-word',
 		});
@@ -312,16 +316,16 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
-			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
 			'text-decoration': pagezone.decoration, 
 			'text-align': pagezone.align, 
 			'font-weight': pagezone.fontweight, 
 			'font-style': pagezone.fontstyle, 
-			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
 			'text-shadow': shadow,  
 			'word-wrap': 'break-word',
 		});
@@ -335,16 +339,16 @@ function refreshPagezone(pagezone) {
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 			'color': pagezone.color, 
 			'font-family': pagezone.fontfamily, 
-			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
 			'text-decoration': pagezone.decoration, 
 			'text-align': pagezone.align, 
 			'font-weight': pagezone.fontweight, 
 			'font-style': pagezone.fontstyle, 
-			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
 			'text-shadow': shadow,  
 			'word-wrap': 'break-word',
 		});
@@ -366,13 +370,78 @@ function refreshPagezone(pagezone) {
 			text_val = text_val.replace(/&nbsp;/g, ' ');
 		}
 		$(pagezoneDiv).find('p').html(text_val);
+	} else if (pagezone.type == 11 || pagezone.type == 12) {
+		var table = $(pagezoneDiv).find('table');
+		$(table).attr('width', '100%');
+		$(table).attr('height', '100%');
+		$(table).attr('rules', pagezone.rules);
+		$(table).empty();
+		if (pagezone.type == 11) {
+			$(pagezoneDiv).find('tr td:first').attr('width', '30%');
+			for (var row=0; row<pagezone.rows; row++) {
+				var tr_element = document.createElement('tr');
+				$(table).append(tr_element);
+				for (var col=0; col<pagezone.cols; col++) {
+					var td_element = document.createElement('td');
+					$(tr_element).append(td_element);
+					if (col == 0 && row < 2) {
+						$(td_element).html('0' + (row+8) + ':00');
+					} else if (col == 0 && row >=2) {
+						$(td_element).html('' + (row+8) + ':00');
+					} else {
+						$(td_element).html('' + row + col);
+					}
+				}
+			}
+		} else {
+			for (var row=0; row<pagezone.rows; row++) {
+				var tr_element = document.createElement('tr');
+				$(table).append(tr_element);
+				for (var col=0; col<pagezone.cols; col++) {
+					var td_element = document.createElement('td');
+					$(tr_element).append(td_element);
+					if (col == 0) {
+						if (row == 1 || row == 2) {
+							$(td_element).html('0' + (row+7) + ':00');
+						} else if (row > 2) {
+							$(td_element).html('' + (row+7) + ':00');
+						}
+					} else {
+						if (row == 0) {
+							$(td_element).html('周' + col);
+						} else {
+							$(td_element).html('' + row + col);
+						}
+					}
+				}
+			}
+		}
+		$(pagezoneDiv).find('td').css({
+			'border-width': Math.ceil(pagezone.rulewidth / PageScale) + 'px', 
+			'border-color': pagezone.rulecolor,
+			'text-decoration': pagezone.decoration, 
+		});
+		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
+			'color': pagezone.color, 
+			'font-family': pagezone.fontfamily, 
+			'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
+			'text-align': pagezone.align, 
+			'font-weight': pagezone.fontweight, 
+			'font-style': pagezone.fontstyle, 
+			'word-wrap': 'break-word',
+		});
 	} else {
 		$(pagezoneDiv).find('#rotatable').css({
 			'box-sizing': 'border-box',
 			'border-color': pagezone.bdcolor, 
 			'border-style': pagezone.bdstyle, 
-			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
-			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 			'color': '#FFFFFF', 
 			'font-size': (50 / PageScale) + 'px', 
 			'word-wrap': 'break-word',
@@ -635,6 +704,32 @@ function enterPagezoneFocus(pagezone) {
 	$('.bdcolorPick i').css('background', pagezone.bdcolor);
 	$('.bdcolorPick input').val(pagezone.bdcolor);
 
+	$('.rulecolorPick').wColorPicker({
+		theme			: 'classic',  // set theme
+		opacity			: 0.8,		// opacity level
+		color			: pagezone.rulecolor,  // set init color
+		mode			: 'click',	 // mode for palette (flat, hover, click)
+		position		: 'br',	   // position of palette, (tl, tc, tr, rt, rm, rb, br, bc, bl, lb, lm, lt)
+		generateButton	: false,	   // if mode not flat generate button or not
+		dropperButton   : false,	  // optional dropper button to use in other apps
+		effect			: 'slide',	// only used when not in flat mode (none, slide, fade)
+		showSpeed		: 200,		// show speed for effects
+		hideSpeed		: 200,		// hide speed for effects
+		onMouseover		: null,	   // callback for color mouseover
+		onMouseout		: null,	   // callback for color mouseout
+		onSelect		: function(color) {
+			if (color.indexOf('#') == 0) {
+				$('.rulecolorPick i').css('background', color);
+				$('.rulecolorPick input').val(color);
+				CurrentZone.rulecolor = color;
+				refreshPagezone(CurrentZone);
+			}
+		},
+		onDropper		: null		// callback when dropper is clicked
+	});
+	$('.rulecolorPick i').css('background', pagezone.rulecolor);
+	$('.rulecolorPick input').val(pagezone.rulecolor);
+
 	$('.opacityRange').ionRangeSlider({
 		min: 0,
 		max: 255,
@@ -686,10 +781,16 @@ function enterPagezoneFocus(pagezone) {
 	$('#spinner-bdradius').spinner();
 	$('#spinner-bdradius').spinner('setting', {value:parseInt(pagezone.bdradius), step: 1, min: 0, max: 255});
 
+	$('#spinner-rows').spinner();
+	$('#spinner-rows').spinner('setting', {value:parseInt(pagezone.rows), step: 1, min: 1, max: 15});
+	$('#spinner-cols').spinner();
+	$('#spinner-cols').spinner('setting', {value:parseInt(pagezone.cols), step: 1, min: 1, max: 8});
+	$('#spinner-rulewidth').spinner();
+	$('#spinner-rulewidth').spinner('setting', {value:parseInt(pagezone.rulewidth), step: 1, min: 1, max: 99});
+
 	refreshLocSpinners(pagezone);
 	refreshFontStyle();
 	refreshFontFamilySelect();
-	refreshBdstyleSelect();
 	if (CurrentObj.touchflag == 1) {
 		refreshSubPageSelect();
 	}
@@ -724,6 +825,9 @@ $('.spinner').on('change', function(e) {
 	CurrentZone.shadowblur = $('#spinner-shadowblur').spinner('value');
 	CurrentZone.bdwidth = $('#spinner-bdwidth').spinner('value');
 	CurrentZone.bdradius = $('#spinner-bdradius').spinner('value');
+	CurrentZone.rows = $('#spinner-rows').spinner('value');
+	CurrentZone.cols = $('#spinner-cols').spinner('value');
+	CurrentZone.rulewidth = $('#spinner-rulewidth').spinner('value');
 	refreshPagezone(CurrentZone);
 });	
 
@@ -926,26 +1030,6 @@ $('#FontFamilySelect').on('change', function(e) {
 	refreshPagezone(CurrentZone);
 });	
 
-function refreshBdstyleSelect() {
-	var bdstylelist = [
-		{id: 'solid', text: 'solid'},
-		{id: 'dashed', text: 'dashed'},
-		{id: 'dotted', text: 'dotted'},
-	];
-	$('#BdstyleSelect').select2({
-		placeholder: common.tips.detail_select,
-		minimumInputLength: 0,
-		data: bdstylelist,
-		dropdownCssClass: "bigdrop", 
-		escapeMarkup: function (m) { return m; } 
-	});
-}
-$('#BdstyleSelect').on('change', function(e) {
-	if ($('#BdstyleSelect').select2('data') != null) {
-		CurrentZone.bdstyle = $('#BdstyleSelect').select2('data').id;
-	}
-	refreshPagezone(CurrentZone);
-});	
 $('#SubPageSelect').on('change', function(e) {
 	if ($('#SubPageSelect').select2('data') != null) {
 		CurrentZone.touchpageid = $('#SubPageSelect').select2('data').id;
@@ -956,6 +1040,8 @@ $('.zoneform input,select').on('change', function(e) {
 	CurrentZone.dateformat = $('.zoneform select[name=dateformat]').val();
 	CurrentZone.zindex = $('.zoneform select[name=zindex]').val();
 	CurrentZone.touchtype = $('.zoneform select[name=touchtype]').val();
+	CurrentZone.bdstyle = $('.zoneform select[name=bdstyle]').val();
+	CurrentZone.rules = $('.zoneform select[name=rules]').val();
 	console.log(CurrentZone);
 	refreshPagezone(CurrentZone);
 });
@@ -1031,6 +1117,19 @@ $('body').on('click', '.pix-addzone', function(event) {
 	if (pagezone.type == 5) {
 		pagezone.dateformat = 'yyyy-MM-dd HH:mm:ss';
 	}
+	if (pagezone.type == 11) {
+		pagezone.rows = 5;
+		pagezone.cols = 2;
+	} else if (pagezone.type == 12) {
+		pagezone.rows = 9;
+		pagezone.cols = 6;
+	} else {
+		pagezone.rows = 1;
+		pagezone.cols = 1;
+	}
+	pagezone.rules = 'all';
+	pagezone.rulecolor = '#000000';
+	pagezone.rulewidth = 1;
 	
 	CurrentObj.pagezones.push(pagezone);
 	

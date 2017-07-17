@@ -1,0 +1,16 @@
+.day-course-tr.is-current {
+    animation: colorCycle 5s infinite linear alternate;
+}
+
+@-webkit-keyframes colorCycle {
+    0% {
+        color: yellow;
+    }
+    50% {
+        color: green;
+    }
+    100% {
+        color: blue;
+    }
+}
+

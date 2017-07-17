@@ -3,15 +3,19 @@
 <html style="font-size: 22px;">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="../../plugin/fullcalendar/fullcalendar.min.css" rel="stylesheet"/>
-    <link href="calendar-list.css" rel="stylesheet"/>
+    <link href="daily-course.css" rel="stylesheet"/>
 </head>
 <body>
-<div class="calendar-list"></div>
+<div class="daily-course"></div>
 <script src="../../plugin/jquery/jquery.min.js"></script>
 <script src="../../plugin/moment/moment.min.js"></script>
-<script src="../../plugin/fullcalendar/fullcalendar.min.js"></script>
-<script src="../../plugin/fullcalendar/zh-cn.js"></script>
-<script src="calendar-list.js"></script>
+<script src="../../plugin/dot/doT.min.js"></script>
+<script src="index.js"></script>
+<script>
+    $(document).ready(function(){
+        var elvis = new DailyCourse($(document.body), {fontsize: 36, rows: 9})
+        elvis.resize(1,1)
+    })
+</script>
 </body>
 </html>

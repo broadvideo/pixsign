@@ -9,7 +9,7 @@ var ImageZone = function (zonediv, zone) {
 			$(img_element).attr('src', 'image/' + pagezonedtls[0].image.filename);
 			$(img_element).attr('width', '100%');
 			$(img_element).attr('height', '100%');
-			$(zonediv).find('#PagezoneCT').append(img_element);
+			$(zonediv).append(img_element);
 		} else if (pagezonedtls.length > 1) {
 			var ul_element = document.createElement('ul');
 			$(ul_element).addClass('bxslider');
@@ -18,7 +18,7 @@ var ImageZone = function (zonediv, zone) {
 					$(ul_element).append('<li><img src="image/' + pagezonedtls[i].image.filename + '" width="100%" height="100%"/></li>');
 				}
 			}
-			$(zonediv).find('#PagezoneCT').append(ul_element);
+			$(zonediv).append(ul_element);
 			$(ul_element).bxSlider({
 				auto: true,
 				controls: false,
@@ -34,7 +34,7 @@ var ImageZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowv) / scaleh) + 'px ';
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
-		$(zonediv).find('#PagezoneCT').css({
+		$(zonediv).css({
 			'box-shadow': shadow, 
 			'opacity': parseInt(zone.opacity)/255,
 		});

@@ -32,6 +32,11 @@
     <result column="decoration" property="decoration" jdbcType="VARCHAR" />
     <result column="align" property="align" jdbcType="VARCHAR" />
     <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
+    <result column="rows" property="rows" jdbcType="INTEGER" />
+    <result column="cols" property="cols" jdbcType="INTEGER" />
+    <result column="rules" property="rules" jdbcType="VARCHAR" />
+    <result column="rulecolor" property="rulecolor" jdbcType="VARCHAR" />
+    <result column="rulewidth" property="rulewidth" jdbcType="INTEGER" />
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchpageid" property="touchpageid" jdbcType="INTEGER" />
@@ -46,7 +51,7 @@
     pagezoneid, pageid, homepageid, type, height, width, topoffset, leftoffset, zindex, transform, 
     bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
     shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, 
-    decoration, align, lineheight, dateformat, touchtype, touchpageid
+    decoration, align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, touchtype, touchpageid
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -94,7 +99,9 @@
       shadowblur, shadowcolor, color, 
       fontfamily, fontsize, fontweight, 
       fontstyle, decoration, align, 
-      lineheight, dateformat, touchtype, 
+      lineheight, rows, cols, 
+      rules, rulecolor, rulewidth, 
+      dateformat, touchtype, 
       touchpageid, content)
     values (#{pageid,jdbcType=INTEGER}, #{homepageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
@@ -105,7 +112,9 @@
       #{shadowblur,jdbcType=INTEGER}, #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
       #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, 
       #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
-      #{lineheight,jdbcType=INTEGER}, #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
+      #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
+      #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
+      #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
       #{touchpageid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
@@ -200,6 +209,21 @@
       </if>
       <if test="lineheight != null" >
         lineheight,
+      </if>
+      <if test="rows != null" >
+        rows,
+      </if>
+      <if test="cols != null" >
+        cols,
+      </if>
+      <if test="rules != null" >
+        rules,
+      </if>
+      <if test="rulecolor != null" >
+        rulecolor,
+      </if>
+      <if test="rulewidth != null" >
+        rulewidth,
       </if>
       <if test="dateformat != null" >
         dateformat,
@@ -301,6 +325,21 @@
       </if>
       <if test="lineheight != null" >
         #{lineheight,jdbcType=INTEGER},
+      </if>
+      <if test="rows != null" >
+        #{rows,jdbcType=INTEGER},
+      </if>
+      <if test="cols != null" >
+        #{cols,jdbcType=INTEGER},
+      </if>
+      <if test="rules != null" >
+        #{rules,jdbcType=VARCHAR},
+      </if>
+      <if test="rulecolor != null" >
+        #{rulecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="rulewidth != null" >
+        #{rulewidth,jdbcType=INTEGER},
       </if>
       <if test="dateformat != null" >
         #{dateformat,jdbcType=VARCHAR},
@@ -406,6 +445,21 @@
       <if test="lineheight != null" >
         lineheight = #{lineheight,jdbcType=INTEGER},
       </if>
+      <if test="rows != null" >
+        rows = #{rows,jdbcType=INTEGER},
+      </if>
+      <if test="cols != null" >
+        cols = #{cols,jdbcType=INTEGER},
+      </if>
+      <if test="rules != null" >
+        rules = #{rules,jdbcType=VARCHAR},
+      </if>
+      <if test="rulecolor != null" >
+        rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="rulewidth != null" >
+        rulewidth = #{rulewidth,jdbcType=INTEGER},
+      </if>
       <if test="dateformat != null" >
         dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
@@ -452,6 +506,11 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
+      rows = #{rows,jdbcType=INTEGER},
+      cols = #{cols,jdbcType=INTEGER},
+      rules = #{rules,jdbcType=VARCHAR},
+      rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      rulewidth = #{rulewidth,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchpageid = #{touchpageid,jdbcType=INTEGER},
@@ -489,6 +548,11 @@
       decoration = #{decoration,jdbcType=VARCHAR},
       align = #{align,jdbcType=VARCHAR},
       lineheight = #{lineheight,jdbcType=INTEGER},
+      rows = #{rows,jdbcType=INTEGER},
+      cols = #{cols,jdbcType=INTEGER},
+      rules = #{rules,jdbcType=VARCHAR},
+      rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      rulewidth = #{rulewidth,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchpageid = #{touchpageid,jdbcType=INTEGER}

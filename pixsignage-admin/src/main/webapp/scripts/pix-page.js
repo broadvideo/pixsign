@@ -28,9 +28,6 @@ var oTable = $('#MyTable').dataTable({
 		$('#PageContainer').html(''); 
 		return true;
 	},
-	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'touchflag','value':'0' });
-	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 		if (iDisplayIndex % 4 == 0) {
 			pagehtml = '';
@@ -39,21 +36,18 @@ var oTable = $('#MyTable').dataTable({
 		pagehtml += '<div class="col-md-3 col-xs-3">';
 		pagehtml += '<h3>' + aData.name + '</h3>';
 		if (aData.ratio == 1) {
-			pagehtml += '<h6><span class="label label-sm label-info">' + common.view.template_ratio_1 + '</span></h6>';
+			pagehtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span></h6>';
 		} else if (aData.ratio == 2) {
-			pagehtml += '<h6><span class="label label-sm label-success">' + common.view.template_ratio_2 + '</span></h6>';
+			pagehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
 		}
 
+		pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="fancybox">';
+		pagehtml += '<div class="thumbs">';
 		if (aData.snapshot != null) {
-			pagehtml += '<a class="fancybox" href="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" title="' + aData.name + '">';
-			pagehtml += '<div class="thumbs">';
 			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-			pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + aData.timestamp  + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-			pagehtml += '</div></a>';
-		} else {
-			pagehtml += '<div class="thumbs">';
-			pagehtml += '</div>';
+			pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		}
+		pagehtml += '</div></a>';
 		
 		pagehtml += '<div privilegeid="101010">';
 		pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs green pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
@@ -69,18 +63,46 @@ var oTable = $('#MyTable').dataTable({
 				pagehtml += '<hr/>';
 			}
 			$('#PageContainer').append(pagehtml);
-			$('.thumbs').each(function(i) {
-				$(this).width($(this).parent().closest('div').width());
-				$(this).height($(this).parent().closest('div').width());
-			});
-			$('.fancybox').fancybox({
-				openEffect	: 'none',
-				closeEffect	: 'none',
-				closeBtn : false,
-			});
 		}
 		return nRow;
-	}
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('.thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+		$('.fancybox').each(function(index,item) {
+			$(this).click(function() {
+				var pageid = $(this).attr('pageid');
+				$.ajax({
+					type : 'GET',
+					url : 'page!get.action',
+					data : {pageid: pageid},
+					success : function(data, status) {
+						if (data.errorcode == 0) {
+							$.fancybox({
+								openEffect	: 'none',
+								closeEffect	: 'none',
+								closeBtn : false,
+						        padding : 0,
+						        content: '<div id="PagePreview"></div>',
+						    });
+							redrawPagePreview($('#PagePreview'), data.page, 800);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						console.log('failue');
+					}
+				});
+			    return false;
+			})
+		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'touchflag','value':'0' });
+	},
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 jQuery('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');

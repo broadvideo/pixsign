@@ -172,6 +172,12 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setDecoration(fromtemplatezone.getDecoration());
 				templatezone.setAlign(fromtemplatezone.getAlign());
 				templatezone.setLineheight(fromtemplatezone.getLineheight());
+				templatezone.setRows(fromtemplatezone.getRows());
+				templatezone.setCols(fromtemplatezone.getCols());
+				templatezone.setRules(fromtemplatezone.getRules());
+				templatezone.setRulecolor(fromtemplatezone.getRulecolor());
+				templatezone.setRulewidth(fromtemplatezone.getRulewidth());
+				templatezone.setDateformat(fromtemplatezone.getDateformat());
 				templatezone.setContent(fromtemplatezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Templatezonedtl fromtemplatezonedtl : fromtemplatezone.getTemplatezonedtls()) {

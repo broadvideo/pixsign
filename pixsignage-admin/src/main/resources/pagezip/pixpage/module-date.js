@@ -10,7 +10,7 @@ var DateZone = function (zonediv, zone) {
 	var init = function () {
 		var p_element = document.createElement('p');
 		$(p_element).html(zone.content);
-		$(zonediv).find('#PagezoneCT').append(p_element);
+		$(zonediv).append(p_element);
 		show();
 	};
 
@@ -20,7 +20,7 @@ var DateZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowv) / scaleh) + 'px ';
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
-		$(zonediv).find('#PagezoneCT').css({
+		$(zonediv).css({
 			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 

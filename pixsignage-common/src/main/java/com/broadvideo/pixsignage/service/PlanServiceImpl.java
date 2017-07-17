@@ -218,8 +218,6 @@ public class PlanServiceImpl implements PlanService {
 					"" + device.getDevicegroupid());
 		}
 		for (Plan plan : planList) {
-			HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
-
 			JSONObject planJson = new JSONObject();
 			planJsonArray.put(planJson);
 			planJson.put("plan_id", plan.getPlanid());
@@ -231,9 +229,11 @@ public class PlanServiceImpl implements PlanService {
 			planJson.put("start_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
 			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
+
 			JSONArray plandtlJsonArray = new JSONArray();
-			HashMap<Integer, Page> pageHash = new HashMap<Integer, Page>();
 			JSONArray videoJsonArray = new JSONArray();
+			HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+			HashMap<Integer, Page> pageHash = new HashMap<Integer, Page>();
 			for (Plandtl plandtl : plan.getPlandtls()) {
 				if (plandtl.getObjtype().equals(Plandtl.ObjType_Page)) {
 					Page page = pageMapper.selectByPrimaryKey("" + plandtl.getObjid());
