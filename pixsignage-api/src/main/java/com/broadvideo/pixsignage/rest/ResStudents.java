@@ -142,6 +142,35 @@ public class ResStudents {
 			return Base64.encode("[]".getBytes());
 		}
 
+	}
+
+	@POST
+	@Path("/{student_id}/message")
+	public String sendMessage(String request, @Context HttpServletRequest req,
+			@PathParam("student_id") Integer studentId) {
+		if (studentId == null || StringUtils.isBlank(request)) {
+			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "studentId or request body is empty.");
+		}
+
+		try {
+			JSONObject requestBodyJson = new JSONObject(request);
+			studentId = requestBodyJson.getInt("student_id");
+			String image = requestBodyJson.getString("image");
+			String text = requestBodyJson.getString("text");
+			String audio = requestBodyJson.getString("audio");
+			long msgtime = requestBodyJson.getLong("msg_time");
+			logger.info("sendMessage request body:\n{}", request);
+
+			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success");
+
+		} catch (Exception e) {
+
+			logger.error("sendMessage exception.", e);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, e.getMessage());
+
+
+		}
+
 
 }
 	private String handleResult(int code, String message) {

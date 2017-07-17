@@ -16,6 +16,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +32,8 @@ import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.domain.Classroom;
 import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.domain.Courseschedule;
+import com.broadvideo.pixsignage.domain.Courseschedulescheme;
+import com.broadvideo.pixsignage.domain.Periodtimedtl;
 import com.broadvideo.pixsignage.domain.Schoolclass;
 import com.broadvideo.pixsignage.domain.Student;
 import com.broadvideo.pixsignage.persistence.ClassroomMapper;
@@ -34,6 +42,8 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.SchoolclassMapper;
 import com.broadvideo.pixsignage.persistence.StudentMapper;
 import com.broadvideo.pixsignage.service.ClassroomService;
+import com.broadvideo.pixsignage.service.CourseScheduleSchemeService;
+import com.broadvideo.pixsignage.util.Base64;
 import com.broadvideo.pixsignage.util.DateUtil;
 
 @Component
@@ -45,6 +55,8 @@ public class ResClassrooms {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private ClassroomService classroomService;
+	@Autowired
+	private CourseScheduleSchemeService coursescheduleschemeService;
 	@Autowired
 	private StudentMapper studentMapper;
 	@Autowired
@@ -96,28 +108,39 @@ public class ResClassrooms {
 			return this.handleResult(ApiRetCodeEnum.INVALID_ARGS, "classroom_id is null.");
 		}
 		try {
+			JSONObject respJson = new JSONObject();
+			Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
+			Courseschedulescheme scheme = coursescheduleschemeService.getEnableScheme(classroom.getOrgid());
+			Courseschedulescheme schemedtl = coursescheduleschemeService.getSchemeDtl(
+					scheme.getCoursescheduleschemeid(), scheme.getOrgid());
+			JSONObject schemeJson = this.buildSchemeJson(schemedtl);
 			List<Courseschedule> schedules = classroomService.getClassroomSchedules(classroomId);
-			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
-
+			List<Map<String, Object>> scheduleList = new ArrayList<Map<String, Object>>();
 			if (schedules != null) {
 				for (Courseschedule schedule : schedules) {
 					Map<String, Object> scheduleMap = new HashMap<String, Object>();
 					scheduleMap.put("id", schedule.getCoursescheduleid());
 					scheduleMap.put("course_id", schedule.getCourseid());
 					scheduleMap.put("course_name", schedule.getCoursename());
-					scheduleMap.put("instructor", schedule.getTeachername());
+					scheduleMap.put("teacher_name", schedule.getTeachername());
+					scheduleMap.put("teacher_id", schedule.getTeacherid());
 					scheduleMap.put("workday", schedule.getWorkday());
+					scheduleMap.put("type", schedule.getPeriodtimedtl().getType());
+					scheduleMap.put("period_num", schedule.getPeriodtimedtl().getPeriodnum());
 					scheduleMap.put("start_time",
 							DateUtil.formatShorttime(schedule.getPeriodtimedtl().getShortstarttime(), null));
 					scheduleMap.put("end_time",
 							DateUtil.formatShorttime(schedule.getPeriodtimedtl().getShortendtime(), null));
-					dataList.add(scheduleMap);
+					scheduleList.add(scheduleMap);
 				}
 
 
 			}
-
-			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", dataList);
+			respJson.put("retcode", ApiRetCodeEnum.SUCCESS);
+			respJson.put("message", "success");
+			respJson.put("scheme", schemeJson);
+			respJson.put("course_schedules", scheduleList);
+			return respJson.toString();
 		} catch (Exception e) {
 			logger.error("Get classroom schedules exception.", e);
 			return this.handleResult(ApiRetCodeEnum.EXCEPTION, e.getMessage());
@@ -177,6 +200,41 @@ public class ResClassrooms {
 
 	}
 
+	@GET
+	@Path("/{classroom_id}/messagesum")
+	public String getClassroomMsgSum(@Context HttpServletRequest req, @PathParam("classroom_id") Integer classroomId) {
+		logger.debug("Get getClassroomMsgSum(classroomId={}) request...", classroomId);
+
+		try {
+			Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
+			Schoolclass schoolclass = this.schoolclassMapper.selectByClassroomid(classroom.getOrgid(), classroomId);
+			String url = "http://school.wkmip.cn/mobile/interface/statistics?school_id=" + classroom.getOrgid()
+					+ "&class_name=" + java.net.URLEncoder.encode(schoolclass.getName(), "UTF-8");
+			logger.info("get messagesum from wkmip: {}", url);
+			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
+					.setConnectionRequestTimeout(30000).build();
+			CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+			HttpGet httpget = new HttpGet(url);
+			CloseableHttpResponse response = httpclient.execute(httpget);
+			int status = response.getStatusLine().getStatusCode();
+			if (status == 200) {
+				String s = EntityUtils.toString(response.getEntity());
+				httpclient.close();
+				logger.info("get messagesum from wkmip response: {}", s);
+				return s;
+			} else {
+				httpclient.close();
+				logger.error("call get messagesum  response code: {}", status);
+				return Base64.encode("[]".getBytes());
+			}
+		} catch (Exception e) {
+			logger.error("call get messagesum error: {}", e.getMessage());
+			return Base64.encode("[]".getBytes());
+		}
+
+
+
+	}
 	private String handleResult(int code, String message) {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("retcode", code);
@@ -192,6 +250,45 @@ public class ResClassrooms {
 		responseJson.put("data", data);
 		logger.info("Classroom Service response: {}", responseJson.toString());
 		return responseJson.toString();
+	}
+
+	private JSONObject buildSchemeJson(Courseschedulescheme scheme) {
+		JSONObject schemeJson = new JSONObject();
+		String[] workdaysArr=scheme.getWorkdays().split(",");
+		int[] intWorkdays = new int[workdaysArr.length];
+		for (int i = 0; i < workdaysArr.length; i++) {
+
+			intWorkdays[i] = Integer.parseInt(workdaysArr[i]);
+		}
+		schemeJson.put("workdays", intWorkdays);
+		JSONObject morningJson = new JSONObject();
+		morningJson.put("periods", scheme.getMorningperiods());
+		morningJson.put("dtls", this.buildPeriodtimedtls(scheme.getMorningperiodtimedtls()));
+		schemeJson.put("morning", morningJson);
+		JSONObject afternoonJson = new JSONObject();
+		afternoonJson.put("periods", scheme.getAfternoonperiods());
+		afternoonJson.put("dtls", this.buildPeriodtimedtls(scheme.getAfternoonperiodtimedtls()));
+		schemeJson.put("afternoon", afternoonJson);
+		JSONObject nightJson = new JSONObject();
+		nightJson.put("periods", scheme.getNightperiods());
+		nightJson.put("dtls", this.buildPeriodtimedtls(scheme.getNightperiodtimedtls()));
+		schemeJson.put("night", nightJson);
+		return schemeJson;
+
+	}
+
+	private List<Map<String, Object>> buildPeriodtimedtls(List<Periodtimedtl> periodtimedtls) {
+		List<Map<String, Object>> dtls = new ArrayList<Map<String, Object>>();
+		for (Periodtimedtl periodtimedtl : periodtimedtls) {
+			Map<String, Object> morningDtlMap = new HashMap<String, Object>();
+			morningDtlMap.put("period_num", periodtimedtl.getPeriodnum());
+			morningDtlMap.put("start_time", periodtimedtl.getShortstarttime());
+			morningDtlMap.put("end_time", periodtimedtl.getShortendtime());
+			dtls.add(morningDtlMap);
+
+		}
+
+		return dtls;
 	}
 
 
