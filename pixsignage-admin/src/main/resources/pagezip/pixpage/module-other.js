@@ -4,13 +4,13 @@ var OtherZone = function (zonediv, zone) {
 
 	var init = function () {
 		if (zone.type == 11) {
-			$(zonediv).find('#PagezoneCT').addClass('calendar-list');
+			$(zonediv).addClass('calendar-list');
 		} else if (zone.type == 12) {
-			$(zonediv).find('#PagezoneCT').addClass('calendar-table');
+			$(zonediv).addClass('calendar-table');
 		} else if (zone.type == 13) {
-			$(zonediv).find('#PagezoneCT').addClass('attendance');
+			$(zonediv).addClass('attendance');
 		} else if (zone.type == 14) {
-			$(zonediv).find('#PagezoneCT').addClass('home-school');
+			$(zonediv).addClass('home-school');
 		}
 	};
 
@@ -20,7 +20,7 @@ var OtherZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowv) / scaleh) + 'px ';
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
-		$(zonediv).find('#PagezoneCT').css({
+		$(zonediv).css({
 			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 

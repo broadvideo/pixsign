@@ -28,7 +28,7 @@ var VideoZone = function (zonediv, zone) {
 			$(video_element).attr('src', '../../videos/' + pagezonedtls[0].video.filename);
 		}
 		video_element.addEventListener('ended', play);
-		$(zonediv).find('#PagezoneCT').append(video_element);
+		$(zonediv).append(video_element);
 		for (var i=0; i<pagezonedtls.length; i++) {
 			_list.push(pagezonedtls[i].video);
 		}
@@ -40,7 +40,7 @@ var VideoZone = function (zonediv, zone) {
 		shadow += (parseInt(zone.shadowv) / scaleh) + 'px ';
 		shadow += (parseInt(zone.shadowblur) / scalew) + 'px ';
 		shadow += zone.shadowcolor;
-		$(zonediv).find('#PagezoneCT').css({
+		$(zonediv).css({
 			'box-shadow': shadow, 
 			'opacity': parseInt(zone.opacity)/255,
 		});

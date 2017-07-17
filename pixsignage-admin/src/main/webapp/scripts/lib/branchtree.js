@@ -13,7 +13,6 @@ var BranchTree = function (container) {
 				if (data.errorcode == 0) {
 					var branches = data.aaData;
 					_self.branchid = branches[0].branchid;
-					console.log(this.branchid, _self.branchid);
 					
 					if ( $(container).find('.branchtree').length > 0 ) {
 						if (branches[0].children.length == 0) {

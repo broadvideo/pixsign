@@ -44,17 +44,14 @@ var oTable = $('#MyTable').dataTable({
 			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
 		}
 
+		templatehtml += '<a href="javascript:;" templateid="' + aData.templateid + '" class="fancybox">';
+		templatehtml += '<div class="thumbs">';
 		if (aData.snapshot != null) {
-			templatehtml += '<a class="fancybox" href="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" title="' + aData.name + '">';
-			templatehtml += '<div class="thumbs">';
 			var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-			templatehtml += '<img src="/pixsigdata' + aData.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-			templatehtml += '</div></a>';
-		} else {
-			templatehtml += '<div class="thumbs">';
-			templatehtml += '</div>';
+			templatehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		}
-		
+		templatehtml += '</div></a>';
+
 		templatehtml += '<div privilegeid="101010">';
 		templatehtml += '<a href="javascript:;" templateid="' + aData.templateid + '" class="btn default btn-xs green pix-template"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 		//templatehtml += '<a href="template!export.action?templateid=' + aData.templateid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
@@ -69,17 +66,42 @@ var oTable = $('#MyTable').dataTable({
 				templatehtml += '<hr/>';
 			}
 			$('#TemplateContainer').append(templatehtml);
-			$('.thumbs').each(function(i) {
-				$(this).width($(this).parent().closest('div').width());
-				$(this).height($(this).parent().closest('div').width());
-			});
-			$('.fancybox').fancybox({
-				openEffect	: 'none',
-				closeEffect	: 'none',
-				closeBtn : false,
-			});
 		}
 		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('.thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+		$('.fancybox').each(function(index,item) {
+			$(this).click(function() {
+				var templateid = $(this).attr('templateid');
+				$.ajax({
+					type : 'GET',
+					url : 'template!get.action',
+					data : {templateid: templateid},
+					success : function(data, status) {
+						if (data.errorcode == 0) {
+							$.fancybox({
+								openEffect	: 'none',
+								closeEffect	: 'none',
+								closeBtn : false,
+						        padding : 0,
+						        content: '<div id="TemplatePreview"></div>',
+						    });
+							redrawPagePreview($('#TemplatePreview'), data.template, 800);
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						console.log('failue');
+					}
+				});
+			    return false;
+			})
+		});
 	},
 	'fnServerParams': function(aoData) { 
 		aoData.push({'name':'touchflag','value':'0' });

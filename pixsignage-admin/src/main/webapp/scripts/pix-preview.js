@@ -786,6 +786,72 @@ function redrawPagePreview(container, page, maxsize) {
 				'white-space': 'pre-wrap',
 				'text-decoration': zone.decoration,
 			});
+		} else if (zone.type == '11' || zone.type == '12') {
+			var table = document.createElement('table');
+			$(inner_div).append(table);
+			$(table).attr('width', '100%');
+			$(table).attr('height', '100%');
+			$(table).attr('rules', zone.rules);
+			$(table).empty();
+			if (zone.type == 11) {
+				$(inner_div).find('tr td:first').attr('width', '30%');
+				for (var row=0; row<zone.rows; row++) {
+					var tr_element = document.createElement('tr');
+					$(table).append(tr_element);
+					for (var col=0; col<zone.cols; col++) {
+						var td_element = document.createElement('td');
+						$(tr_element).append(td_element);
+						if (col == 0 && row < 2) {
+							$(td_element).html('0' + (row+8) + ':00');
+						} else if (col == 0 && row >=2) {
+							$(td_element).html('' + (row+8) + ':00');
+						} else {
+							$(td_element).html('' + row + col);
+						}
+					}
+				}
+			} else {
+				for (var row=0; row<zone.rows; row++) {
+					var tr_element = document.createElement('tr');
+					$(table).append(tr_element);
+					for (var col=0; col<zone.cols; col++) {
+						var td_element = document.createElement('td');
+						$(tr_element).append(td_element);
+						if (col == 0) {
+							if (row == 1 || row == 2) {
+								$(td_element).html('0' + (row+7) + ':00');
+							} else if (row > 2) {
+								$(td_element).html('' + (row+7) + ':00');
+							}
+						} else {
+							if (row == 0) {
+								$(td_element).html('周' + col);
+							} else {
+								$(td_element).html('' + row + col);
+							}
+						}
+					}
+				}
+			}
+			$(inner_div).find('td').css({
+				'border-width': Math.ceil(zone.rulewidth / scale) + 'px', 
+				'border-color': zone.rulecolor,
+				'text-decoration': zone.decoration, 
+			});
+			$(inner_div).css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': Math.ceil(zone.bdwidth / scale) + 'px', 
+				'border-radius': Math.ceil(zone.bdradius / scale) + 'px', 
+				'color': zone.color, 
+				'font-family': zone.fontfamily, 
+				'font-size': Math.ceil(zone.fontsize / scale) + 'px', 
+				'text-align': zone.align, 
+				'font-weight': zone.fontweight, 
+				'font-style': zone.fontstyle, 
+				'line-height': '1px', 
+			});
 		} else {
 			var p_element = document.createElement('p');
 			$(p_element).html(eval('common.view.pagezone_type_' + zone.type));

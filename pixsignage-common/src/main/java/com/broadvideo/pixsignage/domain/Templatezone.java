@@ -75,6 +75,16 @@ public class Templatezone {
 
 	private Integer lineheight;
 
+	private Integer rows;
+
+	private Integer cols;
+
+	private String rules;
+
+	private String rulecolor;
+
+	private Integer rulewidth;
+
 	private String dateformat;
 
 	private String touchtype;
@@ -323,6 +333,46 @@ public class Templatezone {
 
 	public void setLineheight(Integer lineheight) {
 		this.lineheight = lineheight;
+	}
+
+	public Integer getRows() {
+		return rows;
+	}
+
+	public void setRows(Integer rows) {
+		this.rows = rows;
+	}
+
+	public Integer getCols() {
+		return cols;
+	}
+
+	public void setCols(Integer cols) {
+		this.cols = cols;
+	}
+
+	public String getRules() {
+		return rules;
+	}
+
+	public void setRules(String rules) {
+		this.rules = rules;
+	}
+
+	public String getRulecolor() {
+		return rulecolor;
+	}
+
+	public void setRulecolor(String rulecolor) {
+		this.rulecolor = rulecolor;
+	}
+
+	public Integer getRulewidth() {
+		return rulewidth;
+	}
+
+	public void setRulewidth(Integer rulewidth) {
+		this.rulewidth = rulewidth;
 	}
 
 	public String getDateformat() {

@@ -183,6 +183,11 @@ public class PageServiceImpl implements PageService {
 					pagezone.setDecoration(templatezone.getDecoration());
 					pagezone.setAlign(templatezone.getAlign());
 					pagezone.setLineheight(templatezone.getLineheight());
+					pagezone.setRows(templatezone.getRows());
+					pagezone.setCols(templatezone.getCols());
+					pagezone.setRules(templatezone.getRules());
+					pagezone.setRulecolor(templatezone.getRulecolor());
+					pagezone.setRulewidth(templatezone.getRulewidth());
 					pagezone.setDateformat(templatezone.getDateformat());
 					pagezone.setTouchtype(templatezone.getTouchtype());
 					Integer touchpageid = pageidHash.get(templatezone.getTouchtemplateid());
@@ -286,6 +291,11 @@ public class PageServiceImpl implements PageService {
 				pagezone.setDecoration(frompagezone.getDecoration());
 				pagezone.setAlign(frompagezone.getAlign());
 				pagezone.setLineheight(frompagezone.getLineheight());
+				pagezone.setRows(frompagezone.getRows());
+				pagezone.setCols(frompagezone.getCols());
+				pagezone.setRules(frompagezone.getRules());
+				pagezone.setRulecolor(frompagezone.getRulecolor());
+				pagezone.setRulewidth(frompagezone.getRulewidth());
 				pagezone.setDateformat(frompagezone.getDateformat());
 				pagezone.setTouchtype(frompagezone.getTouchtype());
 				pagezone.setTouchpageid(frompagezone.getTouchpageid());

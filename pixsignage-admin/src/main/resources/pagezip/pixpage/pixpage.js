@@ -23,29 +23,37 @@ var PixPage = function () {
 			$('#PageDiv').append(zone_div);
 			
 			if (zone.type == 1) {
-				var videozone = new VideoZone($(zone_div), zone);
+				var videozone = new VideoZone($(inner_div), zone);
 				allzones.push(videozone);
 			} else if (zone.type == 2) {
-				var imagezone = new ImageZone($(zone_div), zone);
+				var imagezone = new ImageZone($(inner_div), zone);
 				allzones.push(imagezone);
 			} else if (zone.type == '3') {
 				//Text Zone
-				var textzone = new TextZone($(zone_div), zone);
+				var textzone = new TextZone($(inner_div), zone);
 				allzones.push(textzone);
 			} else if (zone.type == '4') {
 				//Scroll Zone
-				var scrollzone = new ScrollZone($(zone_div), zone);
+				var scrollzone = new ScrollZone($(inner_div), zone);
 				allzones.push(scrollzone);
 			} else if (zone.type == '5') {
 				//Date Zone
-				var datezone = new DateZone($(zone_div), zone);
+				var datezone = new DateZone($(inner_div), zone);
 				allzones.push(datezone);
 			} else if (zone.type == '7') {
 				//Button Zone
-				var buttonzone = new ButtonZone($(zone_div), zone);
+				var buttonzone = new ButtonZone($(inner_div), zone);
 				allzones.push(buttonzone);
+			} else if (zone.type == '11') {
+				//CalendarList Zone
+				var dczone = new DailyCourse($(inner_div), zone);
+				allzones.push(dczone);
+			} else if (zone.type == '12') {
+				//CalendarTable Zone
+				var wczone = new WeeklyCourse($(inner_div), zone);
+				allzones.push(wczone);
 			} else {
-				var otherzone = new OtherZone($(zone_div), zone);
+				var otherzone = new OtherZone($(inner_div), zone);
 				allzones.push(otherzone);
 			}
 		}

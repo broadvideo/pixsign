@@ -186,14 +186,50 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5">
+								<div class="panel panel-default zone-ctl zonetype-7">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse4">字体样式</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse4">按键设置</a>
 										</h4>
 									</div>
 									<div id="Collapse4" class="panel-collapse collapse in">
 										<form id="ZoneEditForm4" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label"></label>
+													<div class="col-md-9">
+														<a href="javascript:;" class="btn default btn-xs blue pix-bgimage-library"><i class="fa fa-image"></i> 选择图片</a>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">功能</label>
+													<div class="col-md-9">
+														<select class="form-control" name="touchtype" tabindex="-1">
+															<option value="0"><spring:message code="pixsign.prop.touchtype_0"/></option>
+															<option value="1"><spring:message code="pixsign.prop.touchtype_1"/></option>
+															<option value="2"><spring:message code="pixsign.prop.touchtype_2"/></option>
+															<option value="9"><spring:message code="pixsign.prop.touchtype_9"/></option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">跳转</label>
+													<div class="col-md-9">
+														<input type="hidden" id="SubPageSelect" class="form-control select2" name="touchpageid" />
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>
+										</h4>
+									</div>
+									<div id="Collapse5" class="panel-collapse collapse">
+										<form id="ZoneEditForm5" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">字体</label>
@@ -268,14 +304,101 @@
 										</form>
 									</div>
 								</div>
+								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">表格设置</a>
+										</h4>
+									</div>
+									<div id="Collapse6" class="panel-collapse collapse">
+										<form id="ZoneEditForm6" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">行数</label>
+													<div class="col-md-9">
+														<div class="spinner" id="spinner-rows">
+															<div class="input-group input-small">
+																<input type="text" class="spinner-input form-control" readonly name="rows" >
+																<div class="spinner-buttons input-group-btn btn-group-vertical">
+																	<button type="button" class="btn spinner-up btn-xs blue">
+																	<i class="fa fa-angle-up"></i>
+																	</button>
+																	<button type="button" class="btn spinner-down btn-xs blue">
+																	<i class="fa fa-angle-down"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">列数</label>
+													<div class="col-md-9">
+														<div class="spinner" id="spinner-cols">
+															<div class="input-group input-small">
+																<input type="text" class="spinner-input form-control" readonly name="cols" >
+																<div class="spinner-buttons input-group-btn btn-group-vertical">
+																	<button type="button" class="btn spinner-up btn-xs blue">
+																	<i class="fa fa-angle-up"></i>
+																	</button>
+																	<button type="button" class="btn spinner-down btn-xs blue">
+																	<i class="fa fa-angle-down"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">分隔</label>
+													<div class="col-md-9">
+														<select class="form-control" name="rules" tabindex="-1">
+															<option value="none">无分隔线</option>
+															<option value="all">有分隔线</option>
+															<option value="rows">行分隔线</option>
+															<option value="cols">列分隔线</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">颜色</label>
+													<div class="col-md-9">
+														<div class="input-group colorpicker-component rulecolorPick">
+															<input type="text" name="rulecolor" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
+															<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">线宽</label>
+													<div class="col-md-9">
+														<div class="spinner" id="spinner-rulewidth">
+															<div class="input-group input-small">
+																<input type="text" class="spinner-input form-control" readonly name="rulewidth" >
+																<div class="spinner-buttons input-group-btn btn-group-vertical">
+																	<button type="button" class="btn spinner-up btn-xs blue">
+																	<i class="fa fa-angle-up"></i>
+																	</button>
+																	<button type="button" class="btn spinner-down btn-xs blue">
+																	<i class="fa fa-angle-down"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">背景阴影</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse7">背景阴影</a>
 										</h4>
 									</div>
-									<div id="Collapse5" class="panel-collapse collapse">
-										<form id="ZoneEditForm5" class="form-horizontal pix-bordered zoneform">
+									<div id="Collapse7" class="panel-collapse collapse">
+										<form id="ZoneEditForm7" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">背景</label>
@@ -362,11 +485,11 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">边框设置</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse8">边框设置</a>
 										</h4>
 									</div>
-									<div id="Collapse6" class="panel-collapse collapse">
-										<form id="ZoneEditForm6" class="form-horizontal pix-bordered zoneform">
+									<div id="Collapse8" class="panel-collapse collapse">
+										<form id="ZoneEditForm8" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">颜色</label>
@@ -398,7 +521,11 @@
 												<div class="form-group">
 													<label class="col-md-3 control-label">样式</label>
 													<div class="col-md-9">
-														<input type="hidden" id="BdstyleSelect" class="form-control select2" name="bdstyle">
+														<select class="form-control" name="bdstyle" tabindex="-1">
+															<option value="solid">dotted</option>
+															<option value="dashed">dashed</option>
+															<option value="dotted">dotted</option>
+														</select>
 													</div>
 												</div>
 												<div class="form-group">
@@ -426,11 +553,11 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse7">大小位置</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse9">大小位置</a>
 										</h4>
 									</div>
-									<div id="Collapse7" class="panel-collapse collapse">
-										<form id="ZoneEditForm7" class="form-horizontal pix-bordered zoneform">
+									<div id="Collapse9" class="panel-collapse collapse">
+										<form id="ZoneEditForm9" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.zindex"/></label>
