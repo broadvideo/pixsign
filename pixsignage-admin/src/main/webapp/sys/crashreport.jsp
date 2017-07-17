@@ -36,27 +36,27 @@
 										<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.appname"></label>
 									</div>
 									<div class="form-group">
-										<label class="col-md-2 control-label required"><spring:message code="global.crash.vname"/><</label>
+										<label class="col-md-2 control-label required"><spring:message code="pixsign.crash.vname"/><</label>
 										<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vname"></label>
 									</div>
 									<div class="form-group">
-										<label class="col-md-2 control-label required"><spring:message code="global.crash.vcode"/><</label>
+										<label class="col-md-2 control-label required"><spring:message code="pixsign.crash.vcode"/><</label>
 										<label class="col-md-10 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="crashreport.vcode"></label>
 									</div>
 									<div class="form-group">
-										<label class="col-md-2 control-label required"><spring:message code="global.crash.stack"/><</label>
+										<label class="col-md-2 control-label required"><spring:message code="pixsign.crash.stack"/><</label>
 										<div class="col-md-10">
 											<textarea class="form-control" rows="16" name="crashreport.stack"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-2 control-label required"><spring:message code="global.crash.resolution"/><</label>
+										<label class="col-md-2 control-label required"><spring:message code="pixsign.crash.resolution"/><</label>
 										<div class="col-md-10">
 											<textarea class="form-control" rows="4" name="crashreport.resolution"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-2 control-label required"><spring:message code="global.crash.other"/></label>
+										<label class="col-md-2 control-label required"><spring:message code="pixsign.crash.other"/></label>
 										<div class="col-md-10">
 											<textarea class="form-control" rows="3" name="crashreport.other"></textarea>
 										</div>
@@ -91,7 +91,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.crash"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.crash"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

@@ -2,7 +2,7 @@
  * Created by Elvis on 2017/6/29.
  */
 var Attendance = function () {
-    var host = window.android && window.android.getHost() || '192.168.2.102'
+    var host = window.android && window.android.getHost() || '192.168.0.102'
     var baseUrl = 'http://' + host + '/pixsignage-api/service'
     var terminalId = window.android && window.android.getTerminalId() || '00002'
     var classRoom = {}
@@ -11,18 +11,21 @@ var Attendance = function () {
 
     var checkin = function (student) {
         if(!student.id) return
-        var id = student.id
-        var nodes = document.getElementsByClassName('student')
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes.item(i)
-            if (node.dataset.id == id) {
-                node.getElementsByTagName('img').item(0).classList.remove('opacity')
-                node.classList.add('rubberBand')
+        $('.attendance-item').each(function(index, node){
+            if ($(node).data('id') == student.id) {
+                $(node).find('img').removeClass('opacity')
+                $(node).addClass('rubberBand')
                 setTimeout(function () {
-                    node.classList.remove('rubberBand')
-                }, 3000)
+                    $(node).removeClass('rubberBand')
+                }, 1000)
+                $('.attendance-popup').remove()
+                clearTimeout(timer)
+                $(node).clone().removeClass('attendance-item animated rubberBand').addClass('attendance-popup').appendTo('body')
+                timer = setTimeout(function(){
+                    $('.attendance-popup').remove()
+                },5000)
             }
-        }
+        })
     }
     /*function checkout() {
      students.forEach(function (student) {
@@ -42,8 +45,8 @@ var Attendance = function () {
         }).then(function (res) {
             students = res.data
             var tpl = document.createElement('div')
-            $(tpl).load('module/attendance/attendance.tpl', function(){
-                var templ = doT.template(tpl.children[0].textContent)
+            $('<div />').load('module/attendance/attendance.tpl', function(){
+                var templ = doT.template($(this).text())
                 var nodes = document.getElementsByClassName('attendance')
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes.item(i)
@@ -56,35 +59,34 @@ var Attendance = function () {
     }
 
     var swipe = function (hardId) {
+        console.log(hardId)
         var student = students.filter(function (student) {
             return student['hard_id'] == hardId
         })
         clearTimeout(timer)
         if (student.length) {
             var st = student[0]
-            timer = setTimeout(checkin, 300, st)
+            checkin(st)
             var data = JSON.stringify({
                 'hard_id': st.hard_id,
-                'student_id': st.student_id,
+                'student_id': st.id,
                 'classroom_id': classRoom.id
             })
             $.ajax({
                 url: baseUrl + '/students/' + st.id + '/attendance',
                 type: 'post',
-                contentType: 'json',
+                contentType: 'application/json',
                 data: data
             }).then(function (res) {
                 console.log(res.data)
             }).catch(function (err) {
-                console.log(err.message)
+                console.log(JSON.stringify(err))
             })
         }
     }
-
-    var swipe2 = function (hardId) {
+    var keyup = function (hardId) {
         var st = students[Math.floor(Math.random() * 10)]
-        clearTimeout(timer)
-        timer = setTimeout(checkin, 300, st)
+        checkin(st)
         var data = JSON.stringify({
             'hard_id': st['hard_id'],
             'student_id': st.id,
@@ -99,14 +101,17 @@ var Attendance = function () {
         }).then(function (res) {
             console.log(res.data)
         }).catch(function (err) {
-            console.log(err.message)
+            console.log(JSON.stringify(err))
         })
     }
 
     return {
         init: init,
         swipe: swipe,
-        keyup: swipe2
+        keyup: keyup
     }
 }()
-document.body.onkeyup = Attendance.keyup
+$(function(){
+    Attendance.init()
+})
+document.body.addEventListener('keyup', Attendance.keyup)

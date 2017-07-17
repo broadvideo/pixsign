@@ -1,14 +1,22 @@
 package com.broadvideo.pixsignage.util;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
@@ -38,6 +46,88 @@ public class CommonUtil {
 			logger.error("parseDate {} exception: {}", s, e.getMessage());
 		}
 		return date;
+	}
+
+	public static void zip(ZipOutputStream out, File f, String base) throws Exception {
+		if (f.isDirectory()) {
+			File[] fl = f.listFiles();
+			if (fl.length == 0) {
+				out.putNextEntry(new ZipEntry(base + "/")); // 创建zip压缩进入点base
+			}
+			for (int i = 0; i < fl.length; i++) {
+				if (base.equals("")) {
+					zip(out, fl[i], fl[i].getName()); // 递归遍历子文件夹
+				} else {
+					zip(out, fl[i], base + "/" + fl[i].getName()); // 递归遍历子文件夹
+				}
+			}
+		} else {
+			out.putNextEntry(new ZipEntry(base)); // 创建zip压缩进入点base
+			FileInputStream in = new FileInputStream(f);
+			byte[] b = new byte[1000];
+			int len = -1;
+			while ((len = in.read(b)) != -1) {
+				out.write(b, 0, len);
+			}
+			in.close();
+		}
+	}
+
+	public static void unzip(String zipFilePath, String unzipFilePath, boolean includeZipFileName) throws Exception {
+		File zipFile = new File(zipFilePath);
+		// 如果解压后的文件保存路径包含压缩文件的文件名，则追加该文件名到解压路径
+		if (includeZipFileName) {
+			String fileName = zipFile.getName();
+			fileName = fileName.substring(0, fileName.lastIndexOf("."));
+			unzipFilePath = unzipFilePath + "/" + fileName;
+		}
+		// 创建解压缩文件保存的路径
+		File unzipFileDir = new File(unzipFilePath);
+		if (!unzipFileDir.exists() || !unzipFileDir.isDirectory()) {
+			unzipFileDir.mkdirs();
+		}
+
+		// 开始解压
+		ZipFile zip = new ZipFile(zipFile);
+		Enumeration<? extends ZipEntry> entries = zip.entries();
+		// 循环对压缩包里的每一个文件进行解压
+		while (entries.hasMoreElements()) {
+			ZipEntry entry = entries.nextElement();
+			if (entry.isDirectory()) {
+				new File(unzipFilePath + "/" + entry.getName()).mkdirs();
+				continue;
+			}
+			// 构建压缩包中一个文件解压后保存的文件全路径
+			String entryFilePath = unzipFilePath + "/" + entry.getName();
+			// 构建解压后保存的文件夹路径
+			int index = entryFilePath.lastIndexOf("/");
+			String entryDirPath = null;
+			if (index != -1) {
+				entryDirPath = entryFilePath.substring(0, index);
+			} else {
+				entryDirPath = "";
+			}
+			File entryDir = new File(entryDirPath);
+			if (!entryDir.exists() || !entryDir.isDirectory()) {
+				entryDir.mkdirs();
+			}
+
+			// 创建解压文件
+			File entryFile = new File(entryFilePath);
+
+			// 写入文件
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(entryFile));
+			BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+			int count = 0;
+			byte[] buffer = new byte[1024];
+			while ((count = bis.read(buffer, 0, 1024)) != -1) {
+				bos.write(buffer, 0, count);
+			}
+			bos.flush();
+			bos.close();
+			bis.close();
+		}
+		zip.close();
 	}
 
 	public static int execCommand(String command) {

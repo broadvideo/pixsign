@@ -54,6 +54,28 @@ public class PlanAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doListByBind() {
+		try {
+			String plantype = getParameter("plantype");
+			String bindtype = getParameter("bindtype");
+			String bindid = getParameter("bindid");
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<Plan> planList = planService.selectListByBind(plantype, bindtype, bindid);
+			for (int i = 0; i < planList.size(); i++) {
+				aaData.add(planList.get(i));
+			}
+			this.setAaData(aaData);
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PlanAction doListByBind exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDesign() {
 		try {
 			if (plan.getPlanid().intValue() == 0) {

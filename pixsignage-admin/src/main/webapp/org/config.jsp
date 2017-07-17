@@ -23,7 +23,7 @@
 							<form id="MyEditForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-4 control-label"><spring:message code="config.server.ip"/><span class="required">*</span></label>
+										<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.ip"/><span class="required">*</span></label>
 										<div class="col-md-8">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="serverip" />
@@ -31,7 +31,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-4 control-label"><spring:message code="config.server.port"/><span class="required">*</span></label>
+										<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.port"/><span class="required">*</span></label>
 										<div class="col-md-8">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="serverport" />
@@ -39,7 +39,7 @@
 										</div>
 									</div>
 									<div class="form-group calendar-ctrl">
-										<label class="col-md-4 control-label"><spring:message code="config.pixedx.ip"/></label>
+										<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.ip"/></label>
 										<div class="col-md-8">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="pixedxip" />
@@ -47,7 +47,7 @@
 										</div>
 									</div>
 									<div class="form-group calendar-ctrl">
-										<label class="col-md-4 control-label"><spring:message code="config.pixedx.port"/></label>
+										<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.port"/></label>
 										<div class="col-md-8">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="pixedxport" />

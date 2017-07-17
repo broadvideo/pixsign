@@ -56,7 +56,7 @@
 				<div class="modal-body">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.device.screenlist"/></div>
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device.screenlist"/></div>
 							<div class="tools">
 								<a href="javascript:;" class="reload pix-ScreenReload"></a>
 							</div>
@@ -88,15 +88,15 @@
 			
 							<div class="portlet box blue tabbable">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.devicefile"/></div>
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.devicefile"/></div>
 									<div class="tools">
 										<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
 									</div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
-										<li id="nav_tab4 mscreen-ctrl"><a href="#portlet_tab4" data-toggle="tab"><spring:message code="global.gridimage"/></a></li>
-										<li id="nav_tab3 mscreen-ctrl"><a href="#portlet_tab3" data-toggle="tab"><spring:message code="global.gridvideo"/></a></li>
-										<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="global.image"/></a></li>
-										<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="global.video"/></a></li>
+										<li id="nav_tab4 mscreen-ctrl"><a href="#portlet_tab4" data-toggle="tab"><spring:message code="pixsign.gridimage"/></a></li>
+										<li id="nav_tab3 mscreen-ctrl"><a href="#portlet_tab3" data-toggle="tab"><spring:message code="pixsign.gridvideo"/></a></li>
+										<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="pixsign.image"/></a></li>
+										<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="pixsign.video"/></a></li>
 									</ul>
 								</div>
 								<div class="portlet-body">
@@ -143,52 +143,52 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="ConfigForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
 						<input type="hidden" name="device.deviceid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.terminalid"/></label>
 								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.volumeflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volumeflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="device.volumeflag" value="0"> <spring:message code="global.volumeflag_0"/>
+										<input type="radio" name="device.volumeflag" value="0"> <spring:message code="pixsign.prop.volumeflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.volumeflag" value="1"> <spring:message code="global.volumeflag_1"/>
+										<input type="radio" name="device.volumeflag" value="1"> <spring:message code="pixsign.prop.volumeflag_1"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.volumeflag" value="2" checked> <spring:message code="global.volumeflag_2"/>
+										<input type="radio" name="device.volumeflag" value="2" checked> <spring:message code="pixsign.prop.volumeflag_2"/>
 									</label>
 								</div>
 							</div>
 							<div class="form-group volumeflag">
-								<label class="col-md-3 control-label"><spring:message code="global.volume"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
 								<div class="col-md-9">
 									<input class="volumeRange" type="text" name="device.volume" value="50"/>
 								</div>
 							</div>
 							<div class="form-group sscreen-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.powerflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="device.powerflag" value="0"> <spring:message code="global.powerflag_0"/>
+										<input type="radio" name="device.powerflag" value="0"> <spring:message code="pixsign.prop.powerflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.powerflag" value="1" > <spring:message code="global.powerflag_1"/>
+										<input type="radio" name="device.powerflag" value="1" > <spring:message code="pixsign.prop.powerflag_1"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.powerflag" value="2" checked> <spring:message code="global.powerflag_2"/>
+										<input type="radio" name="device.powerflag" value="2" checked> <spring:message code="pixsign.prop.powerflag_2"/>
 									</label>
 								</div>
 							</div>
 							<div class="form-group sscreen-ctrl powerflag">
-								<label class="col-md-3 control-label"><spring:message code="global.poweron"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.poweron"/></label>
 								<div class="col-md-9">
 									<div class="input-group date form_time">                                       
 										<input type="text" size="16" readonly class="form-control" name="device.poweron">
@@ -199,7 +199,7 @@
 								</div>
 							</div>
 							<div class="form-group sscreen-ctrl powerflag">
-								<label class="col-md-3 control-label"><spring:message code="global.poweroff"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.poweroff"/></label>
 								<div class="col-md-9">
 									<div class="input-group date form_time">                                       
 										<input type="text" size="16" readonly class="form-control" name="device.poweroff">
@@ -225,7 +225,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
@@ -234,11 +234,11 @@
 						<input type="hidden" name="device.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.terminalid"/></label>
 								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.name" />
@@ -246,7 +246,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.position"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.position"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.position" />
@@ -254,7 +254,7 @@
 								</div>
 							</div>
 							<div class="form-group calendar-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.device.externalid"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.externalid"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="ExternalSelect" class="form-control select2" name="device.externalid">
 									<input type="hidden" name="device.externalname" value="" />
@@ -275,7 +275,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 								<div class="col-md-9">
 									<textarea class="form-control" rows="2" name="device.description"></textarea>
 								</div>
@@ -296,13 +296,13 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="UTextForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.count"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.count"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="count" value="0" />
@@ -310,35 +310,35 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.position"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.position"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="position" value="top"> <spring:message code="global.position.top"/>
+										<input type="radio" name="position" value="top"> <spring:message code="pixsign.prop.position.top"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="position" value="center"> <spring:message code="global.position.center"/>
+										<input type="radio" name="position" value="center"> <spring:message code="pixsign.prop.position.center"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="position" value="bottom" checked> <spring:message code="global.position.bottom"/>
+										<input type="radio" name="position" value="bottom" checked> <spring:message code="pixsign.prop.position.bottom"/>
 									</label>  
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.speed"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
+										<input type="radio" name="speed" value="1"> <spring:message code="pixsign.prop.speed_1"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
+										<input type="radio" name="speed" value="2" checked> <spring:message code="pixsign.prop.speed_2"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
+										<input type="radio" name="speed" value="3"> <spring:message code="pixsign.prop.speed_3"/>
 									</label>  
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.color"/></label>
 								<div class="col-md-9">
 									<div class="input-group colorpicker-component colorPick">
 										<input type="text" name="color" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
@@ -347,13 +347,13 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.size"/></label>
 								<div class="col-md-9">
 									<input class="sizeRange" type="text" name="size" value="50"/>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgcolor"/></label>
 								<div class="col-md-9">
 									<div class="input-group colorpicker-component bgcolorPick">
 										<input type="text" name="bgcolor" value="#000000" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
@@ -362,13 +362,13 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.opacity"/></label>
 								<div class="col-md-9">
 									<input class="opacityRange" type="text" name="opacity" value=""/>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.text"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<textarea class="form-control" rows="3" name="text"></textarea>
 								</div>
@@ -403,13 +403,13 @@
 				<div class="col-md-12">
 					<div class="portlet box blue tabbable">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.device"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.device"/></div>
 							<div class="tools">
 								<a href="javascript:;" class="reload pix-DeviceReload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="UnDeviceTab"><a href="#portlet_device2" data-toggle="tab"><spring:message code="global.device.unregister"/></a></li>
-								<li class="active" id="DeviceTab"><a href="#portlet_device1" data-toggle="tab"><spring:message code="global.device.register"/></a></li>
+								<li id="UnDeviceTab"><a href="#portlet_device2" data-toggle="tab"><spring:message code="pixsign.device.unregister"/></a></li>
+								<li class="active" id="DeviceTab"><a href="#portlet_device1" data-toggle="tab"><spring:message code="pixsign.device.register"/></a></li>
 							</ul>
 						</div>
 						<div class="portlet-body">
@@ -420,18 +420,18 @@
 									<div class="tab-pane active" id="portlet_device1">
 										<div class="table-toolbar sscreen-ctrl" style="display:none;">
 											<div class="btn-group">
-												<button class="btn green pix-allmap"><spring:message code="global.device.map"/> <i class="fa fa-map-marker"></i></button>
+												<button class="btn green pix-allmap"><spring:message code="pixsign.map"/> <i class="fa fa-map-marker"></i></button>
 											</div>
 											<div class="btn-group">
-												<button class="btn red pix-utext"><spring:message code="global.utext"/> <i class="fa fa-bolt"></i></button>
+												<button class="btn red pix-utext"><spring:message code="pixsign.utext"/> <i class="fa fa-bolt"></i></button>
 											</div>
 											<div class="btn-group">
-												<button class="btn blue pix-ucancel"><spring:message code="global.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
+												<button class="btn blue pix-ucancel"><spring:message code="pixsign.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
 											</div>
 											<!-- 
 											<div class="btn-group">
 												<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-												<spring:message code="global.branchselect"/>  <i class="fa fa-angle-down"></i></a>
+												<spring:message code="pixsign.tips.branchselect"/>  <i class="fa fa-angle-down"></i></a>
 												<ul class="dropdown-menu pull-right">
 												</ul>
 											</div>

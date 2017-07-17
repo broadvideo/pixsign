@@ -8,7 +8,7 @@
 	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
 	<constant name="struts.devMode" value="false" />
 	<constant name="struts.i18n.encodeing" value="UTF-8" />
-	<constant name="struts.custom.i18n.resources" value="resource.global" />
+	<constant name="struts.custom.i18n.resources" value="resource.global, resource.menu, resource.pixsign, resource.school" />
 	
 	<constant name="struts.multipart.maxSize" value="2147483648" />
 	<constant name="struts.multipart.saveDir" value="/tmp" />

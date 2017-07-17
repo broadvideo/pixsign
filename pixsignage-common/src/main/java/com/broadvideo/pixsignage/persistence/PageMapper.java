@@ -10,9 +10,11 @@ public interface PageMapper {
 	Page selectByPrimaryKey(@Param(value = "pageid") String pageid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
 			@Param(value = "search") String search);
 
 	List<Page> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 

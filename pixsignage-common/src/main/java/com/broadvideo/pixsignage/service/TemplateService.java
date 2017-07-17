@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Template;
@@ -7,10 +8,13 @@ import com.broadvideo.pixsignage.domain.Template;
 public interface TemplateService {
 	public Template selectByPrimaryKey(String templateid);
 
-	public int selectCount(String orgid, String ratio, String publicflag, String search);
+	public Template selectByUuid(String uuid);
 
-	public List<Template> selectList(String orgid, String ratio, String publicflag, String search, String start,
-			String length);
+	public int selectCount(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search);
+
+	public List<Template> selectList(String orgid, String ratio, String touchflag, String homeflag, String publicflag,
+			String search, String start, String length);
 
 	public void addTemplate(Template template);
 
@@ -21,5 +25,9 @@ public interface TemplateService {
 	public void deleteTemplate(String templateid);
 
 	public void design(Template template) throws Exception;
+
+	public void exportZip(String templateid) throws Exception;
+
+	public void importZip(File zipfile) throws Exception;
 
 }

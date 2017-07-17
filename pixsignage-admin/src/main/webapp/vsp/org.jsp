@@ -68,7 +68,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.org.sscreenflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.sscreenflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.sscreenflag" value="0"> <spring:message code="global.off"/>
@@ -79,7 +79,7 @@
 										</div>
 									</div>
 									<div class="form-group mscreen-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.mscreenflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.mscreenflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.mscreenflag" value="0" checked> <spring:message code="global.off"/>
@@ -90,7 +90,7 @@
 										</div>
 									</div>
 									<div class="form-group review-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.reviewflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.reviewflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.reviewflag" value="0" checked> <spring:message code="global.off"/>
@@ -101,7 +101,7 @@
 										</div>
 									</div>
 									<div class="form-group touch-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.touchflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.touchflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.touchflag" value="0" checked> <spring:message code="global.off"/>
@@ -112,21 +112,21 @@
 										</div>
 									</div>
 									<div class="form-group calendar-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.calendarflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.calendarflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.calendarflag" value="0" checked> <spring:message code="global.off"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.calendarflag" value="1"> <spring:message code="global.org.calendarflag_1"/>
+												<input type="radio" name="org.calendarflag" value="1"> <spring:message code="pixsign.org.calendarflag_1"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.calendarflag" value="2"> <spring:message code="global.org.calendarflag_2"/>
+												<input type="radio" name="org.calendarflag" value="2"> <spring:message code="pixsign.org.calendarflag_2"/>
 											</label>
 										</div>
 									</div>
 									<div class="form-group lift-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.liftflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.liftflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.liftflag" value="0" checked> <spring:message code="global.off"/>
@@ -137,41 +137,41 @@
 										</div>
 									</div>
 									<div class="form-group flowrate-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.org.flowrateflag"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.flowrateflag"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.flowrateflag" value="0" checked> <spring:message code="global.off"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.flowrateflag" value="1"> <spring:message code="global.org.flowrate_1"/>
+												<input type="radio" name="org.flowrateflag" value="1"> <spring:message code="pixsign.org.flowrate_1"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.flowrateflag" value="2"> <spring:message code="global.org.flowrate_2"/>
+												<input type="radio" name="org.flowrateflag" value="2"> <spring:message code="pixsign.org.flowrate_2"/>
 											</label>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.org.media"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.media"/></label>
 										<div class="col-md-9 checkbox-list">
 											<label class="checkbox-inline stream-ctrl">
-												<input type="checkbox" name="org.streamflag" value="1"><spring:message code="global.stream"/>
+												<input type="checkbox" name="org.streamflag" value="1"><spring:message code="pixsign.stream"/>
 											</label>
 											<label class="checkbox-inline dvb-ctrl">
-												<input type="checkbox" name="org.dvbflag" value="1"><spring:message code="global.dvb"/>
+												<input type="checkbox" name="org.dvbflag" value="1"><spring:message code="pixsign.dvb"/>
 											</label>
 											<label class="checkbox-inline videoin-ctrl">
-												<input type="checkbox" name="org.videoinflag" value="1"><spring:message code="global.videoin"/>
+												<input type="checkbox" name="org.videoinflag" value="1"><spring:message code="pixsign.videoin"/>
 											</label>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.org.expiretime"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.expiretime"/><span class="required">*</span></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
-												<input type="radio" name="org.expireflag" value="0" checked> <spring:message code="global.org.unlimited"/>
+												<input type="radio" name="org.expireflag" value="0" checked> <spring:message code="pixsign.org.unlimited"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.expireflag" value="1" > <spring:message code="global.org.expire"/>
+												<input type="radio" name="org.expireflag" value="1" > <spring:message code="pixsign.org.expire"/>
 											</label>
 										</div>
 									</div>
@@ -187,7 +187,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.org.maxdevices"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" value="0" />
@@ -195,7 +195,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.org.storage"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.storage"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" value="0" />
@@ -203,13 +203,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.timezone"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.timezone"/></label>
 										<div class="col-md-9">
 											<input type="hidden" id="TimezoneSelect" class="form-control select2" name="org.timezone">
 										</div>
 									</div>
 									<div class="form-group pix-control">
-										<label class="col-md-3 control-label"><spring:message code="global.org.copyright"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.copyright"/></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="org.copyright" />
@@ -238,13 +238,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.app"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.appfile"/></label>
 										<div class="col-md-9">
 											<div class="col-md-9 pre-scrollable" id="AppTree"></div>						
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="4" name="org.description"></textarea>
 										</div>

@@ -22,7 +22,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.page"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.page"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
@@ -33,7 +33,7 @@
 						<input type="hidden" name="page.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/><span
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span
 										class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
@@ -42,32 +42,32 @@
 								</div>
 							</div>
 							<div class="form-group hide-update">
-								<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
+								<label class="control-label col-md-3"><spring:message code="pixsign.prop.ratio"/></label>
 								<div class="col-md-9">
 									<select class="form-control" name="page.ratio" tabindex="-1">
-										<option value="1"><spring:message code="global.layout.ratio_1"/></option>
-										<option value="2"><spring:message code="global.layout.ratio_2"/></option>
+										<option value="1"><spring:message code="pixsign.prop.ratio_1"/></option>
+										<option value="2"><spring:message code="pixsign.prop.ratio_2"/></option>
 									</select>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.bundle.templetflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.templateflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="templateflag" value="0" checked> <spring:message code="global.bundle.templetflag_0"/>
+										<input type="radio" name="templateflag" value="0" checked> <spring:message code="pixsign.prop.templateflag_0"/>
 									</label>
 									<!-- 
 									<label class="radio-inline">
-										<input type="radio" name="templateflag" value="1"> <spring:message code="global.bundle.templetflag_1"/>
+										<input type="radio" name="templateflag" value="1"> <spring:message code="pixsign.prop.templateflag_1"/>
 									</label>
 									-->
 									<label class="radio-inline">
-										<input type="radio" name="templateflag" value="2"> <spring:message code="global.bundle.templetflag_2"/>
+										<input type="radio" name="templateflag" value="2"> <spring:message code="pixsign.prop.templateflag_2"/>
 									</label>
 								</div>
 							</div>
 							<div class="form-group template-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.templet"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.template"/><span class="required">*</span></label>
 								<div class="col-md-9 pre-scrollable">
 									<table id="TemplateTable" class="table table-condensed table-hover">
 										<thead></thead>
@@ -91,7 +91,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.template"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.template"/></h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -457,12 +457,12 @@
 										<form id="ZoneEditForm7" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
-													<label class="col-md-3 control-label">层叠</label>
+													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.zindex"/></label>
 													<div class="col-md-9">
 														<select class="form-control" name="zindex" tabindex="-1">
-															<option value="50"><spring:message code="global.layout.region.zindex_0"/></option>
-															<option value="51"><spring:message code="global.layout.region.zindex_1"/></option>
-															<option value="52"><spring:message code="global.layout.region.zindex_2"/></option>
+															<option value="50"><spring:message code="pixsign.prop.zindex_0"/></option>
+															<option value="51"><spring:message code="pixsign.prop.zindex_1"/></option>
+															<option value="52"><spring:message code="pixsign.prop.zindex_2"/></option>
 														</select>
 													</div>
 												</div>
@@ -584,24 +584,24 @@
 		
 							<div class="portlet box blue">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 									<ul class="nav nav-tabs" style="margin-left: 10px;">
 										<li class="image-ctl">
-											<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+											<a href="#ImageLibraryTab" data-toggle="tab"><spring:message code="pixsign.image"/></a>
 										</li>
 										<li class="video-ctl">
-											<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.video"/></a>
+											<a href="#VideoLibraryTab" data-toggle="tab"><spring:message code="pixsign.video"/></a>
 										</li>
 									</ul>
 								</div>
 								<div class="portlet-body">
 									<div class="tab-content">
-										<div class="tab-pane active" id="portlet_tab">
+										<div class="tab-pane image-ctl active" id="ImageLibraryTab">
 											<div class="row">
 												<div class="col-md-3">
-													<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
 													<hr/>
-													<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+													<div class="row"><div class="col-md-12 foldertree"></div></div>
 												</div>
 												<div class="col-md-9">
 													<div class="image-ctl">
@@ -610,6 +610,17 @@
 															<tbody></tbody>
 														</table>
 													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane video-ctl active" id="VideoLibraryTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+													<hr/>
+													<div class="row"><div class="col-md-12 foldertree"></div></div>
+												</div>
+												<div class="col-md-9">
 													<div class="video-ctl">
 														<table id="VideoTable" class="table table-condensed table-hover">
 															<thead></thead>
@@ -662,105 +673,13 @@
 							<form id="ScrollForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.resource.text"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="content"></textarea>
 										</div>
 									</div>
 								</div>
 							</form>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- 推送对话框  -->
-	<div id="PushModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-		<div class="modal-dialog modal-full">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.page"/></h4>
-				</div>
-				<div class="modal-body">
-					<div class="note note-success">
-						<p><spring:message code="global.tips_2"/></p>
-						<p><spring:message code="global.tips_3"/></p>
-					</div>
-					<div class="row">
-						<div class="col-md-7">
-							<div class="portlet box blue tabbable">
-								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.wizard.selectdevice"/></div>
-									<ul class="nav nav-tabs">
-										<li id="nav_dtab1" class="active">
-											<a href="#device_tab" data-toggle="tab"><spring:message code="global.device"/></a>
-										</li>
-										<li id="nav_dtab2">
-											<a href="#device_tab" data-toggle="tab"><spring:message code="global.devicegroup"/></a>
-										</li>
-									</ul>
-								</div>
-								<div class="portlet-body">
-									<div class="tab-content">
-										<div class="tab-pane active" id="device_tab">
-											<div class="row">
-												<div class="col-md-3">
-													<div id="DeviceBranchTreeDiv"></div>
-												</div>
-												<div class="col-md-9">
-													<div id="DeviceDiv">
-														<table id="DeviceTable" class="table table-condensed table-hover">
-															<thead></thead>
-															<tbody></tbody>
-														</table>
-													</div>
-													<div id="DeviceGroupDiv" style="display:none">
-														<table id="DeviceGroupTable" class="table table-condensed table-hover">
-															<thead></thead>
-															<tbody></tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-5">
-							<div class="portlet box green">
-								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.device.selected"/></div>
-								</div>
-								<div class="portlet-body">
-									<div class="table-responsive">
-										<table id="SelectedDeviceTable" class="table table-condensed table-hover">
-											<thead></thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							<div class="portlet box green">
-								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.devicegroup.selected"/></div>
-								</div>
-								<div class="portlet-body">
-									<div class="table-responsive">
-										<table id="SelectedDevicegroupTable" class="table table-condensed table-hover">
-											<thead></thead>
-											<tbody></tbody>
-										</table>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -791,7 +710,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.page"/></div>
+							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.page"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -841,6 +760,7 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/lib/branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-page.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-page-design.js?t=${timestamp}"></script>

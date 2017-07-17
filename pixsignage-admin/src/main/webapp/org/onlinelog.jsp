@@ -20,7 +20,7 @@
 				<div class="modal-body">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.onlinelog"/></div>
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.onlinelog"/></div>
 						</div>
 						<div class="portlet-body">
 							<div class="row">
@@ -67,7 +67,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.onlinelog"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.onlinelog"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

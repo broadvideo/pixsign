@@ -25,9 +25,9 @@
 						<div class="col-md-12 col-sm-12">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.schedule"/></div>
+									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.schedule"/></div>
 									<div class="actions">
-										<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="global.addschedule"/></a>
+										<a class="btn default btn-sm yellow pix-add-schedule" href="#"><i class="fa fa-plus"></i><spring:message code="pixsign.addschedule"/></a>
 									</div>
 								</div>
 								<div class="portlet-body form schedule-edit">
@@ -39,12 +39,12 @@
 														<label class="control-label col-md-3"><spring:message code="global.option"/></label>
 														<div class="col-md-9 radio-list">
 															<label class="radio-inline">
-																<input type="radio" name="playmode" value="2" checked> <spring:message code="global.daily"/>
+																<input type="radio" name="playmode" value="2" checked> <spring:message code="pixsign.daily"/>
 															</label>
 														</div>
 													</div>
 													<div class="form-group schedule-add">
-														<label class="col-md-3 control-label"><spring:message code="global.starttime"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.starttime"/><span class="required">*</span></label>
 														<div class="col-md-9">
 															<div class="input-group date form_time">                                       
 																<input type="text" size="16" readonly class="form-control" name="starttime">
@@ -61,17 +61,17 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.bundle"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.bundle"/><span class="required">*</span></label>
 														<div class="col-md-9">
 															<div class="portlet box blue">
 																<div class="portlet-title">
-																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																	<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																	<ul class="nav nav-tabs">
 																		<li id="nav_tab2" class="touch-ctrl" style="display:none">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.touchbundle"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchbundle"/></a>
 																		</li>
 																		<li id="nav_tab1" class="active">
-																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.bundle"/></a>
+																			<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.bundle"/></a>
 																		</li>
 																	</ul>
 																</div>
@@ -152,8 +152,8 @@
 								<a href="javascript:;" onClick="refreshSchedule();" class="reload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="DevicegroupNav"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="global.devicegroup"/></a></li>
-								<li id="DeviceNav" class="active"><a href="#DeviceTab" data-toggle="tab"><spring:message code="global.device"/></a></li>
+								<li id="DevicegroupNav"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+								<li id="DeviceNav" class="active"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device"/></a></li>
 							</ul>
 						</div>
 						<div class="portlet-body">

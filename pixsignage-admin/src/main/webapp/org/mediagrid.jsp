@@ -53,7 +53,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.mediagrid"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.mediagrid"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
@@ -61,7 +61,7 @@
 						<input type="hidden" name="mediagrid.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="mediagrid.name" />
@@ -69,7 +69,7 @@
 								</div>
 							</div>
 							<div class="form-group mediagrid-layout">
-								<label class="col-md-3 control-label"><spring:message code="global.layout"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.layout"/><span class="required">*</span></label>
 								<div class="col-md-9 pre-scrollable">
 									<table id="GridlayoutTable" class="table-striped"></table>
 								</div>
@@ -97,7 +97,7 @@
 						<div class="col-md-12 col-sm-12">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.mediagrid"/></div>
+									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.mediagrid"/></div>
 									<div class="actions">
 										<a href="javascript:;" class="btn btn-sm yellow pix-dtl-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></a>
 									</div>
@@ -114,7 +114,7 @@
 												<div class="form-body">
 													<label class="page-title mediagrid-title"></label>
 													<div class="form-group last">
-														<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 														<div class="col-md-9">
 															<div class="input-icon right">
 																<i class="fa"></i> <input type="text" class="form-control" name="name" />
@@ -133,26 +133,26 @@
 														</div>
 													</div>
 													<div class="form-group mediagrid-ctl">
-														<label class="col-md-3 control-label"><spring:message code="global.mediagrid"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.mediagrid"/></label>
 														<div class="col-md-9 radio-list">
 															<label class="radio-inline">
-																<input type="radio" name="objtype" value="1" checked> <spring:message code="global.video"/>
+																<input type="radio" name="objtype" value="1" checked> <spring:message code="pixsign.video"/>
 															</label>
 															<label class="radio-inline">
-																<input type="radio" name="objtype" value="2"> <spring:message code="global.image"/>
+																<input type="radio" name="objtype" value="2"> <spring:message code="pixsign.image"/>
 															</label>
 															<!-- 
 															<label class="radio-inline page-ctrl">
-																<input type="radio" name="objtype" value="3"> <spring:message code="global.page"/>
+																<input type="radio" name="objtype" value="3"> <spring:message code="pixsign.page"/>
 															</label>
 															<label class="radio-inline bundle-ctrl">
-																<input type="radio" name="objtype" value="4"> <spring:message code="global.bundle"/>
+																<input type="radio" name="objtype" value="4"> <spring:message code="pixsign.bundle"/>
 															</label>
 																 -->
 														</div>
 													</div>
 													<div class="form-group mediagrid-ctl last">
-														<label class="col-md-3 control-label"><spring:message code="global.mediagrid"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.mediagrid"/></label>
 														<div class="col-md-9">
 															<div class="input-group">
 																<span class="input-group-btn">
@@ -203,7 +203,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.mediagrid"/></div>
+							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.mediagrid"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

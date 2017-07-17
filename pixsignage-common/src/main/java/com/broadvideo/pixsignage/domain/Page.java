@@ -46,6 +46,8 @@ public class Page {
 
 	private List<Pagezone> pagezones;
 
+	private List<Page> subpages;
+
 	public Integer getPageid() {
 		return pageid;
 	}
@@ -215,5 +217,13 @@ public class Page {
 
 	public void setPagezones(List<Pagezone> pagezones) {
 		this.pagezones = pagezones;
+	}
+
+	public List<Page> getSubpages() {
+		return subpages;
+	}
+
+	public void setSubpages(List<Page> subpages) {
+		this.subpages = subpages;
 	}
 }

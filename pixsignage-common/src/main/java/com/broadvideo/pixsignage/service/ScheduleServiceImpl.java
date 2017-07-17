@@ -222,6 +222,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("schedules", scheduleJsonArray);
+		responseJson.put("multi_schedules", new JSONArray());
 		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
 
 		return responseJson;

@@ -72,6 +72,9 @@
 		<property name="basenames">
 			<list>
 				<value>resource.global</value>
+				<value>resource.menu</value>
+				<value>resource.pixsign</value>
+				<value>resource.school</value>
 			</list>
 		</property>
 	</bean>

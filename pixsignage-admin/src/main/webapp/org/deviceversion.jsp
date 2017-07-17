@@ -18,22 +18,22 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
 				</div>
 				<div class="modal-body">
 					<div class="note note-success">
-						<p><spring:message code="global.tips_4"/></p>
+						<p><spring:message code="pixsign.tips_4"/></p>
 					</div>
 					<form id="AllDeviceForm" class="form-horizontal" method="POST">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.upgradeflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.upgradeflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="upgradeflag" value="0" checked> <spring:message code="global.upgradeflag_0"/>
+										<input type="radio" name="upgradeflag" value="0" checked> <spring:message code="pixsign.prop.upgradeflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="upgradeflag" value="1"> <spring:message code="global.upgradeflag_1"/>
+										<input type="radio" name="upgradeflag" value="1"> <spring:message code="pixsign.prop.upgradeflag_1"/>
 									</label>
 								</div>
 							</div>
@@ -53,40 +53,40 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="SoloDeviceForm" class="form-horizontal" method="POST">
 						<input type="hidden" name="device.deviceid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="global.terminalid"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.terminalid"/></label>
 								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="global.mtype"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.mtype"/></label>
 								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.mtype"></label>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="global.appname"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.appname"/></label>
 								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.appname"></label>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.upgradeflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.upgradeflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="device.upgradeflag" value="0" checked> <spring:message code="global.upgradeflag_0"/>
+										<input type="radio" name="device.upgradeflag" value="0" checked> <spring:message code="pixsign.prop.upgradeflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.upgradeflag" value="1"> <spring:message code="global.upgradeflag_1"/>
+										<input type="radio" name="device.upgradeflag" value="1"> <spring:message code="pixsign.prop.upgradeflag_1"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.upgradeflag" value="2"> <spring:message code="global.upgradeflag_2"/>
+										<input type="radio" name="device.upgradeflag" value="2"> <spring:message code="pixsign.prop.upgradeflag_2"/>
 									</label>
 								</div>
 							</div>
 							<div class="form-group upgradeflag">
-								<label class="col-md-3 control-label"><spring:message code="global.appfile"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.appfile"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="AppfileSelect" class="form-control select2" name="device.appfileid">
 								</div>
@@ -121,7 +121,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.deviceversion"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.deviceversion"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -134,7 +134,7 @@
 									<div class="table-toolbar">
 										<div class="btn-group">
 											<button class="btn green pix-all-upgrade">
-												<spring:message code="global.upgradepolicy"/> <i class="fa fa-delicious"></i>
+												<spring:message code="pixsign.upgradepolicy"/> <i class="fa fa-delicious"></i>
 											</button>
 										</div>
 									</div>

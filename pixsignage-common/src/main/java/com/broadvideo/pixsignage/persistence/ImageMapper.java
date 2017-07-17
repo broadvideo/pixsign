@@ -9,6 +9,8 @@ import com.broadvideo.pixsignage.domain.Image;
 public interface ImageMapper {
 	Image selectByPrimaryKey(@Param(value = "imageid") String imageid);
 
+	Image selectByUuid(@Param(value = "uuid") String uuid);
+
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "folderid") String folderid, @Param(value = "objtype") String objtype,
 			@Param(value = "objid") String objid, @Param(value = "search") String search);

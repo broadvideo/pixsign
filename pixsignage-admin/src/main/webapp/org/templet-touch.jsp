@@ -52,7 +52,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.touchtemplet"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.touchtemplet"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
@@ -63,7 +63,7 @@
 						<input type="hidden" name="templet.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="templet.name" />
@@ -71,13 +71,14 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-3"><spring:message code="global.layout.ratio"/></label>
+								<label class="control-label col-md-3"><spring:message code="pixsign.prop.ratio"/></label>
 								<div class="col-md-9">
 									<select class="form-control" name="templet.ratio" tabindex="-1">
-										<option value="1" selected="selected"><spring:message code="global.layout.ratio_1"/></option>
-										<option value="2"><spring:message code="global.layout.ratio_2"/></option>
-										<option value="3"><spring:message code="global.layout.ratio_3"/></option>
-										<option value="4"><spring:message code="global.layout.ratio_4"/></option>
+										<option value="1" selected="selected"><spring:message code="pixsign.prop.ratio_1"/></option>
+										<option value="2"><spring:message code="pixsign.prop.ratio_2"/></option>
+										<option value="3"><spring:message code="pixsign.prop.ratio_3"/></option>
+										<option value="4"><spring:message code="pixsign.prop.ratio_4"/></option>
+										<option value="5"><spring:message code="pixsign.prop.ratio_5"/></option>
 									</select>
 								</div>
 							</div>
@@ -97,7 +98,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.subbundle"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.subtemplet"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="SubtempletForm" class="form-horizontal" data-async data-target="#SubtempletModal" method="POST">
@@ -109,7 +110,7 @@
 						<input type="hidden" name="templet.ratio" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="templet.name" />
@@ -117,7 +118,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.subtemplet"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.subtemplet"/></label>
 								<div class="col-md-9 pre-scrollable">
 									<table id="FromTempletTable">
 									</table>
@@ -152,19 +153,19 @@
 											<li>
 												<a href="#tab1" data-toggle="tab" class="step">
 													<span class="number">1</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.baseedit"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.tips.baseedit"/></span>   
 												</a>
 											</li>
 											<li>
 												<a href="#tab2" data-toggle="tab" class="step">
 													<span class="number">2</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designlayout"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.tips.designlayout"/></span>   
 												</a>
 											</li>
 											<li>
 												<a href="#tab3" data-toggle="tab" class="step">
 													<span class="number">3</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.designcontent"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.tips.designcontent"/></span>   
 												</a>
 											</li>
 										</ul>
@@ -182,7 +183,7 @@
 											<div class="tab-pane" id="tab1">
 												<form id="TempletOptionForm" class="form-horizontal" data-async method="POST">
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 														<div class="col-md-6">
 															<div class="input-icon right">
 																<i class="fa"></i> <input type="text" class="form-control" name="name" />
@@ -190,7 +191,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.bundle.homeidletime"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.homeidletime"/></label>
 														<div class="col-md-6">
 															<div class="input-icon right">
 																<i class="fa"></i> <input type="text" class="form-control" name="homeidletime" value="0"/>
@@ -198,7 +199,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgimage"/></label>
 														<div class="col-md-6">
 															<div class="input-group">
 																<span class="input-group-btn">
@@ -216,7 +217,7 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 														<div class="col-md-6">
 															<textarea class="form-control" rows="6" name="description"></textarea>
 														</div>
@@ -229,28 +230,28 @@
 													<div class="col-md-12 col-sm-12">
 														<div class="portlet box purple">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.layout"/></div>
+																<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.touchtemplet"/></div>
 																<div class="actions">
 																	<!-- 
 																	<div id="RegionBtn" class="btn-group">
 																	</div>
 																		 -->
-																	<a href="javascript:;" regiontype="0" class="btn btn-sm yellow pix-addregion"><spring:message code="region.play"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="region.text"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="region.date"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="3" class="btn btn-sm yellow pix-addregion"><spring:message code="region.weather"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion stream-ctrl"><spring:message code="region.stream"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion dvb-ctrl"><spring:message code="region.dvb"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="region.videoin"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.touch"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="region.navigate"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="region.qrcode"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendarlist"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="11" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="region.calendartable"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="region.rss"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="13" class="btn btn-sm yellow pix-addregion audio-ctrl"><spring:message code="region.audio"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a1"/> <i class="fa fa-plus"></i></a>
-																	<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="region.a2"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="0" class="btn btn-sm yellow pix-addregion"><spring:message code="pixsign.bundledtl.type.play"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="1" class="btn btn-sm yellow pix-addregion"><spring:message code="pixsign.bundledtl.type.text"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="2" class="btn btn-sm yellow pix-addregion"><spring:message code="pixsign.bundledtl.type.date"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="3" class="btn btn-sm yellow pix-addregion"><spring:message code="pixsign.bundledtl.type.weather"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="6" class="btn btn-sm yellow pix-addregion stream-ctrl"><spring:message code="pixsign.bundledtl.type.stream"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="5" class="btn btn-sm yellow pix-addregion dvb-ctrl"><spring:message code="pixsign.bundledtl.type.dvb"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="4" class="btn btn-sm yellow pix-addregion videoin-ctrl"><spring:message code="pixsign.bundledtl.type.videoin"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="7" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="pixsign.bundledtl.type.touch"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="8" class="btn btn-sm yellow pix-addregion touch-ctrl"><spring:message code="pixsign.bundledtl.type.navigate"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="9" class="btn btn-sm yellow pix-addregion"><spring:message code="pixsign.bundledtl.type.qrcode"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="10" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="pixsign.bundledtl.type.calendarlist"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="11" class="btn btn-sm yellow pix-addregion calendar-ctrl"><spring:message code="pixsign.bundledtl.type.calendartable"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="12" class="btn btn-sm yellow pix-addregion rss-ctrl"><spring:message code="pixsign.bundledtl.type.rss"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="13" class="btn btn-sm yellow pix-addregion audio-ctrl"><spring:message code="pixsign.bundledtl.type.audio"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="A1" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="pixsign.bundledtl.type.a1"/> <i class="fa fa-plus"></i></a>
+																	<a href="javascript:;" regiontype="A2" class="btn btn-sm yellow pix-addregion lift-ctrl"><spring:message code="pixsign.bundledtl.type.a2"/> <i class="fa fa-plus"></i></a>
 																</div>
 															</div>
 															<div class="portlet-body form">
@@ -269,67 +270,67 @@
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.sleeptime"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.sleeptime"/></label>
 																					<div class="col-md-9">
 																						<input class="sleepRange" type="text" name="sleeptime" value="0"/>
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0 regiontype-6">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.intervaltime"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.intervaltime"/></label>
 																					<div class="col-md-9">
 																						<input class="intervalRange" type="text" name="intervaltime" value="10"/>
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.animation"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.animation"/></label>
 																					<div class="col-md-9">
 																						<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.fitflag"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.fitflag"/></label>
 																					<div class="col-md-9 radio-list">
 																						<label class="radio-inline">
-																							<input type="radio" name="fitflag" value="0"> <spring:message code="global.layout.region.fitflag_0"/>
+																							<input type="radio" name="fitflag" value="0"> <spring:message code="pixsign.prop.fitflag_0"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="fitflag" value="1" checked> <spring:message code="global.layout.region.fitflag_1"/>
+																							<input type="radio" name="fitflag" value="1" checked> <spring:message code="pixsign.prop.fitflag_1"/>
 																						</label>
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0 regiontype-6">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.volume"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
 																					<div class="col-md-9">
 																						<input class="volumeRange" type="text" name="volume" value="50"/>
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.direction"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.direction"/></label>
 																					<div class="col-md-9 radio-list">
 																						<label class="radio-inline">
-																							<input type="radio" name="direction" value="1"> <spring:message code="global.layout.region.direction_1"/>
+																							<input type="radio" name="direction" value="1"> <spring:message code="pixsign.prop.direction_1"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="direction" value="4" checked> <spring:message code="global.layout.region.direction_4"/>
+																							<input type="radio" name="direction" value="4" checked> <spring:message code="pixsign.prop.direction_4"/>
 																						</label>  
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.speed"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.speed"/></label>
 																					<div class="col-md-9 radio-list">
 																						<label class="radio-inline">
-																							<input type="radio" name="speed" value="1"> <spring:message code="global.layout.region.speed_1"/>
+																							<input type="radio" name="speed" value="1"> <spring:message code="pixsign.prop.speed_1"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="speed" value="2" checked> <spring:message code="global.layout.region.speed_2"/>
+																							<input type="radio" name="speed" value="2" checked> <spring:message code="pixsign.prop.speed_2"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="speed" value="3"> <spring:message code="global.layout.region.speed_3"/>
+																							<input type="radio" name="speed" value="3"> <spring:message code="pixsign.prop.speed_3"/>
 																						</label>  
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-12">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.color"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.color"/></label>
 																					<div class="col-md-9">
 																						<div class="input-group colorpicker-component colorPick">
 																							<input type="text" name="color" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
@@ -338,13 +339,13 @@
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.size"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.size"/></label>
 																					<div class="col-md-9">
 																						<input class="sizeRange" type="text" name="size" value="50"/>
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-2">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.dateformat"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.dateformat"/></label>
 																					<div class="col-md-9">
 																						<select class="form-control" name="dateformat" tabindex="-1">
 																							<option value="yyyy-MM-dd">2016-01-01</option>
@@ -356,7 +357,7 @@
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-0 regiontype-7 regiontype-8 regiontype-10 regiontype-11">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.bgimage"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgimage"/></label>
 																					<div class="col-md-9">
 																						<div class="input-group">
 																							<span class="input-group-btn">
@@ -374,7 +375,7 @@
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.bgcolor"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgcolor"/></label>
 																					<div class="col-md-9">
 																						<div class="input-group colorpicker-component bgcolorPick">
 																							<input type="text" name="bgcolor" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
@@ -383,22 +384,22 @@
 																					</div>
 																				</div>
 																				<div class="form-group templet-ctl regiontype-1 regiontype-2 regiontype-3 regiontype-7 regiontype-8 regiontype-10 regiontype-11 regiontype-12">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.opacity"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.opacity"/></label>
 																					<div class="col-md-9">
 																						<input class="opacityRange" type="text" name="opacity" value=""/>
 																					</div>
 																				</div>
 																				<div class="form-group">
-																					<label class="col-md-3 control-label"><spring:message code="global.layout.region.zindex"/></label>
+																					<label class="col-md-3 control-label"><spring:message code="pixsign.prop.zindex"/></label>
 																					<div class="col-md-9 radio-list">
 																						<label class="radio-inline">
-																							<input type="radio" name="zindex" value="0"> <spring:message code="global.layout.region.zindex_0"/>
+																							<input type="radio" name="zindex" value="0"> <spring:message code="pixsign.prop.zindex_0"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="zindex" value="1" checked> <spring:message code="global.layout.region.zindex_1"/>
+																							<input type="radio" name="zindex" value="1" checked> <spring:message code="pixsign.prop.zindex_1"/>
 																						</label>
 																						<label class="radio-inline">
-																							<input type="radio" name="zindex" value="2"> <spring:message code="global.layout.region.zindex_2"/>
+																							<input type="radio" name="zindex" value="2"> <spring:message code="pixsign.prop.zindex_2"/>
 																						</label>  
 																					</div>
 																				</div>
@@ -492,7 +493,7 @@
 																<label class="page-title font-red-sunglo templetdtl-title"></label>
 			
 																<div class="form-group templet-ctl regiontype-7">
-																	<label class="control-label col-md-3"><spring:message code="global.bundledtl.touchlabel"/></label>
+																	<label class="control-label col-md-3"><spring:message code="pixsign.prop.touchlabel"/></label>
 																	<div class="col-md-9">
 																		<div class="input-icon right">
 																			<i class="fa"></i> <input type="text" class="form-control" name="templetdtl.touchlabel" value=""/>
@@ -500,30 +501,30 @@
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-7">
-																	<label class="control-label col-md-3"><spring:message code="global.bundledtl.touchtype"/><span class="required">*</span></label>
+																	<label class="control-label col-md-3"><spring:message code="pixsign.prop.touchtype"/><span class="required">*</span></label>
 																	<div class="col-md-9 radio-list">
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="0"> <spring:message code="global.bundledtl.touchtype_0"/>
+																			<input type="radio" name="templetdtl.touchtype" value="0"> <spring:message code="pixsign.prop.touchtype_0"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="1" checked> <spring:message code="global.bundledtl.touchtype_1"/>
+																			<input type="radio" name="templetdtl.touchtype" value="1" checked> <spring:message code="pixsign.prop.touchtype_1"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="2"> <spring:message code="global.bundledtl.touchtype_2"/>
+																			<input type="radio" name="templetdtl.touchtype" value="2"> <spring:message code="pixsign.prop.touchtype_2"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="3"> <spring:message code="global.bundledtl.touchtype_3"/>
+																			<input type="radio" name="templetdtl.touchtype" value="3"> <spring:message code="pixsign.prop.touchtype_3"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="4"> <spring:message code="global.bundledtl.touchtype_4"/>
+																			<input type="radio" name="templetdtl.touchtype" value="4"> <spring:message code="pixsign.prop.touchtype_4"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.touchtype" value="9"> <spring:message code="global.bundledtl.touchtype_9"/>
+																			<input type="radio" name="templetdtl.touchtype" value="9"> <spring:message code="pixsign.prop.touchtype_9"/>
 																		</label>
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-7 touchtype-2">
-																	<label class="col-md-3 control-label"><spring:message code="global.bundledtl.touchbundle"/><span class="required">*</span></label>
+																	<label class="col-md-3 control-label"><spring:message code="pixsign.prop.touchbundle"/><span class="required">*</span></label>
 																	<div class="col-md-9">
 																		<input type="hidden" id="SubBundleSelect" class="form-control select2" name="templetdtl.touchbundleid" />
 																	</div>
@@ -541,18 +542,18 @@
 																	<label class="control-label col-md-3"><spring:message code="global.type"/></label>
 																	<div class="col-md-9 radio-list">
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.objtype" value="1" checked> <spring:message code="global.medialist"/>
+																			<input type="radio" name="templetdtl.objtype" value="1" checked> <spring:message code="pixsign.medialist"/>
 																		</label>
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.objtype" value="5"> <spring:message code="global.widget"/>
+																			<input type="radio" name="templetdtl.objtype" value="5"> <spring:message code="pixsign.widget"/>
 																		</label>
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-1 touchtype-3">
-																	<label class="control-label col-md-3"><spring:message code="global.bundledtl.objtype"/></label>
+																	<label class="control-label col-md-3"><spring:message code="pixsign.prop.objtype"/></label>
 																	<div class="col-md-9 radio-list">
 																		<label class="radio-inline">
-																			<input type="radio" name="templetdtl.objtype" value="2" checked> <spring:message code="global.text"/>
+																			<input type="radio" name="templetdtl.objtype" value="2" checked> <spring:message code="pixsign.text"/>
 																		</label>
 																	</div>
 																</div>
@@ -563,13 +564,13 @@
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-1">
-																	<label class="col-md-3 control-label"><spring:message code="global.resource.text"/></label>
+																	<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/></label>
 																	<div class="col-md-9">
 																		<textarea class="form-control" rows="10" name="templetdtl.text.text"></textarea>
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-0 regiontype-7 objtype-5 touchtype-3">
-																	<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
+																	<label class="col-md-3 control-label"><spring:message code="pixsign.prop.url"/><span class="required">*</span></label>
 																	<div class="col-md-9">
 																		<div class="input-icon right">
 																			<i class="fa"></i> <input type="text" class="form-control" name="templetdtl.widget.url" />
@@ -577,7 +578,7 @@
 																	</div>
 																</div>
 																<div class="form-group templet-ctl regiontype-12">
-																	<label class="col-md-3 control-label"><spring:message code="global.url"/><span class="required">*</span></label>
+																	<label class="col-md-3 control-label"><spring:message code="pixsign.prop.url"/><span class="required">*</span></label>
 																	<div class="col-md-9">
 																		<div class="input-icon right">
 																			<i class="fa"></i> <input type="text" class="form-control" name="templetdtl.rss.url" />
@@ -591,7 +592,7 @@
 															<div class="col-md-7">
 																<div class="portlet box blue">
 																	<div class="portlet-title">
-																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.bundledtl.stream.warehouse"/></div>
+																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																	</div>
 																	<div class="portlet-body">
 																		<table id="StreamTable1" class="table table-condensed table-hover">
@@ -622,7 +623,7 @@
 															<div class="col-md-7">
 																<div class="portlet box blue">
 																	<div class="portlet-title">
-																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																		<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																	</div>
 																	<div class="portlet-body">
 																		<table id="AudioTable1" class="table table-condensed table-hover">
@@ -656,16 +657,16 @@
 													<div class="col-md-8">
 														<div class="portlet box blue">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																<ul class="nav nav-tabs">
 																	<li id="nav_tab3" class="imageflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.image"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.image"/></a>
 																	</li>
 																	<li id="nav_tab2" class="hide-orgtype-2">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.extvideo"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.extvideo"/></a>
 																	</li>
 																	<li id="nav_tab1" class="videoflag active">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.intvideo"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.video"/></a>
 																	</li>
 																</ul>
 															</div>
@@ -730,8 +731,8 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="col-md-offset-9 col-md-3">
-													<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> <spring:message code="global.wizard.previous"/> </a>
-													<a href="javascript:;" class="btn blue button-next"><spring:message code="global.wizard.next"/> <i class="m-icon-swapright m-icon-white"></i></a>
+													<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> <spring:message code="global.previous"/> </a>
+													<a href="javascript:;" class="btn blue button-next"><spring:message code="global.next"/> <i class="m-icon-swapright m-icon-white"></i></a>
 													<a href="javascript:;" class="btn green button-submit" style="display: none;"><spring:message code="global.submit"/> <i class="m-icon-swapright m-icon-white"></i></a>                            
 												</div>
 											</div>
@@ -767,7 +768,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.touchtemplet"/></div>
+							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.touchtemplet"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

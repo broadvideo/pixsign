@@ -20,7 +20,7 @@ var CalendarTable = function () {
             aspectRatio: 1,
             firstDay: 1,
             allDaySlot: false,
-            slotDuration: '00:30:00',
+            slotDuration: '01:00:00',
             //snapDuration: '00:05:00',
             //slotEventOverlap: false,
             selectOverlap: false,

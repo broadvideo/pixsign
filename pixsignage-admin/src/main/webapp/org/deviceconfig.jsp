@@ -27,7 +27,7 @@
 								<div class="form-body">
 									<!-- 
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.upgradeflag"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.upgradeflag"/></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.upgradeflag" value="0" checked> <spring:message code="global.off"/>
@@ -39,24 +39,24 @@
 									</div>
 										 -->
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.volumeflag"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volumeflag"/></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
-												<input type="radio" name="org.volumeflag" value="0" checked> <spring:message code="global.volumeflag_0"/>
+												<input type="radio" name="org.volumeflag" value="0" checked> <spring:message code="pixsign.prop.volumeflag_0"/>
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="org.volumeflag" value="1"> <spring:message code="global.volumeflag_1"/>
+												<input type="radio" name="org.volumeflag" value="1"> <spring:message code="pixsign.prop.volumeflag_1"/>
 											</label>
 										</div>
 									</div>
 									<div class="form-group volumeflag">
-										<label class="col-md-3 control-label"><spring:message code="global.volume"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
 										<div class="col-md-9">
 											<input class="volumeRange" type="text" name="org.volume" value="50"/>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.devicepassflag"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.devicepassflag"/></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.devicepassflag" value="0"> <spring:message code="global.off"/>
@@ -67,7 +67,7 @@
 										</div>
 									</div>
 									<div class="form-group devicepassflag">
-										<label class="col-md-3 control-label"><spring:message code="global.devicepass"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.devicepass"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="org.devicepass" />
@@ -75,13 +75,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.backupvideo"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
 										<div class="col-md-9">
 											<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 										</div>
 									</div>
 									<div class="form-group sscreen-ctrl">
-										<label class="col-md-3 control-label"><spring:message code="global.powerflag"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 										<div class="col-md-9 radio-list">
 											<label class="radio-inline">
 												<input type="radio" name="org.powerflag" value="0" checked> <spring:message code="global.off"/>
@@ -92,7 +92,7 @@
 										</div>
 									</div>
 									<div class="form-group sscreen-ctrl powerflag">
-										<label class="col-md-3 control-label"><spring:message code="global.poweron"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.poweron"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-group date form_time">                                       
 												<input type="text" size="16" readonly class="form-control" name="org.poweron">
@@ -103,7 +103,7 @@
 										</div>
 									</div>
 									<div class="form-group sscreen-ctrl powerflag">
-										<label class="col-md-3 control-label"><spring:message code="global.poweroff"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.poweroff"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-group date form_time">                                       
 												<input type="text" size="16" readonly class="form-control" name="org.poweroff">
@@ -152,7 +152,7 @@
 									<button privilegeid="101010" class="btn blue pix-update"><spring:message code="global.update"/> <i class="fa fa-edit"></i></button>
 								</div>
 								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-push"><spring:message code="global.pushall"/> <i class="fa fa-cogs"></i></button>
+									<button privilegeid="101010" class="btn green pix-push"><spring:message code="pixsign.device.pushall"/> <i class="fa fa-cogs"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">

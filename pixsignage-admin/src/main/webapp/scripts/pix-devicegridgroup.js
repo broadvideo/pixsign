@@ -28,10 +28,7 @@ var oTable = $('#MyTable').dataTable({
 	'sAjaxSource' : myurls['common.list'],
 	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
 					{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '65%' },
-					{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
-					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
-					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' },
-					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }],
+					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '20%' }],
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
@@ -57,10 +54,18 @@ var oTable = $('#MyTable').dataTable({
 		}
 		$('td:eq(1)', nRow).html(listhtml);
 		
-		$('td:eq(2)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
-		$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>');
-		$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-		$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+		var buttonhtml = '';
+		buttonhtml += '<div class="util-btn-margin-bottom-5">';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-plan"><i class="fa fa-codepen"></i> ' + common.view.multiplan + '</a>';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + '</a>';
+		buttonhtml += '</div>';
+		buttonhtml += '<div class="util-btn-margin-bottom-5">';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.detail + '</a>';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+		buttonhtml += '</div>';
+
+		$('td:eq(2)', nRow).html(buttonhtml);
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
@@ -520,4 +525,129 @@ $('body').on('click', '.pix-deletedevicegpdtl', function(event) {
 			console.log('failue');
 		}
 	});
+});
+
+$("#PlanTable thead").css("display", "none");
+$("#PlanTable tbody").css("display", "none");
+$('#PlanTable').dataTable({
+	'sDom' : 'rt',
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'plan!listbybind.action',
+	'aoColumns' : [ {'sTitle' : common.view.playtime, 'mData' : 'planid', 'bSortable' : false, 'sWidth' : '30%' }, 
+	                {'sTitle' : common.view.detail, 'mData' : 'planid', 'bSortable' : false, 'sWidth' : '70%' }],
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnPreDrawCallback': function (oSettings) {
+		if ($('#PlanContainer').length < 1) {
+			$('#PlanTable').append('<div id="PlanContainer"></div>');
+		}
+		$('#PlanContainer').html(''); 
+		return true;
+	},
+	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		var playtimehtml = '';
+		if (aData.priority == 0) {
+			playtimehtml += '<span class="label label-sm label-success">' + common.view.plan_priority_0 + '</span>';
+		} else {
+			playtimehtml += '<span class="label label-sm label-danger">' + common.view.plan_priority_1 + '</span>';
+		}
+		playtimehtml += '<span><h4><b>Plan-' + aData.planid + '</b></h4></span>';
+		if (aData.startdate == '1970-01-01') {
+			playtimehtml += common.view.unlimited;
+		} else {
+			playtimehtml += aData.startdate;
+		}
+		playtimehtml += ' ~ ';
+		if (aData.enddate == '2037-01-01') {
+			playtimehtml += common.view.unlimited;
+		} else {
+			playtimehtml += aData.enddate;
+		}
+		playtimehtml += '<br/>';
+		if (aData.starttime == '00:00:00' && aData.endtime == '00:00:00') {
+			playtimehtml += common.view.fulltime;
+		} else {
+			playtimehtml += aData.starttime + ' ~ ' + aData.endtime;
+		}
+
+		var planhtml = '';
+		if (aData.plandtls.length > 0) {
+			for (var i=0; i<aData.plandtls.length; i++) {
+				var plandtl = aData.plandtls[i];
+				var name;
+				var thumbwidth;
+				if (i % 6 == 0) {
+					planhtml += '<div class="row" >';
+				}
+				planhtml += '<div class="col-md-2 col-xs-2">';
+
+				planhtml += '<div class="thumbs">';
+				if (plandtl.objtype == 2) {
+					name = plandtl.page.name;
+					thumbwidth = plandtl.page.width > plandtl.page.height? 100 : 100*plandtl.page.width/plandtl.page.height;
+					planhtml += '<img src="/pixsigdata' + plandtl.page.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" />';
+				} else if (plandtl.objtype == 3) {
+					name = plandtl.video.name;
+					thumbwidth = plandtl.video.width > plandtl.video.height? 100 : 100*plandtl.video.width/plandtl.video.height;
+					planhtml += '<img src="/pixsigdata' + plandtl.video.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" />';
+				} else if (plandtl.objtype == 4) {
+					name = plandtl.image.name;
+					thumbwidth = plandtl.image.width > plandtl.image.height? 100 : 100*plandtl.image.width/plandtl.image.height;
+					planhtml += '<img src="/pixsigdata' + plandtl.image.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" />';
+				} else if (plandtl.objtype == 9) {
+					name = plandtl.mediagrid.name;
+					thumbwidth = plandtl.mediagrid.width > plandtl.mediagrid.height? 100 : 100*plandtl.mediagrid.width/plandtl.mediagrid.height;
+					planhtml += '<img src="/pixsigdata' + plandtl.mediagrid.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" />';
+				}
+				planhtml += '</div>';
+				planhtml += '<h6 class="pixtitle">' + name + '</h6>';
+				if (plandtl.duration > 0) {
+					planhtml += '<h6 class="pixtitle">' + transferIntToTime(plandtl.duration) + '</h6>';
+				}
+				if (plandtl.maxtimes > 0) {
+					planhtml += '<h6 class="pixtitle">' + plandtl.maxtimes + '</h6>';
+				}
+				planhtml += '</div>';
+				if ((i+1) % 6 == 0 || (i+1) == aData.plandtls.length) {
+					planhtml += '</div>';
+				}
+			}
+		} else {
+			planhtml = '';
+		}
+		planhtml += '<hr/>';
+		$('#PlanContainer').append(playtimehtml + planhtml);
+		
+		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('#PlanTable .thumbs').each(function(i) {
+			$(this).width($(this).parent().closest('div').width());
+			$(this).height($(this).parent().closest('div').width());
+		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'plantype','value':2 });
+		aoData.push({'name':'bindtype','value':2 });
+		aoData.push({'name':'bindid','value':CurrentDevicegroupid });
+	}
+});
+$('#PlanTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+$('#PlanTable_wrapper .dataTables_length select').addClass('form-control input-small');
+$('#PlanTable_wrapper .dataTables_length select').select2();
+$('#PlanTable').css('width', '100%');
+
+$('#PlanModal').on('shown.bs.modal', function (e) {
+	$('#PlanTable').dataTable()._fnAjaxUpdate();
+})
+
+$('body').on('click', '.pix-plan', function(event) {
+	var index = $(event.target).attr('data-id');
+	if (index == undefined) {
+		index = $(event.target).parent().attr('data-id');
+	}
+	CurrentDevicegroup = $('#MyTable').dataTable().fnGetData(index);
+	CurrentDevicegroupid = CurrentDevicegroup.devicegroupid;
+	$('#PlanModal').modal();
 });

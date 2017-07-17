@@ -104,19 +104,19 @@ var FormValidateOption = {
 	errorElement : 'span', //default input error message container
 	errorClass : 'help-block', // default input error message class
 	focusInvalid : false, // do not focus the last invalid input
-	   highlight: function (element) { 
-		   $(element).closest('.form-group').addClass('has-error'); 
-		},
-		success: function (label) {
-			label.closest('.form-group').removeClass('has-error');
-			label.remove();
-		},
-		errorPlacement: function (error, element) {
-			error.insertAfter(element.closest('.input-icon'));
-		},
-		rules: {},
-		ignore: null,
-	};
+	highlight: function (element) { 
+		$(element).closest('.form-group').addClass('has-error'); 
+	},
+	success: function (label) {
+		label.closest('.form-group').removeClass('has-error');
+		label.remove();
+	},
+	errorPlacement: function (error, element) {
+		error.insertAfter(element.closest('.input-icon'));
+	},
+	rules: {},
+	ignore: null,
+};
 
 
 function startPingTimer(){

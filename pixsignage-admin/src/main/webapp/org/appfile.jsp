@@ -21,7 +21,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.appfile"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.appfile"/></h4>
 						</div>
 						<div class="modal-body">
 		
@@ -32,16 +32,16 @@
 										<!-- The fileinput-button span is used to style the file input field as button -->
 										<span class="btn green fileinput-button">
 										<i class="fa fa-plus"></i>
-										<span><spring:message code="global.resource.choose"/></span>
+										<span><spring:message code="pixsign.appfile"/></span>
 										<input type="file" name="myfile" multiple>
 										</span>
 										<button type="submit" class="btn blue start">
 										<i class="fa fa-upload"></i>
-										<span><spring:message code="global.resource.uploadall"/></span>
+										<span><spring:message code="global.uploadall"/></span>
 										</button>
 										<button type="reset" class="btn yellow cancel">
 										<i class="fa fa-ban"></i>
-										<span><spring:message code="global.resource.uploadcancel"/></span>
+										<span><spring:message code="global.uploadcancel"/></span>
 										</button>
 										<!-- The global file processing state -->
 										<span class="fileupload-process"></span>
@@ -75,14 +75,14 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.appfile"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.appfile"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
 								<input type="hidden" name="appfile.appfileid" value="0" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="appfile.name" />
@@ -90,7 +90,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.description"/></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="appfile.description"></textarea>
 										</div>
@@ -123,7 +123,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.appfile"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.appfile"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -131,7 +131,7 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.resource.upload"/> <i class="fa fa-plus"></i></button>
+									<button privilegeid="201010" class="btn green pix-add"><spring:message code="global.upload"/> <i class="fa fa-plus"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -147,8 +147,7 @@
 </body>
 
 <div id="SiteMethJavaScript">
-<spring:message code="global.name" var="global_name"/>
-<spring:message code="global.resource.upload" var="global_resource_upload"/>
+<spring:message code="global.upload" var="global_upload"/>
 <spring:message code="global.cancel" var="global_cancel"/>
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -169,7 +168,7 @@
 			{% if (!i && !o.options.autoUpload) { %}
 				<button class="btn blue start" disabled>
 					<i class="fa fa-upload"></i>
-					<span>${global_resource_upload}</span>
+					<span>${global_upload}</span>
 				</button>
 			{% } %}
 			{% if (!i) { %}
@@ -198,7 +197,7 @@
 				{% } %}
 			</p>
 			{% if (file.error) { %}
-				<div><span class="label label-danger"><spring:message code="global.error"/></span><spring:message code="global.resource.uploadfail"/><span>:{%=file.errorcode%}</span></div>
+				<div><span class="label label-danger"><spring:message code="global.error"/></span><spring:message code="global.uploadfail"/><span>:{%=file.errorcode%}</span></div>
 			{% } %}
 		</td>
 		<td>

@@ -24,7 +24,7 @@
 					<form id="PlandtlForm" class="form-horizontal" method="POST">
 						<div class="form-body">
 							<div class="form-group plandtl-duration">
-								<label class="col-md-3 control-label"><spring:message code="global.duration"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.duration"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="duration" />
@@ -32,7 +32,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.maxtimes"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.maxtimes"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="maxtimes" />
@@ -67,19 +67,19 @@
 											<li>
 												<a href="#tab1" data-toggle="tab" class="step">
 													<span class="number">1</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.plan.baseedit"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.plan.baseedit"/></span>   
 												</a>
 											</li>
 											<li>
 												<a href="#tab2" data-toggle="tab" class="step">
 													<span class="number">2</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.plan.programdetail"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.plan.programdetail"/></span>   
 												</a>
 											</li>
 											<li>
 												<a href="#tab3" data-toggle="tab" class="step">
 													<span class="number">3</span>
-													<span class="desc"><i class="fa fa-check"></i> <spring:message code="global.plan.devicedetail"/></span>   
+													<span class="desc"><i class="fa fa-check"></i> <spring:message code="pixsign.plan.devicedetail"/></span>   
 												</a>
 											</li>
 										</ul>
@@ -97,27 +97,27 @@
 											<div class="tab-pane" id="tab1">
 												<form id="PlanOptionForm" class="form-horizontal" data-async method="POST">
 													<div class="form-group plan-layout">
-														<label class="col-md-3 control-label"><spring:message code="global.layout"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.layout"/><span class="required">*</span></label>
 														<div class="col-md-9 pre-scrollable">
 															<table id="GridlayoutTable" class="table-striped"></table>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.plan.priority"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.priority"/><span class="required">*</span></label>
 														<div class="col-md-9 radio-list">
 															<label class="radio-inline">
-																<input type="radio" name="plan.priority" value="0" checked> <spring:message code="global.plan.priority_0"/>
+																<input type="radio" name="plan.priority" value="0" checked> <spring:message code="pixsign.prop.planpriority_0"/>
 															</label>
 															<label class="radio-inline">
-																<input type="radio" name="plan.priority" value="1"> <spring:message code="global.plan.priority_1"/>
+																<input type="radio" name="plan.priority" value="1"> <spring:message code="pixsign.prop.planpriority_1"/>
 															</label>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.plan.startdate"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.startdate"/><span class="required">*</span></label>
 														<div class="col-md-1 checkbox-list">
 															<label class="checkbox-inline">
-																<input type="checkbox" name="plan.startdate.unlimited" value="1"><spring:message code="global.plan.unlimited"/>
+																<input type="checkbox" name="plan.startdate.unlimited" value="1"><spring:message code="pixsign.prop.unlimited"/>
 															</label>
 														</div>
 														<div class="col-md-3">
@@ -130,10 +130,10 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.plan.enddate"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.enddate"/><span class="required">*</span></label>
 														<div class="col-md-1 checkbox-list">
 															<label class="checkbox-inline">
-																<input type="checkbox" name="plan.enddate.unlimited" value="1"><spring:message code="global.plan.unlimited"/>
+																<input type="checkbox" name="plan.enddate.unlimited" value="1"><spring:message code="pixsign.prop.unlimited"/>
 															</label>
 														</div>
 														<div class="col-md-3">
@@ -146,10 +146,10 @@
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-3 control-label"><spring:message code="global.plan.playtime"/><span class="required">*</span></label>
+														<label class="col-md-3 control-label"><spring:message code="pixsign.prop.playtime"/><span class="required">*</span></label>
 														<div class="col-md-1 checkbox-list">
 															<label class="checkbox-inline">
-																<input type="checkbox" name="plan.fulltime" value="1"><spring:message code="global.plan.fulltime"/>
+																<input type="checkbox" name="plan.fulltime" value="1"><spring:message code="pixsign.prop.fulltime"/>
 															</label>
 														</div>
 														<div class="col-md-3">
@@ -177,21 +177,21 @@
 													<div class="col-md-8 col-sm-12">
 														<div class="portlet box blue">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.resource.warehouse"/></div>
+																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																<ul class="nav nav-tabs">
 																	<!-- 
 																	<li id="nav_tab4" class="pageflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solopage"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solopage"/></a>
 																	</li>
 																		 -->
 																	<li id="nav_tab3" class="imageflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.soloimage"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.soloimage"/></a>
 																	</li>
 																	<li id="nav_tab2" class="videoflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.solovideo"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solovideo"/></a>
 																	</li>
 																	<li id="nav_tab1" class="mediagridflag active">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="global.mediagrid"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.mediagrid"/></a>
 																	</li>
 																</ul>
 															</div>
@@ -261,13 +261,13 @@
 													<div class="col-md-7">
 														<div class="portlet box blue tabbable">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.plan.devicewarehouse"/></div>
+																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.plan.devicewarehouse"/></div>
 																<ul class="nav nav-tabs">
 																	<li id="nav_dtab1" class="active">
-																		<a href="#device_tab" data-toggle="tab"><spring:message code="global.devicegrid"/></a>
+																		<a href="#device_tab" data-toggle="tab"><spring:message code="pixsign.devicegrid"/></a>
 																	</li>
 																	<li id="nav_dtab2">
-																		<a href="#device_tab" data-toggle="tab"><spring:message code="global.devicegridgroup"/></a>
+																		<a href="#device_tab" data-toggle="tab"><spring:message code="pixsign.devicegridgroup"/></a>
 																	</li>
 																</ul>
 															</div>
@@ -294,7 +294,7 @@
 													<div class="col-md-5">
 														<div class="portlet box green">
 															<div class="portlet-title">
-																<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.plan.deviceselected"/></div>
+																<div class="caption"><i class="fa fa-picture"></i><spring:message code="pixsign.plan.deviceselected"/></div>
 															</div>
 															<div class="portlet-body">
 																<div class="table-responsive">
@@ -317,8 +317,8 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="col-md-offset-9 col-md-3">
-													<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> <spring:message code="global.wizard.previous"/> </a>
-													<a href="javascript:;" class="btn blue button-next"><spring:message code="global.wizard.next"/> <i class="m-icon-swapright m-icon-white"></i></a>
+													<a href="javascript:;" class="btn default button-previous" style="display: none;"><i class="m-icon-swapleft"></i> <spring:message code="global.previous"/> </a>
+													<a href="javascript:;" class="btn blue button-next"><spring:message code="global.next"/> <i class="m-icon-swapright m-icon-white"></i></a>
 													<a href="javascript:;" class="btn green button-submit" style="display: none;"><spring:message code="global.submit"/> <i class="m-icon-swapright m-icon-white"></i></a>                            
 												</div>
 											</div>
@@ -353,7 +353,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.multiplan"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.multiplan"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="refreshPlan();" class="reload"></a>
 							</div>

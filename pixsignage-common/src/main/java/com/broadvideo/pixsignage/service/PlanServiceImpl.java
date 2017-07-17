@@ -3,7 +3,9 @@ package com.broadvideo.pixsignage.service;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -154,14 +156,14 @@ public class PlanServiceImpl implements PlanService {
 	public void syncPlan(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals(Device.Online) && device.getDevicegridid() > 0) {
+			if (device.getOnlineflag().equals(Device.Online)) {
 				generateSyncEvent(Integer.parseInt(bindid));
 			}
 		} else if (bindtype.equals(Planbind.BindType_Devicegroup)) {
 			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
 			for (Device device : devices) {
 				if (device.getOnlineflag().equals(Device.Online)) {
-					// generateSyncEvent(device.getDeviceid());
+					generateSyncEvent(Integer.parseInt(bindid));
 				}
 			}
 			List<Devicegrid> devicegrids = devicegridMapper.selectByDevicegroup(bindid);
@@ -180,6 +182,14 @@ public class PlanServiceImpl implements PlanService {
 					generateSyncEvent(device.getDeviceid());
 				}
 			}
+		}
+	}
+
+	@Transactional
+	public void syncPlanByPage(String pageid) throws Exception {
+		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
+		for (HashMap<String, Object> bindObj : bindList) {
+			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 
@@ -222,28 +232,16 @@ public class PlanServiceImpl implements PlanService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
 			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
 			JSONArray plandtlJsonArray = new JSONArray();
+			HashMap<Integer, Page> pageHash = new HashMap<Integer, Page>();
 			JSONArray videoJsonArray = new JSONArray();
 			for (Plandtl plandtl : plan.getPlandtls()) {
 				if (plandtl.getObjtype().equals(Plandtl.ObjType_Page)) {
 					Page page = pageMapper.selectByPrimaryKey("" + plandtl.getObjid());
-					for (Pagezone pagezone : page.getPagezones()) {
-						for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
-							if (pagezonedtl.getVideo() != null) {
-								if (videoHash.get(pagezonedtl.getObjid()) == null) {
-									Video video = pagezonedtl.getVideo();
-									JSONObject videoJson = new JSONObject();
-									videoJson.put("id", video.getVideoid());
-									videoJson.put("name", video.getName());
-									videoJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
-											+ video.getFilepath());
-									videoJson.put("file", video.getFilename());
-									videoJson.put("size", video.getSize());
-									videoJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
-											+ video.getThumbnail());
-									videoHash.put(video.getVideoid(), videoJson);
-									videoJsonArray.put(videoJson);
-								}
-							}
+					if (page != null && pageHash.get(page.getPageid()) == null) {
+						pageHash.put(page.getPageid(), page);
+						for (Page subpage : page.getSubpages()) {
+							Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+							pageHash.put(p.getPageid(), p);
 						}
 					}
 
@@ -264,6 +262,31 @@ public class PlanServiceImpl implements PlanService {
 					}
 				}
 
+			}
+			Iterator<Entry<Integer, Page>> iter = pageHash.entrySet().iterator();
+			while (iter.hasNext()) {
+				Entry<Integer, Page> entry = iter.next();
+				Page page = entry.getValue();
+				for (Pagezone pagezone : page.getPagezones()) {
+					for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+						if (pagezonedtl.getVideo() != null) {
+							if (videoHash.get(pagezonedtl.getObjid()) == null) {
+								Video video = pagezonedtl.getVideo();
+								JSONObject videoJson = new JSONObject();
+								videoJson.put("id", video.getVideoid());
+								videoJson.put("name", video.getName());
+								videoJson.put("url",
+										"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+								videoJson.put("file", video.getFilename());
+								videoJson.put("size", video.getSize());
+								videoJson.put("thumbnail",
+										"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
+								videoHash.put(video.getVideoid(), videoJson);
+								videoJsonArray.put(videoJson);
+							}
+						}
+					}
+				}
 			}
 			planJson.put("plandtls", plandtlJsonArray);
 			planJson.put("videos", videoJsonArray);

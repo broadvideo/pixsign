@@ -23,6 +23,8 @@ public interface PlanService {
 
 	public void syncPlan(String bindtype, String bindid) throws Exception;
 
+	public void syncPlanByPage(String pageid) throws Exception;
+
 	public void syncPlanByMediagrid(String mediagridid) throws Exception;
 
 	public JSONObject generatePlanJson(String deviceid);

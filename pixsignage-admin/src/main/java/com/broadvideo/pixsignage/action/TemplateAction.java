@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,6 +55,9 @@ public class TemplateAction extends BaseDatatableAction {
 	private Image image;
 	private File templateimage;
 	private String templateimageFileName;
+
+	private String exportname;
+	private InputStream inputStream;
 
 	@Autowired
 	private TemplateService templateService;
@@ -338,6 +342,8 @@ public class TemplateAction extends BaseDatatableAction {
 			search = SqlUtil.likeEscapeH(search);
 			String ratio = getParameter("ratio");
 			String templateflag = getParameter("templateflag");
+			String touchflag = getParameter("touchflag");
+			String homeflag = getParameter("homeflag");
 			String publicflag = null;
 
 			String orgid = "" + getLoginStaff().getOrgid();
@@ -346,12 +352,13 @@ public class TemplateAction extends BaseDatatableAction {
 				publicflag = "1";
 			}
 
-			int count = templateService.selectCount(orgid, ratio, publicflag, search);
+			int count = templateService.selectCount(orgid, ratio, touchflag, homeflag, publicflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Template> templateList = templateService.selectList(orgid, ratio, publicflag, search, start, length);
+			List<Template> templateList = templateService.selectList(orgid, ratio, touchflag, homeflag, publicflag,
+					search, start, length);
 			for (int i = 0; i < templateList.size(); i++) {
 				aaData.add(templateList.get(i));
 			}
@@ -371,12 +378,17 @@ public class TemplateAction extends BaseDatatableAction {
 			template.setOrgid(getLoginStaff().getOrgid());
 			template.setCreatestaffid(getLoginStaff().getStaffid());
 			template.setUuid(UUID.randomUUID().toString().replace("-", ""));
-
 			String fromtemplateid = getParameter("fromtemplateid");
 			if (fromtemplateid != null) {
 				templateService.copyTemplate(fromtemplateid, template);
 			} else {
 				templateService.addTemplate(template);
+			}
+			logger.info("Template add, templateid={}", template.getTemplateid());
+			if (template.getHomeflag().equals("1")) {
+				templateService.exportZip("" + template.getTemplateid());
+			} else {
+				templateService.exportZip("" + template.getHometemplateid());
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -389,6 +401,7 @@ public class TemplateAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
+			logger.info("Template update, templateid={}", template.getTemplateid());
 			templateService.updateTemplate(template);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -401,6 +414,7 @@ public class TemplateAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
+			logger.info("Template delete, templateid={}", template.getTemplateid());
 			templateService.deleteTemplate("" + template.getTemplateid());
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -413,9 +427,15 @@ public class TemplateAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
+			logger.info("Template design, templateid={}", template.getTemplateid());
 			template.setOrgid(getLoginStaff().getOrgid());
 			template.setCreatestaffid(getLoginStaff().getStaffid());
 			templateService.design(template);
+			if (template.getHomeflag().equals("1")) {
+				templateService.exportZip("" + template.getTemplateid());
+			} else {
+				templateService.exportZip("" + template.getHometemplateid());
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("TemplateAction doDesign exception, ", ex);
@@ -508,6 +528,23 @@ public class TemplateAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doExport() {
+		try {
+			String templateid = getParameter("templateid");
+			logger.info("Template export, templateid={}", templateid);
+			Template template = templateService.selectByPrimaryKey(templateid);
+			exportname = "template-" + template.getUuid() + ".zip";
+			File zipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/template/" + templateid, exportname);
+			inputStream = new FileInputStream(zipFile);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("TemplateAction doExport exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Template getTemplate() {
 		return template;
 	}
@@ -538,6 +575,22 @@ public class TemplateAction extends BaseDatatableAction {
 
 	public void setTemplateimageFileName(String templateimageFileName) {
 		this.templateimageFileName = templateimageFileName;
+	}
+
+	public String getExportname() {
+		return exportname;
+	}
+
+	public void setExportname(String exportname) {
+		this.exportname = exportname;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 }

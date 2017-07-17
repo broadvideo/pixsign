@@ -17,7 +17,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.text"/></h4>
+							<h4 class="modal-title"><spring:message code="pixsign.text"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -26,7 +26,7 @@
 								<input type="hidden" name="text.status" value="1" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="text.name" />
@@ -34,7 +34,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.resource.text"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="text.text"></textarea>
 										</div>
@@ -67,7 +67,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="global.text"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.text"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

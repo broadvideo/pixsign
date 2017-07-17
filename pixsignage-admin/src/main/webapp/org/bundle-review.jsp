@@ -16,27 +16,27 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.bundle"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.bundle"/></h4>
 				</div>
 				<div class="modal-body">
 				<form id="ReviewForm" class="form-horizontal" data-async data-target="#ReviewModal" method="POST">
 						<input type="hidden" name="bundle.bundleid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.review.result"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.review.result"/></label>
 								<div class="col-md-9">
 									<div class="col-md-9 radio-list">
 										<label class="radio-inline">
-											<input type="radio" name="bundle.reviewflag" value="1" checked> <spring:message code="global.review.passed"/>
+											<input type="radio" name="bundle.reviewflag" value="1" checked> <spring:message code="pixsign.review.passed"/>
 										</label>
 										<label class="radio-inline">
-											<input type="radio" name="bundle.reviewflag" value="2"> <spring:message code="global.review.rejected"/>
+											<input type="radio" name="bundle.reviewflag" value="2"> <spring:message code="pixsign.review.rejected"/>
 										</label>
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.review.comment"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.review.comment"/></label>
 								<div class="col-md-9">
 									<textarea class="form-control" rows="5" name="bundle.comment"></textarea>
 								</div>
@@ -64,7 +64,7 @@
 						<div class="col-md-12 col-sm-12">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="global.bundle"/></div>
+									<div class="caption"><i class="fa fa-calendar"></i><spring:message code="pixsign.bundle"/></div>
 								</div>
 								<div class="portlet-body form">
 									<div class="row">
@@ -73,7 +73,7 @@
 										</div>
 										<div id="BundleCol2">
 											<label class="page-title font-red-sunglo bundledtl-title"></label>
-											<h3 class="bundledtl-objtype"><spring:message code="global.medialist"/></h3>
+											<h3 class="bundledtl-objtype"><spring:message code="pixsign.medialist"/></h3>
 											<h3 class="bundledtl-objvalue">http://</h3>
 											<div class="bundledtl-medialist table-responsive">
 												<table id="MedialistDtlTable" class="table table-condensed table-hover">
@@ -115,7 +115,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.bundle"/></div>
+							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.bundle"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>

@@ -90,6 +90,7 @@ function initOperation(pagezone) {
 		handles: 'ne, nw, se, sw',
 		stop: updatePagezonePos,
 	});
+	/*
 	if (isOpera) {
 		var tr = $(pagezoneDiv).css('-o-transform').replace('matrix(', '').replace(')', '');
 	} else if (isFirefox) {
@@ -103,6 +104,7 @@ function initOperation(pagezone) {
 			//set_rotation_angle_spinner_value(a);
 		}
 	});
+	*/
 }
 
 function createZone(pagezone) {
@@ -133,11 +135,11 @@ function createZone(pagezone) {
 			e.preventDefault();
 			// get text representation of clipboard
 			var text = e.clipboardData.getData('text/plain');
+			console.log(text);
 			// insert text manually
-			//document.execCommand('insertHTML', false, text);
-			document.execCommand('insertText', false, text);
+			document.execCommand('insertHTML', false, text);
+			//document.execCommand('insertText', false, text);
 		});
-
 		var p_element = document.createElement('p');
 		p_element.className = 'clstextedit';
 		$(inner_div).append(p_element);
@@ -153,6 +155,21 @@ function createZone(pagezone) {
 	} else if (pagezone.type == 5) {
 		//Date Zone
 		var p_element = document.createElement('p');
+		$(inner_div).append(p_element);
+	} else if (pagezone.type == 7) {
+		//Button Zone
+		inner_div.addEventListener('paste', function(e) {
+			// cancel paste
+			e.preventDefault();
+			// get text representation of clipboard
+			var text = e.clipboardData.getData('text/plain');
+			console.log(text);
+			// insert text manually
+			document.execCommand('insertHTML', false, text);
+			//document.execCommand('insertText', false, text);
+		});
+		var p_element = document.createElement('p');
+		p_element.className = 'clstextedit';
 		$(inner_div).append(p_element);
 	} else {
 		var p_element = document.createElement('p');
@@ -312,6 +329,43 @@ function refreshPagezone(pagezone) {
 			'text-decoration': pagezone.decoration,
 		});
 		$(pagezoneDiv).find('p').html(new Date().pattern(pagezone.dateformat));
+	} else if (pagezone.type == 7) {
+		//Button Zone
+		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': (parseInt(pagezone.bdwidth) / PageScale) + 'px', 
+			'border-radius': (parseInt(pagezone.bdradius) / PageScale) + 'px', 
+			'color': pagezone.color, 
+			'font-family': pagezone.fontfamily, 
+			'font-size': (parseInt(pagezone.fontsize) / PageScale) + 'px', 
+			'text-decoration': pagezone.decoration, 
+			'text-align': pagezone.align, 
+			'font-weight': pagezone.fontweight, 
+			'font-style': pagezone.fontstyle, 
+			'line-height': (parseInt(pagezone.lineheight) / PageScale) + 'px', 
+			'text-shadow': shadow,  
+			'word-wrap': 'break-word',
+		});
+		if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].image != null) {
+			$(pagezoneDiv).find('#rotatable').css('background-image', 'url(/pixsigdata' + pagezone.pagezonedtls[0].image.filepath + ')');
+			$(pagezoneDiv).find('#rotatable').css('background-size', '100% 100%');
+			$(pagezoneDiv).find('#rotatable').css('background-position', 'center');
+			$(pagezoneDiv).find('#rotatable').css('background-repeat', 'no-repeat');
+		}
+		$(pagezoneDiv).find('p').css({
+			'word-wrap': 'break-word',
+			'white-space': 'pre-wrap',
+			'text-decoration': pagezone.decoration,
+		});
+		var text_val = pagezone.content;
+		if (text_val == undefined || text_val == null || text_val == '') {
+			text_val = '<br>';
+		} else {
+			text_val = text_val.replace(/&nbsp;/g, ' ');
+		}
+		$(pagezoneDiv).find('p').html(text_val);
 	} else {
 		$(pagezoneDiv).find('#rotatable').css({
 			'box-sizing': 'border-box',
@@ -410,8 +464,8 @@ function pagezoneClick(e, dblclick){
 					$('.image-ctl').css('display', '');
 					$('.video-ctl').css('display', 'none');
 					$('#LibraryModal').modal();
-				} else if (pagezones[0].type == 3) {
-					//Text Zone
+				} else if (pagezones[0].type == 3 || pagezones[0].type == 7) {
+					//Text Zone & Button Zone
 					CurrentZone = pagezones[0];
 					var pagezonediv = $('#PagezoneDiv' + CurrentZone.pagezoneid);
 					if (!$(pagezonediv).find('#rotatable').hasClass('dblclick')) {
@@ -636,6 +690,9 @@ function enterPagezoneFocus(pagezone) {
 	refreshFontStyle();
 	refreshFontFamilySelect();
 	refreshBdstyleSelect();
+	if (CurrentObj.touchflag == 1) {
+		refreshSubPageSelect();
+	}
 }
 
 function refreshLocSpinners(pagezone) {
@@ -889,15 +946,22 @@ $('#BdstyleSelect').on('change', function(e) {
 	}
 	refreshPagezone(CurrentZone);
 });	
+$('#SubPageSelect').on('change', function(e) {
+	if ($('#SubPageSelect').select2('data') != null) {
+		CurrentZone.touchpageid = $('#SubPageSelect').select2('data').id;
+	}
+});	
 
 $('.zoneform input,select').on('change', function(e) {
 	CurrentZone.dateformat = $('.zoneform select[name=dateformat]').val();
 	CurrentZone.zindex = $('.zoneform select[name=zindex]').val();
+	CurrentZone.touchtype = $('.zoneform select[name=touchtype]').val();
+	console.log(CurrentZone);
 	refreshPagezone(CurrentZone);
 });
 
 function validPagezone(pagezone) {
-	if (pagezone != null && pagezone.type == 3) {
+	if (pagezone != null && (pagezone.type == 3 || pagezone.type == 7)) {
 		var pagezoneDiv = $('#PagezoneDiv' + pagezone.pagezoneid);
 		var content = $(pagezoneDiv).find('p').html();
 		if (content != 'Double click to edit') {
@@ -905,6 +969,7 @@ function validPagezone(pagezone) {
 		} else {
 			pagezone.content = '';
 		}
+		console.log(pagezone.content);
 	}
 	return true;
 }
@@ -957,8 +1022,10 @@ $('body').on('click', '.pix-addzone', function(event) {
 	pagezone.fontweight = 'normal';
 	pagezone.fontstyle = 'normal';
 	pagezone.decoration = 'none';
-	pagezone.align = 'start';
+	pagezone.align = 'center';
 	pagezone.lineheight = 80;
+	pagezone.touchtype = '0';
+	pagezone.touchpageid = 0;
 	pagezone.content = '';
 	pagezone.pagezonedtls = [];
 	if (pagezone.type == 5) {
@@ -984,6 +1051,7 @@ $('[type=submit]', $('#ScrollModal')).on('click', function(event) {
 
 
 //图片table初始化
+var ImageTree = new BranchTree($('#ImageLibraryTab'));
 $('#ImageTable thead').css('display', 'none');
 $('#ImageTable tbody').css('display', 'none');	
 var imagehtml = '';
@@ -1049,8 +1117,8 @@ $('#ImageTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':ImageTree.branchid });
+		aoData.push({'name':'folderid','value':ImageTree.folderid });
 	}
 });
 $('#ImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
@@ -1058,6 +1126,7 @@ $('#ImageTable_wrapper .dataTables_length select').addClass('form-control input-
 $('#ImageTable').css('width', '100%');
 
 //视频table初始化
+var VideoTree = new BranchTree($('#VideoLibraryTab'));
 $('#VideoTable thead').css('display', 'none');
 $('#VideoTable tbody').css('display', 'none');	
 var videohtml = '';
@@ -1123,19 +1192,14 @@ $('#VideoTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':VideoTree.branchid });
+		aoData.push({'name':'folderid','value':VideoTree.folderid });
 		aoData.push({'name':'format','value':'mp4' });
 	}
 });
 $('#VideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
 $('#VideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 $('#VideoTable').css('width', '100%');
-
-function refreshMediaTable() {
-	$('#ImageTable').dataTable()._fnAjaxUpdate();
-	$('#VideoTable').dataTable()._fnAjaxUpdate();
-}
 
 //播放明细Table初始化
 $('#PagezonedtlTable').dataTable({
@@ -1160,7 +1224,8 @@ $('#PagezonedtlTable').dataTable({
 });
 
 $('#LibraryModal').on('shown.bs.modal', function (e) {
-	refreshMediaTable();
+	$('#ImageTable').dataTable()._fnAjaxUpdate();
+	$('#VideoTable').dataTable()._fnAjaxUpdate();
 	refreshPagezondtls();
 })
 
@@ -1256,7 +1321,6 @@ $('body').on('click', '.pix-pagezonedtl-image-add', function(event) {
 	refreshPagezone(CurrentZone);
 });
 
-
 //删除播放明细列表某行
 $('body').on('click', '.pix-pagezonedtl-delete', function(event) {
 	var rowIndex = $(event.target).attr("data-id");
@@ -1330,123 +1394,141 @@ $('body').on('click', '.pix-pagezonedtl-down', function(event) {
 	refreshPagezone(CurrentZone);
 });
 
+//图片table初始化
+var BGImageTree = new BranchTree($('#BGImageModal'));
+$('#BGImageTable thead').css('display', 'none');
+$('#BGImageTable tbody').css('display', 'none');	
+var bgimagehtml = '';
+$('#BGImageTable').dataTable({
+	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
+					  [ 18, 30, 48, 96 ] 
+					],
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'image!list.action',
+	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+					{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
+					{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+					{'sTitle' : common.view.operation, 'mData' : 'imageid', 'bSortable' : false }],
+	'iDisplayLength' : 18,
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnPreDrawCallback': function (oSettings) {
+		if ($('#BGImageContainer').length < 1) {
+			$('#BGImageTable').append('<div id="BGImageContainer"></div>');
+		}
+		$('#BGImageContainer').html(''); 
+		return true;
+	},
+	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		if (iDisplayIndex % 6 == 0) {
+			bgimagehtml = '';
+			bgimagehtml += '<div class="row" >';
+		}
+		bgimagehtml += '<div class="col-md-2 col-xs-2">';
+		
+		bgimagehtml += '<div id="ThumbContainer" style="position:relative">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		bgimagehtml += '<div id="BGImageThumb" class="thumbs">';
+		bgimagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		bgimagehtml += '<div class="mask">';
+		bgimagehtml += '<div>';
+		bgimagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		bgimagehtml += '<a class="btn default btn-sm green pix-bgimage-set" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
+		bgimagehtml += '</div>';
+		bgimagehtml += '</div>';
+		bgimagehtml += '</div>';
 
-initMediaBranchTree();
-function initMediaBranchTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'branch!list.action',
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var branches = data.aaData;
-				CurrentMediaBranchid = branches[0].branchid;
-				
-				if ( $('#MediaBranchTreeDiv').length > 0 ) {
-					if (branches[0].children.length == 0) {
-						$('#MediaBranchTreeDiv').css('display', 'none');
-						CurrentMediaFolderid = null;
-						initMediaFolderTree();
-						refreshMediaTable();
-					} else {
-						var branchTreeDivData = [];
-						createBranchTreeData(branches, branchTreeDivData);
-						$('#MediaBranchTreeDiv').jstree('destroy');
-						$('#MediaBranchTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#MediaBranchTreeDiv').on('loaded.jstree', function() {
-							$('#MediaBranchTreeDiv').jstree('select_node', CurrentMediaBranchid);
-						});
-						$('#MediaBranchTreeDiv').on('select_node.jstree', function(event, data) {
-							CurrentMediaBranchid = data.instance.get_node(data.selected[0]).id;
-							CurrentMediaFolderid = null;
-							initMediaFolderTree();
-							refreshMediaTable();
-						});
-					}
+		bgimagehtml += '</div>';
+
+		bgimagehtml += '</div>';
+		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#BGImageTable').dataTable().fnGetData().length) {
+			bgimagehtml += '</div>';
+			if ((iDisplayIndex+1) != $('#BGImageTable').dataTable().fnGetData().length) {
+				bgimagehtml += '<hr/>';
+			}
+			$('#BGImageContainer').append(bgimagehtml);
+		}
+		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('#BGImageContainer .thumbs').each(function(i) {
+			$(this).height($(this).parent().width());
+		});
+		$('#BGImageContainer .mask').each(function(i) {
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':BGImageTree.branchid });
+		aoData.push({'name':'folderid','value':BGImageTree.folderid });
+	}
+});
+$('#BGImageTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
+$('#BGImageTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
+$('#BGImageTable').css('width', '100%');
+
+$('body').on('click', '.pix-bgimage-library', function(event) {
+	$('#BGImageModal').modal();
+});
+$('#BGImageModal').on('shown.bs.modal', function (e) {
+	$('#BGImageTable').dataTable()._fnAjaxUpdate();
+	displayBGImagePreview();
+})
+//设置按键背景图片
+$('body').on('click', '.pix-bgimage-set', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#BGImageTable').dataTable().fnGetData(rowIndex);
+	if (CurrentZone.pagezonedtls.length == 0) {
+		var pagezonedtl = {};
+		pagezonedtl.pagezonedtlid = 0;
+		pagezonedtl.pagezoneid = CurrentZone.pagezoneid;
+		pagezonedtl.objtype = '2';
+		pagezonedtl.objid = data.imageid;
+		pagezonedtl.sequence = 1;
+		pagezonedtl.image = data;
+		CurrentZone.pagezonedtls.push(pagezonedtl);
+	} else {
+		CurrentZone.pagezonedtls[0].objtype = '2';
+		CurrentZone.pagezonedtls[0].objid = data.imageid;
+		CurrentZone.pagezonedtls[0].image = data;
+	}
+	displayBGImagePreview();
+	refreshPagezone(CurrentZone);
+});
+function displayBGImagePreview() {
+	$('#BGImagePreview').height($('#BGImagePreview').width());
+	if (CurrentZone.pagezonedtls.length > 0) {
+		var backgroundimage = CurrentZone.pagezonedtls[0].image;
+		if (backgroundimage != '') {
+			$('#BGImagePreview').css('background-image', 'url(/pixsigdata' + backgroundimage.filepath + ')');
+			var owidth = backgroundimage.width;
+			var oheight = backgroundimage.height;
+			var background_size = 'auto auto';
+			if (owidth >= $('#BGImagePreview').width() || oheight >= $('#BGImagePreview').height()) {
+				if (owidth > oheight) {
+					background_size = '100% auto';
+				} else {
+					background_size = 'auto 100%';
 				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
 			}
-		},
-		error : function() {
-			console.log('failue');
+			$('#BGImagePreview').css('background-size', background_size);
+			$('#BGImagePreview').css('background-position', 'center');
+			$('#BGImagePreview').css('background-repeat', 'no-repeat');
+		} else {
+			$('#BGImagePreview').css('background-image', '');
 		}
-	});
-	function createBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = branches[i].branchid;
-			treeData[i].text = branches[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createBranchTreeData(branches[i].children, treeData[i].children);
-		}
-	}	
-}
-function initMediaFolderTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'folder!list.action',
-		data : {
-			branchid: CurrentMediaBranchid
-		},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var folders = data.aaData;
-				CurrentMediaFolderid = folders[0].folderid;
-				
-				if ( $('#MediaFolderTreeDiv').length > 0 ) {
-					var folderTreeDivData = [];
-					createFolderTreeData(folders, folderTreeDivData);
-					$('#MediaFolderTreeDiv').jstree('destroy');
-					$('#MediaFolderTreeDiv').jstree({
-						'core' : {
-							'multiple' : false,
-							'data' : folderTreeDivData
-						},
-						'plugins' : ['unique', 'types'],
-						'types' : {
-							'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
-						},
-					});
-					$('#MediaFolderTreeDiv').on('loaded.jstree', function() {
-						$('#MediaFolderTreeDiv').jstree('select_node', CurrentMediaFolderid);
-					});
-					$('#MediaFolderTreeDiv').on('select_node.jstree', function(event, data) {
-						CurrentMediaFolderid = data.instance.get_node(data.selected[0]).id;
-						refreshMediaTable();
-					});
-				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
-		}
-	});
-	function createFolderTreeData(folders, treeData) {
-		if (folders == null) return;
-		for (var i=0; i<folders.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = folders[i].folderid;
-			treeData[i].text = folders[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createFolderTreeData(folders[i].children, treeData[i].children);
-		}
+	} else {
+		$('#BGImagePreview').css('background-image', '');
 	}
 }
+
+
+
 
 $(document).keydown(function (e) {
 	if (e.which == 13 && text_editable == 'dblclick') {
