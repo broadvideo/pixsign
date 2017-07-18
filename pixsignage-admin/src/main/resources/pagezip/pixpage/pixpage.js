@@ -52,6 +52,14 @@ var PixPage = function () {
 				//CalendarTable Zone
 				var wczone = new WeeklyCourse($(inner_div), zone, scalew, scaleh);
 				allzones.push(wczone);
+			} else if (zone.type == '13') {
+				//Attendance Zone
+				var attendance = new Attendance($(inner_div), zone, scalew, scaleh);
+				allzones.push(attendance);
+			} else if (zone.type == '14') {
+				//HomeSchool Zone
+				var homeschool = new HomeSchool($(inner_div), zone, scalew, scaleh);
+				allzones.push(homeschool);
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allzones.push(otherzone);

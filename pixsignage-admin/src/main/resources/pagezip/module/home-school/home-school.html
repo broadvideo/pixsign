@@ -12,6 +12,13 @@
 <script src="../../plugin/moment/moment.min.js"></script>
 <script src="../../plugin/dot/doT.min.js"></script>
 <script src="../../plugin/base64/base64.min.js"></script>
-<script src="compiled.js"></script>
+<script src="../common/index.js"></script>
+<script src="index.js"></script>
+<script>
+    var homeSchool = new HomeSchool($('.home-school'), {})
+    document.body.addEventListener('keyup', function () {
+        homeSchool.keyup()
+    })
+</script>
 </body>
 </html>

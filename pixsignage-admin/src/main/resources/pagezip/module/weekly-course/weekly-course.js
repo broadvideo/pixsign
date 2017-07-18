@@ -2,15 +2,8 @@
 var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
     this.zonediv = zonediv;
     this.zone = zone;
-    var host = window.android && window.android.getHost() || '192.168.0.71'
-    var baseUrl = 'http://' + host + '/pixsignage-api/service'
-    var terminalId = window.android && window.android.getTerminalId() || '00004'
-    var classRoom = {}
-    var timer, current = moment()
-    $.ajaxSetup({
-        global: true,
-        cache: false
-    })
+    common.weeklyCourse.push(this)
+
     var WeeklyCourseTpl = `<table>
             <tbody>
             <tr>
@@ -78,15 +71,9 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
     this.init = function () {
         var thiz = this
         $.ajax({
-            url: baseUrl + '/terminals/' + terminalId + '/classroom',
-            dataType: 'json'
-        }).then(function (res) {
-            classRoom = res.classroom
-            return $.ajax({
-                url: baseUrl + '/classrooms/' + classRoom.id + '/schedules',
-                contentType: 'application/json; charset=UTF-8',
-                dataType: 'json',
-            })
+            url: `${common.baseUrl}/classrooms/${common.classRoom.id}/schedules?ts=${Date.now()}`,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: 'json',
         }).then(function (res) {
             if (res.retcode != 0) throw new Error('failed to get day course list.');
             res.course_schedules.forEach(function (item) {
@@ -185,5 +172,4 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             console.log(err.message)
         })
     }
-    this.init()
 };

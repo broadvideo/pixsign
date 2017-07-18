@@ -6,7 +6,7 @@
                 <img src="{{=student.avatar}}" class="opacity"/>
             </div>
             <div class="attendance-info">
-                <p>{{=student.name}}</p>
+                <p>签到时间：{{=moment().format('YYYY-MM-DD HH:mm:ss')}}</p>
             </div>
         </div>
         {{~}}

@@ -2,25 +2,13 @@
 var DailyCourse = function (zonediv, zone) {
     this.zonediv = zonediv;
     this.zone = zone;
-    var host = window.android && window.android.getHost() || '192.168.0.71'
-    var baseUrl = 'http://' + host + '/pixsignage-api/service'
-    var terminalId = window.android && window.android.getTerminalId() || '00004'
-    var classRoom = {}
-    var timer, current = moment()
-    $.ajaxSetup({
-        global: true,
-        cache: false
-    })
+    common.dailyCourse.push(this)
     var DailyCourseTpl = `<table>
             <tbody>
             {{~it:course:index}}
             <tr class="day-course-tr {{? course.current}}is-current{{?}}">
-                <td>
-                    {{=course.start_time}}
-                </td>
-                <td>
-                    <span>{{=course.course_name}}</span>
-                </td>
+                <td>{{=course.start_time}}</td>
+                <td>{{=course.course_name}}</td>
             </tr>
             {{~}}
             </tbody>
@@ -54,15 +42,9 @@ var DailyCourse = function (zonediv, zone) {
     this.init = function () {
         var thiz = this
         $.ajax({
-            url: baseUrl + '/terminals/' + terminalId + '/classroom',
-            dataType: 'json'
-        }).then(function (res) {
-            classRoom = res.classroom
-            return $.ajax({
-                url: baseUrl + '/classrooms/' + classRoom.id + '/schedules',
-                contentType: 'application/json; charset=UTF-8',
-                dataType: 'json',
-            })
+            url: `${common.baseUrl}/classrooms/${common.classRoom.id}/schedules?ts=${Date.now()}`,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: 'json',
         }).then(function (res) {
             if (res.retcode != 0) throw new Error('failed to get day course list.');
             var courses = res.course_schedules.filter(function (item) {
@@ -93,5 +75,4 @@ var DailyCourse = function (zonediv, zone) {
             console.log(err.message)
         })
     }
-    this.init()
 };
