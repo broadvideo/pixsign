@@ -46,11 +46,11 @@ var PixPage = function () {
 				allzones.push(buttonzone);
 			} else if (zone.type == '11') {
 				//CalendarList Zone
-				var dczone = new DailyCourse($(inner_div), zone);
+				var dczone = new DailyCourse($(inner_div), zone, scalew, scaleh);
 				allzones.push(dczone);
 			} else if (zone.type == '12') {
 				//CalendarTable Zone
-				var wczone = new WeeklyCourse($(inner_div), zone);
+				var wczone = new WeeklyCourse($(inner_div), zone, scalew, scaleh);
 				allzones.push(wczone);
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);

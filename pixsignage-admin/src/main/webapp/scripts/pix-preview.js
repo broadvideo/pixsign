@@ -794,7 +794,6 @@ function redrawPagePreview(container, page, maxsize) {
 			$(table).attr('rules', zone.rules);
 			$(table).empty();
 			if (zone.type == 11) {
-				$(inner_div).find('tr td:first').attr('width', '30%');
 				for (var row=0; row<zone.rows; row++) {
 					var tr_element = document.createElement('tr');
 					$(table).append(tr_element);
@@ -810,6 +809,7 @@ function redrawPagePreview(container, page, maxsize) {
 						}
 					}
 				}
+				$(inner_div).find('tr td:first').attr('width', '30%');
 			} else {
 				for (var row=0; row<zone.rows; row++) {
 					var tr_element = document.createElement('tr');

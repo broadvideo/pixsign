@@ -377,7 +377,6 @@ function refreshPagezone(pagezone) {
 		$(table).attr('rules', pagezone.rules);
 		$(table).empty();
 		if (pagezone.type == 11) {
-			$(pagezoneDiv).find('tr td:first').attr('width', '30%');
 			for (var row=0; row<pagezone.rows; row++) {
 				var tr_element = document.createElement('tr');
 				$(table).append(tr_element);
@@ -393,6 +392,7 @@ function refreshPagezone(pagezone) {
 					}
 				}
 			}
+			$(pagezoneDiv).find('tr td:first').attr('width', '30%');
 		} else {
 			for (var row=0; row<pagezone.rows; row++) {
 				var tr_element = document.createElement('tr');

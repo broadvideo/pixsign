@@ -201,6 +201,7 @@ $('#TemplateTable').dataTable({
 		var templateflag = $('#MyEditForm input[name="templateflag"]:checked').val();
 		var ratio = $('select[name="page.ratio"]').val();
 		aoData.push({'name':'templateflag','value':templateflag });
+		aoData.push({'name':'touchflag','value':'0' });
 		aoData.push({'name':'ratio','value':ratio });
 	}
 });
