@@ -8,6 +8,9 @@ var HomeSchool = function (zonediv, zone) {
     var student = {}
     var msgSumTpl = `<table class="home-school-table">
             <tbody>
+            {{? it.length == 0}}
+            无留言记录
+            {{?}}
             {{~it:msgSum:index}}
             <tr class="home-school-tr">
                 <td class="home-school-avatar">

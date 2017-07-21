@@ -16,7 +16,7 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             <tr>
                 <td><span>{{=courseIndex.courseName}}</span><span>{{=courseIndex.start_time}}</span></td>
                 {{~it.scheme.workdays:day:index2}}
-                <td data-periodnum="{{=index}}" data-type="0" data-workday="{{=index2}}"> </td>
+                <td data-periodnum="{{=index+1}}" data-type="0" data-workday="{{=index2+1}}"> </td>
                 {{~}}
             </tr>
             {{~}}
@@ -25,7 +25,7 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             <tr>
                 <td><span>{{=courseIndex.courseName}}</span><span>{{=courseIndex.start_time}}</span></td>
                 {{~it.scheme.workdays:day:index2}}
-                <td data-periodnum="{{=index}}" data-type="2" data-workday="{{=index2}}"> </td>
+                <td data-periodnum="{{=index+1}}" data-type="2" data-workday="{{=index2+1}}"> </td>
                 {{~}}
             </tr>
             {{~}}
@@ -34,7 +34,7 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             <tr>
                 <td><span>{{=courseIndex.courseName}}</span><span>{{=courseIndex.start_time}}</span></td>
                 {{~it.scheme.workdays:day:index2}}
-                <td data-periodnum="{{=index}}" data-type="3" data-workday="{{=index2}}"> </td>
+                <td data-periodnum="{{=index+1}}" data-type="3" data-workday="{{=index2+1}}"> </td>
                 {{~}}
             </tr>
             {{~}}
