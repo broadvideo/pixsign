@@ -105,6 +105,18 @@ public class Device {
 
 	private String temperature;
 
+	private Integer downloadspeed;
+
+	private Long downloadbytes;
+
+	private String networkmode;
+
+	private Integer networksignal;
+
+	private Integer brightness;
+
+	private String tags;
+
 	private Devicegroup devicegroup;
 
 	private Appfile appfile;
@@ -503,6 +515,54 @@ public class Device {
 
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
+	}
+
+	public Integer getDownloadspeed() {
+		return downloadspeed;
+	}
+
+	public void setDownloadspeed(Integer downloadspeed) {
+		this.downloadspeed = downloadspeed;
+	}
+
+	public Long getDownloadbytes() {
+		return downloadbytes;
+	}
+
+	public void setDownloadbytes(Long downloadbytes) {
+		this.downloadbytes = downloadbytes;
+	}
+
+	public String getNetworkmode() {
+		return networkmode;
+	}
+
+	public void setNetworkmode(String networkmode) {
+		this.networkmode = networkmode;
+	}
+
+	public Integer getNetworksignal() {
+		return networksignal;
+	}
+
+	public void setNetworksignal(Integer networksignal) {
+		this.networksignal = networksignal;
+	}
+
+	public Integer getBrightness() {
+		return brightness;
+	}
+
+	public void setBrightness(Integer brightness) {
+		this.brightness = brightness;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 	public Devicegroup getDevicegroup() {

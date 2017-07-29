@@ -21,6 +21,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="relate" column="{videoid=relateid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectRelateVideo" />
@@ -29,13 +30,13 @@
   <sql id="Base_Column_List" >
     videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, relateid, createtime, createstaffid
+    thumbnail, relateid, tags, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
     select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, 0 as relateid, createtime, createstaffid
+    thumbnail, 0 as relateid, tags, createtime, createstaffid
     from video
     where videoid = #{videoid}
     and status != '9'
@@ -120,18 +121,20 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into video (orgid, branchid, folderid, 
-      name, uuid, 
-      type, width, height, 
-      filepath, filename, size, md5, 
-      previewflag, status, progress, description, 
-      thumbnail, relateid, createtime, createstaffid
+      name, uuid, type, 
+      width, height, filepath, 
+      filename, size, md5, 
+      previewflag, status, progress, 
+      description, thumbnail, relateid, 
+      tags, createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
-      #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
-      #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
-      #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, 
+      #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
+      #{tags,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Video" >
@@ -194,6 +197,9 @@
       <if test="relateid != null" >
         relateid,
       </if>
+      <if test="tags != null" >
+        tags,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -255,6 +261,9 @@
       </if>
       <if test="relateid != null" >
         #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -321,6 +330,9 @@
       <if test="relateid != null" >
         relateid = #{relateid,jdbcType=INTEGER},
       </if>
+      <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -350,6 +362,7 @@
       description = #{description,jdbcType=VARCHAR},
       thumbnail = #{thumbnail,jdbcType=VARCHAR},
       relateid = #{relateid,jdbcType=INTEGER},
+      tags = #{tags,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where videoid = #{videoid,jdbcType=INTEGER}

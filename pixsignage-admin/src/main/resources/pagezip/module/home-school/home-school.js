@@ -19,7 +19,7 @@ var HomeSchool = function (zonediv, zone) {
                 <td class="home-school-name">
                     <span>{{=msgSum.student_name}}</span>
                 </td>
-                <td class="home-school-ts">
+                <td class="home-school-sum">
                     <span>{{=msgSum.num}}</span>
                 </td>
             </tr>
@@ -63,7 +63,7 @@ var HomeSchool = function (zonediv, zone) {
             </div>
         </div>`
 
-    this.init = function () {
+    var messageSum = function () {
         $.ajax({
             url: `${common.baseUrl}/classrooms/${common.classRoom.id}/messagesum?ts=${Date.now()}`,
             dataType: 'text'
@@ -80,12 +80,15 @@ var HomeSchool = function (zonediv, zone) {
                 })
             })
             var templ = doT.template(msgSumTpl)
-            $('.home-school').each(function (index, item) {
-                $(item).html(templ(msgSum2))
-            })
+            $(zonediv).html(templ(msgSum2))
         }).catch(function (err) {
             console.log(JSON.stringify(err))
         })
+    }
+
+    this.init = function () {
+        messageSum()
+        setInterval(messageSum, 5000)
         $('body').on('click', '.home-school-close', function () {
             $('.home-school-popup').remove()
         })

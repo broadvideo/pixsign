@@ -354,6 +354,7 @@ public class PlanServiceImpl implements PlanService {
 							plandtlJson.put("duration", 0);
 						}
 						plandtlJson.put("max_times", plandtl.getMaxtimes());
+						plandtlJson.put("tags", "");
 						plandtlJsonArray.put(plandtlJson);
 					}
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Video)) {
@@ -369,6 +370,7 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJson.put("size", video.getSize());
 					plandtlJson.put("duration", plandtl.getDuration());
 					plandtlJson.put("max_times", plandtl.getMaxtimes());
+					plandtlJson.put("tags", video.getTags());
 					plandtlJsonArray.put(plandtlJson);
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Image)) {
 					JSONObject plandtlJson = new JSONObject();
@@ -389,6 +391,7 @@ public class PlanServiceImpl implements PlanService {
 						plandtlJson.put("duration", 0);
 					}
 					plandtlJson.put("max_times", plandtl.getMaxtimes());
+					plandtlJson.put("tags", "");
 					plandtlJsonArray.put(plandtlJson);
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Mediagrid)) {
 					Mediagrid mediagrid = plandtl.getMediagrid();
@@ -439,6 +442,7 @@ public class PlanServiceImpl implements PlanService {
 										plandtlJson.put("duration", 0);
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
+									plandtlJson.put("tags", "");
 									plandtlJsonArray.put(plandtlJson);
 								}
 							} else {
@@ -463,6 +467,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("size", mmediadtl.getSize());
 									plandtlJson.put("duration", plandtl.getDuration());
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
+									plandtlJson.put("tags", "");
 									plandtlJsonArray.put(plandtlJson);
 								} else if (mmediadtl != null
 										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
@@ -490,6 +495,7 @@ public class PlanServiceImpl implements PlanService {
 										plandtlJson.put("duration", 0);
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
+									plandtlJson.put("tags", "");
 									plandtlJsonArray.put(plandtlJson);
 								}
 							}

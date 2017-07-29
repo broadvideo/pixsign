@@ -59,7 +59,8 @@ response.setDateHeader("Expires",0);
 	
 	String theme = "darkblue.css";
 	if (sdomain != null) {
-		theme = "light.css";
+		//theme = "light.css";
+		theme = "darkblue.css";
 	}
 	
 	String currentPrivilegeid = request.getParameter("CurrentP");

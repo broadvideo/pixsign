@@ -742,11 +742,13 @@ public class PixsignageService2 {
 					devicefile.setUpdatetime(Calendar.getInstance().getTime());
 					devicefileService.addDevicefile(devicefile);
 				} else {
-					devicefile.setProgress(progress);
-					devicefile.setStatus(status);
-					devicefile.setDescription(desc);
-					devicefile.setUpdatetime(Calendar.getInstance().getTime());
-					devicefileService.updateDevicefile(devicefile);
+					if (devicefile.getProgress().intValue() != progress || devicefile.getStatus().equals(status)) {
+						devicefile.setProgress(progress);
+						devicefile.setStatus(status);
+						devicefile.setDescription(desc);
+						devicefile.setUpdatetime(Calendar.getInstance().getTime());
+						devicefileService.updateDevicefile(devicefile);
+					}
 				}
 			}
 

@@ -96,7 +96,7 @@
     ol.duration=(unix_timestamp()-unix_timestamp(ol.onlinetime))
     where ol.deviceid = d.deviceid 
     and ol.offlinetime is null
-    and d.onlineflag='9'
+    and d.onlineflag='0'
   </update>
 
   <update id="updateLast2Offline" >
