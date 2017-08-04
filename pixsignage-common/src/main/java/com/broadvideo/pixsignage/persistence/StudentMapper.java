@@ -16,13 +16,16 @@ public interface StudentMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
-	int deleteByPrimaryKey(@Param(value = "studentid") String studentid);
+	int deleteByPrimaryKey(@Param(value = "studentid") Integer studentid, @Param("orgid") Integer orgid);
 
 	// int insert(Student record);
 
 	int insertSelective(Student record);
 
 	int updateByPrimaryKeySelective(Student record);
+
+	int countBy(@Param("excludeid") Integer excludeId, @Param("studentno") String studentno,
+			@Param("hardid") String hardid, @Param("orgid") Integer orgid);
 
 	// int updateByPrimaryKey(Student record);
 }

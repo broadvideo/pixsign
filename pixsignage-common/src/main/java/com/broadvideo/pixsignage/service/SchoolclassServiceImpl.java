@@ -28,7 +28,10 @@ public class SchoolclassServiceImpl implements SchoolclassService {
 
 	@Override
 	public Integer addSchoolclass(Schoolclass schoolclass) {
-
+		if (hasNameExists(null, schoolclass.getName(), schoolclass.getOrgid())) {
+			logger.error("schoolclass.name={} has exists.", schoolclass.getName());
+			throw new ServiceException(String.format("schoolclass.name=%s has exists.", schoolclass.getName()));
+		}
 		if (hasBind(schoolclass.getClassroomid(), null)) {
 			logger.error("Classroomid={} has bind.", schoolclass.getClassroomid());
 			throw new ServiceException("Classroom is bind.");
@@ -69,12 +72,23 @@ public class SchoolclassServiceImpl implements SchoolclassService {
 		this.schoolclassMapper.updateByPrimaryKeySelective(schoolclass);
 
 	}
+	
+	private boolean hasNameExists(Integer excludeid, String name, Integer orgid) {
+
+		return this.schoolclassMapper.countBy(name, excludeid, orgid) > 0;
+	}
 
 	@Override
 	public void deleteSchoolclass(Integer schoolclassid, Integer orgid) {
 		logger.info("Delete schoolclass(schoolclassid={},orgid={})", schoolclassid, orgid);
 		this.schoolclassMapper.deleteByPrimaryKey(schoolclassid, orgid);
 
+	}
+
+	@Override
+	public Schoolclass loadSchoolclassByName(String name, Integer orgid) {
+
+		return this.schoolclassMapper.selectByName(name, orgid);
 	}
 
 }

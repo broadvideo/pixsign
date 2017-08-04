@@ -17,9 +17,13 @@ public interface SchoolclassMapper {
 
     Schoolclass selectByPrimaryKey(Integer schoolclassid);
 
+	Schoolclass selectByName(@Param("name") String name, @Param("orgid") Integer orgid);
+
 	Schoolclass selectByClassroomid(@Param("orgid") Integer orgid, @Param("classroomid") Integer classroomid);
 
 	int selectCount(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search);
+
+	int countBy(@Param("name") String name, @Param("excludeid") Integer excludeid, @Param("orgid") Integer orgid);
 
 	List<Map<String, Object>> selectList(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search,
 			RowBounds rowBounds);

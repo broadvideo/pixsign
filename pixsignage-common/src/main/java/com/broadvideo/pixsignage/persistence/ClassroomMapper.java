@@ -20,6 +20,8 @@ public interface ClassroomMapper {
 
 	Classroom selectClassroom(@Param("classroomid") Integer classroomid, @Param("orgid") Integer orgid);
 
+	Classroom selectByName(@Param("name") String name, @Param("orgid") Integer orgid);
+
 	List<Classroom> selectClassrooms(@Param("search") String search, @Param("orgid") Integer orgid,
 			RowBounds rowBounds);
 

@@ -16,6 +16,8 @@ public interface CourseScheduleSchemeService {
 
 	Courseschedulescheme loadScheme(Integer id, Integer orgId) throws ServiceException;
 
+	Courseschedulescheme loadSchemeByName(String name, Integer orgId) throws ServiceException;
+
 	void updateScheme(Courseschedulescheme scheduleScheme) throws ServiceException;
 
 	void changeSchemeFlag(Integer id, String enableFlag, Integer psnId, Integer orgId)

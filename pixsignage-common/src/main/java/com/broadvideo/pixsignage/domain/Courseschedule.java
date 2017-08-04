@@ -18,6 +18,7 @@ public class Courseschedule {
     private String teachername;
 
     private Integer coursescheduleschemeid;
+	private String coursescheduleschemename;
 
     private Integer workday;
 
@@ -97,7 +98,15 @@ public class Courseschedule {
         this.coursescheduleschemeid = coursescheduleschemeid;
     }
 
-    public Integer getWorkday() {
+	public String getCoursescheduleschemename() {
+		return coursescheduleschemename;
+	}
+
+	public void setCoursescheduleschemename(String coursescheduleschemename) {
+		this.coursescheduleschemename = coursescheduleschemename;
+	}
+
+	public Integer getWorkday() {
         return workday;
     }
 

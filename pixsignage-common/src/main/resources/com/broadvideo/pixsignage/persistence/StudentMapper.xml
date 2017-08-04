@@ -53,9 +53,26 @@
     </if>
   </select>
   
+  
+  <select id="countBy"  resultType="Integer">
+    select count(1)  from  student 
+    where orgid=#{orgid} 
+     <if test="excludeid != null" >
+       and  studentid != #{excludeid}
+      </if>
+      <if test="studentno != null" >
+       and  studentno = #{studentno}
+      </if>
+      <if test="hardid != null" >
+       and  hardid = #{hardid}
+      </if>
+  </select>
+  
+  
+  
   <delete id="deleteByPrimaryKey" >
     delete from student
-    where studentid = #{studentid}
+    where studentid = #{studentid} and orgid=#{orgid}
   </delete>
   
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Student" >

@@ -4,9 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.common.RetCodeEnum;
+import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -58,6 +61,24 @@ public class BaseAction extends ActionSupport {
 		setErrorcode(errorcode);
 		setErrormsg(errormsg);
 	}
+
+	public void renderError(Exception ex, String errormsg) {
+		int errorcode = RetCodeEnum.EXCEPTION;
+		if (ex instanceof ServiceException) {
+			ServiceException se = (ServiceException) ex;
+			if (se.getCode() != null) {
+				errorcode = se.getCode();
+			}
+			if (StringUtils.isBlank(errormsg)) {
+				errormsg = ex.getMessage();
+			}
+
+		}
+
+		renderError(errorcode, errormsg);
+
+	}
+
 
 	/**
 	 * get http session.

@@ -26,6 +26,8 @@ public interface ClassroomService {
 
 	Classroom loadClassroom(Integer id, Integer orgId);
 
+	Classroom loadClassroomByName(String name, Integer orgId);
+
 	List<Classroom> getClassroomsByOrgCode(String orgCode);
 
 	List<Classroom> getClassrooms(Integer orgId);

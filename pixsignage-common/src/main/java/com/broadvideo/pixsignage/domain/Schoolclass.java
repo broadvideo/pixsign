@@ -8,6 +8,7 @@ public class Schoolclass {
     private Integer orgid;
 
     private Integer classroomid;
+	private String classroomname;
 
     private String name;
 
@@ -41,7 +42,15 @@ public class Schoolclass {
         this.classroomid = classroomid;
     }
 
-    public String getName() {
+	public String getClassroomname() {
+		return classroomname;
+	}
+
+	public void setClassroomname(String classroomname) {
+		this.classroomname = classroomname;
+	}
+
+	public String getName() {
         return name;
     }
 

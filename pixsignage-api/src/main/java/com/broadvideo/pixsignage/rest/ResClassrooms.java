@@ -33,6 +33,7 @@ import com.broadvideo.pixsignage.domain.Classroom;
 import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.domain.Courseschedule;
 import com.broadvideo.pixsignage.domain.Courseschedulescheme;
+import com.broadvideo.pixsignage.domain.Examinationroom;
 import com.broadvideo.pixsignage.domain.Periodtimedtl;
 import com.broadvideo.pixsignage.domain.Schoolclass;
 import com.broadvideo.pixsignage.domain.Student;
@@ -43,6 +44,8 @@ import com.broadvideo.pixsignage.persistence.SchoolclassMapper;
 import com.broadvideo.pixsignage.persistence.StudentMapper;
 import com.broadvideo.pixsignage.service.ClassroomService;
 import com.broadvideo.pixsignage.service.CourseScheduleSchemeService;
+import com.broadvideo.pixsignage.service.ExaminationroomService;
+import com.broadvideo.pixsignage.service.StudentService;
 import com.broadvideo.pixsignage.util.Base64;
 import com.broadvideo.pixsignage.util.DateUtil;
 
@@ -57,6 +60,10 @@ public class ResClassrooms {
 	private ClassroomService classroomService;
 	@Autowired
 	private CourseScheduleSchemeService coursescheduleschemeService;
+	@Autowired
+	private ExaminationroomService examinationroomService;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private StudentMapper studentMapper;
 	@Autowired
@@ -185,9 +192,16 @@ public class ResClassrooms {
 				if (config != null) {
 					serverIP = config.getValue();
 				}
-
-				dataMap.put("avatar", "http://" + serverIP + "/pixsigdata/image/avatar/" + student.getStudentno()
-						+ ".jpg");
+				String avatarpath=null;
+				String avatar=student.getAvatar();
+				if(StringUtils.isNotBlank(avatar)){
+					avatarpath="http://" + serverIP +"/pixsigdata"+avatar;
+				}else{
+					avatarpath	="http://" + serverIP + "/pixsigdata/image/avatar/" + student.getStudentno()
+							+ ".jpg";
+				}
+				dataMap.put("avatar", avatarpath);
+				
 				dataList.add(dataMap);
 			}
 
@@ -235,6 +249,38 @@ public class ResClassrooms {
 
 
 	}
+
+	@GET
+	@Path("/{classroom_id}/examinationrooms")
+	public String getClassroomExaminationrooms(@Context HttpServletRequest req,
+			@PathParam("classroom_id") Integer classroomId) {
+		logger.debug("getClassroomExaminationrooms(classroomId={}) request...", classroomId);
+		try {
+		List<Examinationroom> examinationrooms = this.examinationroomService
+				.getExaminationroomsByClassroomid(classroomId);
+			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+			if (examinationrooms != null && examinationrooms.size() > 0) {
+				for (Examinationroom examinationroom : examinationrooms) {
+					Map<String, Object> dataMap = new HashMap<String, Object>();
+					dataMap.put("id", examinationroom.getExaminationroomid());
+					dataMap.put("name", examinationroom.getName());
+					dataMap.put("description", examinationroom.getDescription());
+					dataMap.put("coursename", examinationroom.getCoursename());
+					dataMap.put("starttime", examinationroom.getStarttime().getTime());
+					dataMap.put("endtime", examinationroom.getEndtime().getTime());
+					dataList.add(dataMap);
+				}
+
+			}
+			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", dataList);
+		} catch (Exception ex) {
+			logger.error("getClassroomExaminationrooms exception.", ex);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, ex.getMessage());
+
+		}
+
+	}
+
 	private String handleResult(int code, String message) {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("retcode", code);
@@ -243,7 +289,7 @@ public class ResClassrooms {
 		return responseJson.toString();
 	}
 
-	private String handleResult(int code, String message, List<Map<String, Object>> data) {
+	private String handleResult(int code, String message, List data) {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("retcode", code);
 		responseJson.put("message", message);
@@ -290,6 +336,7 @@ public class ResClassrooms {
 
 		return dtls;
 	}
+
 
 
 }
