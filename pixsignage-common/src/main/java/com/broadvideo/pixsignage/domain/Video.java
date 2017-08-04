@@ -48,6 +48,8 @@ public class Video {
 
 	private Integer relateid;
 
+	private String tags;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -212,6 +214,14 @@ public class Video {
 
 	public void setRelateid(Integer relateid) {
 		this.relateid = relateid;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

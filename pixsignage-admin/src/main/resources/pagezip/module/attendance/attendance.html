@@ -11,6 +11,14 @@
 <div class="attendance"></div>
 <script src="../../plugin/jquery/jquery.min.js"></script>
 <script src="../../plugin/dot/doT.min.js"></script>
-<script src="attendance.js"></script>
+<script src="../../plugin/moment/moment.min.js"></script>
+<script src="../common/index.js"></script>
+<script src="index.js"></script>
+<script>
+    var attendance = new Attendance($('.attendance'), {})
+    document.body.addEventListener('keyup', function () {
+        attendance.keyup()
+    })
+</script>
 </body>
 </html>

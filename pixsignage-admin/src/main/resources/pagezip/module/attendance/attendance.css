@@ -3,10 +3,6 @@
     overflow: auto;
 }
 
-.opacity {
-    opacity: 0.2;
-}
-
 .attendance-item {
     float: left;
     margin: 5px;
@@ -34,6 +30,10 @@
     position: absolute;
 }
 
+.attendance-item .attendance-avatar img.opacity {
+    opacity: 0.2;
+}
+
 .attendance-item .attendance-info {
     _margin-bottom: 3px;
     padding-left: 0px;
@@ -59,7 +59,7 @@
     z-index: 500;
 }
 
-.attendance-popup .attendance-avatar {
+.attendance-popup .attendance-popup-avatar {
     float: left;
     width: 420px;
     height: 452px;
@@ -67,7 +67,7 @@
     overflow: hidden;
 }
 
-.attendance-popup .attendance-avatar img {
+.attendance-popup .attendance-popup-avatar img {
     background: #333;
     width: 420px;
     height: 452px;
@@ -76,7 +76,7 @@
     position: absolute;
 }
 
-.attendance-popup .attendance-info {
+.attendance-popup .attendance-popup-info {
     _margin-bottom: 3px;
     padding-left: 0px;
     width: 420px;
@@ -84,8 +84,8 @@
     color: #EA7500;
 }
 
-.attendance-popup .attendance-info p {
+.attendance-popup .attendance-popup-info p {
     width: 420px;
-    font-size: 56px;
+    font-size: 32px;
     text-align: center;
 }

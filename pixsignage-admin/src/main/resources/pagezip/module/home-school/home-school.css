@@ -33,6 +33,18 @@
     color: #666666;
 }
 
+.home-school-sum {
+    font-size: 18px;
+}
+
+.home-school-sum>span {
+    padding: 0 6px;
+    color: white;
+    background-color: red;
+    border-radius: 50%;
+}
+
+
 .home-school-popup {
     width: 600px;
     position: absolute;
@@ -51,7 +63,9 @@
 }
 
 .home-school-title {
-    margin: 5px 0;
+    font-size: 24px;
+    margin: 5px;
+    line-height: 36px;
 }
 
 .home-school-close {
@@ -60,10 +74,14 @@
     top: 5px;
 }
 
+.home-school-close>i {
+    font-size: 36px;
+}
+
 .home-school-audio {
     font-size: 60px;
-    color: grey;
+    color: #888888;
 }
 .home-school-audio.recording {
-    color: orangered;
+    color: #FF3860;
 }

@@ -45,6 +45,7 @@
     <result column="timezone" property="timezone" jdbcType="VARCHAR" />
     <result column="apps" property="apps" jdbcType="VARCHAR" />
     <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
@@ -56,7 +57,7 @@
     calendarflag, sscreenflag, mscreenflag, flowrateflag, videoflag, imageflag, textflag, streamflag, 
     dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, currentdevices, currentdeviceidx, 
     maxstorage, currentstorage, copyright, description, backupvideoid, powerflag, poweron, poweroff, 
-    qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, apps, logo, 
+    qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, apps, logo, tags, 
     createtime, createstaffid
   </sql>
   
@@ -127,7 +128,7 @@
       qrcodeflag, devicepassflag, devicepass, 
       upgradeflag, volumeflag, volume, 
       timezone, apps, logo, 
-      createtime, createstaffid)
+      tags, createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{bundleflag,jdbcType=CHAR}, 
       #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
@@ -143,7 +144,7 @@
       #{qrcodeflag,jdbcType=CHAR}, #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, 
       #{upgradeflag,jdbcType=CHAR}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{timezone,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{tags,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
@@ -279,6 +280,9 @@
       </if>
       <if test="logo != null" >
         logo,
+      </if>
+      <if test="tags != null" >
+        tags,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -416,6 +420,9 @@
       </if>
       <if test="logo != null" >
         #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -557,6 +564,9 @@
       <if test="logo != null" >
         logo = #{logo,jdbcType=VARCHAR},
       </if>
+      <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -611,6 +621,7 @@
       timezone = #{timezone,jdbcType=VARCHAR},
       apps = #{apps,jdbcType=VARCHAR},
       logo = #{logo,jdbcType=VARCHAR},
+      tags = #{tags,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where orgid = #{orgid,jdbcType=INTEGER}

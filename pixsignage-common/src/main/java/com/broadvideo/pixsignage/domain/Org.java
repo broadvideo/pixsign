@@ -97,6 +97,8 @@ public class Org {
 
 	private String logo;
 
+	private String tags;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -461,6 +463,14 @@ public class Org {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

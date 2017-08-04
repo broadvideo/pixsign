@@ -36,6 +36,7 @@ import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
+import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Flowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
@@ -48,6 +49,7 @@ import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.DevicegridMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.FlowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
@@ -89,6 +91,8 @@ public class PixsignageService21 {
 	private DebugreportMapper debugreportMapper;
 	@Autowired
 	private FlowlogMapper flowlogMapper;
+	@Autowired
+	private DevicegridMapper devicegridMapper;
 
 	@Autowired
 	private ScheduleService scheduleService;
@@ -302,6 +306,15 @@ public class PixsignageService21 {
 			} else {
 				responseJson.put("master_flag", 0);
 			}
+			JSONArray griddtlArray = new JSONArray();
+			Devicegrid devicegrid = devicegridMapper.selectByPrimaryKey("" + device.getDevicegridid());
+			if (devicegrid != null) {
+				List<Device> devices = devicegrid.getDevices();
+				for (Device d : devices) {
+					griddtlArray.put(d.getTerminalid());
+				}
+			}
+			responseJson.put("devicegrid_dtls", griddtlArray);
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();
@@ -494,9 +507,15 @@ public class PixsignageService21 {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			JSONObject locationJson = requestJson.getJSONObject("location");
-			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
-			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
-			String temperature = requestJson.getString("temperature");
+			long freebytes = requestJson.has("sdcard_free_bytes") ? requestJson.getLong("sdcard_free_bytes") : 0;
+			long totalbytes = requestJson.has("sdcard_total_bytes") ? requestJson.getLong("sdcard_total_bytes") : 0;
+			String temperature = requestJson.has("temperature") ? requestJson.getString("temperature") : "";
+			int downloadspeed = requestJson.has("download_speed") ? requestJson.getInt("download_speed") : 0;
+			long downloadbytes = requestJson.has("total_download_bytes") ? requestJson.getLong("total_download_bytes")
+					: 0;
+			String networkmode = requestJson.has("network_mode") ? requestJson.getString("network_mode") : "0";
+			int networksignal = requestJson.has("signal_strength") ? requestJson.getInt("signal_strength") : 0;
+			int brightness = requestJson.has("brightness") ? requestJson.getInt("brightness") : 0;
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -530,9 +549,14 @@ public class PixsignageService21 {
 				device.setAddr2(addr2);
 			}
 
-			device.setStorageavail(sdcard_free_bytes);
-			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setStorageavail(freebytes);
+			device.setStorageused(totalbytes - freebytes);
 			device.setTemperature(temperature);
+			device.setDownloadspeed(downloadspeed);
+			device.setDownloadbytes(downloadbytes);
+			device.setNetworkmode(networkmode);
+			device.setNetworksignal(networksignal);
+			device.setBrightness(brightness);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
@@ -540,6 +564,7 @@ public class PixsignageService21 {
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("tags", device.getTags());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {
@@ -742,11 +767,13 @@ public class PixsignageService21 {
 					devicefile.setUpdatetime(Calendar.getInstance().getTime());
 					devicefileService.addDevicefile(devicefile);
 				} else {
-					devicefile.setProgress(progress);
-					devicefile.setStatus(status);
-					devicefile.setDescription(desc);
-					devicefile.setUpdatetime(Calendar.getInstance().getTime());
-					devicefileService.updateDevicefile(devicefile);
+					if (devicefile.getProgress().intValue() != progress || devicefile.getStatus().equals(status)) {
+						devicefile.setProgress(progress);
+						devicefile.setStatus(status);
+						devicefile.setDescription(desc);
+						devicefile.setUpdatetime(Calendar.getInstance().getTime());
+						devicefileService.updateDevicefile(devicefile);
+					}
 				}
 			}
 

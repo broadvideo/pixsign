@@ -50,6 +50,12 @@
     <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="appfileid" property="appfileid" jdbcType="INTEGER" />
     <result column="temperature" property="temperature" jdbcType="VARCHAR" />
+    <result column="downloadspeed" property="downloadspeed" jdbcType="INTEGER" />
+    <result column="downloadbytes" property="downloadbytes" jdbcType="BIGINT" />
+    <result column="networkmode" property="networkmode" jdbcType="CHAR" />
+    <result column="networksignal" property="networksignal" jdbcType="INTEGER" />
+    <result column="brightness" property="brightness" jdbcType="INTEGER" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
@@ -63,7 +69,8 @@
     filestatus, status, description, onlineflag, appname, sign, vname, vcode, mtype, type, ostype, 
     devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
-    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid
+    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, temperature,
+    downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -264,7 +271,9 @@
       powerflag, poweron, 
       poweroff, volumeflag, volume, 
       boardinfo, storageused, storageavail, 
-      upgradeflag, appfileid, temperature)
+      upgradeflag, appfileid, temperature,
+      downloadspeed, downloadbytes, networkmode,
+      networksignal, brightness, tags)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -280,7 +289,9 @@
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, 
       #{poweroff,jdbcType=TIME}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
-      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{temperature,jdbcType=VARCHAR})
+      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{temperature,jdbcType=VARCHAR},
+      #{downloadspeed,jdbcType=INTEGER},#{downloadbytes,jdbcType=BIGINT},#{networkmode,jdbcType=CHAR},
+      #{networksignal,jdbcType=INTEGER},#{brightness,jdbcType=INTEGER},#{tags,jdbcType=VARCHAR},)
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -429,6 +440,24 @@
       <if test="temperature != null" >
         temperature,
       </if>
+      <if test="downloadspeed != null" >
+        downloadspeed,
+      </if>
+      <if test="downloadbytes != null" >
+        downloadbytes,
+      </if>
+      <if test="networkmode != null" >
+        networkmode,
+      </if>
+      <if test="networksignal != null" >
+        networksignal,
+      </if>
+      <if test="brightness != null" >
+        brightness,
+      </if>
+      <if test="tags != null" >
+        tags,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -571,6 +600,24 @@
       </if>
       <if test="temperature != null" >
         #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadspeed != null" >
+        #{downloadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="downloadbytes != null" >
+        #{downloadbytes,jdbcType=BIGINT},
+      </if>
+      <if test="networkmode != null" >
+        #{networkmode,jdbcType=CHAR},
+      </if>
+      <if test="networksignal != null" >
+        #{networksignal,jdbcType=INTEGER},
+      </if>
+      <if test="brightness != null" >
+        #{brightness,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -718,6 +765,24 @@
       <if test="temperature != null" >
         temperature = #{temperature,jdbcType=VARCHAR},
       </if>
+      <if test="downloadspeed != null" >
+        downloadspeed = #{downloadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="downloadbytes != null" >
+        downloadbytes = #{downloadbytes,jdbcType=BIGINT},
+      </if>
+      <if test="networkmode != null" >
+        networkmode = #{networkmode,jdbcType=CHAR},
+      </if>
+      <if test="networksignal != null" >
+        networksignal = #{networksignal,jdbcType=INTEGER},
+      </if>
+      <if test="brightness != null" >
+        brightness = #{brightness,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -769,7 +834,13 @@
       storageavail = #{storageavail,jdbcType=BIGINT},
       upgradeflag = #{upgradeflag,jdbcType=CHAR},
       appfileid = #{appfileid,jdbcType=INTEGER},
-      temperature = #{temperature,jdbcType=VARCHAR}
+      temperature = #{temperature,jdbcType=VARCHAR},
+      downloadspeed = #{downloadspeed,jdbcType=INTEGER},
+      downloadbytes = #{downloadbytes,jdbcType=BIGINT},
+      networkmode = #{networkmode,jdbcType=CHAR},
+      networksignal = #{networksignal,jdbcType=INTEGER},
+      brightness = #{brightness,jdbcType=INTEGER},
+      tags = #{tags,jdbcType=VARCHAR}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
 </mapper>

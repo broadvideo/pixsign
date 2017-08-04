@@ -487,6 +487,7 @@ function initMyEditModal() {
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
+	initTagSelect();
 
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
@@ -507,6 +508,7 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['device.update']);
+		$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
 		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
 		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
@@ -530,6 +532,7 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['device.update']);
+		$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
 		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
 		//$("#ExternalSelect").select2('val', CurrentDevice.externalid);
@@ -537,6 +540,25 @@ function initMyEditModal() {
 		$('#MyEditModal').modal();
 		$("#ExternalSelect").select2('val',CurrentDevice.externalid);
 	});
+
+	function initTagSelect() {
+		var tags = ['华为', '小米', 'Vivo', 'OPPO', '三星', 'iPhone'];
+		var taglist = [];
+		for (var i=0; i<tags.length; i++) {
+			taglist.push({
+				id: tags[i],
+				text: tags[i],
+			})
+		}
+		$('#TagSelect').select2({
+			multiple: true,
+			minimumInputLength: 0,
+			data: taglist,
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
+	}
+
 }
 
 function initConfigModal() {

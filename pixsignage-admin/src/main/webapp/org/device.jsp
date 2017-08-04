@@ -253,6 +253,14 @@
 									</div>
 								</div>
 							</div>
+							<!-- 
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
+								</div>
+							</div>
+							 -->
 							<div class="form-group calendar-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.externalid"/></label>
 								<div class="col-md-9">

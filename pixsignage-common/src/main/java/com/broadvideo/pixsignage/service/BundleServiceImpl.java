@@ -1145,6 +1145,7 @@ public class BundleServiceImpl implements BundleService {
 							} else {
 								videoJson.put("relate_id", 0);
 							}
+							videoJson.put("tags", video.getTags());
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.put(videoJson);
 							videoList.add(video);
@@ -1273,6 +1274,7 @@ public class BundleServiceImpl implements BundleService {
 				videoJson.put("thumbnail",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getThumbnail());
 				videoJson.put("relate_id", 0);
+				videoJson.put("tags", video.getRelate().getTags());
 				videoHash.put(video.getRelateid(), videoJson);
 				videoJsonArray.put(videoJson);
 			}

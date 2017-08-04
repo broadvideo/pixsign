@@ -429,9 +429,15 @@ public class PixsignageService {
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
-			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
-			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
-			String temperature = requestJson.getString("temperature");
+			long freebytes = requestJson.has("sdcard_free_bytes") ? requestJson.getLong("sdcard_free_bytes") : 0;
+			long totalbytes = requestJson.has("sdcard_total_bytes") ? requestJson.getLong("sdcard_total_bytes") : 0;
+			String temperature = requestJson.has("temperature") ? requestJson.getString("temperature") : "";
+			int downloadspeed = requestJson.has("download_speed") ? requestJson.getInt("download_speed") : 0;
+			long downloadbytes = requestJson.has("total_download_bytes") ? requestJson.getLong("total_download_bytes")
+					: 0;
+			String networkmode = requestJson.has("network_mode") ? requestJson.getString("network_mode") : "0";
+			int networksignal = requestJson.has("signal_strength") ? requestJson.getInt("signal_strength") : 0;
+			int brightness = requestJson.has("brightness") ? requestJson.getInt("brightness") : 0;
 
 			JSONObject locationJson = requestJson.getJSONObject("location");
 
@@ -467,26 +473,22 @@ public class PixsignageService {
 				device.setAddr2(addr2);
 			}
 
-			device.setStorageavail(sdcard_free_bytes);
-			device.setStorageused(sdcard_total_bytes - sdcard_free_bytes);
+			device.setStorageavail(freebytes);
+			device.setStorageused(totalbytes - freebytes);
 			device.setTemperature(temperature);
+			device.setDownloadspeed(downloadspeed);
+			device.setDownloadbytes(downloadbytes);
+			device.setNetworkmode(networkmode);
+			device.setNetworksignal(networksignal);
+			device.setBrightness(brightness);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
 
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
-			/*
-			 * if (mediatype.equals("video")) { Playlog playlog = new Playlog();
-			 * playlog.setOrgid(device.getOrgid());
-			 * playlog.setBranchid(device.getBranchid());
-			 * playlog.setDeviceid(device.getDeviceid());
-			 * playlog.setVideoid(mediaid);
-			 * playlog.setStarttime(Calendar.getInstance().getTime());
-			 * playlogMapper.insertSelective(playlog); }
-			 */
-
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("tags", device.getTags());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_status exception", e);
@@ -553,11 +555,13 @@ public class PixsignageService {
 					devicefile.setUpdatetime(Calendar.getInstance().getTime());
 					devicefileService.addDevicefile(devicefile);
 				} else {
-					devicefile.setProgress(progress);
-					devicefile.setStatus(status);
-					devicefile.setDescription(desc);
-					devicefile.setUpdatetime(Calendar.getInstance().getTime());
-					devicefileService.updateDevicefile(devicefile);
+					if (devicefile.getProgress().intValue() != progress || devicefile.getStatus().equals(status)) {
+						devicefile.setProgress(progress);
+						devicefile.setStatus(status);
+						devicefile.setDescription(desc);
+						devicefile.setUpdatetime(Calendar.getInstance().getTime());
+						devicefileService.updateDevicefile(devicefile);
+					}
 				}
 			}
 

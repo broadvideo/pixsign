@@ -123,7 +123,7 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.deviceversion"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="refreshMyTable();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body">
