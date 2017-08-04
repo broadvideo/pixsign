@@ -2,7 +2,7 @@
  * Created by Elvis on 2017/6/29.
  */
 var common = new function () {
-    this.host = window.android && window.android.getHost() || '192.168.0.71';
+    this.host = window.android && window.android.getHost() || '192.168.0.102';
     this.baseUrl = 'http://' + this.host + '/pixsignage-api/service';
     this.terminalId = window.android && window.android.getTerminalId() || '00004';
     this.classRoom = null;
@@ -11,6 +11,7 @@ var common = new function () {
     this.attendance = [];
     this.dailyCourse = [];
     this.weeklyCourse = [];
+    this.exam = [];
     $.ajaxSetup({
         global: true,
         cache: false
@@ -32,6 +33,7 @@ var common = new function () {
             thiz.weeklyCourse.forEach(item => item.init());
             thiz.homeSchool.forEach(item => item.init());
             thiz.attendance.forEach(item => item.init());
+            thiz.exam.forEach(item => item.init());
         }).catch(function (err) {
             console.log(err.message);
         });
