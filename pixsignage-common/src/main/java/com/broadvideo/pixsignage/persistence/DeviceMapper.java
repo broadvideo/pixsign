@@ -52,6 +52,8 @@ public interface DeviceMapper {
 
 	int changeBranch(@Param(value = "branchid1") String branchid1, @Param(value = "branchid2") String branchid2);
 
+	int updateTags(@Param(value = "branchid") String branchid, @Param(value = "tags") String tags);
+
 	int checkDevicegroup();
 
 	int updateOnlineflag();

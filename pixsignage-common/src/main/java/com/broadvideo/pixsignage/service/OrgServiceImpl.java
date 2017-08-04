@@ -164,7 +164,7 @@ public class OrgServiceImpl implements OrgService {
 		if (list.size() == 0) {
 			return true;
 		} else {
-			return (org.getOrgid() == list.get(0).getOrgid());
+			return (org.getOrgid().intValue() == list.get(0).getOrgid().intValue());
 		}
 	}
 
@@ -173,7 +173,7 @@ public class OrgServiceImpl implements OrgService {
 		if (oldOrg == null) {
 			return true;
 		} else {
-			return (org.getOrgid() == oldOrg.getOrgid());
+			return (org.getOrgid().intValue() == oldOrg.getOrgid().intValue());
 		}
 	}
 

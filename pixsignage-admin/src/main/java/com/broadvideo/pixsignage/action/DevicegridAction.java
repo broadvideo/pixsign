@@ -80,7 +80,6 @@ public class DevicegridAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			devicegrid.setOrgid(getLoginStaff().getOrgid());
-			devicegrid.setBranchid(getLoginStaff().getBranchid());
 			devicegridService.addDevicegrid(devicegrid);
 			return SUCCESS;
 		} catch (Exception ex) {

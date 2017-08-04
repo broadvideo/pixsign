@@ -74,6 +74,11 @@ var common = {
 		maxstorage: '存储上限',
 		currentstorage: '已用存储',
 		temperature: '温度',
+		downloadspeed: '下载速率',
+		downloadbytes: '下载大小',
+		networkmode: '网络模式',
+		networksignal: '网络信号',
+		brightness: '亮度',
 		boardinfo: '硬件信息',
 		createtime: '创建时间',
 		updatetime: '更新时间',
@@ -135,6 +140,7 @@ var common = {
 		pagezone_type_12: '本周课表',
 		pagezone_type_13: '刷卡签到',
 		pagezone_type_14: '家校互动',
+		pagezone_type_15: '考试通告',
 
 		play_period: '播放时间段',
 		valid_period: '生效期',
@@ -257,6 +263,7 @@ var common = {
 	},
 	tips: {
 		remove: '请确认是否删除 ',
+		resetpassword: '请确认是否重置密码 ',
 		unbind: '请确认是否解绑 ',
 		sync: '是否同步播放计划至 ',
 		synclayout: '是否同步此布局至相关联的终端和终端组',

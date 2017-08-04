@@ -290,6 +290,12 @@ public class PixsignageService {
 
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
+			if (org.getTagflag().equals("1") && device.getTagflag().equals("1")) {
+				responseJson.put("tag_flag", 1);
+			} else {
+				responseJson.put("tag_flag", 0);
+			}
+			responseJson.put("tags", device.getTags());
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();

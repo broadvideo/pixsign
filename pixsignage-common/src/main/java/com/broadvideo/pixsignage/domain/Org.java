@@ -39,6 +39,8 @@ public class Org {
 
 	private String flowrateflag;
 
+	private String tagflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -225,6 +227,14 @@ public class Org {
 
 	public void setFlowrateflag(String flowrateflag) {
 		this.flowrateflag = flowrateflag;
+	}
+
+	public String getTagflag() {
+		return tagflag;
+	}
+
+	public void setTagflag(String tagflag) {
+		this.tagflag = tagflag;
 	}
 
 	public String getVideoflag() {

@@ -161,6 +161,12 @@ function initMyTable() {
 		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
 		sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
 		sOut += '<tr><td>' + common.view.temperature + ':</td><td>' + aData.temperature + '</td></tr>';
+		sOut += '<tr><td>' + common.view.downloadspeed + ':</td><td>' + aData.downloadspeed + ' KB/s</td></tr>';
+		sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + transferIntToByte(aData.downloadbytes) + '</td></tr>';
+		sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + aData.networkmode + '</td></tr>';
+		sOut += '<tr><td>' + common.view.networksignal + ':</td><td>' + aData.networksignal + '</td></tr>';
+		sOut += '<tr><td>' + common.view.brightness + ':</td><td>' + aData.brightness + '</td></tr>';
+		sOut += '<tr><td>Tags:</td><td>' + aData.tags + '</td></tr>';
 		sOut += '<tr><td>' + common.view.boardinfo + ':</td><td class="autowrap">' + aData.boardinfo + '</td></tr>';
 		sOut += '<tr><td>' + common.view.refreshtime + ':</td><td>' + aData.refreshtime + '</td></tr>';
 		sOut += '<tr><td>' + common.view.activetime + ':</td><td>' + aData.activetime + '</td></tr>';
@@ -487,7 +493,6 @@ function initMyEditModal() {
 		});
 	};
 	$('#MyEditForm').validate(FormValidateOption);
-	initTagSelect();
 
 	$('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 		if ($('#MyEditForm').valid()) {
@@ -508,15 +513,11 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['device.update']);
-		$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
 		currentEditBranchid = CurrentDevice.branchid;
 		createEditBranchTree(currentEditBranchTreeData);
 		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
-	
-
-		
 	});
 
 	$('body').on('click', '.pix-update2', function(event) {
@@ -540,28 +541,42 @@ function initMyEditModal() {
 		$('#MyEditModal').modal();
 		$("#ExternalSelect").select2('val',CurrentDevice.externalid);
 	});
-
-	function initTagSelect() {
-		var tags = ['华为', '小米', 'Vivo', 'OPPO', '三星', 'iPhone'];
-		var taglist = [];
-		for (var i=0; i<tags.length; i++) {
-			taglist.push({
-				id: tags[i],
-				text: tags[i],
-			})
-		}
-		$('#TagSelect').select2({
-			multiple: true,
-			minimumInputLength: 0,
-			data: taglist,
-			dropdownCssClass: "bigdrop", 
-			escapeMarkup: function (m) { return m; } 
-		});
-	}
-
 }
 
 function initConfigModal() {
+	initTagSelect();
+	function initTagSelect() {
+		$.ajax({
+			type : 'GET',
+			url : 'org!get.action',
+			data : '',
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					var tags = $(data.org.tags.split(','));
+					var taglist = [];
+					for (var i=0; i<tags.length; i++) {
+						taglist.push({
+							id: tags[i],
+							text: tags[i],
+						})
+					}
+					$('#TagSelect').select2({
+						multiple: true,
+						minimumInputLength: 0,
+						data: taglist,
+						dropdownCssClass: "bigdrop", 
+						escapeMarkup: function (m) { return m; } 
+					});
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				console.log('failue');
+			}
+		});
+	}
+
 	$('body').on('click', '.pix-config', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
@@ -584,6 +599,7 @@ function initConfigModal() {
 		} else {
 			$('.powerflag').css('display', 'none');
 		}
+		$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
 		$('#ConfigModal').modal();
 	});
 	$('[type=submit]', $('#ConfigModal')).on('click', function(event) {

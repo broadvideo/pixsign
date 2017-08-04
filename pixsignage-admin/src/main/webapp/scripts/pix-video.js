@@ -348,7 +348,7 @@ function initMyEditModal() {
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['common.update']);
-		$('#TagSelect').select2('val', $(CurrentVideo.tags.split(",")));
+		$('#TagSelect').select2('val', $(CurrentVideo.tags.split(',')));
 		currentEditFolderid = CurrentVideo.folderid;
 		createEditFolderTree(currentEditFolderTreeData);
 		refreshRelateVideoSelect();
@@ -358,20 +358,34 @@ function initMyEditModal() {
 }
 
 function initTagSelect() {
-	var tags = ['华为', '小米', 'Vivo', 'OPPO', '三星', 'iPhone'];
-	var taglist = [];
-	for (var i=0; i<tags.length; i++) {
-		taglist.push({
-			id: tags[i],
-			text: tags[i],
-		})
-	}
-	$('#TagSelect').select2({
-		multiple: true,
-		minimumInputLength: 0,
-		data: taglist,
-		dropdownCssClass: "bigdrop", 
-		escapeMarkup: function (m) { return m; } 
+	$.ajax({
+		type : 'GET',
+		url : 'org!get.action',
+		data : '',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var tags = $(data.org.tags.split(','));
+				var taglist = [];
+				for (var i=0; i<tags.length; i++) {
+					taglist.push({
+						id: tags[i],
+						text: tags[i],
+					})
+				}
+				$('#TagSelect').select2({
+					multiple: true,
+					minimumInputLength: 0,
+					data: taglist,
+					dropdownCssClass: "bigdrop", 
+					escapeMarkup: function (m) { return m; } 
+				});
+			} else {
+				bootbox.alert(common.tips.error + data.errormsg);
+			}
+		},
+		error : function() {
+			console.log('failue');
+		}
 	});
 }
 

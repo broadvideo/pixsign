@@ -13,6 +13,7 @@
     <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
     <result column="mscreenflag" property="mscreenflag" jdbcType="CHAR" />
     <result column="flowrateflag" property="flowrateflag" jdbcType="CHAR" />
+    <result column="tagflag" property="tagflag" jdbcType="CHAR" />
     <result column="streamflag" property="streamflag" jdbcType="CHAR" />
     <result column="dvbflag" property="dvbflag" jdbcType="CHAR" />
     <result column="videoinflag" property="videoinflag" jdbcType="CHAR" />
@@ -29,7 +30,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     vspid, name, code, bundleflag, pageflag, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, 
-    flowrateflag, streamflag, dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
+    flowrateflag, tagflag, streamflag, dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
     currentstorage, apps, status, description, createtime, createstaffid
   </sql>
   
@@ -84,7 +85,7 @@
     insert into vsp (name, code, bundleflag, 
       pageflag, reviewflag, touchflag, 
       liftflag, calendarflag, mscreenflag, 
-      flowrateflag, streamflag, dvbflag, 
+      flowrateflag, tagflag, streamflag, dvbflag, 
       videoinflag, maxdevices, maxstorage, 
       currentdevices, currentstorage, apps, 
       status, description, createtime, 
@@ -93,7 +94,7 @@
     values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{bundleflag,jdbcType=CHAR}, 
       #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, 
-      #{flowrateflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, #{dvbflag,jdbcType=CHAR}, 
+      #{flowrateflag,jdbcType=CHAR}, #{tagflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, #{dvbflag,jdbcType=CHAR}, 
       #{videoinflag,jdbcType=CHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
@@ -135,6 +136,9 @@
       </if>
       <if test="flowrateflag != null" >
         flowrateflag,
+      </if>
+      <if test="tagflag != null" >
+        tagflag,
       </if>
       <if test="streamflag != null" >
         streamflag,
@@ -203,6 +207,9 @@
       </if>
       <if test="flowrateflag != null" >
         #{flowrateflag,jdbcType=CHAR},
+      </if>
+      <if test="tagflag != null" >
+        #{tagflag,jdbcType=CHAR},
       </if>
       <if test="streamflag != null" >
         #{streamflag,jdbcType=CHAR},
@@ -275,6 +282,9 @@
       <if test="flowrateflag != null" >
         flowrateflag = #{flowrateflag,jdbcType=CHAR},
       </if>
+      <if test="tagflag != null" >
+        tagflag = #{tagflag,jdbcType=CHAR},
+      </if>
       <if test="streamflag != null" >
         streamflag = #{streamflag,jdbcType=CHAR},
       </if>
@@ -326,6 +336,7 @@
       calendarflag = #{calendarflag,jdbcType=CHAR},
       mscreenflag = #{mscreenflag,jdbcType=CHAR},
       flowrateflag = #{flowrateflag,jdbcType=CHAR},
+      tagflag = #{tagflag,jdbcType=CHAR},
       streamflag = #{streamflag,jdbcType=CHAR},
       dvbflag = #{dvbflag,jdbcType=CHAR},
       videoinflag = #{videoinflag,jdbcType=CHAR},

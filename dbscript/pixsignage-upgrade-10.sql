@@ -13,15 +13,22 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table vsp add tagflag char(1) default '0';
+alter table org add tags varchar(512) default '';
+alter table org add tagflag char(1) default '0';
+alter table branch add code varchar(16) default '';
+
 alter table device add downloadspeed int default 0;
 alter table device add downloadbytes bigint default 0;
 alter table device add networkmode char(1) default '0';
 alter table device add networksignal int default 0;
 alter table device add brightness int default 0;
 alter table device add tags varchar(512) default '';
+alter table device add tagflag char(1) default '0';
 
 alter table video add tags varchar(512) default '';
-alter table org add tags varchar(512) default '';
+alter table mediagrid add tags varchar(512) default '';
+
 
 ############################################################
 ## post script  ############################################

@@ -60,6 +60,10 @@ var PixPage = function () {
 				//HomeSchool Zone
 				var homeschool = new HomeSchool($(inner_div), zone, scalew, scaleh);
 				allzones.push(homeschool);
+			} else if (zone.type == '15') {
+				//ExamNotice Zone
+				var examnotice = new ExamNotice($(inner_div), zone, scalew, scaleh);
+				allzones.push(examnotice);
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allzones.push(otherzone);

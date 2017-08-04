@@ -28,6 +28,8 @@ public class Vsp {
 
 	private String flowrateflag;
 
+	private String tagflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -140,6 +142,14 @@ public class Vsp {
 
 	public void setFlowrateflag(String flowrateflag) {
 		this.flowrateflag = flowrateflag;
+	}
+
+	public String getTagflag() {
+		return tagflag;
+	}
+
+	public void setTagflag(String tagflag) {
+		this.tagflag = tagflag;
 	}
 
 	public String getStreamflag() {

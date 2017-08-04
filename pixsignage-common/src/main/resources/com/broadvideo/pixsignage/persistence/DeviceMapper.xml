@@ -49,6 +49,7 @@
     <result column="storageavail" property="storageavail" jdbcType="BIGINT" />
     <result column="upgradeflag" property="upgradeflag" jdbcType="CHAR" />
     <result column="appfileid" property="appfileid" jdbcType="INTEGER" />
+    <result column="tagflag" property="tagflag" jdbcType="CHAR" />
     <result column="temperature" property="temperature" jdbcType="VARCHAR" />
     <result column="downloadspeed" property="downloadspeed" jdbcType="INTEGER" />
     <result column="downloadbytes" property="downloadbytes" jdbcType="BIGINT" />
@@ -69,7 +70,7 @@
     filestatus, status, description, onlineflag, appname, sign, vname, vcode, mtype, type, ostype, 
     devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
-    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, temperature,
+    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, tagflag, temperature,
     downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags
   </sql>
   
@@ -217,6 +218,12 @@
     where branchid = #{branchid1}
   </update>
 
+  <update id="updateTags" >
+    update device
+    set tags = #{tags}
+    where branchid = #{branchid}
+  </update>
+
   <update id="checkDevicegroup" >
     update device d, devicegroup dg
     set d.devicegroupid = 0 
@@ -271,7 +278,7 @@
       powerflag, poweron, 
       poweroff, volumeflag, volume, 
       boardinfo, storageused, storageavail, 
-      upgradeflag, appfileid, temperature,
+      upgradeflag, appfileid, tagflag, temperature,
       downloadspeed, downloadbytes, networkmode,
       networksignal, brightness, tags)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
@@ -289,7 +296,7 @@
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, 
       #{poweroff,jdbcType=TIME}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
-      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{temperature,jdbcType=VARCHAR},
+      #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{tagflag,jdbcType=CHAR}, #{temperature,jdbcType=VARCHAR},
       #{downloadspeed,jdbcType=INTEGER},#{downloadbytes,jdbcType=BIGINT},#{networkmode,jdbcType=CHAR},
       #{networksignal,jdbcType=INTEGER},#{brightness,jdbcType=INTEGER},#{tags,jdbcType=VARCHAR},)
   </insert>
@@ -436,6 +443,9 @@
       </if>
       <if test="appfileid != null" >
         appfileid,
+      </if>
+      <if test="tagflag != null" >
+        tagflag,
       </if>
       <if test="temperature != null" >
         temperature,
@@ -597,6 +607,9 @@
       </if>
       <if test="appfileid != null" >
         #{appfileid,jdbcType=INTEGER},
+      </if>
+      <if test="tagflag != null" >
+        #{tagflag,jdbcType=CHAR},
       </if>
       <if test="temperature != null" >
         #{temperature,jdbcType=VARCHAR},
@@ -762,6 +775,9 @@
       <if test="appfileid != null" >
         appfileid = #{appfileid,jdbcType=INTEGER},
       </if>
+      <if test="tagflag != null" >
+        tagflag = #{tagflag,jdbcType=CHAR},
+      </if>
       <if test="temperature != null" >
         temperature = #{temperature,jdbcType=VARCHAR},
       </if>
@@ -834,6 +850,7 @@
       storageavail = #{storageavail,jdbcType=BIGINT},
       upgradeflag = #{upgradeflag,jdbcType=CHAR},
       appfileid = #{appfileid,jdbcType=INTEGER},
+      tagflag = #{tagflag,jdbcType=CHAR},
       temperature = #{temperature,jdbcType=VARCHAR},
       downloadspeed = #{downloadspeed,jdbcType=INTEGER},
       downloadbytes = #{downloadbytes,jdbcType=BIGINT},

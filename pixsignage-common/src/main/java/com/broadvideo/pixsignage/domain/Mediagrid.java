@@ -32,6 +32,8 @@ public class Mediagrid {
 
 	private Integer intervaltime;
 
+	private String tags;
+
 	private String snapshot;
 
 	private String status;
@@ -128,6 +130,14 @@ public class Mediagrid {
 
 	public void setIntervaltime(Integer intervaltime) {
 		this.intervaltime = intervaltime;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 	public String getSnapshot() {

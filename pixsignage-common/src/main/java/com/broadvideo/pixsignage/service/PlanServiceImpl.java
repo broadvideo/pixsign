@@ -442,7 +442,7 @@ public class PlanServiceImpl implements PlanService {
 										plandtlJson.put("duration", 0);
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
-									plandtlJson.put("tags", "");
+									plandtlJson.put("tags", mediagrid.getTags());
 									plandtlJsonArray.put(plandtlJson);
 								}
 							} else {
@@ -467,7 +467,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("size", mmediadtl.getSize());
 									plandtlJson.put("duration", plandtl.getDuration());
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
-									plandtlJson.put("tags", "");
+									plandtlJson.put("tags", mediagrid.getTags());
 									plandtlJsonArray.put(plandtlJson);
 								} else if (mmediadtl != null
 										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
@@ -495,7 +495,7 @@ public class PlanServiceImpl implements PlanService {
 										plandtlJson.put("duration", 0);
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
-									plandtlJson.put("tags", "");
+									plandtlJson.put("tags", mediagrid.getTags());
 									plandtlJsonArray.put(plandtlJson);
 								}
 							}

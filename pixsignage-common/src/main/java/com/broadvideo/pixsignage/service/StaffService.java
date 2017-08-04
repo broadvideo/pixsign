@@ -14,9 +14,9 @@ public interface StaffService {
 
 	public void updateStaff(Staff staff);
 
-	public void resetPassword(Staff staff);
-
 	public boolean updatePassword(Staff staff);
+
+	public void resetPassword(String staffid);
 
 	public void deleteStaff(String staffid);
 

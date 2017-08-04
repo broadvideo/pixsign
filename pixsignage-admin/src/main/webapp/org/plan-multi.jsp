@@ -181,54 +181,62 @@
 																<ul class="nav nav-tabs">
 																	<!-- 
 																	<li id="nav_tab4" class="pageflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solopage"/></a>
+																		<a href="#PageTab" data-toggle="tab"><spring:message code="pixsign.solopage"/></a>
 																	</li>
 																		 -->
 																	<li id="nav_tab3" class="imageflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.soloimage"/></a>
+																		<a href="#ImageTab" data-toggle="tab"><spring:message code="pixsign.soloimage"/></a>
 																	</li>
 																	<li id="nav_tab2" class="videoflag">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.solovideo"/></a>
+																		<a href="#VideoTab" data-toggle="tab"><spring:message code="pixsign.solovideo"/></a>
 																	</li>
 																	<li id="nav_tab1" class="mediagridflag active">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.mediagrid"/></a>
+																		<a href="#MediagridTab" data-toggle="tab"><spring:message code="pixsign.mediagrid"/></a>
 																	</li>
 																</ul>
 															</div>
 															<div class="portlet-body">
 																<div class="tab-content">
-																	<div class="tab-pane active" id="portlet_tab">
+																	<div class="tab-pane active" id="MediagridTab">
 																		<div class="row">
 																			<div class="col-md-3">
-																				<div class="row"><div class="col-md-12" id="MediaBranchTreeDiv"></div></div>
-																				<hr/>
-																				<div class="row"><div class="col-md-12" id="MediaFolderTreeDiv"></div></div>
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
 																			</div>
 																			<div class="col-md-9">
-																				<div id="MediagridDiv">
-																					<table id="MediagridTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
-																				<div id="VideoDiv" style="display:none">
-																					<table id="VideoTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
-																				<div id="ImageDiv" style="display:none">
-																					<table id="ImageTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
-																				<div id="PageDiv" style="display:none">
-																					<table id="PageTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
+																				<table id="MediagridTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="tab-pane" id="VideoTab">
+																		<div class="row">
+																			<div class="col-md-3">
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
+																				<hr/>
+																				<div class="row"><div class="col-md-12 foldertree"></div></div>
+																			</div>
+																			<div class="col-md-9">
+																				<table id="VideoTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="tab-pane" id="ImageTab">
+																		<div class="row">
+																			<div class="col-md-3">
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
+																				<hr/>
+																				<div class="row"><div class="col-md-12 foldertree"></div></div>
+																			</div>
+																			<div class="col-md-9">
+																				<table id="ImageTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
 																			</div>
 																		</div>
 																	</div>
@@ -264,27 +272,39 @@
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.plan.devicewarehouse"/></div>
 																<ul class="nav nav-tabs">
 																	<li id="nav_dtab1" class="active">
-																		<a href="#device_tab" data-toggle="tab"><spring:message code="pixsign.devicegrid"/></a>
+																		<a href="#DevicegridTab" data-toggle="tab"><spring:message code="pixsign.devicegrid"/></a>
 																	</li>
 																	<li id="nav_dtab2">
-																		<a href="#device_tab" data-toggle="tab"><spring:message code="pixsign.devicegridgroup"/></a>
+																		<a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegridgroup"/></a>
 																	</li>
 																</ul>
 															</div>
 															<div class="portlet-body">
 																<div class="tab-content">
-																	<div class="tab-pane active" id="device_tab">
-																		<div id="DevicegridDiv">
-																			<table id="DevicegridTable" class="table table-condensed table-hover">
-																				<thead></thead>
-																				<tbody></tbody>
-																			</table>
+																	<div class="tab-pane active" id="DevicegridTab">
+																		<div class="row">
+																			<div class="col-md-3">
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
+																			</div>
+																			<div class="col-md-9">
+																				<table id="DevicegridTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
 																		</div>
-																		<div id="DevicegroupDiv" style="display:none">
-																			<table id="DevicegroupTable" class="table table-condensed table-hover">
-																				<thead></thead>
-																				<tbody></tbody>
-																			</table>
+																	</div>
+																	<div class="tab-pane" id="DevicegroupTab">
+																		<div class="row">
+																			<div class="col-md-3">
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
+																			</div>
+																			<div class="col-md-9">
+																				<table id="DevicegroupTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
 																		</div>
 																	</div>
 																</div>
@@ -400,8 +420,8 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/common/branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-plan-multi.js?t=${timestamp}"></script>
 <script>

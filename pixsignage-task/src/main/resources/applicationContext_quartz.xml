@@ -154,6 +154,24 @@
 		</property>
 	</bean>
 
+	<bean id="taodianTask" class="com.broadvideo.pixsignage.task.TaodianTask"></bean>
+	<bean id="taodianJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="taodianTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="taodianJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="taodianJob" />
+		</property>
+		<property name="cronExpression">
+			<value>50 * * * * ?</value>
+		</property>
+	</bean>
+
 	<bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -167,6 +185,7 @@
 				<ref bean="playlogJobTrigger" />
 				<ref bean="pflowJobTrigger" />
 				<ref bean="importJobTrigger" />
+				<ref bean="taodianJobTrigger" />
 			</list>
 		</property>
 	</bean>

@@ -129,6 +129,17 @@
 											</label>
 										</div>
 									</div>
+									<div class="form-group tag-ctrl">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.tagflag"/><span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="vsp.tagflag" value="0" checked> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="vsp.tagflag" value="1"> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-md-3 control-label"><spring:message code="pixsign.org.media"/></label>
 										<div class="col-md-9 checkbox-list">

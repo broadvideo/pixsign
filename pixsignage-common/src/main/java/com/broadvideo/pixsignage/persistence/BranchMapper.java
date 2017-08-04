@@ -13,6 +13,8 @@ public interface BranchMapper {
 
 	List<Branch> selectByName(@Param(value = "name") String name, @Param(value = "orgid") String orgid);
 
+	List<Branch> selectTaodianList();
+
 	int deleteByPrimaryKey(@Param(value = "branchid") String branchid);
 
 	// int insert(Branch record);

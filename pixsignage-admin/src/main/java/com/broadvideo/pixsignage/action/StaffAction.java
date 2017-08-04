@@ -90,18 +90,6 @@ public class StaffAction extends BaseDatatableAction {
 		}
 	}
 
-	public String doResetPassword() {
-		try {
-			staffService.resetPassword(staff);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("StaffAction doResetPassword exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
 	public String doUpdatePassword() {
 		try {
 			if (staffService.updatePassword(staff)) {
@@ -112,6 +100,18 @@ public class StaffAction extends BaseDatatableAction {
 			}
 		} catch (Exception ex) {
 			logger.error("StaffAction doUpdatePassword exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doResetPassword() {
+		try {
+			staffService.resetPassword("" + staff.getStaffid());
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("StaffAction doResetPassword exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

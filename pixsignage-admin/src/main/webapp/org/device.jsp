@@ -209,6 +209,23 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group tag-ctrl">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.tagflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="device.tagflag" value="0"> <spring:message code="pixsign.prop.tagflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="device.tagflag" value="1"> <spring:message code="pixsign.prop.tagflag_1"/>
+									</label>
+								</div>
+							</div>
+							<div class="form-group tag-ctrl">
+								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -253,14 +270,6 @@
 									</div>
 								</div>
 							</div>
-							<!-- 
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
-								<div class="col-md-9">
-									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
-								</div>
-							</div>
-							 -->
 							<div class="form-group calendar-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.externalid"/></label>
 								<div class="col-md-9">
@@ -504,6 +513,8 @@ var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 var MscreenCtrl = <%=(session_org != null && session_org.getMscreenflag().equals("1"))%>;
 $('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
+var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
+$('.tag-ctrl').css('display', TagCtrl?'':'none');
 var MapSource = <%=(session_org != null && !session_org.getTimezone().equals("Asia/Shanghai"))%>;
 
 jQuery(document).ready(function() {

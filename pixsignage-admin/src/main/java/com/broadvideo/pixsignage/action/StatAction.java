@@ -30,8 +30,6 @@ public class StatAction extends BaseDatatableAction {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
 
-			System.out.println(branchid);
-
 			List<Object> aaData = new ArrayList<Object>();
 			List<HashMap<String, String>> statList = statService.statDevices("" + getLoginStaff().getOrgid(), branchid);
 			for (int i = 0; i < statList.size(); i++) {

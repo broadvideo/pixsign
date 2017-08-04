@@ -80,7 +80,6 @@ public class MediagridAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			mediagrid.setOrgid(getLoginStaff().getOrgid());
-			mediagrid.setBranchid(getLoginStaff().getBranchid());
 			mediagridService.addMediagrid(mediagrid);
 			return SUCCESS;
 		} catch (Exception ex) {

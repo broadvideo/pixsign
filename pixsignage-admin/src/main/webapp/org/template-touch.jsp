@@ -157,6 +157,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="15">
+								<i class="fa fa-child"></i><div>考试通告</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -964,7 +967,7 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/lib/branchtree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-template-touch.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-page-design.js?t=${timestamp}"></script>

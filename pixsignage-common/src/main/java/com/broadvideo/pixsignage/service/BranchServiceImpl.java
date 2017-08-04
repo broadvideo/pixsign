@@ -72,7 +72,7 @@ public class BranchServiceImpl implements BranchService {
 		if (list.size() == 0) {
 			return true;
 		} else {
-			return (branch.getBranchid() == list.get(0).getBranchid());
+			return (branch.getBranchid().intValue() == list.get(0).getBranchid().intValue());
 		}
 	}
 }

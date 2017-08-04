@@ -93,7 +93,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group tag-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="TagSelect" class="form-control select2" name="video.tags">
@@ -351,6 +351,9 @@
 <script src="${base_ctx}/scripts/pix-foldertree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-video.js?t=${timestamp}"></script>
 <script>
+var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
+$('.tag-ctrl').css('display', TagCtrl?'':'none');
+
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 var myType = 1;
 

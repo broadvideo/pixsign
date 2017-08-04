@@ -296,7 +296,13 @@ public class PixsignageService21 {
 
 			responseJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 			responseJson.put("password", org.getDevicepass());
+			if (org.getTagflag().equals("1") && device.getTagflag().equals("1")) {
+				responseJson.put("tag_flag", 1);
+			} else {
+				responseJson.put("tag_flag", 0);
+			}
 
+			responseJson.put("tags", device.getTags());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());

@@ -58,6 +58,7 @@
 				<div class="modal-body">
 					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
 						<input type="hidden" name="mediagrid.mediagridid" value="0" />
+						<input type="hidden" name="mediagrid.branchid" value="0" />
 						<input type="hidden" name="mediagrid.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
@@ -119,6 +120,12 @@
 															<div class="input-icon right">
 																<i class="fa"></i> <input type="text" class="form-control" name="name" />
 															</div>
+														</div>
+													</div>
+													<div class="form-group last tag-ctrl">
+														<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
+														<div class="col-md-9">
+															<input type="hidden" id="TagSelect" class="form-control select2" name="tags">
 														</div>
 													</div>
 												</div>
@@ -209,17 +216,23 @@
 							</div>
 						</div>
 						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add">
-										<spring:message code="global.add"/> <i class="fa fa-plus"></i>
-									</button>
+							<div class="row">
+								<div class="col-md-2" id="BranchTreeDiv">
+								</div>
+								<div class="col-md-10" id="BranchContentDiv">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button privilegeid="101010" class="btn green pix-add">
+												<spring:message code="global.add"/> <i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+									<table id="MyTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -249,13 +262,18 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-preview.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-mediagrid.js?t=${timestamp}"></script>
 <script>
+var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
+$('.tag-ctrl').css('display', TagCtrl?'':'none');
+
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
 	DataInit.init('${locale}');
+	initBranchTree();
 });
 
 </script>

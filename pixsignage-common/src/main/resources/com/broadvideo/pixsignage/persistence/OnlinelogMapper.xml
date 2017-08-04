@@ -147,15 +147,13 @@
       <if test="deviceid != null" >
         deviceid,
       </if>
-      <if test="onlinetime != null" >
-        onlinetime,
-      </if>
       <if test="offlinetime != null" >
         offlinetime,
       </if>
       <if test="duration != null" >
         duration,
       </if>
+      onlinetime,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -167,15 +165,13 @@
       <if test="deviceid != null" >
         #{deviceid,jdbcType=INTEGER},
       </if>
-      <if test="onlinetime != null" >
-        #{onlinetime,jdbcType=TIMESTAMP},
-      </if>
       <if test="offlinetime != null" >
         #{offlinetime,jdbcType=TIMESTAMP},
       </if>
       <if test="duration != null" >
         #{duration,jdbcType=INTEGER},
       </if>
+      now(),
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Onlinelog" >

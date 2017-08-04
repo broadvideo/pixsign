@@ -10,6 +10,7 @@ ZoneLimits['11'] = 1;
 ZoneLimits['12'] = 1;
 ZoneLimits['13'] = 1;
 ZoneLimits['14'] = 1;
+ZoneLimits['15'] = 1;
 
 var ZoneRatios = [];
 

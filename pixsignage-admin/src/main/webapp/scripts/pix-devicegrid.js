@@ -28,6 +28,10 @@ $(window).resize(function(e) {
 	}
 });
 
+function refreshMyTable() {
+	$('#MyTable').dataTable()._fnAjaxUpdate();
+}			
+
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
 var devicegridhtml = '';
@@ -112,6 +116,9 @@ var oTable = $('#MyTable').dataTable({
 			    return false;
 			})
 		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':CurBranchid });
 	},
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -399,6 +406,7 @@ $('body').on('click', '.pix-add', function(event) {
 	refreshForm('MyEditForm');
 	$('#MyEditForm').attr('action', action);
 	$('.devicegrid-ratio').css('display', 'block');
+	$('#MyEditForm input[name="devicegrid.branchid"]').val(CurBranchid);
 	CurrentDevicegrid = null;
 	CurrentDevicegridid = 0;
 	//refreshDevicegridBgImageSelect1();
@@ -548,6 +556,7 @@ function refreshDeviceSelect() {
 					iDisplayStart: (page-1)*10,
 					iDisplayLength: 10,
 					devicegridid: 0,
+					branchid: CurBranchid,
 				};
 			},
 			results: function (data, page) {

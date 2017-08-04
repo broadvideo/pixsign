@@ -168,15 +168,21 @@
 							</div>
 						</div>
 						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/><i class="fa fa-plus"></i></button>
+							<div class="row">
+								<div class="col-md-2" id="BranchTreeDiv">
+								</div>
+								<div class="col-md-10" id="BranchContentDiv">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/><i class="fa fa-plus"></i></button>
+										</div>
+									</div>
+									<table id="MyTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>

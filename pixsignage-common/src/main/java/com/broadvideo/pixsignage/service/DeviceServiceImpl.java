@@ -223,6 +223,11 @@ public class DeviceServiceImpl implements DeviceService {
 
 		msgBodyJson.put("password_flag", Integer.parseInt(org.getDevicepassflag()));
 		msgBodyJson.put("password", org.getDevicepass());
+		if (org.getTagflag().equals("1") && device.getTagflag().equals("1")) {
+			msgBodyJson.put("tag_flag", 1);
+		} else {
+			msgBodyJson.put("tag_flag", 0);
+		}
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());

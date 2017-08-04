@@ -47,16 +47,6 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Transactional
-	public void resetPassword(Staff staff) {
-		Staff oldStaff = staffMapper.selectByPrimaryKey("" + staff.getStaffid());
-
-		Staff newStaff = new Staff();
-		newStaff.setStaffid(staff.getStaffid());
-		newStaff.setPassword(CommonUtil.getPasswordMd5(oldStaff.getLoginname(), staff.getPassword()));
-		staffMapper.updateByPrimaryKeySelective(newStaff);
-	}
-
-	@Transactional
 	public boolean updatePassword(Staff staff) {
 		Staff oldStaff = staffMapper.selectByPrimaryKey("" + staff.getStaffid());
 		if (staff.getOldpassword() == null || staff.getOldpassword().trim().length() == 0) {
@@ -72,6 +62,13 @@ public class StaffServiceImpl implements StaffService {
 		newStaff.setPassword(CommonUtil.getPasswordMd5(oldStaff.getLoginname(), staff.getPassword()));
 		staffMapper.updateByPrimaryKeySelective(newStaff);
 		return true;
+	}
+
+	@Transactional
+	public void resetPassword(String staffid) {
+		Staff staff = staffMapper.selectByPrimaryKey(staffid);
+		staff.setPassword(CommonUtil.getPasswordMd5(staff.getLoginname(), staff.getLoginname()));
+		staffMapper.updateByPrimaryKeySelective(staff);
 	}
 
 	@Transactional

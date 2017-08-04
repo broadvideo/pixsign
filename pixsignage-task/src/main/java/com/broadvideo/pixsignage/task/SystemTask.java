@@ -65,6 +65,7 @@ public class SystemTask extends Thread {
 							String calendarflag1 = vspJson.getString("calendarflag");
 							String mscreenflag1 = vspJson.getString("mscreenflag");
 							String flowrateflag1 = vspJson.getString("flowrateflag");
+							String tagflag1 = vspJson.getString("tagflag");
 							String liftflag1 = vspJson.getString("liftflag");
 							String streamflag1 = vspJson.getString("streamflag");
 							String dvbflag1 = vspJson.getString("dvbflag");
@@ -78,6 +79,7 @@ public class SystemTask extends Thread {
 							vsp.setCalendarflag(calendarflag1);
 							vsp.setMscreenflag(mscreenflag1);
 							vsp.setFlowrateflag(flowrateflag1);
+							vsp.setTagflag(tagflag1);
 							vsp.setLiftflag(liftflag1);
 							vsp.setStreamflag(streamflag1);
 							vsp.setDvbflag(dvbflag1);
@@ -94,6 +96,7 @@ public class SystemTask extends Thread {
 							String sscreenflag2 = orgJson.getString("sscreenflag");
 							String mscreenflag2 = orgJson.getString("mscreenflag");
 							String flowrateflag2 = orgJson.getString("flowrateflag");
+							String tagflag2 = orgJson.getString("tagflag");
 							String liftflag2 = orgJson.getString("liftflag");
 							String streamflag2 = orgJson.getString("streamflag");
 							String dvbflag2 = orgJson.getString("dvbflag");
@@ -108,6 +111,7 @@ public class SystemTask extends Thread {
 							org.setSscreenflag(sscreenflag2);
 							org.setMscreenflag(mscreenflag2);
 							org.setFlowrateflag(flowrateflag2);
+							org.setTagflag(tagflag2);
 							org.setLiftflag(liftflag2);
 							org.setStreamflag(streamflag2);
 							org.setDvbflag(dvbflag2);

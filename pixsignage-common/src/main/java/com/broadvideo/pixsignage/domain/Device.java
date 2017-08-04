@@ -103,6 +103,8 @@ public class Device {
 
 	private Integer appfileid;
 
+	private String tagflag;
+
 	private String temperature;
 
 	private Integer downloadspeed;
@@ -579,6 +581,14 @@ public class Device {
 
 	public void setAppfile(Appfile appfile) {
 		this.appfile = appfile;
+	}
+
+	public String getTagflag() {
+		return tagflag;
+	}
+
+	public void setTagflag(String tagflag) {
+		this.tagflag = tagflag;
 	}
 
 	public List<Schedule> getSchedules() {

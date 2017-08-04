@@ -10,61 +10,61 @@
 </head>
 
 <body>
-	<div class="page-content-wrapper">
-		<div class="page-content">
-			<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-				<div class="modal-dialog modal-wide">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="global.config"/></h4>
-						</div>
-						<div class="modal-body">
-							<form id="MyEditForm" class="form-horizontal" method="POST">
-								<div class="form-body">
-									<div class="form-group">
-										<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.ip"/><span class="required">*</span></label>
-										<div class="col-md-8">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="serverip" />
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.port"/><span class="required">*</span></label>
-										<div class="col-md-8">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="serverport" />
-											</div>
-										</div>
-									</div>
-									<div class="form-group calendar-ctrl">
-										<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.ip"/></label>
-										<div class="col-md-8">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="pixedxip" />
-											</div>
-										</div>
-									</div>
-									<div class="form-group calendar-ctrl">
-										<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.port"/></label>
-										<div class="col-md-8">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="pixedxport" />
-											</div>
-										</div>
+	<div id="ConfigEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-wide">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"><spring:message code="global.config"/></h4>
+				</div>
+				<div class="modal-body">
+					<form id="ConfigEditForm" class="form-horizontal" method="POST">
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.ip"/><span class="required">*</span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="serverip" />
 									</div>
 								</div>
-							</form>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.port"/><span class="required">*</span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="serverport" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group calendar-ctrl">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.ip"/></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="pixedxip" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group calendar-ctrl">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.port"/></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="pixedxport" />
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-						</div>
-					</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 				</div>
 			</div>
+		</div>
+	</div>
 			
+	<div class="page-content-wrapper">
+		<div class="page-content">
 			<h3 class="page-title"><spring:message code="menu.config"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
@@ -84,7 +84,7 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.config"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="refreshMyTable();" class="reload"></a>
+								<a href="javascript:;" onClick="ConfigModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -93,7 +93,7 @@
 									<button privilegeid="101010" class="btn blue pix-update"><spring:message code="global.update"/> <i class="fa fa-edit"></i></button>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
+							<table id="ConfigTable" class="table table-striped table-bordered table-hover">
 								<thead></thead>
 								<tbody></tbody>
 							</table>
@@ -123,15 +123,16 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-config.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/config.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
+	PixData.init('${locale}');
+	ConfigModule.init();
 });
 
 </script>

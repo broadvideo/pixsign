@@ -28,6 +28,10 @@ $(window).resize(function(e) {
 	}
 });
 
+function refreshMyTable() {
+	$('#MyTable').dataTable()._fnAjaxUpdate();
+}			
+
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
 var mediagridhtml = '';
@@ -105,6 +109,9 @@ var oTable = $('#MyTable').dataTable({
 			}
 		}
 		return nRow;
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':CurBranchid });
 	}
 });
 jQuery('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -318,6 +325,7 @@ $('body').on('click', '.pix-add', function(event) {
 	refreshForm('MyEditForm');
 	$('#MyEditForm').attr('action', action);
 	$('.mediagrid-ratio').css('display', 'block');
+	$('#MyEditForm input[name="mediagrid.branchid"]').val(CurBranchid);
 	CurrentMediagrid = null;
 	CurrentMediagridid = 0;
 	//refreshMediagridBgImageSelect1();
@@ -492,6 +500,7 @@ function validMediagrid(mediagrid) {
 		$('.help-block').remove();
 
 		mediagrid.name = $('#MediagridEditForm input[name="mediagrid.name"]').attr('value');
+		mediagrid.tags = $('#TagSelect').select2('val').join(',');
 		return true;
 	}
 	return false;
@@ -905,6 +914,7 @@ $('body').on('click', '.pix-mediagrid', function(event) {
 	CurrentMediagriddtl = null;
 	
 	$('#MediagridEditForm').loadJSON(CurrentMediagrid);
+	$('#TagSelect').select2('val', $(CurrentMediagrid.tags.split(',')));
 	$('#MediagridEditForm .mediagrid-title').html(CurrentMediagrid.name);
 	//refreshMediagridBgImageSelect2();
 
@@ -921,6 +931,35 @@ $('#MediagridModal').on('shown.bs.modal', function (e) {
 	//updateRegionBtns();
 })
 
+$.ajax({
+	type : 'GET',
+	url : 'org!get.action',
+	data : '',
+	success : function(data, status) {
+		if (data.errorcode == 0) {
+			var tags = $(data.org.tags.split(','));
+			var taglist = [];
+			for (var i=0; i<tags.length; i++) {
+				taglist.push({
+					id: tags[i],
+					text: tags[i],
+				})
+			}
+			$('#TagSelect').select2({
+				multiple: true,
+				minimumInputLength: 0,
+				data: taglist,
+				dropdownCssClass: "bigdrop", 
+				escapeMarkup: function (m) { return m; } 
+			});
+		} else {
+			bootbox.alert(common.tips.error + data.errormsg);
+		}
+	},
+	error : function() {
+		console.log('failue');
+	}
+});
 
 //在设计对话框中进行提交
 $('[type=submit]', $('#MediagridModal')).on('click', function(event) {

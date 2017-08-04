@@ -391,6 +391,7 @@ function initMyEditModal() {
 		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 		$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
+		$('.tag-ctrl').css('display', TagCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
@@ -449,6 +450,7 @@ function initMyEditModal() {
 		$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 		$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 		$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
+		$('.tag-ctrl').css('display', TagCtrl?'':'none');
 		$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 		$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');

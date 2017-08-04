@@ -7,6 +7,7 @@
     <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -21,6 +22,7 @@
     <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -28,7 +30,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    branchid, orgid, topfolderid, parentid, name, status, description, createtime, createstaffid
+    branchid, orgid, topfolderid, parentid, name, code, status, description, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -68,6 +70,14 @@
       and orgid = #{orgid}
     </if>
   </select>
+  
+  <select id="selectTaodianList" resultMap="BaseResultMap">
+    select b.* from branch b, org o
+    where b.orgid = o.orgid
+    and b.status = '1' 
+    and b.code != '' 
+    and o.tagflag = '1'
+  </select>
 
   <delete id="deleteByPrimaryKey">
     update branch set status='9'
@@ -78,10 +88,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="branchid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into branch (orgid, topfolderid, parentid, name, 
+    insert into branch (orgid, topfolderid, parentid, 
+      name, code, 
       status, description, 
       createtime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{orgid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
@@ -102,6 +114,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="code != null" >
+        code,
       </if>
       <if test="status != null" >
         status,
@@ -128,6 +143,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -158,6 +176,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -179,6 +200,7 @@
       topfolderid = #{topfolderid,jdbcType=INTEGER},
       parentid = #{parentid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

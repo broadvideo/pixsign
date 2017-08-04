@@ -359,6 +359,7 @@ $('body').on('click', '.pix-delete', function(event) {
 });
 
 //本地视频table初始化
+var MediagridTree = new BranchTree($('#MediagridTab'));
 $('#MediagridTable thead').css('display', 'none');
 $('#MediagridTable tbody').css('display', 'none');	
 var mediagridhtml = '';
@@ -426,6 +427,7 @@ $('#MediagridTable').dataTable({
 			aoData.push({'name':'gridlayoutcode','value':CurrentPlan.gridlayoutcode });
 		}
 		aoData.push({'name':'status','value':1 });
+		aoData.push({'name':'branchid','value':MediagridTree.branchid });
 	}
 });
 $('#MediagridTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
@@ -433,6 +435,7 @@ $('#MediagridTable_wrapper .dataTables_length select').addClass("form-control in
 $('#MediagridTable').css('width', '100%');
 
 //视频table初始化
+var VideoTree = new BranchTree($('#VideoTab'));
 $('#VideoTable thead').css('display', 'none');
 $('#VideoTable tbody').css('display', 'none');	
 var videohtml = '';
@@ -501,8 +504,8 @@ $('#VideoTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':VideoTree.branchid });
+		aoData.push({'name':'folderid','value':VideoTree.folderid });
 		aoData.push({'name':'type','value':1 });
 	}
 });
@@ -511,6 +514,7 @@ $('#VideoTable_wrapper .dataTables_length select').addClass("form-control input-
 $('#VideoTable').css('width', '100%');
 
 //图片table初始化
+var ImageTree = new BranchTree($('#ImageTab'));
 $('#ImageTable thead').css('display', 'none');
 $('#ImageTable tbody').css('display', 'none');	
 var imagehtml = '';
@@ -574,13 +578,23 @@ $('#ImageTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':ImageTree.branchid });
+		aoData.push({'name':'folderid','value':ImageTree.folderid });
 	}
 });
 $('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 $('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#ImageTable').css('width', '100%');
+
+$('#nav_tab1').click(function(event) {
+	$('#MediagridTable').dataTable()._fnAjaxUpdate();
+});
+$('#nav_tab2').click(function(event) {
+	$('#VideoTable').dataTable()._fnAjaxUpdate();
+});
+$('#nav_tab3').click(function(event) {
+	$('#ImageTable').dataTable()._fnAjaxUpdate();
+});
 
 //SelectedDtlTable初始化
 $('#SelectedDtlTable').dataTable({
@@ -604,6 +618,7 @@ $('#SelectedDtlTable').dataTable({
 	}
 });
 
+var DevicegridTree = new BranchTree($('#DevicegridTab'));
 $('#DevicegridTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -646,12 +661,14 @@ $('#DevicegridTable').dataTable({
 			aoData.push({'name':'gridlayoutcode','value':CurrentPlan.gridlayoutcode });
 		}
 		aoData.push({'name':'devicegroupid','value':'0' });
+		aoData.push({'name':'branchid','value':DevicegridTree.branchid });
 	}
 });
 $('#DevicegridTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 $('#DevicegridTable_wrapper .dataTables_length select').addClass('form-control input-small');
 $('#DevicegridTable').css('width', '100%');
 
+var DevicegroupTree = new BranchTree($('#DevicegroupTab'));
 $('#DevicegroupTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -681,6 +698,7 @@ $('#DevicegroupTable').dataTable({
 			aoData.push({'name':'gridlayoutcode','value':CurrentPlan.gridlayoutcode });
 		}
 		aoData.push({'name':'type','value':'2' });
+		aoData.push({'name':'branchid','value':DevicegroupTree.branchid });
 	}
 });
 $('#DevicegroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');
@@ -704,34 +722,6 @@ $('#SelectedBindTable').dataTable({
 	}
 });
 
-$('#nav_tab1').click(function(event) {
-	$('#MediagridDiv').css('display', '');
-	$('#VideoDiv').css('display', 'none');
-	$('#ImageDiv').css('display', 'none');
-	$('#PageDiv').css('display', 'none');
-	$('#MediagridTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_tab2').click(function(event) {
-	$('#MediagridDiv').css('display', 'none');
-	$('#VideoDiv').css('display', '');
-	$('#ImageDiv').css('display', 'none');
-	$('#PageDiv').css('display', 'none');
-	$('#VideoTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_tab3').click(function(event) {
-	$('#MediagridDiv').css('display', 'none');
-	$('#VideoDiv').css('display', 'none');
-	$('#ImageDiv').css('display', '');
-	$('#PageDiv').css('display', 'none');
-	$('#ImageTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_tab4').click(function(event) {
-	$('#MediagridDiv').css('display', 'none');
-	$('#VideoDiv').css('display', 'none');
-	$('#ImageDiv').css('display', 'none');
-	$('#PageDiv').css('display', '');
-	$('#PageTable').dataTable()._fnAjaxUpdate();
-});
 //增加Mediagrid到SelectedDtlTable
 $('body').on('click', '.pix-plandtl-mediagrid-add', function(event) {
 	var rowIndex = $(event.target).attr("data-id");
@@ -840,16 +830,6 @@ $('body').on('click', '.pix-plandtl-delete', function(event) {
 	refreshSelectedDtlTable();
 });
 
-$('#nav_dtab1').click(function(event) {
-	$('#DevicegridDiv').css('display', '');
-	$('#DevicegroupDiv').css('display', 'none');
-	$('#DevicegridTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_dtab2').click(function(event) {
-	$('#DevicegridDiv').css('display', 'none');
-	$('#DevicegroupDiv').css('display', '');
-	$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
-});
 //增加Devicegrid到SelectedBindTable
 $('body').on('click', '.pix-planbind-devicegrid-add', function(event) {
 	var rowIndex = $(event.target).attr("data-id");
@@ -1064,7 +1044,6 @@ function initData1() {
 }
 
 function initTab2() {
-	initMediaBranchTree();
 }
 
 function initData2() {
@@ -1239,125 +1218,6 @@ function refreshSelectedBindTable() {
 			bindtype = common.view.devicegrid;
 			bindname = planbind.devicegrid.name;
 			$('#SelectedBindTable').dataTable().fnAddData([(i+1), bindtype, bindname, 0]);
-		}
-	}
-}
-
-
-function initMediaBranchTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'branch!list.action',
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var branches = data.aaData;
-				CurrentMediaBranchid = branches[0].branchid;
-				
-				if ( $("#MediaBranchTreeDiv").length > 0 ) {
-					if (branches[0].children.length == 0) {
-						$('#MediaBranchTreeDiv').css('display', 'none');
-						CurrentMediaFolderid = null;
-						initMediaFolderTree();
-						refreshMediaTable();
-					} else {
-						var branchTreeDivData = [];
-						createBranchTreeData(branches, branchTreeDivData);
-						$('#MediaBranchTreeDiv').jstree('destroy');
-						$('#MediaBranchTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#MediaBranchTreeDiv').on('loaded.jstree', function() {
-							$('#MediaBranchTreeDiv').jstree('select_node', CurrentMediaBranchid);
-						});
-						$('#MediaBranchTreeDiv').on('select_node.jstree', function(event, data) {
-							CurrentMediaBranchid = data.instance.get_node(data.selected[0]).id;
-							CurrentMediaFolderid = null;
-							initMediaFolderTree();
-							refreshMediaTable();
-						});
-					}
-				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
-		}
-	});
-	function createBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = branches[i].branchid;
-			treeData[i].text = branches[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createBranchTreeData(branches[i].children, treeData[i].children);
-		}
-	}	
-}
-
-
-function initMediaFolderTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'folder!list.action',
-		data : {
-			branchid: CurrentMediaBranchid
-		},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var folders = data.aaData;
-				CurrentMediaFolderid = folders[0].folderid;
-				
-				if ( $("#MediaFolderTreeDiv").length > 0 ) {
-					var folderTreeDivData = [];
-					createFolderTreeData(folders, folderTreeDivData);
-					$('#MediaFolderTreeDiv').jstree('destroy');
-					$('#MediaFolderTreeDiv').jstree({
-						'core' : {
-							'multiple' : false,
-							'data' : folderTreeDivData
-						},
-						'plugins' : ['unique', 'types'],
-						'types' : {
-							'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
-						},
-					});
-					$('#MediaFolderTreeDiv').on('loaded.jstree', function() {
-						$('#MediaFolderTreeDiv').jstree('select_node', CurrentMediaFolderid);
-					});
-					$('#MediaFolderTreeDiv').on('select_node.jstree', function(event, data) {
-						CurrentMediaFolderid = data.instance.get_node(data.selected[0]).id;
-						refreshMediaTable();
-					});
-				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
-		}
-	});
-	function createFolderTreeData(folders, treeData) {
-		if (folders == null) return;
-		for (var i=0; i<folders.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = folders[i].folderid;
-			treeData[i].text = folders[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createFolderTreeData(folders[i].children, treeData[i].children);
 		}
 	}
 }
