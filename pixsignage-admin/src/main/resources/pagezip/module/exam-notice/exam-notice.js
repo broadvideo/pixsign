@@ -6,20 +6,23 @@ var ExamNotice = function (zonediv, zone) {
     this.zone = zone;
     common.exam.push(this)
 
-    var examListTpl = `<div class="exam-list">
-            <div class="current-exam-item" data-id="{{=it[0].id}}">
-                <p class="exam-name">{{=it[0].name}} - {{=it[0].coursename}}</p>
-                <p class="exam-time">{{=moment(it[0].starttime).format('MM-DD HH:mm')}} - {{=moment(it[0].endtime).format('HH:mm')}}</p>
-            </div>
-            <div class="future-exams">
-                {{~it:exam:index}}
-                {{? index > 0}}
-                <div class="future-exam-item" data-id="{{=exam.id}}">
-                    <p class="exam-name">下一场 {{=exam.coursename}}</p>
-                    <p class="exam-time">{{=moment(exam.starttime).format('MM-DD HH:mm')}} - {{=moment(exam.endtime).format('HH:mm')}}</p>
+    var examListTpl = `<div class="exam-holder">
+             <div class="exam-list">
+                <div class="current-exam-item" data-id="{{=it[0].id}}">
+                    <p class="exam-name">{{=it[0].name}}</p>
+                    <p class="exam-name">{{=it[0].coursename}}</p>
+                    <p class="exam-time">{{=moment(it[0].starttime).format('MM-DD HH:mm')}} - {{=moment(it[0].endtime).format('HH:mm')}}</p>
                 </div>
-                {{?}}
-                {{~}}
+                <div class="future-exams">
+                    {{~it:exam:index}}
+                    {{? index > 0}}
+                    <div class="future-exam-item" data-id="{{=exam.id}}">
+                        <p class="exam-name">下一场 {{=exam.coursename}}</p>
+                        <p class="exam-time">{{=moment(exam.starttime).format('MM-DD HH:mm')}} - {{=moment(exam.endtime).format('HH:mm')}}</p>
+                    </div>
+                    {{?}}
+                    {{~}}
+                </div>
             </div>
         </div>`
 
@@ -49,13 +52,17 @@ var ExamNotice = function (zonediv, zone) {
             'border-style': zone.bdstyle,
             'border-width': (parseInt(zone.bdwidth) / scalew) + 'px',
             'border-radius': (parseInt(zone.bdradius) / scalew) + 'px',
-            'color': zone.color,
-            'font-family': zone.fontfamily,
-            'font-size': (parseInt(zone.fontsize) / scalew) + 'px',
-            'text-align': zone.align,
-            'font-weight': zone.fontweight,
-            'font-style': zone.fontstyle,
             'overflow': 'hidden'
         });
+        let scale = Math.max(scalew, scaleh)
+        $('.current-exam-item .exam-name').css({
+            'font-size': `${140 / scale}px`
+        })
+        $('.current-exam-item .exam-time').css({
+            'font-size': `${80 / scale}px`
+        })
+        $('.future-exam-item').css({
+            'font-size': `${30 / scale}px`
+        })
     };
 }
