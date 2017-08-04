@@ -133,6 +133,11 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 
 	@Override
+	public Classroom loadClassroomByName(String name, Integer orgId) {
+		return this.classroomMapper.selectByName(name, orgId);
+	}
+
+	@Override
 	public List<Classroom> getClassroomsByOrgCode(String orgCode) {
 
 		Org org = this.orgService.selectByCode(orgCode);

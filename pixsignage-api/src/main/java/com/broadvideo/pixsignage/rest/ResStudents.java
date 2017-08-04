@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +18,13 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -104,6 +108,7 @@ public class ResStudents {
 
 	@GET
 	@Path("/{student_id}/messages")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
 	public String getMessages(@Context HttpServletRequest req, @PathParam("student_id") Integer studentId,
 			@QueryParam("terminal_id") String terminalId) {
 		if (studentId == null) {
@@ -153,7 +158,12 @@ public class ResStudents {
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "studentId or request body is empty.");
 		}
 
+
 		try {
+			Student student=this.studentMapper.selectByPrimaryKey(studentId.toString());
+			if(student==null){
+				return handleResult(ApiRetCodeEnum.INVALID_ARGS, String.format("studentId=%s not found.",studentId));
+			}
 			JSONObject requestBodyJson = new JSONObject(request);
 			studentId = requestBodyJson.getInt("student_id");
 			String image = requestBodyJson.getString("image");
@@ -161,16 +171,48 @@ public class ResStudents {
 			String audio = requestBodyJson.getString("audio");
 			long msgtime = requestBodyJson.getLong("msg_time");
 			logger.info("sendMessage request body:\n{}", request);
+			String url = "http://school.wkmip.cn/mobile/interface/studentnote";
+			logger.info("post message to wkmip: {}", url);
+			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
+					.setConnectionRequestTimeout(30000).build();
+			CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+			HttpPost httppost = new HttpPost(url);
+			List<BasicNameValuePair>  nameValuePairs=new ArrayList<BasicNameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("school_id","1"));
+			nameValuePairs.add(new BasicNameValuePair("student_no",student.getStudentno()));
+			if (StringUtils.isNotBlank(audio)) {
+			nameValuePairs.add(new BasicNameValuePair("mp3", audio));
+			}
+			if (StringUtils.isNotBlank(image)) {
+			nameValuePairs.add(new BasicNameValuePair("img",image));
+			}
+			if (StringUtils.isNotBlank(text)) {
+			nameValuePairs.add(new BasicNameValuePair("info",text));
+			}
+			UrlEncodedFormEntity entity=new UrlEncodedFormEntity(nameValuePairs);
+			httppost.setEntity(entity);
+			CloseableHttpResponse response = httpclient.execute(httppost);
+			int status = response.getStatusLine().getStatusCode();
+			if (status == 200) {
+				String s = EntityUtils.toString(response.getEntity());
+				httpclient.close();
+				logger.info("post message to wkmip response: {}", s);
+				return this.handleResult(ApiRetCodeEnum.SUCCESS, "success");
 
-			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success");
+			} else {
+				httpclient.close();
+				logger.error("call post message  response code: {}", status);
+				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "response code:" + status);
 
+			}
 		} catch (Exception e) {
-
-			logger.error("sendMessage exception.", e);
-			return this.handleResult(ApiRetCodeEnum.EXCEPTION, e.getMessage());
-
+			e.printStackTrace();
+			logger.error("call post message error: {}", e);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, "Post message error：" + e.getMessage());
 
 		}
+
+	
 
 
 }

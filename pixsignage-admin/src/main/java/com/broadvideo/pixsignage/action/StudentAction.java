@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Student;
 import com.broadvideo.pixsignage.persistence.StudentMapper;
+import com.broadvideo.pixsignage.service.StudentService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -21,9 +23,17 @@ public class StudentAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Student student;
-
+	private File avatarfile;
+	private String avatarfileContentType;
+	@Autowired
+	private StudentService studentService;
 	@Autowired
 	private StudentMapper studentMapper;
+
+	public String doUpload() {
+
+		return SUCCESS;
+	}
 
 	public String doList() {
 		try {
@@ -59,7 +69,7 @@ public class StudentAction extends BaseDatatableAction {
 			student.setOrgid(getLoginStaff().getOrgid());
 			student.setCreatestaffid(getLoginStaff().getStaffid());
 			student.setCreatetime(Calendar.getInstance().getTime());
-			studentMapper.insertSelective(student);
+			Integer studentid = this.studentService.addStudent(student, avatarfile);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("StudentAction doAdd exception, ", ex);
@@ -71,7 +81,14 @@ public class StudentAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
-			studentMapper.updateByPrimaryKeySelective(student);
+			student.setOrgid(getLoginStaff().getOrgid());
+			if (avatarfile != null) {
+				String avatar = studentService.saveAvatar(student.getStudentid(), avatarfile, getLoginStaff()
+						.getOrgid());
+				logger.info("saveAvatar return path:{}", avatar);
+				student.setAvatar(avatar);
+			}
+			this.studentService.updateStudent(student);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("StudentAction doUpdate exception, ", ex);
@@ -83,7 +100,7 @@ public class StudentAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			studentMapper.deleteByPrimaryKey("" + student.getStudentid());
+			studentService.deleteStudent(student.getStudentid(), getLoginStaff().getOrgid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("StudentAction doDelete exception, ", ex);
@@ -99,6 +116,22 @@ public class StudentAction extends BaseDatatableAction {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public File getAvatarfile() {
+		return avatarfile;
+	}
+
+	public void setAvatarfile(File avatarfile) {
+		this.avatarfile = avatarfile;
+	}
+
+	public String getAvatarfileContentType() {
+		return avatarfileContentType;
+	}
+
+	public void setAvatarfileContentType(String avatarfileContentType) {
+		this.avatarfileContentType = avatarfileContentType;
 	}
 
 }

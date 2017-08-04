@@ -24,6 +24,8 @@ public interface CoursescheduleschemeMapper {
 
 	Courseschedulescheme selectEnableCourseschedulescheme(@Param("orgid") Integer orgid);
 
+	Courseschedulescheme selectByName(@Param("name") String name, @Param("orgid") Integer orgid);
+
 	Courseschedulescheme selectCourseschedulescheme(@Param("coursescheduleschemeid") Integer coursescheduleschemeid,
 			@Param("orgid") Integer orgid);
 
@@ -36,6 +38,8 @@ public interface CoursescheduleschemeMapper {
 
 	int disableCoursescheduleschemes(@Param("excludeid") Integer excludeid, @Param("updatepsnid") Integer updatepsnid,
 			@Param("orgid") Integer orgid);
+
+	int countBy(@Param("excludeid") Integer excludeid, @Param("name") String name, @Param("orgid") Integer orgId);
 
 
 }

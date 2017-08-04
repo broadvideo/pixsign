@@ -39,6 +39,10 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 	@Override
 	public Integer addScheme(Courseschedulescheme scheduleScheme) {
 
+		if (this.hasNameExists(null, scheduleScheme.getName(), scheduleScheme.getOrgid())) {
+			logger.error("scheduleScheme.name={} is exists.", scheduleScheme.getName());
+			throw new ServiceException("addScheme:name:" + scheduleScheme.getName() + " has exists.");
+		}
 		Courseschedulescheme saveScheduleScheme = new Courseschedulescheme();
 		saveScheduleScheme.setName(scheduleScheme.getName());
 		saveScheduleScheme.setMorningperiods(scheduleScheme.getMorningperiods());
@@ -82,8 +86,16 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 	}
 
 	@Override
-	public void updateScheme(Courseschedulescheme scheme) {
+	public Courseschedulescheme loadSchemeByName(String name, Integer orgId) throws ServiceException {
+		return this.schemeMapper.selectByName(name, orgId);
+	}
 
+	@Override
+	public void updateScheme(Courseschedulescheme scheme) {
+		if (this.hasNameExists(null, scheme.getName(), scheme.getOrgid())) {
+			logger.error("scheme.name={} is exists.", scheme.getName());
+			throw new ServiceException("updateScheme:name:" + scheme.getName() + " has exists.");
+		}
 		Courseschedulescheme uScheme = new Courseschedulescheme();
 		uScheme.setName(scheme.getName());
 		if (StringUtils.isBlank(scheme.getDescription())) {
@@ -286,6 +298,11 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 	@Override
 	public int countSchemeDtl(Integer id, Integer orgId) {
 		return periodTimeDtlMapper.countPeriodDtlsBy(id, orgId);
+	}
+
+	private boolean hasNameExists(Integer excludeId, String name, Integer orgId) {
+
+		return this.schemeMapper.countBy(excludeId, name, orgId) > 0;
 	}
 
 

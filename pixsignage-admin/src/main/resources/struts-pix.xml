@@ -1711,6 +1711,15 @@
 				<param name="includeProperties">courseschedulescheme.*,errorcode,errormsg</param>
 			</result>		
 		</action>
+		<action name="student!avatarupload" method="doUpload" class="studentAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="student!list" method="doList" class="studentAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1718,6 +1727,9 @@
 			</result>
 		</action>
 		<action name="student!add" method="doAdd" class="studentAction">
+		   <interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -1796,6 +1808,35 @@
 		</action>
 		<action name="student!delete" method="doDelete" class="studentAction">
 			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="classcard!import" method="doImport" class="classcardimportAction">
+			<result name="success" type="json">
+			</result>
+		</action>
+		
+		<action name="examinationroom!list" method="doList" class="examinationroomAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="examinationroom!add" method="doAdd" class="examinationroomAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="examinationroom!update" method="doUpdate" class="examinationroomAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="examinationroom!delete" method="doDelete" class="examinationroomAction">
+		    <result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>

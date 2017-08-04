@@ -50,7 +50,13 @@
    where classroomid=#{classroomid} and orgid=#{orgid}
        
   </select>
+ <select id="selectByName"  resultMap="BaseResultMap">
+       select 
+          <include refid="Base_Column_List" />
+      from  classroom 
+        where orgid=#{orgid}   and  name=#{name}
   
+  </select>
   <select id="countBy"  resultType="Integer">
     select count(1)  from  classroom 
     where orgid=#{orgid}  and name=#{name}

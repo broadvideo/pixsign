@@ -16,4 +16,6 @@ public interface SchoolclassService {
 
 	void deleteSchoolclass(Integer schoolclassid, Integer orgid);
 
+	Schoolclass loadSchoolclassByName(String name, Integer orgid);
+
 }

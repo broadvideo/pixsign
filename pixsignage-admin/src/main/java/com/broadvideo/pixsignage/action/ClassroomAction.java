@@ -54,12 +54,10 @@ public class ClassroomAction extends BaseDatatableAction {
 
 
 	public String doAdd() throws Exception {
-		
 		if (StringUtils.isBlank(classroom.getName())) {
 			logger.error("classroom.name is empty.");
 			renderError(RetCodeEnum.INVALID_ARGS, "Invalid args");
 			return ERROR;
-
 		}
 		classroom.setCreatepsnid(getStaffid());
 		classroom.setOrgid(getStaffOrgid());
