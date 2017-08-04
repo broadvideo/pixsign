@@ -30,6 +30,25 @@ alter table video add tags varchar(512) default '';
 alter table mediagrid add tags varchar(512) default '';
 
 
+CREATE TABLE `examinationroom`(
+	`examinationroomid` int(11) NOT NULL  auto_increment COMMENT '考场id，自增主键' , 
+	`name` varchar(200) COLLATE utf8_general_ci NOT NULL  COMMENT '考场名称' , 
+	`description` varchar(3000) COLLATE utf8_general_ci NULL  COMMENT '补充说明部分' , 
+	`starttime` datetime NOT NULL  COMMENT '开始时间' , 
+	`endtime` datetime NOT NULL  COMMENT '结束时间' , 
+	`coursename` varchar(200) COLLATE utf8_general_ci NULL  COMMENT '课程名' , 
+	`courseid` int(11) NULL  COMMENT '课程id' , 
+	`classroomid` int(11) NOT NULL  COMMENT '教室id' , 
+	`orgid` int(11) NOT NULL  COMMENT '所属orgid' , 
+	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
+	`createstaffid` int(11) NOT NULL  COMMENT '创建人员的id' , 
+	PRIMARY KEY (`examinationroomid`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+insert into `privilege` (`privilegeid`, `subsystem`, `parentid`, `name`, `menuurl`, `icon`, `type`, `orgtype`, `sequence`, `createtime`) values('30731','2','307','menu.batchimport','classcardimport.jsp',NULL,'1','0','0','2017-07-25 09:50:30');
+insert into `privilege` (`privilegeid`, `subsystem`, `parentid`, `name`, `menuurl`, `icon`, `type`, `orgtype`, `sequence`, `createtime`) values('30741','2','307','menu.examinationroom','examinationroom.jsp',NULL,'1','0','41','2017-08-02 12:29:30');
+
+
 ############################################################
 ## post script  ############################################
 ############################################################
