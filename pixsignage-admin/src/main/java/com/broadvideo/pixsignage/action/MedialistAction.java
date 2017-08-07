@@ -62,7 +62,6 @@ public class MedialistAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			medialist.setOrgid(getLoginStaff().getOrgid());
-			medialist.setBranchid(getLoginStaff().getBranchid());
 			medialist.setCreatestaffid(getLoginStaff().getStaffid());
 			medialistService.addMedialist(medialist);
 			return SUCCESS;

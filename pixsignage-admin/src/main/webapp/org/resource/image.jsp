@@ -25,17 +25,17 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.video"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="UploadForm" class="form-horizontal" action="video!upload.action" method="POST" enctype="multipart/form-data">
+					<form id="UploadForm" class="form-horizontal" action="image!upload.action" method="POST" enctype="multipart/form-data">
 						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 						<div class="row fileupload-buttonbar">
 							<div class="col-lg-6">
 								<!-- The fileinput-button span is used to style the file input field as button -->
 								<span class="btn green fileinput-button">
 								<i class="fa fa-plus"></i>
-								<span><spring:message code="pixsign.video"/></span>
+								<span><spring:message code="pixsign.image"/></span>
 								<input type="file" name="mymedia" multiple>
 								</span>
 								<button type="submit" class="btn blue start">
@@ -73,30 +73,24 @@
 		</div>
 	</div>
 		
-	<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="ImageEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.video"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="MyEditForm" class="form-horizontal" method="POST">
-						<input type="hidden" name="video.videoid" value="0" />
-						<input type="hidden" name="video.folderid" value="0" />
+					<form id="ImageEditForm" class="form-horizontal" method="POST">
+						<input type="hidden" name="image.imageid" value="0" />
+						<input type="hidden" name="image.folderid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="video.name" />
+										<i class="fa"></i> <input type="text" class="form-control" name="image.name" />
 									</div>
-								</div>
-							</div>
-							<div class="form-group tag-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
-								<div class="col-md-9">
-									<input type="hidden" id="TagSelect" class="form-control select2" name="video.tags">
 								</div>
 							</div>
 							<div class="form-group">
@@ -106,9 +100,9 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.relatevideo"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.relateimage"/></label>
 								<div class="col-md-9">
-									<div class="input-group">
+									<div id="RelateImageSelect" class="input-group">
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
 											<ul class="dropdown-menu" role="menu">
@@ -116,9 +110,9 @@
 												</div>
 											</ul>
 										</span>
-										<input type="hidden" id="RelateVideoSelect" class="form-control select2" name="video.relateid">
+										<input type="hidden" class="form-control select2" name="image.relateid">
 										<span class="input-group-btn">
-											<button class="btn default" type="button" id="RelateVideoRemove"><i class="fa fa-trash-o"/></i></button>
+											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
 										</span>
 									</div>
 								</div>
@@ -136,7 +130,7 @@
 			
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.video"/></h3>
+			<h3 class="page-title"><spring:message code="menu.image"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -144,7 +138,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.video"/></a>
+					<li><a href="#"><spring:message code="menu.image"/></a>
 					</li>
 				</ul>
 			</div>
@@ -153,29 +147,20 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.video"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.image"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="ImageModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
+						<div class="portlet-body" id="ImagePortlet">
 							<div class="row">
 								<div class="col-md-2">
-									<div class="row"><div class="col-md-12" id="BranchTreeDiv"></div></div>
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
 									<hr/>
-									<div class="row"><div class="col-md-12" id="FolderTreeDiv"></div></div>
+									<div class="row"><div class="col-md-12 foldertree"></div></div>
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">
-										<!-- 
-										<div class="btn-group">
-											<a class="btn default blue" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><spring:message code="pixsign.tips.branchselect"/> <i class="fa fa-angle-down"></i></a>
-											<ul class="dropdown-menu pull-right">
-												<div class="pre-scrollable" id="SelectBranchTree">
-												</div>
-											</ul>
-										</div>
-										-->
 										<div class="btn-group">
 										<%
 											if (session_org.getCurrentstorage() >= session_org.getMaxstorage()) {
@@ -189,12 +174,8 @@
 											}
 										%>
 										</div>
-										<!-- 
-										<div id="BranchBreadcrumb" class="page-breadcrumb breadcrumb">
-										</div>
-										-->
 									</div>
-									<table id="MyTable" class="table table-striped table-bordered table-hover">
+									<table id="ImageTable" class="table table-striped table-bordered table-hover">
 										<thead></thead>
 										<tbody></tbody>
 									</table>
@@ -219,14 +200,14 @@
 			<div class="input-icon right">
 				<i class="fa"></i>
 				<input type="text" class="form-control" name="names" placeholder="${global_name}" />
-				<input type="hidden" name="branchids" value="{%=CurBranchid%}" />
-				<input type="hidden" name="folderids" value="{%=CurFolderid%}" />
+				<input type="hidden" name="branchids" value="{%=ImageTree.branchid%}" />
+				<input type="hidden" name="folderids" value="{%=ImageTree.folderid%}" />
 			</div>
 		</td>
 		<td>
 			<p class="name">{%=file.name%}</p>
 			<div><span class="label label-danger error"></span></div>
-			<span></span>
+			<span class="preview"></span>
 		</td>
 		<td>
 			<p class="size">Processing...</p>
@@ -304,8 +285,6 @@
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
-<script src="${static_ctx}/global/plugins/jwplayer/jwplayer.js"></script>
-<script src="${static_ctx}/global/plugins/jwplayer/jwpsrv.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN:File Upload Plugin JS files-->
@@ -346,26 +325,16 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-foldertree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-video.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/resource/image.js?t=${timestamp}"></script>
 <script>
-var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
-$('.tag-ctrl').css('display', TagCtrl?'':'none');
-
-var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
-var myType = 1;
-
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
-	initBranchTree();
-	initFolderTree();
-	initMyTable();
-	initMyEditModal();
-	initUploadModal();
+	PixData.init('${locale}');
+	ImageModule.init();
 });
 
 </script>

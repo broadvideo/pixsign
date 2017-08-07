@@ -275,7 +275,7 @@ function hasPrivilege(privilegeid) {
 						
 						if (p.getMenuurl() != null && p.getMenuurl().length() > 0) {
 							out.println("<li class=\"" + liClass + "\">");
-							out.println("<a href=\"" + p.getMenuurl()+"?CurrentP="+p.getPrivilegeid() + "\">");
+							out.println("<a href=\"/pixsignage/" + subsystem + "/" + p.getMenuurl()+"?CurrentP="+p.getPrivilegeid() + "\">");
 							out.println("<i class=\"fa " + p.getIcon() + "\"></i>");
 							out.println("<span class=\"title\">" + p.getName() + "</span>");
 							if (liClass.equals("active")) {
@@ -300,7 +300,7 @@ function hasPrivilege(privilegeid) {
 										}
 										if (superFlag || myPrivilegeidList.indexOf(child.getPrivilegeid()) >= 0) {
 											out.println("<li class=\"" + liClass + "\">");
-											out.println("<a href=\"" + child.getMenuurl()+"?CurrentP="+child.getPrivilegeid()+"&ParentP="+child.getParentid() + "\">" + child.getName() + "</a>");
+											out.println("<a href=\"/pixsignage/" + subsystem + "/" + child.getMenuurl()+"?CurrentP="+child.getPrivilegeid()+"&ParentP="+child.getParentid() + "\">" + child.getName() + "</a>");
 										} else {
 											out.println("<li class=\"disabled-link tooltips\" data-original-title=\"<spring:message code=\"global_noprivilege\"/>\">");
 											out.println("<a href=\"#\" class=\"disabled-link\"><span class=\"disable-target\">" + child.getName() + "</span></a>");
