@@ -26,7 +26,7 @@
 	  sc.schoolclassid,
 	  sc.name,
 	  IFNULL(sc.description,'') as description,
-	  IFNULL(sc.classroomid,'') as classroomid,
+	  IFNULL(sc.classroomid,0) as classroomid,
 	  IFNULL(cr.name,'')        as classroomname
   from schoolclass sc
 	  left join classroom cr
