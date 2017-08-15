@@ -136,7 +136,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/staff.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/system/staff.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

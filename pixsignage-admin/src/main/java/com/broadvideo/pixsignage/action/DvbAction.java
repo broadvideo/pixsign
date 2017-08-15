@@ -59,7 +59,6 @@ public class DvbAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			dvb.setOrgid(getLoginStaff().getOrgid());
-			dvb.setBranchid(getLoginStaff().getBranchid());
 			dvb.setCreatestaffid(getLoginStaff().getStaffid());
 			dvbService.addDvb(dvb);
 			return SUCCESS;

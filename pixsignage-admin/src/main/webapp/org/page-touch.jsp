@@ -991,7 +991,7 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/common/branchtree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-page-touch.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/pix-page-design.js?t=${timestamp}"></script>

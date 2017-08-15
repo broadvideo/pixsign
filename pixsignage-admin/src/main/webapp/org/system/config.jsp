@@ -5,32 +5,52 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 </head>
 
 <body>
-	<div id="RoleEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-		<div class="modal-dialog">
+	<div id="ConfigEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-wide">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"><spring:message code="global.config"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="RoleEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
-						<input type="hidden" name="role.roleid" value="0" />
+					<form id="ConfigEditForm" class="form-horizontal" method="POST">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.ip"/><span class="required">*</span></label>
+								<div class="col-md-8">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="role.name" />
+										<i class="fa"></i> <input type="text" class="form-control" name="serverip" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.privilege"/></label>
-								<div class="col-md-8 pre-scrollable" id="PrivilegeTree"></div>						
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.server.port"/><span class="required">*</span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="serverport" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group calendar-ctrl">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.ip"/></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="pixedxip" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group calendar-ctrl">
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.port"/></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="pixedxport" />
+									</div>
+								</div>
 							</div>
 						</div>
 					</form>
@@ -45,7 +65,7 @@
 			
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.role"/></h3>
+			<h3 class="page-title"><spring:message code="menu.config"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -53,7 +73,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.role"/></a>
+					<li><a href="#"><spring:message code="menu.config"/></a>
 					</li>
 				</ul>
 			</div>
@@ -62,18 +82,18 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="global.role"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="global.config"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="RoleModule.refresh();" class="reload"></a>
+								<a href="javascript:;" onClick="ConfigModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+									<button privilegeid="101010" class="btn blue pix-update"><spring:message code="global.update"/> <i class="fa fa-edit"></i></button>
 								</div>
 							</div>
-							<table id="RoleTable" class="table table-striped table-bordered table-hover">
+							<table id="ConfigTable" class="table table-striped table-bordered table-hover">
 								<thead></thead>
 								<tbody></tbody>
 							</table>
@@ -91,11 +111,12 @@
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=0" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -103,13 +124,15 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/role.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/system/config.js?t=${timestamp}"></script>
 <script>
+var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	PixData.init('${locale}');
-	RoleModule.init();
+	ConfigModule.init();
 });
 
 </script>

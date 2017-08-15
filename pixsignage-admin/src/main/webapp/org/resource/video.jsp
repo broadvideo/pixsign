@@ -11,96 +11,132 @@
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
+<style type="text/css">
+.dropdown-menu li > a {
+  padding: 0px !important; 
+  display: inline !important;
+}
+</style>
 </head>
 
 <body>
+	<div id="UploadModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"><spring:message code="pixsign.video"/></h4>
+				</div>
+				<div class="modal-body">
+					<form id="UploadForm" class="form-horizontal" action="video!upload.action" method="POST" enctype="multipart/form-data">
+						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+						<div class="row fileupload-buttonbar">
+							<div class="col-lg-6">
+								<!-- The fileinput-button span is used to style the file input field as button -->
+								<span class="btn green fileinput-button">
+								<i class="fa fa-plus"></i>
+								<span><spring:message code="pixsign.video"/></span>
+								<input type="file" name="mymedia" multiple>
+								</span>
+								<button type="submit" class="btn blue start">
+								<i class="fa fa-upload"></i>
+								<span><spring:message code="global.uploadall"/></span>
+								</button>
+								<button type="reset" class="btn yellow cancel">
+								<i class="fa fa-ban"></i>
+								<span><spring:message code="global.uploadcancel"/></span>
+								</button>
+								<!-- The global file processing state -->
+								<span class="fileupload-process"></span>
+							</div>
+							<!-- The global progress information -->
+							<div class="col-lg-6 fileupload-progress fade">
+								<!-- The global progress bar -->
+								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+									<div class="progress-bar progress-bar-success" style="width:0%;"></div>
+								</div>
+								<!-- The extended global progress information -->
+								<div class="progress-extended">&nbsp;</div>
+							</div>
+						</div>
+						<!-- The table listing the files available for upload/download -->
+						<table role="presentation" class="table table-striped clearfix">
+							<tbody class="files"></tbody>
+						</table>
+					</form>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default pix-upload-close" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<div id="VideoEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"><spring:message code="pixsign.video"/></h4>
+				</div>
+				<div class="modal-body">
+					<form id="VideoEditForm" class="form-horizontal" method="POST">
+						<input type="hidden" name="video.videoid" value="0" />
+						<input type="hidden" name="video.folderid" value="0" />
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="video.name" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group tag-ctrl">
+								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="TagSelect" class="form-control select2" name="video.tags">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="global.folder"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="pre-scrollable" id="EditFormFolderTree"></div>	
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.relatevideo"/></label>
+								<div class="col-md-9">
+									<div id="RelateVideoSelect" class="input-group">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+											<ul class="dropdown-menu" role="menu">
+												<div class="pre-scrollable foldertree">
+												</div>
+											</ul>
+										</span>
+										<input type="hidden" class="form-control select2" name="video.relateid">
+										<span class="input-group-btn">
+											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<div id="UploadModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="pixsign.audio"/></h4>
-						</div>
-						<div class="modal-body">
-		
-							<form id="UploadForm" class="form-horizontal" action="audio!upload.action" method="POST" enctype="multipart/form-data">
-								<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-								<div class="row fileupload-buttonbar">
-									<div class="col-lg-6">
-										<!-- The fileinput-button span is used to style the file input field as button -->
-										<span class="btn green fileinput-button">
-										<i class="fa fa-plus"></i>
-										<span><spring:message code="pixsign.audio"/></span>
-										<input type="file" name="mymedia" multiple>
-										</span>
-										<button type="submit" class="btn blue start">
-										<i class="fa fa-upload"></i>
-										<span><spring:message code="global.uploadall"/></span>
-										</button>
-										<button type="reset" class="btn yellow cancel">
-										<i class="fa fa-ban"></i>
-										<span><spring:message code="global.uploadcancel"/></span>
-										</button>
-										<!-- The global file processing state -->
-										<span class="fileupload-process"></span>
-									</div>
-									<!-- The global progress information -->
-									<div class="col-lg-6 fileupload-progress fade">
-										<!-- The global progress bar -->
-										<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-											<div class="progress-bar progress-bar-success" style="width:0%;"></div>
-										</div>
-										<!-- The extended global progress information -->
-										<div class="progress-extended">&nbsp;</div>
-									</div>
-								</div>
-								<!-- The table listing the files available for upload/download -->
-								<table role="presentation" class="table table-striped clearfix">
-									<tbody class="files"></tbody>
-								</table>
-							</form>
-		
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn default pix-upload-close" data-dismiss="modal"><spring:message code="global.close"/></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		
-			<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="pixsign.audio"/></h4>
-						</div>
-						<div class="modal-body">
-							<form id="MyEditForm" class="form-horizontal" method="POST">
-								<input type="hidden" name="audio.audioid" value="0" />
-								<div class="form-body">
-									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
-										<div class="col-md-9">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="audio.name" />
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		
-			<h3 class="page-title"><spring:message code="menu.audio"/></h3>
+			<h3 class="page-title"><spring:message code="menu.video"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -108,7 +144,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.audio"/></a>
+					<li><a href="#"><spring:message code="menu.video"/></a>
 					</li>
 				</ul>
 			</div>
@@ -117,14 +153,17 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.audio"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.video"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="VideoModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
+						<div class="portlet-body" id="VideoPortlet">
 							<div class="row">
-								<div class="col-md-2" id="BranchTreeDiv">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+									<hr/>
+									<div class="row"><div class="col-md-12 foldertree"></div></div>
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">
@@ -140,8 +179,9 @@
 										<%
 											}
 										%>
+										</div>
 									</div>
-									<table id="MyTable" class="table table-striped table-bordered table-hover">
+									<table id="VideoTable" class="table table-striped table-bordered table-hover">
 										<thead></thead>
 										<tbody></tbody>
 									</table>
@@ -166,13 +206,14 @@
 			<div class="input-icon right">
 				<i class="fa"></i>
 				<input type="text" class="form-control" name="names" placeholder="${global_name}" />
-				<input type="hidden" name="branchids" value="{%=CurBranchid%}" />
+				<input type="hidden" name="branchids" value="{%=VideoTree.branchid%}" />
+				<input type="hidden" name="folderids" value="{%=VideoTree.folderid%}" />
 			</div>
 		</td>
 		<td>
 			<p class="name">{%=file.name%}</p>
 			<div><span class="label label-danger error"></span></div>
-			<span class="preview"></span>
+			<span></span>
 		</td>
 		<td>
 			<p class="size">Processing...</p>
@@ -250,6 +291,8 @@
 
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
+<script src="${static_ctx}/global/plugins/jwplayer/jwplayer.js"></script>
+<script src="${static_ctx}/global/plugins/jwplayer/jwpsrv.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN:File Upload Plugin JS files-->
@@ -290,20 +333,19 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-branchtree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-audio.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/resource/video.js?t=${timestamp}"></script>
 <script>
-var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
+var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
+$('.tag-ctrl').css('display', TagCtrl?'':'none');
 
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
-	initBranchTree();
-	initMyTable();
-	initMyEditModal();
-	initUploadModal();
+	PixData.init('${locale}');
+	VideoModule.init();
 });
 
 </script>
@@ -311,4 +353,3 @@ jQuery(document).ready(function() {
 </div>
 
 </html>
-

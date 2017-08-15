@@ -5,13 +5,12 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/jquery-treegrid/css/jquery.treegrid.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 </head>
 
 <body>
-	<div id="DeviceModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="MedialistDtlModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -19,50 +18,66 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-7">
 							<div class="portlet box blue">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device"/></div>
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
+									<ul class="nav nav-tabs" style="margin-left: 10px;">
+										<li id="nav_tab2">
+											<a href="#ImageTab" data-toggle="tab"><spring:message code="pixsign.image"/></a>
+										</li>
+										<li id="nav_tab1" class="active">
+											<a href="#VideoTab" data-toggle="tab"><spring:message code="pixsign.video"/></a>
+										</li>
+									</ul>
 								</div>
 								<div class="portlet-body">
-									<div class="table-toolbar">
-										<div class="btn-group pull-right">
-											<button class="btn btn-sm blue pix-left2right"><spring:message code="pixsign.tips.right"/> <i class="fa fa-arrow-right"></i></button>
+									<div class="tab-content">
+										<div class="tab-pane active" id="VideoTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+													<hr/>
+													<div class="row"><div class="col-md-12 foldertree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<table id="VideoTable" class="table table-condensed table-hover">
+														<thead></thead>
+														<tbody></tbody>
+													</table>
+												</div>
+											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-3" id="LeftTreeDiv">
-										</div>
-										<div class="col-md-9">
-											<table id="LeftTable" class="table table-striped table-bordered table-hover">
-												<thead></thead>
-												<tbody></tbody>
-											</table>
+										<div class="tab-pane" id="ImageTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+													<hr/>
+													<div class="row"><div class="col-md-12 foldertree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<table id="ImageTable" class="table table-condensed table-hover">
+														<thead></thead>
+														<tbody></tbody>
+													</table>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<div class="portlet box green">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-picture"></i><spring:message code="pixsign.device"/></div>
+									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
 								</div>
 								<div class="portlet-body">
-									<div class="table-toolbar">
-										<div class="btn-group">
-											<button class="btn btn-sm green pix-right2left"><i class="fa fa-arrow-left"></i> <spring:message code="pixsign.tips.left"/></button>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-3" id="RightTreeDiv">
-										</div>
-										<div class="col-md-9">
-											<table id="RightTable" class="table table-striped table-bordered table-hover">
-												<thead></thead>
-												<tbody></tbody>
-											</table>
-										</div>
+									<div class="table-responsive">
+										<table id="MedialistDtlTable" class="table table-condensed table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -70,45 +85,38 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div id="BranchEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			
+	<div id="MedialistEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="global.branch"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.medialist"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="BranchEditForm" class="form-horizontal" data-async data-target="#BranchEditModal" method="POST">
-						<input type="hidden" name="branch.branchid" value="0" />
-						<input type="hidden" name="branch.status" value="1" />
-						<input type="hidden" name="branch.parentid" value="0" />
+					<form id="MedialistEditForm" class="form-horizontal" method="POST">
+						<input type="hidden" name="medialist.medialistid" value="0" />
+						<input type="hidden" name="medialist.branchid" value="0" />
+						<input type="hidden" name="medialist.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="branch.name" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="global.code"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="branch.code" />
+										<i class="fa"></i> <input type="text" class="form-control" name="medialist.name" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 								<div class="col-md-9">
-									<textarea class="form-control" rows="4" name="branch.description"></textarea>
+									<textarea class="form-control" rows="4" name="medialist.description"></textarea>
 								</div>
 							</div>
 						</div>
@@ -121,41 +129,48 @@
 			</div>
 		</div>
 	</div>
-		
+			
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.branch"/></h3>
+			<h3 class="page-title"><spring:message code="menu.medialist"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
-						class="fa fa-angle-right"></i>
+							class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.systemmanage"/></a><i class="fa fa-angle-right"></i>
+					<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.branch"/></a>
+					<li><a href="#"><spring:message code="menu.medialist"/></a>
 					</li>
 				</ul>
 			</div>
-		
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="global.branch"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.medialist"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="BranchModule.refresh();" class="reload"></a>
+								<a href="javascript:;" onClick="SteamModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button class="btn green pix-device"><spring:message code="pixsign.device"/> <i class="fa fa-desktop"></i></button>
+						<div class="portlet-body" id="MedialistPortlet">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-10">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+										</div>
+									</div>
+									<table id="MedialistTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="BranchTable" class="table table-striped table-bordered table-hover tree">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -174,22 +189,23 @@
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-treegrid/js/jquery.treegrid.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-treegrid/js/jquery.treegrid.bootstrap3.js" type="text/javascript"></script>
+
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
+
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/branch.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/resource/medialist.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	PixData.init('${locale}');
-	BranchModule.init();
+	MedialistModule.init();
 });
 
 </script>

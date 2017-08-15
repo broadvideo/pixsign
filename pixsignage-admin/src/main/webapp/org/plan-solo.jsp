@@ -186,7 +186,7 @@
 																	<div class="tab-pane active" id="portlet_tab">
 																		<div class="row">
 																			<div class="col-md-12">
-																				<div id="BundleDiv">
+																				<div id="BundleDiv" style="display:none">
 																					<table id="BundleTable" class="table table-condensed table-hover">
 																						<thead></thead>
 																						<tbody></tbody>
@@ -198,13 +198,13 @@
 																						<tbody></tbody>
 																					</table>
 																				</div>
-																				<div id="PageDiv">
+																				<div id="PageDiv" style="display:none">
 																					<table id="PageTable" class="table table-condensed table-hover">
 																						<thead></thead>
 																						<tbody></tbody>
 																					</table>
 																				</div>
-																				<div id="TouchpageDiv">
+																				<div id="TouchpageDiv" style="display:none">
 																					<table id="TouchpageTable" class="table table-condensed table-hover">
 																						<thead></thead>
 																						<tbody></tbody>
