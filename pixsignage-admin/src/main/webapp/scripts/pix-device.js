@@ -17,7 +17,7 @@ var myurls = {
 function refreshMyTable() {
 	$('#DeviceTable').dataTable()._fnAjaxUpdate();
 	$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
-}			
+}
 
 var CurrentDevice;
 var CurrentDeviceid = 0;
@@ -156,6 +156,7 @@ function initMyTable() {
 		}
 		sOut += '</tr>';
 		sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
+		sOut += '<tr><td>MAC:</td><td>'+aData.mac + '</td></tr>';
 		sOut += '<tr><td>' + common.view.storage + ':</td><td>' + transferIntToByte(aData.storageused) + '/' + transferIntToByte(aData.storageavail) + '</td></tr>';
 		sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
