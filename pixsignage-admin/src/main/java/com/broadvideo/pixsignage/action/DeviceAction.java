@@ -142,7 +142,8 @@ public class DeviceAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
-			deviceService.unbind("" + device.getDeviceid());
+			String deviceid = getParameter("deviceid");
+			deviceService.unbind(deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);

@@ -76,10 +76,9 @@ function initWizard() {
 			if (index == 1) {
 				redrawLayout($('#LayoutDiv'), CurrentBundle, CurrentBundledtl);
 				enterLayoutdtlFocus(CurrentBundledtl);
-				//initMediaBranchTree();
 			} else if (index == 2) {
 				enterBundledtlFocus(CurrentBundledtl);
-				$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+				$('#VideoTable').dataTable()._fnAjaxUpdate();
 			}
 		}
 	});
@@ -112,11 +111,14 @@ function initTab2() {
 function initData2() {
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	if (CurrentBundle.width > CurrentBundle.height) {
+	if (CurrentBundle.ratio == 1 || CurrentBundle.ratio == 3 || CurrentBundle.ratio == 5) {
 		$('#LayoutCol1').attr('class', 'col-md-7 col-sm-7');
 		$('#LayoutCol2').attr('class', 'col-md-5 col-sm-5');
-	} else {
+	} else if (CurrentBundle.ratio == 2 || CurrentBundle.ratio == 4) {
 		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
+		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
+	} else if (CurrentBundle.ratio == 6) {
+		$('#LayoutCol1').attr('class', 'col-md-2 col-sm-2');
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
 	$('.touch-ctrl').css('display', TouchCtrl?'':'none');
@@ -129,7 +131,6 @@ function initData2() {
 }
 
 function initTab3() {
-	initMediaBranchTree();
 }
 
 function initData3() {

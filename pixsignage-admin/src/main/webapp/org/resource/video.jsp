@@ -163,7 +163,7 @@
 								<div class="col-md-2">
 									<div class="row"><div class="col-md-12 branchtree"></div></div>
 									<hr/>
-									<div class="row"><div class="col-md-12 foldertree"></div></div>
+									<div class="row"><div class="col-md-12 foldertree editable"></div></div>
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">

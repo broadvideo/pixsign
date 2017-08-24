@@ -37,6 +37,7 @@ var RSSModule = function () {
 				aoData.push({'name':'branchid','value':RSSTree.branchid });
 			}
 		});
+		$('#RSSTable_wrapper').addClass('form-inline');
 		$('#RSSTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#RSSTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#RSSTable_wrapper .dataTables_length select').select2();

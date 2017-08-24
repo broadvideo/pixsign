@@ -76,6 +76,7 @@ var MedialistModule = function () {
 				aoData.push({'name':'branchid','value':MedialistTree.branchid });
 			}
 		});
+		$('#MedialistTable_wrapper').addClass('form-inline');
 		$('#MedialistTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#MedialistTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#MedialistTable_wrapper .dataTables_length select').select2();
@@ -314,6 +315,7 @@ var MedialistModule = function () {
 				aoData.push({'name':'type','value':1 });
 			}
 		});
+		$('#VideoTable_wrapper').addClass('form-inline');
 		$('#VideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 		$('#VideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 		$('#VideoTable').css('width', '100%');
@@ -387,6 +389,7 @@ var MedialistModule = function () {
 				aoData.push({'name':'folderid','value':ImageTree.folderid });
 			}
 		});
+		$('#ImageTable_wrapper').addClass('form-inline');
 		$('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
 		$('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 		$('#ImageTable').css('width', '100%');

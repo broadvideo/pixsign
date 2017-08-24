@@ -180,7 +180,8 @@ var common = {
 		ratio_2: '9:16',
 		ratio_3: '4:3',
 		ratio_4: '3:4',
-		ratio_5: '32:9',
+		ratio_5: '16:3',
+		ratio_6: '3:16',
 		type_0: 'Private',
 		type_1: 'Public',
 

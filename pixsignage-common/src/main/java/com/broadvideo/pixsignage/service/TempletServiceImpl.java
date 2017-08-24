@@ -100,6 +100,10 @@ public class TempletServiceImpl implements TempletService {
 			// 16:3
 			templet.setWidth(1920);
 			templet.setHeight(360);
+		} else if (templet.getRatio().equals("6")) {
+			// 3:16
+			templet.setWidth(360);
+			templet.setHeight(1920);
 		}
 		templetMapper.insertSelective(templet);
 
@@ -178,6 +182,10 @@ public class TempletServiceImpl implements TempletService {
 				// 16:3
 				templet.setWidth(1920);
 				templet.setHeight(360);
+			} else if (templet.getRatio().equals("6")) {
+				// 3:16
+				templet.setWidth(360);
+				templet.setHeight(1920);
 			}
 			templetMapper.insertSelective(templet);
 

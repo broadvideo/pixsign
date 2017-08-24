@@ -7,6 +7,7 @@
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="folderid" property="folderid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="oname" property="oname" jdbcType="VARCHAR" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="width" property="width" jdbcType="INTEGER" />
@@ -28,13 +29,13 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
+    videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
     thumbnail, relateid, tags, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
-    select videoid, orgid, branchid, folderid, name, uuid, type, width, height, filepath, 
+    select videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
     thumbnail, 0 as relateid, tags, createtime, createstaffid
     from video
@@ -121,7 +122,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into video (orgid, branchid, folderid, 
-      name, uuid, type, 
+      name, oname, uuid, type, 
       width, height, filepath, 
       filename, size, md5, 
       previewflag, status, progress, 
@@ -129,7 +130,7 @@
       tags, createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, 
       #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
@@ -154,6 +155,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="oname != null" >
+        oname,
       </if>
       <if test="uuid != null" >
         uuid,
@@ -219,6 +223,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="oname != null" >
+        #{oname,jdbcType=VARCHAR},
       </if>
       <if test="uuid != null" >
         #{uuid,jdbcType=VARCHAR},
@@ -288,6 +295,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="oname != null" >
+        oname = #{oname,jdbcType=VARCHAR},
+      </if>
       <if test="uuid != null" >
         uuid = #{uuid,jdbcType=VARCHAR},
       </if>
@@ -348,6 +358,7 @@
       branchid = #{branchid,jdbcType=INTEGER},
       folderid = #{folderid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      oname = #{oname,jdbcType=VARCHAR},
       uuid = #{uuid,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       width = #{width,jdbcType=INTEGER},

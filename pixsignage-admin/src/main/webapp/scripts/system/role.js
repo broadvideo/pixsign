@@ -36,9 +36,6 @@ var RoleModule = function () {
 				return nRow;
 			}
 		});
-		$('#RoleTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-		$('#RoleTable_wrapper .dataTables_length select').addClass('form-control input-small');
-		$('#RoleTable_wrapper .dataTables_length select').select2();
 		$('#RoleTable').css('width', '100%');
 	};
 	

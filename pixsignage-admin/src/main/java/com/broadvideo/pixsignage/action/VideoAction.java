@@ -76,6 +76,7 @@ public class VideoAction extends BaseDatatableAction {
 					video.setBranchid(Integer.parseInt(branchids[i]));
 					video.setFolderid(Integer.parseInt(folderids[i]));
 					video.setName(names[i]);
+					video.setOname(mymediaFileName[i]);
 					video.setFilename(mymediaFileName[i]);
 					video.setStatus("9");
 					video.setDescription(mymediaFileName[i]);

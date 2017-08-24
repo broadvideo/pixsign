@@ -11,8 +11,7 @@ RegionColors['A1'] = '#CC9966';
 RegionColors['A2'] = '#CC9966';
 
 function refreshMediaTable() {
-	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
-	$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
+	$('#VideoTable').dataTable()._fnAjaxUpdate();
 	$('#ImageTable').dataTable()._fnAjaxUpdate();
 }
 
@@ -372,7 +371,7 @@ function refreshBundledtlEdit() {
 	}
 	if (CurrentBundledtl.type == 0) {
 		$('.regiontype-0').css("display", "block");
-		$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+		$('#VideoTable').dataTable()._fnAjaxUpdate();
 		if ($('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val() == 1) {
 			$('.public-0').css("display", "none");
 		} else if ($('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val() == 0) {
@@ -413,7 +412,7 @@ function refreshBundledtlEdit() {
 		} else if (touchtype == 3) {
 			$('.touchtype-2').css("display", "none");
 			$('.touchtype-4').css("display", "none");
-			$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+			$('#VideoTable').dataTable()._fnAjaxUpdate();
 			if ($('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val() == 1) {
 				$('.public-0').css("display", "none");
 			} else if ($('#BundledtlEditForm input[name="bundledtl.referflag"]:checked').val() == 0) {
@@ -672,16 +671,8 @@ function refreshMedialistDtl() {
 				var thumbnail = '';
 				var thumbhtml = '';
 				var medianame = '';
-				if (medialistdtl.objtype == 1 && medialistdtl.video.type == 1) {
-					mediatype = common.view.intvideo;
-					medianame = medialistdtl.video.name;
-					if (medialistdtl.video.thumbnail == null) {
-						thumbnail = '../img/video.jpg';
-					} else {
-						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
-					}
-				} else if (medialistdtl.objtype == 1 && medialistdtl.video.type == 2) {
-					mediatype = common.view.extvideo;
+				if (medialistdtl.objtype == 1) {
+					mediatype = common.view.video;
 					medianame = medialistdtl.video.name;
 					if (medialistdtl.video.thumbnail == null) {
 						thumbnail = '../img/video.jpg';
@@ -796,10 +787,11 @@ $('#BundledtlEditForm input[name="bundledtl.touchtype"]').change(function(e) {
 });
 
 //本地视频table初始化
-$('#IntVideoTable thead').css('display', 'none');
-$('#IntVideoTable tbody').css('display', 'none');	
-var intvideohtml = '';
-$('#IntVideoTable').dataTable({
+var VideoTree = new BranchTree($('#VideoTab'));
+$('#VideoTable thead').css('display', 'none');
+$('#VideoTable tbody').css('display', 'none');	
+var videohtml = '';
+$('#VideoTable').dataTable({
 	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
 					  [ 18, 30, 48, 96 ] 
@@ -815,28 +807,28 @@ $('#IntVideoTable').dataTable({
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnPreDrawCallback': function (oSettings) {
-		if ($('#IntVideoContainer').length < 1) {
-			$('#IntVideoTable').append('<div id="IntVideoContainer"></div>');
+		if ($('#VideoContainer').length < 1) {
+			$('#VideoTable').append('<div id="VideoContainer"></div>');
 		}
-		$('#IntVideoContainer').html(''); 
+		$('#VideoContainer').html(''); 
 		return true;
 	},
 	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 		if (iDisplayIndex % 6 == 0) {
-			intvideohtml = '';
-			intvideohtml += '<div class="row" >';
+			videohtml = '';
+			videohtml += '<div class="row" >';
 		}
-		intvideohtml += '<div class="col-md-2 col-xs-2">';
+		videohtml += '<div class="col-md-2 col-xs-2">';
 
-		intvideohtml += '<div id="ThumbContainer" style="position:relative">';
+		videohtml += '<div id="ThumbContainer" style="position:relative">';
 		var thumbnail = '../img/video.jpg';
 		var thumbwidth = 100;
 		if (aData.thumbnail != null) {
 			thumbnail = '/pixsigdata' + aData.thumbnail;
 			thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 		}
-		intvideohtml += '<div id="VideoThumb" class="thumbs">';
-		intvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		videohtml += '<div id="VideoThumb" class="thumbs">';
+		videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		if (aData.relate != null) {
 			var thumbnail = '../img/video.jpg';
 			var thumbwidth = 50;
@@ -848,38 +840,38 @@ $('#IntVideoTable').dataTable({
 				thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
 				thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
 			}
-			intvideohtml += '<div id="RelateThumb">';
-			intvideohtml += '<img src="' + thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
-			intvideohtml += '</div>';
+			videohtml += '<div id="RelateThumb">';
+			videohtml += '<img src="' + thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+			videohtml += '</div>';
 		}
-		intvideohtml += '<div class="mask">';
-		intvideohtml += '<div>';
-		intvideohtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-		intvideohtml += '<a class="btn default btn-sm green pix-medialistdtl-intvideo-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-		intvideohtml += '</div>';
-		intvideohtml += '</div>';
-		intvideohtml += '</div>';
+		videohtml += '<div class="mask">';
+		videohtml += '<div>';
+		videohtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		videohtml += '<a class="btn default btn-sm green pix-medialistdtl-video-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
+		videohtml += '</div>';
+		videohtml += '</div>';
+		videohtml += '</div>';
 
-		intvideohtml += '</div>';
+		videohtml += '</div>';
 
-		intvideohtml += '</div>';
-		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#IntVideoTable').dataTable().fnGetData().length) {
-			intvideohtml += '</div>';
-			if ((iDisplayIndex+1) != $('#IntVideoTable').dataTable().fnGetData().length) {
-				intvideohtml += '<hr/>';
+		videohtml += '</div>';
+		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#VideoTable').dataTable().fnGetData().length) {
+			videohtml += '</div>';
+			if ((iDisplayIndex+1) != $('#VideoTable').dataTable().fnGetData().length) {
+				videohtml += '<hr/>';
 			}
-			$('#IntVideoContainer').append(intvideohtml);
+			$('#VideoContainer').append(videohtml);
 		}
 		return nRow;
 	},
 	'fnDrawCallback': function(oSettings, json) {
-		$('#IntVideoContainer .thumbs').each(function(i) {
+		$('#VideoContainer .thumbs').each(function(i) {
 			$(this).height($(this).parent().width());
 		});
-		$('#IntVideoContainer .mask').each(function(i) {
+		$('#VideoContainer .mask').each(function(i) {
 			$(this).height($(this).parent().parent().width() + 2);
 		});
-		$('#IntVideoContainer #RelateThumb').each(function(i) {
+		$('#VideoContainer #RelateThumb').each(function(i) {
 			var thumbwidth = $(this).find('img').attr('thumbwidth');
 			var thumbheight = $(this).find('img').attr('thumbheight');
 			$(this).css('position', 'absolute');
@@ -889,119 +881,17 @@ $('#IntVideoTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':VideoTree.branchid });
+		aoData.push({'name':'folderid','value':VideoTree.folderid });
 		aoData.push({'name':'type','value':1 });
 	}
 });
-$('#IntVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-$('#IntVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-$('#IntVideoTable').css('width', '100%');
-
-//引入视频table初始化
-$('#ExtVideoTable thead').css('display', 'none');
-$('#ExtVideoTable tbody').css('display', 'none');	
-var extvideohtml = '';
-$('#ExtVideoTable').dataTable({
-	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-	'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-					  [ 18, 30, 48, 96 ] 
-					],
-	'bProcessing' : true,
-	'bServerSide' : true,
-	'sAjaxSource' : 'video!list.action',
-	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
-					{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
-					{'sTitle' : common.view.operation, 'mData' : 'videoid', 'bSortable' : false }],
-	'iDisplayLength' : 18,
-	'sPaginationType' : 'bootstrap',
-	'oLanguage' : DataTableLanguage,
-	'fnPreDrawCallback': function (oSettings) {
-		if ($('#ExtVideoContainer').length < 1) {
-			$('#ExtVideoTable').append('<div id="ExtVideoContainer"></div>');
-		}
-		$('#ExtVideoContainer').html(''); 
-		return true;
-	},
-	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-		if (iDisplayIndex % 6 == 0) {
-			extvideohtml = '';
-			extvideohtml += '<div class="row" >';
-		}
-		extvideohtml += '<div class="col-md-2 col-xs-2">';
-
-		extvideohtml += '<div id="ThumbContainer" style="position:relative">';
-		var thumbnail = '../img/video.jpg';
-		var thumbwidth = 100;
-		if (aData.thumbnail != null) {
-			thumbnail = '/pixsigdata' + aData.thumbnail;
-			thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-		}
-		extvideohtml += '<div id="VideoThumb" class="thumbs">';
-		extvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-		if (aData.relate != null) {
-			var thumbnail = '../img/video.jpg';
-			var thumbwidth = 50;
-			var thumbheight = 50;
-			if (aData.relate.thumbnail != null) {
-				thumbnail = '/pixsigdata' + aData.relate.thumbnail;
-				aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
-				aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
-				thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
-				thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
-			}
-			extvideohtml += '<div id="RelateThumb">';
-			extvideohtml += '<img src="' + thumbnail + '" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
-			extvideohtml += '</div>';
-		}
-		extvideohtml += '<div class="mask">';
-		extvideohtml += '<div>';
-		extvideohtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-		extvideohtml += '<a class="btn default btn-sm green pix-medialistdtl-extvideo-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-		extvideohtml += '</div>';
-		extvideohtml += '</div>';
-		extvideohtml += '</div>';
-
-		extvideohtml += '</div>';
-
-		extvideohtml += '</div>';
-		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#ExtVideoTable').dataTable().fnGetData().length) {
-			extvideohtml += '</div>';
-			if ((iDisplayIndex+1) != $('#ExtVideoTable').dataTable().fnGetData().length) {
-				extvideohtml += '<hr/>';
-			}
-			$('#ExtVideoContainer').append(extvideohtml);
-		}
-		return nRow;
-	},
-	'fnDrawCallback': function(oSettings, json) {
-		$('#ExtVideoContainer .thumbs').each(function(i) {
-			$(this).height($(this).parent().width());
-		});
-		$('#ExtVideoContainer .mask').each(function(i) {
-			$(this).height($(this).parent().parent().width() + 2);
-		});
-		$('#ExtVideoContainer #RelateThumb').each(function(i) {
-			var thumbwidth = $(this).find('img').attr('thumbwidth');
-			var thumbheight = $(this).find('img').attr('thumbheight');
-			$(this).css('position', 'absolute');
-			$(this).css('left', (100-thumbwidth) + '%');
-			$(this).css('top', '0');
-			$(this).css('width', thumbwidth + '%');
-		});
-	},
-	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
-		aoData.push({'name':'type','value':2 });
-	}
-});
-$('#ExtVideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-$('#ExtVideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-$('#ExtVideoTable').css('width', '100%');
+$('#VideoTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#VideoTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#VideoTable').css('width', '100%');
 
 //图片table初始化
+var ImageTree = new BranchTree($('#ImageTab'));
 $('#ImageTable thead').css('display', 'none');
 $('#ImageTable tbody').css('display', 'none');	
 var imagehtml = '';
@@ -1084,8 +974,8 @@ $('#ImageTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
-		aoData.push({'name':'branchid','value':CurrentMediaBranchid });
-		aoData.push({'name':'folderid','value':CurrentMediaFolderid });
+		aoData.push({'name':'branchid','value':ImageTree.branchid });
+		aoData.push({'name':'folderid','value':ImageTree.folderid });
 	}
 });
 $('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
@@ -1093,21 +983,9 @@ $('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-
 $('#ImageTable').css('width', '100%');
 
 $('#nav_tab1').click(function(event) {
-	$('#IntVideoDiv').css('display', '');
-	$('#ExtVideoDiv').css('display', 'none');
-	$('#ImageDiv').css('display', 'none');
-	$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+	$('#VideoTable').dataTable()._fnAjaxUpdate();
 });
 $('#nav_tab2').click(function(event) {
-	$('#IntVideoDiv').css('display', 'none');
-	$('#ExtVideoDiv').css('display', '');
-	$('#ImageDiv').css('display', 'none');
-	$('#ExtVideoTable').dataTable()._fnAjaxUpdate();
-});
-$('#nav_tab3').click(function(event) {
-	$('#IntVideoDiv').css('display', 'none');
-	$('#ExtVideoDiv').css('display', 'none');
-	$('#ImageDiv').css('display', '');
 	$('#ImageTable').dataTable()._fnAjaxUpdate();
 });
 
@@ -1134,12 +1012,12 @@ $('#MedialistDtlTable').dataTable({
 });
 
 //增加本地视频到播放明细Table
-$('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
+$('body').on('click', '.pix-medialistdtl-video-add', function(event) {
 	var rowIndex = $(event.target).attr("data-id");
 	if (rowIndex == undefined) {
 		rowIndex = $(event.target).parent().attr('data-id');
 	}
-	var data = $('#IntVideoTable').dataTable().fnGetData(rowIndex);
+	var data = $('#VideoTable').dataTable().fnGetData(rowIndex);
 	var medialistdtl = {};
 	medialistdtl.medialistdtlid = 0;
 	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
@@ -1156,34 +1034,7 @@ $('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
 		thumbnail = '/pixsigdata' + data.thumbnail;
 	}
 	var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + data.name + '"></div>';
-	$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.intvideo, thumbhtml, data.name, 0, 0, 0]);
-	redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
-});
-
-//增加引入视频到播放明细Table
-$('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
-	var rowIndex = $(event.target).attr("data-id");
-	if (rowIndex == undefined) {
-		rowIndex = $(event.target).parent().attr('data-id');
-	}
-	var data = $('#ExtVideoTable').dataTable().fnGetData(rowIndex);
-	var medialistdtl = {};
-	medialistdtl.medialistdtlid = 0;
-	medialistdtl.medialistid = CurrentBundledtl.medialist0.medialistid;
-	medialistdtl.objtype = '1';
-	medialistdtl.objid = data.videoid;
-	medialistdtl.sequence = CurrentBundledtl.medialist0.medialistdtls.length + 1;
-	medialistdtl.video = data;
-	CurrentBundledtl.medialist0.medialistdtls[CurrentBundledtl.medialist0.medialistdtls.length] = medialistdtl;
-
-	var thumbnail = '';
-	if (data.thumbnail == null) {
-		thumbnail = '../img/video.jpg';
-	} else {
-		thumbnail = '/pixsigdata' + data.thumbnail;
-	}
-	var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + data.name + '"></div>';
-	$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.extvideo, thumbhtml, data.name, 0, 0, 0]);
+	$('#MedialistDtlTable').dataTable().fnAddData([medialistdtl.sequence, common.view.video, thumbhtml, data.name, 0, 0, 0]);
 	redrawBundle($('#BundleDiv'), CurrentBundle, CurrentBundledtl);
 });
 
@@ -1544,123 +1395,3 @@ $('body').on('click', '.pix-audio-down', function(event) {
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1] = temp;
 	CurrentBundledtl.medialist0.medialistdtls[rowIndex+1].sequence = rowIndex+2;
 });
-
-
-function initMediaBranchTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'branch!list.action',
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var branches = data.aaData;
-				CurrentMediaBranchid = branches[0].branchid;
-				
-				if ( $("#MediaBranchTreeDiv").length > 0 ) {
-					if (branches[0].children.length == 0) {
-						$('#MediaBranchTreeDiv').css('display', 'none');
-						CurrentMediaFolderid = null;
-						initMediaFolderTree();
-						refreshMediaTable();
-					} else {
-						var branchTreeDivData = [];
-						createBranchTreeData(branches, branchTreeDivData);
-						$('#MediaBranchTreeDiv').jstree('destroy');
-						$('#MediaBranchTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#MediaBranchTreeDiv').on('loaded.jstree', function() {
-							$('#MediaBranchTreeDiv').jstree('select_node', CurrentMediaBranchid);
-						});
-						$('#MediaBranchTreeDiv').on('select_node.jstree', function(event, data) {
-							CurrentMediaBranchid = data.instance.get_node(data.selected[0]).id;
-							CurrentMediaFolderid = null;
-							initMediaFolderTree();
-							refreshMediaTable();
-						});
-					}
-				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
-		}
-	});
-	function createBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = branches[i].branchid;
-			treeData[i].text = branches[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createBranchTreeData(branches[i].children, treeData[i].children);
-		}
-	}	
-}
-
-
-function initMediaFolderTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'folder!list.action',
-		data : {
-			branchid: CurrentMediaBranchid
-		},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var folders = data.aaData;
-				CurrentMediaFolderid = folders[0].folderid;
-				
-				if ( $("#MediaFolderTreeDiv").length > 0 ) {
-					var folderTreeDivData = [];
-					createFolderTreeData(folders, folderTreeDivData);
-					$('#MediaFolderTreeDiv').jstree('destroy');
-					$('#MediaFolderTreeDiv').jstree({
-						'core' : {
-							'multiple' : false,
-							'data' : folderTreeDivData
-						},
-						'plugins' : ['unique', 'types'],
-						'types' : {
-							'default' : { 'icon' : 'fa fa-folder icon-state-warning icon-lg' }
-						},
-					});
-					$('#MediaFolderTreeDiv').on('loaded.jstree', function() {
-						$('#MediaFolderTreeDiv').jstree('select_node', CurrentMediaFolderid);
-					});
-					$('#MediaFolderTreeDiv').on('select_node.jstree', function(event, data) {
-						CurrentMediaFolderid = data.instance.get_node(data.selected[0]).id;
-						refreshMediaTable();
-					});
-				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
-			}
-		},
-		error : function() {
-			console.log('failue');
-		}
-	});
-	function createFolderTreeData(folders, treeData) {
-		if (folders == null) return;
-		for (var i=0; i<folders.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = folders[i].folderid;
-			treeData[i].text = folders[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createFolderTreeData(folders[i].children, treeData[i].children);
-		}
-	}
-
-}

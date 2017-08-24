@@ -176,9 +176,11 @@ var VideoModule = function () {
 				aoData.push({'name':'type','value':'1' });
 			}
 		});
+		$('#VideoTable_wrapper').addClass('form-inline');
 		$('#VideoTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#VideoTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#VideoTable_wrapper .dataTables_length select').select2();
+		$('#VideoTable').css('width', '100%');
 	};
 	
 	var initVideoEvent = function () {

@@ -276,7 +276,11 @@
 		<action name="branch!list" method="doList" class="branchAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="branch!listnode" method="doListNode" class="branchAction">
+			<result type="json">
 			</result>
 		</action>
 		<action name="branch!validate" method="doValidate" class="branchAction">

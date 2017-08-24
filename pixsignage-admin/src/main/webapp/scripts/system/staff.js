@@ -43,6 +43,7 @@ var StaffModule = function () {
 				return nRow;
 			}
 		});
+		$('#StaffTable_wrapper').addClass('form-inline');
 		$('#StaffTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#StaffTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#StaffTable_wrapper .dataTables_length select').select2();
@@ -118,7 +119,6 @@ var StaffModule = function () {
 		var RoleTreeData = [];
 		var BranchTreeData = [];
 		var _roles = {};
-		var _branchid = 0;
 		var Oper = 1;
 		
 		$.ajax({
@@ -158,8 +158,8 @@ var StaffModule = function () {
 			}
 		}
 		function createRoleTree(treeData) {
-			$('#RoleTree').jstree('destroy');
-			var treeview = $('#RoleTree').jstree({
+			$('#StaffEditForm #RoleTree').jstree('destroy');
+			var treeview = $('#StaffEditForm #RoleTree').jstree({
 				'core' : {
 					'data' : treeData
 				},
@@ -172,48 +172,25 @@ var StaffModule = function () {
 			});
 		}
 
-		$.ajax({
-			type : 'POST',
-			url : 'branch!list.action',
-			data : {},
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					createBranchTreeData(data.aaData, BranchTreeData);
-					createBranchTree(BranchTreeData);
-				} else {
-					bootbox.alert(common.tips.error + data.errormsg);
+		var BranchTeee = $('#StaffEditForm #BranchTree');
+		BranchTeee.jstree('destroy');
+		BranchTeee.jstree({
+			'core' : {
+				'multiple' : false,
+				'data' : {
+					'url': function(node) {
+						return 'branch!listnode.action';
+					},
+					'data': function(node) {
+						return {
+							'id': node.id,
+						}
+					}
 				}
 			},
-			error : function() {
-				console.log('failue');
-			}
+			'plugins' : ['unique'],
 		});
-		function createBranchTreeData(branches, treeData) {
-			for (var i=0; i<branches.length; i++) {
-				treeData[i] = {};
-				treeData[i].id = branches[i].branchid;
-				treeData[i].text = branches[i].name;
-				treeData[i].state = {
-					opened: true,
-				}
-				treeData[i].children = [];
-				createBranchTreeData(branches[i].children, treeData[i].children);
-			}
-		}
-		function createBranchTree(treeData) {
-			$('#BranchTree').jstree('destroy');
-			$('#BranchTree').jstree({
-				'core' : {
-					'multiple' : false,
-					'data' : treeData
-				},
-				'plugins' : ['unique'],
-			});
-			$('#BranchTree').on('loaded.jstree', function() {
-				$('#BranchTree').jstree('select_node', _branchid);
-			});
-		}
-
+		
 		var formHandler = new FormHandler($('#StaffEditForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['staff.loginname'] = {
@@ -255,9 +232,11 @@ var StaffModule = function () {
 				postData.password = $('#StaffEditForm input[name="staff.password"]').val();
 				postData.name = $('#StaffEditForm input[name="staff.name"]').val();
 				postData.status = 1;
-				postData.branchid = $("#BranchTree").jstree('get_selected', false)[0];
+				if ($("#StaffEditForm #BranchTree").jstree('get_selected', false).length > 0) {
+					postData.branchid = BranchTeee.jstree('get_selected', false)[0];
+				}
 				postData.roles = [];
-				var roles = $("#RoleTree").jstree('get_checked', false);
+				var roles = $('#StaffEditForm #RoleTree').jstree('get_checked', false);
 				for (var i=0; i<roles.length; i++) {
 					var role = {};
 					role.roleid = roles[i];
@@ -268,9 +247,11 @@ var StaffModule = function () {
 				postData.loginname = $('#StaffEditForm input[name="staff.loginname"]').val();
 				postData.name = $('#StaffEditForm input[name="staff.name"]').val();
 				postData.status = 1;
-				postData.branchid = $("#BranchTree").jstree('get_selected', false)[0];
+				if ($("#StaffEditForm #BranchTree").jstree('get_selected', false).length > 0) {
+					postData.branchid = BranchTeee.jstree('get_selected', false)[0];
+				}
 				postData.roles = [];
-				var roles = $("#RoleTree").jstree('get_checked', false);
+				var roles = $('#StaffEditForm #RoleTree').jstree('get_checked', false);
 				for (var i=0; i<roles.length; i++) {
 					var role = {};
 					role.roleid = roles[i];
@@ -318,13 +299,13 @@ var StaffModule = function () {
 			formHandler.validateOption.rules['staff.password']['minlength'] = 5;
 			formHandler.validateOption.rules['staff.password2'] = {};
 			formHandler.validateOption.rules['staff.password2']['equalTo'] = '#StaffPassword';
-			$.extend($("#StaffEditForm").validate().settings, {
+			$.extend($('#StaffEditForm').validate().settings, {
 				rules: formHandler.validateOption.rules,
 			});
-			_roles = {};
-			_branchid = BranchTreeData[0].id;
 			Oper = 1;
-			createBranchTree(BranchTreeData);
+			BranchTeee.jstree('deselect_all', true);
+			BranchTeee.jstree('select_node', BranchTree.jstree(true).get_json('#')[0].id);
+			_roles = {};
 			refreshRoleTreeData(RoleTreeData);
 			createRoleTree(RoleTreeData);
 			$('#StaffEditModal').modal();
@@ -341,13 +322,13 @@ var StaffModule = function () {
 			$('#StaffEditForm .password').css('display', 'none');
 			$('#StaffEditForm input[name="staff.loginname"]').attr('readonly','readonly');
 			formHandler.validateOption.rules['staff.password'] = {};
- 			$.extend($("#StaffEditForm").validate().settings, {
+ 			$.extend($('#StaffEditForm').validate().settings, {
 				rules: formHandler.validateOption.rules,
 			});
-			_roles = {};
-			_branchid = _staff.branchid;
 			Oper = 2;
-			createBranchTree(BranchTreeData);
+			BranchTeee.jstree('deselect_all', true);
+			BranchTeee.jstree('select_node', _staff.branchid);
+			_roles = {};
 			for (var i=0; i<_staff.roles.length; i++) {
 				_roles[_staff.roles[i].roleid] = _staff.roles[i];
 			}

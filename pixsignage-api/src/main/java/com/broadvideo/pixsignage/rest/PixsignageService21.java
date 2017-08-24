@@ -36,6 +36,7 @@ import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
+import com.broadvideo.pixsignage.domain.Devicefilehis;
 import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Flowlog;
@@ -49,6 +50,7 @@ import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.DevicefilehisMapper;
 import com.broadvideo.pixsignage.persistence.DevicegridMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
 import com.broadvideo.pixsignage.persistence.FlowlogMapper;
@@ -93,6 +95,8 @@ public class PixsignageService21 {
 	private FlowlogMapper flowlogMapper;
 	@Autowired
 	private DevicegridMapper devicegridMapper;
+	@Autowired
+	private DevicefilehisMapper devicefilehisMapper;
 
 	@Autowired
 	private ScheduleService scheduleService;
@@ -735,11 +739,6 @@ public class PixsignageService21 {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			String fullflag = requestJson.getString("full_flag");
-			if (fullflag != null && fullflag.equals("1")) {
-				devicefileService.clearByDevice("" + device.getDeviceid());
-			}
-
 			JSONArray fileJsonArray = requestJson.getJSONArray("files");
 			for (int i = 0; i < fileJsonArray.length(); i++) {
 				JSONObject fileJson = fileJsonArray.getJSONObject(i);
@@ -772,15 +771,34 @@ public class PixsignageService21 {
 					devicefile.setDescription(desc);
 					devicefile.setUpdatetime(Calendar.getInstance().getTime());
 					devicefileService.addDevicefile(devicefile);
-				} else {
-					if (devicefile.getProgress().intValue() != progress || devicefile.getStatus().equals(status)) {
-						devicefile.setProgress(progress);
-						devicefile.setStatus(status);
-						devicefile.setDescription(desc);
-						devicefile.setUpdatetime(Calendar.getInstance().getTime());
-						devicefileService.updateDevicefile(devicefile);
+					if (status.equals("2")) {
+						Devicefilehis devicefilehis = new Devicefilehis();
+						devicefilehis.setDeviceid(device.getDeviceid());
+						devicefilehis.setObjtype(objtype);
+						devicefilehis.setObjid(id);
+						devicefilehis.setSize(devicefile.getSize());
+						devicefilehisMapper.insertSelective(devicefilehis);
 					}
+				} else {
+					if (!devicefile.getStatus().equals("2") && status.equals("2")) {
+						Devicefilehis devicefilehis = new Devicefilehis();
+						devicefilehis.setDeviceid(device.getDeviceid());
+						devicefilehis.setObjtype(objtype);
+						devicefilehis.setObjid(id);
+						devicefilehis.setSize(devicefile.getSize());
+						devicefilehisMapper.insertSelective(devicefilehis);
+					}
+					devicefile.setProgress(progress);
+					devicefile.setStatus(status);
+					devicefile.setDescription(desc);
+					devicefile.setUpdatetime(Calendar.getInstance().getTime());
+					devicefileService.updateDevicefile(devicefile);
 				}
+			}
+
+			String fullflag = requestJson.getString("full_flag");
+			if (fullflag != null && fullflag.equals("1")) {
+				devicefileService.clearByDevice("" + device.getDeviceid());
 			}
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");

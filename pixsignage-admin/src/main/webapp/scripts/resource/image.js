@@ -117,9 +117,11 @@ var ImageModule = function () {
 				aoData.push({'name':'folderid','value':ImageTree.folderid });
 			}
 		});
+		$('#ImageTable_wrapper').addClass('form-inline');
 		$('#ImageTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#ImageTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#ImageTable_wrapper .dataTables_length select').select2();
+		$('#ImageTable').css('width', '100%');
 	};
 	
 	var initImageEvent = function () {
