@@ -66,7 +66,9 @@ create table hourplaylog(
  )engine = innodb
 default character set utf8;
 alter table hourplaylog add index hourplaylog_index1(deviceid);
-alter table hourplaylog add unique(deviceid, mediatype, mediaid, starttime);
+alter table hourplaylog add index hourplaylog_index2(mediatype, mediaid);
+alter table hourplaylog add index hourplaylog_index3(orgid);
+alter table hourplaylog add unique index(deviceid, mediatype, mediaid, starttime);
 
 create table templet( 
    templetid int not null auto_increment,

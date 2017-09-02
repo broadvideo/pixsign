@@ -97,7 +97,7 @@ var DeviceModule = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'branchid','value':DeviceTree1.branchid });
 				aoData.push({'name':'status','value':'1' });
 			}
 		});
@@ -204,7 +204,7 @@ var DeviceModule = function () {
 						},
 						success : function(data, status) {
 							if (data.errorcode == 0) {
-								refreshDeviceTable();
+								refresh();
 							} else {
 								bootbox.alert(common.tips.error + data.errormsg);
 							}
@@ -531,10 +531,10 @@ var DeviceModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
 			var formdata = new Object();
-			for (var name in CurrentDevice) {
-				formdata['device.' + name] = CurrentDevice[name];
+			for (var name in _device) {
+				formdata['device.' + name] = _device[name];
 			}
 			$('#ConfigForm').loadJSON(formdata);
 			if ($('input[name="device.powerflag"]:checked').val() == 1) {
@@ -548,19 +548,19 @@ var DeviceModule = function () {
 			} else {
 				$('.powerflag').css('display', 'none');
 			}
-			$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
+			$('#TagSelect').select2('val', $(_device.tags.split(",")));
 			$('#ConfigModal').modal();
 		});
 		$('[type=submit]', $('#ConfigModal')).on('click', function(event) {
 			$.ajax({
 				type : 'POST',
-				url : myurls['device.update'],
+				url : 'device!update.action',
 				data : $('#ConfigForm').serialize(),
 				success : function(data, status) {
 					if (data.errorcode == 0) {
 						$('#ConfigModal').modal('hide');
 						bootbox.alert(common.tips.success);
-						refreshMyTable();
+						refresh();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
 					}
@@ -575,7 +575,7 @@ var DeviceModule = function () {
 			$(".volumeRange").ionRangeSlider({
 				min: 0,
 				max: 100,
-				from: CurrentDevice.volume,
+				from: _device.volume,
 				type: 'single',
 				step: 5,
 				hasGrid: false
@@ -616,15 +616,15 @@ var DeviceModule = function () {
 				target = $(event.target).parent();
 				index = $(event.target).parent().attr('data-id');
 			}
-			currentItem = $('#DeviceTable').dataTable().fnGetData(index);
-			bootbox.confirm(common.tips.screen + currentItem.name, function(result) {
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.screen + _device.name, function(result) {
 				if (result == true) {
 					$.ajax({
 						type : 'GET',
-						url : myurls['device.screen'],
+						url : 'device!screen.action',
 						cache: false,
 						data : {
-							deviceid: currentItem.deviceid,
+							deviceid: _device.deviceid,
 						},
 						dataType : 'json',
 						contentType : 'application/json;charset=utf-8',
@@ -653,8 +653,7 @@ var DeviceModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
-			CurrentDeviceid = CurrentDevice.deviceid;
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
 			$('#ScreenPreview').html('');
 			$('#ScreenTable').dataTable()._fnAjaxUpdate();
 			$('#ScreenModal').modal();
@@ -667,11 +666,11 @@ var DeviceModule = function () {
 			'sDom' : 'rt',
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : myurls['device.screenlist'],
+			'sAjaxSource' : 'device!screenlist.action',
 			'aoColumns' : [ {'sTitle' : common.view.screentime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '80%' }, 
 							{'sTitle' : common.view.screen, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
 			'sPaginationType' : 'bootstrap',
-			'oLanguage' : DataTableLanguage,
+			'oLanguage' : PixData.tableLanguage,
 			'fnPreDrawCallback': function (oSettings) {
 				if ($('#ScreenContainer').length < 1) {
 					$('#ScreenTable').append('<div id="ScreenContainer"></div>');
@@ -715,7 +714,7 @@ var DeviceModule = function () {
 				});
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'deviceid','value':CurrentDeviceid });
+				aoData.push({'name':'deviceid','value':_device.deviceid });
 			},
 		});
 		$('#ScreenTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
@@ -735,14 +734,11 @@ var DeviceModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
-			CurrentDeviceid = CurrentDevice.deviceid;
-			
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
 			$('#DeviceVideoTable').dataTable()._fnAjaxUpdate();
 			$('#DeviceImageTable').dataTable()._fnAjaxUpdate();
 			$('#GridVideoTable').dataTable()._fnAjaxUpdate();
 			$('#GridImageTable').dataTable()._fnAjaxUpdate();
-			
 			$('#DeviceFileModal').modal();
 		});
 
@@ -753,7 +749,7 @@ var DeviceModule = function () {
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : myurls['devicefile.list'],
+			'sAjaxSource' : 'devicefile!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -762,7 +758,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
-			'oLanguage' : DataTableLanguage,
+			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(0)', nRow).html(aData.video.videoid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.video.thumbnail + '" width="40px"></img>');
@@ -778,7 +774,7 @@ var DeviceModule = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'deviceid','value':CurrentDeviceid },
+				aoData.push({'name':'deviceid','value':_device.deviceid },
 							{'name':'objtype','value':'1' });
 			} 
 		});
@@ -794,7 +790,7 @@ var DeviceModule = function () {
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : myurls['devicefile.list'],
+			'sAjaxSource' : 'devicefile!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -803,7 +799,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
-			'oLanguage' : DataTableLanguage,
+			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(0)', nRow).html(aData.image.imageid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.image.thumbnail + '" width="40px"></img>');
@@ -819,7 +815,7 @@ var DeviceModule = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'deviceid','value':CurrentDeviceid },
+				aoData.push({'name':'deviceid','value':_device.deviceid },
 							{'name':'objtype','value':'2' });
 			} 
 		});
@@ -835,7 +831,7 @@ var DeviceModule = function () {
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : myurls['devicefile.list'],
+			'sAjaxSource' : 'devicefile!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -844,7 +840,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
-			'oLanguage' : DataTableLanguage,
+			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.video.thumbnail + '" width="40px"></img>');
@@ -860,7 +856,7 @@ var DeviceModule = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'deviceid','value':CurrentDeviceid },
+				aoData.push({'name':'deviceid','value':_device.deviceid },
 							{'name':'objtype','value':'8' });
 			} 
 		});
@@ -876,7 +872,7 @@ var DeviceModule = function () {
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : myurls['devicefile.list'],
+			'sAjaxSource' : 'devicefile!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -885,7 +881,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
-			'oLanguage' : DataTableLanguage,
+			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.image.thumbnail + '" width="40px"></img>');
@@ -901,7 +897,7 @@ var DeviceModule = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'deviceid','value':CurrentDeviceid },
+				aoData.push({'name':'deviceid','value':_device.deviceid },
 							{'name':'objtype','value':'9' });
 			} 
 		});
@@ -931,8 +927,7 @@ var DeviceModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentDevice = $('#DeviceTable').dataTable().fnGetData(index);
-			CurrentDeviceid = CurrentDevice.deviceid;
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
 			MapType = 0;
 			if (MapSource) {
 				$('#GoogleMapModal').modal();
@@ -1152,16 +1147,17 @@ var DeviceModule = function () {
 			});
 		})
 
-		FormValidateOption.rules = {};
-		FormValidateOption.rules['text'] = {};
-		FormValidateOption.rules['text']['required'] = true;
-		FormValidateOption.rules['count'] = {};
-		FormValidateOption.rules['count']['required'] = true;
-		FormValidateOption.rules['count']['number'] = true;
-		FormValidateOption.submitHandler = function(form) {
+		var formHandler = new FormHandler($('#UTextForm'));
+		formHandler.validateOption.rules = {};
+		formHandler.validateOption.rules['text'] = {};
+		formHandler.validateOption.rules['text']['required'] = true;
+		formHandler.validateOption.rules['count'] = {};
+		formHandler.validateOption.rules['count']['required'] = true;
+		formHandler.validateOption.rules['count']['number'] = true;
+		formHandler.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',
-				url : myurls['device.utext'],
+				url : 'device!utext.action',
 				data : $('#UTextForm').serialize(),
 				success : function(data, status) {
 					$('#UTextModal').modal('hide');
@@ -1176,8 +1172,8 @@ var DeviceModule = function () {
 				}
 			});
 		};
-		$('#UTextForm').validate(FormValidateOption);
-		
+		$('#UTextForm').validate(formHandler.validateOption);
+
 		$('[type=submit]', $('#UTextModal')).on('click', function(event) {
 			if ($('#UTextForm').valid()) {
 				$('#UTextForm').submit();
@@ -1193,7 +1189,7 @@ var DeviceModule = function () {
 				if (result == true) {
 					$.ajax({
 						type : 'POST',
-						url : myurls['device.ucancel'],
+						url : 'device!ucancel.action',
 						cache: false,
 						data : {},
 						success : function(data, status) {

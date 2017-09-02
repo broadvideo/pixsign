@@ -52,6 +52,17 @@ var FormHandler = function (form) {
 			formdata[prefex + '.' + name] = obj[name];
 		}
 		this.form.loadJSON(formdata);
+
+		var checkboxes = this.form.find('input[type="checkbox"]');
+		$.each( checkboxes, function( index, checkbox ) {
+			if (formdata[$(checkbox).attr('name')] == 0) {
+				$(checkbox).removeAttr('checked');
+				$(checkbox).parent().removeClass('checked');
+			} else {
+				$(checkbox).attr('checked');
+				$(checkbox).parent().addClass('checked');
+			}
+		});
 	}
 	
 	init();
