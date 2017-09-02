@@ -1,6 +1,7 @@
 var CurBranchid;
 	
 function initBranchTree() {
+	/*
 	$.ajax({
 		type : 'POST',
 		url : 'branch!list.action',
@@ -53,7 +54,29 @@ function initBranchTree() {
 			createBranchTreeData(branches[i].children, treeData[i].children);
 		}
 	}
+	*/
 
+	$('#BranchTreeDiv').jstree('destroy');
+	$('#BranchTreeDiv').jstree({
+		'core' : {
+			'multiple' : false,
+			'data' : {
+				'url': function(node) {
+					return 'branch!listnode.action';
+				},
+				'data': function(node) {
+					return {
+						'id': node.id,
+					}
+				}
+			}
+		},
+		'plugins' : ['unique'],
+	});
+	$('#BranchTreeDiv').on('loaded.jstree', function() {
+		CurBranchid = $('#BranchTreeDiv').jstree(true).get_json('#')[0].id;
+		$('#BranchTreeDiv').jstree('select_node', CurBranchid);
+	});
 	$('#BranchTreeDiv').on('select_node.jstree', function(event, data) {
 		CurBranchid = data.instance.get_node(data.selected[0]).id;
 		if ($('#FolderTreeDiv').length > 0) {

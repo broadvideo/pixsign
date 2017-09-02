@@ -30,8 +30,8 @@
 											<button class="btn btn-sm blue pix-left2right"><spring:message code="pixsign.tips.right"/> <i class="fa fa-arrow-right"></i></button>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-3" id="LeftTreeDiv">
+									<div class="row" id="LeftTreeDiv">
+										<div class="col-md-3 branchtree">
 										</div>
 										<div class="col-md-9">
 											<table id="LeftTable" class="table table-striped table-bordered table-hover">
@@ -54,8 +54,8 @@
 											<button class="btn btn-sm green pix-right2left"><i class="fa fa-arrow-left"></i> <spring:message code="pixsign.tips.left"/></button>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-md-3" id="RightTreeDiv">
+									<div class="row" id="RightTreeDiv">
+										<div class="col-md-3 branchtree">
 										</div>
 										<div class="col-md-9">
 											<table id="RightTable" class="table table-striped table-bordered table-hover">
@@ -146,16 +146,26 @@
 								<a href="javascript:;" onClick="BranchModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button class="btn green pix-device"><spring:message code="pixsign.device"/> <i class="fa fa-desktop"></i></button>
+						<div class="portlet-body" id="BranchPortlet">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-9">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+										</div>
+										<div class="btn-group">
+											<button class="btn yellow pix-device"><spring:message code="pixsign.device"/> <i class="fa fa-desktop"></i></button>
+										</div>
+									</div>
+									<table id="BranchTable" class="table table-striped table-bordered table-hover tree">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="BranchTable" class="table table-striped table-bordered table-hover tree">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -174,8 +184,6 @@
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-treegrid/js/jquery.treegrid.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-treegrid/js/jquery.treegrid.bootstrap3.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->

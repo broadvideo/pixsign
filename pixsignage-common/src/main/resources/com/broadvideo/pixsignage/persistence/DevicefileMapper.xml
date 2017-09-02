@@ -47,8 +47,10 @@
   
   <select id="selectCount" resultType="Integer">
     select count(1) from devicefile
-    where objtype = #{objtype} 
-    and deviceid = #{deviceid}
+    where deviceid = #{deviceid}
+    <if test="objtype != null">
+      and objtype = #{objtype} 
+    </if>
     <if test="status != null">
       and status = #{status}
     </if>
@@ -56,8 +58,10 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select * from devicefile
-    where objtype = #{objtype} 
-    and deviceid = #{deviceid}
+    where deviceid = #{deviceid}
+    <if test="objtype != null">
+      and objtype = #{objtype} 
+    </if>
     <if test="status != null">
       and status = #{status}
     </if>
@@ -249,6 +253,7 @@
   <delete id="clearByDevice" >
     delete from devicefile
     where deviceid = #{deviceid} 
+    and period_diff(date_format(now(),'%Y%m%d'), date_format(updatetime, '%Y%m%d')) >0 ;
   </delete>
 
   <delete id="clearByMedia" >

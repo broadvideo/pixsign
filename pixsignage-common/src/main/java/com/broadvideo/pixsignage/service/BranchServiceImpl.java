@@ -31,6 +31,10 @@ public class BranchServiceImpl implements BranchService {
 		return branchMapper.selectRoot(orgid);
 	}
 
+	public List<Branch> selectChild(String parentid) {
+		return branchMapper.selectChild(parentid);
+	}
+
 	@Transactional
 	public void addDevices(Branch branch, String[] deviceids) {
 		for (int i = 0; i < deviceids.length; i++) {

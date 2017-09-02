@@ -42,6 +42,14 @@ var oTable = $('#MyTable').dataTable({
 			templatehtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span></h6>';
 		} else if (aData.ratio == 2) {
 			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
+		} else if (aData.ratio == 3) {
+			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_3 + '</span></h6>';
+		} else if (aData.ratio == 4) {
+			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_4 + '</span></h6>';
+		} else if (aData.ratio == 5) {
+			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_5 + '</span></h6>';
+		} else if (aData.ratio == 6) {
+			templatehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_6 + '</span></h6>';
 		}
 
 		templatehtml += '<a href="javascript:;" templateid="' + aData.templateid + '" class="fancybox">';

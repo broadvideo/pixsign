@@ -15,6 +15,8 @@ public class Image {
 
 	private String name;
 
+	private String oname;
+
 	private String uuid;
 
 	private Integer width;
@@ -85,6 +87,14 @@ public class Image {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getOname() {
+		return oname;
+	}
+
+	public void setOname(String oname) {
+		this.oname = oname;
 	}
 
 	public String getUuid() {

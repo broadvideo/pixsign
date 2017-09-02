@@ -43,14 +43,13 @@
   </select>
 
   <select id="statFilesizeSum" resultMap="BaseResultMap" >
-    select sum(df.size) as value, 
-    date(df.updatetime) as label, 
-    DATEDIFF(DATE(NOW()),DATE(df.updatetime)) as sequence
-    from devicefile df, device d
+    select sum(dfh.size) as value, 
+    date(dfh.createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(dfh.createtime)) as sequence
+    from devicefilehis dfh, device d
     where d.orgid = #{orgid} 
-    and df.progress='100' 
-    and df.deviceid=d.deviceid
-    group by date(df.updatetime)
+    and dfh.deviceid=d.deviceid
+    group by date(dfh.createtime)
     having sequence &lt; 30
     order by label
   </select>

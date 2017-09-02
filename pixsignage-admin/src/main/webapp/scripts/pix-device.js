@@ -17,7 +17,7 @@ var myurls = {
 function refreshMyTable() {
 	$('#DeviceTable').dataTable()._fnAjaxUpdate();
 	$('#UnDeviceTable').dataTable()._fnAjaxUpdate();
-}			
+}
 
 var CurrentDevice;
 var CurrentDeviceid = 0;
@@ -105,7 +105,7 @@ function initMyTable() {
 			aoData.push({'name':'status','value':'1' });
 		}
 	});
-
+	$('#DeviceTable_wrapper').addClass('form-inline');
 	$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 	$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	$('#DeviceTable_wrapper .dataTables_length select').select2();
@@ -141,7 +141,7 @@ function initMyTable() {
 			aoData.push({'name':'status','value':'0' });
 		}
 	});
-
+	$('#UnDeviceTable_wrapper').addClass('form-inline');
 	$('#UnDeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small'); 
 	$('#UnDeviceTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#UnDeviceTable_wrapper .dataTables_length select').select2(); 
@@ -156,6 +156,7 @@ function initMyTable() {
 		}
 		sOut += '</tr>';
 		sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
+		sOut += '<tr><td>MAC:</td><td>'+aData.mac + '</td></tr>';
 		sOut += '<tr><td>' + common.view.storage + ':</td><td>' + transferIntToByte(aData.storageused) + '/' + transferIntToByte(aData.storageavail) + '</td></tr>';
 		sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 		sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
@@ -199,11 +200,11 @@ function initMyTable() {
 		bootbox.confirm(common.tips.unbind + currentItem.name, function(result) {
 			if (result == true) {
 				$.ajax({
-					type : 'POST',
+					type : 'GET',
 					url : myurls['device.delete'],
 					cache: false,
 					data : {
-						'device.deviceid': currentItem['deviceid']
+						deviceid: currentItem.deviceid,
 					},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
@@ -387,6 +388,7 @@ function initMyTable() {
 function initMyEditModal() {
 	var currentEditBranchTreeData = [];
 	var currentEditBranchid = 0;
+	/*
 	$.ajax({
 		type : 'POST',
 		url : 'branch!list.action',
@@ -428,7 +430,29 @@ function initMyEditModal() {
 			$('#EditFormBranchTree').jstree('select_node', currentEditBranchid);
 		});
 	}
+	*/
 
+	$('#EditFormBranchTree').jstree('destroy');
+	$('#EditFormBranchTree').jstree({
+		'core' : {
+			'multiple' : false,
+			'data' : {
+				'url': function(node) {
+					return 'branch!listnode.action';
+				},
+				'data': function(node) {
+					return {
+						'id': node.id,
+					}
+				}
+			}
+		},
+		'plugins' : ['unique'],
+	});
+	$('#EditFormBranchTree').on('loaded.jstree', function() {
+		$('#EditFormBranchTree').jstree('select_node', currentEditBranchid);
+	});
+	
 	$.ajax({
 		type : 'GET',
 		url : 'classroom!list.action',
@@ -469,7 +493,9 @@ function initMyEditModal() {
 	FormValidateOption.rules['device.name']['required'] = true;
 	FormValidateOption.rules['device.name']['minlength'] = 2;
 	FormValidateOption.submitHandler = function(form) {
-		$('#MyEditForm input[name="device.branchid"]').attr('value', $("#EditFormBranchTree").jstree('get_selected', false)[0]);
+		if ($("#EditFormBranchTree").jstree('get_selected', false).length > 0) {
+			$('#MyEditForm input[name="device.branchid"]').attr('value', $("#EditFormBranchTree").jstree('get_selected', false)[0]);
+		}
 		if ($('#ExternalSelect').select2('data') != null) {
 			$('#MyEditForm input[name="device.externalid"]').attr('value', $('#ExternalSelect').select2('data').id);
 			$('#MyEditForm input[name="device.externalname"]').attr('value', $('#ExternalSelect').select2('data').text);
@@ -514,7 +540,9 @@ function initMyEditModal() {
 		$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditForm').attr('action', myurls['device.update']);
 		currentEditBranchid = CurrentDevice.branchid;
-		createEditBranchTree(currentEditBranchTreeData);
+		$('#EditFormBranchTree').jstree('deselect_all', true);
+		$('#EditFormBranchTree').jstree('select_node', CurrentDevice.branchid);
+		//createEditBranchTree(currentEditBranchTreeData);
 		$("#ExternalSelect").select2('val', CurrentDevice.externalid);
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
@@ -535,7 +563,9 @@ function initMyEditModal() {
 		$('#MyEditForm').attr('action', myurls['device.update']);
 		$('#TagSelect').select2('val', $(CurrentDevice.tags.split(",")));
 		currentEditBranchid = CurrentDevice.branchid;
-		createEditBranchTree(currentEditBranchTreeData);
+		$('#EditFormBranchTree').jstree('deselect_all', true);
+		$('#EditFormBranchTree').jstree('select_node', CurrentDevice.branchid);
+		//createEditBranchTree(currentEditBranchTreeData);
 		//$("#ExternalSelect").select2('val', CurrentDevice.externalid);
 		$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 		$('#MyEditModal').modal();
@@ -832,6 +862,7 @@ function initDeviceFileModal() {
 						{'name':'objtype','value':'1' });
 		} 
 	});
+	$('#DeviceVideoTable_wrapper').addClass('form-inline');
 	$('#DeviceVideoTable_wrapper .dataTables_filter input').addClass('form-control input-medium'); 
 	$('#DeviceVideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 	$('#DeviceVideoTable').css('width', '100%').css('table-layout', 'fixed');

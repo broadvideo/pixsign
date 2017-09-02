@@ -110,11 +110,14 @@ function initTab2() {
 function initData2() {
 	$('.form-group').removeClass('has-error');
 	$('.help-block').remove();
-	if (CurrentTemplet.width > CurrentTemplet.height) {
+	if (CurrentTemplet.ratio == 1 || CurrentTemplet.ratio == 3 || CurrentTemplet.ratio == 5) {
 		$('#LayoutCol1').attr('class', 'col-md-7 col-sm-7');
 		$('#LayoutCol2').attr('class', 'col-md-5 col-sm-5');
-	} else {
+	} else if (CurrentTemplet.ratio == 2 || CurrentTemplet.ratio == 4) {
 		$('#LayoutCol1').attr('class', 'col-md-5 col-sm-5');
+		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
+	} else if (CurrentTemplet.ratio == 6) {
+		$('#LayoutCol1').attr('class', 'col-md-2 col-sm-2');
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
 	$('.touch-ctrl').css('display', TouchCtrl?'':'none');

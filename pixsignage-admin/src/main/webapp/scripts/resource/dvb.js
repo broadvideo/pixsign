@@ -38,6 +38,7 @@ var DVBModule = function () {
 				aoData.push({'name':'branchid','value':DVBTree.branchid });
 			}
 		});
+		$('#DVBTable_wrapper').addClass('form-inline');
 		$('#DVBTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#DVBTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#DVBTable_wrapper .dataTables_length select').select2();

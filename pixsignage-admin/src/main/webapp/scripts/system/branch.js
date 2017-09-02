@@ -1,15 +1,11 @@
 var BranchModule = function () {
+	var _parentid = -1;
 	var _branch = {};
+	var BranchTree;
 	var TreeData = [];
-	var Columns = [
-		{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-		{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
-		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
-		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
-		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }
-	];
 
 	var init = function () {
+		initBranchTree();
 		initBranchTable();
 		initBranchEvent();
 		initBranchEditModal();
@@ -17,66 +13,68 @@ var BranchModule = function () {
 	};
 
 	var refresh = function () {
-		$.ajax({
-			type : 'POST',
-			url : 'branch!list.action',
-			data : {},
-			success : function(data, status) {
-				if (data.errorcode == 0) {
-					tbodyhtml = '';
-					TreeData = [];
-					generateTreeHtml(data.aaData);
-					$('#BranchTable tbody').html(tbodyhtml);
-					$('.tree').treegrid({
-						expanderExpandedClass: 'glyphicon glyphicon-minus',
-						expanderCollapsedClass: 'glyphicon glyphicon-plus'
-					});
-				} else {
-					bootbox.alert(common.tips.error + data.errormsg);
+		$('#BranchTable').dataTable()._fnAjaxUpdate();
+		$('#BranchPortlet .branchtree').jstree(true).refresh_node(_parentid);
+	};
+	
+	var initBranchTree = function () {
+		BranchTree = $('#BranchPortlet .branchtree');
+		BranchTree.jstree('destroy');
+		BranchTree.jstree({
+			'core' : {
+				'multiple' : false,
+				'data' : {
+					'url': function(node) {
+						return 'branch!listnode.action';
+					},
+					'data': function(node) {
+						return {
+							'id': node.id,
+						}
+					}
 				}
 			},
-			error : function() {
-				console.log('failue');
-			}
+			'plugins' : ['unique'],
 		});
-		
-		function generateTreeHtml(treedata) {
-			for (var i=0; i<treedata.length; i++) {
-				TreeData.push(treedata[i]);
-				if (tbodyhtml == '') {
-					tbodyhtml += '<tr class="odd treegrid-' + treedata[i]['branchid'] + '">';
-				} else {
-					tbodyhtml += '<tr class="odd treegrid-' + treedata[i]['branchid'] + ' treegrid-parent-' + treedata[i]['parentid'] + '">';
-				}
-				for (var j=0; j<Columns.length-3; j++) {
-					tbodyhtml += '<td>' + eval('treedata[i].' + Columns[j]['mData']) + '</td>';
-				}
-
-				tbodyhtml += '<td>';
-				if (treedata[i].parentid == 0 || treedata[i].parent.parentid == 0 || treedata[i].parent.parent.parentid == 0) {
-					tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (TreeData.length-1) + '" class="btn default btn-xs blue pix-add"><i class="fa fa-plus"></i> ' + common.view.add + '</a>';
-				}
-				tbodyhtml += '</td><td>'
-				tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (TreeData.length-1) + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-				tbodyhtml += '</td><td>'
-				if (treedata[i].parentid != 0 && treedata[i].children.length == 0) {
-					tbodyhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + (TreeData.length-1) + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-				}
-				tbodyhtml += '</td></tr>'
-				
-				generateTreeHtml(treedata[i].children);
-			}		
-		}
+		BranchTree.on('loaded.jstree', function() {
+			_parentid = BranchTree.jstree(true).get_json('#')[0].id;
+			BranchTree.jstree('select_node', _parentid);
+			refresh();
+		});
+		BranchTree.on('select_node.jstree', function(event, data) {
+			_parentid = data.instance.get_node(data.selected[0]).id;
+			refresh();
+		});
 	};
 	
 	var initBranchTable = function () {
-		var theadhtml = '<tr role="row">';
-		for (var i=0; i<Columns.length; i++) {
-			theadhtml += '<th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1">' + Columns[i]['sTitle'] + '</th>';
-		}
-		theadhtml += '</tr>';
-		$('#BranchTable thead').html(theadhtml);
-		refresh();
+		$('#BranchTable').dataTable({
+			'sDom' : 'rt',
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'branch!list.action',
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+			        		{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
+			        		{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
+			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
+			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }],
+			'iDisplayLength' : 10,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				if (aData.childcount == 0) {
+					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+				} else {
+					$('td:eq(4)', nRow).html('');
+				}
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'parentid','value':_parentid });
+			}
+		});
+		$('#BranchTable').css('width', '100%').css('table-layout', 'fixed');
 	};
 
 	var initBranchEvent = function () {
@@ -85,7 +83,7 @@ var BranchModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			_branch = TreeData[index];
+			_branch = $('#BranchTable').dataTable().fnGetData(index);
 			bootbox.confirm(common.tips.remove + _branch.name, function(result) {
 				if (result == true) {
 					$.ajax({
@@ -108,7 +106,6 @@ var BranchModule = function () {
 					});				
 				}
 			 });
-			
 		});
 	};
 
@@ -169,14 +166,14 @@ var BranchModule = function () {
 			}
 		});
 		
-		$('#BranchTable').on('click', '.pix-add', function(event) {
+		$('body').on('click', '.pix-add', function(event) {
 			var index = $(event.target).attr('data-id');
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
 			formHandler.reset();
 			$('#BranchEditForm').attr('action', 'branch!add.action');
-			$('#BranchEditForm input[name="branch.parentid"]').attr('value', TreeData[index]['branchid']);
+			$('#BranchEditForm input[name="branch.parentid"]').attr('value', _parentid);
 			$('#BranchEditModal').modal();
 		});
 
@@ -185,7 +182,7 @@ var BranchModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			_branch = TreeData[index];
+			_branch = $('#BranchTable').dataTable().fnGetData(index);
 			formHandler.setdata('branch', _branch);
 			$('#BranchEditForm').attr('action', 'branch!update.action');
 			$('#BranchEditModal').modal();
@@ -193,6 +190,8 @@ var BranchModule = function () {
 	};
 
 	var initDeviceModal = function () {
+		var LeftTree = $('#LeftTreeDiv').find('.branchtree');
+		var RightTree = $('#RightTreeDiv').find('.branchtree');
 		var LeftBranchid = null;
 		var RightBranchid = null;
 		var LeftDevices = [];
@@ -210,72 +209,59 @@ var BranchModule = function () {
 		});
 		
 		function initBranchTreeData() {
-			$.ajax({
-				type : 'POST',
-				url : 'branch!list.action',
-				data : {},
-				success : function(data, status) {
-					if (data.errorcode == 0) {
-						var branches = data.aaData;
-						LeftBranchid = branches[0].branchid;
-						RightBranchid = branches[0].branchid;
-						var branchTreeDivData = [];
-						createBranchTreeData(branches, branchTreeDivData);
-						
-						$('#LeftTreeDiv').jstree('destroy');
-						$('#LeftTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#LeftTreeDiv').on('loaded.jstree', function() {
-							$('#LeftTreeDiv').jstree('select_node', LeftBranchid);
-						});
-						$('#LeftTreeDiv').on('select_node.jstree', function(event, data) {
-							LeftBranchid = data.instance.get_node(data.selected[0]).id;
-							LeftDevices = [];
-							$('#LeftTable').dataTable()._fnAjaxUpdate();
-						});
-						
-						$('#RightTreeDiv').jstree('destroy');
-						$('#RightTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#RightTreeDiv').on('loaded.jstree', function() {
-							$('#RightTreeDiv').jstree('select_node', RightBranchid);
-						});
-						$('#RightTreeDiv').on('select_node.jstree', function(event, data) {
-							RightBranchid = data.instance.get_node(data.selected[0]).id;
-							RightDevices = [];
-							$('#RightTable').dataTable()._fnAjaxUpdate();
-						});
-					} else {
-						bootbox.alert(common.tips.error + data.errormsg);
+			LeftTree.jstree('destroy');
+			LeftTree.jstree({
+				'core' : {
+					'multiple' : false,
+					'data' : {
+						'url': function(node) {
+							return 'branch!listnode.action';
+						},
+						'data': function(node) {
+							return {
+								'id': node.id,
+							}
+						}
 					}
 				},
-				error : function() {
-					console.log('failue');
-				}
+				'plugins' : ['unique'],
+			});
+			LeftTree.on('loaded.jstree', function() {
+				LeftBranchid = LeftTree.jstree(true).get_json('#')[0].id;
+				LeftTree.jstree('select_node', LeftBranchid);
+			});
+			LeftTree.on('select_node.jstree', function(event, data) {
+				LeftBranchid = data.instance.get_node(data.selected[0]).id;
+				LeftDevices = [];
+				$('#LeftTable').dataTable()._fnAjaxUpdate();
 			});
 
-		}
-		function createBranchTreeData(branches, treeData) {
-			for (var i=0; i<branches.length; i++) {
-				treeData[i] = {};
-				treeData[i].id = branches[i].branchid;
-				treeData[i].text = branches[i].name;
-				treeData[i].state = {
-					opened: true,
-				}
-				treeData[i].children = [];
-				createBranchTreeData(branches[i].children, treeData[i].children);
-			}
+			RightTree.jstree('destroy');
+			RightTree.jstree({
+				'core' : {
+					'multiple' : false,
+					'data' : {
+						'url': function(node) {
+							return 'branch!listnode.action';
+						},
+						'data': function(node) {
+							return {
+								'id': node.id,
+							}
+						}
+					}
+				},
+				'plugins' : ['unique'],
+			});
+			RightTree.on('loaded.jstree', function() {
+				RightBranchid = RightTree.jstree(true).get_json('#')[0].id;
+				RightTree.jstree('select_node', RightBranchid);
+			});
+			RightTree.on('select_node.jstree', function(event, data) {
+				RightBranchid = data.instance.get_node(data.selected[0]).id;
+				RightDevices = [];
+				$('#RightTable').dataTable()._fnAjaxUpdate();
+			});
 		}
 
 		$('#LeftTable').dataTable({

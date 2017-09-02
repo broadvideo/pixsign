@@ -79,6 +79,7 @@
 										<option value="3"><spring:message code="pixsign.prop.ratio_3"/></option>
 										<option value="4"><spring:message code="pixsign.prop.ratio_4"/></option>
 										<option value="5"><spring:message code="pixsign.prop.ratio_5"/></option>
+										<option value="6"><spring:message code="pixsign.prop.ratio_6"/></option>
 									</select>
 								</div>
 							</div>

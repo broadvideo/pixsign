@@ -71,6 +71,7 @@ public class ImageAction extends BaseDatatableAction {
 					image.setBranchid(Integer.parseInt(branchids[i]));
 					image.setFolderid(Integer.parseInt(folderids[i]));
 					image.setName(names[i]);
+					image.setOname(mymediaFileName[i]);
 					image.setFilename(mymediaFileName[i]);
 					image.setStatus("9");
 					image.setObjtype("0");

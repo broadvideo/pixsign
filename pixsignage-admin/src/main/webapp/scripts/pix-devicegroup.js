@@ -53,7 +53,7 @@ function initMyTable() {
 			aoData.push({'name':'type','value':'1' });
 		}
 	});
-
+	$('#MyTable_wrapper').addClass('form-inline');
 	$('#MyTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').addClass('form-control input-small');
 	$('#MyTable_wrapper .dataTables_length select').select2();

@@ -242,9 +242,11 @@ public class BundleAction extends BaseDatatableAction {
 			JSONArray scheduleJsonArray = new JSONArray();
 			bundleScheduleJson.put("bundle_schedules", scheduleJsonArray);
 			JSONObject scheduleJson = new JSONObject();
-			scheduleJson.put("bundle_id", Integer.parseInt(bundleid));
 			scheduleJson.put("playmode", "daily");
 			scheduleJson.put("start_time", "00:00:00");
+			JSONArray bundleArray = new JSONArray();
+			bundleArray.put(Integer.parseInt(bundleid));
+			scheduleJson.put("bundles", bundleArray);
 			scheduleJsonArray.put(scheduleJson);
 
 			File bundleFile = new File(exportDir, "bundle.jsf");

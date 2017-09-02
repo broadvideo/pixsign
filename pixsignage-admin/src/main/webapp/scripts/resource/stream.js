@@ -37,6 +37,7 @@ var StreamModule = function () {
 				aoData.push({'name':'branchid','value':StreamTree.branchid });
 			}
 		});
+		$('#StreamTable_wrapper').addClass('form-inline');
 		$('#StreamTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#StreamTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#StreamTable_wrapper .dataTables_length select').select2();

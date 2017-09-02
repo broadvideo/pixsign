@@ -26,6 +26,8 @@ public class Branch {
 
 	private Integer createstaffid;
 
+	private Integer childcount;
+
 	private Branch parent;
 
 	private List<Branch> children;
@@ -112,6 +114,14 @@ public class Branch {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Integer getChildcount() {
+		return childcount;
+	}
+
+	public void setChildcount(Integer childcount) {
+		this.childcount = childcount;
 	}
 
 	public Branch getParent() {

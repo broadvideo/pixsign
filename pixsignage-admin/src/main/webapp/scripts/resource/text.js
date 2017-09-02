@@ -37,6 +37,7 @@ var TextModule = function () {
 				aoData.push({'name':'branchid','value':TextTree.branchid });
 			}
 		});
+		$('#TextTable_wrapper').addClass('form-inline');
 		$('#TextTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#TextTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#TextTable_wrapper .dataTables_length select').select2();

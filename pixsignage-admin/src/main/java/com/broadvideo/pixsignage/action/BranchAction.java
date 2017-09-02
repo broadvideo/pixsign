@@ -1,8 +1,13 @@
 package com.broadvideo.pixsignage.action;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,9 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.service.BranchService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -26,9 +34,12 @@ public class BranchAction extends BaseDatatableAction {
 
 	public String doList() {
 		try {
+			String parentid = getParameter("parentid");
 			List<Object> aaData = new ArrayList<Object>();
-			Branch branch = branchService.selectByPrimaryKey("" + getLoginStaff().getBranchid());
-			aaData.add(branch);
+			List<Branch> branches = branchService.selectChild(parentid);
+			for (int i = 0; i < branches.size(); i++) {
+				aaData.add(branches.get(i));
+			}
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -37,6 +48,46 @@ public class BranchAction extends BaseDatatableAction {
 			setErrormsg(ex.getMessage());
 			return ERROR;
 		}
+	}
+
+	public void doListNode() throws IOException {
+		String id = getParameter("id");
+		JSONArray branchArray = new JSONArray();
+		if (id.equals("#")) {
+			Branch branch = branchService.selectByPrimaryKey("" + getLoginStaff().getBranchid());
+			JSONObject branchJson = new JSONObject();
+			branchJson.put("id", branch.getBranchid());
+			branchJson.put("parent", "#");
+			branchJson.put("text", branch.getName());
+			if (branch.getChildcount().intValue() == 0) {
+				branchJson.put("children", false);
+			} else {
+				branchJson.put("children", true);
+			}
+			branchArray.add(branchJson);
+		} else {
+			List<Branch> branches = branchService.selectChild(id);
+			for (Branch branch : branches) {
+				JSONObject branchJson = new JSONObject();
+				branchJson.put("id", branch.getBranchid());
+				branchJson.put("parent", id);
+				branchJson.put("text", branch.getName());
+				if (branch.getChildcount().intValue() == 0) {
+					branchJson.put("children", false);
+				} else {
+					branchJson.put("children", true);
+				}
+				branchArray.add(branchJson);
+			}
+		}
+
+		HttpServletResponse response = ServletActionContext.getResponse();
+		response.setContentType("application/json;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println(branchArray.toString());
+		out.flush();
+		out.close();
 	}
 
 	public String doAdd() {

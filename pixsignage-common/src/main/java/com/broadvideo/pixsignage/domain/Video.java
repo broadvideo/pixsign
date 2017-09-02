@@ -18,6 +18,8 @@ public class Video {
 
 	private String name;
 
+	private String oname;
+
 	private String uuid;
 
 	private String type;
@@ -94,6 +96,14 @@ public class Video {
 
 	public void setName(String name) {
 		this.name = name == null ? null : name.trim();
+	}
+
+	public String getOname() {
+		return oname;
+	}
+
+	public void setOname(String oname) {
+		this.oname = oname;
 	}
 
 	public String getUuid() {

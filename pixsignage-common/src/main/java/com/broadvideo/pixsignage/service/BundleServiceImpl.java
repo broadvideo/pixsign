@@ -135,6 +135,10 @@ public class BundleServiceImpl implements BundleService {
 				// 16:3
 				bundle.setWidth(1920);
 				bundle.setHeight(360);
+			} else if (bundle.getRatio().equals("6")) {
+				// 3:16
+				bundle.setWidth(360);
+				bundle.setHeight(1920);
 			}
 			bundleMapper.insertSelective(bundle);
 
@@ -368,6 +372,10 @@ public class BundleServiceImpl implements BundleService {
 				// 16:3
 				bundle.setWidth(1920);
 				bundle.setHeight(360);
+			} else if (bundle.getRatio().equals("6")) {
+				// 3:16
+				bundle.setWidth(360);
+				bundle.setHeight(1920);
 			}
 			bundleMapper.insertSelective(bundle);
 
@@ -1134,6 +1142,7 @@ public class BundleServiceImpl implements BundleService {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("name", video.getName());
+							videoJson.put("oname", video.getOname());
 							videoJson.put("url",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
@@ -1157,6 +1166,7 @@ public class BundleServiceImpl implements BundleService {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
 							imageJson.put("name", image.getName());
+							imageJson.put("oname", image.getOname());
 							imageJson.put("url",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
 							imageJson.put("file", image.getFilename());
@@ -1267,6 +1277,7 @@ public class BundleServiceImpl implements BundleService {
 				JSONObject videoJson = new JSONObject();
 				videoJson.put("id", video.getRelateid());
 				videoJson.put("name", video.getRelate().getName());
+				videoJson.put("oname", video.getRelate().getOname());
 				videoJson.put("url",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getFilepath());
 				videoJson.put("file", video.getRelate().getFilename());
@@ -1284,6 +1295,7 @@ public class BundleServiceImpl implements BundleService {
 				JSONObject imageJson = new JSONObject();
 				imageJson.put("id", image.getRelateid());
 				imageJson.put("name", image.getRelate().getName());
+				imageJson.put("oname", image.getRelate().getOname());
 				imageJson.put("url",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getFilepath());
 				imageJson.put("file", image.getRelate().getFilename());
