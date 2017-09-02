@@ -16,6 +16,9 @@ public interface StudentMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
+	List<Student> selectSchoolclassStudents(@Param(value = "schoolclassid") Integer classid,
+			@Param(value = "orgid") Integer orgid);
+
 	int deleteByPrimaryKey(@Param(value = "studentid") Integer studentid, @Param("orgid") Integer orgid);
 
 	// int insert(Student record);

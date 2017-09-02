@@ -1,6 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -123,24 +123,25 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 
 
 		String shorttime = DateUtil.getDateStr(classTime, "HH:mm");
-		return this.courseScheduleMapper.selectCurCourseschedule(schemeId, classroomId, getWorkday(classTime),
+		return this.courseScheduleMapper.selectCurCourseschedule(schemeId, classroomId, DateUtil.getWorkday(classTime),
 				shorttime, orgId);
 	}
 
-	private static int getWorkday(Date date) {
+	@Override
+	public List<Courseschedule> getClassroomCourseSchedules(Integer classroomId, Integer workday,
+			Integer scheduleSchemeId, Integer orgId) {
+		List<Courseschedule> coursescheudles = this.getClassroomCourseSchedules(classroomId, scheduleSchemeId, orgId);
+		List<Courseschedule> filterData = new ArrayList<Courseschedule>();
+		for (Courseschedule courseschedule : coursescheudles) {
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		int workday = calendar.get(Calendar.DAY_OF_WEEK);
-		if (workday == 1) {
-			workday = 7;
-		} else {
-			workday = workday - 1;
+			if (courseschedule.getWorkday().equals(workday)) {
+				filterData.add(courseschedule);
+			}
+
 		}
-
-		return workday;
-
+		return filterData;
 	}
+
 
 
 }

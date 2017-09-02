@@ -23,6 +23,10 @@ public interface AttendanceMapper {
 			@Param(value = "classroomid") Integer classroomid, @Param(value = "search") String search,
 			@Param(value = "start") Integer start, @Param(value = "length") Integer length);
 
+	List<Attendance> selectAttendances(@Param("attendanceeventid") Integer attendanceeventid,
+			@Param("classroomid") Integer classroomid,
+			@Param("orgid") Integer orgid);
+
     int updateByPrimaryKeySelective(Attendance record);
 
     int updateByPrimaryKey(Attendance record);

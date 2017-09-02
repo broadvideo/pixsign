@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -131,6 +132,12 @@ public class StudentServiceImpl implements StudentService {
 			logger.error("student.id={} avatar is null", student.getStudentid());
 			return null;
 		}
+	}
+
+	@Override
+	public List<Student> getSchoolclassStudents(Integer schoolclassid, Integer orgid) {
+
+		return this.studentMapper.selectSchoolclassStudents(schoolclassid, orgid);
 	}
 
 	public static void main(String[] args) {

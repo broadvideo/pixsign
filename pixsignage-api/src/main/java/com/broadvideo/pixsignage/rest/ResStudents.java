@@ -67,26 +67,26 @@ public class ResStudents {
 
 		}
 		try {
-		JSONObject requestJson = new JSONObject(request);
-		String hardId = requestJson.getString("hard_id");
-		Integer studentId = requestJson.getInt("student_id");
-		Integer classroomId = requestJson.getInt("classroom_id");
-		Integer courseScheduleId = requestJson.getInt("course_schedule_id");
-		Long eventTimeTs = requestJson.getLong("event_time");
-
+			JSONObject requestJson = new JSONObject(request);
+			String hardId = requestJson.getString("hard_id");
+			Integer studentId = requestJson.getInt("student_id");
+			Integer classroomId = requestJson.getInt("classroom_id");
+			Integer courseScheduleId = requestJson.getInt("course_schedule_id");
+			Integer eventId = requestJson.getInt("event_id");
+			Long eventTimeTs = requestJson.getLong("event_time");
 			Student student = this.studentMapper.selectByPrimaryKey(studentId + "");
-		Attendance attendancelog = new Attendance();
-		attendancelog.setClassroomid(classroomId);
-		attendancelog.setCoursescheduleid(courseScheduleId);
+			Attendance attendancelog = new Attendance();
+			attendancelog.setClassroomid(classroomId);
+			attendancelog.setCoursescheduleid(courseScheduleId);
 			Date curDate = new Date();
 			attendancelog.setEventtime(curDate);
-		attendancelog.setStudentid(studentId);
+			attendancelog.setStudentid(studentId);
+			attendancelog.setAttendanceeventid(eventId);
 			attendancelog.setCreatetime(curDate);
 			Courseschedulescheme scheme = courseScheduleSchemeService.getEnableScheme(student.getOrgid());
 			if (scheme != null) {
 				Courseschedule courseSchedule = this.courseScheduleService.getCurCourseSchedule(
-						scheme.getCoursescheduleschemeid(),
-						classroomId, curDate, student.getOrgid());
+						scheme.getCoursescheduleschemeid(), classroomId, curDate, student.getOrgid());
 				if (courseSchedule != null) {
 					attendancelog.setCoursescheduleid(courseSchedule.getCoursescheduleid());
 				}
@@ -95,7 +95,7 @@ public class ResStudents {
 
 			attendancelog.setSchoolclassid(student.getSchoolclassid());
 			attendancelog.setOrgid(student.getOrgid());
-		this.attendancelogMapper.insertSelective(attendancelog);
+			this.attendancelogMapper.insertSelective(attendancelog);
 
 			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success");
 		} catch (Exception e) {
@@ -115,14 +115,15 @@ public class ResStudents {
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "studentId  is empty.");
 		}
 		try {
-			try{
-		        Student student=this.studentMapper.selectByPrimaryKey(studentId+"");
+			try {
+				Student student = this.studentMapper.selectByPrimaryKey(studentId + "");
 				String url = "http://school.wkmip.cn/mobile/interface/note?school_id=1&student_no="
 						+ student.getStudentno() + "&student_idcard=";
 				logger.info("get messages from wkmip: {}", url);
-				RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
-						.setConnectionRequestTimeout(30000).build();
-				CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+				RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000)
+						.setConnectTimeout(5000).setConnectionRequestTimeout(30000).build();
+				CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig)
+						.build();
 				HttpGet httpget = new HttpGet(url);
 				CloseableHttpResponse response = httpclient.execute(httpget);
 				int status = response.getStatusLine().getStatusCode();
@@ -141,7 +142,6 @@ public class ResStudents {
 				return Base64.encode("[]".getBytes());
 			}
 
-
 		} catch (Exception e) {
 
 			logger.error("getMessages exception.", e);
@@ -158,11 +158,10 @@ public class ResStudents {
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "studentId or request body is empty.");
 		}
 
-
 		try {
-			Student student=this.studentMapper.selectByPrimaryKey(studentId.toString());
-			if(student==null){
-				return handleResult(ApiRetCodeEnum.INVALID_ARGS, String.format("studentId=%s not found.",studentId));
+			Student student = this.studentMapper.selectByPrimaryKey(studentId.toString());
+			if (student == null) {
+				return handleResult(ApiRetCodeEnum.INVALID_ARGS, String.format("studentId=%s not found.", studentId));
 			}
 			JSONObject requestBodyJson = new JSONObject(request);
 			studentId = requestBodyJson.getInt("student_id");
@@ -177,19 +176,19 @@ public class ResStudents {
 					.setConnectionRequestTimeout(30000).build();
 			CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
 			HttpPost httppost = new HttpPost(url);
-			List<BasicNameValuePair>  nameValuePairs=new ArrayList<BasicNameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("school_id","1"));
-			nameValuePairs.add(new BasicNameValuePair("student_no",student.getStudentno()));
+			List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("school_id", "1"));
+			nameValuePairs.add(new BasicNameValuePair("student_no", student.getStudentno()));
 			if (StringUtils.isNotBlank(audio)) {
-			nameValuePairs.add(new BasicNameValuePair("mp3", audio));
+				nameValuePairs.add(new BasicNameValuePair("mp3", audio));
 			}
 			if (StringUtils.isNotBlank(image)) {
-			nameValuePairs.add(new BasicNameValuePair("img",image));
+				nameValuePairs.add(new BasicNameValuePair("img", image));
 			}
 			if (StringUtils.isNotBlank(text)) {
-			nameValuePairs.add(new BasicNameValuePair("info",text));
+				nameValuePairs.add(new BasicNameValuePair("info", text));
 			}
-			UrlEncodedFormEntity entity=new UrlEncodedFormEntity(nameValuePairs);
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
 			httppost.setEntity(entity);
 			CloseableHttpResponse response = httpclient.execute(httppost);
 			int status = response.getStatusLine().getStatusCode();
@@ -212,10 +211,8 @@ public class ResStudents {
 
 		}
 
-	
+	}
 
-
-}
 	private String handleResult(int code, String message) {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("retcode", code);
@@ -232,6 +229,5 @@ public class ResStudents {
 		logger.info("Student Service response: {}", responseJson.toString());
 		return responseJson.toString();
 	}
-
 
 }

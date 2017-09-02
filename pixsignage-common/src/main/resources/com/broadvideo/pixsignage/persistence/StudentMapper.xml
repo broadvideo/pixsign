@@ -13,16 +13,14 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
-  
   <sql id="Base_Column_List" >
     studentid, orgid, schoolclassid, studentno, name, hardid, avatar, createtime, createstaffid
   </sql>
-  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from student
-    where studentid = '${studentid}'
+    where studentid =${studentid}
   </select>
   
   <select id="selectCount" resultType="Integer">
@@ -67,7 +65,12 @@
        and  hardid = #{hardid}
       </if>
   </select>
-  
+  <select  id="selectSchoolclassStudents"  resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+    from student
+    where orgid=#{orgid} and schoolclassid=#{schoolclassid}
+  </select>
   
   
   <delete id="deleteByPrimaryKey" >

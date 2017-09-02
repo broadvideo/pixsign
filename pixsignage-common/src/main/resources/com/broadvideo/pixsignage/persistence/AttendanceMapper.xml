@@ -2,18 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.broadvideo.pixsignage.persistence.AttendanceMapper" >
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Attendance" >
-    <id column="attendanceid" jdbcType="INTEGER" property="attendanceid" />
-    <result column="studentid" jdbcType="INTEGER" property="studentid" />
-    <result column="orgid" jdbcType="INTEGER" property="orgid" />
-    <result column="schoolclassid" jdbcType="INTEGER" property="schoolclassid" />
-    <result column="classroomid" jdbcType="INTEGER" property="classroomid" />
-    <result column="coursescheduleid" jdbcType="INTEGER" property="coursescheduleid" />
-    <result column="eventtime" jdbcType="TIMESTAMP" property="eventtime" />
-    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <id column="attendanceid" property="attendanceid" jdbcType="INTEGER" />
+    <result column="studentid" property="studentid" jdbcType="INTEGER" />
+    <result column="attendanceeventid" property="attendanceeventid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="schoolclassid" property="schoolclassid" jdbcType="INTEGER" />
+    <result column="classroomid" property="classroomid" jdbcType="INTEGER" />
+    <result column="coursescheduleid" property="coursescheduleid" jdbcType="INTEGER" />
+    <result column="eventtime" property="eventtime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="student" column="{studentid=studentid}"  select="com.broadvideo.pixsignage.persistence.StudentMapper.selectByPrimaryKey" />
+    
   </resultMap>
   <sql id="Base_Column_List" >
-    attendanceid, studentid, orgid, schoolclassid, classroomid, coursescheduleid, eventtime, 
-    createtime
+    attendanceid, studentid, attendanceeventid, orgid, schoolclassid, classroomid, coursescheduleid, 
+    eventtime, createtime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -64,6 +67,14 @@
       limit ${start}, ${length}
     </if>
   </select>
+  <select id="selectAttendances"  resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from attendance
+	    where  attendanceeventid=#{attendanceeventid} 
+	          AND classroomid=#{classroomid}
+	          AND orgid=#{orgid}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from attendance
     where attendanceid = #{attendanceid,jdbcType=INTEGER}
@@ -72,12 +83,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="attendanceid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attendance (studentid, orgid, schoolclassid, 
-      classroomid, coursescheduleid, eventtime, 
-      createtime)
-    values (#{studentid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, #{schoolclassid,jdbcType=INTEGER}, 
-      #{classroomid,jdbcType=INTEGER}, #{coursescheduleid,jdbcType=INTEGER}, #{eventtime,jdbcType=TIMESTAMP}, 
-      #{createtime,jdbcType=TIMESTAMP})
+    insert into attendance (studentid, attendanceeventid, orgid, 
+      schoolclassid, classroomid, coursescheduleid, 
+      eventtime, createtime)
+    values (#{studentid,jdbcType=INTEGER}, #{attendanceeventid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, 
+      #{schoolclassid,jdbcType=INTEGER}, #{classroomid,jdbcType=INTEGER}, #{coursescheduleid,jdbcType=INTEGER}, 
+      #{eventtime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendance">
     <selectKey resultType="java.lang.Integer" keyProperty="attendanceid" order="AFTER" >
@@ -87,6 +98,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="studentid != null" >
         studentid,
+      </if>
+      <if test="attendanceeventid != null" >
+        attendanceeventid,
       </if>
       <if test="orgid != null" >
         orgid,
@@ -110,6 +124,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="studentid != null">
         #{studentid,jdbcType=INTEGER},
+      </if>
+      <if test="attendanceeventid != null" >
+        #{attendanceeventid,jdbcType=INTEGER},
       </if>
       <if test="orgid != null">
         #{orgid,jdbcType=INTEGER},
@@ -137,6 +154,9 @@
       <if test="studentid != null">
         studentid = #{studentid,jdbcType=INTEGER},
       </if>
+      <if test="attendanceeventid != null" >
+        attendanceeventid = #{attendanceeventid,jdbcType=INTEGER},
+      </if>
       <if test="orgid != null">
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -161,6 +181,7 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Attendance">
     update attendance
     set studentid = #{studentid,jdbcType=INTEGER},
+      attendanceeventid = #{attendanceeventid,jdbcType=INTEGER},
       orgid = #{orgid,jdbcType=INTEGER},
       schoolclassid = #{schoolclassid,jdbcType=INTEGER},
       classroomid = #{classroomid,jdbcType=INTEGER},

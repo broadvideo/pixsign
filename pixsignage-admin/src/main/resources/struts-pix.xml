@@ -1836,6 +1836,37 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="attendancescheme!add" method="doAdd" class="attendanceschemeAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="attendancescheme!delete" method="doDelete" class="attendanceschemeAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="attendancescheme!list" method="doList" class="attendanceschemeAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+			  <param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="attendancescheme!update" method="doUpdate" class="attendanceschemeAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="attendancescheme!updateenableflag" method="doUpdateEnableflag" class="attendanceschemeAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		
 
 	</package>
 

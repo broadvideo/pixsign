@@ -15,6 +15,9 @@ public interface CourseScheduleService {
 
 	List<Courseschedule> getClassroomCourseSchedules(Integer classroomId, Integer scheduleSchemeId, Integer orgId);
 
+	List<Courseschedule> getClassroomCourseSchedules(Integer classroomId, Integer workday, Integer scheduleSchemeId,
+			Integer orgId);
+
 	void deleteCourseSchedule(Integer id, Integer optPsnId, Integer orgId);
 
 	void deleteCourseSchedules(List<Integer> ids, Integer optPsnId, Integer orgId);

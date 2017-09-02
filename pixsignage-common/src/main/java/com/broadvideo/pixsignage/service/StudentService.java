@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
+import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Student;
 
@@ -19,6 +20,8 @@ public interface StudentService {
 	String getAvatarBaseDir(Integer orgid);
 
 	String getAvatarAbsolutePath(Student student);
+
+	List<Student> getSchoolclassStudents(Integer schoolclassid, Integer orgid);
 
 
 }

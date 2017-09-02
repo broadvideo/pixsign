@@ -6,10 +6,14 @@ public class Attendance {
     private Integer attendanceid;
 
     private Integer studentid;
+	private Student student;
+
+    private Integer attendanceeventid;
 
     private Integer orgid;
 
     private Integer schoolclassid;
+
     private Integer classroomid;
 
     private Integer coursescheduleid;
@@ -34,16 +38,33 @@ public class Attendance {
         this.studentid = studentid;
     }
 
-    public Integer getOrgid() {
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Integer getAttendanceeventid() {
+        return attendanceeventid;
+    }
+
+    public void setAttendanceeventid(Integer attendanceeventid) {
+        this.attendanceeventid = attendanceeventid;
+    }
+	public Integer getOrgid() {
         return orgid;
     }
 
     public void setOrgid(Integer orgid) {
         this.orgid = orgid;
     }
+
     public Integer getSchoolclassid() {
         return schoolclassid;
     }
+
     public void setSchoolclassid(Integer schoolclassid) {
         this.schoolclassid = schoolclassid;
     }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AttendanceschemeMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Attendancescheme" >
+    <id column="attendanceschemeid" property="attendanceschemeid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="timeconfig" property="timeconfig" jdbcType="VARCHAR" />
+    <result column="enableflag" property="enableflag" jdbcType="CHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attendanceschemeid, type, name, amount, timeconfig, enableflag, createtime, orgid, 
+    createstaffid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendancescheme
+    where attendanceschemeid = #{attendanceschemeid,jdbcType=INTEGER}
+  </select>
+  <select id="getEnableAttendancescheme"  resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+    select 
+      <include refid="Base_Column_List"/>
+    from attendancescheme
+    where enableflag='1' and orgid=#{orgid}
+  
+  </select>
+  <select id="selectAttendancescheme"  resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from attendancescheme
+	    where attendanceschemeid = #{attendanceschemeid,jdbcType=INTEGER} and orgid=#{orgid}
+  
+  </select>
+  <select id="selectAllEnableAttendanceschemes" resultMap="BaseResultMap" >
+      select 
+	    <include refid="Base_Column_List" />
+	    from attendancescheme
+	  where enableflag='1'
+  
+  </select>
+  
+  <select id="selectAttendanceschemes"  resultMap="BaseResultMap">
+  
+     select 
+       <include refid="Base_Column_List" />
+      from  attendancescheme 
+      where orgid=#{orgid}  
+      <if test="search!=null and search!=''">      
+      and  ( name like '%${search}%')
+      </if>    
+       order by createtime desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from attendancescheme
+    where attendanceschemeid = #{attendanceschemeid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteAttendancescheme" parameterType="java.lang.Integer">
+      delete from attendancescheme
+    where attendanceschemeid = #{attendanceschemeid} and orgid=#{orgid}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Attendancescheme" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendanceschemeid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendancescheme (type, name, amount, 
+      timeconfig, enableflag, createtime, 
+      orgid, createstaffid)
+    values (#{type,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{timeconfig,jdbcType=VARCHAR}, #{enableflag,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{orgid,jdbcType=INTEGER}, #{createstaffid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendancescheme" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendanceschemeid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendancescheme
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="timeconfig != null" >
+        timeconfig,
+      </if>
+      <if test="enableflag != null" >
+        enableflag,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="timeconfig != null" >
+        #{timeconfig,jdbcType=VARCHAR},
+      </if>
+      <if test="enableflag != null" >
+        #{enableflag,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Attendancescheme" >
+    update attendancescheme
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="timeconfig != null" >
+        timeconfig = #{timeconfig,jdbcType=VARCHAR},
+      </if>
+      <if test="enableflag != null" >
+        enableflag = #{enableflag,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where attendanceschemeid = #{attendanceschemeid,jdbcType=INTEGER}  and orgid=#{orgid}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Attendancescheme" >
+    update attendancescheme
+    set type = #{type,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      timeconfig = #{timeconfig,jdbcType=VARCHAR},
+      enableflag = #{enableflag,jdbcType=CHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      orgid = #{orgid,jdbcType=INTEGER},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where attendanceschemeid = #{attendanceschemeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateEnableflag"   >
+    
+    update attendancescheme
+    set enableflag=#{enableflag}
+    where orgid=#{orgid} and enableflag!=#{enableflag}
+  
+  </update>
+</mapper>
