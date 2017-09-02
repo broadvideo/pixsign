@@ -156,7 +156,7 @@ public class PixsignageService21 {
 			Device device = deviceMapper.selectByHardkey(hardkey);
 			String oldhardkey = hardkey;
 			if (device != null && !device.getTerminalid().equals(terminalid)) {
-				logger.info("unbind old device {} for the same hardkey {}", terminalid, hardkey);
+				logger.info("unbind old device {} for the same hardkey {}", device.getTerminalid(), hardkey);
 				deviceMapper.unbind("" + device.getDeviceid());
 			}
 			if (device == null) {

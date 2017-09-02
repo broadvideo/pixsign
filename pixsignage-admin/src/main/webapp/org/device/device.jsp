@@ -425,8 +425,8 @@
 								<a href="javascript:;" onClick="DeviceModule.refresh();" class="reload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="UnDeviceTab"><a href="#portlet_device2" data-toggle="tab"><spring:message code="pixsign.device.unregister"/></a></li>
-								<li class="active" id="DeviceTab"><a href="#portlet_device1" data-toggle="tab"><spring:message code="pixsign.device.register"/></a></li>
+								<li id="nav_tab2"><a href="#UnDeviceTab" data-toggle="tab"><spring:message code="pixsign.device.unregister"/></a></li>
+								<li id="nav_tab1" class="active"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device.register"/></a></li>
 							</ul>
 						</div>
 						<div class="portlet-body" id="DevicePortlet">
@@ -506,7 +506,6 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/device/device.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;

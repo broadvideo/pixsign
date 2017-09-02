@@ -76,19 +76,20 @@ function initWizard() {
 			if (index == 1) {
 				redrawLayout($('#LayoutDiv'), CurrentTemplet, CurrentTempletdtl);
 				enterLayoutdtlFocus(CurrentTempletdtl);
-				//initMediaBranchTree();
 			} else if (index == 2) {
 				enterBundledtlFocus(CurrentTempletdtl);
-				$('#IntVideoTable').dataTable()._fnAjaxUpdate();
+				$('#VideoTable').dataTable()._fnAjaxUpdate();
 			}
 		}
 	});
 
 	$('#MyWizard').find('.button-previous').hide();
 	$('#MyWizard .button-submit').click(function () {
+		$('#MyWizard .button-submit').attr('disabled', 'true');
 		if (CurrentTempletdtl != null && validBundledtl(CurrentTempletdtl)) {
 			submitData();
 		}
+		$('#MyWizard .button-submit').removeAttr('disabled');
 	}).hide();
 	
 	$('#MyWizard').bootstrapWizard('first');
@@ -130,7 +131,6 @@ function initData2() {
 }
 
 function initTab3() {
-	initMediaBranchTree();
 }
 
 function initData3() {
