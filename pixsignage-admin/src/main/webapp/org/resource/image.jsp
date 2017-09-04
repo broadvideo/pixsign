@@ -328,7 +328,7 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/resource/image.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/resource/image.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

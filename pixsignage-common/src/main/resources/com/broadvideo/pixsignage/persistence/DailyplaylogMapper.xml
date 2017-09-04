@@ -28,7 +28,7 @@
     where deviceid=#{deviceid}
     and mediatype = #{mediatype}
     and mediaid = #{mediaid}
-    and date_format(playdate,'%Y%m%d%H') = #{day}
+    and date_format(playdate,'%Y%m%d') = #{day}
   </select>
   
   <resultMap id="PeriodResultMap" type="java.util.HashMap">
@@ -52,32 +52,24 @@
     select deviceid, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d') &gt;= #{from}
-    and date_format(starttime,'%Y%m%d') &lt;= #{to}
-    group by mediatype, mediaid
-    order by amount desc
-  </select>
-  <select id="statByHour" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m%d%H') as period, mediatype, mediaid, sum(total) as amount
-    from dailyplaylog
-    where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d%H') = #{hour}
+    and date_format(playdate,'%Y%m%d') &gt;= #{from}
+    and date_format(playdate,'%Y%m%d') &lt;= #{to}
     group by mediatype, mediaid
     order by amount desc
   </select>
   <select id="statByDay" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m%d') as period, mediatype, mediaid, sum(total) as amount
+    select deviceid, date_format(playdate,'%Y%m%d') as period, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d') = #{day}
+    and date_format(playdate,'%Y%m%d') = #{day}
     group by mediatype, mediaid
     order by amount desc
   </select>
   <select id="statByMonth" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m') as period, mediatype, mediaid, sum(total) as amount
+    select deviceid, date_format(playdate,'%Y%m') as period, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m') = #{month}
+    and date_format(playdate,'%Y%m') = #{month}
     group by mediatype, mediaid
     order by amount desc
   </select>

@@ -175,7 +175,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/device/deviceversion.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/device/deviceversion.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

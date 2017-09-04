@@ -21,10 +21,6 @@ public class Dailyplaylog {
 
 	private Date createtime;
 
-	private Video video;
-
-	private Image image;
-
 	public Integer getDailyplaylogid() {
 		return dailyplaylogid;
 	}
@@ -95,21 +91,5 @@ public class Dailyplaylog {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
-	}
-
-	public Video getVideo() {
-		return video;
-	}
-
-	public void setVideo(Video video) {
-		this.video = video;
-	}
-
-	public Image getImage() {
-		return image;
-	}
-
-	public void setImage(Image image) {
-		this.image = image;
 	}
 }

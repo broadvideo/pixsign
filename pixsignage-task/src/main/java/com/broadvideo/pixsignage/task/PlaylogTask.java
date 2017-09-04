@@ -18,11 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.Dailyplaylog;
+import com.broadvideo.pixsignage.domain.Dailyplaylog;
 import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Hourplaylog;
 import com.broadvideo.pixsignage.domain.Mmedia;
+import com.broadvideo.pixsignage.persistence.DailyplaylogMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.HourplaylogMapper;
 import com.broadvideo.pixsignage.persistence.MmediaMapper;
 
 public class PlaylogTask {
@@ -31,7 +32,7 @@ public class PlaylogTask {
 	private static boolean workflag = false;
 
 	@Autowired
-	private HourplaylogMapper hourplaylogMapper;
+	private DailyplaylogMapper dailyplaylogMapper;
 	@Autowired
 	private MmediaMapper mmediaMapper;
 	@Autowired
@@ -157,24 +158,25 @@ public class PlaylogTask {
 							continue;
 						}
 
-						Hourplaylog hourplaylog = hourplaylogMapper.selectByDetail("" + device.getDeviceid(), mediatype,
-								mediaid, new SimpleDateFormat("yyyyMMddHH").format(c1.getTime()));
-						if (hourplaylog != null) {
-							hourplaylog.setTotal(hourplaylog.getTotal() + 1);
-							hourplaylogMapper.updateByPrimaryKeySelective(hourplaylog);
+						Dailyplaylog dailyplaylog = dailyplaylogMapper.selectByDetail("" + device.getDeviceid(),
+								mediatype, mediaid, new SimpleDateFormat("yyyyMMdd").format(c1.getTime()));
+						if (dailyplaylog != null) {
+							dailyplaylog.setTotal(dailyplaylog.getTotal() + 1);
+							dailyplaylogMapper.updateByPrimaryKeySelective(dailyplaylog);
 						} else {
-							hourplaylog = new Hourplaylog();
-							hourplaylog.setOrgid(device.getOrgid());
-							hourplaylog.setBranchid(device.getBranchid());
-							hourplaylog.setDeviceid(device.getDeviceid());
-							hourplaylog.setMediatype(mediatype);
-							hourplaylog.setMediaid(Integer.parseInt(mediaid));
+							dailyplaylog = new Dailyplaylog();
+							dailyplaylog.setOrgid(device.getOrgid());
+							dailyplaylog.setBranchid(device.getBranchid());
+							dailyplaylog.setDeviceid(device.getDeviceid());
+							dailyplaylog.setMediatype(mediatype);
+							dailyplaylog.setMediaid(Integer.parseInt(mediaid));
+							c1.set(Calendar.HOUR_OF_DAY, 0);
 							c1.set(Calendar.MINUTE, 0);
 							c1.set(Calendar.SECOND, 0);
 							c1.set(Calendar.MILLISECOND, 0);
-							hourplaylog.setStarttime(c1.getTime());
-							hourplaylog.setTotal(1);
-							hourplaylogMapper.insertSelective(hourplaylog);
+							dailyplaylog.setPlaydate(c1.getTime());
+							dailyplaylog.setTotal(1);
+							dailyplaylogMapper.insertSelective(dailyplaylog);
 						}
 					}
 				}
