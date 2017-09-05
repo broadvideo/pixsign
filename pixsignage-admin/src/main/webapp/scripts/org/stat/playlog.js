@@ -4,6 +4,7 @@ var PlaylogModule = function () {
 
 	var init = function () {
 		initDeviceTable();
+		initStatAllModal();
 		initDetailModal();
 	};
 
@@ -54,6 +55,44 @@ var PlaylogModule = function () {
 		$('#DeviceTable').css('width', '100%');
 	};
 	
+	var initStatAllModal = function () {
+		$('body').on('click', '.pix-statall', function(event) {
+			$('#AllTable').dataTable()._fnAjaxUpdate();
+			$('#AllModal').modal();
+		});
+		
+		$('#AllTable').dataTable({
+			'sDom' : 'rt', 
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'playlog!statall.action',
+			'aoColumns' : [ {'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '5%' },
+							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '45%' },
+							{'sTitle' : common.view.amount, 'mData' : 'amount', 'bSortable' : false, 'sWidth' : '10%' },
+							{'sTitle' : common.view.dcount, 'mData' : 'dcount', 'bSortable' : false, 'sWidth' : '10%' }],
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				var thumbwidth = 100;
+				var thumbhtml = '';
+				var playhtml = '';
+				if (aData.mediatype == 1 && aData.video.length > 0) {
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.video[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml = common.view.video + ': ' + aData.video[0].name;
+				} else if (aData.mediatype == 2 && aData.image.length > 0) {
+					thumbwidth = aData.image[0].width > aData.image[0].height? 100 : 100*aData.image[0].width/aData.image[0].height;
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.image[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml += common.view.image + ': ' + aData.image[0].name;
+				}
+				$('td:eq(0)', nRow).html(thumbhtml);
+				$('td:eq(1)', nRow).html(playhtml);
+				return nRow;
+			} 
+		});
+		$('#AllTable').css('width', '100%').css('table-layout', 'fixed');
+
+	};
+	
 	var initDetailModal = function () {
 		var StatType = 1; //1-day 2-month 3-period
 		var PlaylogTable;
@@ -70,8 +109,8 @@ var PlaylogModule = function () {
 			$('.stat-day').css('display', 'none');
 			$('.stat-month').css('display', 'none');
 			$('.stat-period').css('display', 'none');
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyhour.action?deviceid=' + _device.deviceid + '&hour=' + $('input[name="playlog.stathour"]').val());
-			PlaylogTable.fnSettings().sAjaxSource = 'dailyplaylog!statbyhour.action';
+			$('.pix-download').attr('href', 'playlog!downloadbyhour.action?deviceid=' + _device.deviceid + '&hour=' + $('input[name="playlog.stathour"]').val());
+			PlaylogTable.fnSettings().sAjaxSource = 'playlog!statbyhour.action';
 			PlaylogTable.fnDraw();
 			$('#PlaylogModal').modal();
 		});
@@ -88,8 +127,8 @@ var PlaylogModule = function () {
 			$('.stat-day').css('display', '');
 			$('.stat-month').css('display', 'none');
 			$('.stat-period').css('display', 'none');
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyday.action?deviceid=' + _device.deviceid + '&day=' + $('input[name="playlog.statday"]').val());
-			PlaylogTable.fnSettings().sAjaxSource = 'dailyplaylog!statbyday.action';
+			$('.pix-download').attr('href', 'playlog!downloadbyday.action?deviceid=' + _device.deviceid + '&day=' + $('input[name="playlog.statday"]').val());
+			PlaylogTable.fnSettings().sAjaxSource = 'playlog!statbyday.action';
 			PlaylogTable.fnDraw();
 			$('#PlaylogModal').modal();
 		});
@@ -105,8 +144,8 @@ var PlaylogModule = function () {
 			$('.stat-day').css('display', 'none');
 			$('.stat-month').css('display', '');
 			$('.stat-period').css('display', 'none');
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbymonth.action?deviceid=' + _device.deviceid + '&month=' + $('#MonthSelect').select2('data').text);
-			PlaylogTable.fnSettings().sAjaxSource = 'dailyplaylog!statbymonth.action';
+			$('.pix-download').attr('href', 'playlog!downloadbymonth.action?deviceid=' + _device.deviceid + '&month=' + $('#MonthSelect').select2('data').text);
+			PlaylogTable.fnSettings().sAjaxSource = 'playlog!statbymonth.action';
 			PlaylogTable.fnDraw();
 			$('#PlaylogModal').modal();
 		});
@@ -122,8 +161,8 @@ var PlaylogModule = function () {
 			$('.stat-day').css('display', 'none');
 			$('.stat-month').css('display', 'none');
 			$('.stat-period').css('display', '');
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
-			PlaylogTable.fnSettings().sAjaxSource = 'dailyplaylog!statbyperiod.action';
+			$('.pix-download').attr('href', 'playlog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
+			PlaylogTable.fnSettings().sAjaxSource = 'playlog!statbyperiod.action';
 			PlaylogTable.fnDraw();
 			$('#PlaylogModal').modal();
 		});
@@ -154,24 +193,24 @@ var PlaylogModule = function () {
 
 		/*
 		$('input[name="playlog.stathour"]').on('change', function(e) {
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyhour.action?deviceid=' + _device.deviceid + '&hour=' + $('input[name="playlog.stathour"]').val());
+			$('.pix-download').attr('href', 'playlog!downloadbyhour.action?deviceid=' + _device.deviceid + '&hour=' + $('input[name="playlog.stathour"]').val());
 			$('#PlaylogTable').dataTable().fnDraw(true);
 		});
 		*/
 		$('input[name="playlog.statday"]').on('change', function(e) {
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyday.action?deviceid=' + _device.deviceid + '&day=' + $('input[name="playlog.statday"]').val());
+			$('.pix-download').attr('href', 'playlog!downloadbyday.action?deviceid=' + _device.deviceid + '&day=' + $('input[name="playlog.statday"]').val());
 			$('#PlaylogTable').dataTable().fnDraw(true);
 		});
 		$('#MonthSelect').on('change', function(e) {
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbymonth.action?deviceid=' + _device.deviceid + '&month=' + $('#MonthSelect').select2('data').text);
+			$('.pix-download').attr('href', 'playlog!downloadbymonth.action?deviceid=' + _device.deviceid + '&month=' + $('#MonthSelect').select2('data').text);
 			$('#PlaylogTable').dataTable().fnDraw(true);
 		});
 		$('input[name="playlog.statfrom"]').on('change', function(e) {
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
+			$('.pix-download').attr('href', 'playlog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
 			$('#PlaylogTable').dataTable().fnDraw(true);
 		});
 		$('input[name="playlog.statto"]').on('change', function(e) {
-			$('.pix-download').attr('href', 'dailyplaylog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
+			$('.pix-download').attr('href', 'playlog!downloadbyperiod.action?deviceid=' + _device.deviceid + '&from=' + $('input[name="playlog.statfrom"]').val() + '&to=' + $('input[name="playlog.statto"]').val());
 			$('#PlaylogTable').dataTable().fnDraw(true);
 		});
 
@@ -179,7 +218,7 @@ var PlaylogModule = function () {
 			'sDom' : 'rt', 
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : 'dailyplaylog!statbyday.action',
+			'sAjaxSource' : 'playlog!statbyday.action',
 			'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 							{'sTitle' : common.view.stat_period, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '5%' },

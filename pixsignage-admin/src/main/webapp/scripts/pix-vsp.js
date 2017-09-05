@@ -91,7 +91,7 @@ function initMyEditModal() {
 	
 	$.ajax({
 		type : 'POST',
-		url : myurls['app.list'],
+		url : 'app!list.action',
 		data : {},
 		success : function(data, status) {
 			if (data.errorcode == 0) {

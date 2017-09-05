@@ -221,7 +221,8 @@ var common = {
 		yesterday: '昨日',
 		
 		stat_period: '统计周期',
-		amount: '总数',
+		amount: '总次数',
+		dcount: '终端数',
 
 		config_serverip: '本服务器地址',
 		config_serverport: '本服务器端口',

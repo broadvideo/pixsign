@@ -22,9 +22,11 @@ import com.broadvideo.pixsignage.domain.Dailyplaylog;
 import com.broadvideo.pixsignage.domain.Dailyplaylog;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Mmedia;
+import com.broadvideo.pixsignage.domain.Monthlyplaylog;
 import com.broadvideo.pixsignage.persistence.DailyplaylogMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MmediaMapper;
+import com.broadvideo.pixsignage.persistence.MonthlyplaylogMapper;
 
 public class PlaylogTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -33,6 +35,8 @@ public class PlaylogTask {
 
 	@Autowired
 	private DailyplaylogMapper dailyplaylogMapper;
+	@Autowired
+	private MonthlyplaylogMapper monthlyplaylogMapper;
 	@Autowired
 	private MmediaMapper mmediaMapper;
 	@Autowired
@@ -158,8 +162,9 @@ public class PlaylogTask {
 							continue;
 						}
 
+						String playdate = new SimpleDateFormat("yyyyMMdd").format(c1.getTime());
 						Dailyplaylog dailyplaylog = dailyplaylogMapper.selectByDetail("" + device.getDeviceid(),
-								mediatype, mediaid, new SimpleDateFormat("yyyyMMdd").format(c1.getTime()));
+								mediatype, mediaid, playdate);
 						if (dailyplaylog != null) {
 							dailyplaylog.setTotal(dailyplaylog.getTotal() + 1);
 							dailyplaylogMapper.updateByPrimaryKeySelective(dailyplaylog);
@@ -170,13 +175,27 @@ public class PlaylogTask {
 							dailyplaylog.setDeviceid(device.getDeviceid());
 							dailyplaylog.setMediatype(mediatype);
 							dailyplaylog.setMediaid(Integer.parseInt(mediaid));
-							c1.set(Calendar.HOUR_OF_DAY, 0);
-							c1.set(Calendar.MINUTE, 0);
-							c1.set(Calendar.SECOND, 0);
-							c1.set(Calendar.MILLISECOND, 0);
-							dailyplaylog.setPlaydate(c1.getTime());
+							dailyplaylog.setPlaydate(playdate);
 							dailyplaylog.setTotal(1);
 							dailyplaylogMapper.insertSelective(dailyplaylog);
+						}
+
+						String playmonth = new SimpleDateFormat("yyyyMM").format(c1.getTime());
+						Monthlyplaylog monthlyplaylog = monthlyplaylogMapper.selectByDetail("" + device.getDeviceid(),
+								mediatype, mediaid, playmonth);
+						if (monthlyplaylog != null) {
+							monthlyplaylog.setTotal(monthlyplaylog.getTotal() + 1);
+							monthlyplaylogMapper.updateByPrimaryKeySelective(monthlyplaylog);
+						} else {
+							monthlyplaylog = new Monthlyplaylog();
+							monthlyplaylog.setOrgid(device.getOrgid());
+							monthlyplaylog.setBranchid(device.getBranchid());
+							monthlyplaylog.setDeviceid(device.getDeviceid());
+							monthlyplaylog.setMediatype(mediatype);
+							monthlyplaylog.setMediaid(Integer.parseInt(mediaid));
+							monthlyplaylog.setPlaymonth(playmonth);
+							monthlyplaylog.setTotal(1);
+							monthlyplaylogMapper.insertSelective(monthlyplaylog);
 						}
 					}
 				}

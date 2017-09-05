@@ -70,7 +70,7 @@
 		</div>
 	</div>
 
-	<div id="ChartModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+	<div id="ChartModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">

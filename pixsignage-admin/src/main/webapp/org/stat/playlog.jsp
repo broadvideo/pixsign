@@ -11,7 +11,35 @@
 </head>
 
 <body>
-	<div id="PlaylogModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+	<div id="AllModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-full">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.playlog"/></div>
+						</div>
+						<div class="portlet-body">
+							<div class="row">
+							</div>
+							<table id="AllTable" class="table table-condensed table-hover">
+								<thead></thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="PlaylogModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -109,6 +137,11 @@
 							</div>
 						</div>
 						<div class="portlet-body" id="DevicePortlet">
+							<div class="table-toolbar">
+								<div class="btn-group">
+									<button class="btn green pix-statall"><spring:message code="pixsign.statall"/> <i class="fa fa-download"></i></button>
+								</div>
+							</div>
 							<div class="row">
 								<div class="col-md-2">
 									<div class="row"><div class="col-md-12 branchtree"></div></div>

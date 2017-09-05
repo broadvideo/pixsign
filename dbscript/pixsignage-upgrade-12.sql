@@ -20,20 +20,42 @@ create table dailyplaylog(
    deviceid int not null,
    mediatype char(1) not null,
    mediaid int not null,
-   playdate date,
+   playdate varchar(8),
    total int default 0,
    createtime timestamp not null default current_timestamp,
    primary key (dailyplaylogid)
  )engine = innodb
 default character set utf8;
-alter table dailyplaylog add index hourplaylog_index1(deviceid);
-alter table dailyplaylog add index hourplaylog_index2(mediatype, mediaid);
-alter table dailyplaylog add index hourplaylog_index3(orgid);
+alter table dailyplaylog add index dailyplaylog_index1(deviceid);
+alter table dailyplaylog add index dailyplaylog_index2(mediatype, mediaid);
+alter table dailyplaylog add index dailyplaylog_index3(orgid);
 alter table dailyplaylog add unique index(deviceid, mediatype, mediaid, playdate);
 
 insert into dailyplaylog(orgid,deviceid,mediatype,mediaid,playdate,total)
-select orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y-%m-%d'),SUM(total) 
-from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y-%m-%d');
+select orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m%d'),SUM(total) 
+from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m%d');
+
+create table monthlyplaylog( 
+   monthlyplaylogid int not null auto_increment,
+   orgid int not null,
+   branchid int not null,
+   deviceid int not null,
+   mediatype char(1) not null,
+   mediaid int not null,
+   playmonth varchar(6),
+   total int default 0,
+   createtime timestamp not null default current_timestamp,
+   primary key (monthlyplaylogid)
+ )engine = innodb
+default character set utf8;
+alter table monthlyplaylog add index monthlyplaylog_index1(deviceid);
+alter table monthlyplaylog add index monthlyplaylog_index2(mediatype, mediaid);
+alter table monthlyplaylog add index monthlyplaylog_index3(orgid);
+alter table monthlyplaylog add unique index(deviceid, mediatype, mediaid, playmonth);
+
+insert into monthlyplaylog(orgid,deviceid,mediatype,mediaid,playmonth,total)
+select orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m'),SUM(total) 
+from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m');
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.opmanage','','fa-cloud',1,1);

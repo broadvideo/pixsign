@@ -19,11 +19,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.persistence.DailyplaylogMapper;
+import com.broadvideo.pixsignage.persistence.MonthlyplaylogMapper;
 
 @SuppressWarnings("serial")
 @Scope("request")
-@Controller("dailyplaylogAction")
-public class DailyplaylogAction extends BaseDatatableAction {
+@Controller("playlogAction")
+public class PlaylogAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String downloadname;
@@ -31,6 +32,28 @@ public class DailyplaylogAction extends BaseDatatableAction {
 
 	@Autowired
 	private DailyplaylogMapper dailyplaylogMapper;
+	@Autowired
+	private MonthlyplaylogMapper monthlyplaylogMapper;
+
+	public String doStatAll() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String length = getParameter("length");
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<HashMap<String, Object>> list = monthlyplaylogMapper.statAll("" + getLoginStaff().getOrgid(), length);
+			for (int i = 0; i < list.size(); i++) {
+				aaData.add(list.get(i));
+			}
+			this.setAaData(aaData);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PlaylogAction doStatAll exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
 
 	public String doStatByPeriod() {
 		try {
@@ -49,7 +72,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doStatByPeriod exception, ", ex);
+			logger.error("PlaylogAction doStatByPeriod exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -71,7 +94,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doStatByDay exception, ", ex);
+			logger.error("PlaylogAction doStatByDay exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -93,7 +116,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doStatPeriodByMonth exception, ", ex);
+			logger.error("PlaylogAction doStatPeriodByMonth exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -153,7 +176,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			downloadname = "playlog-" + deviceid + "-" + from + "-" + to + ".xls";
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doDownloadByDay exception. ", ex);
+			logger.error("PlaylogAction doDownloadByDay exception. ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -215,7 +238,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			downloadname = "playlog-" + deviceid + "-" + day + ".xls";
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doDownloadByDay exception. ", ex);
+			logger.error("PlaylogAction doDownloadByDay exception. ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -273,7 +296,7 @@ public class DailyplaylogAction extends BaseDatatableAction {
 			downloadname = "playlog-" + deviceid + "-" + month + ".xls";
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("DailyplaylogAction doDownloadByMonth exception. ", ex);
+			logger.error("PlaylogAction doDownloadByMonth exception. ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

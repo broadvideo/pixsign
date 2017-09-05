@@ -32,7 +32,6 @@
 						<div id="CurrentDevicesProgress" class="progress-bar " role="progressbar" style="width: 0%"></div>
 					</div>
 				</div>
-	
 				<div class="col-md-6 col-sm-6">
 					<span id="CurrentStorage"></span><span id="MaxStorage" class="badge badge-danger" style="float: right;"></span>
 					<div class="progress">
@@ -50,7 +49,7 @@
 								<i class="fa fa-bell-o"></i><spring:message code="pixsign.main.title1"/>
 							</div>
 							<div class="actions">
-								<a href="device.jsp?CurrentP=30201&ParentP=302" class="btn btn-sm default easy-pie-chart-reload"><i
+								<a href="device/device.jsp?CurrentP=30201&ParentP=302" class="btn btn-sm default easy-pie-chart-reload"><i
 									class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
 							</div>
 						</div>
@@ -79,12 +78,35 @@
 			</div>
 	
 			<div class="clearfix"></div>
+			<div class="row ">
+				<div class="col-md-12 col-sm-12">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bell-o"></i><spring:message code="pixsign.main.title3"/>
+							</div>
+							<div class="actions">
+								<a href="stat/playlog.jsp?CurrentP=30802&ParentP=308" class="btn btn-sm default easy-pie-chart-reload"><i
+									class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<table id="PlaylogTable" class="table table-striped">
+								<thead></thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title3"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title4"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -102,7 +124,7 @@
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title4"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title5"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -116,13 +138,15 @@
 					</div>
 				</div>
 			</div>
-				<div class="clearfix"></div>
+
+			<!-- 			
+			<div class="clearfix"></div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
 					<div class="portlet solid bordered light-grey">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title5"/>
+								<i class="fa fa-bar-chart-o"></i><spring:message code="pixsign.main.title6"/>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -134,7 +158,8 @@
 					</div>
 				</div>
 			</div>
-			
+			 -->
+			 
 		</div>
 	</div>
 </body>
@@ -160,7 +185,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/main.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/main.js?t=${timestamp}"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 jQuery(document).ready(function() {
@@ -170,6 +195,7 @@ jQuery(document).ready(function() {
 	License.init();
 	DeviceTable.init();
 	DeviceChart.init();
+	PlaylogTable.init();
 	MediaChart.init();
 	FileChart.init();
 	APPTable.init();

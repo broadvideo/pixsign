@@ -455,7 +455,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane active" id="UnDeviceTab">
+								<div class="tab-pane" id="UnDeviceTab">
 									<div class="row">
 										<div class="col-md-2">
 											<div class="row"><div class="col-md-12 branchtree"></div></div>

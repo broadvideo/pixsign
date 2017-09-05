@@ -145,6 +145,46 @@ var DeviceChart = function () {
 	}
 }();
 
+var PlaylogTable = function () {
+	var init = function () {
+		$('#PlaylogTable').dataTable({
+			'sDom' : 'rt',
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'playlog!statall.action',
+			'aoColumns' : [ {'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '5%' },
+							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '45%' },
+							{'sTitle' : common.view.amount, 'mData' : 'amount', 'bSortable' : false, 'sWidth' : '10%' },
+							{'sTitle' : common.view.dcount, 'mData' : 'dcount', 'bSortable' : false, 'sWidth' : '10%' }],
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				var thumbwidth = 100;
+				var thumbhtml = '';
+				var playhtml = '';
+				if (aData.mediatype == 1 && aData.video.length > 0) {
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.video[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml = common.view.video + ': ' + aData.video[0].name;
+				} else if (aData.mediatype == 2 && aData.image.length > 0) {
+					thumbwidth = aData.image[0].width > aData.image[0].height? 100 : 100*aData.image[0].width/aData.image[0].height;
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.image[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml += common.view.image + ': ' + aData.image[0].name;
+				}
+				$('td:eq(0)', nRow).html(thumbhtml);
+				$('td:eq(1)', nRow).html(playhtml);
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'length','value':'20' });
+			}
+		});
+	};
+
+	return {
+		init: init,
+	}
+}();
+
 var MediaChart = function () {
 	var init = function () {
 		if (!jQuery.plot) {

@@ -221,7 +221,8 @@ var common = {
 		yesterday: 'Yesterday',
 
 		stat_period: 'Period',
-		amount: 'Amount',
+		amount: 'Play Count',
+		dcount: 'Device Count',
 
 		config_serverip: 'Server IP',
 		config_serverport: 'Server Port',

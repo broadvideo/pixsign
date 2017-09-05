@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<div id="OnlinelogModal" class="modal fade modal-scroll" role="dialog" data-backdrop="static">
+	<div id="OnlinelogModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">

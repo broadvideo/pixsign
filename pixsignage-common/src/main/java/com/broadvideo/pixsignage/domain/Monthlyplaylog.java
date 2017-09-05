@@ -2,8 +2,8 @@ package com.broadvideo.pixsignage.domain;
 
 import java.util.Date;
 
-public class Dailyplaylog {
-	private Integer dailyplaylogid;
+public class Monthlyplaylog {
+	private Integer monthlyplaylogid;
 
 	private Integer orgid;
 
@@ -15,18 +15,18 @@ public class Dailyplaylog {
 
 	private Integer mediaid;
 
-	private String playdate;
+	private String playmonth;
 
 	private Integer total;
 
 	private Date createtime;
 
-	public Integer getDailyplaylogid() {
-		return dailyplaylogid;
+	public Integer getMonthlyplaylogid() {
+		return monthlyplaylogid;
 	}
 
-	public void setDailyplaylogid(Integer dailyplaylogid) {
-		this.dailyplaylogid = dailyplaylogid;
+	public void setMonthlyplaylogid(Integer monthlyplaylogid) {
+		this.monthlyplaylogid = monthlyplaylogid;
 	}
 
 	public Integer getOrgid() {
@@ -69,12 +69,12 @@ public class Dailyplaylog {
 		this.mediaid = mediaid;
 	}
 
-	public String getPlaydate() {
-		return playdate;
+	public String getPlaymonth() {
+		return playmonth;
 	}
 
-	public void setPlaydate(String playdate) {
-		this.playdate = playdate;
+	public void setPlaymonth(String playmonth) {
+		this.playmonth = playmonth == null ? null : playmonth.trim();
 	}
 
 	public Integer getTotal() {
