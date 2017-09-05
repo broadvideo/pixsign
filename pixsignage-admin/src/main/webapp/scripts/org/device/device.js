@@ -21,7 +21,7 @@ var DeviceModule = function () {
 		var DeviceTree1 = new BranchTree($('#DeviceTab'));
 		var DeviceTree2 = new BranchTree($('#UnDeviceTab'));
 
-		$('#DeviceTable').dataTable({
+		var oTable = $('#DeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 							[ 10, 25, 50, 100 ] 
@@ -153,13 +153,13 @@ var DeviceModule = function () {
 			sOut += '</tr>';
 			sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
 			sOut += '<tr><td>MAC:</td><td>'+aData.mac + '</td></tr>';
-			sOut += '<tr><td>' + common.view.storage + ':</td><td>' + transferIntToByte(aData.storageused) + '/' + transferIntToByte(aData.storageavail) + '</td></tr>';
+			sOut += '<tr><td>' + common.view.storage + ':</td><td>' + PixData.transferIntToByte(aData.storageused) + '/' + PixData.transferIntToByte(aData.storageavail) + '</td></tr>';
 			sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 			sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
 			sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
 			sOut += '<tr><td>' + common.view.temperature + ':</td><td>' + aData.temperature + '</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadspeed + ':</td><td>' + aData.downloadspeed + ' KB/s</td></tr>';
-			sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + transferIntToByte(aData.downloadbytes) + '</td></tr>';
+			sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + PixData.transferIntToByte(aData.downloadbytes) + '</td></tr>';
 			sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + aData.networkmode + '</td></tr>';
 			sOut += '<tr><td>' + common.view.networksignal + ':</td><td>' + aData.networksignal + '</td></tr>';
 			sOut += '<tr><td>' + common.view.brightness + ':</td><td>' + aData.brightness + '</td></tr>';
