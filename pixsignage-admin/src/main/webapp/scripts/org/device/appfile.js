@@ -15,9 +15,6 @@ var AppfileModule = function () {
 	var initAppfileTable = function () {
 		$('#AppfileTable').dataTable({
 			'sDom' : 'rt',
-			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-							[ 10, 25, 50, 100 ]
-							],
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'appfile!list.action',
@@ -29,7 +26,6 @@ var AppfileModule = function () {
 							{'sTitle' : common.view.latest, 'mData' : 'appfileid', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '15%' }, 
 							{'sTitle' : '', 'mData' : 'appfileid', 'bSortable' : false, 'sWidth' : '10%' }],
-			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

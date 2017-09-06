@@ -304,7 +304,7 @@ var StaffModule = function () {
 			});
 			Oper = 1;
 			BranchTeee.jstree('deselect_all', true);
-			BranchTeee.jstree('select_node', BranchTree.jstree(true).get_json('#')[0].id);
+			BranchTeee.jstree('select_node', 'ul > li:first');
 			_roles = {};
 			refreshRoleTreeData(RoleTreeData);
 			createRoleTree(RoleTreeData);

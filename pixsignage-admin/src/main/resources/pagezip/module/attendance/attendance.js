@@ -4,17 +4,27 @@
 var Attendance = function (zonediv, zone) {
     this.zonediv = zonediv;
     this.zone = zone;
+    this.currentEvent = null;
     common.attendance.push(this)
     var timer = 0
 
-    var attendanceListTpl = `<div class="attendance-list">
+    var attendanceSummaryTpl = `<div class="attendance-summary">
+            <h3 class="title">{{=it.event_name}}</h3>
+            <p class="info">应到人数&nbsp;{{=it.total}}</p>
+            <p class="info">已到&nbsp;{{=it.avail_total}}</p>
+        </div>`
+    var attendanceNullTpl = `<div class="attendance-summary">
+            <p>当前无考勤</p>
+        </div>`
+
+    var attendanceListTpl = `<div class="attendance-list" id="attendanceList">
             {{~it:student:index}}
-            <div class="attendance-item animated" data-id="{{=student.id}}">
+            <div class="attendance-item animated" data-id="{{=student.student_id}}">
                 <div class="attendance-avatar">
-                    <img src="{{=student.avatar}}" class="opacity"/>
+                    <img src="{{=student.avatar}}" {{?student.state == '2'}}class="opacity"{{?}}/>
                 </div>
                 <div class="attendance-info">
-                    <p>{{=student.name}}</p>
+                    <p>{{=student.student_name}}</p>
                 </div>
             </div>
             {{~}}
@@ -28,11 +38,6 @@ var Attendance = function (zonediv, zone) {
                     <p>签到时间：{{=moment().format('HH:mm:ss')}}</p>
                 </div>
             </div>`
-
-    this.init = function () {
-        var templ = doT.template(attendanceListTpl)
-        this.zonediv.html(templ(common.students))
-    }
 
     var checkin = function (student) {
         if (!student.id) return
@@ -54,6 +59,40 @@ var Attendance = function (zonediv, zone) {
         }, 5000)
     }
 
+    this.refreshAttendance = function () {
+        var self = this
+        var now = Date.now()
+        var events = common.attendanceEvents.filter(function (event) {
+            return event.start_time < now
+        })
+        if (events.length > 0) {
+            self.currentEvent = events[events.length - 1]
+            $.ajax({
+                url: `${common.baseUrl}/classrooms/${common.classRoom.id}/attendancesummary?event_id=${self.currentEvent.id}`,
+                dataType: 'json'
+            }).then(function (res) {
+                console.log('get attendancesummary', res)
+                var templ = doT.template(attendanceSummaryTpl)
+                $(self.zonediv).html(templ(res.data))
+                $('#attendanceList').remove()
+                if (now < self.currentEvent.end_time) {
+                    var templ = doT.template(attendanceListTpl)
+                    $('body').append(templ(res.data.dtls))
+                }
+            }).catch(function (err) {
+                console.log(err.message)
+            })
+        } else {
+            this.zonediv.html(attendanceNullTpl)
+        }
+    }
+
+    this.init = function () {
+        var self = this
+        setInterval(self.refreshAttendance, 300000)
+        self.refreshAttendance()
+    }
+
     this.resize = function (scalew, scaleh) {
         zonediv.css({
             'box-sizing': 'border-box',
@@ -72,51 +111,30 @@ var Attendance = function (zonediv, zone) {
     };
 
     this.swipe = function (hardId) {
-        console.log(hardId)
-        var student = common.students.filter(function (student) {
-            return student['hard_id'] == hardId
-        })
-        clearTimeout(timer)
-        if (student.length) {
-            var st = student[0]
-            checkin(st)
-            var data = JSON.stringify({
-                'hard_id': st['hard_id'],
-                'student_id': st.id,
-                'classroom_id': common.classRoom.id,
-                ts: Date.now()
+        var self = this
+        if (self.currentEvent && self.currentEvent.end_time < Date.now) {
+            var student = common.students.find(function (student) {
+                return student['hard_id'] == hardId
             })
-            $.ajax({
-                url: `${common.baseUrl}/students/${st.id}/attendance?ts=${Date.now()}`,
-                type: 'post',
-                contentType: 'application/json',
-                data: data
-            }).then(function (res) {
-                console.log(res.data)
-            }).catch(function (err) {
-                console.log(JSON.stringify(err))
-            })
+            if (student) {
+                checkin(student)
+                var data = JSON.stringify({
+                    'hard_id': student['hard_id'],
+                    'student_id': student.id,
+                    'classroom_id': common.classRoom.id,
+                    ts: Date.now()
+                })
+                $.ajax({
+                    url: `${common.baseUrl}/students/${student.id}/attendance?event_time=${Date.now()}&event_id=${self.currentEvent.id}`,
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: data
+                }).then(function (res) {
+                    self.refreshAttendance()
+                }).catch(function (err) {
+                    console.log(JSON.stringify(err))
+                })
+            }
         }
-    }
-
-    this.keyup = function () {
-        var st = common.students[Math.floor(Math.random() * 10)]
-        checkin(st)
-        var data = JSON.stringify({
-            'hard_id': st['hard_id'],
-            'student_id': st.id,
-            'classroom_id': common.classRoom.id,
-            ts: Date.now()
-        })
-        $.ajax({
-            url: `${common.baseUrl}/students/${st.id}/attendance?ts=${Date.now()}`,
-            type: 'post',
-            contentType: 'application/json',
-            data: data
-        }).then(function (res) {
-            console.log(res.data)
-        }).catch(function (err) {
-            console.log(JSON.stringify(err))
-        })
     }
 }

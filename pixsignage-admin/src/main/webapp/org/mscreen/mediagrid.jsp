@@ -148,10 +148,10 @@
 															<label class="radio-inline">
 																<input type="radio" name="objtype" value="2"> <spring:message code="pixsign.image"/>
 															</label>
-															<!-- 
 															<label class="radio-inline page-ctrl">
 																<input type="radio" name="objtype" value="3"> <spring:message code="pixsign.page"/>
 															</label>
+															<!-- 
 															<label class="radio-inline bundle-ctrl">
 																<input type="radio" name="objtype" value="4"> <spring:message code="pixsign.bundle"/>
 															</label>

@@ -179,11 +179,9 @@
 															<div class="portlet-title">
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																<ul class="nav nav-tabs">
-																	<!-- 
 																	<li id="nav_tab4" class="pageflag">
 																		<a href="#PageTab" data-toggle="tab"><spring:message code="pixsign.solopage"/></a>
 																	</li>
-																		 -->
 																	<li id="nav_tab3" class="imageflag">
 																		<a href="#ImageTab" data-toggle="tab"><spring:message code="pixsign.soloimage"/></a>
 																	</li>
@@ -234,6 +232,19 @@
 																			</div>
 																			<div class="col-md-9">
 																				<table id="ImageTable" class="table table-condensed table-hover">
+																					<thead></thead>
+																					<tbody></tbody>
+																				</table>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="tab-pane" id="PageTab">
+																		<div class="row">
+																			<div class="col-md-3">
+																				<div class="row"><div class="col-md-12 branchtree"></div></div>
+																			</div>
+																			<div class="col-md-9">
+																				<table id="PageTable" class="table table-condensed table-hover">
 																					<thead></thead>
 																					<tbody></tbody>
 																				</table>

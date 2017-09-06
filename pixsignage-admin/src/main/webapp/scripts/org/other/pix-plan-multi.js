@@ -586,6 +586,79 @@ $('#ImageTable_wrapper .dataTables_filter input').addClass("form-control input-m
 $('#ImageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
 $('#ImageTable').css('width', '100%');
 
+//页面table初始化
+var PageTree = new BranchTree($('#PageTab'));
+$('#PageTable thead').css('display', 'none');
+$('#PageTable tbody').css('display', 'none');	
+var pagehtml = '';
+$('#PageTable').dataTable({
+	'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+	'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+					  [ 12, 30, 48, 96 ] 
+					],
+	'bProcessing' : true,
+	'bServerSide' : true,
+	'sAjaxSource' : 'page!list.action',
+	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+					{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
+	'iDisplayLength' : 12,
+	'sPaginationType' : 'bootstrap',
+	'oLanguage' : DataTableLanguage,
+	'fnPreDrawCallback': function (oSettings) {
+		if ($('#PageContainer').length < 1) {
+			$('#PageTable').append('<div id="PageContainer"></div>');
+		}
+		$('#PageContainer').html(''); 
+		return true;
+	},
+	'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		if (iDisplayIndex % 6 == 0) {
+			pagehtml = '';
+			pagehtml += '<div class="row" >';
+		}
+		pagehtml += '<div class="col-md-2 col-xs-2">';
+		
+		pagehtml += '<div id="ThumbContainer" style="position:relative">';
+		var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+		pagehtml += '<div id="PageThumb" class="thumbs">';
+		pagehtml += '<img src="/pixsigdata' + aData.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+		pagehtml += '<div class="mask">';
+		pagehtml += '<div>';
+		pagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+		pagehtml += '<a class="btn default btn-sm green pix-plandtl-page-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
+		pagehtml += '</div>';
+		pagehtml += '</div>';
+		pagehtml += '</div>';
+
+		pagehtml += '</div>';
+
+		pagehtml += '</div>';
+		if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#PageTable').dataTable().fnGetData().length) {
+			pagehtml += '</div>';
+			if ((iDisplayIndex+1) != $('#PageTable').dataTable().fnGetData().length) {
+				pagehtml += '<hr/>';
+			}
+			$('#PageContainer').append(pagehtml);
+		}
+		return nRow;
+	},
+	'fnDrawCallback': function(oSettings, json) {
+		$('#PageContainer .thumbs').each(function(i) {
+			$(this).height($(this).parent().width());
+		});
+		$('#PageContainer .mask').each(function(i) {
+			$(this).height($(this).parent().parent().width() + 2);
+		});
+	},
+	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':PageTree.branchid });
+		aoData.push({'name':'folderid','value':PageTree.folderid });
+	}
+});
+$('#PageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+$('#PageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+$('#PageTable').css('width', '100%');
+
 $('#nav_tab1').click(function(event) {
 	$('#MediagridTable').dataTable()._fnAjaxUpdate();
 });
@@ -594,6 +667,9 @@ $('#nav_tab2').click(function(event) {
 });
 $('#nav_tab3').click(function(event) {
 	$('#ImageTable').dataTable()._fnAjaxUpdate();
+});
+$('#nav_tab4').click(function(event) {
+	$('#PageTable').dataTable()._fnAjaxUpdate();
 });
 
 //SelectedDtlTable初始化
@@ -779,6 +855,25 @@ $('body').on('click', '.pix-plandtl-image-add', function(event) {
 	plandtl.objtype = 4;
 	plandtl.objid = data.imageid;
 	plandtl.image = data;
+	plandtl.sequence = CurrentPlandtls.length + 1;
+	plandtl.maxtimes = 0;
+	plandtl.duration = 10;
+	CurrentPlandtls.push(plandtl);
+	refreshSelectedDtlTable();
+});
+//增加Page到SelectedDtlTable
+$('body').on('click', '.pix-plandtl-page-add', function(event) {
+	var rowIndex = $(event.target).attr("data-id");
+	if (rowIndex == undefined) {
+		rowIndex = $(event.target).parent().attr('data-id');
+	}
+	var data = $('#PageTable').dataTable().fnGetData(rowIndex);
+	var plandtl = {};
+	plandtl.plandtlid = 0;
+	plandtl.planid = CurrentPlan.planid;
+	plandtl.objtype = 2;
+	plandtl.objid = data.pageid;
+	plandtl.page = data;
 	plandtl.sequence = CurrentPlandtls.length + 1;
 	plandtl.maxtimes = 0;
 	plandtl.duration = 10;
@@ -1160,7 +1255,7 @@ function refreshMediaTable() {
 	$('#MediagridTable').dataTable()._fnAjaxUpdate();
 	$('#VideoTable').dataTable()._fnAjaxUpdate();
 	$('#ImageTable').dataTable()._fnAjaxUpdate();
-	//$('#PageTable').dataTable()._fnAjaxUpdate();
+	$('#PageTable').dataTable()._fnAjaxUpdate();
 }
 
 function refreshSelectedDtlTable() {

@@ -30,4 +30,6 @@ public interface TemplateService {
 
 	public void importZip(File zipfile) throws Exception;
 
+	public String fetch(String sourceid) throws Exception;
+
 }

@@ -690,7 +690,7 @@ function refreshMediaSelect() {
 			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
 			ajax: {
-				url: 'page!pagelist.action',
+				url: 'page!list.action',
 				type: 'GET',
 				dataType: 'json',
 				data: function (term, page) {

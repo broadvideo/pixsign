@@ -16,7 +16,7 @@ select last_insert_id() into @dbversionid;
 create table dailyplaylog( 
    dailyplaylogid int not null auto_increment,
    orgid int not null,
-   branchid int not null,
+   branchid int default 0,
    deviceid int not null,
    mediatype char(1) not null,
    mediaid int not null,
@@ -38,7 +38,7 @@ from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime
 create table monthlyplaylog( 
    monthlyplaylogid int not null auto_increment,
    orgid int not null,
-   branchid int not null,
+   branchid int default 0,
    deviceid int not null,
    mediatype char(1) not null,
    mediaid int not null,
