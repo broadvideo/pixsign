@@ -12,6 +12,7 @@
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="format" property="format" jdbcType="VARCHAR" />
     <result column="filepath" property="filepath" jdbcType="VARCHAR" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
@@ -29,13 +30,13 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, filepath, 
+    videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
     thumbnail, relateid, tags, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
-    select videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, filepath, 
+    select videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
     thumbnail, 0 as relateid, tags, createtime, createstaffid
     from video
@@ -123,7 +124,7 @@
     </selectKey>
     insert into video (orgid, branchid, folderid, 
       name, oname, uuid, type, 
-      width, height, filepath, 
+      width, height, format, filepath, 
       filename, size, md5, 
       previewflag, status, progress, 
       description, thumbnail, relateid, 
@@ -131,7 +132,7 @@
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
-      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, 
+      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{format,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
       #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
       #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
@@ -170,6 +171,9 @@
       </if>
       <if test="height != null" >
         height,
+      </if>
+      <if test="format != null" >
+        format,
       </if>
       <if test="filepath != null" >
         filepath,
@@ -238,6 +242,9 @@
       </if>
       <if test="height != null" >
         #{height,jdbcType=INTEGER},
+      </if>
+      <if test="format != null" >
+        #{format,jdbcType=VARCHAR},
       </if>
       <if test="filepath != null" >
         #{filepath,jdbcType=VARCHAR},
@@ -310,6 +317,9 @@
       <if test="height != null" >
         height = #{height,jdbcType=INTEGER},
       </if>
+      <if test="format != null" >
+        format = #{format,jdbcType=VARCHAR},
+      </if>
       <if test="filepath != null" >
         filepath = #{filepath,jdbcType=VARCHAR},
       </if>
@@ -363,6 +373,7 @@
       type = #{type,jdbcType=CHAR},
       width = #{width,jdbcType=INTEGER},
       height = #{height,jdbcType=INTEGER},
+      format = #{format,jdbcType=VARCHAR},
       filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
       size = #{size,jdbcType=BIGINT},

@@ -2,11 +2,12 @@
  * Created by Elvis on 2017/6/29.
  */
 var common = new function () {
-    this.host = window.android && window.android.getHost() || '192.168.0.102';
+    this.host = window.android && window.android.getHost() || '192.168.0.71';
     this.baseUrl = 'http://' + this.host + '/pixsignage-api/service';
-    this.terminalId = window.android && window.android.getTerminalId() || '00004';
+    this.terminalId = window.android && window.android.getTerminalId() || '00001';
     this.classRoom = null;
     this.students = null;
+    this.attendanceEvents = null;
     this.homeSchool = [];
     this.attendance = [];
     this.dailyCourse = [];
@@ -29,6 +30,13 @@ var common = new function () {
             });
         }).then(function (res) {
             thiz.students = res.data;
+            var dateStr = moment().format('YYYYMMDD')
+            return $.ajax({
+                url: `${thiz.baseUrl}/classrooms/${thiz.classRoom.id}/attendanceevents?time=${dateStr}`,
+                dataType: 'json'
+            });
+        }).then(function (res) {
+            thiz.attendanceEvents = res.data;
             thiz.dailyCourse.forEach(item => item.init());
             thiz.weeklyCourse.forEach(item => item.init());
             thiz.homeSchool.forEach(item => item.init());

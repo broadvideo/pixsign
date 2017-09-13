@@ -39,7 +39,7 @@ import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Devicefilehis;
 import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Dvb;
-import com.broadvideo.pixsignage.domain.Flowlog;
+import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
@@ -53,7 +53,7 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefilehisMapper;
 import com.broadvideo.pixsignage.persistence.DevicegridMapper;
 import com.broadvideo.pixsignage.persistence.DvbMapper;
-import com.broadvideo.pixsignage.persistence.FlowlogMapper;
+import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
@@ -92,7 +92,7 @@ public class PixsignageService2 {
 	@Autowired
 	private DebugreportMapper debugreportMapper;
 	@Autowired
-	private FlowlogMapper flowlogMapper;
+	private HourflowlogMapper hourflowlogMapper;
 	@Autowired
 	private DevicegridMapper devicegridMapper;
 	@Autowired
@@ -156,7 +156,7 @@ public class PixsignageService2 {
 			Device device = deviceMapper.selectByHardkey(hardkey);
 			String oldhardkey = hardkey;
 			if (device != null && !device.getTerminalid().equals(terminalid)) {
-				logger.info("unbind old device {} for the same hardkey {}", terminalid, hardkey);
+				logger.info("unbind old device {} for the same hardkey {}", device.getTerminalid(), hardkey);
 				deviceMapper.unbind("" + device.getDeviceid());
 			}
 			if (device == null) {
@@ -793,7 +793,6 @@ public class PixsignageService2 {
 					devicefile.setDescription(desc);
 					devicefile.setUpdatetime(Calendar.getInstance().getTime());
 					devicefileService.updateDevicefile(devicefile);
-
 				}
 			}
 
@@ -1222,7 +1221,6 @@ public class PixsignageService2 {
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
 			long starttime = requestJson.getLong("start_time");
-			long endtime = requestJson.getLong("end_time");
 			int total = requestJson.getInt("total_delta");
 			int male = requestJson.getInt("male_delta");
 			int female = requestJson.getInt("female_delta");
@@ -1232,6 +1230,9 @@ public class PixsignageService2 {
 			int age4 = requestJson.getInt("middle_delta");
 			int age5 = requestJson.getInt("elder_delta");
 
+			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
+				return handleResult(1020, "数据错误");
+			}
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1245,26 +1246,38 @@ public class PixsignageService2 {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			Flowlog flowlog = new Flowlog();
-			flowlog.setOrgid(device.getOrgid());
-			flowlog.setBranchid(device.getBranchid());
-			flowlog.setDeviceid(device.getDeviceid());
-			flowlog.setUuid("" + starttime);
-			Calendar c1 = Calendar.getInstance();
-			c1.setTimeInMillis(starttime);
-			Calendar c2 = Calendar.getInstance();
-			c2.setTimeInMillis(endtime);
-			flowlog.setStarttime(c1.getTime());
-			flowlog.setEndtime(c2.getTime());
-			flowlog.setTotal(total);
-			flowlog.setMale(male);
-			flowlog.setFemale(female);
-			flowlog.setAge1(age1);
-			flowlog.setAge2(age2);
-			flowlog.setAge3(age3);
-			flowlog.setAge4(age4);
-			flowlog.setAge5(age5);
-			flowlogMapper.insertSelective(flowlog);
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(starttime);
+			String flowdate = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+			String flowhour = new SimpleDateFormat("yyyyMMddHH").format(c.getTime());
+			Hourflowlog hourflowlog = hourflowlogMapper.selectByDetail("" + device.getDeviceid(), flowhour);
+			if (hourflowlog != null) {
+				hourflowlog.setTotal(hourflowlog.getTotal() + total);
+				hourflowlog.setMale(hourflowlog.getMale() + male);
+				hourflowlog.setFemale(hourflowlog.getFemale() + female);
+				hourflowlog.setAge1(hourflowlog.getAge1() + age1);
+				hourflowlog.setAge2(hourflowlog.getAge2() + age2);
+				hourflowlog.setAge3(hourflowlog.getAge3() + age3);
+				hourflowlog.setAge4(hourflowlog.getAge4() + age4);
+				hourflowlog.setAge5(hourflowlog.getAge5() + age5);
+				hourflowlogMapper.updateByPrimaryKeySelective(hourflowlog);
+			} else {
+				hourflowlog = new Hourflowlog();
+				hourflowlog.setOrgid(device.getOrgid());
+				hourflowlog.setBranchid(device.getBranchid());
+				hourflowlog.setDeviceid(device.getDeviceid());
+				hourflowlog.setFlowdate(flowdate);
+				hourflowlog.setFlowhour(flowhour);
+				hourflowlog.setTotal(total);
+				hourflowlog.setMale(male);
+				hourflowlog.setFemale(female);
+				hourflowlog.setAge1(age1);
+				hourflowlog.setAge2(age2);
+				hourflowlog.setAge3(age3);
+				hourflowlog.setAge4(age4);
+				hourflowlog.setAge5(age5);
+				hourflowlogMapper.insertSelective(hourflowlog);
+			}
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			return responseJson.toString();

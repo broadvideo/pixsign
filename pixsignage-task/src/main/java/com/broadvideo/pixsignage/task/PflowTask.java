@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -18,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Pflowlog;
+import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.PflowlogMapper;
+import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 
 public class PflowTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,7 +29,7 @@ public class PflowTask {
 	private static boolean workflag = false;
 
 	@Autowired
-	private PflowlogMapper pflowlogMapper;
+	private HourflowlogMapper hourflowlogMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -112,18 +113,25 @@ public class PflowTask {
 						if (Long.parseLong(ss[0]) < 1483200000000L) {
 							continue;
 						}
-						Pflowlog pflowlog = new Pflowlog();
-						pflowlog.setOrgid(device.getOrgid());
-						pflowlog.setBranchid(device.getBranchid());
-						pflowlog.setDeviceid(device.getDeviceid());
-						Calendar c1 = Calendar.getInstance();
-						c1.setTimeInMillis(Long.parseLong(ss[0]));
-						Calendar c2 = Calendar.getInstance();
-						c2.setTimeInMillis(Long.parseLong(ss[1]));
-						pflowlog.setStarttime(c1.getTime());
-						pflowlog.setEndtime(c2.getTime());
-						pflowlog.setDuration((int) Math.ceil((c2.getTimeInMillis() - c1.getTimeInMillis()) / 1000));
-						pflowlogMapper.insertSelective(pflowlog);
+
+						Calendar c = Calendar.getInstance();
+						c.setTimeInMillis(Long.parseLong(ss[0]));
+						String flowdate = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+						String flowhour = new SimpleDateFormat("yyyyMMddHH").format(c.getTime());
+						Hourflowlog hourflowlog = hourflowlogMapper.selectByDetail("" + device.getDeviceid(), flowhour);
+						if (hourflowlog != null) {
+							hourflowlog.setTotal(hourflowlog.getTotal() + 1);
+							hourflowlogMapper.updateByPrimaryKeySelective(hourflowlog);
+						} else {
+							hourflowlog = new Hourflowlog();
+							hourflowlog.setOrgid(device.getOrgid());
+							hourflowlog.setBranchid(device.getBranchid());
+							hourflowlog.setDeviceid(device.getDeviceid());
+							hourflowlog.setFlowdate(flowdate);
+							hourflowlog.setFlowhour(flowhour);
+							hourflowlog.setTotal(1);
+							hourflowlogMapper.insertSelective(hourflowlog);
+						}
 					}
 				}
 			}

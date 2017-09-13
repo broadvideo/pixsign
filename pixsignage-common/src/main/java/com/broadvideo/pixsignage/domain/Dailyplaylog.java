@@ -15,15 +15,11 @@ public class Dailyplaylog {
 
 	private Integer mediaid;
 
-	private Date playdate;
+	private String playdate;
 
 	private Integer total;
 
 	private Date createtime;
-
-	private Video video;
-
-	private Image image;
 
 	public Integer getDailyplaylogid() {
 		return dailyplaylogid;
@@ -73,11 +69,11 @@ public class Dailyplaylog {
 		this.mediaid = mediaid;
 	}
 
-	public Date getPlaydate() {
+	public String getPlaydate() {
 		return playdate;
 	}
 
-	public void setPlaydate(Date playdate) {
+	public void setPlaydate(String playdate) {
 		this.playdate = playdate;
 	}
 
@@ -95,21 +91,5 @@ public class Dailyplaylog {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
-	}
-
-	public Video getVideo() {
-		return video;
-	}
-
-	public void setVideo(Video video) {
-		this.video = video;
-	}
-
-	public Image getImage() {
-		return image;
-	}
-
-	public void setImage(Image image) {
-		this.image = image;
 	}
 }

@@ -42,6 +42,16 @@ var FormHandler = function (form) {
 	
 	this.reset = function () {
 		this.form.loadJSON(_initdata);
+		var checkboxes = this.form.find('input[type="checkbox"]');
+		$.each( checkboxes, function( index, checkbox ) {
+			if (_initdata[$(checkbox).attr('name')] == 0) {
+				$(checkbox).removeAttr('checked');
+				$(checkbox).parent().removeClass('checked');
+			} else {
+				$(checkbox).attr('checked');
+				$(checkbox).parent().addClass('checked');
+			}
+		});
 		this.form.find('.form-group').removeClass('has-error');
 		this.form.find('.help-block').remove();
 	}
@@ -63,6 +73,8 @@ var FormHandler = function (form) {
 				$(checkbox).parent().addClass('checked');
 			}
 		});
+		this.form.find('.form-group').removeClass('has-error');
+		this.form.find('.help-block').remove();
 	}
 	
 	init();

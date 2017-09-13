@@ -406,7 +406,7 @@
 			<h3 class="page-title"><spring:message code="menu.device"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
@@ -455,7 +455,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane active" id="UnDeviceTab">
+								<div class="tab-pane" id="UnDeviceTab">
 									<div class="row">
 										<div class="col-md-2">
 											<div class="row"><div class="col-md-12 branchtree"></div></div>
@@ -506,7 +506,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/device/device.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/device/device.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;

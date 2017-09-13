@@ -205,7 +205,11 @@ public class Page {
 	}
 
 	public Long getTimestamp() {
-		return updatetime.getTime();
+		if (updatetime != null) {
+			return updatetime.getTime();
+		} else {
+			return 0L;
+		}
 	}
 
 	public void setTimestamp(Long timestamp) {

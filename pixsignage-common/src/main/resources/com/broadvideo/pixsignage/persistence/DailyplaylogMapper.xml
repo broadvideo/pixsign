@@ -8,7 +8,7 @@
     <result column="deviceid" property="deviceid" jdbcType="INTEGER" />
     <result column="mediatype" property="mediatype" jdbcType="CHAR" />
     <result column="mediaid" property="mediaid" jdbcType="INTEGER" />
-    <result column="playdate" property="playdate" jdbcType="DATE" />
+    <result column="playdate" property="playdate" jdbcType="VARCHAR" />
     <result column="total" property="total" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -28,7 +28,7 @@
     where deviceid=#{deviceid}
     and mediatype = #{mediatype}
     and mediaid = #{mediaid}
-    and date_format(playdate,'%Y%m%d%H') = #{day}
+    and playdate = #{day}
   </select>
   
   <resultMap id="PeriodResultMap" type="java.util.HashMap">
@@ -52,32 +52,24 @@
     select deviceid, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d') &gt;= #{from}
-    and date_format(starttime,'%Y%m%d') &lt;= #{to}
-    group by mediatype, mediaid
-    order by amount desc
-  </select>
-  <select id="statByHour" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m%d%H') as period, mediatype, mediaid, sum(total) as amount
-    from dailyplaylog
-    where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d%H') = #{hour}
+    and playdate &gt;= #{from}
+    and playdate &lt;= #{to}
     group by mediatype, mediaid
     order by amount desc
   </select>
   <select id="statByDay" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m%d') as period, mediatype, mediaid, sum(total) as amount
+    select deviceid, playdate as period, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m%d') = #{day}
+    and playdate = #{day}
     group by mediatype, mediaid
     order by amount desc
   </select>
   <select id="statByMonth" resultMap="PeriodResultMap">
-    select deviceid, date_format(starttime,'%Y%m') as period, mediatype, mediaid, sum(total) as amount
+    select deviceid, left(playdate,6) as period, mediatype, mediaid, sum(total) as amount
     from dailyplaylog
     where deviceid = #{deviceid}
-    and date_format(starttime,'%Y%m') = #{month}
+    and left(playdate,6) = #{month}
     group by mediatype, mediaid
     order by amount desc
   </select>
@@ -95,7 +87,7 @@
       mediatype, mediaid, playdate, 
       total, createtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
-      #{mediatype,jdbcType=CHAR}, #{mediaid,jdbcType=INTEGER}, #{playdate,jdbcType=DATE}, 
+      #{mediatype,jdbcType=CHAR}, #{mediaid,jdbcType=INTEGER}, #{playdate,jdbcType=VARCHAR}, 
       #{total,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Dailyplaylog" >
@@ -146,7 +138,7 @@
         #{mediaid,jdbcType=INTEGER},
       </if>
       <if test="playdate != null" >
-        #{playdate,jdbcType=DATE},
+        #{playdate,jdbcType=VARCHAR},
       </if>
       <if test="total != null" >
         #{total,jdbcType=INTEGER},
@@ -175,7 +167,7 @@
         mediaid = #{mediaid,jdbcType=INTEGER},
       </if>
       <if test="playdate != null" >
-        playdate = #{playdate,jdbcType=DATE},
+        playdate = #{playdate,jdbcType=VARCHAR},
       </if>
       <if test="total != null" >
         total = #{total,jdbcType=INTEGER},
@@ -193,7 +185,7 @@
       deviceid = #{deviceid,jdbcType=INTEGER},
       mediatype = #{mediatype,jdbcType=CHAR},
       mediaid = #{mediaid,jdbcType=INTEGER},
-      playdate = #{playdate,jdbcType=DATE},
+      playdate = #{playdate,jdbcType=VARCHAR},
       total = #{total,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where dailyplaylogid = #{dailyplaylogid,jdbcType=INTEGER}

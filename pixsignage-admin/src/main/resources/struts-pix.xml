@@ -1282,31 +1282,31 @@
 			</result>
 		</action>
 
-		<action name="hourplaylog!statbyperiod" method="doStatByPeriod" class="hourplaylogAction">
+		<action name="playlog!statall" method="doStatAll" class="playlogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="hourplaylog!statbyhour" method="doStatByHour" class="hourplaylogAction">
+		<action name="playlog!statbyperiod" method="doStatByPeriod" class="playlogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="hourplaylog!statbyday" method="doStatByDay" class="hourplaylogAction">
+		<action name="playlog!statbyday" method="doStatByDay" class="playlogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="hourplaylog!statbymonth" method="doStatByMonth" class="hourplaylogAction">
+		<action name="playlog!statbymonth" method="doStatByMonth" class="playlogAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">,aaData.*,errorcode,errormsg</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="hourplaylog!downloadbyperiod" method="doDownloadByPeriod" class="hourplaylogAction">
+		<action name="playlog!downloadbyperiod" method="doDownloadByPeriod" class="playlogAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
 				<param name="inputName">inputStream</param>
@@ -1314,7 +1314,7 @@
 				<param name="bufferSize">4096</param>
 			</result>
 		</action>
-		<action name="hourplaylog!downloadbyhour" method="doDownloadByHour" class="hourplaylogAction">
+		<action name="playlog!downloadbyday" method="doDownloadByDay" class="playlogAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
 				<param name="inputName">inputStream</param>
@@ -1322,15 +1322,7 @@
 				<param name="bufferSize">4096</param>
 			</result>
 		</action>
-		<action name="hourplaylog!downloadbyday" method="doDownloadByDay" class="hourplaylogAction">
-			<result name="success" type="stream">
-				<param name="contentType">application/octet-stream</param>
-				<param name="inputName">inputStream</param>
-				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
-				<param name="bufferSize">4096</param>
-			</result>
-		</action>
-		<action name="hourplaylog!downloadbymonth" method="doDownloadByMonth" class="hourplaylogAction">
+		<action name="playlog!downloadbymonth" method="doDownloadByMonth" class="playlogAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
 				<param name="inputName">inputStream</param>
@@ -1343,41 +1335,6 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-
-		<action name="pflowlog!devicestatlist" method="doDeviceStatList" class="pflowlogAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="pflowlog!statbyhour" method="doStatByHour" class="pflowlogAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="pflowlog!statbyday" method="doStatByDay" class="pflowlogAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="pflowlog!downloadbyhour" method="doDownloadByHour" class="pflowlogAction">
-			<result name="success" type="stream">
-				<param name="contentType">application/octet-stream</param>
-				<param name="inputName">inputStream</param>
-				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
-				<param name="bufferSize">4096</param>
-			</result>
-		</action>
-		<action name="pflowlog!downloadbyday" method="doDownloadByDay" class="pflowlogAction">
-			<result name="success" type="stream">
-				<param name="contentType">application/octet-stream</param>
-				<param name="inputName">inputStream</param>
-				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
-				<param name="bufferSize">4096</param>
 			</result>
 		</action>
 

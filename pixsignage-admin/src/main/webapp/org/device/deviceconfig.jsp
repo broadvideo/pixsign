@@ -127,7 +127,7 @@
 			<h3 class="page-title"><spring:message code="menu.deviceconfig"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
@@ -187,7 +187,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/device/deviceconfig.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/device/deviceconfig.js?t=${timestamp}"></script>
 <script>
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');

@@ -228,6 +228,7 @@ public class PageServiceImpl implements PageService {
 				page.setWidth(1080);
 				page.setHeight(1920);
 			}
+			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 
 			if (page.getName().equals("UNKNOWN")) {

@@ -156,7 +156,7 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             res.course_schedules.forEach(item => {
                 thiz.zonediv.find('td').each(function (i, item2) {
                     if ($(item2).data('periodnum') == item['period_num'] && $(item2).data('type') == item['type'] && $(item2).data('workday') == item['workday']) {
-                        $(item2).html(`<span>${item.course_name}</span><span>(${item.teacher_name})</span>`)
+                        $(item2).html(`<span>${item.course_name}</span>&nbsp;<span>(${item.teacher_name})</span>`)
                     }
                 })
             })

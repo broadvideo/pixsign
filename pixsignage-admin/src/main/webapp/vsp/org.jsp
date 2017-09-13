@@ -16,7 +16,7 @@
 <body>
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+			<div id="OrgEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -24,7 +24,7 @@
 							<h4 class="modal-title"><spring:message code="global.org"/></h4>
 						</div>
 						<div class="modal-body">
-							<form id="MyEditForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
+							<form id="OrgEditForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
 								<input type="hidden" name="org.orgid" value="0" />
 								<input type="hidden" name="org.status" value="1" />
 								<input type="hidden" name="org.apps" value="" />
@@ -284,16 +284,14 @@
 					</li>
 				</ul>
 			</div>
-			<!-- END PAGE HEADER-->
 			
-			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="global.org"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="OrgModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -302,7 +300,7 @@
 									<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
+							<table id="OrgTable" class="table table-striped table-bordered table-hover">
 								<thead></thead>
 								<tbody></tbody>
 							</table>
@@ -310,7 +308,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- END PAGE CONTENT -->
 		</div>
 	</div>
 </body>
@@ -334,8 +331,8 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-org.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/vsp/org.js?t=${timestamp}"></script>
 <script>
 var PixCtrl = <%=(session_vsp != null && session_vsp.getCode().equals("default"))%>;
 var BundleCtrl = <%=(session_vsp != null && session_vsp.getBundleflag().equals("1"))%>;
@@ -359,9 +356,8 @@ var CurrentStorage = <%=session_vsp.getCurrentstorage()%>;
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
-	initMyTable();
-	initMyEditModal();
+	PixData.init('${locale}');
+	OrgModule.init();
 });
 
 </script>
