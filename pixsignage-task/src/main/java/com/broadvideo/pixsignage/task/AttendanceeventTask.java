@@ -49,8 +49,10 @@ public class AttendanceeventTask {
 
 		} catch (Exception e) {
 			logger.error("Gen Attendanceevent Quartz Task error: {}", e.getMessage());
+		} finally {
+			workflag = false;
+
 		}
-		workflag = false;
 	}
 
 
