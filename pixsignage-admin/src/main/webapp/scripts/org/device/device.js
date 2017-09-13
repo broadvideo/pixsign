@@ -763,7 +763,7 @@ var DeviceModule = function () {
 				$('td:eq(0)', nRow).html(aData.video.videoid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.video.thumbnail + '" width="40px"></img>');
 				$('td:eq(2)', nRow).html(aData.video.filename);
-				$('td:eq(3)', nRow).html(transferIntToComma(aData.video.size));
+				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.video.size));
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -804,7 +804,7 @@ var DeviceModule = function () {
 				$('td:eq(0)', nRow).html(aData.image.imageid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.image.thumbnail + '" width="40px"></img>');
 				$('td:eq(2)', nRow).html(aData.image.filename);
-				$('td:eq(3)', nRow).html(transferIntToComma(aData.image.size));
+				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.image.size));
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -845,7 +845,7 @@ var DeviceModule = function () {
 				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.video.thumbnail + '" width="40px"></img>');
 				$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
-				$('td:eq(3)', nRow).html(transferIntToComma(aData.mmediadtl.size));
+				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -886,7 +886,7 @@ var DeviceModule = function () {
 				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
 				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.image.thumbnail + '" width="40px"></img>');
 				$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
-				$('td:eq(3)', nRow).html(transferIntToComma(aData.mmediadtl.size));
+				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {

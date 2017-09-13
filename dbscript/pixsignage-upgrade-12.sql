@@ -29,11 +29,12 @@ default character set utf8;
 alter table dailyplaylog add index dailyplaylog_index1(deviceid);
 alter table dailyplaylog add index dailyplaylog_index2(mediatype, mediaid);
 alter table dailyplaylog add index dailyplaylog_index3(orgid);
-alter table dailyplaylog add unique index(deviceid, mediatype, mediaid, playdate);
+alter table dailyplaylog add unique index dailyplaylog_index4(deviceid, mediatype, mediaid, playdate);
 
 insert into dailyplaylog(orgid,deviceid,mediatype,mediaid,playdate,total)
 select orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m%d'),SUM(total) 
 from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m%d');
+update dailyplaylog p,device d set p.branchid=d.branchid where p.deviceid=d.deviceid;
 
 create table monthlyplaylog( 
    monthlyplaylogid int not null auto_increment,
@@ -51,11 +52,38 @@ default character set utf8;
 alter table monthlyplaylog add index monthlyplaylog_index1(deviceid);
 alter table monthlyplaylog add index monthlyplaylog_index2(mediatype, mediaid);
 alter table monthlyplaylog add index monthlyplaylog_index3(orgid);
-alter table monthlyplaylog add unique index(deviceid, mediatype, mediaid, playmonth);
+alter table monthlyplaylog add unique index monthlyplaylog_index4(deviceid, mediatype, mediaid, playmonth);
 
 insert into monthlyplaylog(orgid,deviceid,mediatype,mediaid,playmonth,total)
 select orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m'),SUM(total) 
 from hourplaylog group by orgid,deviceid,mediatype,mediaid,DATE_FORMAT(starttime,'%Y%m');
+update monthlyplaylog p,device d set p.branchid=d.branchid where p.deviceid=d.deviceid;
+
+create table hourflowlog( 
+   hourflowlogid int not null auto_increment,
+   orgid int not null,
+   branchid int default 0,
+   deviceid int not null,
+   flowdate varchar(8),
+   flowhour varchar(10),
+   total int default 0,
+   male int default 0,
+   female int default 0,
+   age1 int default 0,
+   age2 int default 0,
+   age3 int default 0,
+   age4 int default 0,
+   age5 int default 0,
+   createtime timestamp not null default current_timestamp,
+   primary key (hourflowlogid)
+ )engine = innodb
+default character set utf8;
+alter table hourflowlog add index hourflowlog_index1(deviceid);
+alter table hourflowlog add index hourflowlog_index2(orgid);
+alter table hourflowlog add index hourflowlog_index3(deviceid, flowdate);
+alter table hourflowlog add unique index hourflowlog_index4(deviceid, flowhour);
+
+update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.opmanage','','fa-cloud',1,1);

@@ -40,8 +40,13 @@ public class PlaylogAction extends BaseDatatableAction {
 			this.setsEcho(getParameter("sEcho"));
 			String length = getParameter("length");
 
+			String branchid = "" + getLoginStaff().getBranchid();
+			if (branchid.equals("" + getLoginStaff().getOrg().getTopbranchid())) {
+				branchid = null;
+			}
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = monthlyplaylogMapper.statAll("" + getLoginStaff().getOrgid(), length);
+			List<HashMap<String, Object>> list = monthlyplaylogMapper.statAll("" + getLoginStaff().getOrgid(), branchid,
+					length);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}

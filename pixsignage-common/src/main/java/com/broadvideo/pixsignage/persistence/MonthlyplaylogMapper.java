@@ -14,7 +14,8 @@ public interface MonthlyplaylogMapper {
 			@Param(value = "mediatype") String mediatype, @Param(value = "mediaid") String mediaid,
 			@Param(value = "month") String month);
 
-	List<HashMap<String, Object>> statAll(@Param(value = "orgid") String orgid, @Param(value = "length") String length);
+	List<HashMap<String, Object>> statAll(@Param(value = "orgid") String orgid,
+			@Param(value = "branchid") String branchid, @Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "monthlyplaylogid") String monthlyplaylogid);
 

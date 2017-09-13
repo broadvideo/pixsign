@@ -1,4 +1,4 @@
-var PflowlogModule = function () {
+var FlowlogModule = function () {
 	var _device = {};
 	this.DeviceTree = new BranchTree($('#DevicePortlet'));
 
@@ -20,9 +20,9 @@ var PflowlogModule = function () {
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : 'pflowlog!devicestatlist.action',
+			'sAjaxSource' : 'flowlog!devicestatlist.action',
 			'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
-			                {'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' },
+							{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' },
 							{'sTitle' : common.view.current_hour, 'mData' : 'amount1', 'bSortable' : false, 'sWidth' : '15%' },
 							{'sTitle' : common.view.previous_hour, 'mData' : 'amount2', 'bSortable' : false, 'sWidth' : '15%' },
 							{'sTitle' : common.view.today, 'mData' : 'amount3', 'bSortable' : false, 'sWidth' : '15%' },
@@ -36,7 +36,7 @@ var PflowlogModule = function () {
 				if (aData.onlineflag == 1) {
 					$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(1)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+					$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				} else if (aData.onlineflag == 9) {
 					$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				}
@@ -60,18 +60,18 @@ var PflowlogModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			$('input[name="pflowlog.statdate"]').val(new Date().format('yyyy') + '-' + new Date().format('MM') + '-' + new Date().format('dd'));
+			$('input[name="flowlog.statdate"]').val(new Date().format('yyyy') + '-' + new Date().format('MM') + '-' + new Date().format('dd'));
 			_device = $('#DeviceTable').dataTable().fnGetData(index);
 			$('#ChartModal').modal();
 		});
 
 		$('#ChartModal').on('shown.bs.modal', function (e) {
-			refreshStatByHourChart();
 			refreshStatByDayChart();
+			refreshStatByMonthChart();
 		})
 
-		$('input[name="pflowlog.statdate"]').on('change', function(e) {
-			refreshStatByHourChart();
+		$('input[name="flowlog.statdate"]').on('change', function(e) {
+			refreshStatByDayChart();
 		});
 
 		var CurrentMonth = new Date().format('yyyy-MM');
@@ -99,35 +99,35 @@ var PflowlogModule = function () {
 		});
 		$('#MonthSelect2').select2('val', MonthData[0].id);
 		$('#MonthSelect2').on('change', function(e) {
-			refreshStatByDayChart();
+			refreshStatByMonthChart();
 		});
 
-		function refreshStatByHourChart() {
+		function refreshStatByDayChart() {
 			$('#StatLoding1').show();
-			$('#StatByHourPlot').hide();
-			$('#StatByHourPlot2').hide();
+			$('#StatByDayPlot').hide();
+			$('#StatByDayPlot2').hide();
 
 			$.ajax({
-				url: 'pflowlog!statbyhour.action',
+				url: 'flowlog!statperiodbyday.action',
 				type : 'POST',
 				data : {
 					'deviceid': _device.deviceid,
-					'day': $('input[name="pflowlog.statdate"]').val(),
+					'day': $('input[name="flowlog.statdate"]').val(),
 				},
 				dataType: "json",
 				success : function(data, status) {
 					if (data.errorcode == 0) {
 						$('#StatLoding1').hide();
-						$('#StatByHourPlot').show();
-						$('#StatByHourPlot2').show();
-						initStatByHourPlot(data.aaData);
-						initStatByHourBar(data.aaData);
+						$('#StatByDayPlot').show();
+						$('#StatByDayPlot2').show();
+						initStatByDayPlot(data.aaData);
+						initStatByDayBar(data.aaData);
 					}
 				}
 			});
 		}
 		
-		function initStatByHourPlot(data) {
+		function initStatByDayPlot(data) {
 			var ticks = [];
 			ticks.push([1, '00:00']);
 			ticks.push([3, '02:00']);
@@ -143,38 +143,38 @@ var PflowlogModule = function () {
 			ticks.push([23, '22:00']);
 			
 			var options = {
-					series: {
-						lines: {
-							show: true,
-							lineWidth: 2,
-							fill: true,
-							fillColor: {
-								colors: [{opacity: 0.05}, {opacity: 0.01}]
-							}
-						},
-						points: {show: true },
-						shadowSize: 2
+				series: {
+					lines: {
+						show: true,
+						lineWidth: 2,
+						fill: true,
+						fillColor: {
+							colors: [{opacity: 0.05}, {opacity: 0.01}]
+						}
 					},
-					grid: {
-						hoverable: true,
-						clickable: true,
-						tickColor: "#eee",
-						borderWidth: 0
-					},
-					colors: ["#d12610"],
-					xaxis: {
-						ticks: ticks,
-						tickDecimals: 0
-					},
-					yaxis: {
-						ticks: 11,
-						tickDecimals: 0
-					}
-				};
+					points: {show: true },
+					shadowSize: 2
+				},
+				grid: {
+					hoverable: true,
+					clickable: true,
+					tickColor: "#eee",
+					borderWidth: 0
+				},
+				colors: ["#d12610"],
+				xaxis: {
+					ticks: ticks,
+					tickDecimals: 0
+				},
+				yaxis: {
+					ticks: 11,
+					tickDecimals: 0
+				}
+			};
 
 			var statdata = [];
 			var series = {};
-			series.label = $('input[name="pflowlog.statdate"]').val();
+			series.label = $('input[name="flowlog.statdate"]').val();
 			series.data = [];
 			
 			for (var i=0; i<24; i++) {
@@ -186,20 +186,20 @@ var PflowlogModule = function () {
 				series.data[sequence-1] = [sequence, amount];
 			}
 			statdata.push(series);
-			$.plot("#StatByHourPlot", statdata, options);
+			$.plot("#StatByDayPlot", statdata, options);
 
-			var prevStatByHourPoint = null;
-			$("#StatByHourPlot").bind("plothover", function (event, pos, item) {
+			var prevStatByDayPoint = null;
+			$("#StatByDayPlot").bind("plothover", function (event, pos, item) {
 				//$("#x").text(pos.x.toFixed(2));
 				//$("#y").text(pos.y.toFixed(2));
 				if (item) {
-					console.log(prevStatByHourPoint, item.dataIndex);
-					if (prevStatByHourPoint != item.dataIndex) {
-						prevStatByHourPoint = item.dataIndex;
-						$("#StatByHourTooltip").remove();
+					console.log(prevStatByDayPoint, item.dataIndex);
+					if (prevStatByDayPoint != item.dataIndex) {
+						prevStatByDayPoint = item.dataIndex;
+						$("#StatByDayTooltip").remove();
 						var x = item.datapoint[0], y = item.datapoint[1];
-						var title = $('input[name="pflowlog.statdate"]').val() + ' ' + (x-1) + ':00';
-						$('<div id="StatByHourTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
+						var title = $('input[name="flowlog.statdate"]').val() + ' ' + (x-1) + ':00';
+						$('<div id="StatByDayTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
 							position: 'absolute',
 							display: 'none',
 							top: item.pageY - 70,
@@ -212,13 +212,13 @@ var PflowlogModule = function () {
 						}).appendTo("body").fadeIn(200);
 					}
 				} else {
-					$("#StatByHourTooltip").remove();
-					prevStatByHourPoint = null;
+					$("#StatByDayTooltip").remove();
+					prevStatByDayPoint = null;
 				}
 			});
 		}
 		
-		function initStatByHourBar(data) {
+		function initStatByDayBar(data) {
 			var ticks = [];
 			ticks.push([0.5, '00:00']);
 			ticks.push([2.5, '02:00']);
@@ -266,22 +266,22 @@ var PflowlogModule = function () {
 				colors: ['#c1004F']
 			};
 			
-			$.plot($("#StatByHourBar"), [{
-		        data: statdata,
-		        lines: {
-		            lineWidth: 1,
-		        },
-		        shadowSize: 0
-		    }], options);
+			$.plot($("#StatByDayBar"), [{
+				data: statdata,
+				lines: {
+					lineWidth: 1,
+				},
+				shadowSize: 0
+			}], options);
 		}
 		
-		function refreshStatByDayChart() {
+		function refreshStatByMonthChart() {
 			$('#StatLoding2').show();
-			$('#StatByDayPlot').hide();
-			$('#StatByDayPlot2').hide();
+			$('#StatByMonthPlot').hide();
+			$('#StatByMonthPlot2').hide();
 
 			$.ajax({
-				url: 'pflowlog!statbyday.action',
+				url: 'flowlog!statperiodbymonth.action',
 				type : 'POST',
 				data : {
 					'deviceid': _device.deviceid,
@@ -291,16 +291,15 @@ var PflowlogModule = function () {
 				success : function(data, status) {
 					if (data.errorcode == 0) {
 						$('#StatLoding2').hide();
-						$('#StatByDayPlot').show();
-						$('#StatByDayPlot2').show();
-						initStatByDayPlot(data.aaData);
-						initStatByDayBar(data.aaData);
+						$('#StatByMonthPlot').show();
+						initStatByMonthPlot(data.aaData);
+						initStatByMonthBar(data.aaData);
 					}
 				}
 			});
 		}
 		
-		function initStatByDayPlot(data) {
+		function initStatByMonthPlot(data) {
 			var month = parseInt($('#MonthSelect2').select2('data').month, 10);
 			var d = new Date($('#MonthSelect2').select2('data').year, month, 0);
 			var daycount = d.getDate();
@@ -316,34 +315,34 @@ var PflowlogModule = function () {
 			ticks.push([daycount, $('#MonthSelect2').select2('data').month + '-' + daycount]);
 			
 			var options = {
-					series: {
-						lines: {
-							show: true,
-							lineWidth: 2,
-							fill: true,
-							fillColor: {
-								colors: [{opacity: 0.05}, {opacity: 0.01}]
-							}
-						},
-						points: {show: true },
-						shadowSize: 2
+				series: {
+					lines: {
+						show: true,
+						lineWidth: 2,
+						fill: true,
+						fillColor: {
+							colors: [{opacity: 0.05}, {opacity: 0.01}]
+						}
 					},
-					grid: {
-						hoverable: true,
-						clickable: true,
-						tickColor: "#eee",
-						borderWidth: 0
-					},
-					colors: ["#37b7f3"],
-					xaxis: {
-						ticks: ticks,
-						tickDecimals: 0
-					},
-					yaxis: {
-						ticks: 11,
-						tickDecimals: 0
-					}
-				};
+					points: {show: true },
+					shadowSize: 2
+				},
+				grid: {
+					hoverable: true,
+					clickable: true,
+					tickColor: "#eee",
+					borderWidth: 0
+				},
+				colors: ["#37b7f3"],
+				xaxis: {
+					ticks: ticks,
+					tickDecimals: 0
+				},
+				yaxis: {
+					ticks: 11,
+					tickDecimals: 0
+				}
+			};
 
 			var statdata = [];
 			var series = {};
@@ -359,20 +358,20 @@ var PflowlogModule = function () {
 				series.data[sequence-1] = [sequence, amount];
 			}
 			statdata.push(series);
-			$.plot("#StatByDayPlot", statdata, options);
+			$.plot("#StatByMonthPlot", statdata, options);
 
-			var prevStatByDayPoint = null;
-			$("#StatByDayPlot").bind("plothover", function (event, pos, item) {
+			var prevStatByMonthPoint = null;
+			$("#StatByMonthPlot").bind("plothover", function (event, pos, item) {
 				//$("#x").text(pos.x.toFixed(2));
 				//$("#y").text(pos.y.toFixed(2));
 				if (item) {
-					console.log(prevStatByDayPoint, item.dataIndex);
-					if (prevStatByDayPoint != item.dataIndex) {
-						prevStatByDayPoint = item.dataIndex;
-						$("#StatByDayTooltip").remove();
+					console.log(prevStatByMonthPoint, item.dataIndex);
+					if (prevStatByMonthPoint != item.dataIndex) {
+						prevStatByMonthPoint = item.dataIndex;
+						$("#StatByMonthTooltip").remove();
 						var x = item.datapoint[0], y = item.datapoint[1];
 						var title = $('#MonthSelect2').select2('data').text + '-' + x;
-						$('<div id="StatByDayTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
+						$('<div id="StatByMonthTooltip" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">' + y + '<\/div><\/div>').css({
 							position: 'absolute',
 							display: 'none',
 							top: item.pageY - 70,
@@ -385,13 +384,13 @@ var PflowlogModule = function () {
 						}).appendTo("body").fadeIn(200);
 					}
 				} else {
-					$("#StatByDayTooltip").remove();
-					prevStatByDayPoint = null;
+					$("#StatByMonthTooltip").remove();
+					prevStatByMonthPoint = null;
 				}
 			});
 		}
 
-		function initStatByDayBar(data) {
+		function initStatByMonthBar(data) {
 			var month = parseInt($('#MonthSelect2').select2('data').month, 10);
 			var d = new Date($('#MonthSelect2').select2('data').year, month, 0);
 			var daycount = d.getDate();
@@ -438,33 +437,23 @@ var PflowlogModule = function () {
 				colors: ['#691BB8']
 			};
 			
-			$.plot($("#StatByDayBar"), [{
-		        data: statdata,
-		        lines: {
-		            lineWidth: 1,
-		        },
-		        shadowSize: 0
-		    }], options);
+			$.plot($("#StatByMonthBar"), [{
+				data: statdata,
+				lines: {
+					lineWidth: 1,
+				},
+				shadowSize: 0
+			}], options);
 		}
 	};
 	
 	var initDownloadModal = function () {
-		var formHandler = new FormHandler($('#DownloadByHourForm'));
+		var formHandler = new FormHandler($('#DownloadByDayForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['day'] = {};
 		formHandler.validateOption.rules['day']['required'] = true;
 		formHandler.validateOption.submitHandler = null;
-		$('#DownloadByHourForm').validate(formHandler.validateOption);
-
-		$('body').on('click', '.pix-downloadbyhour', function(event) {
-			$('#DownloadByHourModal').modal();
-		});
-		$('[type=submit]', $('#DownloadByHourModal')).on('click', function(event) {
-			if ($('#DownloadByHourForm').valid()) {
-				$('#DownloadByHourForm').submit();
-				$('#DownloadByHourModal').modal('hide');
-			}
-		});
+		$('#DownloadByDayForm').validate(formHandler.validateOption);
 
 		$('body').on('click', '.pix-downloadbyday', function(event) {
 			$('#DownloadByDayModal').modal();
@@ -473,6 +462,16 @@ var PflowlogModule = function () {
 			if ($('#DownloadByDayForm').valid()) {
 				$('#DownloadByDayForm').submit();
 				$('#DownloadByDayModal').modal('hide');
+			}
+		});
+
+		$('body').on('click', '.pix-downloadbymonth', function(event) {
+			$('#DownloadByMonthModal').modal();
+		});
+		$('[type=submit]', $('#DownloadByMonthModal')).on('click', function(event) {
+			if ($('#DownloadByMonthForm').valid()) {
+				$('#DownloadByMonthForm').submit();
+				$('#DownloadByMonthModal').modal('hide');
 			}
 		});
 

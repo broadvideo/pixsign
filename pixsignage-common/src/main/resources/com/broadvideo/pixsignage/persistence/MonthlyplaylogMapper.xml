@@ -52,6 +52,9 @@
     select mediatype, mediaid, sum(total) as amount, count(distinct deviceid) as dcount
     from monthlyplaylog
     where orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     group by mediatype, mediaid
     order by amount desc
     <if test="length != null">

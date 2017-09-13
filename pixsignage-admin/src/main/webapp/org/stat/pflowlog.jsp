@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<div id="DownloadByHourModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="DownloadByDayModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -19,7 +19,7 @@
 					<h4 class="modal-title"><spring:message code="pixsign.statbyday.export"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="DownloadByHourForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="pflowlog!downloadbyhour.action">
+					<form id="DownloadByDayForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="flowlog!downloadbyday.action">
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.statday"/><span class="required">*</span></label>
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 
-	<div id="DownloadByDayModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="DownloadByMonthModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -51,7 +51,7 @@
 					<h4 class="modal-title"><spring:message code="pixsign.statbymonth.export"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="DownloadByDayForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="pflowlog!downloadbyday.action">
+					<form id="DownloadByMonthForm" class="form-horizontal form-bordered form-row-stripped" method="GET" action="flowlog!downloadbymonth.action">
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.statmonth"/><span class="required">*</span></label>
@@ -89,7 +89,7 @@
 									<div class="row">
 										<div class="col-md-3">
 											<div class="input-group date form_datetime">                                       
-												<input type="text" size="16" readonly class="form-control" name="pflowlog.statdate">
+												<input type="text" size="16" readonly class="form-control" name="flowlog.statdate">
 												<span class="input-group-btn">
 												<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
 												</span>
@@ -100,11 +100,11 @@
 										<div class="col-md-12 col-sm-12" id="StatLoding1">
 											<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
 										</div>
-										<div class="col-md-6 col-sm-12" id="StatByHour1" class="display-none">
-											<div id="StatByHourPlot" class="chart"></div>
+										<div class="col-md-6 col-sm-12" id="StatByDay1" class="display-none">
+											<div id="StatByDayPlot" class="chart"></div>
 										</div>
-										<div class="col-md-6 col-sm-12" id="StatByHour2" class="display-none">
-											<div id="StatByHourBar" class="chart"></div>
+										<div class="col-md-6 col-sm-12" id="StatByDay2" class="display-none">
+											<div id="StatByDayBar" class="chart"></div>
 										</div>
 									</div>
 								</div>
@@ -130,11 +130,11 @@
 										<div class="col-md-12 col-sm-12" id="StatLoding2">
 											<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
 										</div>
-										<div class="col-md-6 col-sm-12" id="StatByDay1" class="display-none">
-											<div id="StatByDayPlot" class="chart"></div>
+										<div class="col-md-6 col-sm-12" id="StatByMonth1" class="display-none">
+											<div id="StatByMonthPlot" class="chart"></div>
 										</div>
-										<div class="col-md-6 col-sm-12" id="StatByDay2" class="display-none">
-											<div id="StatByDayBar" class="chart"></div>
+										<div class="col-md-6 col-sm-12" id="StatByMonth2" class="display-none">
+											<div id="StatByMonthBar" class="chart"></div>
 										</div>
 									</div>
 								</div>
@@ -153,15 +153,15 @@
 	<div class="page-content-wrapper">
 		<div class="page-content">
 			
-			<h3 class="page-title"><spring:message code="menu.pflowlog"/></h3>
+			<h3 class="page-title"><spring:message code="menu.flowlog"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.stat"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.pflowlog"/></a>
+					<li><a href="#"><spring:message code="menu.flowlog"/></a>
 					</li>
 				</ul>
 			</div>
@@ -170,18 +170,18 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.pflowlog"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.flowlog"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="PflowlogModule.refresh();" class="reload"></a>
+								<a href="javascript:;" onClick="FlowlogModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body" id="DevicePortlet">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button class="btn green pix-downloadbyhour"><spring:message code="pixsign.statbyday.export"/> <i class="fa fa-download"></i></button>
+									<button class="btn green pix-downloadbyday"><spring:message code="pixsign.statbyday.export"/> <i class="fa fa-download"></i></button>
 								</div>
 								<div class="btn-group">
-									<button class="btn green pix-downloadbyday"><spring:message code="pixsign.statbymonth.export"/> <i class="fa fa-download"></i></button>
+									<button class="btn green pix-downloadbymonth"><spring:message code="pixsign.statbymonth.export"/> <i class="fa fa-download"></i></button>
 								</div>
 							</div>
 							<div class="row">
@@ -234,7 +234,7 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	PixData.init('${locale}');
-	PflowlogModule.init();
+	FlowlogModule.init();
 });
 
 </script>

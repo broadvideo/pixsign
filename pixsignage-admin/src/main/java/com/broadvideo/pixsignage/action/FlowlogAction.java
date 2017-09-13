@@ -21,7 +21,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.FlowlogMapper;
+import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -34,7 +34,7 @@ public class FlowlogAction extends BaseDatatableAction {
 	private InputStream inputStream;
 
 	@Autowired
-	private FlowlogMapper flowlogMapper;
+	private HourflowlogMapper hourflowlogMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -51,10 +51,10 @@ public class FlowlogAction extends BaseDatatableAction {
 			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = flowlogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = hourflowlogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<HashMap<String, Object>> list = flowlogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
+			List<HashMap<String, Object>> list = hourflowlogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
 					branchid, search, start, length);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
@@ -77,7 +77,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			day = day.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = flowlogMapper.statPeriodByDay(deviceid, day);
+			List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByDay(deviceid, day);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}
@@ -99,7 +99,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			day = day.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = flowlogMapper.statCatalogByDay(deviceid, day);
+			List<HashMap<String, Object>> list = hourflowlogMapper.statCatalogByDay(deviceid, day);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}
@@ -121,7 +121,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			month = month.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = flowlogMapper.statPeriodByMonth(deviceid, month);
+			List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByMonth(deviceid, month);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}
@@ -143,7 +143,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			month = month.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = flowlogMapper.statCatalogByMonth(deviceid, month);
+			List<HashMap<String, Object>> list = hourflowlogMapper.statCatalogByMonth(deviceid, month);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}
@@ -192,7 +192,7 @@ public class FlowlogAction extends BaseDatatableAction {
 					cell.setCellValue("0");
 				}
 
-				List<HashMap<String, Object>> list = flowlogMapper.statPeriodByDay("" + device.getDeviceid(), day);
+				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByDay("" + device.getDeviceid(), day);
 				for (int i = 0; i < list.size(); i++) {
 					HashMap<String, Object> hash = list.get(i);
 					int sequence = Integer.parseInt(hash.get("sequence").toString());
@@ -264,7 +264,8 @@ public class FlowlogAction extends BaseDatatableAction {
 					cell.setCellValue("0");
 				}
 
-				List<HashMap<String, Object>> list = flowlogMapper.statPeriodByMonth("" + device.getDeviceid(), month);
+				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByMonth("" + device.getDeviceid(),
+						month);
 				for (int i = 0; i < list.size(); i++) {
 					HashMap<String, Object> hash = list.get(i);
 					int sequence = Integer.parseInt(hash.get("sequence").toString());
