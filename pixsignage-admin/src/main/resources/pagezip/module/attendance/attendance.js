@@ -112,25 +112,26 @@ var Attendance = function (zonediv, zone) {
 
     this.swipe = function (hardId) {
         var self = this
-        if (self.currentEvent && self.currentEvent.end_time < Date.now) {
+        if (self.currentEvent && self.currentEvent.end_time > Date.now()) {
             var student = common.students.find(function (student) {
                 return student['hard_id'] == hardId
             })
             if (student) {
                 checkin(student)
                 var data = JSON.stringify({
+                    'event_id':self.currentEvent.id,
                     'hard_id': student['hard_id'],
                     'student_id': student.id,
                     'classroom_id': common.classRoom.id,
                     ts: Date.now()
                 })
                 $.ajax({
-                    url: `${common.baseUrl}/students/${student.id}/attendance?event_time=${Date.now()}&event_id=${self.currentEvent.id}`,
+                    url: `${common.baseUrl}/students/${student.id}/attendance?event_time=${Date.now()}`,
                     type: 'post',
                     contentType: 'application/json',
                     data: data
                 }).then(function (res) {
-                    self.refreshAttendance()
+                    setTimeout(self.refreshAttendance, 1000)
                 }).catch(function (err) {
                     console.log(JSON.stringify(err))
                 })

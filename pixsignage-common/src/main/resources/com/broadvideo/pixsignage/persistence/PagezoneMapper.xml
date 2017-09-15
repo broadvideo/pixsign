@@ -40,6 +40,9 @@
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchpageid" property="touchpageid" jdbcType="INTEGER" />
+    <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
+    <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
+    <result column="animationclick" property="animationclick" jdbcType="VARCHAR" />
 	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
 		column="{pagezoneid=pagezoneid}" select="com.broadvideo.pixsignage.persistence.PagezonedtlMapper.selectList" />
   </resultMap>
@@ -49,9 +52,10 @@
   
   <sql id="Base_Column_List" >
     pagezoneid, pageid, homepageid, type, height, width, topoffset, leftoffset, zindex, transform, 
-    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
-    shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, 
-    decoration, align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, touchtype, touchpageid
+    bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, shadowv, 
+    shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, 
+    lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, touchtype, touchpageid, 
+    animationinit, animationinitdelay, animationclick
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -101,8 +105,9 @@
       fontstyle, decoration, align, 
       lineheight, rows, cols, 
       rules, rulecolor, rulewidth, 
-      dateformat, touchtype, 
-      touchpageid, content)
+      dateformat, touchtype, touchpageid, 
+      animationinit, animationinitdelay, animationclick, 
+      content)
     values (#{pageid,jdbcType=INTEGER}, #{homepageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
@@ -114,8 +119,9 @@
       #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
       #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
       #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, 
-      #{touchpageid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+      #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, #{touchpageid,jdbcType=INTEGER}, 
+      #{animationinit,jdbcType=VARCHAR}, #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -234,6 +240,15 @@
       <if test="touchpageid != null" >
         touchpageid,
       </if>
+      <if test="animationinit != null" >
+        animationinit,
+      </if>
+      <if test="animationinitdelay != null" >
+        animationinitdelay,
+      </if>
+      <if test="animationclick != null" >
+        animationclick,
+      </if>
       <if test="content != null" >
         content,
       </if>
@@ -349,6 +364,15 @@
       </if>
       <if test="touchpageid != null" >
         #{touchpageid,jdbcType=INTEGER},
+      </if>
+      <if test="animationinit != null" >
+        #{animationinit,jdbcType=VARCHAR},
+      </if>
+      <if test="animationinitdelay != null" >
+        #{animationinitdelay,jdbcType=INTEGER},
+      </if>
+      <if test="animationclick != null" >
+        #{animationclick,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -469,6 +493,15 @@
       <if test="touchpageid != null" >
         touchpageid = #{touchpageid,jdbcType=INTEGER},
       </if>
+      <if test="animationinit != null" >
+        animationinit = #{animationinit,jdbcType=VARCHAR},
+      </if>
+      <if test="animationinitdelay != null" >
+        animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      </if>
+      <if test="animationclick != null" >
+        animationclick = #{animationclick,jdbcType=VARCHAR},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -514,6 +547,9 @@
       dateformat = #{dateformat,jdbcType=VARCHAR},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchpageid = #{touchpageid,jdbcType=INTEGER},
+      animationinit = #{animationinit,jdbcType=VARCHAR},
+      animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      animationclick = #{animationclick,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
@@ -555,7 +591,10 @@
       rulewidth = #{rulewidth,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
       touchtype = #{touchtype,jdbcType=CHAR},
-      touchpageid = #{touchpageid,jdbcType=INTEGER}
+      touchpageid = #{touchpageid,jdbcType=INTEGER},
+      animationinit = #{animationinit,jdbcType=VARCHAR},
+      animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      animationclick = #{animationclick,jdbcType=VARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

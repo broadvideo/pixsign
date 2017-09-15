@@ -716,6 +716,38 @@
 										</form>
 									</div>
 								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse10">动画效果</a>
+										</h4>
+									</div>
+									<div id="Collapse10" class="panel-collapse collapse">
+										<form id="ZoneEditForm10" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">初始</label>
+													<div class="col-md-9">
+														<input type="hidden" id="AnimationinitSelect" class="form-control select2" name="animationinit">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">延迟</label>
+													<div class="col-md-9">
+														<input class="animationinitdelayRange" type="text" name="animationinitdelay" value="0"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">点击</label>
+													<div class="col-md-9">
+														<input type="hidden" id="AnimationclickSelect" class="form-control select2" name="animationclick">
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+
 							</div>
 						</div>
 					</div>

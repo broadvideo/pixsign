@@ -83,6 +83,13 @@ alter table hourflowlog add index hourflowlog_index2(orgid);
 alter table hourflowlog add index hourflowlog_index3(deviceid, flowdate);
 alter table hourflowlog add unique index hourflowlog_index4(deviceid, flowhour);
 
+alter table templatezone add animationinit varchar(32) default 'none';
+alter table templatezone add animationinitdelay int default 0;
+alter table templatezone add animationclick varchar(32) default 'none';
+alter table pagezone add animationinit varchar(32) default 'none';
+alter table pagezone add animationinitdelay int default 0;
+alter table pagezone add animationclick varchar(32) default 'none';
+
 update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;

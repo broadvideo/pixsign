@@ -91,6 +91,12 @@ public class Pagezone {
 
 	private Integer touchpageid;
 
+	private String animationinit;
+
+	private Integer animationinitdelay;
+
+	private String animationclick;
+
 	private String content;
 
 	private List<Pagezonedtl> pagezonedtls;
@@ -397,6 +403,30 @@ public class Pagezone {
 
 	public void setTouchpageid(Integer touchpageid) {
 		this.touchpageid = touchpageid;
+	}
+
+	public String getAnimationinit() {
+		return animationinit;
+	}
+
+	public void setAnimationinit(String animationinit) {
+		this.animationinit = animationinit;
+	}
+
+	public Integer getAnimationinitdelay() {
+		return animationinitdelay;
+	}
+
+	public void setAnimationinitdelay(Integer animationinitdelay) {
+		this.animationinitdelay = animationinitdelay;
+	}
+
+	public String getAnimationclick() {
+		return animationclick;
+	}
+
+	public void setAnimationclick(String animationclick) {
+		this.animationclick = animationclick;
 	}
 
 	public String getContent() {

@@ -8,6 +8,7 @@ var PixPage = function () {
 		var scalew = Page.width / width;
 		var scaleh = Page.height / height;
 		var zones = Page.pagezones;
+		var animations = [];
 		for (var i = 0; i < zones.length; i++) {
 			var zone = zones[i];
 			var zone_div = document.createElement('div');
@@ -68,9 +69,33 @@ var PixPage = function () {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allzones.push(otherzone);
 			}
+			
+			if (zone.animationinit != 'none') {
+				var animation = {
+					onevent: 'load',
+					selectors: '#PagezoneDiv' + zone.pagezoneid,
+					anid: zone.animationinit,
+					delay: zone.animationinitdelay,
+					iterationcount: 1
+				};
+				animations.push(animation);
+			}
+			if (zone.animationclick != 'none') {
+				var animation = {
+					onevent: 'click',
+					selectors: '#PagezoneDiv' + zone.pagezoneid,
+					anid: zone.animationclick,
+					delay: 0,
+					iterationcount: 1
+				};
+				animations.push(animation);
+			}
 		}
 		
 		resize();
+		
+		var anCapacity = new AnCapacity();
+		anCapacity.init(null, animations);
 	};
 
 	var resize = function () {

@@ -195,6 +195,9 @@ public class PageServiceImpl implements PageService {
 						touchpageid = 0;
 					}
 					pagezone.setTouchpageid(touchpageid);
+					pagezone.setAnimationinit(templatezone.getAnimationinit());
+					pagezone.setAnimationinitdelay(templatezone.getAnimationinitdelay());
+					pagezone.setAnimationclick(templatezone.getAnimationclick());
 					pagezone.setContent(templatezone.getContent());
 					pagezoneMapper.insertSelective(pagezone);
 					for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {
@@ -300,6 +303,9 @@ public class PageServiceImpl implements PageService {
 				pagezone.setDateformat(frompagezone.getDateformat());
 				pagezone.setTouchtype(frompagezone.getTouchtype());
 				pagezone.setTouchpageid(frompagezone.getTouchpageid());
+				pagezone.setAnimationinit(frompagezone.getAnimationinit());
+				pagezone.setAnimationinitdelay(frompagezone.getAnimationinitdelay());
+				pagezone.setAnimationclick(frompagezone.getAnimationclick());
 				pagezone.setContent(frompagezone.getContent());
 				pagezoneMapper.insertSelective(pagezone);
 				for (Pagezonedtl frompagezonedtl : frompagezone.getPagezonedtls()) {

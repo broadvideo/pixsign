@@ -795,6 +795,23 @@ function enterPagezoneFocus(pagezone) {
 	if (CurrentObj.touchflag == 1) {
 		refreshSubPageSelect();
 	}
+
+	refreshAnimationSelect();
+	$('.animationinitdelayRange').ionRangeSlider({
+		min: 0,
+		max: 10000,
+		from: 0,
+		type: 'single',
+		step: 100,
+		hasGrid: false,
+		onChange: function(data) {
+			CurrentZone.animationinitdelay = $('input[name=animationinitdelay]').val();
+			refreshPagezone(CurrentZone);
+		}
+	});
+	$('.animationinitdelayRange').ionRangeSlider('update', {
+		from: pagezone.animationinitdelay
+	});
 }
 
 function refreshLocSpinners(pagezone) {
@@ -811,6 +828,7 @@ function refreshLocSpinners(pagezone) {
 $('.collapse').on('shown.bs.collapse', function () {
 	$('.opacityRange').ionRangeSlider('update');
 	$('.bgopacityRange').ionRangeSlider('update');
+	$('.animationinitdelayRange').ionRangeSlider('update');
 });
 
 $('.spinner').on('change', function(e) {
@@ -1020,7 +1038,7 @@ function refreshFontFamilySelect() {
 				callback({id: CurrentZone.fontfamily, text: CurrentZone.fontfamily });
 			}
 		},
-		dropdownCssClass: "bigdrop", 
+		dropdownCssClass: 'bigdrop', 
 		escapeMarkup: function (m) { return m; } 
 	});
 }
@@ -1035,6 +1053,86 @@ $('#SubPageSelect').on('change', function(e) {
 	if ($('#SubPageSelect').select2('data') != null) {
 		CurrentZone.touchpageid = $('#SubPageSelect').select2('data').id;
 	}
+});	
+
+function refreshAnimationSelect() {
+	var animations = [];
+	animations.push({id: 'none', text: common.animation.none});
+	animations.push({id: 'pulse', text: common.animation.pulse});
+	animations.push({id: 'flash', text: common.animation.flash});
+	animations.push({id: 'shake', text: common.animation.shake});
+	animations.push({id: 'jackInTheBox', text: common.animation.jackInTheBox});
+	animations.push({id: 'rubberBand', text: common.animation.rubberBand});
+	animations.push({id: 'bounce', text: common.animation.bounce});
+	animations.push({id: 'swing', text: common.animation.swing});
+	animations.push({id: 'wobble', text: common.animation.wobble});
+	animations.push({id: 'jello', text: common.animation.jello});
+	animations.push({id: 'bounceIn', text: common.animation.bounceIn});
+	animations.push({id: 'bounceInDown', text: common.animation.bounceInDown});
+	animations.push({id: 'bounceInLeft', text: common.animation.bounceInLeft});
+	animations.push({id: 'bounceInRight', text: common.animation.bounceInRight});
+	animations.push({id: 'bounceInUp', text: common.animation.bounceInUp});
+	animations.push({id: 'bounceOut', text: common.animation.bounceOut});
+	animations.push({id: 'bounceOutDown', text: common.animation.bounceOutDown});
+	animations.push({id: 'bounceOutLeft', text: common.animation.bounceOutLeft});
+	animations.push({id: 'bounceOutRight', text: common.animation.bounceOutRight});
+	animations.push({id: 'bounceOutUp', text: common.animation.bounceOutUp});
+	animations.push({id: 'fadeIn', text: common.animation.fadeIn});
+	animations.push({id: 'fadeInDown', text: common.animation.fadeInDown});
+	animations.push({id: 'fadeInUp', text: common.animation.fadeInUp});
+	animations.push({id: 'fadeInLeft', text: common.animation.fadeInLeft});
+	animations.push({id: 'fadeInRight', text: common.animation.fadeInRight});
+	animations.push({id: 'fadeOut', text: common.animation.fadeOut});
+	animations.push({id: 'fadeOutDown', text: common.animation.fadeOutDown});
+	animations.push({id: 'fadeOutLeft', text: common.animation.fadeOutLeft});
+	animations.push({id: 'fadeOutRight', text: common.animation.fadeOutRight});
+	animations.push({id: 'fadeOutUp', text: common.animation.fadeOutUp});
+	animations.push({id: 'flip', text: common.animation.flip});
+	animations.push({id: 'flipOutY', text: common.animation.flipOutY});
+	animations.push({id: 'rollIn', text: common.animation.rollIn});
+	animations.push({id: 'rotateIn', text: common.animation.rotateIn});
+	animations.push({id: 'zoomInDown', text: common.animation.zoomInDown});
+	animations.push({id: 'slideInLeft', text: common.animation.slideInLeft});
+	animations.push({id: 'slideInRight', text: common.animation.slideInRight});
+	animations.push({id: 'slideInDown', text: common.animation.slideInDown});
+	$('#AnimationinitSelect').select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		minimumResultsForSearch: -1,
+		data: animations,
+		initSelection: function(element, callback) {
+			if (CurrentZone != null) {
+				callback({id: CurrentZone.animationinit, text: eval('common.animation.'+CurrentZone.animationinit) });
+			}
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+	$('#AnimationclickSelect').select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		minimumResultsForSearch: -1,
+		data: animations,
+		clickSelection: function(element, callback) {
+			if (CurrentZone != null) {
+				callback({id: CurrentZone.animationclick, text: eval('common.animation.'+CurrentZone.animationclick) });
+			}
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+$('#AnimationinitSelect').on('change', function(e) {
+	if ($('#AnimationinitSelect').select2('data') != null) {
+		CurrentZone.animationinit = $('#AnimationinitSelect').select2('data').id;
+	}
+	refreshPagezone(CurrentZone);
+});	
+$('#AnimationclickSelect').on('change', function(e) {
+	if ($('#AnimationclickSelect').select2('data') != null) {
+		CurrentZone.animationclick = $('#AnimationclickSelect').select2('data').id;
+	}
+	refreshPagezone(CurrentZone);
 });	
 
 $('.zoneform input,select').on('change', function(e) {

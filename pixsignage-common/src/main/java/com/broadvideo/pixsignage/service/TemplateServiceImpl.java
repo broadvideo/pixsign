@@ -193,6 +193,9 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setDateformat(fromtemplatezone.getDateformat());
 				templatezone.setTouchtype(fromtemplatezone.getTouchtype());
 				templatezone.setTouchtemplateid(fromtemplatezone.getTouchtemplateid());
+				templatezone.setAnimationinit(fromtemplatezone.getAnimationinit());
+				templatezone.setAnimationinitdelay(fromtemplatezone.getAnimationinitdelay());
+				templatezone.setAnimationclick(fromtemplatezone.getAnimationclick());
 				templatezone.setContent(fromtemplatezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Templatezonedtl fromtemplatezonedtl : fromtemplatezone.getTemplatezonedtls()) {
