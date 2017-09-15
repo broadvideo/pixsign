@@ -73,7 +73,7 @@ var PixPage = function () {
 			if (zone.animationinit != 'none') {
 				var animation = {
 					onevent: 'load',
-					selectors: '#PagezoneDiv' + zone.pagezoneid,
+					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationinit,
 					delay: zone.animationinitdelay,
 					iterationcount: 1
@@ -83,7 +83,7 @@ var PixPage = function () {
 			if (zone.animationclick != 'none') {
 				var animation = {
 					onevent: 'click',
-					selectors: '#PagezoneDiv' + zone.pagezoneid,
+					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationclick,
 					delay: 0,
 					iterationcount: 1
