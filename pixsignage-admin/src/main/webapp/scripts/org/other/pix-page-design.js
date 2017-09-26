@@ -11,6 +11,7 @@ ZoneLimits['12'] = 1;
 ZoneLimits['13'] = 1;
 ZoneLimits['14'] = 1;
 ZoneLimits['15'] = 1;
+ZoneLimits['21'] = 1;
 
 var ZoneRatios = [];
 
@@ -176,6 +177,10 @@ function createZone(pagezone) {
 		//CalendarZone
 		var table = document.createElement('table');
 		$(inner_div).append(table);
+	} else if (pagezone.type == 21) {
+		//Diy Zone
+		var img_element = document.createElement('img');
+		$(inner_div).append(img_element);
 	} else {
 		var p_element = document.createElement('p');
 		$(p_element).append(eval('common.view.pagezone_type_' + pagezone.type));
@@ -436,6 +441,24 @@ function refreshPagezone(pagezone) {
 			'font-style': pagezone.fontstyle, 
 			'word-wrap': 'break-word',
 		});
+	} else if (pagezone.type == 21) {
+		//Diy Zone
+		$(pagezoneDiv).find('#rotatable').css({
+			'box-shadow': shadow, 
+			'opacity': parseInt(pagezone.opacity)/255,
+		});
+		$(pagezoneDiv).find('img').css({
+			'box-sizing': 'border-box',
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
+		});
+		if (pagezone.diy != null) {
+			$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.diy.thumbnail);
+			$(pagezoneDiv).find('img').attr('width', '100%');
+			$(pagezoneDiv).find('img').attr('height', '100%');
+		}
 	} else {
 		$(pagezoneDiv).find('#rotatable').css({
 			'box-sizing': 'border-box',
@@ -792,9 +815,12 @@ function enterPagezoneFocus(pagezone) {
 	refreshLocSpinners(pagezone);
 	refreshFontStyle();
 	refreshFontFamilySelect();
+	
+	refreshTouchtypeSelect();
 	if (CurrentObj.touchflag == 1) {
 		refreshSubPageSelect();
 	}
+	refreshDiyactionSelect();
 
 	refreshAnimationSelect();
 	$('.animationinitdelayRange').ionRangeSlider({
@@ -812,6 +838,8 @@ function enterPagezoneFocus(pagezone) {
 	$('.animationinitdelayRange').ionRangeSlider('update', {
 		from: pagezone.animationinitdelay
 	});
+	
+	refreshDiySelect();
 }
 
 function refreshLocSpinners(pagezone) {
@@ -1049,9 +1077,96 @@ $('#FontFamilySelect').on('change', function(e) {
 	refreshPagezone(CurrentZone);
 });	
 
+function refreshTouchtypeSelect() {
+	var touchtypelist = [];
+	if (CurrentObj.touchflag == 1) {
+		touchtypelist.push({id: 0, text: common.view.touchtype_0 });
+		touchtypelist.push({id: 1, text: common.view.touchtype_1 });
+		touchtypelist.push({id: 2, text: common.view.touchtype_2 });
+		touchtypelist.push({id: 3, text: common.view.touchtype_3 });
+		touchtypelist.push({id: 9, text: common.view.touchtype_9 });
+	} else {
+		touchtypelist.push({id: 3, text: common.view.touchtype_3 });
+		touchtypelist.push({id: 9, text: common.view.touchtype_9 });
+	}
+	$('#TouchtypeSelect').select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		minimumResultsForSearch: -1,
+		data: touchtypelist,
+		initSelection: function(element, callback) {
+			if (CurrentZone != null) {
+				callback({id: CurrentZone.touchtype, text: eval('common.view.touchtype_'+CurrentZone.touchtype) });
+			}
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+	if (CurrentZone.touchtype == 2) {
+		$('#SubPageSelect').closest('.form-group').css('display', '');
+		$('#DiyactionSelect').closest('.form-group').css('display', 'none');
+	} else if (CurrentZone.touchtype == 3) {
+		$('#SubPageSelect').closest('.form-group').css('display', 'none');
+		$('#DiyactionSelect').closest('.form-group').css('display', '');
+	} else {
+		$('#SubPageSelect').closest('.form-group').css('display', 'none');
+		$('#DiyactionSelect').closest('.form-group').css('display', 'none');
+	}
+}
+$('#TouchtypeSelect').on('change', function(e) {
+	if ($('#TouchtypeSelect').select2('data') != null) {
+		CurrentZone.touchtype = $('#TouchtypeSelect').select2('data').id;
+	}
+	if (CurrentZone.touchtype == 2) {
+		$('#SubPageSelect').closest('.form-group').css('display', '');
+		$('#DiyactionSelect').closest('.form-group').css('display', 'none');
+	} else if (CurrentZone.touchtype == 3) {
+		$('#SubPageSelect').closest('.form-group').css('display', 'none');
+		$('#DiyactionSelect').closest('.form-group').css('display', '');
+	} else {
+		$('#SubPageSelect').closest('.form-group').css('display', 'none');
+		$('#DiyactionSelect').closest('.form-group').css('display', 'none');
+	}
+});	
+
 $('#SubPageSelect').on('change', function(e) {
 	if ($('#SubPageSelect').select2('data') != null) {
 		CurrentZone.touchpageid = $('#SubPageSelect').select2('data').id;
+	}
+});	
+
+function refreshDiyactionSelect() {
+	var diyzones = CurrentObj.pagezones.filter(function (el) {
+		return el.diy != null;
+	});
+	var diyactionlist = [];
+	if (diyzones.length > 0) {
+		for (var i=0; i<diyzones[0].diy.diyactions.length; i++) {
+			diyactionlist.push({
+				id: diyzones[0].diy.diyactions[i].diyactionid,
+				text: diyzones[0].diy.diyactions[i].name,
+				diyaction: diyzones[0].diy.diyactions[i]
+			})
+		}
+	}
+	$('#DiyactionSelect').select2({
+		placeholder: common.tips.detail_select,
+		minimumInputLength: 0,
+		minimumResultsForSearch: -1,
+		data: diyactionlist,
+		initSelection: function(element, callback) {
+			if (CurrentZone != null && CurrentZone.touchtype == 3 && CurrentZone.diyaction != null) {
+				callback({id: CurrentZone.diyaction.diyactionid, text: CurrentZone.diyaction.name, diyaction: CurrentZone.diyaction });
+			}
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+$('#DiyactionSelect').on('change', function(e) {
+	if ($('#DiyactionSelect').select2('data') != null) {
+		CurrentZone.diyaction = $('#DiyactionSelect').select2('data').diyaction;
+		CurrentZone.diyactionid = $('#DiyactionSelect').select2('data').id;
 	}
 });	
 
@@ -1135,10 +1250,75 @@ $('#AnimationclickSelect').on('change', function(e) {
 	refreshPagezone(CurrentZone);
 });	
 
+function refreshDiySelect() {
+	$('#DiySelect').select2({
+		minimumInputLength: 0,
+		ajax: {
+			url: 'diy!list.action',
+			type: 'GET',
+			dataType: 'json',
+			data: function (term, page) {
+				return {
+					sSearch: term,
+					iDisplayStart: (page-1)*10,
+					iDisplayLength: 10,
+				};
+			},
+			results: function (data, page) {
+				var more = (page * 10) < data.iTotalRecords; 
+				return {
+					results : $.map(data.aaData, function (item) { 
+						return { 
+							text:item.name, 
+							id:item.diyid, 
+							diy:item, 
+						};
+					}),
+					more: more
+				};
+			}
+		},
+		formatResult: function(data) {
+			var width = 40;
+			var height = 40 * data.diy.height / data.diy.width;
+			if (data.diy.width < data.diy.height) {
+				height = 40;
+				width = 40 * data.diy.width / data.diy.height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.diy.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.diy.name + '</span>';
+			return html;
+		},
+		formatSelection: function(data) {
+			var width = 30;
+			var height = 30 * height / width;
+			if (data.diy.width < data.diy.height) {
+				height = 30;
+				width = 30 * width / height;
+			}
+			var html = '<span><img src="/pixsigdata' + data.diy.thumbnail + '" width="' + width + 'px" height="' + height + 'px"/> ' + data.diy.name + '</span>';
+			return html;
+		},
+		initSelection: function(element, callback) {
+			if (CurrentZone != null && CurrentZone.diy != null) {
+				callback({id: CurrentZone.diy.diyid, text: CurrentZone.diy.name, diy: CurrentZone.diy });
+			}
+		},
+		dropdownCssClass: 'bigdrop', 
+		escapeMarkup: function (m) { return m; } 
+	});
+}
+$('#DiySelect').on('change', function(e) {
+	if ($('#DiySelect').select2('data') != null) {
+		CurrentZone.diy = $('#DiySelect').select2('data').diy;
+		CurrentZone.diyid = $('#DiySelect').select2('data').id;
+	}
+	refreshPagezone(CurrentZone);
+});	
+
+
 $('.zoneform input,select').on('change', function(e) {
 	CurrentZone.dateformat = $('.zoneform select[name=dateformat]').val();
 	CurrentZone.zindex = $('.zoneform select[name=zindex]').val();
-	CurrentZone.touchtype = $('.zoneform select[name=touchtype]').val();
 	CurrentZone.bdstyle = $('.zoneform select[name=bdstyle]').val();
 	CurrentZone.rules = $('.zoneform select[name=rules]').val();
 	console.log(CurrentZone);
@@ -1209,7 +1389,7 @@ $('body').on('click', '.pix-addzone', function(event) {
 	pagezone.decoration = 'none';
 	pagezone.align = 'center';
 	pagezone.lineheight = 80;
-	pagezone.touchtype = '0';
+	pagezone.touchtype = '9';
 	pagezone.touchpageid = 0;
 	pagezone.content = '';
 	pagezone.pagezonedtls = [];
@@ -1229,6 +1409,8 @@ $('body').on('click', '.pix-addzone', function(event) {
 	pagezone.rules = 'all';
 	pagezone.rulecolor = '#000000';
 	pagezone.rulewidth = 1;
+	pagezone.animationinit = 'none';
+	pagezone.animationclick = 'none';
 	
 	CurrentObj.pagezones.push(pagezone);
 	

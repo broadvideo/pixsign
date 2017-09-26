@@ -191,8 +191,10 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setRulecolor(fromtemplatezone.getRulecolor());
 				templatezone.setRulewidth(fromtemplatezone.getRulewidth());
 				templatezone.setDateformat(fromtemplatezone.getDateformat());
+				templatezone.setDiyid(fromtemplatezone.getDiyid());
 				templatezone.setTouchtype(fromtemplatezone.getTouchtype());
 				templatezone.setTouchtemplateid(fromtemplatezone.getTouchtemplateid());
+				templatezone.setDiyactionid(fromtemplatezone.getDiyactionid());
 				templatezone.setAnimationinit(fromtemplatezone.getAnimationinit());
 				templatezone.setAnimationinitdelay(fromtemplatezone.getAnimationinitdelay());
 				templatezone.setAnimationclick(fromtemplatezone.getAnimationclick());
@@ -349,7 +351,7 @@ public class TemplateServiceImpl implements TemplateService {
 		fileName = fileName.substring(0, fileName.lastIndexOf("."));
 		String unzipFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/import/" + fileName;
 		FileUtils.deleteQuietly(new File(unzipFilePath));
-		CommonUtil.unzip(zipFile.getAbsolutePath(), unzipFilePath, false);
+		CommonUtil.unzip(zipFile, unzipFilePath, false);
 		FileUtils.forceDelete(zipFile);
 
 		HashMap<Integer, Template> templateHash = new HashMap<Integer, Template>();

@@ -852,6 +852,26 @@ function redrawPagePreview(container, page, maxsize) {
 				'font-style': zone.fontstyle, 
 				'line-height': '1px', 
 			});
+		} else if (zone.type == '21') {
+			//Diy Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+			$(inner_div).css({
+				'box-shadow': shadow, 
+				'opacity': parseInt(zone.opacity)/255,
+			});
+			$(zone_div).find('img').css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+			});
+			if (zone.diy != null) {
+				$(zone_div).find('img').attr('src', '/pixsigdata' + zone.diy.thumbnail);
+				$(zone_div).find('img').attr('width', '100%');
+				$(zone_div).find('img').attr('height', '100%');
+			}
 		} else {
 			var p_element = document.createElement('p');
 			$(p_element).html(eval('common.view.pagezone_type_' + zone.type));

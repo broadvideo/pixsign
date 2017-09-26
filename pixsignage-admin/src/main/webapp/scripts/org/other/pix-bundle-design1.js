@@ -295,7 +295,6 @@ function refreshLayoutBgImageSelect2(folderid) {
 		},
 		initSelection: function(element, callback) {
 			if (CurrentBundle != null && CurrentBundle.bgimage != null) {
-				console.log(CurrentBundle.bgimage);
 				callback({id: CurrentBundle.bgimage.imageid, text: CurrentBundle.bgimage.name, image: CurrentBundle.bgimage });
 			}
 		},

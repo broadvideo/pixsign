@@ -115,10 +115,10 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
 								<i class="fa fa-sun-o"></i><div>天气</div>
 							</a>
+							 -->
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							 -->
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
@@ -132,7 +132,10 @@
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="15">
-								<i class="fa fa-child"></i><div>考试通告</div>
+								<i class="fa fa-book"></i><div>考试通告</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="21">
+								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
 						</div>
 					</div>
@@ -231,18 +234,19 @@
 												<div class="form-group">
 													<label class="col-md-3 control-label">功能</label>
 													<div class="col-md-9">
-														<select class="form-control" name="touchtype" tabindex="-1">
-															<option value="0"><spring:message code="pixsign.prop.touchtype_0"/></option>
-															<option value="1"><spring:message code="pixsign.prop.touchtype_1"/></option>
-															<option value="2"><spring:message code="pixsign.prop.touchtype_2"/></option>
-															<option value="9"><spring:message code="pixsign.prop.touchtype_9"/></option>
-														</select>
+														<input type="hidden" id="TouchtypeSelect" class="form-control select2" name="touchtype" />
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-3 control-label">跳转</label>
+													<label class="col-md-3 control-label">子页</label>
 													<div class="col-md-9">
 														<input type="hidden" id="SubPageSelect" class="form-control select2" name="touchpageid" />
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">动作</label>
+													<div class="col-md-9">
+														<input type="hidden" id="DiyactionSelect" class="form-control select2" name="diyactionid" />
 													</div>
 												</div>
 											</div>
@@ -715,6 +719,25 @@
 													<label class="col-md-3 control-label">点击</label>
 													<div class="col-md-9">
 														<input type="hidden" id="AnimationclickSelect" class="form-control select2" name="animationclick">
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-21">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse11">互动素材</a>
+										</h4>
+									</div>
+									<div id="Collapse11" class="panel-collapse collapse">
+										<form id="ZoneEditForm11" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">互动</label>
+													<div class="col-md-9">
+														<input type="hidden" id="DiySelect" class="form-control select2" name="diyid">
 													</div>
 												</div>
 											</div>

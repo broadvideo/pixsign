@@ -1,5 +1,6 @@
 var PixPage = function () {
 	var allzones = [];
+	var diyzones = [];
 
 	var init = function () {
 		$('#PageDiv').empty();
@@ -65,12 +66,19 @@ var PixPage = function () {
 				//ExamNotice Zone
 				var examnotice = new ExamNotice($(inner_div), zone, scalew, scaleh);
 				allzones.push(examnotice);
+			} else if (zone.type == '21') {
+				//Diy Zone
+				if (zone.diy.type == 'route-guide') {
+					var routeguide = new RouteGuide($(inner_div), zone, scalew, scaleh);
+					allzones.push(routeguide);
+					diyzones.push(routeguide);
+				}
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allzones.push(otherzone);
 			}
 			
-			if (zone.animationinit != 'none') {
+			if (zone.animationinit != 'none' && zone.animationinit != '') {
 				var animation = {
 					onevent: 'load',
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
@@ -79,8 +87,9 @@ var PixPage = function () {
 					iterationcount: 1
 				};
 				animations.push(animation);
+				console.log('Add on init animation: ', zone.pagezoneid, zone.animationinit);
 			}
-			if (zone.animationclick != 'none') {
+			if (zone.animationclick != 'none' && zone.animationinit != '') {
 				var animation = {
 					onevent: 'click',
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
@@ -89,6 +98,7 @@ var PixPage = function () {
 					iterationcount: 1
 				};
 				animations.push(animation);
+				console.log('Add on click animation: ', zone.pagezoneid, zone.animationinit);
 			}
 		}
 		
@@ -134,10 +144,11 @@ var PixPage = function () {
 			allzones[i].resize(scalew, scaleh);
 		}
 	};
-
+	
 	return {
 		init: init,
 		resize: resize,
+		diyzones: diyzones,
 	}
 	
 }();

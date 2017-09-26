@@ -86,9 +86,47 @@ alter table hourflowlog add unique index hourflowlog_index4(deviceid, flowhour);
 alter table templatezone add animationinit varchar(32) default 'none';
 alter table templatezone add animationinitdelay int default 0;
 alter table templatezone add animationclick varchar(32) default 'none';
+alter table templatezone add diyid int default 0;
+alter table templatezone add diyactionid int default 0;
+
 alter table pagezone add animationinit varchar(32) default 'none';
 alter table pagezone add animationinitdelay int default 0;
 alter table pagezone add animationclick varchar(32) default 'none';
+alter table pagezone add diyid int default 0;
+alter table pagezone add diyactionid int default 0;
+
+create table diy( 
+   diyid int not null auto_increment,
+   orgid int not null,
+   branchid int not null,
+   name varchar(64) not null,
+   code varchar(32) not null,
+   type varchar(32) default '',
+   width int default 0,
+   height int default 0,
+   filepath varchar(64) default '',
+   filename varchar(64) default '',
+   snapshot varchar(128) default '',
+   thumbnail varchar(128) default '',
+   version varchar(16) default '',
+   status char(1) not null,
+   description varchar(1024),
+   createtime timestamp not null default current_timestamp,
+   createstaffid int,
+   primary key (diyid)
+ )engine = innodb
+default character set utf8;
+alter table diy add unique index diy_index1(code);
+
+create table diyaction( 
+   diyactionid int not null auto_increment,
+   diyid int not null,
+   name varchar(64) default '',
+   code varchar(16) default '',
+   primary key (diyactionid)
+ )engine = innodb
+default character set utf8;
+alter table diyaction add unique index diyaction_index1(diyid, code);
 
 update video set format=substring_index(filename, '.', -1);
 
@@ -111,6 +149,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30108,2,301,'menu.dvb','resource/dvb.jsp','',1,8);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30109,2,301,'menu.widget','resource/widget.jsp','',1,9);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30110,2,301,'menu.rss','resource/rss.jsp','',1,10);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30111,2,301,'menu.diy','resource/diy.jsp','',1,11);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30120,2,301,'menu.medialist','resource/medialist.jsp','',1,20);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(302,2,0,'menu.devicemanage','','fa-desktop',1,3);

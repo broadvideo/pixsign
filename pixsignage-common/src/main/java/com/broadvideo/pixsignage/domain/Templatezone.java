@@ -87,9 +87,13 @@ public class Templatezone {
 
 	private String dateformat;
 
+	private Integer diyid;
+
 	private String touchtype;
 
 	private Integer touchtemplateid;
+
+	private Integer diyactionid;
 
 	private String animationinit;
 
@@ -98,6 +102,10 @@ public class Templatezone {
 	private String animationclick;
 
 	private String content;
+
+	private Diy diy;
+
+	private Diyaction diyaction;
 
 	private List<Templatezonedtl> templatezonedtls;
 
@@ -389,6 +397,14 @@ public class Templatezone {
 		this.dateformat = dateformat == null ? null : dateformat.trim();
 	}
 
+	public Integer getDiyid() {
+		return diyid;
+	}
+
+	public void setDiyid(Integer diyid) {
+		this.diyid = diyid;
+	}
+
 	public String getTouchtype() {
 		return touchtype;
 	}
@@ -403,6 +419,14 @@ public class Templatezone {
 
 	public void setTouchtemplateid(Integer touchtemplateid) {
 		this.touchtemplateid = touchtemplateid;
+	}
+
+	public Integer getDiyactionid() {
+		return diyactionid;
+	}
+
+	public void setDiyactionid(Integer diyactionid) {
+		this.diyactionid = diyactionid;
 	}
 
 	public String getAnimationinit() {
@@ -435,6 +459,22 @@ public class Templatezone {
 
 	public void setContent(String content) {
 		this.content = content == null ? null : content.trim();
+	}
+
+	public Diy getDiy() {
+		return diy;
+	}
+
+	public void setDiy(Diy diy) {
+		this.diy = diy;
+	}
+
+	public Diyaction getDiyaction() {
+		return diyaction;
+	}
+
+	public void setDiyaction(Diyaction diyaction) {
+		this.diyaction = diyaction;
 	}
 
 	public List<Templatezonedtl> getTemplatezonedtls() {

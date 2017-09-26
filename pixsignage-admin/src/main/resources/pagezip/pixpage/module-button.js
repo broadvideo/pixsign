@@ -17,6 +17,14 @@ var ButtonZone = function (zonediv, zone) {
 			a_element.href = 'index.html';
 		} else if (zone.touchtype == 2) {
 			a_element.href = zone.touchpageid + '.html';
+		} else if (zone.touchtype == 3) {
+			$(a_element).attr('href', 'javascript:;');
+			$(a_element).attr('diyaction', zone.diyaction.code);
+			$(a_element).click(function(e) {
+				if (PixPage.diyzones > 0) {
+					PixPage.diyzones[0].doAction($(a_element).attr('diyaction'));
+				}
+			});
 		}
 		$(zonediv).wrap(a_element);
 		var p_element = document.createElement('p');

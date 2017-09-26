@@ -73,8 +73,7 @@ public class CommonUtil {
 		}
 	}
 
-	public static void unzip(String zipFilePath, String unzipFilePath, boolean includeZipFileName) throws Exception {
-		File zipFile = new File(zipFilePath);
+	public static void unzip(File zipFile, String unzipFilePath, boolean includeZipFileName) throws Exception {
 		// 如果解压后的文件保存路径包含压缩文件的文件名，则追加该文件名到解压路径
 		if (includeZipFileName) {
 			String fileName = zipFile.getName();

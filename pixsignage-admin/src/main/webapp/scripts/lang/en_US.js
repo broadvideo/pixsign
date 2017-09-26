@@ -142,6 +142,12 @@ var common = {
 		pagezone_type_14: 'Home-School Zone',
 		pagezone_type_15: 'Exam-Notice Zone',
 
+		touchtype_0: 'Back',
+		touchtype_1: 'Home',
+		touchtype_2: 'Sub-Page',
+		touchtype_3: 'Inside Switch',
+		touchtype_9: 'Disable',
+
 		play_period: 'Play Period',
 		valid_period: 'Effective Period',
 

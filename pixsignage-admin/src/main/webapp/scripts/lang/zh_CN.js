@@ -141,6 +141,12 @@ var common = {
 		pagezone_type_13: '刷卡签到',
 		pagezone_type_14: '家校互动',
 		pagezone_type_15: '考试通告',
+		
+		touchtype_0: '返回',
+		touchtype_1: '首页',
+		touchtype_2: '子页跳转',
+		touchtype_3: '本页切换',
+		touchtype_9: '屏蔽',
 
 		play_period: '播放时间段',
 		valid_period: '生效期',
