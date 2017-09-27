@@ -119,22 +119,22 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="11">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="12">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="14">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="15">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="21">
+							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
 						</div>
@@ -951,6 +951,9 @@
 <script src="${base_ctx}/scripts/org/other/pix-page-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/other/pix-preview.js?t=${timestamp}"></script>
 <script>
+var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
+var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
+
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();

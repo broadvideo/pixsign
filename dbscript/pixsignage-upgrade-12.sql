@@ -95,6 +95,9 @@ alter table pagezone add animationclick varchar(32) default 'none';
 alter table pagezone add diyid int default 0;
 alter table pagezone add diyactionid int default 0;
 
+alter table vsp add diyflag char(1) default '0';
+alter table org add diyflag char(1) default '0';
+
 create table diy( 
    diyid int not null auto_increment,
    orgid int not null,

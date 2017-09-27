@@ -41,6 +41,8 @@ public class Org {
 
 	private String tagflag;
 
+	private String diyflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -235,6 +237,14 @@ public class Org {
 
 	public void setTagflag(String tagflag) {
 		this.tagflag = tagflag;
+	}
+
+	public String getDiyflag() {
+		return diyflag;
+	}
+
+	public void setDiyflag(String diyflag) {
+		this.diyflag = diyflag;
 	}
 
 	public String getVideoflag() {

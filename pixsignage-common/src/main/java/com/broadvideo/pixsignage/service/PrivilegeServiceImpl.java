@@ -83,6 +83,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
 					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
+					|| org.getDiyflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30111
 					|| org.getStreamflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
 					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108) {
 				logger.info("remove privilege {}", p.getPrivilegeid());

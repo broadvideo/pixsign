@@ -39,7 +39,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group bundle-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label">BUNDLE<span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -50,7 +50,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group page-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label">PAGE<span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -61,7 +61,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group mscreen-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.mscreenflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -72,7 +72,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group review-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.reviewflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -83,7 +83,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group touch-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.touchflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -94,7 +94,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group calendar-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.calendarflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -105,7 +105,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group lift-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.liftflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -116,7 +116,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group flowrate-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.flowrateflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -127,7 +127,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group tag-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.tagflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -139,15 +139,26 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.diyflag"/><span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="vsp.diyflag" value="0" checked> <spring:message code="global.off"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="vsp.diyflag" value="1"> <spring:message code="global.on"/>
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.media"/></label>
 								<div class="col-md-9 checkbox-list">
-									<label class="checkbox-inline stream-ctrl">
+									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.streamflag" value="1"><spring:message code="pixsign.stream"/>
 									</label>
-									<label class="checkbox-inline dvb-ctrl">
+									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.dvbflag" value="1"><spring:message code="pixsign.dvb"/>
 									</label>
-									<label class="checkbox-inline videoin-ctrl">
+									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.videoinflag" value="1"><spring:message code="pixsign.videoin"/>
 									</label>
 								</div>

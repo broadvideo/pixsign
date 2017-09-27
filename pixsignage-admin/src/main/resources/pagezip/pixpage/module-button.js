@@ -21,7 +21,7 @@ var ButtonZone = function (zonediv, zone) {
 			$(a_element).attr('href', 'javascript:;');
 			$(a_element).attr('diyaction', zone.diyaction.code);
 			$(a_element).click(function(e) {
-				if (PixPage.diyzones > 0) {
+				if (PixPage.diyzones.length > 0) {
 					PixPage.diyzones[0].doAction($(a_element).attr('diyaction'));
 				}
 			});
@@ -42,16 +42,16 @@ var ButtonZone = function (zonediv, zone) {
 			'box-sizing': 'border-box',
 			'border-color': zone.bdcolor, 
 			'border-style': zone.bdstyle, 
-			'border-width': (parseInt(zone.bdwidth) / scalew) + 'px', 
-			'border-radius': (parseInt(zone.bdradius) / scalew) + 'px', 
+			'border-width': Math.ceil(parseInt(zone.bdwidth) / scalew) + 'px', 
+			'border-radius': Math.ceil(parseInt(zone.bdradius) / scalew) + 'px', 
 			'color': zone.color, 
 			'font-family': zone.fontfamily, 
-			'font-size': (parseInt(zone.fontsize) / scalew) + 'px', 
+			'font-size': Math.ceil(parseInt(zone.fontsize) / scalew) + 'px', 
 			'text-decoration': zone.decoration, 
 			'text-align': zone.align, 
 			'font-weight': zone.fontweight, 
 			'font-style': zone.fontstyle, 
-			'line-height': (parseInt(zone.lineheight) / scaleh) + 'px', 
+			'line-height': Math.ceil(parseInt(zone.lineheight) / scaleh) + 'px', 
 			'text-shadow': shadow, 
 			'word-wrap': 'break-word',
 		});

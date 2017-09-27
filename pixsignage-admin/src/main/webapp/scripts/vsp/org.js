@@ -370,6 +370,7 @@ var OrgModule = function () {
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
@@ -411,6 +412,7 @@ var OrgModule = function () {
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
