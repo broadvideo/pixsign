@@ -5,7 +5,11 @@ var ButtonZone = function (zonediv, zone) {
 	var init = function () {
 		var pagezonedtls = zone.pagezonedtls;
 		if (pagezonedtls.length > 0 && pagezonedtls[0].image != null) {
-			$(zonediv).css('background-image', 'url(image/' + pagezonedtls[0].image.filename + ')');
+			if (PixPage.mode == 'preview') {
+				$(zonediv).css('background-image', 'url(/pixsigdata' + pagezonedtls[0].image.filepath + ')');
+			} else {
+				$(zonediv).css('background-image', 'url(image/' + pagezonedtls[0].image.filename + ')');
+			}
 			$(zonediv).css('background-size', '100% 100%');
 			$(zonediv).css('background-position', 'center');
 			$(zonediv).css('background-repeat', 'no-repeat');
@@ -21,8 +25,8 @@ var ButtonZone = function (zonediv, zone) {
 			$(a_element).attr('href', 'javascript:;');
 			$(a_element).attr('diyaction', zone.diyaction.code);
 			$(a_element).click(function(e) {
-				if (PixPage.diyzones.length > 0) {
-					PixPage.diyzones[0].doAction($(a_element).attr('diyaction'));
+				if (PixPage.diymodules.length > 0) {
+					PixPage.diymodules[0].doAction($(a_element).attr('diyaction'));
 				}
 			});
 		}

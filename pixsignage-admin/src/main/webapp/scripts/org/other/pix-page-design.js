@@ -1031,18 +1031,18 @@ function refreshFontStyle() {
 }
 
 function refreshFontFamilySelect() {
-	var families = ['actor', 'advent pro', 'Architects Daughter', 'arial', 'Ariblk', 'arizonia', 'armata', 'AvantGardeLT Bookoblique', 
-	                'AvantGardeLT Demi', 'BankGothicBold', 'BankGothicMedium', 'Bebas', 'belgrano', 'belleza', 'berlinsans', 'Bookman old', 
-	                'Bookman old bi', 'Bookman old bold', 'Bookman old italic', 'candara', 'Century_Gothic', 'Century_Gothic_Bold', 
-	                'ChaparralPro', 'ChaparralProBold', 'ComicSansMS', 'Cooper Std Black', 'Courgette-Regular', 'Curlz MT', 
-	                'DJBAlmostPerfect', 'Diplomata', 'DiplomataSC', 'doppio one', 'DroidSans', 'electrolize', 'Eras BD', 'Forte', 'Fradm', 
-	                'Fradmcn', 'Fradmit', 'Frahv', 'Frahvit', 'Framd', 'Framdcn', 'Framdit', 'FrederickatheGreat', 'fredoka one', 'Freeskpt', 
-	                'Futura XBlk BT', 'gadugi', 'GoboldBoldItalic', 'Gothambold', 'Gothambook', 'Gothammedium', 'Humanist521', 'karla', 
-	                'londrina solid', 'MV Boli', 'marven pro', 'MfReallyAwesome', 'MyriadPro', 'norican', 'nova slim', 'nunito', 'orbitron', 
-	                'overlock', 'PT sana narrow', 'parisienne', 'Permanent Marker', 'philosopher', 'pontano sans', 'pratas', 'quando', 
-	                'quixotic', 'RobotoBold', 'RobotoMedium', 'RobotoRegular', 'rockwell', 'RockwellExtraBold', 'russo one', 'Rye', 'sanchez', 
-	                'sarina', 'Scandinavian', 'Scandinavian Black', 'SegoePrint', 'SegoeUI', 'SegoeUIB', 'signika', 'SketchBlock', 
-	                'Taco modern', 'texgyreadventor-bold', 'Timesnewroman', 'trocchi', 'TwentyEightDaysLater', 'VastShadow', 'Verdana', 
+	var families = ['actor', 'advent_pro', 'Architects_Daughter', 'arial', 'Ariblk', 'arizonia', 'armata', 'AvantGardeLT_Bookoblique', 
+	                'AvantGardeLT_Demi', 'BankGothicBold', 'BankGothicMedium', 'Bebas', 'belgrano', 'belleza', 'berlinsans', 'Bookman_old', 
+	                'Bookman_old_bi', 'Bookman_old_bold', 'Bookman_old_italic', 'candara', 'Century_Gothic', 'Century_Gothic_Bold', 
+	                'ChaparralPro', 'ChaparralProBold', 'ComicSansMS', 'Cooper_Std_Black', 'Courgette-Regular', 'Curlz_MT', 
+	                'DJBAlmostPerfect', 'DiplomataSC', 'doppio_one', 'DroidSans', 'electrolize', 'Eras_BD', 'Forte', 'Fradm', 
+	                'Fradmcn', 'Fradmit', 'Frahv', 'Frahvit', 'Framd', 'Framdcn', 'Framdit', 'FrederickatheGreat', 'fredoka_one', 'Freeskpt', 
+	                'Futura_XBlk_BT', 'gadugi', 'GoboldBoldItalic', 'Gothambold', 'Gothambook', 'Gothammedium', 'Humanist521', 'karla', 
+	                'londrina_solid', 'MV_Boli', 'marven_pro', 'MfReallyAwesome', 'MyriadPro', 'norican', 'nova_slim', 'nunito', 'orbitron', 
+	                'overlock', 'PT_sana_narrow', 'parisienne', 'Permanent_Marker', 'philosopher', 'pontano_sans', 'pratas', 'quando', 
+	                'quixotic', 'RobotoBold', 'RobotoMedium', 'RobotoRegular', 'rockwell', 'RockwellExtraBold', 'russo_one', 'Rye', 'sanchez', 
+	                'sarina', 'Scandinavian', 'Scandinavian_Black', 'SegoePrint', 'SegoeUI', 'SegoeUIB', 'signika', 'SketchBlock', 
+	                'Taco_modern', 'texgyreadventor-bold', 'Timesnewroman', 'TwentyEightDaysLater', 'VastShadow', 'Verdana', 
 	                'yesteryear', 'twentyDaysLater'];
 	var familylist = [];
 	for (var i=0; i<families.length; i++) {
@@ -1943,4 +1943,15 @@ $(document).keydown(function (e) {
 	}
 });
 
-
+$('.pix-preview').on('click', function(event) {
+	$('#PreviewForm input[name="content"]').val($.toJSON(CurrentObj));
+	var pagezones = CurrentObj.pagezones.filter(function (el) {
+		return el.diy != null;
+	});
+	if (pagezones.length > 0) {
+		$('#PreviewForm input[name="diycode"]').val(pagezones[0].diy.code);
+	} else {
+		$('#PreviewForm input[name="diycode"]').val('');
+	}
+	$('#PreviewForm').submit();
+});

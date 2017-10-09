@@ -109,7 +109,7 @@ var OrgModule = function () {
 			for (var i=0; i<apps.length; i++) {
 				treeData[i] = {};
 				treeData[i].id = apps[i].appid;
-				treeData[i].text = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
+				treeData[i].text = apps[i].mtype + ' - ' + apps[i].sname;
 				treeData[i].state = {
 					opened: true,
 					checked: currentApps[treeData[i].id] == undefined? false : true,

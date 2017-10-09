@@ -80,23 +80,23 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 	if (bundledtl.layoutdtl.bgimage != null) {
 		bgimage = '/pixsigdata' + bundledtl.layoutdtl.bgimage.thumbnail;
 	} else if (bundledtl.layoutdtl.mainflag == 1) {
-		bgimage = '../img/region/region-play-main.jpg';
+		bgimage = '/pixsignage/img/region/region-play-main.jpg';
 	} else if (bundledtl.layoutdtl.type == '0') {
-		bgimage = '../img/region/region-play.jpg';
+		bgimage = '/pixsignage/img/region/region-play.jpg';
 	} else if (bundledtl.layoutdtl.type == '4') {
-		bgimage = '../img/region/region-videoin.jpg';
+		bgimage = '/pixsignage/img/region/region-videoin.jpg';
 	} else if (bundledtl.layoutdtl.type == '5') {
-		bgimage = '../img/region/region-dvb.jpg';
+		bgimage = '/pixsignage/img/region/region-dvb.jpg';
 	} else if (bundledtl.layoutdtl.type == '6') {
-		bgimage = '../img/region/region-stream.jpg';
+		bgimage = '/pixsignage/img/region/region-stream.jpg';
 	} else if (bundledtl.layoutdtl.type == '8') {
 		if (bundledtl.layoutdtl.width > bundledtl.layoutdtl.height) {
-			bgimage = '../img/region/region-navigate-h.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-h.jpg';
 		} else {
-			bgimage = '../img/region/region-navigate-v.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-v.jpg';
 		}
 	} else if (bundledtl.layoutdtl.type == '9') {
-		bgimage = '../img/region/region-qrcode.jpg';
+		bgimage = '/pixsignage/img/region/region-qrcode.jpg';
 	}
 	if (bundledtl.layoutdtl.type == '0') {
 		if (bundledtl.objtype == 1 && bundledtl.type == 0 && bundledtl.medialist0.medialistdtls.length > 0) {
@@ -114,7 +114,7 @@ function redrawBundledtl(div, bundle, bundledtl, selected) {
 				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 			}
 		} else if (bundledtl.objtype == 5) {
-			bgimage = '../img/region/region-widget.jpg';
+			bgimage = '/pixsignage/img/region/region-widget.jpg';
 		}
 	}
 
@@ -588,7 +588,7 @@ function refreshBundledtlSelect() {
 					html += '<div class="col-md-1 col-xs-1">';
 					if (medialistdtl.objtype == 1) {
 						if (medialistdtl.video.thumbnail == null) {
-							html += '<img src="../img/video.jpg" alt="' + medialistdtl.video.name + '" width="100%" />';
+							html += '<img src="/pixsignage/img/video.jpg" alt="' + medialistdtl.video.name + '" width="100%" />';
 						} else {
 							html += '<img src="/pixsigdata' + medialistdtl.video.thumbnail + '" alt="' + medialistdtl.video.name + '" width="100%" />';
 						}
@@ -695,7 +695,7 @@ function refreshMedialistDtl() {
 					mediatype = common.view.intvideo;
 					medianame = medialistdtl.video.name;
 					if (medialistdtl.video.thumbnail == null) {
-						thumbnail = '../img/video.jpg';
+						thumbnail = '/pixsignage/img/video.jpg';
 					} else {
 						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
 					}
@@ -703,7 +703,7 @@ function refreshMedialistDtl() {
 					mediatype = common.view.extvideo;
 					medianame = medialistdtl.video.name;
 					if (medialistdtl.video.thumbnail == null) {
-						thumbnail = '../img/video.jpg';
+						thumbnail = '/pixsignage/img/video.jpg';
 					} else {
 						thumbnail = '/pixsigdata' + medialistdtl.video.thumbnail;
 					}
@@ -848,7 +848,7 @@ $('#IntVideoTable').dataTable({
 		intvideohtml += '<div class="col-md-2 col-xs-2">';
 
 		intvideohtml += '<div id="ThumbContainer" style="position:relative">';
-		var thumbnail = '../img/video.jpg';
+		var thumbnail = '/pixsignage/img/video.jpg';
 		var thumbwidth = 100;
 		if (aData.thumbnail != null) {
 			thumbnail = '/pixsigdata' + aData.thumbnail;
@@ -857,7 +857,7 @@ $('#IntVideoTable').dataTable({
 		intvideohtml += '<div id="VideoThumb" class="thumbs">';
 		intvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		if (aData.relate != null) {
-			var thumbnail = '../img/video.jpg';
+			var thumbnail = '/pixsignage/img/video.jpg';
 			var thumbwidth = 50;
 			var thumbheight = 50;
 			if (aData.relate.thumbnail != null) {
@@ -951,7 +951,7 @@ $('#ExtVideoTable').dataTable({
 		extvideohtml += '<div class="col-md-2 col-xs-2">';
 
 		extvideohtml += '<div id="ThumbContainer" style="position:relative">';
-		var thumbnail = '../img/video.jpg';
+		var thumbnail = '/pixsignage/img/video.jpg';
 		var thumbwidth = 100;
 		if (aData.thumbnail != null) {
 			thumbnail = '/pixsigdata' + aData.thumbnail;
@@ -960,7 +960,7 @@ $('#ExtVideoTable').dataTable({
 		extvideohtml += '<div id="VideoThumb" class="thumbs">';
 		extvideohtml += '<img src="' + thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 		if (aData.relate != null) {
-			var thumbnail = '../img/video.jpg';
+			var thumbnail = '/pixsignage/img/video.jpg';
 			var thumbwidth = 50;
 			var thumbheight = 50;
 			if (aData.relate.thumbnail != null) {
@@ -1170,7 +1170,7 @@ $('body').on('click', '.pix-medialistdtl-intvideo-add', function(event) {
 
 	var thumbnail = '';
 	if (data.thumbnail == null) {
-		thumbnail = '../img/video.jpg';
+		thumbnail = '/pixsignage/img/video.jpg';
 	} else {
 		thumbnail = '/pixsigdata' + data.thumbnail;
 	}
@@ -1197,7 +1197,7 @@ $('body').on('click', '.pix-medialistdtl-extvideo-add', function(event) {
 
 	var thumbnail = '';
 	if (data.thumbnail == null) {
-		thumbnail = '../img/video.jpg';
+		thumbnail = '/pixsignage/img/video.jpg';
 	} else {
 		thumbnail = '/pixsigdata' + data.thumbnail;
 	}

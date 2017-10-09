@@ -54,12 +54,6 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="app!filelist" method="doFileList" class="appAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
 
 		<action name="timezone!list" method="doList" class="timezoneAction">
 			<result name="success" type="json">

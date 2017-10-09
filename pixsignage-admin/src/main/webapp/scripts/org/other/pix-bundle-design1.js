@@ -81,23 +81,23 @@ function redrawLayoutdtl(div, bundle, bundledtl, selected) {
 	if (bundledtl.bgimage != null) {
 		bgimage = '/pixsigdata' + bundledtl.bgimage.thumbnail;
 	} else if (bundledtl.mainflag == 1) {
-		bgimage = '../img/region/region-play-main.jpg';
+		bgimage = '/pixsignage/img/region/region-play-main.jpg';
 	} else if (bundledtl.type == 0) {
-		bgimage = '../img/region/region-play.jpg';
+		bgimage = '/pixsignage/img/region/region-play.jpg';
 	} else if (bundledtl.type == 4) {
-		bgimage = '../img/region/region-videoin.jpg';
+		bgimage = '/pixsignage/img/region/region-videoin.jpg';
 	} else if (bundledtl.type == 5) {
-		bgimage = '../img/region/region-dvb.jpg';
+		bgimage = '/pixsignage/img/region/region-dvb.jpg';
 	} else if (bundledtl.type == 6) {
-		bgimage = '../img/region/region-stream.jpg';
+		bgimage = '/pixsignage/img/region/region-stream.jpg';
 	} else if (bundledtl.type == 8) {
 		if (bundledtl.width > bundledtl.height) {
-			bgimage = '../img/region/region-navigate-h.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-h.jpg';
 		} else {
-			bgimage = '../img/region/region-navigate-v.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-v.jpg';
 		}
 	} else if (bundledtl.type == 9) {
-		bgimage = '../img/region/region-qrcode.jpg';
+		bgimage = '/pixsignage/img/region/region-qrcode.jpg';
 	}
 	if (bundledtl.type == 0) {
 		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
@@ -108,7 +108,7 @@ function redrawLayoutdtl(div, bundle, bundledtl, selected) {
 				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 			}
 		} else if (bundledtl.objtype == 5) {
-			bgimage = '../img/region/region-widget.jpg';
+			bgimage = '/pixsignage/img/region/region-widget.jpg';
 		}
 	}
 

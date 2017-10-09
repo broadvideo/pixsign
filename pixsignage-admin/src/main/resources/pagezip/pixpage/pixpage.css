@@ -285,12 +285,6 @@ html,body {
 	font-style:normal;
 }
 @font-face {
-	font-family:'trocchi';
-	src:url('../fonts/Trocchi.woff') format('woff');
-	font-weight:normal;
-	font-style:normal;
-}
-@font-face {
 	font-family:'yesteryear';
 	src:url('../fonts/Yesteryear.woff') format('woff');
 	font-weight:normal;
@@ -300,13 +294,6 @@ html,body {
 @font-face {
 	font-family:'Bebas';
 	src:url('../fonts/Bebas.ttf') format('truetype');
-	font-weight:normal;
-	font-style:normal;
-}
-
-@font-face {
-	font-family:'Diplomata';
-	src:url('../fonts/Diplomata.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }

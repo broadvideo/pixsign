@@ -13,7 +13,7 @@
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<link href="${base_ctx}/wysiwyg/css/wysiwyg.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pixpage.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -172,6 +172,15 @@
 							</div>
 						</div>
 						<div class="col-md-3">
+							<div class="row">
+								<div class="col-md-12">
+									<form method="post" target="_blank" id="PreviewForm" style="display:none" action="/pixsignage/preview/preview.jsp" >
+										<input type="hidden" name="content" value="{}" />
+										<input type="hidden" name="diycode" value="" />
+									</form>
+									<a href="javascript:;" class="btn default blue pull-right pix-preview"><i class="fa fa-video-camera"></i> 预览</a>
+								</div>
+							</div>
 							<div class="panel-group" id="ZoneEditPanel">
 								<div class="panel panel-default zone-ctl zonetype-1">
 									<div class="panel-heading">

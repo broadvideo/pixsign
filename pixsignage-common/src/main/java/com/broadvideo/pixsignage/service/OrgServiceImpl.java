@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.domain.App;
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Org;
@@ -51,15 +50,14 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	public Org selectByPrimaryKey(String orgid) {
-		Org org = orgMapper.selectByPrimaryKey(orgid);
-		List<App> appList = org.getApplist();
-		if (appList != null) {
-			for (App app : appList) {
-				app.setDescription(
-						messageSource.getMessage("app." + app.getName(), null, LocaleContextHolder.getLocale()));
-			}
-
-		}
+		/*
+		 * Org org = orgMapper.selectByPrimaryKey(orgid); List<App> appList =
+		 * org.getApplist(); if (appList != null) { for (App app : appList) {
+		 * app.setDescription( messageSource.getMessage("app." + app.getName(),
+		 * null, LocaleContextHolder.getLocale())); }
+		 * 
+		 * }
+		 */
 		return orgMapper.selectByPrimaryKey(orgid);
 	}
 

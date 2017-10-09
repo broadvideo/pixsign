@@ -29,6 +29,10 @@ public class Appfile {
 
 	private Date createtime;
 
+	private String sname;
+
+	private String sdescription;
+
 	public Integer getAppfileid() {
 		return appfileid;
 	}
@@ -125,5 +129,21 @@ public class Appfile {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getSname() {
+		return sname;
+	}
+
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+
+	public String getSdescription() {
+		return sdescription;
+	}
+
+	public void setSdescription(String sdescription) {
+		this.sdescription = sdescription;
 	}
 }

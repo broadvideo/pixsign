@@ -131,6 +131,21 @@ create table diyaction(
 default character set utf8;
 alter table diyaction add unique index diyaction_index1(diyid, code);
 
+
+drop table app;
+create table app( 
+   appid int not null auto_increment,
+   name varchar(64) not null,
+   mtype varchar(32) not null,
+   sname varchar(64) default '',
+   description varchar(512) default '',
+   createtime timestamp not null default current_timestamp,
+   primary key (appid)
+ )engine = innodb
+default character set utf8;
+alter table app add unique index app_index1(name, mtype);
+insert into app(name, sname, mtype) select distinct name, name, mtype from appfile;
+
 update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;
@@ -205,6 +220,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgt
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30703,2,307,'menu.student','student.jsp',NULL,'1',0,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30711,2,307,'menu.courseschedulescheme','courseschedulescheme.jsp',NULL,'1',0,11);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30712,2,307,'menu.coursescheduleset','courseschedule.jsp',NULL,'1',0,12);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30720,2,307,'menu.attendancescheme','attendancescheme.jsp',NULL,'1',0,20);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30722,2,307,'menu.attendance','attendance.jsp',NULL,'1','0','22');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(3071101,2,30711,'menu.shemetimeconfig','periodtimedtl.jsp',NULL,'2',0,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgtype,sequence) values(30731,2,307,'menu.batchimport','classcardimport.jsp',NULL,'1','0',0);
@@ -212,7 +228,6 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,orgt
 
 
 
-INSERT INTO `privilege` VALUES ('30720', '2', '307', 'menu.attendancescheme', 'attendancescheme.jsp', NULL, '1', '0', '20', '2017-08-18 15:42:24');
 
 ALTER TABLE `attendance` 
 	ADD COLUMN `attendanceeventid` int(11)   NOT NULL COMMENT '考勤事件id' after `studentid`, 

@@ -19,7 +19,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.App;
 import com.broadvideo.pixsignage.domain.Appfile;
+import com.broadvideo.pixsignage.persistence.AppMapper;
 import com.broadvideo.pixsignage.service.AppfileService;
 
 @SuppressWarnings("serial")
@@ -36,6 +38,8 @@ public class AppfileAction extends BaseDatatableAction {
 
 	@Autowired
 	private AppfileService appfileService;
+	@Autowired
+	private AppMapper appMapper;
 
 	public void doUpload() throws Exception {
 		HttpServletResponse response = getHttpServletResponse();
@@ -90,6 +94,15 @@ public class AppfileAction extends BaseDatatableAction {
 					}
 					FileUtils.moveFile(myfile[i], appfileFile);
 
+					App app = appMapper.select(name, mtype);
+					if (app == null) {
+						app = new App();
+						app.setName(name);
+						app.setMtype(mtype);
+						app.setSname(name);
+						appMapper.insertSelective(app);
+					}
+
 					Appfile appfile = new Appfile();
 					appfile.setName(name);
 					appfile.setVname(vname);
@@ -138,6 +151,11 @@ public class AppfileAction extends BaseDatatableAction {
 			List<Object> aaData = new ArrayList<Object>();
 			List<Appfile> appfileList = appfileService.selectList(name, mtype);
 			for (Appfile appfile : appfileList) {
+				App app = appMapper.select(appfile.getName(), appfile.getMtype());
+				if (app != null) {
+					appfile.setSname(app.getSname());
+					appfile.setSdescription(app.getDescription());
+				}
 				aaData.add(appfile);
 			}
 			this.setAaData(aaData);

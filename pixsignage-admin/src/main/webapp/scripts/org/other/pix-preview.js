@@ -53,23 +53,23 @@ function getLayoutdtlPreviewHtml(layout, layoutdtlindex) {
 	if (layoutdtl.bgimage != null) {
 		bgimage = '/pixsigdata' + layoutdtl.bgimage.thumbnail;
 	} else if (layoutdtl.mainflag == 1) {
-		bgimage = '../img/region/region-play-main.jpg';
+		bgimage = '/pixsignage/img/region/region-play-main.jpg';
 	} else if (layoutdtl.type == '0') {
-		bgimage = '../img/region/region-play.jpg';
+		bgimage = '/pixsignage/img/region/region-play.jpg';
 	} else if (layoutdtl.type == '4') {
-		bgimage = '../img/region/region-videoin.jpg';
+		bgimage = '/pixsignage/img/region/region-videoin.jpg';
 	} else if (layoutdtl.type == '5') {
-		bgimage = '../img/region/region-dvb.jpg';
+		bgimage = '/pixsignage/img/region/region-dvb.jpg';
 	} else if (layoutdtl.type == '6') {
-		bgimage = '../img/region/region-stream.jpg';
+		bgimage = '/pixsignage/img/region/region-stream.jpg';
 	} else if (layoutdtl.type == '8') {
 		if (layoutdtl.width > layoutdtl.height) {
-			bgimage = '../img/region/region-navigate-h.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-h.jpg';
 		} else {
-			bgimage = '../img/region/region-navigate-v.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-v.jpg';
 		}
 	} else if (layoutdtl.type == '9') {
-		bgimage = '../img/region/region-qrcode.jpg';
+		bgimage = '/pixsignage/img/region/region-qrcode.jpg';
 	}
 
 	if (layoutdtl.type != 0) {
@@ -167,23 +167,23 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	if (bundledtl.bgimage != null) {
 		bgimage = '/pixsigdata' + bundledtl.bgimage.thumbnail;
 	} else if (bundledtl.mainflag == 1) {
-		bgimage = '../img/region/region-play-main.jpg';
+		bgimage = '/pixsignage/img/region/region-play-main.jpg';
 	} else if (bundledtl.type == '0') {
-		bgimage = '../img/region/region-play.jpg';
+		bgimage = '/pixsignage/img/region/region-play.jpg';
 	} else if (bundledtl.type == '4') {
-		bgimage = '../img/region/region-videoin.jpg';
+		bgimage = '/pixsignage/img/region/region-videoin.jpg';
 	} else if (bundledtl.type == '5') {
-		bgimage = '../img/region/region-dvb.jpg';
+		bgimage = '/pixsignage/img/region/region-dvb.jpg';
 	} else if (bundledtl.type == '6') {
-		bgimage = '../img/region/region-stream.jpg';
+		bgimage = '/pixsignage/img/region/region-stream.jpg';
 	} else if (bundledtl.type == '8') {
 		if (bundledtl.width > bundledtl.height) {
-			bgimage = '../img/region/region-navigate-h.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-h.jpg';
 		} else {
-			bgimage = '../img/region/region-navigate-v.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-v.jpg';
 		}
 	} else if (bundledtl.type == '9') {
-		bgimage = '../img/region/region-qrcode.jpg';
+		bgimage = '/pixsignage/img/region/region-qrcode.jpg';
 	}
 	if (bundledtl.type == '0') {
 		if (bundledtl.objtype == 1 && bundledtl.medialist.medialistdtls.length > 0) {
@@ -194,7 +194,7 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 			}
 		} else if (bundledtl.objtype == 5) {
-			bgimage = '../img/region/region-widget.jpg';
+			bgimage = '/pixsignage/img/region/region-widget.jpg';
 		}
 	}
 	
@@ -229,8 +229,8 @@ function getBundledtlPreviewHtml(bundle, bundledtlindex, dynamic) {
 	} else if (bundledtl.type == 3) {
 		bundledtlhtml += '<div class="bundle-font" bundledtlindex="' + bundledtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + bundledtl.color + '; font-size:12px; font-weight:bold; ">';
 		bundledtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
-		bundledtlhtml += '<img src="../img/duoyun.png" />';
-		bundledtlhtml += '<img src="../img/xiaoyu.png" />';
+		bundledtlhtml += '<img src="/pixsignage/img/duoyun.png" />';
+		bundledtlhtml += '<img src="/pixsignage/img/xiaoyu.png" />';
 		bundledtlhtml += '</div>';
 	} else if (bundledtl.type == 7) {
 		if (bgimage != '') {
@@ -388,23 +388,23 @@ function getTempletdtlPreviewHtml(templet, templetdtlindex, dynamic) {
 	if (templetdtl.bgimage != null) {
 		bgimage = '/pixsigdata' + templetdtl.bgimage.thumbnail;
 	} else if (templetdtl.mainflag == 1) {
-		bgimage = '../img/region/region-play-main.jpg';
+		bgimage = '/pixsignage/img/region/region-play-main.jpg';
 	} else if (templetdtl.type == '0') {
-		bgimage = '../img/region/region-play.jpg';
+		bgimage = '/pixsignage/img/region/region-play.jpg';
 	} else if (templetdtl.type == '4') {
-		bgimage = '../img/region/region-videoin.jpg';
+		bgimage = '/pixsignage/img/region/region-videoin.jpg';
 	} else if (templetdtl.type == '5') {
-		bgimage = '../img/region/region-dvb.jpg';
+		bgimage = '/pixsignage/img/region/region-dvb.jpg';
 	} else if (templetdtl.type == '6') {
-		bgimage = '../img/region/region-stream.jpg';
+		bgimage = '/pixsignage/img/region/region-stream.jpg';
 	} else if (templetdtl.type == '8') {
 		if (templetdtl.width > templetdtl.height) {
-			bgimage = '../img/region/region-navigate-h.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-h.jpg';
 		} else {
-			bgimage = '../img/region/region-navigate-v.jpg';
+			bgimage = '/pixsignage/img/region/region-navigate-v.jpg';
 		}
 	} else if (templetdtl.type == '9') {
-		bgimage = '../img/region/region-qrcode.jpg';
+		bgimage = '/pixsignage/img/region/region-qrcode.jpg';
 	}
 	if (templetdtl.type == '0') {
 		if (templetdtl.objtype == 1 && templetdtl.medialist.medialistdtls.length > 0) {
@@ -415,7 +415,7 @@ function getTempletdtlPreviewHtml(templet, templetdtlindex, dynamic) {
 				bgimage = '/pixsigdata' + medialistdtl.image.thumbnail;
 			}
 		} else if (templetdtl.objtype == 5) {
-			bgimage = '../img/region/region-widget.jpg';
+			bgimage = '/pixsignage/img/region/region-widget.jpg';
 		}
 	}
 	
@@ -449,8 +449,8 @@ function getTempletdtlPreviewHtml(templet, templetdtlindex, dynamic) {
 	} else if (templetdtl.type == 3) {
 		templetdtlhtml += '<div class="templet-font" templetdtlindex="' + templetdtlindex + '" style="text-align:center; overflow:hidden; text-overflow:clip; white-space:nowrap; color:' + templetdtl.color + '; font-size:12px; font-weight:bold; ">';
 		templetdtlhtml += '深圳 20 ~ 17℃ 多云转小雨 ';
-		templetdtlhtml += '<img src="../img/duoyun.png" />';
-		templetdtlhtml += '<img src="../img/xiaoyu.png" />';
+		templetdtlhtml += '<img src="/pixsignage/img/duoyun.png" />';
+		templetdtlhtml += '<img src="/pixsignage/img/xiaoyu.png" />';
 		templetdtlhtml += '</div>';
 	} else if (templetdtl.type == 7) {
 		if (bgimage != '') {

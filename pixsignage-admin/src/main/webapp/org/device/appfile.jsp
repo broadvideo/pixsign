@@ -78,17 +78,21 @@
 						<input type="hidden" name="appfile.appfileid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/></label>
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.name"/></label>
+								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="appfile.name"></label>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.sname"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="appfile.name" />
+										<i class="fa"></i> <input type="text" class="form-control" name="appfile.sname" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
 								<div class="col-md-9">
-									<textarea class="form-control" rows="10" name="appfile.description"></textarea>
+									<textarea class="form-control" rows="10" name="appfile.sdescription"></textarea>
 								</div>
 							</div>
 						</div>
