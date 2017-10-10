@@ -92,8 +92,8 @@ var PixPage = function () {
 					onevent: 'load',
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationinit,
-					delay: zone.animationinitdelay,
-					iterationcount: 1
+					delay: zone.animationinitdelay + 'ms',
+					iterationcount: -1,
 				};
 				animations.push(animation);
 				console.log('Add on init animation: ', zone.pagezoneid, zone.animationinit);
@@ -104,7 +104,7 @@ var PixPage = function () {
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationclick,
 					delay: 0,
-					iterationcount: 1
+					iterationcount: 1,
 				};
 				animations.push(animation);
 				console.log('Add on click animation: ', zone.pagezoneid, zone.animationinit);
