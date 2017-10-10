@@ -38,11 +38,15 @@
     <result column="rulecolor" property="rulecolor" jdbcType="VARCHAR" />
     <result column="rulewidth" property="rulewidth" jdbcType="INTEGER" />
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="diyid" property="diyid" jdbcType="INTEGER" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchtemplateid" property="touchtemplateid" jdbcType="INTEGER" />
+    <result column="diyactionid" property="diyactionid" jdbcType="INTEGER" />
     <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
     <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
     <result column="animationclick" property="animationclick" jdbcType="VARCHAR" />
+	<association property="diy" column="{diyid=diyid}" select="com.broadvideo.pixsignage.persistence.DiyMapper.selectByPrimaryKey" />
+	<association property="diyaction" column="{diyactionid=diyactionid}" select="com.broadvideo.pixsignage.persistence.DiyactionMapper.selectByPrimaryKey" />
     <collection property="templatezonedtls" ofType="com.broadvideo.pixsignage.domain.Templatezonedtl"
 		column="{templatezoneid=templatezoneid}" select="com.broadvideo.pixsignage.persistence.TemplatezonedtlMapper.selectList" />
   </resultMap>
@@ -53,8 +57,8 @@
     templatezoneid, templateid, hometemplateid, type, height, width, topoffset, leftoffset, zindex, 
     transform, bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
     shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, 
-    align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, touchtype, touchtemplateid, 
-    animationinit, animationinitdelay, animationclick
+    align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchtemplateid, 
+    diyactionid, animationinit, animationinitdelay, animationclick
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -95,7 +99,9 @@
       fontstyle, decoration, align, 
       lineheight, rows, cols, 
       rules, rulecolor, rulewidth, 
-      dateformat, touchtype, touchtemplateid, 
+      dateformat, diyid, touchtype, 
+      touchtemplateid, diyactionid, animationinit, 
+      animationinitdelay, animationclick
       content)
     values (#{templateid,jdbcType=INTEGER}, #{hometemplateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
@@ -108,8 +114,9 @@
       #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
       #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
       #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
-      #{dateformat,jdbcType=VARCHAR}, #{touchtype,jdbcType=CHAR}, #{touchtemplateid,jdbcType=INTEGER}, 
-      #{animationinit,jdbcType=VARCHAR}, #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
+      #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
+      #{touchtemplateid,jdbcType=INTEGER}, #{diyactionid,jdbcType=INTEGER}, #{animationinit,jdbcType=VARCHAR}, 
+      #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Templatezone" >
@@ -223,11 +230,17 @@
       <if test="dateformat != null" >
         dateformat,
       </if>
+      <if test="diyid != null" >
+        diyid,
+      </if>
       <if test="touchtype != null" >
         touchtype,
       </if>
       <if test="touchtemplateid != null" >
         touchtemplateid,
+      </if>
+      <if test="diyactionid != null" >
+        diyactionid,
       </if>
       <if test="animationinit != null" >
         animationinit,
@@ -348,11 +361,17 @@
       <if test="dateformat != null" >
         #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="diyid != null" >
+        #{diyid,jdbcType=INTEGER},
+      </if>
       <if test="touchtype != null" >
         #{touchtype,jdbcType=CHAR},
       </if>
       <if test="touchtemplateid != null" >
         #{touchtemplateid,jdbcType=INTEGER},
+      </if>
+      <if test="diyactionid != null" >
+        #{diyactionid,jdbcType=INTEGER},
       </if>
       <if test="animationinit != null" >
         #{animationinit,jdbcType=VARCHAR},
@@ -476,11 +495,17 @@
       <if test="dateformat != null" >
         dateformat = #{dateformat,jdbcType=VARCHAR},
       </if>
+      <if test="diyid != null" >
+        diyid = #{diyid,jdbcType=INTEGER},
+      </if>
       <if test="touchtype != null" >
         touchtype = #{touchtype,jdbcType=CHAR},
       </if>
       <if test="touchtemplateid != null" >
         touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      </if>
+      <if test="diyactionid != null" >
+        diyactionid = #{diyactionid,jdbcType=INTEGER},
       </if>
       <if test="animationinit != null" >
         animationinit = #{animationinit,jdbcType=VARCHAR},
@@ -534,8 +559,10 @@
       rulecolor = #{rulecolor,jdbcType=VARCHAR},
       rulewidth = #{rulewidth,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
+      diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
       animationclick = #{animationclick,jdbcType=VARCHAR},
@@ -579,8 +606,10 @@
       rulecolor = #{rulecolor,jdbcType=VARCHAR},
       rulewidth = #{rulewidth,jdbcType=INTEGER},
       dateformat = #{dateformat,jdbcType=VARCHAR},
+      diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchtemplateid = #{touchtemplateid,jdbcType=INTEGER}
+      diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
       animationclick = #{animationclick,jdbcType=VARCHAR}

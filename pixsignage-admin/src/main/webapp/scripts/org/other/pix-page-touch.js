@@ -568,6 +568,8 @@ $('body').on('click', '.pix-page', function(event) {
 				CurrentObj.pagezones = CurrentObj.pagezones;
 				CurrentId = CurrentObj.pageid;
 				CurrentZone = null;
+				$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+				$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 				$('#PageModal').modal();
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);

@@ -30,6 +30,8 @@ public class Vsp {
 
 	private String tagflag;
 
+	private String diyflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -150,6 +152,14 @@ public class Vsp {
 
 	public void setTagflag(String tagflag) {
 		this.tagflag = tagflag;
+	}
+
+	public String getDiyflag() {
+		return diyflag;
+	}
+
+	public void setDiyflag(String diyflag) {
+		this.diyflag = diyflag;
 	}
 
 	public String getStreamflag() {

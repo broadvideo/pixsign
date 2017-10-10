@@ -29,6 +29,7 @@ var AppfileModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(0)', nRow).html(aData.name + '<br/>' + aData.sname);
 				$('td:eq(1)', nRow).html(aData.vname + '(' + aData.vcode + ')');
 				$('td:eq(3)', nRow).html(PixData.transferIntToByte(aData.size));
 				$('td:eq(4)', nRow).html('<a href="/pixsigdata' + aData.filepath + '">' + aData.filename + '</a>');

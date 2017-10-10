@@ -13,7 +13,7 @@
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<link href="${base_ctx}/wysiwyg/css/wysiwyg.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pixpage.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -145,20 +145,23 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="11">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="12">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="14">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="15">
-								<i class="fa fa-child"></i><div>考试通告</div>
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="15">
+								<i class="fa fa-book"></i><div>考试通告</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
+								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
 						</div>
 					</div>
@@ -169,6 +172,15 @@
 							</div>
 						</div>
 						<div class="col-md-3">
+							<div class="row">
+								<div class="col-md-12">
+									<form method="post" target="_blank" id="PreviewForm" style="display:none" action="/pixsignage/preview/preview.jsp" >
+										<input type="hidden" name="content" value="{}" />
+										<input type="hidden" name="diycode" value="" />
+									</form>
+									<a href="javascript:;" class="btn default blue pull-right pix-preview"><i class="fa fa-video-camera"></i> 预览</a>
+								</div>
+							</div>
 							<div class="panel-group" id="ZoneEditPanel">
 								<div class="panel panel-default zone-ctl zonetype-1">
 									<div class="panel-heading">
@@ -257,18 +269,19 @@
 												<div class="form-group">
 													<label class="col-md-3 control-label">功能</label>
 													<div class="col-md-9">
-														<select class="form-control" name="touchtype" tabindex="-1">
-															<option value="0"><spring:message code="pixsign.prop.touchtype_0"/></option>
-															<option value="1"><spring:message code="pixsign.prop.touchtype_1"/></option>
-															<option value="2"><spring:message code="pixsign.prop.touchtype_2"/></option>
-															<option value="9"><spring:message code="pixsign.prop.touchtype_9"/></option>
-														</select>
+														<input type="hidden" id="TouchtypeSelect" class="form-control select2" name="touchtype" />
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-3 control-label">跳转</label>
+													<label class="col-md-3 control-label">子页</label>
 													<div class="col-md-9">
 														<input type="hidden" id="SubPageSelect" class="form-control select2" name="touchpageid" />
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">动作</label>
+													<div class="col-md-9">
+														<input type="hidden" id="DiyactionSelect" class="form-control select2" name="diyactionid" />
 													</div>
 												</div>
 											</div>
@@ -747,6 +760,25 @@
 										</form>
 									</div>
 								</div>
+								<div class="panel panel-default zone-ctl zonetype-21">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse11">互动素材</a>
+										</h4>
+									</div>
+									<div id="Collapse11" class="panel-collapse collapse">
+										<form id="ZoneEditForm11" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">互动</label>
+													<div class="col-md-9">
+														<input type="hidden" id="DiySelect" class="form-control select2" name="diyid">
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 
 							</div>
 						</div>
@@ -1005,6 +1037,9 @@
 <script src="${base_ctx}/scripts/org/other/pix-page-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/other/pix-preview.js?t=${timestamp}"></script>
 <script>
+var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
+var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
+
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();

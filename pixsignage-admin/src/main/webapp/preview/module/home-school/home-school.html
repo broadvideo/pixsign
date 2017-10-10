@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="home-school.css"/>
+</head>
+<body>
+<div class="home-school"></div>
+<script src="../../plugin/jquery/jquery.min.js"></script>
+<script src="../../plugin/moment/moment.min.js"></script>
+<script src="../../plugin/dot/doT.min.js"></script>
+<script src="../../plugin/base64/base64.min.js"></script>
+<script src="../common/index.js"></script>
+<script src="index.js"></script>
+<script>
+    var homeSchool = new HomeSchool($('.home-school'), {})
+    document.body.addEventListener('keyup', function () {
+        homeSchool.keyup()
+    })
+</script>
+</body>
+</html>

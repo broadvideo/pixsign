@@ -1,15 +1,21 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.util.Date;
+
 public class App {
 	private Integer appid;
 
 	private String name;
 
-	private String mainboard;
+	private String mtype;
 
-	private String subdir;
+	private String sname;
 
 	private String description;
+
+	private Date createtime;
+
+	private Appfile appfile;
 
 	public Integer getAppid() {
 		return appid;
@@ -27,20 +33,20 @@ public class App {
 		this.name = name == null ? null : name.trim();
 	}
 
-	public String getMainboard() {
-		return mainboard;
+	public String getMtype() {
+		return mtype;
 	}
 
-	public void setMainboard(String mainboard) {
-		this.mainboard = mainboard == null ? null : mainboard.trim();
+	public void setMtype(String mtype) {
+		this.mtype = mtype == null ? null : mtype.trim();
 	}
 
-	public String getSubdir() {
-		return subdir;
+	public String getSname() {
+		return sname;
 	}
 
-	public void setSubdir(String subdir) {
-		this.subdir = subdir;
+	public void setSname(String sname) {
+		this.sname = sname == null ? null : sname.trim();
 	}
 
 	public String getDescription() {
@@ -49,5 +55,21 @@ public class App {
 
 	public void setDescription(String description) {
 		this.description = description == null ? null : description.trim();
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public Appfile getAppfile() {
+		return appfile;
+	}
+
+	public void setAppfile(Appfile appfile) {
+		this.appfile = appfile;
 	}
 }

@@ -109,7 +109,7 @@ var OrgModule = function () {
 			for (var i=0; i<apps.length; i++) {
 				treeData[i] = {};
 				treeData[i].id = apps[i].appid;
-				treeData[i].text = apps[i].mainboard + ' - ' + apps[i].description + '(' + apps[i].name + ')';
+				treeData[i].text = apps[i].mtype + ' - ' + apps[i].sname;
 				treeData[i].state = {
 					opened: true,
 					checked: currentApps[treeData[i].id] == undefined? false : true,
@@ -370,6 +370,7 @@ var OrgModule = function () {
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
@@ -411,6 +412,7 @@ var OrgModule = function () {
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');

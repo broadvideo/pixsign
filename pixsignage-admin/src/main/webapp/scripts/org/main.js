@@ -470,26 +470,21 @@ var APPTable = function () {
 			'sDom' : 'rt',
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : 'app!filelist.action',
+			'sAjaxSource' : 'app!list.action',
 			'iDisplayLength' : -1,
 			'bSort' : false,
-			'aoColumns' : [ {'sTitle' : common.view.mainboard, 'mData' : 'mainboard', 'bSortable' : false, 'sWidth' : '10%' },
-							{'sTitle' : common.view.description, 'mData' : 'description', 'bSortable' : false, 'sWidth' : '20%' },
-							{'sTitle' : common.view.versionname, 'mData' : 'vname', 'bSortable' : false, 'sWidth' : '10%' },
-							{'sTitle' : common.view.download, 'mData' : 'file', 'bSortable' : false, 'sWidth' : '40%' },
-							{'sTitle' : common.view.updatetime, 'mData' : 'time', 'bSortable' : false, 'sWidth' : '20%' }],
+			'aoColumns' : [ {'sTitle' : common.view.description, 'mData' : 'sname', 'bSortable' : false, 'sWidth' : '20%' },
+							{'sTitle' : common.view.mainboard, 'mData' : 'mtype', 'bSortable' : false, 'sWidth' : '10%' },
+							{'sTitle' : common.view.versioncode, 'mData' : 'appfile.vcode', 'bSortable' : false, 'sWidth' : '10%' }, 
+							{'sTitle' : common.view.size, 'mData' : 'appfile.size', 'bSortable' : false, 'sWidth' : '10%' }, 
+							{'sTitle' : common.view.download, 'mData' : 'appfile.filename', 'bSortable' : false, 'sWidth' : '30%' }, 
+							{'sTitle' : common.view.updatetime, 'mData' : 'appfile.createtime', 'bSortable' : false, 'sWidth' : '20%' }],
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				if (aData.file != '') {
-					$('td:eq(2)', nRow).html(aData.vname + ' (' + aData.vcode + ')');
-					$('td:eq(3)', nRow).html('<a href="' + aData.url + '">' + aData.file + '</a>');
-					$('td:eq(4)', nRow).html(new Date(parseInt(aData.time)).pattern('yyyy-MM-dd HH:mm:ss'));
-				} else {
-					$('td:eq(2)', nRow).html('');
-					$('td:eq(3)', nRow).html('');
-					$('td:eq(4)', nRow).html('');
-				}
-				return nRow;5
+				$('td:eq(2)', nRow).html(aData.appfile.vname + ' (' + aData.appfile.vcode + ')');
+				$('td:eq(3)', nRow).html(PixData.transferIntToByte(aData.appfile.size));
+				$('td:eq(4)', nRow).html('<a href="/pixsigdata' + aData.appfile.filepath + '">' + aData.appfile.filename + '</a>');
+				return nRow;
 			},
 		});
 	};

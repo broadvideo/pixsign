@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../plugin/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../plugin/animate.css/animate.min.css"/>
+    <link rel="stylesheet" href="exam-notice.css"/>
+</head>
+<body>
+<div>
+<div class="exam"></div>
+<script src="../../plugin/jquery/jquery.min.js"></script>
+<script src="../../plugin/dot/doT.min.js"></script>
+<script src="../../plugin/moment/moment.min.js"></script>
+<script src="../common/index.js"></script>
+<script src="index.js"></script>
+<script>
+    var exam = new ExamNotice($('.exam'), {})
+    exam.init()
+</script>
+</body>
+</html>

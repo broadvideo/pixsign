@@ -189,12 +189,14 @@ public class PageServiceImpl implements PageService {
 					pagezone.setRulecolor(templatezone.getRulecolor());
 					pagezone.setRulewidth(templatezone.getRulewidth());
 					pagezone.setDateformat(templatezone.getDateformat());
+					pagezone.setDiyid(templatezone.getDiyid());
 					pagezone.setTouchtype(templatezone.getTouchtype());
 					Integer touchpageid = pageidHash.get(templatezone.getTouchtemplateid());
 					if (touchpageid == null) {
 						touchpageid = 0;
 					}
 					pagezone.setTouchpageid(touchpageid);
+					pagezone.setDiyactionid(templatezone.getDiyactionid());
 					pagezone.setAnimationinit(templatezone.getAnimationinit());
 					pagezone.setAnimationinitdelay(templatezone.getAnimationinitdelay());
 					pagezone.setAnimationclick(templatezone.getAnimationclick());
@@ -301,8 +303,10 @@ public class PageServiceImpl implements PageService {
 				pagezone.setRulecolor(frompagezone.getRulecolor());
 				pagezone.setRulewidth(frompagezone.getRulewidth());
 				pagezone.setDateformat(frompagezone.getDateformat());
+				pagezone.setDiyid(frompagezone.getDiyid());
 				pagezone.setTouchtype(frompagezone.getTouchtype());
 				pagezone.setTouchpageid(frompagezone.getTouchpageid());
+				pagezone.setDiyactionid(frompagezone.getDiyactionid());
 				pagezone.setAnimationinit(frompagezone.getAnimationinit());
 				pagezone.setAnimationinitdelay(frompagezone.getAnimationinitdelay());
 				pagezone.setAnimationclick(frompagezone.getAnimationclick());
@@ -470,8 +474,19 @@ public class PageServiceImpl implements PageService {
 
 			File htmlFile = new File(pageDir, "index.html");
 			String htmlContent = FileUtils
-					.readFileToString(new File(classLoader.getResource("/pagezip/index.html").getFile()))
-					.replaceFirst("data.js", "" + p.getPageid() + ".js");
+					.readFileToString(new File(classLoader.getResource("/pagezip/index.html").getFile()));
+			htmlContent = htmlContent.replaceFirst("data.js", "" + p.getPageid() + ".js");
+			String diyContent = "";
+			for (Pagezone pz : p.getPagezones()) {
+				if (pz.getDiy() != null) {
+					diyContent += "<script src='module/route-guide/route-guide.js'></script>\n";
+					diyContent += "<script src='" + pz.getDiy().getCode() + "/diy.data.js'></script>\n";
+					CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + pz.getDiy().getFilepath()),
+							pz.getDiy().getCode());
+					break;
+				}
+			}
+			htmlContent = htmlContent.replaceFirst("<!-- DIY -->", diyContent);
 			FileUtils.writeStringToFile(htmlFile, htmlContent, "UTF-8", false);
 			if (p.getHomeflag().equals("1")) {
 				CommonUtil.zip(out, htmlFile, "index.html");

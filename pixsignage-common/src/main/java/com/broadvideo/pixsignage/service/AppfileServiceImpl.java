@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.App;
 import com.broadvideo.pixsignage.domain.Appfile;
+import com.broadvideo.pixsignage.persistence.AppMapper;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 
@@ -19,6 +21,8 @@ public class AppfileServiceImpl implements AppfileService {
 
 	@Autowired
 	private AppfileMapper appfileMapper;
+	@Autowired
+	private AppMapper appMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
 
@@ -47,7 +51,13 @@ public class AppfileServiceImpl implements AppfileService {
 
 	@Transactional
 	public void updateAppfile(Appfile appfile) {
-		appfileMapper.updateByPrimaryKeySelective(appfile);
+		Appfile appfile1 = appfileMapper.selectByPrimaryKey("" + appfile.getAppfileid());
+		App app = appMapper.select(appfile1.getName(), appfile1.getMtype());
+		if (app != null) {
+			app.setSname(appfile.getSname());
+			app.setDescription(appfile.getSdescription());
+			appMapper.updateByPrimaryKeySelective(app);
+		}
 	}
 
 	@Transactional
