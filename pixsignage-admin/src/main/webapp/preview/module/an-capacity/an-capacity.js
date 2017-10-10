@@ -6,16 +6,16 @@
  */
 
 var AN_LIST=[
-            {text:'脉冲',anid:'pulse'},
-            { text:'闪烁',anid:'flash'},
-            {text:'震动',anid:'shake'},
+            {text:'脉冲',anid:'pulse','clsid':'anPulse'},
+            { text:'闪烁',anid:'flash','clsid':'anFlash'},
+            {text:'震动',anid:'shake','clsid':'anShake'},
             {text:'弹出',anid:'jackInTheBox'},
-            {text:'变形',anid:'rubberBand'},
-            {text:'反弹',anid:'bounce'},
-            {text:'摆动',anid:'swing'},
-            {text:'晃动',anid:'wobble'},
-            {text:'扭动',anid:'jello'},
-            {text:'弹跳进入',anid:'bounceIn'},
+            {text:'变形',anid:'rubberBand','clsid':'anRubberBand'},
+            {text:'反弹',anid:'bounce','clsid':'anBounce'},
+            {text:'摆动',anid:'swing','clsid':'anSwing'},
+            {text:'晃动',anid:'wobble','clsid':'anWobble'},
+            {text:'扭动',anid:'jello','clsid':'anJello'},
+            {text:'弹跳进入',anid:'bounceIn','clsid':'anBounceIn'},
             {text:'顶部弹入',anid:'bounceInDown'},
             {text:'左侧弹入',anid:'bounceInLeft'},
             {text:'右侧弹入',anid:'bounceInRight'},
@@ -25,7 +25,7 @@ var AN_LIST=[
             {text:'左侧弹出',anid:'bounceOutLeft'},
             {text:'右侧弹出',anid:'bounceOutRight'},
             {text:'顶部弹出',anid:'bounceOutUp'},
-            {text:'渐入式显示',anid:'fadeIn'},
+            {text:'渐入式显示',anid:'fadeIn','clsid':'anFadeIn'},
             {text:'顶部渐进滑入',anid:'fadeInDown'},
             {text:'底部渐进滑入',anid:'fadeInUp'},
             {text:'左侧渐进滑入',anid:'fadeInLeft'},
@@ -35,11 +35,11 @@ var AN_LIST=[
             {text:'左侧渐进淡出',anid:'fadeOutLeft'},
             {text:'右侧渐进淡出',anid:'fadeOutRight'},
             {text:'顶部渐进淡出',anid:'fadeOutUp'},
-            {text:'翻转',anid:'flip'},
+            {text:'翻转',anid:'flip','clsid':'anFlip'},
             {text:'翻转消失',anid:'flipOutY'},
-            {text:'旋转滑入',anid:'rollIn'},
-            {text:'旋转',anid:'rotateIn'},
-            {text:'放大',anid:'zoomInDown'},
+            {text:'旋转滑入',anid:'rollIn','clsid':'anRollIn'},
+            {text:'旋转',anid:'rotateIn','clsid' :'anRotateIn'},
+            {text:'放大',anid:'zoomInDown','clsid':'anZoomInDown'},
             {text:'左侧平移',anid:'slideInRight'},
             {text:'右侧平移',anid:'slideInRight'},
             {text:'从上到下平移',anid:'slideInDown'}
@@ -73,9 +73,10 @@ AnCapacity.prototype.call=function(anid,selectors,delay,iterationcount){
        console.log('animation not found for anid:',anid);
        return;
    }
-   //添加动画前，清楚原有的动画
+   var clsid=(anobj.clsid!=null?anobj.clsid : anobj.anid);
+   //添加动画前，清除原有的动画
     var oldcls=$(selectors).attr('data-cls');
-   $(selectors).removeClass(anid);
+   $(selectors).removeClass(clsid);
 
 
    //添加动画特性
@@ -83,7 +84,6 @@ AnCapacity.prototype.call=function(anid,selectors,delay,iterationcount){
 
     //延时设置
    if(delay!=null){
-
     $(selectors).each(function(){
         this.style.webkitAnimationDelay=delay;
     });
@@ -92,16 +92,18 @@ AnCapacity.prototype.call=function(anid,selectors,delay,iterationcount){
     if(iterationcount==-1){//循环
         $(selectors).addClass('infinite');
         $(selectors)[0].style.removeProperty('animation-duration');
-        $(selectors)[0].style.removeProperty('animation-delay');
+      //  $(selectors)[0].style.removeProperty('animation-delay');
+
     }else{
         $(selectors).removeClass('infinite');
         $(selectors).each(function(){
             this.style.webkitAnimationIterationCount=iterationcount;
+
         });
     }
     //添加具体动画样式
-    $(selectors).addClass(anid);
-    $(selectors).attr('data-cls',anid);
+    $(selectors).addClass(clsid);
+    $(selectors).attr('data-cls',clsid);
 
 
 

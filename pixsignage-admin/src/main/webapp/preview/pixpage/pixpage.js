@@ -43,6 +43,10 @@ var PixPage = function () {
 				//Date Zone
 				var datezone = new DateZone($(inner_div), zone);
 				allmodules.push(datezone);
+			} else if (zone.type == '6') {
+				//Web Zone
+				var webzone = new WebZone($(inner_div), zone);
+				allmodules.push(webzone);
 			} else if (zone.type == '7') {
 				//Button Zone
 				var buttonzone = new ButtonZone($(inner_div), zone);

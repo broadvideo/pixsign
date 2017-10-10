@@ -13,7 +13,7 @@
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<link href="${base_ctx}/css/pixpage.css" rel="stylesheet"/>
+<link href="${base_ctx}/wysiwyg/css/wysiwyg.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -111,11 +111,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="5">
 								<i class="fa fa-history"></i><div>时间</div>
 							</a>
-							<!-- 
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
-								<i class="fa fa-sun-o"></i><div>天气</div>
+								<i class="fa fa-building"></i><div>网页</div>
 							</a>
-							 -->
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
@@ -870,6 +868,39 @@
 										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="content"></textarea>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="WebModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i>网页</div>
+						</div>
+						<div class="portlet-body">
+							<form id="WebForm" class="form-horizontal" method="POST">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label">URL<span class="required">*</span></label>
+										<div class="col-md-9">
+											<textarea class="form-control" rows="5" name="content"></textarea>
 										</div>
 									</div>
 								</div>

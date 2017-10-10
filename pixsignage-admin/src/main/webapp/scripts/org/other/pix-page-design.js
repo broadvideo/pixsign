@@ -158,6 +158,10 @@ function createZone(pagezone) {
 		//Date Zone
 		var p_element = document.createElement('p');
 		$(inner_div).append(p_element);
+	} else if (pagezone.type == 6) {
+		//Web Zone
+		var p_element = document.createElement('p');
+		$(inner_div).append(p_element);
 	} else if (pagezone.type == 7) {
 		//Button Zone
 		inner_div.addEventListener('paste', function(e) {
@@ -339,6 +343,19 @@ function refreshPagezone(pagezone) {
 			'text-decoration': pagezone.decoration,
 		});
 		$(pagezoneDiv).find('p').html(new Date().pattern(pagezone.dateformat));
+	} else if (pagezone.type == 6) {
+		//Web Zone
+		$(pagezoneDiv).find('#rotatable').css({
+			'box-sizing': 'border-box',
+			'border-color': pagezone.bdcolor, 
+			'border-style': pagezone.bdstyle, 
+			'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+			'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
+			'color': pagezone.color, 
+			'text-align': 'left', 
+			'word-wrap': 'break-word',
+		});
+		$(pagezoneDiv).find('p').html(pagezone.content);
 	} else if (pagezone.type == 7) {
 		//Button Zone
 		$(pagezoneDiv).find('#rotatable').css({
@@ -591,6 +608,11 @@ function pagezoneClick(e, dblclick){
 					CurrentZone = pagezones[0];
 					$('#ScrollModal textarea[name="content"]').val(CurrentZone.content);
 					$('#ScrollModal').modal();
+				} else if (pagezones[0].type == 6) {
+					//Web Zone
+					CurrentZone = pagezones[0];
+					$('#WebModal textarea[name="content"]').val(CurrentZone.content);
+					$('#WebModal').modal();
 				} else {
 					return;
 				}
@@ -1396,6 +1418,12 @@ $('body').on('click', '.pix-addzone', function(event) {
 	if (pagezone.type == 5) {
 		pagezone.dateformat = 'yyyy-MM-dd HH:mm:ss';
 	}
+	if (pagezone.type == 6) {
+		pagezone.color = '#000000';
+		pagezone.bgcolor = '#FFFFFF';
+		pagezone.bgopacity = 0;
+		pagezone.bdwidth = 1;
+	}
 	if (pagezone.type == 11) {
 		pagezone.rows = 5;
 		pagezone.cols = 2;
@@ -1427,6 +1455,12 @@ $('[type=submit]', $('#ScrollModal')).on('click', function(event) {
 	CurrentZone.content = $('#ScrollModal textarea[name="content"]').val();
 	refreshPagezone(CurrentZone);
 	$('#ScrollModal').modal('hide');
+});
+
+$('[type=submit]', $('#WebModal')).on('click', function(event) {
+	CurrentZone.content = $('#WebModal textarea[name="content"]').val();
+	refreshPagezone(CurrentZone);
+	$('#WebModal').modal('hide');
 });
 
 
