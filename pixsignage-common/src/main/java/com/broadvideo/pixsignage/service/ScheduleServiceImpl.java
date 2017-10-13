@@ -72,17 +72,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null, null,
 				null);
 		msgeventMapper.insertSelective(msgevent);
-
-		msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(deviceid);
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null,
-				null, null);
-		msgeventMapper.insertSelective(msgevent);
 	}
 
 	@Transactional

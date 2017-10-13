@@ -172,8 +172,9 @@ public class DevicegroupAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
-			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
+			logger.info("Begin to sync devicegroup: {}", devicegroupid);
 			planService.syncPlan(Planbind.BindType_Devicegroup, devicegroupid);
+			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
 			logger.info("Devicegroup schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
