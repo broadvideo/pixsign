@@ -43,6 +43,10 @@ var PixPage = function () {
 				//Date Zone
 				var datezone = new DateZone($(inner_div), zone);
 				allmodules.push(datezone);
+			} else if (zone.type == '6') {
+				//Web Zone
+				var webzone = new WebZone($(inner_div), zone);
+				allmodules.push(webzone);
 			} else if (zone.type == '7') {
 				//Button Zone
 				var buttonzone = new ButtonZone($(inner_div), zone);
@@ -88,8 +92,8 @@ var PixPage = function () {
 					onevent: 'load',
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationinit,
-					delay: zone.animationinitdelay,
-					iterationcount: 1
+					delay: zone.animationinitdelay + 'ms',
+					iterationcount: -1,
 				};
 				animations.push(animation);
 				console.log('Add on init animation: ', zone.pagezoneid, zone.animationinit);
@@ -100,7 +104,7 @@ var PixPage = function () {
 					selectors: '#PagezoneDiv' + zone.pagezoneid + ' #PagezoneCT',
 					anid: zone.animationclick,
 					delay: 0,
-					iterationcount: 1
+					iterationcount: 1,
 				};
 				animations.push(animation);
 				console.log('Add on click animation: ', zone.pagezoneid, zone.animationinit);

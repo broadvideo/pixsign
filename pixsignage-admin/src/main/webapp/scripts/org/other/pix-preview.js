@@ -754,6 +754,20 @@ function redrawPagePreview(container, page, maxsize) {
 				'white-space': 'pre-wrap',
 				'text-decoration': zone.decoration,
 			});
+		} else if (zone.type == '6') {
+			var p_element = document.createElement('p');
+			$(p_element).html(zone.content);
+			$(inner_div).append(p_element);
+			$(inner_div).css({
+				'box-sizing': 'border-box',
+				'border-color': zone.bdcolor, 
+				'border-style': zone.bdstyle, 
+				'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+				'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+				'color': zone.color, 
+				'text-align': 'left', 
+				'word-wrap': 'break-word',
+			});
 		} else if (zone.type == '7') {
 			var p_element = document.createElement('p');
 			$(p_element).html(zone.content);

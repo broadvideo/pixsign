@@ -16,11 +16,17 @@ var ButtonZone = function (zonediv, zone) {
 		}
 		var a_element = document.createElement('a');
 		if (zone.touchtype == 0) {
-			a_element.href = 'javascript:history.back(-1)';
+			if (PixPage.mode != 'preview') {
+				a_element.href = 'javascript:history.back(-1)';
+			}
 		} else if (zone.touchtype == 1) {
-			a_element.href = 'index.html';
+			if (PixPage.mode != 'preview') {
+				a_element.href = 'index.html';
+			}
 		} else if (zone.touchtype == 2) {
-			a_element.href = zone.touchpageid + '.html';
+			if (PixPage.mode != 'preview') {
+				a_element.href = zone.touchpageid + '.html';
+			}
 		} else if (zone.touchtype == 3) {
 			$(a_element).attr('href', 'javascript:;');
 			$(a_element).attr('diyaction', zone.diyaction.code);

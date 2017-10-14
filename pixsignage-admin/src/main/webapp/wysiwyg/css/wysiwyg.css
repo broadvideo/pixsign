@@ -610,109 +610,109 @@ ul #create_li_list { height:400px; overflow-x:hidden; overflow-y:scroll; }
 
 /*@font-face {
 	font-family:'FuturaBT-ExtraBlack';
-	src:url('../fonts/futuraxk.ttf') format('truetype'); 
+	src:url('/pixsignage/fonts/futuraxk.ttf') format('truetype'); 
 	font-weight:normal;
 	font-style:normal;
 
 } */
 
-/*	src:url('../fonts/futuraxk.eot');
-	src:url('../fonts/futuraxk.eot?#iefix') format('embedded-opentype'),
-		url('../fonts/futuraxk.woff') format('woff'),
-		url('../fonts/futuraxk.ttf') format('truetype'),
-		url('../fonts/futuraxk.svg#futuraxk') format('svg');*/
+/*	src:url('/pixsignage/fonts/futuraxk.eot');
+	src:url('/pixsignage/fonts/futuraxk.eot?#iefix') format('embedded-opentype'),
+		url('/pixsignage/fonts/futuraxk.woff') format('woff'),
+		url('/pixsignage/fonts/futuraxk.ttf') format('truetype'),
+		url('/pixsignage/fonts/futuraxk.svg#futuraxk') format('svg');*/
 
 
 /*@font-face {
 	font-family:'PalatinoLinotype-Roman';
-	src:url('../fonts/pala.ttf') format('truetype');
-		src:url('../fonts/pala.eot');
-		src:url('../fonts/pala.eot?#iefix') format('embedded-opentype'),
-			url('../fonts/pala.woff') format('woff'),
-			url('../fonts/pala.ttf') format('truetype'),
-			url('../fonts/pala.svg#pala') format('svg');
+	src:url('/pixsignage/fonts/pala.ttf') format('truetype');
+		src:url('/pixsignage/fonts/pala.eot');
+		src:url('/pixsignage/fonts/pala.eot?#iefix') format('embedded-opentype'),
+			url('/pixsignage/fonts/pala.woff') format('woff'),
+			url('/pixsignage/fonts/pala.ttf') format('truetype'),
+			url('/pixsignage/fonts/pala.svg#pala') format('svg');
 	font-weight:normal;
 	font-style:normal;
 }*/
 
 @font-face {
 	font-family:'DroidSansBold';
-	src:url('../fonts/droidsans-bold-webfont.eot');
-	src:url('../fonts/droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-		url('../fonts/droidsans-bold-webfont.woff') format('woff'),
-		url('../fonts/droidsans-bold-webfont.ttf') format('truetype'),
-		url('../fonts/droidsans-bold-webfont.svg#DroidSansBold') format('svg');
+	src:url('/pixsignage/fonts/droidsans-bold-webfont.eot');
+	src:url('/pixsignage/fonts/droidsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		url('/pixsignage/fonts/droidsans-bold-webfont.woff') format('woff'),
+		url('/pixsignage/fonts/droidsans-bold-webfont.ttf') format('truetype'),
+		url('/pixsignage/fonts/droidsans-bold-webfont.svg#DroidSansBold') format('svg');
 	font-weight:normal;
 	font-style:normal;
 
 }
 @font-face {
-	font-family:'Curlz MT';
-	src:url('../fonts/Curlz.ttf') format('truetype');
+	font-family:'Curlz_MT';
+	src:url('/pixsignage/fonts/Curlz.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'Bebas';
-	src:url('../fonts/Bebas.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Bebas.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'Futura XBlk BT';
-	src:url('../fonts/futuraxk.eot');
-	src:url('../fonts/futuraxk.eot?#iefix') format('embedded-opentype'),
-		url('../fonts/futuraxk.woff') format('woff'),
-		url('../fonts/futuraxk.ttf') format('truetype'),
-		url('../fonts/futuraxk.svg#DroidSansBold') format('svg');
+	font-family:'Futura_XBlk_BT';
+	src:url('/pixsignage/fonts/futuraxk.eot');
+	src:url('/pixsignage/fonts/futuraxk.eot?#iefix') format('embedded-opentype'),
+		url('/pixsignage/fonts/futuraxk.woff') format('woff'),
+		url('/pixsignage/fonts/futuraxk.ttf') format('truetype'),
+		url('/pixsignage/fonts/futuraxk.svg#DroidSansBold') format('svg');
 	font-weight:normal;
 	font-style:normal;
 
 }
 @font-face {
 	font-family:'droidsans';
-	src:url('../fonts/DroidSans.ttf') format('truetype');
+	src:url('/pixsignage/fonts/DroidSans.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'Taco modern';
-	src:url('../fonts/Tacom.ttf') format('truetype');
-	font-weight:normal;
-	font-style:normal;
-}
-
-@font-face {
-	font-family:'Architects Daughter';
-	src:url('../fonts/ArchitectsDaughter.ttf') format('truetype');
+	font-family:'Taco_modern';
+	src:url('/pixsignage/fonts/Tacom.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'AvantGardeLT Bookoblique';
-	src:url('../fonts/ITCAvantGardeGothicLTBookOblique_0.ttf') format('truetype');
+	font-family:'Architects_Daughter';
+	src:url('/pixsignage/fonts/ArchitectsDaughter.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'AvantGardeLT Demi';
-	src:url('../fonts/ITCAvantGardeGothicLTDemi_0.ttf') format('truetype');
+	font-family:'AvantGardeLT_Bookoblique';
+	src:url('/pixsignage/fonts/ITCAvantGardeGothicLTBookOblique_0.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'MV Boli';
-	src:url('../fonts/mvboli.ttf') format('truetype');
+	font-family:'AvantGardeLT_Demi';
+	src:url('/pixsignage/fonts/ITCAvantGardeGothicLTDemi_0.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'Permanent Marker';
-	src:url('../fonts/PermanentMarker.ttf') format('truetype');		 
+	font-family:'MV_Boli';
+	src:url('/pixsignage/fonts/mvboli.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:'Permanent_Marker';
+	src:url('/pixsignage/fonts/PermanentMarker.ttf') format('truetype');		 
 	font-weight:normal;
 	font-style:normal;
 
@@ -720,559 +720,546 @@ ul #create_li_list { height:400px; overflow-x:hidden; overflow-y:scroll; }
 
 @font-face {
 	font-family:'ChaparralPro';
-	src:url('../fonts/ChaparralPro-Italic_0.otf') format('truetype');
+	src:url('/pixsignage/fonts/ChaparralPro-Italic_0.otf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'ChaparralProBold';
-	src:url('../fonts/ChaparralPro-Bold.otf') format('truetype');
+	src:url('/pixsignage/fonts/ChaparralPro-Bold.otf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'actor';
-	src:url('../fonts/Actor.woff') format('woff');
+	src:url('/pixsignage/fonts/Actor.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'advent pro';
-	src:url('../fonts/AdventPro.woff') format('woff');
+	font-family:'advent_pro';
+	src:url('/pixsignage/fonts/AdventPro.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'Architects Daughter';
-	src:url('../fonts/ArchitectsDaughter.woff') format('woff');
+	font-family:'Architects_Daughter';
+	src:url('/pixsignage/fonts/ArchitectsDaughter.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'arizonia';
-	src:url('../fonts/Arizonia.woff') format('woff');
+	src:url('/pixsignage/fonts/Arizonia.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'armata';
-	src:url('../fonts/Armata.woff') format('woff');
+	src:url('/pixsignage/fonts/Armata.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'belgrano';
-	src:url('../fonts/Belgrano.woff') format('woff');
+	src:url('/pixsignage/fonts/Belgrano.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'belleza';
-	src:url('../fonts/Belleza.woff') format('woff');
+	src:url('/pixsignage/fonts/Belleza.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
-	font-family:'doppio one';
-	src:url('../fonts/DoppioOne.woff') format('woff');
+	font-family:'doppio_one';
+	src:url('/pixsignage/fonts/DoppioOne.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'electrolize';
-	src:url('../fonts/Electrolize.woff') format('woff');
+	src:url('/pixsignage/fonts/Electrolize.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'fredoka one';
-	src:url('../fonts/FredokaOne.woff') format('woff');
+	font-family:'fredoka_one';
+	src:url('/pixsignage/fonts/FredokaOne.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'karla';
-	src:url('../fonts/Karla.woff') format('woff');
+	src:url('/pixsignage/fonts/Karla.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'londrina solid';
-	src:url('../fonts/LondrinaSolid.woff') format('woff');
+	font-family:'londrina_solid';
+	src:url('/pixsignage/fonts/LondrinaSolid.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }@font-face {
-	font-family:'marven pro';
-	src:url('../fonts/MavenPro.woff') format('woff');
+	font-family:'marven_pro';
+	src:url('/pixsignage/fonts/MavenPro.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'norican';
-	src:url('../fonts/Norican.woff') format('woff');
+	src:url('/pixsignage/fonts/Norican.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'nova slim';
-	src:url('../fonts/NovaSlim.woff') format('woff');
+	font-family:'nova_slim';
+	src:url('/pixsignage/fonts/NovaSlim.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'nunito';
-	src:url('../fonts/Nunito.woff') format('woff');
+	src:url('/pixsignage/fonts/Nunito.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'orbitron';
-	src:url('../fonts/Orbitron.woff') format('woff');
+	src:url('/pixsignage/fonts/Orbitron.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'overlock';
-	src:url('../fonts/Overlock.woff') format('woff');
+	src:url('/pixsignage/fonts/Overlock.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'parisienne';
-	src:url('../fonts/Parisienne.woff') format('woff');
+	src:url('/pixsignage/fonts/Parisienne.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'Permanent Marker';
-	src:url('../fonts/PermanentMarker.woff') format('woff');
+	font-family:'Permanent_Marker';
+	src:url('/pixsignage/fonts/PermanentMarker.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'philosopher';
-	src:url('../fonts/Philosopher.woff') format('woff');
+	src:url('/pixsignage/fonts/Philosopher.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'pontano sans';
-	src:url('../fonts/PontanoSans.woff') format('woff');
+	font-family:'pontano_sans';
+	src:url('/pixsignage/fonts/PontanoSans.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'prata';
-	src:url('../fonts/Prata.woff') format('woff');
+	src:url('/pixsignage/fonts/Prata.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'PT sana narrow';
-	src:url('../fonts/PTSansNarrow.woff') format('woff');
+	font-family:'PT_sana_narrow';
+	src:url('/pixsignage/fonts/PTSansNarrow.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'quando';
-	src:url('../fonts/Quando.woff') format('woff');
+	src:url('/pixsignage/fonts/Quando.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
-	font-family:'russo one';
-	src:url('../fonts/RussoOne.woff') format('woff');
+	font-family:'russo_one';
+	src:url('/pixsignage/fonts/RussoOne.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'sanchez';
-	src:url('../fonts/Sanchez.woff') format('woff');
+	src:url('/pixsignage/fonts/Sanchez.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'sarina';
-	src:url('../fonts/Sarina.woff') format('woff');
+	src:url('/pixsignage/fonts/Sarina.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'signika';
-	src:url('../fonts/Signika.woff') format('woff');
-	font-weight:normal;
-	font-style:normal;
-}
-@font-face {
-	font-family:'trocchi';
-	src:url('../fonts/Trocchi.woff') format('woff');
+	src:url('/pixsignage/fonts/Signika.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'yesteryear';
-	src:url('../fonts/Yesteryear.woff') format('woff');
+	src:url('/pixsignage/fonts/Yesteryear.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'Bebas';
-	src:url('../fonts/Bebas.ttf') format('truetype');
-	font-weight:normal;
-	font-style:normal;
-}
-
-@font-face {
-	font-family:'Diplomata';
-	src:url('../fonts/Diplomata.woff') format('woff');
+	src:url('/pixsignage/fonts/Bebas.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'FrederickatheGreat';
-	src:url('../fonts/FrederickatheGreat.woff') format('woff');
+	src:url('/pixsignage/fonts/FrederickatheGreat.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'VastShadow';
-	src:url('../fonts/VastShadow.woff') format('woff');
+	src:url('/pixsignage/fonts/VastShadow.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'DiplomataSC';
-	src:url('../fonts/DiplomataSC.woff') format('woff');
+	src:url('/pixsignage/fonts/DiplomataSC.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'Rye';
-	src:url('../fonts/Rye.woff') format('woff');
+	src:url('/pixsignage/fonts/Rye.woff') format('woff');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'GoboldBoldItalic';
-	src:url('../fonts/Gobold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Gobold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'DJBAlmostPerfect';
-	src:url('../fonts/djb_almost_perfect.ttf') format('truetype');
+	src:url('/pixsignage/fonts/djb_almost_perfect.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'RobotoMedium';
-	src:url('../fonts/Roboto-Medium.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Roboto-Medium.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'Courgette-Regular';
-	src:url('../fonts/Courgette-Regular.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Courgette-Regular.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Century_Gothic';
-	src:url('../fonts/Century_Gothic.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Century_Gothic.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Century_Gothic_Bold';
-	src:url('../fonts/Century_Gothic_Bold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Century_Gothic_Bold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'TwentyEightDaysLater';
-	src:url('../fonts/TwentyEightDaysLater.ttf') format('truetype');
+	src:url('/pixsignage/fonts/TwentyEightDaysLater.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'SegoeUI';
-	src:url('../fonts/SegoeUI.ttf') format('truetype');
+	src:url('/pixsignage/fonts/SegoeUI.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'SegoeUIB';
-	src:url('../fonts/SegoeUIB.ttf') format('truetype');
+	src:url('/pixsignage/fonts/SegoeUIB.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'SketchBlock';
-	src:url('../fonts/SketchBlock.ttf') format('truetype');
+	src:url('/pixsignage/fonts/SketchBlock.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 
 @font-face {
 	font-family:'RobotoMedium';
-	src:url('../fonts/RobotoMedium.ttf') format('truetype');
+	src:url('/pixsignage/fonts/RobotoMedium.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'RobotoBold';
-	src:url('../fonts/RobotoBold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/RobotoBold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'BankGothicMedium';
-	src:url('../fonts/BankGothicMedium.ttf') format('truetype');
+	src:url('/pixsignage/fonts/BankGothicMedium.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'BankGothicBold';
-	src:url('../fonts/BankGothicBold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/BankGothicBold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 
 @font-face {
 	font-family:'RobotoRegular';
-	src:url('../fonts/RobotoRegular.ttf') format('truetype');
+	src:url('/pixsignage/fonts/RobotoRegular.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 
 @font-face {
 	font-family:'ComicSansMS';
-	src:url('../fonts/ComicSansMS.ttf') format('truetype');
+	src:url('/pixsignage/fonts/ComicSansMS.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Freeskpt';
-	src:url('../fonts/Freeskpt.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Freeskpt.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Forte';
-	src:url('../fonts/Forte.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Forte.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'SegoePrint';
-	src:url('../fonts/SegoePrint.ttf') format('truetype');
+	src:url('/pixsignage/fonts/SegoePrint.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Scandinavian';
-	src:url('../fonts/Scandinavian.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Scandinavian.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;
 }
 @font-face {
 	font-family:'MyriadPro';
-	src:url('../fonts/MyriadPro.ttf') format('truetype');
+	src:url('/pixsignage/fonts/MyriadPro.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'RockwellExtraBold';
-	src:url('../fonts/RockwellExtraBold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/RockwellExtraBold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'gadugi';
-	src:url('../fonts/gadugi.ttf') format('truetype');
+	src:url('/pixsignage/fonts/gadugi.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Timesnewroman';
-	src:url('../fonts/Timesnewroman.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Timesnewroman.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'candara';
-	src:url('../fonts/candara.ttf') format('truetype');
+	src:url('/pixsignage/fonts/candara.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Cooper Std Black';
-	src:url('../fonts/Cooper Std Black.ttf') format('truetype');
+	font-family:'Cooper_Std_Black';
+	src:url('/pixsignage/fonts/Cooper_Std_Black.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'ArialRoundedMtBold';
-	src:url('../fonts/Arialroundedmtbold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/Arialroundedmtbold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'MfReallyAwesome';
-	src:url('../fonts/MfReallyAwesome.ttf') format('truetype');
+	src:url('/pixsignage/fonts/MfReallyAwesome.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'rockwell';
-	src:url('../fonts/rockwell.ttf') format('truetype');
+	src:url('/pixsignage/fonts/rockwell.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'texgyreadventor-bold';
-	src:url('../fonts/texgyreadventor-bold.otf') format('truetype');
+	src:url('/pixsignage/fonts/texgyreadventor-bold.otf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Eras BD';
-	src:url('../fonts/ERASBD.ttf') format('truetype');
+	font-family:'Eras_BD';
+	src:url('/pixsignage/fonts/ERASBD.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Scandinavian Black';
-	src:url('../fonts/SCANDINAVIANVIBLACK.ttf') format('truetype');
+	font-family:'Scandinavian_Black';
+	src:url('/pixsignage/fonts/SCANDINAVIANVIBLACK.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Humanist521';
-	src:url('../fonts/Humanist 521 Ultra Bold.otf') format('truetype');
+	src:url('/pixsignage/fonts/Humanist_521_Ultra_Bold.otf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'berlinsans';
-	src:url('../fonts/berlin-sans-fb-demi-bold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/berlin-sans-fb-demi-bold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Bookman old';
-	src:url('../fonts/BOOKOS.ttf') format('truetype');
+	font-family:'Bookman_old';
+	src:url('/pixsignage/fonts/BOOKOS.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Bookman old bold';
-	src:url('../fonts/BOOKOSB.ttf') format('truetype');
+	font-family:'Bookman_old_bold';
+	src:url('/pixsignage/fonts/BOOKOSB.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Bookman old bi';
-	src:url('../fonts/BOOKOSBI.ttf') format('truetype');
+	font-family:'Bookman_old_bi';
+	src:url('/pixsignage/fonts/BOOKOSBI.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
-	font-family:'Bookman old italic';
-	src:url('../fonts/BOOKOSI.ttf') format('truetype');
+	font-family:'Bookman_old_italic';
+	src:url('/pixsignage/fonts/BOOKOSI.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Ariblk';
-	src:url('../fonts/ARIBLK.ttf') format('truetype');
+	src:url('/pixsignage/fonts/ARIBLK.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Fradm';
-	src:url('../fonts/FRADM.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRADM.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Fradmcn';
-	src:url('../fonts/FRADMCN.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRADMCN.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Fradmit';
-	src:url('../fonts/FRADMIT.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRADMIT.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Frahv';
-	src:url('../fonts/FRAHV.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRAHV.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Frahvit';
-	src:url('../fonts/FRAHVIT.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRAHVIT.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Framd';
-	src:url('../fonts/FRAMD.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRAMD.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Framdcn';
-	src:url('../fonts/FRAMDCN.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRAMDCN.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Framdit';
-	src:url('../fonts/FRAMDIT.ttf') format('truetype');
+	src:url('/pixsignage/fonts/FRAMDIT.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'twentyDaysLater';
-	src:url('../fonts/28DaysLater.ttf') format('truetype');
+	src:url('/pixsignage/fonts/28DaysLater.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Gothambold';
-	src:url('../fonts/gothambold.ttf') format('truetype');
+	src:url('/pixsignage/fonts/gothambold.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Gothambook';
-	src:url('../fonts/gothambook.ttf') format('truetype');
+	src:url('/pixsignage/fonts/gothambook.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
 @font-face {
 	font-family:'Gothammedium';
-	src:url('../fonts/gothammedium.ttf') format('truetype');
+	src:url('/pixsignage/fonts/gothammedium.ttf') format('truetype');
 	font-weight:normal;
 	font-style:normal;	
 }
