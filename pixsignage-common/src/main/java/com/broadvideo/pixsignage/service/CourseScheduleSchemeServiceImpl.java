@@ -92,7 +92,7 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 
 	@Override
 	public void updateScheme(Courseschedulescheme scheme) {
-		if (this.hasNameExists(null, scheme.getName(), scheme.getOrgid())) {
+		if (this.hasNameExists(scheme.getCoursescheduleschemeid(), scheme.getName(), scheme.getOrgid())) {
 			logger.error("scheme.name={} is exists.", scheme.getName());
 			throw new ServiceException("updateScheme:name:" + scheme.getName() + " has exists.");
 		}
