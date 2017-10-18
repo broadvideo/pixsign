@@ -171,8 +171,8 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");
-			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
 			planService.syncPlan(Planbind.BindType_Device, deviceid);
+			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

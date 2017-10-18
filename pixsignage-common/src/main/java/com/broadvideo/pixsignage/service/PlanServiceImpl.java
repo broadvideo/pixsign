@@ -128,17 +128,6 @@ public class PlanServiceImpl implements PlanService {
 		msgevent.setStatus(Msgevent.Status_Wait);
 		msgeventMapper.deleteByDtl(Msgevent.MsgType_Plan, Msgevent.ObjType_1_Device, "" + deviceid, null, null, null);
 		msgeventMapper.insertSelective(msgevent);
-
-		msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Bundle_Schedule);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(deviceid);
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Bundle_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null,
-				null, null);
-		msgeventMapper.insertSelective(msgevent);
 	}
 
 	@Transactional
@@ -163,7 +152,7 @@ public class PlanServiceImpl implements PlanService {
 			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
 			for (Device device : devices) {
 				if (device.getOnlineflag().equals(Device.Online)) {
-					generateSyncEvent(Integer.parseInt(bindid));
+					generateSyncEvent(device.getDeviceid());
 				}
 			}
 			List<Devicegrid> devicegrids = devicegridMapper.selectByDevicegroup(bindid);
