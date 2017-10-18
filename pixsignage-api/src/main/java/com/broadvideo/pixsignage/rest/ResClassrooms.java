@@ -294,6 +294,11 @@ public class ResClassrooms {
 			yyyyMMdd = DateUtil.getDateStr(new Date(), "yyyyMMdd");
 		}
 		Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
+		if (classroom == null) {
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION,
+					String.format("classroomid:%s is not found.", classroomId),
+					new ArrayList());
+		}
 		final int orgid = classroom.getOrgid();
 		List<Attendanceevent> attendanceevents = attendanceService.getAttendanceevents(classroomId, yyyyMMdd, orgid);
 		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
