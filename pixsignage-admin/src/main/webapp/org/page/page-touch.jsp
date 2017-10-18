@@ -144,7 +144,7 @@
 					<h4 class="modal-title"><spring:message code="pixsign.touchpage"/></h4>
 				</div>
 				<div class="modal-body">
-					<div class="row">
+					<div class="row zonebtns">
 						<div class="col-md-12">
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="1">
 								<i class="fa fa-video-camera"></i><div>视频</div>
@@ -310,7 +310,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>

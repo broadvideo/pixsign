@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONArray;
@@ -1283,6 +1284,52 @@ public class PixsignageService21 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_flowrate exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("upload_file")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportfile(@FormDataParam("meta") String request,
+			@FormDataParam("file") FormDataContentDisposition fileHeader, @FormDataParam("file") InputStream fileFile) {
+		try {
+			logger.info("Pixsignage Service upload_file: {}, fileHeader: {}", request, fileHeader);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			String ext = FilenameUtils.getExtension(fileHeader.getFileName().toLowerCase());
+			if (ext == null || ext.length() == 0) {
+				ext = "";
+			} else {
+				ext = "." + ext;
+			}
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/file/" + device.getDeviceid()));
+			String filename = "/file/" + device.getDeviceid() + "/file-" + device.getDeviceid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()) + ext;
+			logger.info("Save upload file to: {}", CommonConfig.CONFIG_PIXDATA_HOME + filename);
+			File file = new File(CommonConfig.CONFIG_PIXDATA_HOME + filename);
+			FileUtils.copyInputStreamToFile(fileFile, file);
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("url", "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + filename);
+			logger.info("Pixsignage Service upload_file response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service upload_file exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

@@ -51,6 +51,17 @@
 									</select>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.limitflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="template.limitflag" value="0" checked> <spring:message code="pixsign.prop.limitflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="template.limitflag" value="1"> <spring:message code="pixsign.prop.limitflag_1"/>
+									</label>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -236,7 +247,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>

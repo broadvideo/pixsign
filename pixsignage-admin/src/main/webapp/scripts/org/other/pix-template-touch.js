@@ -112,6 +112,7 @@ var oTable = $('#MyTable').dataTable({
 								closeBtn : false,
 						        padding : 0,
 						        content: '<div id="TemplatePreview"></div>',
+						        title: templateid,
 						    });
 							redrawPagePreview($('#TemplatePreview'), data.template, 800);
 						} else {
@@ -187,6 +188,7 @@ function refreshFromTemplateTable() {
 							closeBtn : false,
 							padding : 0,
 							content: '<div id="TemplatePreview"></div>',
+					        title: templateid,
 						});
 						redrawPagePreview($('#TemplatePreview'), data.template, 800);
 					} else {

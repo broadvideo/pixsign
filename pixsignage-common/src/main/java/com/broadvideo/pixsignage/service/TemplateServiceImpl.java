@@ -135,6 +135,7 @@ public class TemplateServiceImpl implements TemplateService {
 			template.setRatio(fromtemplate.getRatio());
 			template.setHeight(fromtemplate.getHeight());
 			template.setWidth(fromtemplate.getWidth());
+			template.setLimitflag(fromtemplate.getLimitflag());
 			templateMapper.insertSelective(template);
 			if (template.getName().equals("UNKNOWN")) {
 				template.setName("TEMPLATE-" + template.getTemplateid());

@@ -17,11 +17,19 @@ var ButtonZone = function (zonediv, zone) {
 		var a_element = document.createElement('a');
 		if (zone.touchtype == 0) {
 			if (PixPage.mode != 'preview') {
-				a_element.href = 'javascript:history.back(-1)';
+				if (typeof(TeaTableAndroidBridge) == 'undefined') {
+					a_element.href = 'javascript:history.back(-1)';
+				} else {
+					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
+				}
 			}
 		} else if (zone.touchtype == 1) {
 			if (PixPage.mode != 'preview') {
-				a_element.href = 'index.html';
+				if (typeof(TeaTableAndroidBridge) == 'undefined') {
+					a_element.href = 'index.html';
+				} else {
+					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
+				}
 			}
 		} else if (zone.touchtype == 2) {
 			if (PixPage.mode != 'preview') {

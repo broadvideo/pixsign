@@ -10,6 +10,7 @@
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="limitflag" property="limitflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="hometemplateid" property="hometemplateid" jdbcType="INTEGER" />
@@ -30,6 +31,7 @@
     <result column="ratio" property="ratio" jdbcType="CHAR" />
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="limitflag" property="limitflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="hometemplateid" property="hometemplateid" jdbcType="INTEGER" />
@@ -43,7 +45,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    templateid, uuid, orgid, name, snapshot, ratio, height, width, touchflag, homeflag, 
+    templateid, uuid, orgid, name, snapshot, ratio, height, width, limitflag, touchflag, homeflag, 
     hometemplateid, homeidletime, publicflag, status, description, createtime, createstaffid
   </sql>
   
@@ -135,13 +137,13 @@
     </selectKey>
     insert into template (uuid, orgid, name, 
       snapshot, ratio, height, 
-      width, touchflag, homeflag, 
+      width, limitflag, touchflag, homeflag, 
       hometemplateid, homeidletime, publicflag, 
       status, description, createtime, 
       createstaffid)
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
-      #{width,jdbcType=INTEGER}, #{touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, 
+      #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, {touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, 
       #{hometemplateid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, #{publicflag,jdbcType=CHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER})
@@ -172,6 +174,9 @@
       </if>
       <if test="width != null" >
         width,
+      </if>
+      <if test="limitflag != null" >
+        limitflag,
       </if>
       <if test="touchflag != null" >
         touchflag,
@@ -222,6 +227,9 @@
       </if>
       <if test="width != null" >
         #{width,jdbcType=INTEGER},
+      </if>
+      <if test="limitflag != null" >
+        #{limitflag,jdbcType=CHAR},
       </if>
       <if test="touchflag != null" >
         #{touchflag,jdbcType=CHAR},
@@ -276,6 +284,9 @@
       <if test="width != null" >
         width = #{width,jdbcType=INTEGER},
       </if>
+      <if test="limitflag != null" >
+        limitflag = #{limitflag,jdbcType=CHAR},
+      </if>
       <if test="touchflag != null" >
         touchflag = #{touchflag,jdbcType=CHAR},
       </if>
@@ -315,6 +326,7 @@
       ratio = #{ratio,jdbcType=CHAR},
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
+      limitflag = #{limitflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       homeflag = #{homeflag,jdbcType=CHAR},
       hometemplateid = #{hometemplateid,jdbcType=INTEGER},

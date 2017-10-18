@@ -24,6 +24,8 @@ public class Page {
 
 	private Integer width;
 
+	private String limitflag;
+
 	private String touchflag;
 
 	private String homeflag;
@@ -118,6 +120,14 @@ public class Page {
 
 	public void setWidth(Integer width) {
 		this.width = width;
+	}
+
+	public String getLimitflag() {
+		return limitflag;
+	}
+
+	public void setLimitflag(String limitflag) {
+		this.limitflag = limitflag;
 	}
 
 	public String getTouchflag() {

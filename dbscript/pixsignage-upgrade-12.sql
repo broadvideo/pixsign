@@ -146,6 +146,10 @@ default character set utf8;
 alter table app add unique index app_index1(name, mtype);
 insert into app(name, sname, mtype) select distinct name, name, mtype from appfile;
 
+
+alter table page add limitflag char(1) default '0';
+alter table template add limitflag char(1) default '0';
+
 update video set format=substring_index(filename, '.', -1);
 
 delete from privilege where privilegeid > 0;

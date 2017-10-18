@@ -86,6 +86,7 @@ var oTable = $('#MyTable').dataTable({
 								closeBtn : false,
 						        padding : 0,
 						        content: '<div id="PagePreview"></div>',
+						        title: pageid,
 						    });
 							redrawPagePreview($('#PagePreview'), data.page, 800);
 						} else {
@@ -183,6 +184,7 @@ $('#TemplateTable').dataTable({
 								closeBtn : false,
 						        padding : 0,
 						        content: '<div id="TemplatePreview"></div>',
+						        title: templateid,
 						    });
 							redrawTemplatePreview($('#TemplatePreview'), data.template, 800, 1);
 						} else {
@@ -378,8 +380,9 @@ $('body').on('click', '.pix-page', function(event) {
 				CurrentObj = data.page;
 				CurrentId = CurrentObj.pageid;
 				CurrentZone = null;
-				$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
-				$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+				$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
+				$('.diy-ctrl').css('display', DiyCtrl? '':'none');
+				$('.zonebtns').css('display', (CurrentObj.limitflag == 0)? '':'none');
 				$('#PageModal').modal();
 			} else {
 				bootbox.alert(common.tips.error + data.errormsg);

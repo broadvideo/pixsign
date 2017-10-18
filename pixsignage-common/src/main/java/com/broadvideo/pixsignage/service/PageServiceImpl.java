@@ -100,6 +100,7 @@ public class PageServiceImpl implements PageService {
 			page.setHeight(template.getHeight());
 			page.setWidth(template.getWidth());
 			page.setHomeidletime(template.getHomeidletime());
+			page.setLimitflag(template.getLimitflag());
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
@@ -130,6 +131,7 @@ public class PageServiceImpl implements PageService {
 				subpage.setHomeflag(subtemplate.getHomeflag());
 				subpage.setHomepageid(page.getPageid());
 				subpage.setHomeidletime(subtemplate.getHomeidletime());
+				subpage.setLimitflag(subtemplate.getLimitflag());
 				subpage.setUpdatetime(page.getUpdatetime());
 				subpage.setCreatestaffid(page.getCreatestaffid());
 				pageMapper.insertSelective(subpage);
@@ -248,6 +250,7 @@ public class PageServiceImpl implements PageService {
 			page.setHeight(frompage.getHeight());
 			page.setWidth(frompage.getWidth());
 			page.setHomeidletime(frompage.getHomeidletime());
+			page.setLimitflag(frompage.getLimitflag());
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
@@ -466,8 +469,12 @@ public class PageServiceImpl implements PageService {
 			}
 		}
 
+		String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + page.getPageid();
+		File jsonFile = new File(pageDir, "index.json");
+		FileUtils.writeStringToFile(jsonFile, JSONObject.fromObject(page).toString(2), "UTF-8", false);
+		CommonUtil.zip(out, jsonFile, "index.json");
 		for (Page p : pageList) {
-			String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
+			pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 			File dataFile = new File(pageDir, "" + p.getPageid() + ".js");
 			FileUtils.writeStringToFile(dataFile, "var Page=" + JSONObject.fromObject(p).toString(2), "UTF-8", false);
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
