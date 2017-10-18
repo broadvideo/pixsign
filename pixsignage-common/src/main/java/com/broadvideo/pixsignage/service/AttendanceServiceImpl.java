@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,6 @@ import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.ObjectType;
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
-import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Attendance;
 import com.broadvideo.pixsignage.domain.Attendanceevent;
 import com.broadvideo.pixsignage.domain.Attendancescheme;
@@ -216,13 +215,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 	@Override
 	public List<Attendanceevent> getAttendanceevents(Integer classroomid, String yyyyMMdd, Integer orgid) {
+		List<Attendanceevent> attendanceevents = new ArrayList<Attendanceevent>();
 		Attendancescheme attendancescheme = this.getEnableAttendancescheme(orgid);
 		if (attendancescheme == null) {
 			logger.error("orgid:{} without attendance scheme.", orgid);
-			throw new ServiceException(RetCodeEnum.EXCEPTION, "No enable scheme.");
+			return attendanceevents;
 		}
 		Integer attendanceschemeid = attendancescheme.getAttendanceschemeid();
-		List<Attendanceevent> attendanceevents = this.attendanceeventMapper.selectAttendanceeventsBy(
+		attendanceevents = this.attendanceeventMapper.selectAttendanceeventsBy(
 				attendanceschemeid, classroomid, yyyyMMdd, orgid);
 		return attendanceevents;
 	}
