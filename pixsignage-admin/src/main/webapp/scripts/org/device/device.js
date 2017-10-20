@@ -954,11 +954,11 @@ var DeviceModule = function () {
 			}
 			CurrentMap.clearOverlays();
 			if (MapType == 0) {
-				var point = new BMap.Point(CurrentDevice.lontitude, CurrentDevice.latitude);
+				var point = new BMap.Point(_device.lontitude, _device.latitude);
 				var marker = new BMap.Marker(point);
 				var sContent =
-					'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
-					'<p>' + CurrentDevice.addr1 + ' ' + CurrentDevice.addr2 + '</p>' + 
+					'<div><h4>' + _device.terminalid + ' - ' + _device.name + '</h4>' + 
+					'<p>' + _device.addr1 + ' ' + _device.addr2 + '</p>' + 
 					'</div>';
 				var infoWindow = new BMap.InfoWindow(sContent);
 				CurrentMap.centerAndZoom(point, 15);
@@ -1010,16 +1010,16 @@ var DeviceModule = function () {
 			}
 			GoogleMarkers = [];
 			if (MapType == 0) {
-				var point = new google.maps.LatLng(parseFloat(CurrentDevice.latitude), parseFloat(CurrentDevice.lontitude));
+				var point = new google.maps.LatLng(parseFloat(_device.latitude), parseFloat(_device.lontitude));
 				var marker = new google.maps.Marker({
 					position: point,
 					map: CurrentMap,
-					title: CurrentDevice.terminalid
+					title: _device.terminalid
 				});
 				GoogleMarkers.push(marker);
 				var sContent =
-					'<div><h4>' + CurrentDevice.terminalid + ' - ' + CurrentDevice.name + '</h4>' + 
-					'<p>' + CurrentDevice.addr1 + '</p>' + 
+					'<div><h4>' + _device.terminalid + ' - ' + _device.name + '</h4>' + 
+					'<p>' + _device.addr1 + '</p>' + 
 					'</div>';
 				var infowindow = new google.maps.InfoWindow({
 					content: sContent
