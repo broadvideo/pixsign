@@ -116,6 +116,15 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
                     case 4:
                         item.courseName = '第四节'
                         break;
+                    case 5:
+                        item.courseName = '第五节'
+                        break;
+                    case 6:
+                        item.courseName = '第六节'
+                        break;
+                    case 7:
+                        item.courseName = '第七节'
+                        break;
                 }
             })
             res.scheme.afternoon.dtls.forEach(item => {
@@ -131,6 +140,12 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
                         break;
                     case 4:
                         item.courseName = '第四节'
+                        break;
+                    case 5:
+                        item.courseName = '第五节'
+                        break;
+                    case 6:
+                        item.courseName = '第六节'
                         break;
                 }
             })
@@ -156,7 +171,13 @@ var WeeklyCourse = function (zonediv, zone, scalew, scaleh) {
             res.course_schedules.forEach(item => {
                 thiz.zonediv.find('td').each(function (i, item2) {
                     if ($(item2).data('periodnum') == item['period_num'] && $(item2).data('type') == item['type'] && $(item2).data('workday') == item['workday']) {
-                        $(item2).html(`<span>${item.course_name}</span>&nbsp;<span>(${item.teacher_name})</span>`)
+                        var content = ''
+                        if (item.teacher_name) {
+                            content = `<span>${item.course_name}</span>&nbsp;<span>(${item.teacher_name})</span>`
+                        } else {
+                            content = `<span>${item.course_name}</span>`
+                        }
+                        $(item2).html(content)
                     }
                 })
             })
