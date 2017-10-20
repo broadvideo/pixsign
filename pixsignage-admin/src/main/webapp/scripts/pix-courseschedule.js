@@ -253,11 +253,11 @@ function initTab2(){
 			                           $("#form_edit_period_info input[name='courseschedule.coursename']").focus();
 			                           return false;
 			                	}
-			                	if(teacherName.trim().length==0){
-			                		bootbox.alert("上课老师不允许为空！！");
-			                           $("#form_edit_period_info input[name='courseschedule.teachername']").focus();
-			                           return false;
-			                	}
+			                //	if(teacherName.trim().length==0){
+			               // 		bootbox.alert("上课老师不允许为空！！");
+			                //           $("#form_edit_period_info input[name='courseschedule.teachername']").focus();
+			                //           return false;
+			                //	}
 			                
 			                   
 			                },

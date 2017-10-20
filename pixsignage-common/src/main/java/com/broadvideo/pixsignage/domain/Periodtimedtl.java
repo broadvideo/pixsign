@@ -132,4 +132,38 @@ public class Periodtimedtl {
     public void setUpdatepsnid(Integer updatepsnid) {
         this.updatepsnid = updatepsnid;
     }
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Periodtimedtl [periodtimedtlid=");
+		builder.append(periodtimedtlid);
+		builder.append(", type=");
+		builder.append(type);
+		builder.append(", periodnum=");
+		builder.append(periodnum);
+		builder.append(", periodname=");
+		builder.append(periodname);
+		builder.append(", shortstarttime=");
+		builder.append(shortstarttime);
+		builder.append(", shortendtime=");
+		builder.append(shortendtime);
+		builder.append(", duration=");
+		builder.append(duration);
+		builder.append(", coursescheduleschemeid=");
+		builder.append(coursescheduleschemeid);
+		builder.append(", orgid=");
+		builder.append(orgid);
+		builder.append(", createtime=");
+		builder.append(createtime);
+		builder.append(", createpsnid=");
+		builder.append(createpsnid);
+		builder.append(", updatetime=");
+		builder.append(updatetime);
+		builder.append(", updatepsnid=");
+		builder.append(updatepsnid);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

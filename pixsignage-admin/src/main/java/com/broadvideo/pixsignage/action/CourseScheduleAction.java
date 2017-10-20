@@ -31,7 +31,7 @@ public class CourseScheduleAction extends BaseDatatableAction {
 
 	public String addCourseSchedule() throws Exception {
 
-		if (StringUtils.isBlank(courseschedule.getCoursename()) || StringUtils.isBlank(courseschedule.getTeachername())
+		if (StringUtils.isBlank(courseschedule.getCoursename())
 				|| courseschedule.getPeriodtimedtlid() == null || courseschedule.getClassroomid() == null
 				|| courseschedule.getCoursescheduleschemeid() == null) {
 
@@ -55,12 +55,11 @@ public class CourseScheduleAction extends BaseDatatableAction {
 
 	public String updateCourseSchedule() throws Exception {
 
-		if (StringUtils.isBlank(courseschedule.getCoursename()) || StringUtils.isBlank(courseschedule.getTeachername())
+		if (StringUtils.isBlank(courseschedule.getCoursename())
 				|| courseschedule.getPeriodtimedtlid() == null || courseschedule.getClassroomid() == null
 				|| courseschedule.getCoursescheduleschemeid() == null || courseschedule.getCoursescheduleid() == null) {
 
 			logger.error("修改课表失败:Invalid args.");
-			logger.error("添加课表失败:Invalid args.");
 			renderError(-1, "Invalid args.");
 			return ERROR;
 

@@ -135,9 +135,6 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 				scheme.setCreatetime(new Date());
 				try {
 					Integer schemeid = this.coursescheduleschemeService.addScheme(scheme);
-					scheme.setCoursescheduleschemeid(schemeid);
-					this.coursescheduleschemeService.addPeriodTimeDtls(scheme, staffid, orgId);
-
 				} catch (ServiceException ex) {
 					logger.error("addScheme({}) ocurred exception.", scheme.getName(), ex);
 					schemeImportFail++;
@@ -173,15 +170,28 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 
 						Courseschedulescheme schemedtl = this.coursescheduleschemeService.getSchemeDtl(
 								coursescheduleschemeid, orgId);
-
+					String scheduleWorkDays = "," + scheme.getWorkdays() + ",";
 						for (Courseschedule tCourseschedule : courseschedules) {
+						String curWorkday = "," + tCourseschedule.getWorkday() + ",";
+						if (scheduleWorkDays.indexOf(curWorkday) == -1) {
+							logger.error("Improt courseschedule.workday:{} not in schedule.workdays.",
+									tCourseschedule.getWorkday(), scheme.getWorkdays());
+							coursescheduleImportFail++;
+							continue;
+						}
+						
 							tCourseschedule.setOrgid(orgId);
 							tCourseschedule.setCoursescheduleschemeid(coursescheduleschemeid);
 							tCourseschedule.setCreatepsnid(staffid);
 							tCourseschedule.setClassroomid(classroomid);
 							tCourseschedule.setCreatetime(new Date());
-							tCourseschedule.setPeriodtimedtlid(getPeriodtimedtlId(schemedtl,
-									tCourseschedule.getPeriodtimedtl()));
+						Integer periodtimedtlId = getPeriodtimedtlId(schemedtl, tCourseschedule.getPeriodtimedtl());
+						if (periodtimedtlId == null) {
+							logger.error("Import courseschedule not in periodtimedtl.");
+							coursescheduleImportFail++;
+							continue;
+						}
+						tCourseschedule.setPeriodtimedtlid(periodtimedtlId);
 							try {
 								this.coursescheduleService.addCourseSchedule(tCourseschedule);
 						} catch (Exception ex) {
@@ -423,26 +433,40 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 				int endCellIndex = startCellIndex + 1;
 				String morningPeriodStart = getCellValue(r.getCell(startCellIndex));
 				String morningPeriodEnd = getCellValue(r.getCell(endCellIndex));
+				if (StringUtils.isBlank(morningPeriodStart) || StringUtils.isBlank(morningPeriodEnd)) {
+					logger.error("Morning periodStart({}) or periodEnd({}) is null.", morningPeriodStart,
+							morningPeriodEnd);
+					continue;
+				}
 				scheme.getMorningperiodtimedtls().add(
 						this.buildPeriodtimedtl(morningPeriodStart, morningPeriodEnd, PeriodType.MORNING,
 								morningPeriods));
 			}
 			logger.info("Init afternoon period dtls....");
 			for (int afternoonPeriods = 1; afternoonPeriods <= scheme.getAfternoonperiods(); afternoonPeriods++) {
-				int startCellIndex = 21 + (2 * afternoonPeriods - 2);
+				int startCellIndex = 25 + (2 * afternoonPeriods - 2);
 				int endCellIndex = startCellIndex + 1;
 				String afternoonPeriodStart = getCellValue(r.getCell(startCellIndex));
 				String afternoonPeriodEnd = getCellValue(r.getCell(endCellIndex));
+				if (StringUtils.isBlank(afternoonPeriodStart) || StringUtils.isBlank(afternoonPeriodEnd)) {
+					logger.error("Aternoon periodStart({}) or periodEnd({}) is null.", afternoonPeriodStart,
+							afternoonPeriodEnd);
+					continue;
+				}
 				scheme.getAfternoonperiodtimedtls().add(
 						this.buildPeriodtimedtl(afternoonPeriodStart, afternoonPeriodEnd, PeriodType.AFTERNOON,
 								afternoonPeriods));
 			}
 			logger.info("Init night period dtls....");
 			for (int nightPeriods = 1; nightPeriods <= scheme.getNightperiods(); nightPeriods++) {
-				int startCellIndex = 29 + (2 * nightPeriods - 2);
+				int startCellIndex = 37 + (2 * nightPeriods - 2);
 				int endCellIndex = startCellIndex + 1;
 				String nightPeriodStart = getCellValue(r.getCell(startCellIndex));
 				String nightPeriodEnd = getCellValue(r.getCell(endCellIndex));
+				if (StringUtils.isBlank(nightPeriodStart) || StringUtils.isBlank(nightPeriodEnd)) {
+					logger.error("Night periodStart({}) or periodEnd({}) is null.", nightPeriodStart, nightPeriodEnd);
+					continue;
+				}
 				scheme.getNightperiodtimedtls().add(
 						this.buildPeriodtimedtl(nightPeriodStart, nightPeriodEnd, PeriodType.NIGHT, nightPeriods));
 			}
@@ -476,12 +500,12 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 		List<Courseschedule> courseschedules = new ArrayList<Courseschedule>();
 		// 读取上午的排课信息
 		int periodNum = 1;
-		for (int rowNum = 5; rowNum <= 14; rowNum = rowNum + 2) {
+		for (int rowNum = 5; rowNum <= 18; rowNum = rowNum + 2) {
 
 			for (int colNum = 1; colNum <= 7; colNum++) {
 				Cell courseCell = sheet.getRow(rowNum).getCell(colNum);
 				Cell teacherCell = sheet.getRow(rowNum + 1).getCell(colNum);
-				if (courseCell == null || teacherCell == null) {
+				if (courseCell == null ) {//|| teacherCell == null
 					continue;
 				}
 				Courseschedule courseschedule = buildCourseschedule(courseCell, teacherCell, PeriodType.MORNING,
@@ -493,12 +517,12 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 		}
 		// 读取下午的排课信息
 		periodNum = 1;
-		for (int rowNum = 16; rowNum <= 23; rowNum = rowNum + 2) {
+		for (int rowNum = 20; rowNum <= 31; rowNum = rowNum + 2) {
 
 			for (int colNum = 1; colNum <= 7; colNum++) {
 				Cell courseCell = sheet.getRow(rowNum).getCell(colNum);
 				Cell teacherCell = sheet.getRow(rowNum + 1).getCell(colNum);
-				if (courseCell == null || teacherCell == null) {
+				if (courseCell == null) {// || teacherCell == null
 					continue;
 				}
 				Courseschedule courseschedule = buildCourseschedule(courseCell, teacherCell, PeriodType.AFTERNOON,
@@ -510,11 +534,11 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 		}
 		// 读取晚上排课信息
 		periodNum = 1;
-		for (int rowNum = 25; rowNum <= 30; rowNum = rowNum + 2) {
+		for (int rowNum = 33; rowNum <= 40; rowNum = rowNum + 2) {
 			for (int colNum = 1; colNum <= 7; colNum++) {
 				Cell courseCell = sheet.getRow(rowNum).getCell(colNum);
 				Cell teacherCell = sheet.getRow(rowNum + 1).getCell(colNum);
-				if (courseCell == null || teacherCell == null) {
+				if (courseCell == null) {// || teacherCell == null
 					continue;
 				}
 				Courseschedule courseschedule = buildCourseschedule(courseCell, teacherCell, PeriodType.NIGHT,

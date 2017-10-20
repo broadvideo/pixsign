@@ -312,7 +312,7 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-3 control-label">上课老师<span class="required">*</span> </label>
+                    <label class="col-md-3 control-label">上课老师<span class="required" style="display:none;">*</span> </label>
                     <div class="col-md-9">    
                        <input type="text" class="form-control" name="courseschedule.teachername" value="{$T.teachername}"/>                       
                     </div>  

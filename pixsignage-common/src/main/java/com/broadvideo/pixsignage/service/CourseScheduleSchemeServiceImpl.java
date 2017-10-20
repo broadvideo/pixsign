@@ -55,7 +55,8 @@ public class CourseScheduleSchemeServiceImpl implements CourseScheduleSchemeServ
 		saveScheduleScheme.setDescription(scheduleScheme.getDescription());
 		saveScheduleScheme.setCreatetime(new Date());
 		this.schemeMapper.insertSelective(saveScheduleScheme);
-
+		scheduleScheme.setCoursescheduleschemeid(saveScheduleScheme.getCoursescheduleschemeid());
+		addPeriodTimeDtls(scheduleScheme, scheduleScheme.getCreatepsnid(), scheduleScheme.getOrgid());
 		return saveScheduleScheme.getCoursescheduleschemeid();
 	}
 

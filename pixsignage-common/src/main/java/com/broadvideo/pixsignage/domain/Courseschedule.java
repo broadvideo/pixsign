@@ -169,4 +169,46 @@ public class Courseschedule {
     public void setUpdatepsnid(Integer updatepsnid) {
         this.updatepsnid = updatepsnid;
     }
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Courseschedule [coursescheduleid=");
+		builder.append(coursescheduleid);
+		builder.append(", courseid=");
+		builder.append(courseid);
+		builder.append(", coursename=");
+		builder.append(coursename);
+		builder.append(", classroomid=");
+		builder.append(classroomid);
+		builder.append(", classroomname=");
+		builder.append(classroomname);
+		builder.append(", teacherid=");
+		builder.append(teacherid);
+		builder.append(", teachername=");
+		builder.append(teachername);
+		builder.append(", coursescheduleschemeid=");
+		builder.append(coursescheduleschemeid);
+		builder.append(", coursescheduleschemename=");
+		builder.append(coursescheduleschemename);
+		builder.append(", workday=");
+		builder.append(workday);
+		builder.append(", periodtimedtlid=");
+		builder.append(periodtimedtlid);
+		builder.append(", periodtimedtl=");
+		builder.append(periodtimedtl);
+		builder.append(", orgid=");
+		builder.append(orgid);
+		builder.append(", createtime=");
+		builder.append(createtime);
+		builder.append(", createpsnid=");
+		builder.append(createpsnid);
+		builder.append(", updatetime=");
+		builder.append(updatetime);
+		builder.append(", updatepsnid=");
+		builder.append(updatepsnid);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }
