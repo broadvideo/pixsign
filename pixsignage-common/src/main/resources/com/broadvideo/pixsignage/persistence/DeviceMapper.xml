@@ -59,6 +59,7 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
+    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectMiniByPrimaryKey" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
@@ -86,7 +87,14 @@
       and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = #{branchid}
+      <if test="subbranchflag == 0">
+        and branchid = #{branchid}
+      </if>
+      <if test="subbranchflag == 1">
+        and exists (select 1 from branch b 
+          where b.branchid=device.branchid 
+          and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+      </if>
     </if>
     <if test="status != null">
       and status = #{status}
@@ -109,7 +117,14 @@
       and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = #{branchid}
+      <if test="subbranchflag == 0">
+        and branchid = #{branchid}
+      </if>
+      <if test="subbranchflag == 1">
+        and exists (select 1 from branch b 
+          where b.branchid=device.branchid 
+          and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+      </if>
     </if>
     <if test="status != null">
       and status = #{status}

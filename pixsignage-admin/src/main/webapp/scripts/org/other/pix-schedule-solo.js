@@ -31,9 +31,9 @@ $('#DeviceTable').dataTable({
 	'bServerSide' : true,
 	'sAjaxSource' : 'device!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' }, 
+	                {'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '60%' }, 
-					{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }],
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
@@ -42,14 +42,15 @@ $('#DeviceTable').dataTable({
 		if (aData.name != aData.terminalid) {
 			$('td:eq(0)', nRow).html(aData.name + '(' + aData.terminalid + ')');
 		}
+		$('td:eq(1)', nRow).html(aData.branch.name);
 		if (aData.status == 0) {
-			$('td:eq(1)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
+			$('td:eq(2)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
 		} else if (aData.onlineflag == 9) {
-			$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+			$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 		} else if (aData.onlineflag == 1) {
-			$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
+			$('td:eq(2)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 		} else if (aData.onlineflag == 0) {
-			$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+			$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 		}
 		
 		var schedulehtml = '';
@@ -91,10 +92,14 @@ $('#DeviceTable').dataTable({
 		} else {
 			schedulehtml = '';
 		}
-		$('td:eq(2)', nRow).html(schedulehtml);
+		$('td:eq(3)', nRow).html(schedulehtml);
 		
-		$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" deviceid="' + aData.deviceid + '" class="btn default btn-xs blue pix-schedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>');
-		$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+		var buttonhtml = '';
+		buttonhtml += '<div class="util-btn-margin-bottom-5">';
+		buttonhtml += '<a href="javascript:;" privilegeid="101010" deviceid="' + aData.deviceid + '" class="btn default btn-xs blue pix-schedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>';
+		buttonhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+		buttonhtml += '</div>';
+		$('td:eq(4)', nRow).html(buttonhtml);
 
 		return nRow;
 	},

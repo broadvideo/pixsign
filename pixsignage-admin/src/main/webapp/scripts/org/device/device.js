@@ -31,6 +31,7 @@ var DeviceModule = function () {
 			'sAjaxSource' : 'device!list.action',
 			'aoColumns' : [ {'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }, 
 							{'sTitle' : common.view.device, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
+							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false, 'sWidth' : '15%' }, 
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '40%' }],
@@ -63,13 +64,14 @@ var DeviceModule = function () {
 				}
 				$('td:eq(1)', nRow).html(devicehtml);
 				
+				$('td:eq(2)', nRow).html(aData.branch.name);
 				if (aData.devicegroupid > 0) {
-					$('td:eq(2)', nRow).html(aData.devicegroup.name);
+					$('td:eq(3)', nRow).html(aData.devicegroup.name);
 				} else {
-					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
 				}
 				if (aData.lontitude > 0 && aData.latitude > 0) {
-					$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
+					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 				}
 				
 				var buttonhtml = '';
@@ -89,7 +91,7 @@ var DeviceModule = function () {
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.fileview + '</a>';
 				buttonhtml += '</div>';
 
-				$('td:eq(4)', nRow).html(buttonhtml);
+				$('td:eq(5)', nRow).html(buttonhtml);
 
 				var rowdetail = '<span class="row-details row-details-close"></span>';
 				$('td:eq(0)', nRow).html(rowdetail);
@@ -117,6 +119,7 @@ var DeviceModule = function () {
 			'sAjaxSource' : 'device!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 							{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false }, 
 							{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false }, 
 							{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false },
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
@@ -124,12 +127,13 @@ var DeviceModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(2)', nRow).html(aData.branch.name);
 				if (aData.devicegroupid > 0) {
-					$('td:eq(2)', nRow).html(aData.devicegroup.name);
+					$('td:eq(3)', nRow).html(aData.devicegroup.name);
 				} else {
-					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
 				}
-				$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update2"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update2"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 

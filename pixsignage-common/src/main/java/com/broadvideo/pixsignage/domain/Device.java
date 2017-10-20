@@ -119,6 +119,8 @@ public class Device {
 
 	private String tags;
 
+	private Branch branch;
+
 	private Devicegroup devicegroup;
 
 	private Appfile appfile;
@@ -565,6 +567,14 @@ public class Device {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 	public Devicegroup getDevicegroup() {

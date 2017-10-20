@@ -199,7 +199,6 @@ $('#TempletTable').dataTable({
 	},
 	'fnDrawCallback': function(oSettings, json) {
 		$('#TempletContainer .thumbs').each(function(i) {
-			console.log($(this).parent().closest('div').width());
 			$(this).width($(this).parent().closest('div').width());
 			$(this).height($(this).parent().closest('div').width());
 		});
@@ -514,12 +513,13 @@ $('#DeviceTable').dataTable({
 	'sAjaxSource' : myurls['device.list'],
 	'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 					{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+					{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'deviceid', 'bSortable' : false }],
 	'iDisplayLength' : 20,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(2)', nRow).html(aData.branch.name);
 		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevice">' + common.view.add + '</button>');
 		return nRow;
 	},

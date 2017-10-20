@@ -213,7 +213,7 @@ var DevicegroupModule = function () {
 			'sAjaxSource' : 'device!list.action',
 			'aoColumns' : [ {'sTitle' : '<input type="checkbox" id="CheckAll" />', 'mData' : 'deviceid', 'bSortable' : false }, 
 			                {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
-							{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false },
+							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false },
 							{'sTitle' : common.view.status, 'mData' : 'onlineflag', 'bSortable' : false }],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
@@ -227,6 +227,7 @@ var DevicegroupModule = function () {
 				}
 
 				$('td:eq(1)', nRow).html(aData.terminalid + '(' + aData.name + ')');
+				$('td:eq(2)', nRow).html(aData.branch.name);
 				if (aData.status == 0) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
 				} else if (aData.onlineflag == 9) {
@@ -255,7 +256,7 @@ var DevicegroupModule = function () {
 			'sAjaxSource' : 'device!list.action',
 			'aoColumns' : [ {'sTitle' : '<input type="checkbox" id="CheckAll" />', 'mData' : 'deviceid', 'bSortable' : false }, 
 			                {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
-							{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false },
+							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false },
 							{'sTitle' : common.view.status, 'mData' : 'onlineflag', 'bSortable' : false }],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
@@ -269,6 +270,7 @@ var DevicegroupModule = function () {
 				}
 				
 				$('td:eq(1)', nRow).html(aData.terminalid + '(' + aData.name + ')');
+				$('td:eq(2)', nRow).html(aData.branch.name);
 				if (aData.status == 0) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
 				} else if (aData.onlineflag == 9) {

@@ -14,6 +14,10 @@ public class Branch {
 
 	private Integer parentid;
 
+	private Integer parentid2;
+
+	private Integer parentid3;
+
 	private String name;
 
 	private String code;
@@ -64,6 +68,22 @@ public class Branch {
 
 	public void setParentid(Integer parentid) {
 		this.parentid = parentid;
+	}
+
+	public Integer getParentid2() {
+		return parentid2;
+	}
+
+	public void setParentid2(Integer parentid2) {
+		this.parentid2 = parentid2;
+	}
+
+	public Integer getParentid3() {
+		return parentid3;
+	}
+
+	public void setParentid3(Integer parentid3) {
+		this.parentid3 = parentid3;
 	}
 
 	public String getName() {

@@ -301,6 +301,7 @@ var BranchModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':LeftBranchid });
+				aoData.push({'name':'subbranchflag','value':0 });
 				aoData.push({'name':'type','value':'1' });
 			} 
 		});
@@ -342,6 +343,7 @@ var BranchModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':RightBranchid });
+				aoData.push({'name':'subbranchflag','value':0 });
 				aoData.push({'name':'type','value':'1' });
 			} 
 		});

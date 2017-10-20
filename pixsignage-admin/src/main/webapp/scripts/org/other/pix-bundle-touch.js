@@ -635,61 +635,32 @@ var SelectedDevicegroupList = [];
 var CurrentDeviceBranchid;
 
 function initDeviceBranchTree() {
-	$.ajax({
-		type : 'POST',
-		url : 'branch!list.action',
-		data : {},
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var branches = data.aaData;
-				CurrentDeviceBranchid = branches[0].branchid;
-				
-				if ( $("#DeviceBranchTreeDiv").length > 0 ) {
-					if (branches[0].children.length == 0) {
-						$('#DeviceBranchTreeDiv').css('display', 'none');
-						$('#DeviceTable').dataTable()._fnAjaxUpdate();
-						$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
-					} else {
-						var branchTreeDivData = [];
-						createBranchTreeData(branches, branchTreeDivData);
-						$('#DeviceBranchTreeDiv').jstree('destroy');
-						$('#DeviceBranchTreeDiv').jstree({
-							'core' : {
-								'multiple' : false,
-								'data' : branchTreeDivData
-							},
-							'plugins' : ['unique'],
-						});
-						$('#DeviceBranchTreeDiv').on('loaded.jstree', function() {
-							$('#DeviceBranchTreeDiv').jstree('select_node', CurrentDeviceBranchid);
-						});
-						$('#DeviceBranchTreeDiv').on('select_node.jstree', function(event, data) {
-							CurrentDeviceBranchid = data.instance.get_node(data.selected[0]).id;
-							$('#DeviceTable').dataTable()._fnAjaxUpdate();
-							$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
-						});
+	$("#DeviceBranchTreeDiv").jstree('destroy');
+	$("#DeviceBranchTreeDiv").jstree({
+		'core' : {
+			'multiple' : false,
+			'data' : {
+				'url': function(node) {
+					return 'branch!listnode.action';
+				},
+				'data': function(node) {
+					return {
+						'id': node.id,
 					}
 				}
-			} else {
-				bootbox.alert(common.tips.error + data.errormsg);
 			}
 		},
-		error : function() {
-			console.log('failue');
-		}
+		'plugins' : ['unique'],
 	});
-	function createBranchTreeData(branches, treeData) {
-		for (var i=0; i<branches.length; i++) {
-			treeData[i] = {};
-			treeData[i].id = branches[i].branchid;
-			treeData[i].text = branches[i].name;
-			treeData[i].state = {
-				opened: true,
-			}
-			treeData[i].children = [];
-			createBranchTreeData(branches[i].children, treeData[i].children);
-		}
-	}	
+	$("#DeviceBranchTreeDiv").on('loaded.jstree', function() {
+		CurrentDeviceBranchid = $("#DeviceBranchTreeDiv").jstree(true).get_json('#')[0].id;
+		$("#DeviceBranchTreeDiv").jstree('select_node', CurrentDeviceBranchid);
+	});
+	$("#DeviceBranchTreeDiv").on('select_node.jstree', function(event, data) {
+		CurrentDeviceBranchid = data.instance.get_node(data.selected[0]).id;
+		$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		$('#DeviceGroupTable').dataTable()._fnAjaxUpdate();
+	});
 }
 
 //编制计划对话框中的设备table初始化
@@ -703,12 +674,13 @@ $('#DeviceTable').dataTable({
 	'sAjaxSource' : myurls['device.list'],
 	'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 					{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+					{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false }, 
 					{'sTitle' : common.view.operation, 'mData' : 'deviceid', 'bSortable' : false }],
 	'iDisplayLength' : 20,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(2)', nRow).html(aData.branch.name);
 		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-adddevice">' + common.view.add + '</button>');
 		return nRow;
 	},

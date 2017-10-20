@@ -111,10 +111,13 @@ $('#PlanTable').dataTable({
 		}
 		$('td:eq(2)', nRow).html(devicehtml + devicegrouphtml);
 	
-		var operhtml = '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a><br/>';
-		operhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a><br/>';
-		operhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-		$('td:eq(3)', nRow).html(operhtml);
+		var buttonhtml = '';
+		buttonhtml += '<div class="util-btn-margin-bottom-5">';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+		buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+		buttonhtml += '</div>';
+		$('td:eq(3)', nRow).html(buttonhtml);
 
 		return nRow;
 	},
@@ -628,12 +631,13 @@ $('#DeviceTable').dataTable({
 	'sAjaxSource' : 'device!list.action',
 	'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 					{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-					{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false }, 
+					{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false }, 
 					{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false }],
 	'iDisplayLength' : 20,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+		$('td:eq(2)', nRow).html(aData.branch.name);
 		$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-planbind-device-add">' + common.view.add + '</button>');
 		return nRow;
 	},

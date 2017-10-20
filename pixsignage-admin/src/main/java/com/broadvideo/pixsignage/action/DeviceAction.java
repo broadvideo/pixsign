@@ -81,6 +81,10 @@ public class DeviceAction extends BaseDatatableAction {
 			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String subbranchflag = getParameter("subbranchflag");
+			if (subbranchflag == null) {
+				subbranchflag = "1";
+			}
 			String status = getParameter("status");
 			String devicegroupid = getParameter("devicegroupid");
 			String devicegridid = getParameter("devicegridid");
@@ -93,13 +97,14 @@ public class DeviceAction extends BaseDatatableAction {
 				orgid = "" + getLoginStaff().getOrgid();
 			}
 
-			int count = deviceService.selectCount(orgid, branchid, status, null, devicegroupid, devicegridid, search);
+			int count = deviceService.selectCount(orgid, branchid, subbranchflag, status, null, devicegroupid,
+					devicegridid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectList(orgid, branchid, status, null, devicegroupid,
-					devicegridid, search, start, length, order);
+			List<Device> deviceList = deviceService.selectList(orgid, branchid, subbranchflag, status, null,
+					devicegroupid, devicegridid, search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}

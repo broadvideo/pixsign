@@ -188,8 +188,8 @@ public class AdminService {
 				return handleResult(1002, "Token失效");
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(), null, null,
-					null, null, null, start, length, "deviceid");
+			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(), "1", null,
+					null, null, null, null, start, length, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
