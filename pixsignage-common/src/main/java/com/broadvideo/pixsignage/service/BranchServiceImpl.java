@@ -47,6 +47,15 @@ public class BranchServiceImpl implements BranchService {
 	public void addBranch(Branch branch) {
 		branchMapper.insertSelective(branch);
 
+		Branch topBranch = branchMapper.selectByPrimaryKey("" + branch.getParentid());
+		if (topBranch != null) {
+			branch.setParentid2(topBranch.getParentid());
+			branch.setParentid3(topBranch.getParentid2());
+		} else {
+			branch.setParentid2(0);
+			branch.setParentid3(0);
+		}
+
 		Folder folder = new Folder();
 		folder.setOrgid(branch.getOrgid());
 		folder.setBranchid(branch.getBranchid());

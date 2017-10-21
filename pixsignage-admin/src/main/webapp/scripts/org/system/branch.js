@@ -1,5 +1,6 @@
 var BranchModule = function () {
 	var _parentid = -1;
+	var _parent = {};
 	var _branch = {};
 	var BranchTree;
 	var TreeData = [];
@@ -15,6 +16,11 @@ var BranchModule = function () {
 	var refresh = function () {
 		$('#BranchTable').dataTable()._fnAjaxUpdate();
 		$('#BranchPortlet .branchtree').jstree(true).refresh_node(_parentid);
+		if (_parent.parentid3 > 0) {
+			$('.pix-add').css('display', 'none');
+		} else {
+			$('.pix-add').css('display', '');
+		}
 	};
 	
 	var initBranchTree = function () {
@@ -30,6 +36,7 @@ var BranchModule = function () {
 					'data': function(node) {
 						return {
 							'id': node.id,
+							'branch':node.branch,
 						}
 					}
 				}
@@ -43,6 +50,7 @@ var BranchModule = function () {
 		});
 		BranchTree.on('select_node.jstree', function(event, data) {
 			_parentid = data.instance.get_node(data.selected[0]).id;
+			_parent = data.instance.get_node(data.selected[0]).original.branch;
 			refresh();
 		});
 	};

@@ -59,6 +59,7 @@ public class BranchAction extends BaseDatatableAction {
 			branchJson.put("id", branch.getBranchid());
 			branchJson.put("parent", "#");
 			branchJson.put("text", branch.getName());
+			branchJson.put("branch", branch);
 			if (branch.getChildcount().intValue() == 0) {
 				branchJson.put("children", false);
 			} else {
@@ -72,6 +73,7 @@ public class BranchAction extends BaseDatatableAction {
 				branchJson.put("id", branch.getBranchid());
 				branchJson.put("parent", id);
 				branchJson.put("text", branch.getName());
+				branchJson.put("branch", branch);
 				if (branch.getChildcount().intValue() == 0) {
 					branchJson.put("children", false);
 				} else {
