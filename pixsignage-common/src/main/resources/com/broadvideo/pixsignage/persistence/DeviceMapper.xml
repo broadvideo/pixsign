@@ -17,6 +17,7 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
+    <result column="testflag" property="testflag" jdbcType="CHAR" />
     <result column="appname" property="appname" jdbcType="VARCHAR" />
     <result column="sign" property="sign" jdbcType="VARCHAR" />
     <result column="vname" property="vname" jdbcType="VARCHAR" />
@@ -68,7 +69,7 @@
   
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
-    filestatus, status, description, onlineflag, appname, sign, vname, vcode, mtype, type, ostype, 
+    filestatus, status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, type, ostype, 
     devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, tagflag, temperature,
@@ -282,7 +283,7 @@
       hardkey, name, position, 
       ip, iip, mac, schedulestatus, 
       filestatus, status, description, 
-      onlineflag, appname, sign, 
+      onlineflag, testflag, appname, sign, 
       vname, vcode, mtype, 
       type, ostype, devicegroupid, 
       lontitude, latitude, city, 
@@ -300,7 +301,7 @@
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
       #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{onlineflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{onlineflag,jdbcType=CHAR}, #{testflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
       #{vname,jdbcType=VARCHAR}, #{vcode,jdbcType=INTEGER}, #{mtype,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{ostype,jdbcType=CHAR}, #{devicegroupid,jdbcType=INTEGER}, 
       #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
@@ -362,6 +363,9 @@
       </if>
       <if test="onlineflag != null" >
         onlineflag,
+      </if>
+      <if test="testflag != null" >
+        testflag,
       </if>
       <if test="appname != null" >
         appname,
@@ -526,6 +530,9 @@
       </if>
       <if test="onlineflag != null" >
         #{onlineflag,jdbcType=CHAR},
+      </if>
+      <if test="testflag != null" >
+        #{testflag,jdbcType=CHAR},
       </if>
       <if test="appname != null" >
         #{appname,jdbcType=VARCHAR},
@@ -694,6 +701,9 @@
       <if test="onlineflag != null" >
         onlineflag = #{onlineflag,jdbcType=CHAR},
       </if>
+      <if test="testflag != null" >
+        testflag = #{testflag,jdbcType=CHAR},
+      </if>
       <if test="appname != null" >
         appname = #{appname,jdbcType=VARCHAR},
       </if>
@@ -833,6 +843,7 @@
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       onlineflag = #{onlineflag,jdbcType=CHAR},
+      testflag = #{testflag,jdbcType=CHAR},
       appname = #{appname,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},
       vname = #{vname,jdbcType=VARCHAR},

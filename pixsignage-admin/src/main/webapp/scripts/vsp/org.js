@@ -24,7 +24,6 @@ var OrgModule = function () {
 							{'sTitle' : common.view.currentdevices, 'mData' : 'currentdevices', 'bSortable' : false }, 
 							{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
 							{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
-							{'sTitle' : '', 'mData' : 'orgid', 'bSortable' : false },
 							{'sTitle' : '', 'mData' : 'orgid', 'bSortable' : false }],
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -32,12 +31,15 @@ var OrgModule = function () {
 				$('td:eq(5)', nRow).html(PixData.transferIntToComma(aData.maxstorage) + ' MB');
 				$('td:eq(6)', nRow).html(PixData.transferIntToComma(aData.currentstorage) + ' MB');
 
-				$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				var buttonhtml = '';
+				buttonhtml += '<div class="util-btn-margin-bottom-5">';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
 				if (aData.code != 'default') {
-					$('td:eq(8)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
-				} else {
-					$('td:eq(8)', nRow).html('');
+					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				}
+				buttonhtml += '</div>';
+				$('td:eq(7)', nRow).html(buttonhtml);
 				return nRow;
 			}
 		});
@@ -49,6 +51,37 @@ var OrgModule = function () {
 	};
 	
 	var initOrgEvent = function () {
+		$('body').on('click', '.pix-password', function(event) {
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+			}
+			_org = $('#OrgTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.resetpassword + _org.name, function(result) {
+				if (result == true) {
+					$.ajax({
+						type : 'POST',
+						url : 'org!resetpassword.action',
+						cache: false,
+						data : {
+							'org.orgid': _org.orgid
+						},
+						success : function(data, status) {
+							if (data.errorcode == 0) {
+								bootbox.alert(common.tips.success);
+								refresh();
+							} else {
+								bootbox.alert(common.tips.error + data.errormsg);
+							}
+						},
+						error : function() {
+							console.log('failue');
+						}
+					});				
+				}
+			 });
+		});
+
 		$('body').on('click', '.pix-delete', function(event) {
 			var index = $(event.target).attr('data-id');
 			if (index == undefined) {

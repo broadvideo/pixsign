@@ -150,6 +150,17 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Transactional
+	public void resetPassword(String orgid) {
+		Org org = orgMapper.selectByPrimaryKey(orgid);
+		List<Staff> staffs = staffMapper.selectByLoginname("admin@" + org.getCode());
+		if (staffs.size() > 0) {
+			Staff staff = staffs.get(0);
+			staff.setPassword(CommonUtil.getPasswordMd5(staff.getLoginname(), staff.getLoginname()));
+			staffMapper.updateByPrimaryKeySelective(staff);
+		}
+	}
+
+	@Transactional
 	public void deleteOrg(String orgid) {
 		staffMapper.deleteByOrg(orgid);
 		orgMapper.deleteByPrimaryKey(orgid);

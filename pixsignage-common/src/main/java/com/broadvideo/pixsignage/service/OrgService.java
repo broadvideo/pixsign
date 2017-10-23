@@ -15,6 +15,8 @@ public interface OrgService {
 
 	public void updateOrg(Org org);
 
+	public void resetPassword(String orgid);
+
 	public void deleteOrg(String orgid);
 
 	public boolean validateName(Org org);

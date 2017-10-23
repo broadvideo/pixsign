@@ -13,6 +13,8 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table device add testflag int default 0;
+
 alter table branch add parentid2 int default 0;
 alter table branch add parentid3 int default 0;
 update branch set parentid2=0;

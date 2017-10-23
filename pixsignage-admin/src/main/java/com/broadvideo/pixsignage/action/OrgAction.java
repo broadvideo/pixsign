@@ -101,6 +101,18 @@ public class OrgAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doResetPassword() {
+		try {
+			orgService.resetPassword("" + org.getOrgid());
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("OrgAction doResetPassword exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDelete() {
 		try {
 			orgService.deleteOrg("" + org.getOrgid());

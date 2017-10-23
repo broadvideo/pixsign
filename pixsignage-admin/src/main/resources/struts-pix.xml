@@ -141,6 +141,12 @@
 			</result>
 			<result name="input" type="json"></result>
 		</action>
+		<action name="org!resetpassword" method="doResetPassword" class="orgAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="org!delete" method="doDelete" class="orgAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
