@@ -9,7 +9,6 @@ var RouteGuide=function(zonediv,zone,scalew,scaleh,diydir){
     this.zonediv=zonediv;
     this.guidediv=null;
     this.canvas=null;
-    this.miniman=null;
     this.diydir=diydir;
     this.init();
 };
@@ -34,36 +33,49 @@ RouteGuide.prototype.getRoute=function(routeid){
 RouteGuide.prototype.doAction=function(routeid){
 
         var route= this.getRoute(routeid);
-        this.route(route.routelines[0]);
+        this.route(route.routelines);
 
 };
 
-RouteGuide.prototype.route=function(ways){
+RouteGuide.prototype.initAnimationcounter=function(routelines){
+    var counter=0;
+    for(var i=0;i<routelines.length;i++){
+        counter+=routelines[i].length-1;
+    }
+    RouteGuide.animationcounter=counter;
+
+};
+
+RouteGuide.prototype.route=function(routelines){
 
     if(RouteGuide.animationcounter>0){
         console.log('Animation is running,coutter is:',RouteGuide.animationcounter);
         return;
-    }else{
-        RouteGuide.animationcounter=ways.length-1;
     }
-
+    this.initAnimationcounter(routelines);
     var canvasctx=this.getCanvasCtx();
     this.reset(canvasctx);
     canvasctx.beginPath();
-    ways.forEach(function(item,index,arr){
+    console.log('Draw dash line....');
+for(var i=0;i<routelines.length;i++) {
+    var routeline=routelines[i];
+    routeline.forEach(function(item,index,arr){
         console.log(item.x1,item.y1);
     });
-    console.log('Draw dash line....')
-    for(var i=0;i+1<ways.length;i++){
-
-        var x1=ways[i].x1;
-        var y1=ways[i].y1;
-        var x2=ways[i+1].x1;
-        var y2=ways[i+1].y1;
-        this.drawDashLine(canvasctx,x1,y1,x2,y2,8);
+    for (var j = 0; j + 1 < routeline.length; j++) {
+        if (routeline[j].linebreak != null && routeline[j].linebreak) {
+            continue;
+        }
+        var x1 = routeline[j].x1;
+        var y1 = routeline[j].y1;
+        var x2 = routeline[j + 1].x1;
+        var y2 = routeline[j + 1].y1;
+        this.drawDashLine(canvasctx, x1, y1, x2, y2, 8);
     }
     console.log('miniman do animation move');
-    this.subMove(ways);
+    this.subMove(routeline);
+}
+
 
 };
 
@@ -84,23 +96,25 @@ RouteGuide.prototype.init=function(){
   //canvas.className='guide01';
   $(canvas).css({'background': 'url('+this.diydir+'/img/guide01.png)','background-repeat':'no-repeat','background-size':'1920px 1080px'});
   guidediv.appendChild(canvas);
-  //创建小人人
-  var  miniman=document.createElement('div');
-  miniman.className='miniman';
-  $(miniman).css({'position':'absolute','display':'none','left':'593px','top':'827px','width':'28px','height':'73px','background':'url('+this.diydir+'/img/step.png)'});
-  guidediv.appendChild(miniman);
   var scalew=width/this.width;
   var scaleh=height/this.height;
   guidediv.style.webkitTransformOrigin='0% 0%';
   guidediv.style.webkitTransform='scale3d('+scalew+','+scaleh+',1)';
   this.zonediv.append($(guidediv));
-  //保存对小人的引用
-  this.miniman=miniman;
   this.canvas=canvas;
   this.guidediv=guidediv;
 
 
 
+};
+
+RouteGuide.prototype.createMiniman=function(){
+    //创建小人人
+    var  miniman=document.createElement('div');
+    miniman.className='miniman';
+    $(miniman).css({'position':'absolute','display':'none','left':'593px','top':'827px','width':'28px','height':'73px','background':'url('+this.diydir+'/img/step.png)'});
+    this.guidediv.appendChild(miniman);
+    return miniman;
 };
 //Resize
 RouteGuide.prototype.resize=function(){
@@ -143,16 +157,17 @@ RouteGuide.prototype.subMove= function(data){
     if (data.length==0) {
         return;
     }
+   var miniman=this.createMiniman();
     for(var i=0;i+1<data.length;i++) {
         var xlength = Math.abs(data[i+1].x1 - data[i].x1);
         var ylength = Math.abs(data[i+1].y1  - data[i].y1);
         var distance = Math.sqrt(xlength * xlength + ylength * ylength);
         var times = distance *2;
         if(i==0){
-            $('.miniman').css({'left':data[0].x1-14,'top':data[0].y1-73}).show();
+            $(miniman).css({'left':data[0].x1-14,'top':data[0].y1-73}).show();
         }
 
-        $($('.miniman')).show().animate({'left': data[i+1].x1-14, 'top': data[i+1].y1-73}, times,function(){
+        $(miniman).show().animate({'left': data[i+1].x1-14, 'top': data[i+1].y1-73}, times,function(){
 
             RouteGuide.animationcounter--;
             console.log('>>>animation end,with counter:',RouteGuide.animationcounter)
@@ -161,7 +176,7 @@ RouteGuide.prototype.subMove= function(data){
     }
 };
 RouteGuide.prototype.reset=function(canvasctx) {
-   $(this.miniman).hide();
+   $('.miniman').remove();
     canvasctx.clearRect(0,0,this.canvas.width,this.canvas.height);
 
 };
