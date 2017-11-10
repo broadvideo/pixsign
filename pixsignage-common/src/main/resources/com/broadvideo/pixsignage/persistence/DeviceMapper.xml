@@ -177,12 +177,11 @@
     order by deviceid
   </select>
 
-  <select id="selectByOrgtype" resultMap="FullResultMap">
-    select d.* from device d, org o
-    where d.orgid = o.orgid 
-    and o.orgtype = '${orgtype}' 
-    and d.status = '1'
-    order by deviceid
+  <select id="selectCountByOstype" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and ostype = #{ostype}
   </select>
 
   <delete id="unbind" >

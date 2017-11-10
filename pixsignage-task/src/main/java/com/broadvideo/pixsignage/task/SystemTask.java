@@ -105,6 +105,8 @@ public class SystemTask extends Thread {
 							String dvbflag2 = orgJson.getString("dvbflag");
 							String videoinflag2 = orgJson.getString("videoinflag");
 							int maxdevices2 = orgJson.getInt("maxdevices");
+							int maxdevices12 = orgJson.getInt("maxdevices1");
+							int maxdevices22 = orgJson.getInt("maxdevices2");
 							long maxstorage2 = orgJson.getLong("maxstorage");
 							org.setBundleflag(bundleflag2);
 							org.setPageflag(pageflag2);
@@ -121,6 +123,8 @@ public class SystemTask extends Thread {
 							org.setDvbflag(dvbflag2);
 							org.setVideoinflag(videoinflag2);
 							org.setMaxdevices(maxdevices2);
+							org.setMaxdevices1(maxdevices12);
+							org.setMaxdevices2(maxdevices22);
 							org.setMaxstorage(maxstorage2);
 
 							vspService.updateVsp(vsp);

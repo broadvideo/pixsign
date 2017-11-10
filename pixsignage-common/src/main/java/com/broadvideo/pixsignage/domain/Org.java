@@ -67,6 +67,10 @@ public class Org {
 
 	private Integer currentdeviceidx;
 
+	private Integer maxdevices1;
+
+	private Integer maxdevices2;
+
 	private Long maxstorage;
 
 	private Long currentstorage;
@@ -343,6 +347,22 @@ public class Org {
 
 	public void setCurrentdeviceidx(Integer currentdeviceidx) {
 		this.currentdeviceidx = currentdeviceidx;
+	}
+
+	public Integer getMaxdevices1() {
+		return maxdevices1;
+	}
+
+	public void setMaxdevices1(Integer maxdevices1) {
+		this.maxdevices1 = maxdevices1;
+	}
+
+	public Integer getMaxdevices2() {
+		return maxdevices2;
+	}
+
+	public void setMaxdevices2(Integer maxdevices2) {
+		this.maxdevices2 = maxdevices2;
 	}
 
 	public Long getMaxstorage() {

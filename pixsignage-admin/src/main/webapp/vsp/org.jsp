@@ -217,6 +217,22 @@
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="col-md-3 control-label">Android<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices1" value="0" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Windows<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices2" value="0" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="col-md-3 control-label"><spring:message code="pixsign.org.storage"/><span class="required">*</span></label>
 										<div class="col-md-9">
 											<div class="input-icon right">

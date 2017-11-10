@@ -428,8 +428,8 @@ public class PageServiceImpl implements PageService {
 						}
 					}
 				}
-				if ((pagezone.getType() == Pagezone.Type_Text || pagezone.getType() == Pagezone.Type_Button)
-						&& pagezone.getFontfamily().length() > 0) {
+				if ((pagezone.getType() == Pagezone.Type_Text || pagezone.getType() == Pagezone.Type_Scroll
+						|| pagezone.getType() == Pagezone.Type_Button) && pagezone.getFontfamily().length() > 0) {
 					String font = CONFIG_FONTS.get(pagezone.getFontfamily());
 					if (font != null && fontList.indexOf(font) < 0) {
 						logger.info("Copy one font, family={}, file={}", pagezone.getFontfamily(), font);

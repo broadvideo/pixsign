@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="PageEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -25,12 +25,13 @@
 					<h4 class="modal-title"><spring:message code="pixsign.page"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
+					<form id="PageEditForm" class="form-horizontal" data-async data-target="#PageEditModal" method="POST">
 						<input type="hidden" name="page.pageid" value="0" />
 						<input type="hidden" name="page.homepageid" value="0" />
 						<input type="hidden" name="page.touchflag" value="0" />
 						<input type="hidden" name="page.homeflag" value="1" />
 						<input type="hidden" name="page.status" value="1" />
+						<input type="hidden" name="page.branchid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span
@@ -50,7 +51,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group hide-update">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.templateflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -865,7 +866,18 @@
 							<form id="ScrollForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label">内容来源</label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="sourcetype" value="0" checked> 自定义
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="sourcetype" value="1"> 自动生成
+											</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="content"></textarea>
 										</div>
@@ -937,21 +949,28 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.page"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="PageModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add">
-										<spring:message code="global.add"/> <i class="fa fa-plus"></i>
-									</button>
+						<div class="portlet-body" id="PagePortlet">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-10">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button privilegeid="101010" class="btn green pix-add">
+												<spring:message code="global.add"/> <i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+									<table id="PageTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -985,11 +1004,11 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-page.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-page-design.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page-design.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
@@ -997,7 +1016,8 @@ var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
+	PixData.init('${locale}');
+	PageModule.init();
 });
 
 </script>

@@ -18,8 +18,6 @@ public interface DeviceService {
 
 	public Device selectByTerminalid(String terminalid);
 
-	public List<Device> selectByOrgtype(String orgtype);
-
 	public void addDevice(Device device);
 
 	public void updateDevice(Device device);

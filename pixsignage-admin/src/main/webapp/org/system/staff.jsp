@@ -100,16 +100,23 @@
 								<a href="javascript:;" onClick="StaffModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+						<div class="portlet-body" id="StaffPortlet">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-10">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+										</div>
+									</div>
+									<table id="StaffTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="StaffTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -136,6 +143,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/system/staff.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {

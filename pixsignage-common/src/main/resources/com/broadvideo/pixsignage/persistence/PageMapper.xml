@@ -12,6 +12,7 @@
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="limitflag" property="limitflag" jdbcType="CHAR" />
+    <result column="privilegeflag" property="privilegeflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
@@ -35,6 +36,7 @@
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="limitflag" property="limitflag" jdbcType="CHAR" />
+    <result column="privilegeflag" property="privilegeflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
@@ -48,7 +50,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, touchflag, 
+    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
     homeflag, homepageid, homeidletime, status, description, createtime, updatetime, 
     createstaffid
   </sql>
@@ -123,13 +125,15 @@
     </selectKey>
     insert into page (orgid, branchid, templateid, 
       name, snapshot, ratio, 
-      height, width, limitflag, touchflag, 
+      height, width, limitflag, 
+      privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
       status, description, createtime, 
       updatetime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
-      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
+      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
+      #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
@@ -166,6 +170,9 @@
       </if>
       <if test="limitflag != null" >
         limitflag,
+      </if>
+      <if test="privilegeflag != null" >
+        privilegeflag,
       </if>
       <if test="touchflag != null" >
         touchflag,
@@ -222,6 +229,9 @@
       </if>
       <if test="limitflag != null" >
         #{limitflag,jdbcType=CHAR},
+      </if>
+      <if test="privilegeflag != null" >
+        #{privilegeflag,jdbcType=CHAR},
       </if>
       <if test="touchflag != null" >
         #{touchflag,jdbcType=CHAR},
@@ -282,6 +292,9 @@
       <if test="limitflag != null" >
         limitflag = #{limitflag,jdbcType=CHAR},
       </if>
+      <if test="privilegeflag != null" >
+        privilegeflag = #{privilegeflag,jdbcType=CHAR},
+      </if>
       <if test="touchflag != null" >
         touchflag = #{touchflag,jdbcType=CHAR},
       </if>
@@ -323,6 +336,7 @@
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
       limitflag = #{limitflag,jdbcType=CHAR},
+      privilegeflag = #{privilegeflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       homeflag = #{homeflag,jdbcType=CHAR},
       homepageid = #{homepageid,jdbcType=INTEGER},

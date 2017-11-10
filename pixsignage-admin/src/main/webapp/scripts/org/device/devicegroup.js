@@ -76,7 +76,7 @@ var DevicegroupModule = function () {
 						url : 'devicegroup!delete.action',
 						cache: false,
 						data : {
-							devicegroupid: _devicegroup.deviceid,
+							devicegroupid: _devicegroup.devicegroupid,
 						},
 						success : function(data, status) {
 							if (data.errorcode == 0) {

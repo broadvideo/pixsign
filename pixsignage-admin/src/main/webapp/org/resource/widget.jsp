@@ -71,7 +71,7 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.widget"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="SteamModule.refresh();" class="reload"></a>
+								<a href="javascript:;" onClick="WidgetModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body" id="WidgetPortlet">

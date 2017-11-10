@@ -52,7 +52,7 @@ public class MedialistAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -66,7 +66,7 @@ public class MedialistAction extends BaseDatatableAction {
 			medialistService.addMedialist(medialist);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doAdd exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -78,7 +78,7 @@ public class MedialistAction extends BaseDatatableAction {
 			medialistService.updateMedialist(medialist);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doUpdate exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -90,7 +90,7 @@ public class MedialistAction extends BaseDatatableAction {
 			medialistService.deleteMedialist("" + medialist.getMedialistid());
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doDelete exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -108,7 +108,7 @@ public class MedialistAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doDtlList exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -120,7 +120,7 @@ public class MedialistAction extends BaseDatatableAction {
 			medialistService.syncMedialistdtlList(medialist, medialistdtls);
 			return SUCCESS;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error("MedialistAction doDtlSync exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

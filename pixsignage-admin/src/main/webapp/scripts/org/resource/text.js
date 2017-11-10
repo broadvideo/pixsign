@@ -22,6 +22,7 @@ var TextModule = function () {
 			'bServerSide' : true,
 			'sAjaxSource' : 'text!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
+			                {'sTitle' : common.view.status, 'mData' : 'status', 'bSortable' : false, 'sWidth' : '10%' },
 							{'sTitle' : common.view.text, 'mData' : 'text', 'bSortable' : false, 'sWidth' : '65%', 'sClass': 'autowrap' },
 							{'sTitle' : '', 'mData' : 'textid', 'bSortable' : false, 'sWidth' : '10%' },
 							{'sTitle' : '', 'mData' : 'textid', 'bSortable' : false, 'sWidth' : '10%' }],
@@ -29,8 +30,13 @@ var TextModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(2)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+				if (aData.status == 0) {
+					$('td:eq(1)', nRow).html('<span class="label label-sm label-default">' + common.view.invalid + '</span>');
+				} else if (aData.status == 1) {
+					$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.valid + '</span>');
+				}
+				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 

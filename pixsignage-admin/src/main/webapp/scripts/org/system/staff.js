@@ -1,5 +1,6 @@
 var StaffModule = function () {
 	var _staff = {};
+	this.StaffTree = new BranchTree($('#StaffPortlet'));
 
 	var init = function () {
 		initStaffTable();
@@ -41,6 +42,9 @@ var StaffModule = function () {
 				buttonhtml += '</div>';
 				$('td:eq(4)', nRow).html(buttonhtml);
 				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':StaffTree.branchid });
 			}
 		});
 		$('#StaffTable_wrapper').addClass('form-inline');

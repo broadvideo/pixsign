@@ -101,6 +101,8 @@ public class Pagezone {
 
 	private String animationclick;
 
+	private String sourcetype;
+
 	private String content;
 
 	private Diy diy;
@@ -451,6 +453,14 @@ public class Pagezone {
 
 	public void setAnimationclick(String animationclick) {
 		this.animationclick = animationclick;
+	}
+
+	public String getSourcetype() {
+		return sourcetype;
+	}
+
+	public void setSourcetype(String sourcetype) {
+		this.sourcetype = sourcetype;
 	}
 
 	public String getContent() {

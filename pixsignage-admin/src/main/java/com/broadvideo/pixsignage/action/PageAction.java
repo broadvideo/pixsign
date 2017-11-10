@@ -87,7 +87,6 @@ public class PageAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			page.setOrgid(getLoginStaff().getOrgid());
-			page.setBranchid(getLoginStaff().getBranchid());
 			page.setCreatestaffid(getLoginStaff().getStaffid());
 			String frompageid = getParameter("frompageid");
 			if (frompageid != null) {

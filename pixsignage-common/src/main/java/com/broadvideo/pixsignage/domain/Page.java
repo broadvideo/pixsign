@@ -26,6 +26,8 @@ public class Page {
 
 	private String limitflag;
 
+	private String privilegeflag;
+
 	private String touchflag;
 
 	private String homeflag;
@@ -49,6 +51,8 @@ public class Page {
 	private List<Pagezone> pagezones;
 
 	private List<Page> subpages;
+
+	private List<Staff> staffs;
 
 	public Integer getPageid() {
 		return pageid;
@@ -128,6 +132,14 @@ public class Page {
 
 	public void setLimitflag(String limitflag) {
 		this.limitflag = limitflag;
+	}
+
+	public String getPrivilegeflag() {
+		return privilegeflag;
+	}
+
+	public void setPrivilegeflag(String privilegeflag) {
+		this.privilegeflag = privilegeflag;
 	}
 
 	public String getTouchflag() {
@@ -239,5 +251,13 @@ public class Page {
 
 	public void setSubpages(List<Page> subpages) {
 		this.subpages = subpages;
+	}
+
+	public List<Staff> getStaffs() {
+		return staffs;
+	}
+
+	public void setStaffs(List<Staff> staffs) {
+		this.staffs = staffs;
 	}
 }
