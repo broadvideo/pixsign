@@ -82,6 +82,10 @@ var PixPage = function () {
 					allmodules.push(routeguide);
 					diymodules.push(routeguide);
 				}
+			} else if (zone.type == '31') {
+				//Meeting Zone
+				var meeting = new Meeting($(inner_div), zone, scalew, scaleh);
+				allmodules.push(meeting);
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allmodules.push(otherzone);

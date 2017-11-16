@@ -43,6 +43,8 @@ public class Org {
 
 	private String diyflag;
 
+	private String meetingflag;
+
 	private String videoflag;
 
 	private String imageflag;
@@ -249,6 +251,14 @@ public class Org {
 
 	public void setDiyflag(String diyflag) {
 		this.diyflag = diyflag;
+	}
+
+	public String getMeetingflag() {
+		return meetingflag;
+	}
+
+	public void setMeetingflag(String meetingflag) {
+		this.meetingflag = meetingflag;
 	}
 
 	public String getVideoflag() {

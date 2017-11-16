@@ -1114,6 +1114,7 @@
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
+var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

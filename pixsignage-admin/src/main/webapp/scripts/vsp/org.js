@@ -410,6 +410,7 @@ var OrgModule = function () {
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
 			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
@@ -452,6 +453,7 @@ var OrgModule = function () {
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
 			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');

@@ -574,6 +574,7 @@ var PageModule = function () {
 						_design.Zone = null;
 						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
+						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.zonebtns').css('display', (_design.Object.limitflag == 0)? '':'none');
 						$('#PageModal').modal();
 					} else {

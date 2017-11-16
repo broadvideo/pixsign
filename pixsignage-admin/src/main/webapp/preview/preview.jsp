@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="module/home-school/home-school.css"/>
 	<link rel="stylesheet" href="module/exam-notice/exam-notice.css"/>
 	<link rel="stylesheet" href="module/an-capacity/animate-ext.css"/>
+	<link rel="stylesheet" href="module/meeting/meeting.css"/>
 	
 	<link rel="stylesheet" href="pixpage/pixpage.css"/>
 </head>
@@ -45,6 +46,7 @@
 	<script src="module/home-school/index.js"></script>
 	<script src="module/exam-notice/index.js"></script>
 	<script src="module/an-capacity/an-capacity.js"></script>
+	<script src="module/meeting/index.js"></script>
 
 <%
 	String content = new String(request.getParameter("content").getBytes("ISO-8859-1"), "UTF-8");

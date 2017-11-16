@@ -42,6 +42,17 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.privilegeflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="page.privilegeflag" value="0" checked> <spring:message code="pixsign.prop.privilegeflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="page.privilegeflag" value="1"> <spring:message code="pixsign.prop.privilegeflag_1"/>
+									</label>
+								</div>
+							</div>
 							<div class="form-group hide-update">
 								<label class="control-label col-md-3"><spring:message code="pixsign.prop.ratio"/></label>
 								<div class="col-md-9">
@@ -135,6 +146,9 @@
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl" zonetype="31">
+								<i class="fa fa-arrows"></i><div>会议日程</div>
 							</a>
 						</div>
 					</div>
@@ -261,7 +275,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>
@@ -343,7 +357,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12">
+								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">表格设置</a>
@@ -702,7 +716,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default">
+								<div class="panel panel-default zone-ctl zonetype-2 zonetype-7">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse10">动画效果</a>
@@ -1012,6 +1026,7 @@
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
+var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

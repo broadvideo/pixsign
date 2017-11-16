@@ -245,6 +245,7 @@ var TemplateModule = function () {
 						_design.Zone = null;
 						$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
 						$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('#PageModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);

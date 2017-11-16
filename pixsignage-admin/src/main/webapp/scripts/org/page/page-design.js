@@ -24,7 +24,8 @@ var PageDesignModule = function (mode) {
 		ZoneLimits['14'] = 1;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['21'] = 1;
-
+		ZoneLimits['31'] = 1;
+		
 		initEvent();
 	};
 
@@ -186,8 +187,8 @@ var PageDesignModule = function (mode) {
 				var p_element = document.createElement('p');
 				p_element.className = 'clstextedit';
 				$(inner_div).append(p_element);
-			} else if (pagezone.type == 11 || pagezone.type == 12) {
-				//CalendarZone
+			} else if (pagezone.type == 11 || pagezone.type == 12 || pagezone.type == 31) {
+				//CalendarZone & MeetingZone
 				var table = document.createElement('table');
 				$(inner_div).append(table);
 			} else if (pagezone.type == 21) {
@@ -402,7 +403,7 @@ var PageDesignModule = function (mode) {
 					text_val = text_val.replace(/&nbsp;/g, ' ');
 				}
 				$(pagezoneDiv).find('p').html(text_val);
-			} else if (pagezone.type == 11 || pagezone.type == 12) {
+			} else if (pagezone.type == 11 || pagezone.type == 12 || pagezone.type == 31) {
 				var table = $(pagezoneDiv).find('table');
 				$(table).attr('width', '100%');
 				$(table).attr('height', '100%');
@@ -425,7 +426,7 @@ var PageDesignModule = function (mode) {
 						}
 					}
 					$(pagezoneDiv).find('tr td:first').attr('width', '30%');
-				} else {
+				} else if (pagezone.type == 12) {
 					for (var row=0; row<pagezone.rows; row++) {
 						var tr_element = document.createElement('tr');
 						$(table).append(tr_element);
@@ -447,6 +448,23 @@ var PageDesignModule = function (mode) {
 							}
 						}
 					}
+				} else if (pagezone.type == 31) {
+					for (var row=0; row<pagezone.rows; row++) {
+						var tr_element = document.createElement('tr');
+						$(table).append(tr_element);
+						for (var col=0; col<pagezone.cols; col++) {
+							var td_element = document.createElement('td');
+							$(tr_element).append(td_element);
+							if (col == 0 && row < 2) {
+								$(td_element).html('0' + (row+8) + ':00');
+							} else if (col == 0 && row >=2) {
+								$(td_element).html('' + (row+8) + ':00');
+							} else {
+								$(td_element).html('' + row + col);
+							}
+						}
+					}
+					$(pagezoneDiv).find('tr td:first').attr('width', '30%');
 				}
 				$(pagezoneDiv).find('td').css({
 					'border-width': Math.ceil(pagezone.rulewidth / PageScale) + 'px', 
@@ -1490,6 +1508,9 @@ var PageDesignModule = function (mode) {
 			} else if (pagezone.type == 12) {
 				pagezone.rows = 9;
 				pagezone.cols = 6;
+			} else if (pagezone.type == 31) {
+				pagezone.rows = 5;
+				pagezone.cols = 3;
 			} else {
 				pagezone.rows = 1;
 				pagezone.cols = 1;

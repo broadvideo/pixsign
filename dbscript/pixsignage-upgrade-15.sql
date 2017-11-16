@@ -13,6 +13,9 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table vsp add meetingflag char(1) default '0';
+alter table org add meetingflag char(1) default '0';
+
 alter table page add privilegeflag char(1) default '0';
 
 create table staffpage( 

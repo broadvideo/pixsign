@@ -60,10 +60,13 @@ var PageModule = function () {
 				}
 				pagehtml += '</div></a>';
 				
-				pagehtml += '<div privilegeid="101010">';
+				pagehtml += '<div class="util-btn-margin-bottom-5">';
 				pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs green pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+				if (aData.privilegeflag == 1) {
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs purple pix-privilege"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
+				}
 				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				pagehtml += '</div>';
 
@@ -383,6 +386,7 @@ var PageModule = function () {
 						_design.Zone = null;
 						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
+						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.zonebtns').css('display', (_design.Object.limitflag == 0)? '':'none');
 						$('#PageModal').modal();
 					} else {

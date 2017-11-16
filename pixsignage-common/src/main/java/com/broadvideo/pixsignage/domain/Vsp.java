@@ -32,6 +32,8 @@ public class Vsp {
 
 	private String diyflag;
 
+	private String meetingflag;
+
 	private String streamflag;
 
 	private String dvbflag;
@@ -160,6 +162,14 @@ public class Vsp {
 
 	public void setDiyflag(String diyflag) {
 		this.diyflag = diyflag;
+	}
+
+	public String getMeetingflag() {
+		return meetingflag;
+	}
+
+	public void setMeetingflag(String meetingflag) {
+		this.meetingflag = meetingflag;
 	}
 
 	public String getStreamflag() {

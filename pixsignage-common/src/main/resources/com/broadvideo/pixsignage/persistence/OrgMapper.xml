@@ -19,6 +19,7 @@
     <result column="flowrateflag" property="flowrateflag" jdbcType="CHAR" />
     <result column="tagflag" property="tagflag" jdbcType="CHAR" />
     <result column="diyflag" property="diyflag" jdbcType="CHAR" />
+    <result column="meetingflag" property="meetingflag" jdbcType="CHAR" />
     <result column="videoflag" property="videoflag" jdbcType="CHAR" />
     <result column="imageflag" property="imageflag" jdbcType="CHAR" />
     <result column="textflag" property="textflag" jdbcType="CHAR" />
@@ -59,7 +60,7 @@
   
   <sql id="Base_Column_List" >
     orgid, vspid, topbranchid, name, code, status, bundleflag, pageflag, reviewflag, touchflag, liftflag, 
-    calendarflag, sscreenflag, mscreenflag, flowrateflag, tagflag, diyflag, videoflag, imageflag, textflag, 
+    calendarflag, sscreenflag, mscreenflag, flowrateflag, tagflag, diyflag, meetingflag, videoflag, imageflag, textflag, 
     streamflag, dvbflag, videoinflag, widgetflag, expireflag, expiretime, maxdevices, currentdevices, currentdeviceidx, 
     maxdevices1, maxdevices2, maxstorage, currentstorage, copyright, description, backupvideoid, powerflag, 
     poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
@@ -123,7 +124,7 @@
       pageflag, reviewflag, touchflag, 
       liftflag, calendarflag, sscreenflag, 
       mscreenflag, flowrateflag, tagflag, 
-      diyflag, videoflag, 
+      diyflag, meetingflag, videoflag, 
       imageflag, textflag, streamflag, 
       dvbflag, videoinflag, widgetflag, 
       expireflag, expiretime, maxdevices, 
@@ -141,7 +142,7 @@
       #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{sscreenflag,jdbcType=CHAR}, 
       #{mscreenflag,jdbcType=CHAR}, #{flowrateflag,jdbcType=CHAR}, #{tagflag,jdbcType=CHAR}, 
-      #{diyflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
+      #{diyflag,jdbcType=CHAR}, #{meetingflag,jdbcType=CHAR}, #{videoflag,jdbcType=CHAR}, 
       #{imageflag,jdbcType=CHAR}, #{textflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, 
       #{dvbflag,jdbcType=CHAR}, #{videoinflag,jdbcType=CHAR}, #{widgetflag,jdbcType=CHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
@@ -208,6 +209,12 @@
       </if>
       <if test="diyflag != null" >
         diyflag,
+      </if>
+      <if test="diyflag != null" >
+        diyflag,
+      </if>
+      <if test="meetingflag != null" >
+        meetingflag,
       </if>
       <if test="videoflag != null" >
         videoflag,
@@ -360,6 +367,9 @@
       </if>
       <if test="diyflag != null" >
         #{diyflag,jdbcType=CHAR},
+      </if>
+      <if test="meetingflag != null" >
+        #{meetingflag,jdbcType=CHAR},
       </if>
       <if test="videoflag != null" >
         #{videoflag,jdbcType=CHAR},
@@ -516,6 +526,9 @@
       <if test="diyflag != null" >
         diyflag = #{diyflag,jdbcType=CHAR},
       </if>
+      <if test="meetingflag != null" >
+        meetingflag = #{meetingflag,jdbcType=CHAR},
+      </if>
       <if test="videoflag != null" >
         videoflag = #{videoflag,jdbcType=CHAR},
       </if>
@@ -639,6 +652,7 @@
       flowrateflag = #{flowrateflag,jdbcType=CHAR},
       tagflag = #{tagflag,jdbcType=CHAR},
       diyflag = #{diyflag,jdbcType=CHAR},
+      meetingflag = #{meetingflag,jdbcType=CHAR},
       videoflag = #{videoflag,jdbcType=CHAR},
       imageflag = #{imageflag,jdbcType=CHAR},
       textflag = #{textflag,jdbcType=CHAR},
