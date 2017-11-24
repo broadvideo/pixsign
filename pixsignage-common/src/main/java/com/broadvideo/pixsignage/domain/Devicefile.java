@@ -31,8 +31,6 @@ public class Devicefile {
 
 	private Date updatetime;
 
-	private Device device;
-
 	private Video video;
 
 	private Image image;
@@ -121,14 +119,6 @@ public class Devicefile {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
-	}
-
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
 	}
 
 	public Video getVideo() {

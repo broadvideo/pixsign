@@ -114,6 +114,80 @@
     and homepageid = #{homepageid}
   </select>
 
+  <select id="selectStaffPage" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and s.staffid = #{staffid}
+    and sp.pageid = #{pageid}
+  </select>
+
+  <select id="selectStaffCount" resultType="Integer" >
+    select count(1)
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectStaff2SelectCount" resultType="Integer" >
+    select count(1)
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff2Select" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.* 
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by b.branchid desc, s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="addStaff" >
+    insert into staffpage(staffid, pageid)
+    values(#{staffid}, #{pageid})
+  </delete>
+  
+  <delete id="deleteStaff" >
+    delete from staffpage
+    where staffid = #{staffid}
+    and pageid = #{pageid}
+  </delete>
+  
   <delete id="deleteByPrimaryKey" >
     update page set status='9'
     where pageid = #{pageid}

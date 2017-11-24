@@ -40,7 +40,7 @@ public class BranchServiceImpl implements BranchService {
 		for (int i = 0; i < deviceids.length; i++) {
 			deviceMapper.updateBranch(deviceids[i], "" + branch.getBranchid());
 		}
-		deviceMapper.checkDevicegroup();
+		// deviceMapper.checkDevicegroup();
 	}
 
 	@Transactional

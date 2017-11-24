@@ -448,6 +448,10 @@
 													<button class="btn blue pix-ucancel"><spring:message code="pixsign.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
 												</div>
 											</div>
+											<div class="row">
+												<div class="col-md-6 col-sm-12"><input type="hidden" id="OnlineSelect" class="form-control select2 input-medium"></div>
+											</div>
+											<br/>
 											<table id="DeviceTable" class="table table-striped table-bordered table-hover">
 												<thead></thead>
 												<tbody></tbody>

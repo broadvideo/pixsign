@@ -93,6 +93,8 @@ public class Pagezone {
 
 	private Integer touchpageid;
 
+	private String fixflag;
+
 	private Integer diyactionid;
 
 	private String animationinit;
@@ -421,6 +423,14 @@ public class Pagezone {
 
 	public void setTouchpageid(Integer touchpageid) {
 		this.touchpageid = touchpageid;
+	}
+
+	public String getFixflag() {
+		return fixflag;
+	}
+
+	public void setFixflag(String fixflag) {
+		this.fixflag = fixflag;
 	}
 
 	public Integer getDiyactionid() {

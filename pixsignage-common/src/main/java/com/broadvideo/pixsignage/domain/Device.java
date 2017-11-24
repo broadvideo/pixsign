@@ -178,11 +178,11 @@ public class Device {
 	}
 
 	public String getPosition() {
-		return position == null ? "" : position.trim();
+		return position;
 	}
 
 	public void setPosition(String position) {
-		this.position = position == null ? null : position.trim();
+		this.position = position;
 	}
 
 	public String getIp() {

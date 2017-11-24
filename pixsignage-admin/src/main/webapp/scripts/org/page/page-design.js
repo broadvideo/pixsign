@@ -1491,6 +1491,7 @@ var PageDesignModule = function (mode) {
 			pagezone.lineheight = 80;
 			pagezone.touchtype = '9';
 			pagezone.touchpageid = 0;
+			pagezone.fixflag = '1';
 			pagezone.content = '';
 			pagezone.pagezonedtls = [];
 			if (pagezone.type == 5) {

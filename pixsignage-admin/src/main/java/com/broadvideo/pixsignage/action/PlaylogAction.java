@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.persistence.DailyplaylogMapper;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.MonthlyplaylogMapper;
 
 @SuppressWarnings("serial")
@@ -30,6 +32,8 @@ public class PlaylogAction extends BaseDatatableAction {
 	private String downloadname;
 	private InputStream inputStream;
 
+	@Autowired
+	private DeviceMapper deviceMapper;
 	@Autowired
 	private DailyplaylogMapper dailyplaylogMapper;
 	@Autowired
@@ -194,6 +198,8 @@ public class PlaylogAction extends BaseDatatableAction {
 			String day = getParameter("day");
 			day = day.replace("-", "");
 
+			Device device = deviceMapper.selectByPrimaryKey(deviceid);
+
 			HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet sheet = workbook.createSheet();
 			HSSFCellStyle style = workbook.createCellStyle();
@@ -206,27 +212,31 @@ public class PlaylogAction extends BaseDatatableAction {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> hash = list.get(i);
 				row = sheet.createRow(count);
+				cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(day);
+				cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getName());
+				cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getPosition());
 				if (hash.get("mediatype").toString().equals("1")) {
-					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("Video");
-					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
 					ArrayList<HashMap> videos = (ArrayList<HashMap>) hash.get("video");
 					if (videos.size() > 0) {
 						cell.setCellValue(videos.get(0).get("name").toString());
 					}
-					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
-					cell.setCellValue(hash.get("amount").toString());
 				} else {
-					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("Image");
-					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
 					ArrayList<HashMap> images = (ArrayList<HashMap>) hash.get("image");
 					if (images.size() > 0) {
 						cell.setCellValue(images.get(0).get("name").toString());
 					}
-					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
-					cell.setCellValue(hash.get("amount").toString());
 				}
+				cell = row.createCell(5, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(hash.get("amount").toString());
 				count++;
 			}
 
@@ -256,6 +266,8 @@ public class PlaylogAction extends BaseDatatableAction {
 			String month = getParameter("month");
 			month = month.replace("-", "");
 
+			Device device = deviceMapper.selectByPrimaryKey(deviceid);
+
 			HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet sheet = workbook.createSheet();
 			HSSFCellStyle style = workbook.createCellStyle();
@@ -268,23 +280,27 @@ public class PlaylogAction extends BaseDatatableAction {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> hash = list.get(i);
 				row = sheet.createRow(count);
+				cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(month);
+				cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getName());
+				cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getPosition());
 				if (hash.get("mediatype").toString().equals("1")) {
-					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("Video");
-					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
 					ArrayList<HashMap> videos = (ArrayList<HashMap>) hash.get("video");
 					cell.setCellValue(videos.get(0).get("name").toString());
-					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
-					cell.setCellValue(hash.get("amount").toString());
 				} else {
-					cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("Image");
-					cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+					cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
 					ArrayList<HashMap> images = (ArrayList<HashMap>) hash.get("image");
 					cell.setCellValue(images.get(0).get("name").toString());
-					cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
-					cell.setCellValue(hash.get("amount").toString());
 				}
+				cell = row.createCell(5, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(hash.get("amount").toString());
 				count++;
 			}
 

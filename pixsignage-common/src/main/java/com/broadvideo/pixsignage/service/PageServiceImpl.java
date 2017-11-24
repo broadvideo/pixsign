@@ -27,6 +27,7 @@ import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
+import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
@@ -62,8 +63,48 @@ public class PageServiceImpl implements PageService {
 	}
 
 	public List<Page> selectList(String orgid, String branchid, String touchflag, String homeflag, String search,
-			String start, String length) {
-		return pageMapper.selectList(orgid, branchid, touchflag, homeflag, search, start, length);
+			String start, String length, Staff staff) {
+		List<Page> pageList = pageMapper.selectList(orgid, branchid, touchflag, homeflag, search, start, length);
+		for (Page page : pageList) {
+			page.setEditflag("1");
+			if (page.getPrivilegeflag().equals("1") && !staff.getLoginname().equals("admin")
+					&& !staff.getLoginname().startsWith("admin@")
+					&& staff.getStaffid().intValue() != page.getCreatestaffid().intValue()) {
+				Staff s = pageMapper.selectStaffPage("" + staff.getStaffid(), "" + page.getPageid());
+				if (s == null) {
+					page.setEditflag("0");
+				}
+			}
+			List<Page> subpages = page.getSubpages();
+			for (Page subpage : subpages) {
+				subpage.setEditflag("1");
+				if (subpage.getPrivilegeflag().equals("1") && !staff.getLoginname().equals("admin")
+						&& !staff.getLoginname().startsWith("admin@")
+						&& staff.getStaffid().intValue() != subpage.getCreatestaffid().intValue()) {
+					Staff s = pageMapper.selectStaffPage("" + staff.getStaffid(), "" + subpage.getPageid());
+					if (s == null) {
+						subpage.setEditflag("0");
+					}
+				}
+			}
+		}
+		return pageList;
+	}
+
+	public int selectStaffCount(String pageid, String search) {
+		return pageMapper.selectStaffCount(pageid, search);
+	}
+
+	public List<Staff> selectStaff(String pageid, String search, String start, String length) {
+		return pageMapper.selectStaff(pageid, search, start, length);
+	}
+
+	public int selectStaff2SelectCount(String pageid, String search) {
+		return pageMapper.selectStaff2SelectCount(pageid, search);
+	}
+
+	public List<Staff> selectStaff2Select(String pageid, String search, String start, String length) {
+		return pageMapper.selectStaff2Select(pageid, search, start, length);
 	}
 
 	@Transactional
@@ -508,4 +549,15 @@ public class PageServiceImpl implements PageService {
 		out.close();
 	}
 
+	public void addStaffs(Page page, String[] staffids) {
+		for (int i = 0; i < staffids.length; i++) {
+			pageMapper.addStaff("" + page.getPageid(), staffids[i]);
+		}
+	}
+
+	public void deleteStaffs(Page page, String[] staffids) {
+		for (int i = 0; i < staffids.length; i++) {
+			pageMapper.deleteStaff("" + page.getPageid(), staffids[i]);
+		}
+	}
 }

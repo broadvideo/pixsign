@@ -12,7 +12,6 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
-    <association property="device" column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByPrimaryKey" />
     <association property="video" column="{objtype=objtype,videoid=objid}" select="selectVideoid" />
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImageid" />
     <association property="mmediadtl" column="{objtype=objtype,mmediadtlid=objid}" select="selectMmediadtlid" />

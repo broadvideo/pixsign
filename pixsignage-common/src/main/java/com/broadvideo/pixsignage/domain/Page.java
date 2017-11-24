@@ -48,11 +48,11 @@ public class Page {
 
 	private String snapshotdtl;
 
+	private String editflag = "1";
+
 	private List<Pagezone> pagezones;
 
 	private List<Page> subpages;
-
-	private List<Staff> staffs;
 
 	public Integer getPageid() {
 		return pageid;
@@ -226,6 +226,14 @@ public class Page {
 		this.snapshotdtl = snapshotdtl;
 	}
 
+	public String getEditflag() {
+		return editflag;
+	}
+
+	public void setEditflag(String editflag) {
+		this.editflag = editflag;
+	}
+
 	public Long getTimestamp() {
 		if (updatetime != null) {
 			return updatetime.getTime();
@@ -251,13 +259,5 @@ public class Page {
 
 	public void setSubpages(List<Page> subpages) {
 		this.subpages = subpages;
-	}
-
-	public List<Staff> getStaffs() {
-		return staffs;
-	}
-
-	public void setStaffs(List<Staff> staffs) {
-		this.staffs = staffs;
 	}
 }

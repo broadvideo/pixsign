@@ -120,7 +120,7 @@ $('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input
 $('#DeviceTable_wrapper .dataTables_length select').select2();
 $('#DeviceTable').css('width', '100%');
 
-$('#DevicegroupTable').dataTable({
+var devicegroupTable = $('#DevicegroupTable').dataTable({
 	'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 	'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 					[ 10, 25, 50, 100 ] 
@@ -128,10 +128,10 @@ $('#DevicegroupTable').dataTable({
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'devicegroup!list.action',
-	'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
+	'aoColumns' : [ {'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }, 
+					{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
 					{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '25%' },
 					{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '55%' }, 
-					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }, 
 					{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }],
 	'iDisplayLength' : 20,
 	'sPaginationType' : 'bootstrap',
@@ -141,8 +141,12 @@ $('#DevicegroupTable').dataTable({
 		var listhtml = '';
 		for (var i=0; i<aData.devices.length; i++) {
 			listhtml += aData.devices[i].name + ' ';
+			if (i > 6 && i<aData.devices.length-1) {
+				listhtml += '...';
+				break;
+			}
 		}
-		$('td:eq(1)', nRow).html(listhtml);
+		$('td:eq(2)', nRow).html(listhtml);
 		
 		var schedulehtml = '';
 		if (aData.schedules.length > 0) {
@@ -183,10 +187,18 @@ $('#DevicegroupTable').dataTable({
 		} else {
 			schedulehtml = '';
 		}
-		$('td:eq(2)', nRow).html(schedulehtml);
+		$('td:eq(3)', nRow).html(schedulehtml);
 				
-		$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" devicegroupid="' + aData.devicegroupid + '" class="btn default btn-xs blue pix-schedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>');
-		$('td:eq(4)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>');
+		var buttonhtml = '';
+		buttonhtml += '<div class="util-btn-margin-bottom-5">';
+		buttonhtml += '<a href="javascript:;" privilegeid="101010" devicegroupid="' + aData.devicegroupid + '" class="btn default btn-xs blue pix-schedule"><i class="fa fa-calendar-o"></i> ' + common.view.schedule + '</a>';
+		buttonhtml += '<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+		buttonhtml += '</div>';
+		$('td:eq(4)', nRow).html(buttonhtml);
+
+		var rowdetail = '<span class="row-details row-details-close"></span>';
+		$('td:eq(0)', nRow).html(rowdetail);
+		
 
 		return nRow;
 	},
@@ -207,6 +219,30 @@ $('#DevicegroupTable_wrapper .dataTables_length select').addClass('form-control 
 $('#DevicegroupTable_wrapper .dataTables_length select').select2();
 $('#DevicegroupTable').css('width', '100%');
 
+function fnFormatDetails ( oTable, nTr ) {
+	var aData = oTable.fnGetData( nTr );
+	var listhtml = '';
+	for (var i=0; i<aData.devices.length; i++) {
+		listhtml += aData.devices[i].name + ' ';
+	}
+	var sOut = '<table width="100%">';
+	sOut += '<tr><td width="10%">' + common.view.detail + ':</td><td width="90%">' + listhtml + '</td>';
+	sOut += '</tr>';
+	return sOut;
+}
+
+$('#DevicegroupTable').on('click', ' tbody td .row-details', function () {
+	var nTr = $(this).parents('tr')[0];
+	if ( devicegroupTable.fnIsOpen(nTr) ) {
+		/* This row is already open - close it */
+		$(this).addClass('row-details-close').removeClass('row-details-open');
+		devicegroupTable.fnClose( nTr );
+	} else {
+		/* Open this row */				
+		$(this).addClass('row-details-open').removeClass('row-details-close');
+		devicegroupTable.fnOpen( nTr, fnFormatDetails(devicegroupTable, nTr), 'details' );
+	}
+});
 
 $('body').on('click', '.pix-sync', function(event) {
 	var index = $(event.target).attr('data-id');

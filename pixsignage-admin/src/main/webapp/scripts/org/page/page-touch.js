@@ -10,6 +10,7 @@ var PageModule = function () {
 		initPageEvent();
 		initPageEditModal();
 		initPageDesignModal();
+		initStaffPageModal();
 	};
 
 	var refresh = function () {
@@ -50,11 +51,15 @@ var PageModule = function () {
 				} else if (aData.ratio == 2) {
 					pagehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
 				}
-				pagehtml += '<div privilegeid="101010">';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subpage-add"><i class="fa fa-plus"></i> ' + common.view.subpage + '</a>';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-				//pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a> </div>';
+				pagehtml += '<div class="util-btn-margin-bottom-5">';
+				if (aData.editflag == 1) {
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subpage-add"><i class="fa fa-plus"></i> ' + common.view.subpage + '</a>';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				} else {
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+				}
+				pagehtml += '</div>';
 				pagehtml += '</div>';
 				pagehtml += '</div>';
 
@@ -67,10 +72,15 @@ var PageModule = function () {
 					pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				}
 				pagehtml += '</div></a>';
-				pagehtml += '<div privilegeid="101010">';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-				pagehtml += '</div>';
+				if (aData.editflag == 1) {
+					pagehtml += '<div class="util-btn-margin-bottom-5">';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+					if (aData.privilegeflag == 1) {
+						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
+					}
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+					pagehtml += '</div>';
+				}
 				pagehtml += '</div>';
 				pagehtml += '<div class="col-md-8 col-xs-6">';
 				for (var i=0; i<aData.subpages.length; i++) {
@@ -86,11 +96,16 @@ var PageModule = function () {
 						pagehtml += '<img src="/pixsigdata' + aData.subpages[i].snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + subthumbwidth + '%" />';
 					}
 					pagehtml += '</div></a>';
-					pagehtml += '<div privilegeid="101010">';
-					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
-					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-					pagehtml += '</div>';
+					if (aData.subpages[i].editflag == 1) {
+						pagehtml += '<div class="util-btn-margin-bottom-5">';
+						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+						if (aData.subpages[i].privilegeflag == 1) {
+							pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
+						}
+						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+						pagehtml += '</div>';
+					}
 					pagehtml += '</div>';
 					if ((i+1) % 4 == 0 || (i+1) == aData.subpages.length) {
 						pagehtml += '</div>';
@@ -575,7 +590,9 @@ var PageModule = function () {
 						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
-						$('.zonebtns').css('display', (_design.Object.limitflag == 0)? '':'none');
+						if (_design.Object.limitflag == 1) {
+							$('.limit-1').css('display', 'none');
+						}
 						$('#PageModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
@@ -639,6 +656,205 @@ var PageModule = function () {
 		});
 
 	}
+	
+	var initStaffPageModal = function () {
+		var pageid = 0;
+		var selectedStaffs1 = [];
+		var selectedStaffs2 = [];
+		
+		$('body').on('click', '.pix-staffpage', function(event) {
+			var index = $(event.target).attr('data-id');
+			var subid = $(event.target).attr('sub-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+				subid = $(event.target).parent().attr('sub-id');
+			}
+			_page = $('#PageTable').dataTable().fnGetData(index);
+			pageid = _page.pageid;
+			if (subid != undefined) {
+				pageid = _page.subpages[subid].pageid;
+			}
+			selectedStaffs1 = [];
+			selectedStaffs2 = [];
+			$('#StaffTable1').dataTable().fnDraw(true);
+			$('#StaffTable2').dataTable().fnDraw(true);
+			$('#StaffPageModal').modal();
+		});
+		
+		//待选择table初始化
+		$('#StaffTable1').dataTable({
+			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ] 
+							],
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'page!liststaff2select.action',
+			'aoColumns' : [ {'sTitle' : '<input type="checkbox" id="CheckAll" />', 'mData' : 'staffid', 'bSortable' : false, 'sWidth' : '10%' }, 
+			                {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '30%' }, 
+							{'sTitle' : common.view.loginname, 'mData' : 'loginname', 'bSortable' : false, 'sWidth' : '30%' }, 
+							{'sTitle' : common.view.branch, 'mData' : 'branch.name', 'bSortable' : false, 'sWidth' : '30%' }],
+			'iDisplayLength' : 20,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
+				if ( $.inArray(aData.staffid, selectedStaffs1) >= 0 ) {
+					$(nRow).addClass('active');
+					$('td:eq(0)', nRow).html('<input type="checkbox" id="StaffCheckA' + aData.staffid + '" checked />');
+				} else {
+					$('td:eq(0)', nRow).html('<input type="checkbox" id="StaffCheckA' + aData.staffid + '" />');
+				}
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'pageid','value':pageid });
+			} 
+		});
+
+		//已加入table初始化
+		$('#StaffTable2').dataTable({
+			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ] 
+							],
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'page!liststaff.action',
+			'aoColumns' : [ {'sTitle' : '<input type="checkbox" id="CheckAll" />', 'mData' : 'staffid', 'bSortable' : false, 'sWidth' : '10%' }, 
+			                {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '30%' }, 
+							{'sTitle' : common.view.loginname, 'mData' : 'loginname', 'bSortable' : false, 'sWidth' : '30%' }, 
+							{'sTitle' : common.view.branch, 'mData' : 'branch.name', 'bSortable' : false, 'sWidth' : '30%' }],
+			'iDisplayLength' : 20,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				if ( $.inArray(aData.staffid, selectedStaffs2) >= 0 ) {
+					$(nRow).addClass('active');
+					$('td:eq(0)', nRow).html('<input type="checkbox" id="StaffCheckB' + aData.staffid + '" checked />');
+				} else {
+					$('td:eq(0)', nRow).html('<input type="checkbox" id="StaffCheckB' + aData.staffid + '" />');
+				}
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'pageid','value':pageid });
+			} 
+		});
+
+		$('#StaffTable1').on('click', 'tr', function () {
+			var row = $('#StaffTable1').dataTable().fnGetData(this);
+			if (row == null) return;
+			var staffid = row.staffid;
+			var index = $.inArray(staffid, selectedStaffs1);
+			if (index >= 0) {
+				selectedStaffs1.splice(index, 1);
+				$('#StaffCheckA'+staffid).prop('checked', false);
+			} else {
+				selectedStaffs1.push(staffid);
+				$('#StaffCheckA'+staffid).prop('checked', true);
+			}
+			$(this).toggleClass('active');
+		});
+		$('#CheckAll', $('#StaffTable1')).on('click', function() {
+			var rows = $("#StaffTable1").dataTable().fnGetNodes();
+			for (var i=0; i<rows.length; i++) {
+				var staffid = $('#StaffTable1').dataTable().fnGetData(rows[i]).staffid;
+				if (this.checked) {
+					$(rows[i]).addClass('active');
+				} else {
+					$(rows[i]).removeClass('active');
+				}
+				$('#StaffCheckA'+staffid).prop('checked', this.checked);
+				var index = $.inArray(staffid, selectedStaffs1);
+				if (index == -1 && this.checked) {
+					selectedStaffs1.push(staffid);
+				} else if (index >= 0 && !this.checked) {
+					selectedStaffs1.splice(index, 1);
+				}
+		    }
+		} );
+
+		$('#StaffTable2').on('click', 'tr', function () {
+			var row = $('#StaffTable2').dataTable().fnGetData(this);
+			if (row == null) return;
+			var staffid = row.staffid;
+			var index = $.inArray(staffid, selectedStaffs2);
+			if (index >= 0) {
+				selectedStaffs2.splice(index, 1);
+				$('#StaffCheckB'+staffid).prop('checked', false);
+			} else {
+				selectedStaffs2.push(staffid);
+				$('#StaffCheckB'+staffid).prop('checked', true);
+			}
+			$(this).toggleClass('active');
+		});
+		$('#CheckAll', $('#StaffTable2')).on('click', function() {
+			var rows = $("#StaffTable2").dataTable().fnGetNodes();
+			for (var i=0; i<rows.length; i++) {
+				var staffid = $('#StaffTable2').dataTable().fnGetData(rows[i]).staffid;
+				if (this.checked) {
+					$(rows[i]).addClass('active');
+				} else {
+					$(rows[i]).removeClass('active');
+				}
+				$('#StaffCheckB'+staffid).prop('checked', this.checked);
+				var index = $.inArray(staffid, selectedStaffs2);
+				if (index == -1 && this.checked) {
+					selectedStaffs2.push(staffid);
+				} else if (index >= 0 && !this.checked) {
+					selectedStaffs2.splice(index, 1);
+				}
+		    }
+		} );
+
+		$('body').on('click', '.pix-addstaff', function(event) {
+			$.ajax({
+				type : 'POST',
+				url : 'page!addstaffs.action',
+				data : '{"page":{"pageid":' + pageid + '}, "staffids":' + $.toJSON(selectedStaffs1) + '}',
+				dataType : 'json',
+				contentType : 'application/json;charset=utf-8',
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						selectedStaffs1 = [];
+						selectedStaffs2 = [];
+						$('#StaffTable1').dataTable()._fnAjaxUpdate();
+						$('#StaffTable2').dataTable()._fnAjaxUpdate();
+						refresh();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
+		});
+
+		$('body').on('click', '.pix-deletestaff', function(event) {
+			$.ajax({
+				type : 'POST',
+				url : 'page!deletestaffs.action',
+				data : '{"page":{"pageid":' + pageid + '}, "staffids":' + $.toJSON(selectedStaffs2) + '}',
+				dataType : 'json',
+				contentType : 'application/json;charset=utf-8',
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						selectedStaffs1 = [];
+						selectedStaffs2 = [];
+						$('#StaffTable1').dataTable()._fnAjaxUpdate();
+						$('#StaffTable2').dataTable()._fnAjaxUpdate();
+						refresh();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
+		});
+	};
 	
 	return {
 		init: init,

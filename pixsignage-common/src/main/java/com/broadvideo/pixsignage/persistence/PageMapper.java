@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.broadvideo.pixsignage.domain.Page;
+import com.broadvideo.pixsignage.domain.Staff;
 
 public interface PageMapper {
 	Page selectByPrimaryKey(@Param(value = "pageid") String pageid);
@@ -18,7 +19,21 @@ public interface PageMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
-	List<Page> selectPageListByPagepkg(@Param(value = "pagepkgid") String pagepkgid);
+	Staff selectStaffPage(@Param(value = "staffid") String staffid, @Param(value = "pageid") String pageid);
+
+	int selectStaffCount(@Param(value = "pageid") String pageid, @Param(value = "search") String search);
+
+	List<Staff> selectStaff(@Param(value = "pageid") String pageid, @Param(value = "search") String search,
+			@Param(value = "start") String start, @Param(value = "length") String length);
+
+	int selectStaff2SelectCount(@Param(value = "pageid") String pageid, @Param(value = "search") String search);
+
+	List<Staff> selectStaff2Select(@Param(value = "pageid") String pageid, @Param(value = "search") String search,
+			@Param(value = "start") String start, @Param(value = "length") String length);
+
+	int addStaff(@Param(value = "pageid") String pageid, @Param(value = "staffid") String staffid);
+
+	int deleteStaff(@Param(value = "pageid") String pageid, @Param(value = "staffid") String staffid);
 
 	int deleteByPrimaryKey(@Param(value = "pageid") String pageid);
 

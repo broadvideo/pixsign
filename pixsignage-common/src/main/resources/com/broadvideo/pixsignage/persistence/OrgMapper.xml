@@ -210,9 +210,6 @@
       <if test="diyflag != null" >
         diyflag,
       </if>
-      <if test="diyflag != null" >
-        diyflag,
-      </if>
       <if test="meetingflag != null" >
         meetingflag,
       </if>

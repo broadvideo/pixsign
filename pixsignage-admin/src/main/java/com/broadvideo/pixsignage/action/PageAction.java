@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Page;
+import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -23,8 +22,7 @@ public class PageAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Page page;
-	private Device[] devices;
-	private Devicegroup[] devicegroups;
+	private String[] staffids;
 
 	@Autowired
 	private PageService pageService;
@@ -51,7 +49,7 @@ public class PageAction extends BaseDatatableAction {
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Page> pageList = pageService.selectList("" + getLoginStaff().getOrgid(), branchid, touchflag, homeflag,
-					search, start, length);
+					search, start, length, getLoginStaff());
 			for (int i = 0; i < pageList.size(); i++) {
 				aaData.add(pageList.get(i));
 			}
@@ -78,6 +76,64 @@ public class PageAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doListStaff() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String start = getParameter("iDisplayStart");
+			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
+			String pageid = getParameter("pageid");
+
+			int count = pageService.selectStaffCount(pageid, search);
+			this.setiTotalRecords(count);
+			this.setiTotalDisplayRecords(count);
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<Staff> staffList = pageService.selectStaff(pageid, search, start, length);
+			for (int i = 0; i < staffList.size(); i++) {
+				aaData.add(staffList.get(i));
+			}
+			this.setAaData(aaData);
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PageAction doListStaff exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doListStaff2Select() {
+		try {
+			this.setsEcho(getParameter("sEcho"));
+			String start = getParameter("iDisplayStart");
+			String length = getParameter("iDisplayLength");
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
+			String pageid = getParameter("pageid");
+
+			int count = pageService.selectStaff2SelectCount(pageid, search);
+			this.setiTotalRecords(count);
+			this.setiTotalDisplayRecords(count);
+
+			List<Object> aaData = new ArrayList<Object>();
+			List<Staff> staffList = pageService.selectStaff2Select(pageid, search, start, length);
+			for (int i = 0; i < staffList.size(); i++) {
+				aaData.add(staffList.get(i));
+			}
+			this.setAaData(aaData);
+
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PageAction doListStaff2Select exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -166,6 +222,30 @@ public class PageAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doAddStaffs() {
+		try {
+			pageService.addStaffs(page, staffids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PageAction doAddStaffs exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doDeleteStaffs() {
+		try {
+			pageService.deleteStaffs(page, staffids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PageAction doDeleteStaffs exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Page getPage() {
 		return page;
 	}
@@ -174,20 +254,12 @@ public class PageAction extends BaseDatatableAction {
 		this.page = page;
 	}
 
-	public Device[] getDevices() {
-		return devices;
+	public String[] getStaffids() {
+		return staffids;
 	}
 
-	public void setDevices(Device[] devices) {
-		this.devices = devices;
-	}
-
-	public Devicegroup[] getDevicegroups() {
-		return devicegroups;
-	}
-
-	public void setDevicegroups(Devicegroup[] devicegroups) {
-		this.devicegroups = devicegroups;
+	public void setStaffids(String[] staffids) {
+		this.staffids = staffids;
 	}
 
 }

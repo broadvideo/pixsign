@@ -93,6 +93,8 @@ public class Templatezone {
 
 	private Integer touchtemplateid;
 
+	private String fixflag;
+
 	private Integer diyactionid;
 
 	private String animationinit;
@@ -419,6 +421,14 @@ public class Templatezone {
 
 	public void setTouchtemplateid(Integer touchtemplateid) {
 		this.touchtemplateid = touchtemplateid;
+	}
+
+	public String getFixflag() {
+		return fixflag;
+	}
+
+	public void setFixflag(String fixflag) {
+		this.fixflag = fixflag;
 	}
 
 	public Integer getDiyactionid() {
