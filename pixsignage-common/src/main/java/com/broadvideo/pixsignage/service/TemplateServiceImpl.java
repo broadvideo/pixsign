@@ -195,6 +195,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setDiyid(fromtemplatezone.getDiyid());
 				templatezone.setTouchtype(fromtemplatezone.getTouchtype());
 				templatezone.setTouchtemplateid(fromtemplatezone.getTouchtemplateid());
+				templatezone.setFixflag(fromtemplatezone.getFixflag());
 				templatezone.setDiyactionid(fromtemplatezone.getDiyactionid());
 				templatezone.setAnimationinit(fromtemplatezone.getAnimationinit());
 				templatezone.setAnimationinitdelay(fromtemplatezone.getAnimationinitdelay());
