@@ -55,7 +55,7 @@
 	    on a.classroomid = cr.classroomid
 	  left join courseschedule cs
 	    on a.coursescheduleid = cs.coursescheduleid
-    where a.orgid = #{orgid}
+    where a.orgid = #{orgid} and st.studentid>0
     <if test="classroomid != null">
       and a.classroomid = #{classroomid}
     </if>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.WxappinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Wxappinfo" >
+    <id column="wxappinfoid" property="wxappinfoid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="appsecret" property="appsecret" jdbcType="VARCHAR" />
+    <result column="accesstoken" property="accesstoken" jdbcType="VARCHAR" />
+    <result column="callbackurl" property="callbackurl" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="encodingaeskey" property="encodingaeskey" jdbcType="VARCHAR" />
+    <result column="encodingtype" property="encodingtype" jdbcType="CHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wxappinfoid, type, appid, appsecret, accesstoken, callbackurl, token, encodingaeskey, 
+    encodingtype, description, createtime, orgid, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wxappinfo
+    where wxappinfoid = #{wxappinfoid,jdbcType=INTEGER}
+  </select>
+  <select id="selectWxappinfo"  resultMap="BaseResultMap">
+    select 
+     <include refid="Base_Column_List" />
+    from wxappinfo
+    where orgid=#{orgid} and type=#{type} and status='1'
+  </select>
+    <select id="selectAllWxappinfo"  resultMap="BaseResultMap">
+    select 
+     <include refid="Base_Column_List" />
+    from wxappinfo
+    where  type=#{type} and status='1'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wxappinfo
+    where wxappinfoid = #{wxappinfoid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Wxappinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="wxappinfoid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wxappinfo (type, appid, appsecret, 
+      accesstoken, callbackurl, token, 
+      encodingaeskey, encodingtype, description, 
+      createtime, orgid, status
+      )
+    values (#{type,jdbcType=CHAR}, #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, 
+      #{accesstoken,jdbcType=VARCHAR}, #{callbackurl,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
+      #{encodingaeskey,jdbcType=VARCHAR}, #{encodingtype,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{orgid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Wxappinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="wxappinfoid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wxappinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="appid != null" >
+        appid,
+      </if>
+      <if test="appsecret != null" >
+        appsecret,
+      </if>
+      <if test="accesstoken != null" >
+        accesstoken,
+      </if>
+      <if test="callbackurl != null" >
+        callbackurl,
+      </if>
+      <if test="token != null" >
+        token,
+      </if>
+      <if test="encodingaeskey != null" >
+        encodingaeskey,
+      </if>
+      <if test="encodingtype != null" >
+        encodingtype,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecret != null" >
+        #{appsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="accesstoken != null" >
+        #{accesstoken,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackurl != null" >
+        #{callbackurl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="encodingaeskey != null" >
+        #{encodingaeskey,jdbcType=VARCHAR},
+      </if>
+      <if test="encodingtype != null" >
+        #{encodingtype,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Wxappinfo" >
+    update wxappinfo
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecret != null" >
+        appsecret = #{appsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="accesstoken != null" >
+        accesstoken = #{accesstoken,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackurl != null" >
+        callbackurl = #{callbackurl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="encodingaeskey != null" >
+        encodingaeskey = #{encodingaeskey,jdbcType=VARCHAR},
+      </if>
+      <if test="encodingtype != null" >
+        encodingtype = #{encodingtype,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where wxappinfoid = #{wxappinfoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Wxappinfo" >
+    update wxappinfo
+    set type = #{type,jdbcType=CHAR},
+      appid = #{appid,jdbcType=VARCHAR},
+      appsecret = #{appsecret,jdbcType=VARCHAR},
+      accesstoken = #{accesstoken,jdbcType=VARCHAR},
+      callbackurl = #{callbackurl,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      encodingaeskey = #{encodingaeskey,jdbcType=VARCHAR},
+      encodingtype = #{encodingtype,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      orgid = #{orgid,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR}
+    where wxappinfoid = #{wxappinfoid,jdbcType=INTEGER}
+  </update>
+</mapper>

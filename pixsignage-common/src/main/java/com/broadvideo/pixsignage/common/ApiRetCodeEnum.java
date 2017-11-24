@@ -10,6 +10,15 @@ public interface ApiRetCodeEnum {
 	public final static Integer NOT_LOGIN=-2;
 	//系统异常
 	public final static Integer EXCEPTION=-3;
+	// 终端不存在
+	public final static Integer TERMINAL_NOT_FOUND = -10000;
+	// 终端未授权操作柜门
+	public final static Integer TERMINAL_NOAUTH_OPT_DOOR = -10001;
+	// 终端未绑定用户
+	public final static Integer TERMINAL_NOBINDING_USER = -10002;
+
+	// 微信公众号缺少配置
+	public final static Integer WXMP_NO_CONFIG = -20000;
 	//认证失败
 	public final static Integer  AUTH_FAIL=-20;
 	

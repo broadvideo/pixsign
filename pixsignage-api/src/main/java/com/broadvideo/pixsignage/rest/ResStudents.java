@@ -61,15 +61,17 @@ public class ResStudents {
 
 	@POST
 	@Path("/{student_id}/attendance")
-	public String doStudentAttend(String request, @Context HttpServletRequest req) {
+	public String doStudentAttend(String request, @Context HttpServletRequest req,
+			@PathParam("student_id") Integer studentId) {
 		if (StringUtils.isBlank(request)) {
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "Request body is empty.");
 
 		}
 		try {
+			logger.info("attendance for studentid:{}", studentId);
 			JSONObject requestJson = new JSONObject(request);
 			String hardId = requestJson.getString("hard_id");
-			Integer studentId = requestJson.getInt("student_id");
+			studentId = requestJson.getInt("student_id");
 			Integer classroomId = requestJson.getInt("classroom_id");
 			Integer courseScheduleId = requestJson.getInt("course_schedule_id");
 			Integer eventId = requestJson.getInt("event_id");

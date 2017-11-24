@@ -156,7 +156,7 @@ $('body').on('click', '.pix-update', function(event) {
 			formdata['examinationroom.str' + name] = moment(item[name]).format('YYYY-MM-DD HH:mm');
 
 		}else{
-		formdata['examinationroom.' + name] = item[name];
+		  formdata['examinationroom.' + name] = item[name];
 		}
 	}
 	refreshForm('MyEditForm');

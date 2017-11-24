@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -43,8 +44,14 @@ public class ResTerminals {
 		try {
 		Device device = deviceMapper.selectByTerminalid(terminalId);
 		String externalId = device.getExternalid();
+			if (StringUtils.isBlank(externalId)) {
+				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "No binding classroom.");
+			}
 		logger.info("terminal_id={} fetch externalid={}", terminalId, externalId);
 		Classroom classroom = classroomService.loadClassroom(NumberUtils.toInt(externalId), device.getOrgid());
+			if (classroom == null) {
+				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "classroom not found.");
+			}
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("retcode", ApiRetCodeEnum.SUCCESS);
 		responseJson.put("message", "success");

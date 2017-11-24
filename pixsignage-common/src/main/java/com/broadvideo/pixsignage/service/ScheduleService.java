@@ -22,4 +22,5 @@ public interface ScheduleService {
 	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
 
 	public JSONObject generateScheduleJson(String deviceid);
+
 }
