@@ -93,6 +93,8 @@ public class Pagezone {
 
 	private Integer touchpageid;
 
+	private String fixflag;
+
 	private Integer diyactionid;
 
 	private String animationinit;
@@ -100,6 +102,8 @@ public class Pagezone {
 	private Integer animationinitdelay;
 
 	private String animationclick;
+
+	private String sourcetype;
 
 	private String content;
 
@@ -421,6 +425,14 @@ public class Pagezone {
 		this.touchpageid = touchpageid;
 	}
 
+	public String getFixflag() {
+		return fixflag;
+	}
+
+	public void setFixflag(String fixflag) {
+		this.fixflag = fixflag;
+	}
+
 	public Integer getDiyactionid() {
 		return diyactionid;
 	}
@@ -451,6 +463,14 @@ public class Pagezone {
 
 	public void setAnimationclick(String animationclick) {
 		this.animationclick = animationclick;
+	}
+
+	public String getSourcetype() {
+		return sourcetype;
+	}
+
+	public void setSourcetype(String sourcetype) {
+		this.sourcetype = sourcetype;
 	}
 
 	public String getContent() {

@@ -12,6 +12,7 @@
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="limitflag" property="limitflag" jdbcType="CHAR" />
+    <result column="privilegeflag" property="privilegeflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
@@ -35,6 +36,7 @@
     <result column="height" property="height" jdbcType="INTEGER" />
     <result column="width" property="width" jdbcType="INTEGER" />
     <result column="limitflag" property="limitflag" jdbcType="CHAR" />
+    <result column="privilegeflag" property="privilegeflag" jdbcType="CHAR" />
     <result column="touchflag" property="touchflag" jdbcType="CHAR" />
     <result column="homeflag" property="homeflag" jdbcType="CHAR" />
     <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
@@ -48,7 +50,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, touchflag, 
+    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
     homeflag, homepageid, homeidletime, status, description, createtime, updatetime, 
     createstaffid
   </sql>
@@ -112,6 +114,80 @@
     and homepageid = #{homepageid}
   </select>
 
+  <select id="selectStaffPage" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and s.staffid = #{staffid}
+    and sp.pageid = #{pageid}
+  </select>
+
+  <select id="selectStaffCount" resultType="Integer" >
+    select count(1)
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectStaff2SelectCount" resultType="Integer" >
+    select count(1)
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff2Select" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
+    select s.* 
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by b.branchid desc, s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="addStaff" >
+    insert into staffpage(staffid, pageid)
+    values(#{staffid}, #{pageid})
+  </delete>
+  
+  <delete id="deleteStaff" >
+    delete from staffpage
+    where staffid = #{staffid}
+    and pageid = #{pageid}
+  </delete>
+  
   <delete id="deleteByPrimaryKey" >
     update page set status='9'
     where pageid = #{pageid}
@@ -123,13 +199,15 @@
     </selectKey>
     insert into page (orgid, branchid, templateid, 
       name, snapshot, ratio, 
-      height, width, limitflag, touchflag, 
+      height, width, limitflag, 
+      privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
       status, description, createtime, 
       updatetime, createstaffid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
-      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
+      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
+      #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
@@ -166,6 +244,9 @@
       </if>
       <if test="limitflag != null" >
         limitflag,
+      </if>
+      <if test="privilegeflag != null" >
+        privilegeflag,
       </if>
       <if test="touchflag != null" >
         touchflag,
@@ -222,6 +303,9 @@
       </if>
       <if test="limitflag != null" >
         #{limitflag,jdbcType=CHAR},
+      </if>
+      <if test="privilegeflag != null" >
+        #{privilegeflag,jdbcType=CHAR},
       </if>
       <if test="touchflag != null" >
         #{touchflag,jdbcType=CHAR},
@@ -282,6 +366,9 @@
       <if test="limitflag != null" >
         limitflag = #{limitflag,jdbcType=CHAR},
       </if>
+      <if test="privilegeflag != null" >
+        privilegeflag = #{privilegeflag,jdbcType=CHAR},
+      </if>
       <if test="touchflag != null" >
         touchflag = #{touchflag,jdbcType=CHAR},
       </if>
@@ -323,6 +410,7 @@
       height = #{height,jdbcType=INTEGER},
       width = #{width,jdbcType=INTEGER},
       limitflag = #{limitflag,jdbcType=CHAR},
+      privilegeflag = #{privilegeflag,jdbcType=CHAR},
       touchflag = #{touchflag,jdbcType=CHAR},
       homeflag = #{homeflag,jdbcType=CHAR},
       homepageid = #{homepageid,jdbcType=INTEGER},

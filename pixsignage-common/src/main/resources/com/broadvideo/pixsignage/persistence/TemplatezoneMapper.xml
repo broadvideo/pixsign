@@ -41,6 +41,7 @@
     <result column="diyid" property="diyid" jdbcType="INTEGER" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchtemplateid" property="touchtemplateid" jdbcType="INTEGER" />
+    <result column="fixflag" property="fixflag" jdbcType="CHAR" />
     <result column="diyactionid" property="diyactionid" jdbcType="INTEGER" />
     <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
     <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
@@ -58,7 +59,7 @@
     transform, bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
     shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, 
     align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchtemplateid, 
-    diyactionid, animationinit, animationinitdelay, animationclick
+    fixflag, diyactionid, animationinit, animationinitdelay, animationclick
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -100,7 +101,7 @@
       lineheight, rows, cols, 
       rules, rulecolor, rulewidth, 
       dateformat, diyid, touchtype, 
-      touchtemplateid, diyactionid, animationinit, 
+      touchtemplateid, fixflag, diyactionid, animationinit, 
       animationinitdelay, animationclick
       content)
     values (#{templateid,jdbcType=INTEGER}, #{hometemplateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
@@ -115,7 +116,7 @@
       #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
       #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
       #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
-      #{touchtemplateid,jdbcType=INTEGER}, #{diyactionid,jdbcType=INTEGER}, #{animationinit,jdbcType=VARCHAR}, 
+      #{touchtemplateid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, #{animationinit,jdbcType=VARCHAR}, 
       #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
@@ -238,6 +239,9 @@
       </if>
       <if test="touchtemplateid != null" >
         touchtemplateid,
+      </if>
+      <if test="fixflag != null" >
+        fixflag,
       </if>
       <if test="diyactionid != null" >
         diyactionid,
@@ -369,6 +373,9 @@
       </if>
       <if test="touchtemplateid != null" >
         #{touchtemplateid,jdbcType=INTEGER},
+      </if>
+      <if test="fixflag != null" >
+        #{fixflag,jdbcType=CHAR},
       </if>
       <if test="diyactionid != null" >
         #{diyactionid,jdbcType=INTEGER},
@@ -504,6 +511,9 @@
       <if test="touchtemplateid != null" >
         touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
       </if>
+      <if test="fixflag != null" >
+        fixflag = #{fixflag,jdbcType=CHAR},
+      </if>
       <if test="diyactionid != null" >
         diyactionid = #{diyactionid,jdbcType=INTEGER},
       </if>
@@ -562,6 +572,7 @@
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      fixflag = #{fixflag,jdbcType=CHAR},
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
@@ -609,6 +620,7 @@
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchtemplateid = #{touchtemplateid,jdbcType=INTEGER}
+      fixflag = #{fixflag,jdbcType=CHAR}
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},

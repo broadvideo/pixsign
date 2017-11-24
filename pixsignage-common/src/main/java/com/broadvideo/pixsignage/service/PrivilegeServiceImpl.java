@@ -54,7 +54,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
+					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED)
+							&& org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
 					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109

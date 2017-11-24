@@ -56,7 +56,11 @@ var DeviceVersionModule = function () {
 				} else if (aData.upgradeflag == 1) {
 					$('td:eq(5)', nRow).html('<span class="label label-sm label-success">' + common.view.upgradeflag_1 + '</span>');
 				} else if (aData.upgradeflag == 2) {
-					$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.upgradeflag_2 + '</span>' + aData.appfile.vname + '(' + aData.appfile.vcode + ')');
+					if (aData.appfile != null) {
+						$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.upgradeflag_2 + '</span>' + aData.appfile.vname + '(' + aData.appfile.vcode + ')');
+					} else {
+						$('td:eq(5)', nRow).html('<span class="label label-sm label-warning">' + common.view.upgradeflag_2 + '</span>');
+					}
 				} else {
 					$('td:eq(5)', nRow).html('');
 				}

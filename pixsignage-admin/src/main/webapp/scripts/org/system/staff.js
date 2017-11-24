@@ -1,5 +1,6 @@
 var StaffModule = function () {
 	var _staff = {};
+	this.StaffTree = new BranchTree($('#StaffPortlet'));
 
 	var init = function () {
 		initStaffTable();
@@ -33,7 +34,7 @@ var StaffModule = function () {
 				buttonhtml += '<div class="util-btn-margin-bottom-5">';
 				if (aData.loginname != 'admin' && aData.loginname != 'admin@' + aData.org.code) {
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + ' </a>';
-					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
+					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				} else {
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-password"><i class="fa fa-lock"></i> ' + common.view.password_reset + '</a>';
@@ -41,6 +42,9 @@ var StaffModule = function () {
 				buttonhtml += '</div>';
 				$('td:eq(4)', nRow).html(buttonhtml);
 				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':StaffTree.branchid });
 			}
 		});
 		$('#StaffTable_wrapper').addClass('form-inline');

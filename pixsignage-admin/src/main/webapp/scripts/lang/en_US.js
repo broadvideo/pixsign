@@ -151,6 +151,7 @@ var common = {
 		play_period: 'Play Period',
 		valid_period: 'Effective Period',
 
+		privilege: 'Privilege',
 		operation: 'Operation',
 		add: 'Add',
 		edit: 'Edit',

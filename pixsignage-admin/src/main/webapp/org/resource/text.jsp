@@ -21,7 +21,6 @@
 					<form id="TextEditForm" class="form-horizontal" method="POST">
 						<input type="hidden" name="text.textid" value="0" />
 						<input type="hidden" name="text.branchid" value="0" />
-						<input type="hidden" name="text.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
@@ -29,6 +28,17 @@
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="text.name" />
 									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.status"/><span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="text.status" value="0"> <spring:message code="global.inactive"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="text.status" value="1" checked> <spring:message code="global.active"/>
+									</label>
 								</div>
 							</div>
 							<div class="form-group">

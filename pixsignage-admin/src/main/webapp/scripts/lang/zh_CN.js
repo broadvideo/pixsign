@@ -151,6 +151,7 @@ var common = {
 		play_period: '播放时间段',
 		valid_period: '生效期',
 
+		privilege: '权限',
 		operation: '操作',
 		add: '新增',
 		edit: '编辑',

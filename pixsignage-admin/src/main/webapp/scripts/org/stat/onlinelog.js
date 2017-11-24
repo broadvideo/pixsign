@@ -20,10 +20,12 @@ var OnlinelogModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'onlinelog!devicestatlist.action',
-			'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
+			'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '15%' },
+							{'sTitle' : common.view.branch, 'mData' : 'branchname', 'bSortable' : false, 'sWidth' : '15%' }, 
+							{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupname', 'bSortable' : false, 'sWidth' : '10%' }, 
 			                {'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '5%' },
-							{'sTitle' : common.view.onlinetime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '25%' },
-							{'sTitle' : common.view.offlinetime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '25%' },
+							{'sTitle' : common.view.onlinetime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
+							{'sTitle' : common.view.offlinetime, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 							{'sTitle' : common.view.onlineduration, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' },
 							{'sTitle' : common.view.detail, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
 			'iDisplayLength' : 20,
@@ -32,23 +34,23 @@ var OnlinelogModule = function () {
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(0)', nRow).html(aData.terminalid + '(' + aData.name + ')');
 				if (aData.onlineflag == 1) {
-					$('td:eq(1)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				} else if (aData.onlineflag == 9) {
-					$('td:eq(1)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				}
-				$('td:eq(2)', nRow).html('');
-				$('td:eq(3)', nRow).html('');
 				$('td:eq(4)', nRow).html('');
+				$('td:eq(5)', nRow).html('');
+				$('td:eq(6)', nRow).html('');
 				if (aData.onlinelog != null && aData.onlinelog.length > 0) {
-					$('td:eq(2)', nRow).html(aData.onlinelog[0].onlinetime);
+					$('td:eq(4)', nRow).html(aData.onlinelog[0].onlinetime);
 					if (aData.onlinelog[0].offlinetime != null) {
-						$('td:eq(3)', nRow).html(aData.onlinelog[0].offlinetime);
-						$('td:eq(4)', nRow).html(PixData.transferIntToTime(aData.onlinelog[0].duration));
+						$('td:eq(5)', nRow).html(aData.onlinelog[0].offlinetime);
+						$('td:eq(6)', nRow).html(PixData.transferIntToTime(aData.onlinelog[0].duration));
 					}
 				}
-				$('td:eq(5)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.more + '</a>');
+				$('td:eq(7)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-detail"><i class="fa fa-list-ul"></i> ' + common.view.more + '</a>');
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 

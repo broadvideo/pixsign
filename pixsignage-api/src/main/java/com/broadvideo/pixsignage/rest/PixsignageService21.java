@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -45,6 +47,7 @@ import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
@@ -58,6 +61,7 @@ import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
@@ -98,6 +102,8 @@ public class PixsignageService21 {
 	private DevicegridMapper devicegridMapper;
 	@Autowired
 	private DevicefilehisMapper devicefilehisMapper;
+	@Autowired
+	private TextMapper textMapper;
 
 	@Autowired
 	private ScheduleService scheduleService;
@@ -177,6 +183,18 @@ public class PixsignageService21 {
 				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
 			}
 
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			int maxDevices = 0;
+			if (ostype.equals("1")) {
+				maxDevices = org.getMaxdevices1();
+			} else if (ostype.equals("2")) {
+				maxDevices = org.getMaxdevices2();
+			}
+			int currentDevices = deviceMapper.selectCountByOstype("" + device.getOrgid(), ostype);
+			if (!device.getStatus().equals("1") && currentDevices >= maxDevices) {
+				return handleResult(1010, "终端授权数已达上限.");
+			}
+
 			try {
 				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
 				String location = ipseeker.getCountry(ip);
@@ -239,7 +257,6 @@ public class PixsignageService21 {
 			}
 			topicJsonArray.put("org-" + device.getOrgid());
 
-			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();
 				// backupvideoJson.put("type", "video");
@@ -248,6 +265,7 @@ public class PixsignageService21 {
 						"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 								+ org.getBackupvideo().getFilepath());
+				backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
 				backupvideoJson.put("file", org.getBackupvideo().getFilename());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
@@ -261,6 +279,7 @@ public class PixsignageService21 {
 							"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 									+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 									+ defaultOrg.getBackupvideo().getFilepath());
+					backupvideoJson.put("path", "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
 					backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
 					backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
 					responseJson.put("backup_media", backupvideoJson);
@@ -582,6 +601,7 @@ public class PixsignageService21 {
 				responseJson.put("version_name", "");
 				responseJson.put("version_code", "0");
 				responseJson.put("url", "");
+				responseJson.put("path", "");
 				logger.info("Auto upgrade disabled: {}", device.getTerminalid());
 			} else {
 				String ostype = device.getOstype();
@@ -610,13 +630,16 @@ public class PixsignageService21 {
 					responseJson.put("version_name", "");
 					responseJson.put("version_code", "0");
 					responseJson.put("url", "");
+					responseJson.put("path", "");
 					logger.info("Appfile not found, disabled upgrade: {}", device.getTerminalid());
 				} else {
 					String url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 							+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + appfile.getFilepath();
+					String path = "/pixsigdata" + appfile.getFilepath();
 					responseJson.put("version_name", appfile.getVname());
 					responseJson.put("version_code", "" + appfile.getVcode());
 					responseJson.put("url", url);
+					responseJson.put("path", path);
 				}
 			}
 
@@ -649,6 +672,7 @@ public class PixsignageService21 {
 								"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 										+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 										+ org.getBackupvideo().getFilepath());
+						backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
 						backupvideoJson.put("file", org.getBackupvideo().getFilename());
 						backupvideoJson.put("size", org.getBackupvideo().getSize());
 						contentJson.put("backup_media", backupvideoJson);
@@ -1326,6 +1350,7 @@ public class PixsignageService21 {
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("url", "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + filename);
+			responseJson.put("path", "/pixsigdata" + filename);
 			logger.info("Pixsignage Service upload_file response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1376,6 +1401,60 @@ public class PixsignageService21 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_debug exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_text")
+	@Produces("application/json;charset=UTF-8")
+	public String gettext(String request) {
+		try {
+			logger.info("Pixsignage Service get_text: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String terminalid = requestJson.getString("terminal_id");
+
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null || !device.getStatus().equals("1")) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			}
+			String branchid1 = "" + device.getBranch().getBranchid();
+			String branchid2 = "" + device.getBranch().getParentid();
+			String branchid3 = "" + device.getBranch().getParentid2();
+			String branchid4 = "" + device.getBranch().getParentid3();
+
+			List<Text> texts1 = textMapper.selectList("" + device.getOrgid(), branchid1, null, null, null);
+			List<Text> texts2 = textMapper.selectList("" + device.getOrgid(), branchid2, null, null, null);
+			List<Text> texts3 = textMapper.selectList("" + device.getOrgid(), branchid3, null, null, null);
+			List<Text> texts4 = textMapper.selectList("" + device.getOrgid(), branchid4, null, null, null);
+			List<String> texts = new ArrayList<String>();
+			for (Text text : texts1) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts2) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts3) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts4) {
+				texts.add(text.getText());
+			}
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONArray textJsonArray = new JSONArray();
+			String s = "";
+			for (String text : texts) {
+				s += text;
+				textJsonArray.put(text);
+			}
+			responseJson.put("texts", textJsonArray);
+			responseJson.put("checksum", DigestUtils.md5Hex(s));
+
+			logger.info("Pixsignage Service get_text response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_text exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

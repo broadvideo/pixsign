@@ -26,6 +26,8 @@ public class Page {
 
 	private String limitflag;
 
+	private String privilegeflag;
+
 	private String touchflag;
 
 	private String homeflag;
@@ -45,6 +47,8 @@ public class Page {
 	private Integer createstaffid;
 
 	private String snapshotdtl;
+
+	private String editflag = "1";
 
 	private List<Pagezone> pagezones;
 
@@ -130,6 +134,14 @@ public class Page {
 		this.limitflag = limitflag;
 	}
 
+	public String getPrivilegeflag() {
+		return privilegeflag;
+	}
+
+	public void setPrivilegeflag(String privilegeflag) {
+		this.privilegeflag = privilegeflag;
+	}
+
 	public String getTouchflag() {
 		return touchflag;
 	}
@@ -212,6 +224,14 @@ public class Page {
 
 	public void setSnapshotdtl(String snapshotdtl) {
 		this.snapshotdtl = snapshotdtl;
+	}
+
+	public String getEditflag() {
+		return editflag;
+	}
+
+	public void setEditflag(String editflag) {
+		this.editflag = editflag;
 	}
 
 	public Long getTimestamp() {

@@ -41,11 +41,13 @@
     <result column="diyid" property="diyid" jdbcType="INTEGER" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
     <result column="touchpageid" property="touchpageid" jdbcType="INTEGER" />
+    <result column="fixflag" property="fixflag" jdbcType="CHAR" />
     <result column="diyactionid" property="diyactionid" jdbcType="INTEGER" />
     <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
     <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
     <result column="animationclick" property="animationclick" jdbcType="VARCHAR" />
-	<association property="diy" column="{diyid=diyid}" select="com.broadvideo.pixsignage.persistence.DiyMapper.selectByPrimaryKey" />
+	<result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
+    <association property="diy" column="{diyid=diyid}" select="com.broadvideo.pixsignage.persistence.DiyMapper.selectByPrimaryKey" />
 	<association property="diyaction" column="{diyactionid=diyactionid}" select="com.broadvideo.pixsignage.persistence.DiyactionMapper.selectByPrimaryKey" />
 	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
 		column="{pagezoneid=pagezoneid}" select="com.broadvideo.pixsignage.persistence.PagezonedtlMapper.selectList" />
@@ -59,7 +61,7 @@
     bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, shadowv, 
     shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, 
     lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchpageid, 
-    diyactionid, animationinit, animationinitdelay, animationclick
+    fixflag, diyactionid, animationinit, animationinitdelay, animationclick, sourcetype
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -110,9 +112,9 @@
       lineheight, rows, cols, 
       rules, rulecolor, rulewidth, 
       dateformat, diyid, touchtype, 
-      touchpageid, diyactionid, 
+      touchpageid, fixflag, diyactionid, 
       animationinit, animationinitdelay, animationclick, 
-      content)
+      sourcetype, content)
     values (#{pageid,jdbcType=INTEGER}, #{homepageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
@@ -125,9 +127,9 @@
       #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
       #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
       #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
-      #{touchpageid,jdbcType=INTEGER}, #{diyactionid,jdbcType=INTEGER}, 
+      #{touchpageid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, 
       #{animationinit,jdbcType=VARCHAR}, #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{sourcetype,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -249,6 +251,9 @@
       <if test="touchpageid != null" >
         touchpageid,
       </if>
+      <if test="fixflag != null" >
+        fixflag,
+      </if>
       <if test="diyactionid != null" >
         diyactionid,
       </if>
@@ -260,6 +265,9 @@
       </if>
       <if test="animationclick != null" >
         animationclick,
+      </if>
+      <if test="sourcetype != null" >
+        sourcetype,
       </if>
       <if test="content != null" >
         content,
@@ -380,6 +388,9 @@
       <if test="touchpageid != null" >
         #{touchpageid,jdbcType=INTEGER},
       </if>
+      <if test="fixflag != null" >
+        #{fixflag,jdbcType=CHAR},
+      </if>
       <if test="diyactionid != null" >
         #{diyactionid,jdbcType=INTEGER},
       </if>
@@ -391,6 +402,9 @@
       </if>
       <if test="animationclick != null" >
         #{animationclick,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null" >
+        #{sourcetype,jdbcType=CHAR},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -514,6 +528,9 @@
       <if test="touchpageid != null" >
         touchpageid = #{touchpageid,jdbcType=INTEGER},
       </if>
+      <if test="fixflag != null" >
+        fixflag = #{fixflag,jdbcType=CHAR},
+      </if>
       <if test="diyactionid != null" >
         diyactionid = #{diyactionid,jdbcType=INTEGER},
       </if>
@@ -525,6 +542,9 @@
       </if>
       <if test="animationclick != null" >
         animationclick = #{animationclick,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null" >
+        sourcetype = #{sourcetype,jdbcType=CHAR},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -572,10 +592,12 @@
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchpageid = #{touchpageid,jdbcType=INTEGER},
+      fixflag = #{fixflag,jdbcType=CHAR},
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
       animationclick = #{animationclick,jdbcType=VARCHAR},
+      sourcetype = #{sourcetype,jdbcType=CHAR},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
@@ -619,10 +641,12 @@
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
       touchpageid = #{touchpageid,jdbcType=INTEGER},
+      fixflag = #{fixflag,jdbcType=CHAR},
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
-      animationclick = #{animationclick,jdbcType=VARCHAR}
+      animationclick = #{animationclick,jdbcType=VARCHAR},
+      sourcetype = #{sourcetype,jdbcType=CHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

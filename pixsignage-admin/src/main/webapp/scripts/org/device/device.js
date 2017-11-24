@@ -1,5 +1,6 @@
 var DeviceModule = function () {
 	var _device = {};
+	var _onlineflag = '';
 
 	var init = function () {
 		initDeviceTable();
@@ -101,6 +102,7 @@ var DeviceModule = function () {
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree1.branchid });
 				aoData.push({'name':'status','value':'1' });
+				aoData.push({'name':'onlineflag','value':_onlineflag });
 			}
 		});
 		$('#DeviceTable_wrapper').addClass('form-inline');
@@ -188,6 +190,26 @@ var DeviceModule = function () {
 				oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
 			}
 		});
+
+		var onlinelist = [];
+		onlinelist.push({id: '', text: '全部' });
+		onlinelist.push({id: '1', text: '在线' });
+		onlinelist.push({id: '0', text: '离线' });
+		$('#OnlineSelect').select2({
+			minimumResultsForSearch: -1,
+			minimumInputLength: 0,
+			data: onlinelist,
+			initSelection: function(element, callback) {
+				callback({id: '', text: '全部' });
+			},
+			dropdownCssClass: 'bigdrop', 
+			escapeMarkup: function (m) { return m; } 
+		});
+
+	    $('#OnlineSelect').on('change', function(e) {
+	    	_onlineflag = $(this).val();
+	    	$('#DeviceTable').dataTable().fnDraw(true);
+	    });
 	};
 	
 	var initDeviceEvent = function () {
@@ -754,7 +776,7 @@ var DeviceModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'devicefile!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'objid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -764,10 +786,15 @@ var DeviceModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(0)', nRow).html(aData.video.videoid);
-				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.video.thumbnail + '" width="40px"></img>');
-				$('td:eq(2)', nRow).html(aData.video.filename);
-				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.video.size));
+				if (aData.video != null) {
+					$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.video.thumbnail + '" width="40px"></img>');
+					$('td:eq(2)', nRow).html(aData.video.filename);
+					$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.video.size));
+				} else {
+					$('td:eq(1)', nRow).html('');
+					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
+				}
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -795,7 +822,7 @@ var DeviceModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'devicefile!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'objid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -805,10 +832,15 @@ var DeviceModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(0)', nRow).html(aData.image.imageid);
-				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.image.thumbnail + '" width="40px"></img>');
-				$('td:eq(2)', nRow).html(aData.image.filename);
-				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.image.size));
+				if (aData.image != null) {
+					$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.image.thumbnail + '" width="40px"></img>');
+					$('td:eq(2)', nRow).html(aData.image.filename);
+					$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.image.size));
+				} else {
+					$('td:eq(1)', nRow).html('');
+					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
+				}
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -836,7 +868,7 @@ var DeviceModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'devicefile!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'objid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -846,10 +878,15 @@ var DeviceModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
-				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.video.thumbnail + '" width="40px"></img>');
-				$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
-				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
+				if (aData.mmediadtl != null && aData.mmediadtl.video != null) {
+					$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.video.thumbnail + '" width="40px"></img>');
+					$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
+					$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
+				} else {
+					$('td:eq(1)', nRow).html('');
+					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
+				}
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {
@@ -877,7 +914,7 @@ var DeviceModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'devicefile!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'devicefileid', 'bSortable' : false }, 
+			'aoColumns' : [ {'sTitle' : common.view.id, 'mData' : 'objid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.filename, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
@@ -887,10 +924,15 @@ var DeviceModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(0)', nRow).html(aData.mmediadtl.mmediadtlid);
-				$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.image.thumbnail + '" width="40px"></img>');
-				$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
-				$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
+				if (aData.mmediadtl != null && aData.mmediadtl.image != null) {
+					$('td:eq(1)', nRow).html('<img src="/pixsigdata' + aData.mmediadtl.image.thumbnail + '" width="40px"></img>');
+					$('td:eq(2)', nRow).html(aData.mmediadtl.filename);
+					$('td:eq(3)', nRow).html(PixData.transferIntToComma(aData.mmediadtl.size));
+				} else {
+					$('td:eq(1)', nRow).html('');
+					$('td:eq(2)', nRow).html('');
+					$('td:eq(3)', nRow).html('');
+				}
 				if (aData.progress == 0) {
 					$('td:eq(4)', nRow).html('<span class="label label-sm label-danger">' + aData.progress + '%</span>');
 				} else if (aData['progress'] == 100) {

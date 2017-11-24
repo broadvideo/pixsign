@@ -242,6 +242,7 @@ public class PlanServiceImpl implements PlanService {
 						plandtlJson.put("media_type", "page");
 						plandtlJson.put("media_id", plandtl.getObjid());
 						plandtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+						plandtlJson.put("path", "/pixsigdata" + zipPath);
 						plandtlJson.put("file", zipFile.getName());
 						plandtlJson.put("size", FileUtils.sizeOf(zipFile));
 						if (plandtl.getDuration() > 0) {
@@ -266,6 +267,7 @@ public class PlanServiceImpl implements PlanService {
 								videoJson.put("name", video.getName());
 								videoJson.put("url",
 										"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+								videoJson.put("path", "/pixsigdata" + video.getFilepath());
 								videoJson.put("file", video.getFilename());
 								videoJson.put("size", video.getSize());
 								videoJson.put("thumbnail",
@@ -333,6 +335,7 @@ public class PlanServiceImpl implements PlanService {
 						plandtlJson.put("media_master", "1");
 						plandtlJson.put("media_id", plandtl.getObjid());
 						plandtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+						plandtlJson.put("path", "/pixsigdata" + zipPath);
 						plandtlJson.put("file", zipFile.getName());
 						plandtlJson.put("size", FileUtils.sizeOf(zipFile));
 						if (plandtl.getDuration() > 0) {
@@ -355,6 +358,7 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJson.put("media_id", plandtl.getObjid());
 					plandtlJson.put("url",
 							"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+					plandtlJson.put("path", "/pixsigdata" + video.getFilepath());
 					plandtlJson.put("file", video.getFilename());
 					plandtlJson.put("size", video.getSize());
 					plandtlJson.put("duration", plandtl.getDuration());
@@ -370,6 +374,7 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJson.put("media_id", plandtl.getObjid());
 					plandtlJson.put("url",
 							"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
+					plandtlJson.put("path", "/pixsigdata" + image.getFilepath());
 					plandtlJson.put("file", image.getFilename());
 					plandtlJson.put("size", image.getSize());
 					if (plandtl.getDuration() > 0) {
@@ -421,6 +426,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("media_id", mediagriddtl.getObjid());
 									plandtlJson.put("url",
 											"http://" + serverip + ":" + serverport + "/pixsigdata" + zipPath);
+									plandtlJson.put("path", "/pixsigdata" + zipPath);
 									plandtlJson.put("file", zipFile.getName());
 									plandtlJson.put("size", FileUtils.sizeOf(zipFile));
 									if (plandtl.getDuration() > 0) {
@@ -452,6 +458,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("media_id", mmediadtl.getMmediadtlid());
 									plandtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
 											+ mmediadtl.getFilepath());
+									plandtlJson.put("path", "/pixsigdata" + mmediadtl.getFilepath());
 									plandtlJson.put("file", mmediadtl.getFilename());
 									plandtlJson.put("size", mmediadtl.getSize());
 									plandtlJson.put("duration", plandtl.getDuration());
@@ -474,6 +481,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("media_id", mmediadtl.getMmediadtlid());
 									plandtlJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
 											+ mmediadtl.getFilepath());
+									plandtlJson.put("path", "/pixsigdata" + mmediadtl.getFilepath());
 									plandtlJson.put("file", mmediadtl.getFilename());
 									plandtlJson.put("size", mmediadtl.getSize());
 									if (plandtl.getDuration() > 0) {

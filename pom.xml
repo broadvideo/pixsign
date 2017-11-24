@@ -4,7 +4,7 @@
 
 	<groupId>com.broadvideo</groupId>
 	<artifactId>pixsignage</artifactId>
-	<version>2.2.4</version>
+	<version>2.2.7</version>
 	<packaging>pom</packaging>
 
 	<name>pixsignage</name>

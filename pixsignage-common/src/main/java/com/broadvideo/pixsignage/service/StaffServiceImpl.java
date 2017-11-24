@@ -16,13 +16,13 @@ public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffMapper staffMapper;
 
-	public int selectCount(String subsystem, String vspid, String orgid, String search) {
-		return staffMapper.selectCount(subsystem, vspid, orgid, search);
+	public int selectCount(String subsystem, String vspid, String orgid, String branchid, String search) {
+		return staffMapper.selectCount(subsystem, vspid, orgid, branchid, search);
 	}
 
-	public List<Staff> selectList(String subsystem, String vspid, String orgid, String search, String start,
-			String length) {
-		return staffMapper.selectList(subsystem, vspid, orgid, search, start, length);
+	public List<Staff> selectList(String subsystem, String vspid, String orgid, String branchid, String search,
+			String start, String length) {
+		return staffMapper.selectList(subsystem, vspid, orgid, branchid, search, start, length);
 	}
 
 	@Transactional

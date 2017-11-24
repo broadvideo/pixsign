@@ -172,6 +172,17 @@
 											</label>
 										</div>
 									</div>
+									<div class="form-group meeting-ctrl">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.org.meetingflag"/><span class="required">*</span></label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="org.meetingflag" value="0" checked> <spring:message code="global.off"/>
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="org.meetingflag" value="1"> <spring:message code="global.on"/>
+											</label>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-md-3 control-label"><spring:message code="pixsign.org.media"/></label>
 										<div class="col-md-9 checkbox-list">
@@ -213,6 +224,22 @@
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices" value="0" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Android<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices1" value="0" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Windows<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices2" value="0" />
 											</div>
 										</div>
 									</div>
@@ -356,6 +383,7 @@ var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))
 var FlowrateCtrl = <%=(session_vsp != null && session_vsp.getFlowrateflag().equals("1"))%>;
 var TagCtrl = <%=(session_vsp != null && session_vsp.getTagflag().equals("1"))%>;
 var DiyCtrl = <%=(session_vsp != null && session_vsp.getDiyflag().equals("1"))%>;
+var MeetingCtrl = <%=(session_vsp != null && session_vsp.getMeetingflag().equals("1"))%>;
 var StreamCtrl = <%=(session_vsp != null && session_vsp.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_vsp != null && session_vsp.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_vsp != null && session_vsp.getVideoinflag().equals("1"))%>;

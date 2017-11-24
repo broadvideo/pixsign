@@ -606,7 +606,12 @@ function pagezoneClick(e, dblclick){
 				} else if (pagezones[0].type == 4) {
 					//Scroll Zone
 					CurrentZone = pagezones[0];
-					$('#ScrollModal textarea[name="content"]').val(CurrentZone.content);
+					$('#ScrollForm').loadJSON(CurrentZone);
+					if (CurrentZone.sourcetype == 0) {
+						$('#ScrollModal textarea[name="content"]').removeAttr('readonly');
+					} else {
+						$('#ScrollModal textarea[name="content"]').attr('readonly','readonly');
+					}
 					$('#ScrollModal').modal();
 				} else if (pagezones[0].type == 6) {
 					//Web Zone
@@ -1343,7 +1348,6 @@ $('.zoneform input,select').on('change', function(e) {
 	CurrentZone.zindex = $('.zoneform select[name=zindex]').val();
 	CurrentZone.bdstyle = $('.zoneform select[name=bdstyle]').val();
 	CurrentZone.rules = $('.zoneform select[name=rules]').val();
-	console.log(CurrentZone);
 	refreshPagezone(CurrentZone);
 });
 
@@ -1356,7 +1360,6 @@ function validPagezone(pagezone) {
 		} else {
 			pagezone.content = '';
 		}
-		console.log(pagezone.content);
 	}
 	return true;
 }
@@ -1452,9 +1455,18 @@ $('body').on('click', '.pix-addzone', function(event) {
 
 
 $('[type=submit]', $('#ScrollModal')).on('click', function(event) {
+	CurrentZone.sourcetype = $('#ScrollModal input[name="sourcetype"]:checked').val();
 	CurrentZone.content = $('#ScrollModal textarea[name="content"]').val();
 	refreshPagezone(CurrentZone);
 	$('#ScrollModal').modal('hide');
+});
+$('#ScrollModal input[name="sourcetype"]').change(function(e) {
+	var sourcetype = $('#ScrollModal input[name="sourcetype"]:checked').val();
+	if (sourcetype == 0) {
+		$('#ScrollModal textarea[name="content"]').removeAttr('readonly');
+	} else {
+		$('#ScrollModal textarea[name="content"]').attr('readonly','readonly');
+	}
 });
 
 $('[type=submit]', $('#WebModal')).on('click', function(event) {

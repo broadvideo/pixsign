@@ -151,7 +151,7 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.medialist"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="SteamModule.refresh();" class="reload"></a>
+								<a href="javascript:;" onClick="MedialistModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body" id="MedialistPortlet">

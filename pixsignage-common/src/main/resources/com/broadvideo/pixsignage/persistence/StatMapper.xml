@@ -10,10 +10,11 @@
   <select id="statDevices" resultMap="BaseResultMap" >
     select concat(status, '-', onlineflag) as label, count(*) as value
     from device
-    where orgid = #{orgid}
-    <if test="branchid != null">
-      and branchid = #{branchid}
-    </if>
+    where testflag = 0
+    and orgid = #{orgid}
+    and exists (select 1 from branch b 
+      where b.branchid=device.branchid 
+      and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
     group by status, onlineflag
     order by onlineflag, status desc
   </select>

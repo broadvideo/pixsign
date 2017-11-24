@@ -32,6 +32,10 @@ public class StaffAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String branchid = getParameter("branchid");
+			if (branchid == null || branchid.equals("")) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
 
 			String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
 			String vspid = null;
@@ -42,12 +46,12 @@ public class StaffAction extends BaseDatatableAction {
 				orgid = "" + getLoginStaff().getOrgid();
 			}
 
-			int count = staffService.selectCount(subsystem, vspid, orgid, search);
+			int count = staffService.selectCount(subsystem, vspid, orgid, branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Staff> staffList = staffService.selectList(subsystem, vspid, orgid, search, start, length);
+			List<Staff> staffList = staffService.selectList(subsystem, vspid, orgid, branchid, search, start, length);
 			for (int i = 0; i < staffList.size(); i++) {
 				aaData.add(staffList.get(i));
 			}

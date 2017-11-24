@@ -29,7 +29,7 @@ public interface DeviceMapper {
 
 	Device selectByTerminalid(@Param(value = "terminalid") String terminalid);
 
-	List<Device> selectByOrgtype(@Param(value = "orgtype") String orgtype);
+	int selectCountByOstype(@Param(value = "orgid") String orgid, @Param(value = "ostype") String ostype);
 
 	int unbind(@Param(value = "deviceid") String deviceid);
 

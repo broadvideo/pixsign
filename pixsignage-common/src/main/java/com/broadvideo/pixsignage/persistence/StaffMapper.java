@@ -12,11 +12,13 @@ public interface StaffMapper {
 	Staff selectByPrimaryKey(@Param(value = "staffid") String staffid);
 
 	int selectCount(@Param(value = "subsystem") String subsystem, @Param(value = "vspid") String vspid,
-			@Param(value = "orgid") String orgid, @Param(value = "search") String search);
+			@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "search") String search);
 
 	List<Staff> selectList(@Param(value = "subsystem") String subsystem, @Param(value = "vspid") String vspid,
-			@Param(value = "orgid") String orgid, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname);
 

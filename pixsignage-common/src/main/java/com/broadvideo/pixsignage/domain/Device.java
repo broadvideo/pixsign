@@ -39,6 +39,8 @@ public class Device {
 
 	private String onlineflag;
 
+	private String testflag;
+
 	private String appname;
 
 	private String sign;
@@ -176,11 +178,11 @@ public class Device {
 	}
 
 	public String getPosition() {
-		return position == null ? "" : position.trim();
+		return position;
 	}
 
 	public void setPosition(String position) {
-		this.position = position == null ? null : position.trim();
+		this.position = position;
 	}
 
 	public String getIp() {
@@ -245,6 +247,14 @@ public class Device {
 
 	public void setOnlineflag(String onlineflag) {
 		this.onlineflag = onlineflag == null ? null : onlineflag.trim();
+	}
+
+	public String getTestflag() {
+		return testflag;
+	}
+
+	public void setTestflag(String testflag) {
+		this.testflag = testflag;
 	}
 
 	public String getAppname() {

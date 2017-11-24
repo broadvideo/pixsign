@@ -5,10 +5,10 @@ import java.util.List;
 import com.broadvideo.pixsignage.domain.Staff;
 
 public interface StaffService {
-	public int selectCount(String subsystem, String vspid, String orgid, String search);
+	public int selectCount(String subsystem, String vspid, String orgid, String branchid, String search);
 
-	public List<Staff> selectList(String subsystem, String vspid, String orgid, String search, String start,
-			String length);
+	public List<Staff> selectList(String subsystem, String vspid, String orgid, String branchid, String search,
+			String start, String length);
 
 	public void addStaff(Staff staff);
 

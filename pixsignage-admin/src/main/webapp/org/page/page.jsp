@@ -17,7 +17,60 @@
 </head>
 
 <body>
-	<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="StaffPageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-full">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="portlet box blue">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.staff.selecting"/></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-toolbar">
+										<div class="btn-group pull-right">
+											<button class="btn btn-sm blue pix-addstaff"><spring:message code="global.add"/> <i class="fa fa-arrow-right"></i></button>
+										</div>
+									</div>
+									<table id="StaffTable1" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="portlet box green">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-picture"></i><spring:message code="pixsign.staff.selected"/></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button class="btn btn-sm red pix-deletestaff"><i class="fa fa-arrow-left"></i> <spring:message code="global.remove"/></button>
+										</div>
+									</div>
+									<table id="StaffTable2" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+	<div id="PageEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -25,12 +78,13 @@
 					<h4 class="modal-title"><spring:message code="pixsign.page"/></h4>
 				</div>
 				<div class="modal-body">
-					<form id="MyEditForm" class="form-horizontal" data-async data-target="#MyEditModal" method="POST">
+					<form id="PageEditForm" class="form-horizontal" data-async data-target="#PageEditModal" method="POST">
 						<input type="hidden" name="page.pageid" value="0" />
 						<input type="hidden" name="page.homepageid" value="0" />
 						<input type="hidden" name="page.touchflag" value="0" />
 						<input type="hidden" name="page.homeflag" value="1" />
 						<input type="hidden" name="page.status" value="1" />
+						<input type="hidden" name="page.branchid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span
@@ -39,6 +93,17 @@
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="page.name" />
 									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.privilegeflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="page.privilegeflag" value="0" checked> <spring:message code="pixsign.prop.privilegeflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="page.privilegeflag" value="1"> <spring:message code="pixsign.prop.privilegeflag_1"/>
+									</label>
 								</div>
 							</div>
 							<div class="form-group hide-update">
@@ -50,7 +115,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group hide-update">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.templateflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -94,46 +159,49 @@
 					<h4 class="modal-title"><spring:message code="pixsign.page"/></h4>
 				</div>
 				<div class="modal-body">
-					<div class="row zonebtns">
+					<div class="row">
 						<div class="col-md-12">
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="1">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="1">
 								<i class="fa fa-video-camera"></i><div>视频</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="2">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="2">
 								<i class="fa fa-image"></i><div>图片</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="3">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="3">
 								<i class="fa fa-font"></i><div>文本</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="4">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="4">
 								<i class="fa fa-long-arrow-left"></i><div>滚动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="5">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="5">
 								<i class="fa fa-history"></i><div>时间</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="6">
 								<i class="fa fa-building"></i><div>网页</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="11">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="12">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="14">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="15">
+							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
+							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl limit-1" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl limit-1" zonetype="31">
+								<i class="fa fa-arrows"></i><div>会议日程</div>
 							</a>
 						</div>
 					</div>
@@ -247,7 +315,7 @@
 												<div class="form-group">
 													<label class="col-md-3 control-label">子页</label>
 													<div class="col-md-9">
-														<input type="hidden" id="SubPageSelect" class="form-control select2" name="touchpageid" />
+														<input type="hidden" id="SubObjectSelect" class="form-control select2" name="touchpageid" />
 													</div>
 												</div>
 												<div class="form-group">
@@ -260,7 +328,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>
@@ -342,7 +410,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12">
+								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">表格设置</a>
@@ -701,7 +769,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default">
+								<div class="panel panel-default zone-ctl zonetype-2 zonetype-7">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse10">动画效果</a>
@@ -865,7 +933,18 @@
 							<form id="ScrollForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
+										<label class="col-md-3 control-label">内容来源</label>
+										<div class="col-md-9 radio-list">
+											<label class="radio-inline">
+												<input type="radio" name="sourcetype" value="0" checked> 自定义
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="sourcetype" value="1"> 自动生成
+											</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/></label>
 										<div class="col-md-9">
 											<textarea class="form-control" rows="10" name="content"></textarea>
 										</div>
@@ -937,21 +1016,28 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.page"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="PageModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button privilegeid="101010" class="btn green pix-add">
-										<spring:message code="global.add"/> <i class="fa fa-plus"></i>
-									</button>
+						<div class="portlet-body" id="PagePortlet">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-10">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button privilegeid="101010" class="btn green pix-add">
+												<spring:message code="global.add"/> <i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+									<table id="PageTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -985,19 +1071,21 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-page.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-page-design.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page-design.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
 <script>
 var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
+var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
+	PixData.init('${locale}');
+	PageModule.init();
 });
 
 </script>

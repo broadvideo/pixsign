@@ -209,11 +209,16 @@ var PixData = function() {
 			data : '{}',
 			dataType : 'json',
 			contentType : 'application/json;charset=utf-8',
-			success : function(data, status) {
-				setTimeout(startPingTimer, 10000); 
-			},
-			error : function() {
-				window.location.reload();
+			complete: function(XMLHttpRequest,textStatus){  
+				//通过XMLHttpRequest取得响应头，sessionstatus，  
+				var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
+				if (sessionstatus=='timeout') {
+					bootbox.alert(common.tips.session_timeout, function() {
+						window.location.reload();
+					});
+				} else {
+					setTimeout(startPingTimer, 10000); 
+				}
 			}
 		});
 	};

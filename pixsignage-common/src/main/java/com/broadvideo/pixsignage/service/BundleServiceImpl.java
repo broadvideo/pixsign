@@ -1031,6 +1031,7 @@ public class BundleServiceImpl implements BundleService {
 			bundleBgImageJson.put("name", bundle.getBgimage().getName());
 			bundleBgImageJson.put("url",
 					"http://" + serverip + ":" + serverport + "/pixsigdata" + bundle.getBgimage().getFilepath());
+			bundleBgImageJson.put("path", "/pixsigdata" + bundle.getBgimage().getFilepath());
 			bundleBgImageJson.put("file", bundle.getBgimage().getFilename());
 			bundleBgImageJson.put("size", bundle.getBgimage().getSize());
 			bundleBgImageJson.put("thumbnail",
@@ -1043,6 +1044,7 @@ public class BundleServiceImpl implements BundleService {
 			bundleBgImageJson.put("id", 0);
 			bundleBgImageJson.put("name", "");
 			bundleBgImageJson.put("url", "");
+			bundleBgImageJson.put("path", "");
 			bundleBgImageJson.put("file", "");
 			bundleBgImageJson.put("size", 0);
 			bundleBgImageJson.put("thumbnail", "");
@@ -1111,6 +1113,7 @@ public class BundleServiceImpl implements BundleService {
 				regionBgImageJson.put("name", bundledtl.getBgimage().getName());
 				regionBgImageJson.put("url",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + bundledtl.getBgimage().getFilepath());
+				regionBgImageJson.put("path", "/pixsigdata" + bundledtl.getBgimage().getFilepath());
 				regionBgImageJson.put("file", bundledtl.getBgimage().getFilename());
 				regionBgImageJson.put("size", bundledtl.getBgimage().getSize());
 				regionBgImageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
@@ -1123,6 +1126,7 @@ public class BundleServiceImpl implements BundleService {
 				regionBgImageJson.put("id", 0);
 				regionBgImageJson.put("name", "");
 				regionBgImageJson.put("url", "");
+				regionBgImageJson.put("path", "");
 				regionBgImageJson.put("file", "");
 				regionBgImageJson.put("size", 0);
 				regionBgImageJson.put("thumbnail", "");
@@ -1145,6 +1149,7 @@ public class BundleServiceImpl implements BundleService {
 							videoJson.put("oname", video.getOname());
 							videoJson.put("url",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+							videoJson.put("path", "/pixsigdata" + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
 							videoJson.put("thumbnail",
@@ -1169,6 +1174,7 @@ public class BundleServiceImpl implements BundleService {
 							imageJson.put("oname", image.getOname());
 							imageJson.put("url",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
+							imageJson.put("path", "/pixsigdata" + image.getFilepath());
 							imageJson.put("file", image.getFilename());
 							imageJson.put("size", image.getSize());
 							imageJson.put("thumbnail",
@@ -1201,6 +1207,7 @@ public class BundleServiceImpl implements BundleService {
 							audioJson.put("name", audio.getName());
 							audioJson.put("url",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + audio.getFilepath());
+							audioJson.put("path", "/pixsigdata" + audio.getFilepath());
 							audioJson.put("file", audio.getFilename());
 							audioJson.put("size", audio.getSize());
 							audioHash.put(audio.getAudioid(), audioJson);
@@ -1280,6 +1287,7 @@ public class BundleServiceImpl implements BundleService {
 				videoJson.put("oname", video.getRelate().getOname());
 				videoJson.put("url",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getFilepath());
+				videoJson.put("path", "/pixsigdata" + video.getRelate().getFilepath());
 				videoJson.put("file", video.getRelate().getFilename());
 				videoJson.put("size", video.getRelate().getSize());
 				videoJson.put("thumbnail",
@@ -1298,6 +1306,7 @@ public class BundleServiceImpl implements BundleService {
 				imageJson.put("oname", image.getRelate().getOname());
 				imageJson.put("url",
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getFilepath());
+				imageJson.put("path", "/pixsigdata" + image.getRelate().getFilepath());
 				imageJson.put("file", image.getRelate().getFilename());
 				imageJson.put("size", image.getRelate().getSize());
 				imageJson.put("thumbnail",

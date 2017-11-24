@@ -75,6 +75,11 @@
     <if test="orgid != null" >
       and orgid = #{orgid}
     </if>
+    <if test="branchid != null">
+      and exists (select 1 from branch b 
+        where b.branchid=staff.branchid 
+        and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+    </if>
     <if test="search != null">
       and (loginname like #{search} or name like #{search})
     </if>
@@ -92,6 +97,11 @@
     </if>
     <if test="orgid != null" >
       and orgid = #{orgid}
+    </if>
+    <if test="branchid != null">
+      and exists (select 1 from branch b 
+        where b.branchid=staff.branchid 
+        and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
     </if>
     <if test="search != null">
       and (loginname like #{search} or name like #{search})

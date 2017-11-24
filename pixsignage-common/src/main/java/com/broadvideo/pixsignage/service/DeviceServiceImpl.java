@@ -56,10 +56,6 @@ public class DeviceServiceImpl implements DeviceService {
 		return deviceMapper.selectByTerminalid(terminalid);
 	}
 
-	public List<Device> selectByOrgtype(String orgtype) {
-		return deviceMapper.selectByOrgtype(orgtype);
-	}
-
 	@Transactional
 	public void addDevice(Device device) {
 		deviceMapper.insertSelective(device);
@@ -73,7 +69,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void updateDeviceSelective(Device device) {
 		deviceMapper.updateByPrimaryKeySelective(device);
-		deviceMapper.checkDevicegroup();
+		// deviceMapper.checkDevicegroup();
 	}
 
 	@Transactional
