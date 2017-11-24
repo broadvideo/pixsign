@@ -239,6 +239,7 @@ public class PageServiceImpl implements PageService {
 						touchpageid = 0;
 					}
 					pagezone.setTouchpageid(touchpageid);
+					pagezone.setFixflag(templatezone.getFixflag());
 					pagezone.setDiyactionid(templatezone.getDiyactionid());
 					pagezone.setAnimationinit(templatezone.getAnimationinit());
 					pagezone.setAnimationinitdelay(templatezone.getAnimationinitdelay());
@@ -350,6 +351,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setDiyid(frompagezone.getDiyid());
 				pagezone.setTouchtype(frompagezone.getTouchtype());
 				pagezone.setTouchpageid(frompagezone.getTouchpageid());
+				pagezone.setFixflag(frompagezone.getFixflag());
 				pagezone.setDiyactionid(frompagezone.getDiyactionid());
 				pagezone.setAnimationinit(frompagezone.getAnimationinit());
 				pagezone.setAnimationinitdelay(frompagezone.getAnimationinitdelay());
