@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.common.DoorConst;
 import com.broadvideo.pixsignage.common.ServiceException;
+import com.broadvideo.pixsignage.common.WxmpMessageTips;
 import com.broadvideo.pixsignage.util.CommonUtils;
 import com.broadvideo.pixsignage.vo.TerminalBinding;
 
@@ -24,6 +25,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 	private final Map<String, String> terminalUserMap = new HashMap<String, String>();
 	@Autowired
 	private SmartdoorService smartdoorService;
+	@Autowired
+	private WxMpService wxmpService;
 	private Thread clearTask = null;
 
 	/**
@@ -85,7 +88,9 @@ public class SmartdoorkeeperService implements InitializingBean {
 			TerminalBinding binding = getBinding(wxuserid);
 			if (binding != null) {
 				try {
-					smartdoorService.saveDoorlog(binding);
+					if (binding.getOpentime() != null && binding.getOpenstate() != null) {
+						smartdoorService.saveDoorlog(binding);
+					}
 				} catch (Exception ex) {
 					logger.error("Save door log error.", ex);
 				}
@@ -170,10 +175,28 @@ public class SmartdoorkeeperService implements InitializingBean {
 			throw new ServiceException(ApiRetCodeEnum.TERMINAL_NOBINDING_USER, "终端未授权开门");
 		}
 		logger.info("terminalid({}) with actionType({}) and state({})", new Object[] { terminalid, actionType, state });
+		// 上报开门状态
 		if (DoorConst.ActionType.ACTION_OPEN.getVal().equals(actionType)) {
+
+			if (DoorConst.DoorState.SUCCESS.getVal().equals(binding.getOpenstate())) {
+				logger.info("terminalid({}) openstate({}) has already success.", terminalid, binding.getOpenstate());
+				return;
+			}
+			if (state.equals(binding.getOpenstate())) {
+				logger.info("terminalid({}) openstate({}) repeat report.", terminalid, state);
+				return;
+			}
 			binding.setOpenstate(state);
 			binding.setOpentime(new Date());
-		} else if (DoorConst.ActionType.ACTION_CLOSE.getVal().equals(actionType)) {
+			if (state.equals(DoorConst.DoorState.FAIL.getVal())) {
+				logger.error("terminalid({}) open door fail.", terminalid);
+			} else if (state.equals(DoorConst.DoorState.SUCCESS.getVal())) {
+				logger.error("terminalid({}) open door success.send message to user", terminalid);
+				wxmpService.sendMessage(wxmpService.getAccessToken(binding.getOrgid(), false).getAccessToken(),
+						wxuserid, WxmpMessageTips.DOOR_OPEN_SUCESS_TIP);
+			}
+
+		} else if (DoorConst.ActionType.ACTION_CLOSE.getVal().equals(actionType)) {// 上报关门状态
 			binding.setClosestate(state);
 			binding.setClosetime(new Date());
 			logger.info("Close door for terminalid({})", terminalid);
@@ -193,6 +216,9 @@ public class SmartdoorkeeperService implements InitializingBean {
 		logger.info("Start ClearTimeoutBindingsTask......");
 		clearTask.start();
 	}
+	
+
+
 
 
 	public class ClearTimeoutBindingsTask extends Thread {
@@ -211,28 +237,29 @@ public class SmartdoorkeeperService implements InitializingBean {
 				try {
 					if (userBindingsMap == null || userBindingsMap.size() == 0) {
 
-						CommonUtils.sleep(2 * 1000L);
+						CommonUtils.sleep(5 * 1000L);
 						logger.info("no binding records");
 						continue;
 					}
 
 					Set<String> keySet = userBindingsMap.keySet();
-					logger.info("check terminal state......");
+					logger.info("check binding state......");
 					for (String key : keySet) {
 
-						logger.info("check terminalid:{}", key);
+						logger.info("check wxuserid:{}", key);
 						TerminalBinding binding = userBindingsMap.get(key);
-						long createtime = binding.getCreatets();
-						if (System.currentTimeMillis() - createtime >= 5 * 60 * 1000L) {
-							logger.info("terminalid={},createtime={} binding over 30s,do unbinding... ",
-									binding.getTerminalid(), binding.getCreatetime());
+						if (System.currentTimeMillis() - binding.getCreatets() >= 1 * 60 * 1000L) {
+							logger.info(
+									"wxuserid({}) and terminalid({}),createtime({}) binding over 300s,do unbinding... ",
+									new Object[] { binding.getWxuserid(), binding.getTerminalid(),
+											binding.getCreatets() });
 							unbind(key);
 						}
 					}
-					logger.info("check terminal  end......,sleep 5s");
+					logger.info("check binding  end......,sleep 5s");
 					CommonUtils.sleep(5 * 1000L);
 				} catch (Exception ex) {
-					CommonUtils.sleep(2 * 1000L);
+					CommonUtils.sleep(5 * 1000L);
 					logger.error("thread unbinding  exception.", ex);
 					continue;
 				}

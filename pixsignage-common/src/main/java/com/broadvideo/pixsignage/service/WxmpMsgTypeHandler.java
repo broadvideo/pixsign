@@ -36,11 +36,16 @@ public abstract class WxmpMsgTypeHandler {
 		msgBuilder.append("<ToUserName><![CDATA[" + toUser + "]]></ToUserName>");
 		msgBuilder.append("<FromUserName><![CDATA[" + fromUser + "]]></FromUserName>");
 		msgBuilder.append("<CreateTime>" + System.currentTimeMillis() / 1000 + "</CreateTime>");
-		msgBuilder.append("<MsgType><![CDATA[" + this.getMsgType() + "]]></MsgType>");
+		msgBuilder.append("<MsgType><![CDATA[text]]></MsgType>");
 		msgBuilder.append("<Content><![CDATA[" + content + "]]></Content>");
 		msgBuilder.append("</xml>");
 		logger.info("Build reply msg:{}", msgBuilder.toString());
 		return msgBuilder.toString();
+	}
+
+	public String buildEmptyReplyMsg() {
+
+		return "success";
 	}
 	public String getMsgType() {
 		return msgType;

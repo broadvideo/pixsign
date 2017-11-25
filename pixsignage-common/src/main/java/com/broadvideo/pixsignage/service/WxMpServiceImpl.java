@@ -91,7 +91,7 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 		}
 		final int statusCode = response.getStatusCode();
 		logger.info("createTicketUrl({}) response(code:{},body:{})", createTicketUrl, statusCode, response.getBody());
-		this.checkResponse(response);
+		this.checkGetAccessTokenResponse(response);
 		JSONObject ticketJson = new JSONObject(response.getBody());
 		String ticket = ticketJson.getString("ticket");
 		Long expireSeconds = ticketJson.getLong("expire_seconds");
@@ -100,16 +100,43 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 	}
 
 	@Override
+	public void sendMessage(String accessToken, String wxuserid, String content) {
+
+		final String sendUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
+        JSONObject bodyJson=new JSONObject();
+        bodyJson.put("touser", wxuserid);
+		bodyJson.put("msgtype", "text");
+        JSONObject textJson=new JSONObject();
+        textJson.put("content",content);
+        bodyJson.put("text", textJson);
+		SimpleHttpResponse response = null;
+		try {
+			response = HttpClientUtils.doPost(sendUrl, bodyJson.toString());
+		} catch (Exception ex) {
+			logger.error("getAccessToken request exception.", ex);
+			throw new ServiceException("getAccessToken request exception:" + ex.getMessage());
+		}
+		checkSendMessageResponse(response);
+		logger.info("sendMessage({},{},{}) with response:{}",
+				new Object[] { accessToken, wxuserid, content, response.getBody() });
+		
+		
+	}
+
+	@Override
 	public void addSubscribe(String terminalid, String wxuserid, Integer createtime, Integer orgid) {
 
 	}
 
 	public synchronized void refreshAccessToken(Integer orgid) {
+
 		MpAccessToken mpAccessToken = this.requestAccessToken(orgid);
 		mpAccessTokenMap.put(orgid, mpAccessToken);
 	}
 
 	private MpAccessToken requestAccessToken(Integer orgid) {
+
+		try {
 		logger.info("get wxappinfo: type:{},orgid:{}", Wxappinfo.WX_MP_TYPE, orgid);
 		Wxappinfo wxappinfo = wxappinfoMapper.selectWxappinfo(Wxappinfo.WX_MP_TYPE, orgid);
 		if (wxappinfo == null) {
@@ -127,16 +154,21 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 			logger.error("getAccessToken request exception.", ex);
 			throw new ServiceException("getAccessToken request exception:" + ex.getMessage());
 		}
-		checkResponse(response);
+		checkGetAccessTokenResponse(response);
 		logger.info("get accessToken({}) with response:{}", accessTokenUrl, response.getBody());
 		JSONObject accessTokenJson = new JSONObject(response.getBody());
 		MpAccessToken mpAccessToken = new MpAccessToken(accessTokenJson.getString("access_token"),
 				accessTokenJson.getLong("expires_in"));
 		return mpAccessToken;
+		} catch (Exception ex) {
+
+			logger.error("requestAccessToken exception.", ex);
+			return null;
+		}
 
 	}
 
-	private void checkResponse(SimpleHttpResponse response) {
+	private void checkGetAccessTokenResponse(SimpleHttpResponse response) {
 		logger.info("Response with statusCode:{},body:{}", response.getStatusCode(), response.getBody());
 		final int statusCode = response.getStatusCode();
 		if (statusCode >= 200 && statusCode <= 300) {
@@ -155,13 +187,42 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 
 	}
 
+	private void checkSendMessageResponse(SimpleHttpResponse response) {
+		logger.info("Response with statusCode:{},body:{}", response.getStatusCode(), response.getBody());
+		final int statusCode = response.getStatusCode();
+		if (statusCode >= 200 && statusCode <= 300) {
+			JSONObject respBodyJson = new JSONObject(response.getBody());
+
+			if (respBodyJson.opt(ERRCODE) != null) {
+				int errcode = respBodyJson.getInt(ERRCODE);
+				String errmsg = respBodyJson.getString(ERRMSG);
+				if (errcode == 0) {
+					logger.info("send message success.");
+
+				} else {
+				logger.error("Response with errcode:{},erromsg:{}", errcode, errmsg);
+				throw new ServiceException("Response with errcode:" + errcode + ",errmsg:" + errmsg);
+				}
+			}
+
+		} else {
+			logger.error("Response with error statusCode({})", statusCode);
+			throw new ServiceException("Response with error statusCode:" + statusCode);
+		}
+
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		logger.info("Init wx mpaccesstoken....");
 		List<Wxappinfo> wxappinfos = this.wxappinfoMapper.selectAllWxappinfo(Wxappinfo.WX_MP_TYPE);
 		if (wxappinfos != null && wxappinfos.size() > 0) {
 			for (Wxappinfo wxappinfo : wxappinfos) {
-				this.refreshAccessToken(wxappinfo.getOrgid());
+				try {
+					this.refreshAccessToken(wxappinfo.getOrgid());
+				} catch (Exception ex) {
+					logger.error("Refresh accessToken exception.", ex);
+				}
 			}
 		}
 		logger.info("Start token refresh thread...");

@@ -31,6 +31,10 @@ public interface WxMpService {
 	MpQRCode getQRCode(String scenestr, Integer orgid);
 
 	void addSubscribe(String terminalid, String wxuserid, Integer createtime, Integer orgid);
+	/**
+	 * 给关注用户发送消息
+	 */
+	void sendMessage(String accessToken, String wxuserid, String content);
 
 
 }

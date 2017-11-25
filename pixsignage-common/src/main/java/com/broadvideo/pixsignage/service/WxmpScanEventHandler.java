@@ -6,6 +6,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.broadvideo.pixsignage.common.ServiceException;
+import com.broadvideo.pixsignage.common.WxmpMessageTips;
 
 /**
  * 已经关注公众号的，扫码事件 msgtype:event event:scan订阅类型
@@ -36,11 +37,12 @@ public class WxmpScanEventHandler extends WxmpEventMsgTypeHandler {
 		final Integer createTime = NumberUtils.toInt(root.selectSingleNode("/xml/CreateTime").getText());
 		if (StringUtils.isBlank(eventKey)) {
 			logger.info("没有传递场景值，不返回提示消息");
-			return buildReplyMsg(toUserName, fromUserName, "success");
+			return buildEmptyReplyMsg(); // buildReplyMsg(toUserName,
+											// fromUserName, "");
 		}
 		ServiceFactory.getBean(SmartdoorkeeperService.class).bind(eventKey, fromUserName, toUserName, event,
 				createTime * 1000L, orgid);
-		String replyMsg = buildReplyMsg(toUserName, fromUserName, "欢迎关注成都免费避孕药具公众号，输入数字开柜门领取避孕套，输入数字：0 或1 开柜门");
+		String replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP);
 		logger.info("订阅成功，发送回复信息给用户({})", fromUserName);
 		return replyMsg;
 

@@ -36,8 +36,19 @@ public class ResSmartDoors extends ResBase {
 	public String getDoorAuthorizeState(@PathParam("terminal_id") String terminalId,
 			@Context HttpServletRequest req) {
 		logger.info("Entry req(door_authorize_state) with terminial_id:{}", terminalId);
-		JSONObject resultData = smartdoorkeeperService.getDoorAuthorizeState(terminalId);
-		return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", resultData);
+		if (StringUtils.isBlank(terminalId)) {
+
+			return this.handleResult(ApiRetCodeEnum.INVALID_ARGS, "parameter(terminal_id) is empty.");
+
+		}
+		try {
+			JSONObject resultData = smartdoorkeeperService.getDoorAuthorizeState(terminalId);
+			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", resultData);
+		} catch (Exception ex) {
+			logger.error("getDoorAuthorizeState exception:", ex);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, ex.getMessage());
+
+		}
 	}
 
 	@POST
@@ -49,6 +60,7 @@ public class ResSmartDoors extends ResBase {
 			logger.info("terminalId({}) is null", terminalId);
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "parameter(terminal_id) is empty.");
 		}
+		try {
 		JSONObject requestJson = new JSONObject(request);
 		String doorType = requestJson.getString("door_type");
 		String actionType = requestJson.optString("action_type");
@@ -59,8 +71,12 @@ public class ResSmartDoors extends ResBase {
 			return this.handleResult(ApiRetCodeEnum.EXCEPTION, "Invalid binding.");
 		}
 		smartdoorkeeperService.doorStateCallback(terminalId, actionType, state);
-
 		return this.handleResult(ApiRetCodeEnum.SUCCESS, "");
+		} catch (Exception ex) {
+			logger.error("reportDoorState exception:", ex);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, ex.getMessage());
+
+		}
 	}
 
 

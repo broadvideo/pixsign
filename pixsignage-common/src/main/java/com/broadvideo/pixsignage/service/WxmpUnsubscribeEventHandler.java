@@ -32,7 +32,8 @@ public class WxmpUnsubscribeEventHandler extends WxmpEventMsgTypeHandler {
 		final String event = root.selectSingleNode("/xml/Event").getText();
 		logger.info("用户({})取消了关注公众号({})", fromUserName, toUserName);
 		ServiceFactory.getBean(SmartdoorkeeperService.class).unbind(fromUserName);
-		return buildReplyMsg(toUserName, fromUserName, "success");
+		return buildEmptyReplyMsg();
+
 	}
 
 

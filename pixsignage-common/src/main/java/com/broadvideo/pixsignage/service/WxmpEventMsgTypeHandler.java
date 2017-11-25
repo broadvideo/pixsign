@@ -21,8 +21,8 @@ public class WxmpEventMsgTypeHandler extends WxmpMsgTypeHandler {
 	private LinkedList<String> eventMsgList = new LinkedList<String>();
 	private final int MAX_CAPACITY_SIZE = 100;
 	private static Map<String, WxmpEventMsgTypeHandler> handlerMap = new HashMap<String, WxmpEventMsgTypeHandler>();
-	static{
-		WxmpEventMsgTypeHandler subscribeHandler=new WxmpSubscribeEventHandler();
+	static {
+		WxmpEventMsgTypeHandler subscribeHandler = new WxmpSubscribeEventHandler();
 		WxmpEventMsgTypeHandler unsubscribeHandler = new WxmpUnsubscribeEventHandler();
 		WxmpEventMsgTypeHandler scanHandler = new WxmpScanEventHandler();
 		handlerMap.put(subscribeHandler.getEvent(), subscribeHandler);
@@ -30,6 +30,7 @@ public class WxmpEventMsgTypeHandler extends WxmpMsgTypeHandler {
 		handlerMap.put(scanHandler.getEvent(), scanHandler);
 	}
 	private String event;
+
 	public WxmpEventMsgTypeHandler() {
 		this.setMsgType("event");
 	}
@@ -48,13 +49,16 @@ public class WxmpEventMsgTypeHandler extends WxmpMsgTypeHandler {
 		final String toUserName = root.selectSingleNode("/xml/ToUserName").getText();
 		final Integer createTime = NumberUtils.toInt(root.selectSingleNode("/xml/CreateTime").getText());
 		String key = fromUserName + "@" + createTime;
-		if (eventMsgList.contains(key)) {
-			return buildReplyMsg(fromUserName, toUserName, "success");
+		synchronized (eventMsgList) {
+			if (eventMsgList.contains(key)) {
+				return buildEmptyReplyMsg(); // buildReplyMsg(toUserName,
+												// fromUserName, "");
+			}
+			if (eventMsgList.size() >= MAX_CAPACITY_SIZE) {
+				eventMsgList.removeFirst();
+			}
+			eventMsgList.add(key);
 		}
-		if (eventMsgList.size() >= MAX_CAPACITY_SIZE) {
-			eventMsgList.removeFirst();
-		}
-		eventMsgList.add(key);
 		return handlerMap.get(event).handle(requestBody, orgid);
 
 	}

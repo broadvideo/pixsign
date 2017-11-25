@@ -26,8 +26,8 @@ public class ResWxmp extends ResBase {
 	@GET
 	@Path("/{org_id}/callback")
 	public String wxmpCallbackForGet(String request, @PathParam("org_id") Integer orgid, @Context HttpServletRequest req) {
-
 		return wxmpCallback(request, orgid, req);
+
 
 	}
 
@@ -35,9 +35,7 @@ public class ResWxmp extends ResBase {
 	@Path("/{org_id}/callback")
 	public String wxmpCallbackForPost(String request, @PathParam("org_id") Integer orgid,
 			@Context HttpServletRequest req) {
-
 		return wxmpCallback(request, orgid, req);
-
 	}
 
 	private String wxmpCallback(String request, Integer orgid, HttpServletRequest req) {
@@ -57,7 +55,9 @@ public class ResWxmp extends ResBase {
 				return echostr;
 			}
 			//处理其他回调时间
-			return WxmpMsgTypeHandlers.doHandle(request, orgid);
+			String replyMsg = WxmpMsgTypeHandlers.doHandle(request, orgid);
+			logger.info("####replyMsg:{}", replyMsg);
+			return replyMsg;
 	
 		} catch (Exception ex) {
 			ex.printStackTrace();
