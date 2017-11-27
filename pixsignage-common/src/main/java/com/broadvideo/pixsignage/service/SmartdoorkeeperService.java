@@ -121,8 +121,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 		TerminalBinding binding=getBinding(wxuserid);
 		logger.info("wxuserid（{}）,terminalid({})current authorizestate({})", new Object[] { wxuserid, terminalid,
 				binding.getAuthorizestate() });
+		resultJson.put("authorize_state", binding.getAuthorizestate());
 		JSONObject doorJson = new JSONObject();
-		doorJson.put("authorize_state", binding.getAuthorizestate());
 		doorJson.put("door_type", binding.getDoortype());
 		doorJson.put("state", DoorConst.DoorState.SUCCESS.getVal());
 		resultJson.put("door_action", doorJson);
