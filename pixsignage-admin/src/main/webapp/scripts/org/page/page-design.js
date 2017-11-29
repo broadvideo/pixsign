@@ -1416,6 +1416,9 @@ var PageDesignModule = function (mode) {
 			}
 			refreshPagezone(_self.Zone);
 		});	
+		$('.zoneform input[name="fixflag"]').on('change', function(e) {
+			_self.Zone.fixflag = $('.zoneform input[name="fixflag"]:checked').val();
+		});	
 
 
 		$('.zoneform input,select').on('change', function(e) {

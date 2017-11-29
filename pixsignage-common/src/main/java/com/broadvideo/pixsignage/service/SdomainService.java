@@ -10,4 +10,14 @@ public interface SdomainService {
 	public Sdomain selectByCode(String code);
 
 	public Sdomain selectByServername(String servername);
+
+	public void addSdomain(Sdomain sdomain);
+
+	public void updateSdomain(Sdomain sdomain);
+
+	public void deleteSdomain(String sdomainid);
+
+	public boolean validateName(Sdomain sdomain);
+
+	public boolean validateCode(Sdomain sdomain);
 }

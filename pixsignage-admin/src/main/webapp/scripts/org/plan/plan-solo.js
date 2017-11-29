@@ -188,7 +188,7 @@ var PlanModule = function () {
 								        padding : 0,
 								        content: '<div id="PagePreview"></div>',
 								    });
-									redrawPagePreview($('#PagePreview'), data.page, 800);
+									PagePreviewModule.preview($('#PagePreview'), data.page, 800);
 								} else {
 									bootbox.alert(common.tips.error + data.errormsg);
 								}

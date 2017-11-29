@@ -389,6 +389,9 @@ var PageModule = function () {
 						_design.Object = data.page;
 						_design.Objectid = data.page.pageid;
 						_design.Zone = null;
+						if (_design.Object.limitflag == 0) {
+							$('.limit-1').css('display', '');
+						}
 						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');

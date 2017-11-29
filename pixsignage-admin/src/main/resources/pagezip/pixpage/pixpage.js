@@ -1,6 +1,7 @@
 var PixPage = function () {
 	var allmodules = [];
 	var diymodules = [];
+	var maxzindex = 0;
 
 	var init = function (mode) {
 		this.mode = mode;
@@ -14,6 +15,7 @@ var PixPage = function () {
 		for (var i = 0; i < zones.length; i++) {
 			var zone = zones[i];
 			var zone_div = document.createElement('div');
+			PixPage.maxzindex = Math.max(PixPage.maxzindex, zone.zindex + 1);
 			zone_div.id = 'PagezoneDiv' + zone.pagezoneid;
 			$(zone_div).attr('zoneid', zone.pagezoneid);
 			$(zone_div).attr('zonetype', zone.type);
@@ -162,6 +164,7 @@ var PixPage = function () {
 		init: init,
 		resize: resize,
 		diymodules: diymodules,
+		maxzindex: maxzindex,
 	}
 	
 }();
