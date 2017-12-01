@@ -1893,8 +1893,44 @@
 		      <param name="includeProperties">errorcode,errormsg</param>
 		   </result>
 		</action>
-		
-
+		<action name="location!list" method="doList" class="locationAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+			  <param name="includeProperties">aaData.*,errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="location!listnode" method="doListNode" class="locationAction">
+			<result type="json">
+			</result>
+		</action>
+	   <action name="location!add" method="doAdd" class="locationAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="location!update" method="doUpdate" class="locationAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="location!delete" method="doDelete" class="locationAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="location!validate" method="doValidate" class="locationAction">
+		  	<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 	</package>
 
 </struts>
