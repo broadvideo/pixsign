@@ -248,6 +248,7 @@ public class PixsignageService21 {
 			onlinelogMapper.insertSelective(onlinelog);
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			responseJson.put("terminalid", device.getTerminalid());
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);

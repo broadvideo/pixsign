@@ -920,6 +920,7 @@ public class PixsignageService {
 			@FormDataParam("playlog") InputStream playlogFile) {
 		try {
 			logger.info("Pixsignage Service report_playlog: {}, playlogHeader: {}", request, playlogHeader);
+			long t1 = System.currentTimeMillis();
 			JSONObject requestJson = new JSONObject(request);
 			String hardkey = requestJson.getString("hardkey");
 			String terminalid = requestJson.getString("terminal_id");
@@ -950,7 +951,8 @@ public class PixsignageService {
 			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
 			FileUtils.moveFile(tempfile, new File(dir, okname));
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-			logger.info("Pixsignage Service report_playlog response: {}", responseJson.toString());
+			long t2 = System.currentTimeMillis();
+			logger.info("Pixsignage Service report_playlog response: {}, time: {}", responseJson.toString(), (t2 - t1));
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_playlog exception", e);

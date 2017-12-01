@@ -165,13 +165,13 @@
     order by ypos, xpos
   </select>
 
-  <select id="selectByHardkey" resultMap="FullResultMap">
+  <select id="selectByHardkey" resultMap="BaseResultMap">
     select * from device
     where status = 1 
     and hardkey = #{hardkey}
   </select>
 
-  <select id="selectByTerminalid" resultMap="FullResultMap">
+  <select id="selectByTerminalid" resultMap="BaseResultMap">
     select * from device
     where terminalid = #{terminalid}
     order by deviceid

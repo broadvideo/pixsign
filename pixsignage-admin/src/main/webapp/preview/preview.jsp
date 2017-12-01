@@ -4,7 +4,8 @@
 <head>
 	<title></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	
 	<link rel="stylesheet" href="plugin/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="plugin/animate.css/animate.min.css"/>
 	<link rel="stylesheet" href="plugin/bxslider/jquery.bxslider.min.css"/>
@@ -28,6 +29,7 @@
 	<script src="plugin/moment/moment.min.js"></script>
 	<script src="plugin/base64/base64.min.js"></script>
 	<script src="plugin/bxslider/jquery.bxslider.min.js"></script>
+	<script src="plugin/hammer/hammer.js"></script>
 	
 	<script src="pixpage/pixpage.js" type="text/javascript"></script>
 	<script src="pixpage/module-image.js" type="text/javascript"></script>

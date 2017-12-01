@@ -11,6 +11,8 @@ public interface SdomainMapper {
 
 	List<Sdomain> selectList();
 
+	List<Sdomain> selectByName(@Param(value = "name") String name);
+
 	Sdomain selectByCode(@Param(value = "code") String code);
 
 	int deleteByPrimaryKey(@Param(value = "sdomainid") String sdomainid);

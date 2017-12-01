@@ -122,6 +122,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl" zonetype="31">
+								<i class="fa fa-arrows"></i><div>会议日程</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -247,7 +250,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>
@@ -329,7 +332,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12">
+								<div class="panel panel-default zone-ctl zonetype-11 zonetype-12 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse6">表格设置</a>
@@ -688,14 +691,38 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default">
+								<div class="panel panel-default zone-ctl zonetype-1 zonetype-2 zonetype-7">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse10">动画效果</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse10">伸缩旋转</a>
 										</h4>
 									</div>
 									<div id="Collapse10" class="panel-collapse collapse">
 										<form id="ZoneEditForm10" class="form-horizontal pix-bordered zoneform">
+											<div class="form-body">
+												<div class="form-group">
+													<label class="col-md-3 control-label">开关</label>
+													<div class="col-md-9 radio-list">
+														<label class="radio-inline">
+															<input type="radio" name="fixflag" value="0"> 打开
+														</label>
+														<label class="radio-inline">
+															<input type="radio" name="fixflag" value="1" checked> 关闭
+														</label>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="panel panel-default zone-ctl zonetype-2 zonetype-7">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse11">动画效果</a>
+										</h4>
+									</div>
+									<div id="Collapse11" class="panel-collapse collapse">
+										<form id="ZoneEditForm11" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">初始</label>
@@ -722,11 +749,11 @@
 								<div class="panel panel-default zone-ctl zonetype-21">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse11">互动素材</a>
+											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse12">互动素材</a>
 										</h4>
 									</div>
-									<div id="Collapse11" class="panel-collapse collapse">
-										<form id="ZoneEditForm11" class="form-horizontal pix-bordered zoneform">
+									<div id="Collapse12" class="panel-collapse collapse">
+										<form id="ZoneEditForm12" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
 													<label class="col-md-3 control-label">互动</label>

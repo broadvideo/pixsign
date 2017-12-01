@@ -40,6 +40,62 @@ var VideoZone = function (zonediv, zone) {
 		for (var i=0; i<pagezonedtls.length; i++) {
 			_list.push(pagezonedtls[i].video);
 		}
+
+		if (zone.fixflag == 0) {
+			var myElement = document.getElementById('PagezoneDiv' + zone.pagezoneid);
+			var mc = new Hammer.Manager(myElement);
+			var pan = new Hammer.Pan();
+			var pinch = new Hammer.Pinch();
+			var rotate = new Hammer.Rotate();
+			pinch.recognizeWith(rotate);
+			mc.add([pan, pinch, rotate]);
+			
+			var lastPosX = 0, lastPosY = 0, posX = 0, posY = 0;
+			var scale = 1, last_scale = 1;
+			var rotation = 0, last_rotation = 0, start_rotation = 0;
+			var zindex = zone.zindex;
+			mc.on('pan panend pinchstart pinch pinchend rotatestart rotate rotateend tap multitap', function(e) {
+				e.preventDefault();
+				if (zindex < PixPage.maxzindex) {
+					PixPage.maxzindex ++;
+					zindex = PixPage.maxzindex;
+					$('#PagezoneDiv' + zone.pagezoneid).css('z-index', zindex);
+					$('#PagezoneDiv' + zone.pagezoneid + ' video').html('');
+				}
+				switch (e.type) {
+					case 'pan':
+						posX = e.deltaX + lastPosX;
+						posY = e.deltaY + lastPosY;
+						break;
+					case 'panend':
+						lastPosX = posX;
+						lastPosY = posY;
+						break;
+					case 'pinchstart':
+						last_scale = scale;
+						break;
+					case 'pinch':
+						scale = Math.max(1, Math.min(last_scale * e.scale, 10));
+						break;
+					case 'pinchend':
+						last_scale = scale;
+						break;
+					case 'rotatestart':
+						last_scale = scale;
+						last_rotation = rotation;
+						start_rotation = e.rotation;
+						break;
+					case 'rotate':
+						rotation = last_rotation - start_rotation + e.rotation;
+						break;
+					case 'rotateend':
+						last_scale = scale;
+						last_rotation = rotation;
+						break;
+				}
+				$('#PagezoneDiv' + zone.pagezoneid).css('-webkit-transform', 'translate3d(' + posX +'px,' + posY + 'px, 0 ) rotate(' + rotation + 'deg)' + ' scale3d(' + scale + ', ' + scale + ', 1 )');
+			});
+		}
 	};
 	
 	this.resize = function (scalew, scaleh) {

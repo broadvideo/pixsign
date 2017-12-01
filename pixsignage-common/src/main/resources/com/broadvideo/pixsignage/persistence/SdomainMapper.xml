@@ -23,7 +23,14 @@
     select
     <include refid="Base_Column_List" />
     from sdomain
-    order by sdomainid
+    order by sdomainid desc
+  </select>
+  
+  <select id="selectByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sdomain
+    where name = #{name}
   </select>
   
   <select id="selectByCode" resultMap="BaseResultMap">
