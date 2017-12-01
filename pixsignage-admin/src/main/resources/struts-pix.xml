@@ -1938,6 +1938,7 @@
 		      <param name="includeProperties">errorcode,errormsg</param>
 		   </result>
 		</action>
+		<!-- 
 		<action name="location!list" method="doList" class="locationAction">
 		   <result name="success" type="json">
 		      <param name="ignoreHierarchy">false</param>
@@ -1976,6 +1977,7 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		 -->
 	</package>
 
 </struts>
