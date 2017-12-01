@@ -16,9 +16,12 @@ public interface ApiRetCodeEnum {
 	public final static Integer TERMINAL_NOAUTH_OPT_DOOR = -10001;
 	// 终端未绑定用户
 	public final static Integer TERMINAL_NOBINDING_USER = -10002;
+	public final static Integer USER_AUTHORIZED_FAIL = -10003;
 
 	// 微信公众号缺少配置
 	public final static Integer WXMP_NO_CONFIG = -20000;
+
+
 	//认证失败
 	public final static Integer  AUTH_FAIL=-20;
 	

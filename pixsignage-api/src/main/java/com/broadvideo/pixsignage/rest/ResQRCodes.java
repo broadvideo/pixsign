@@ -45,6 +45,7 @@ public class ResQRCodes extends ResBase {
 			logger.info("GetWxmpQRCode with terminalId:{}", terminalId);
 			Device device=deviceService.selectByTerminalid(terminalId);
 			if(device==null){
+
 				return handleResult(ApiRetCodeEnum.TERMINAL_NOT_FOUND, "terminal_id:"+terminalId+"not found.");
 			}
 			try {

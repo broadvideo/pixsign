@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.service.SmartdoorkeeperService;
-import com.broadvideo.pixsignage.vo.TerminalBinding;
 
 @Component
 @Path("/terminals")
@@ -42,8 +42,8 @@ public class ResSmartDoors extends ResBase {
 
 		}
 		try {
-			JSONObject resultData = smartdoorkeeperService.getDoorAuthorizeState(terminalId);
-			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", resultData);
+			JSONArray dataArr = smartdoorkeeperService.getDoorAuthorizeState(terminalId);
+			return this.handleResult(ApiRetCodeEnum.SUCCESS, "success", dataArr);
 		} catch (Exception ex) {
 			logger.error("getDoorAuthorizeState exception:", ex);
 			return this.handleResult(ApiRetCodeEnum.EXCEPTION, ex.getMessage());
@@ -65,12 +65,13 @@ public class ResSmartDoors extends ResBase {
 		String doorType = requestJson.getString("door_type");
 		String actionType = requestJson.optString("action_type");
 		String state = requestJson.optString("state");
-		TerminalBinding binding = smartdoorkeeperService.getAuthorizedBinding(terminalId);
-		if (binding == null || !binding.getDoortype().equals(doorType)) {
-			logger.error("Invalid request for doorType({})and  binding({})", doorType, binding);
-			return this.handleResult(ApiRetCodeEnum.EXCEPTION, "Invalid binding.");
+			boolean isBinding = smartdoorkeeperService.isAuthorizedBinding(terminalId, doorType);
+			if (!isBinding) {
+				logger.error("No Authorize binding:Invalid request(report_door_state) for terminalid({}),doorType({})",
+						terminalId, doorType);
+				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "Report State Not found Authorized binding.");
 		}
-		smartdoorkeeperService.doorStateCallback(terminalId, actionType, state);
+			smartdoorkeeperService.doorStateCallback(terminalId, doorType, actionType, state);
 		return this.handleResult(ApiRetCodeEnum.SUCCESS, "");
 		} catch (Exception ex) {
 			logger.error("reportDoorState exception:", ex);

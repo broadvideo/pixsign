@@ -34,6 +34,7 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 		final String toUserName = root.selectSingleNode("/xml/ToUserName").getText();
 		final String content = root.selectSingleNode("/xml/Content").getText().trim();
 		final long msgId = NumberUtils.toLong(root.selectSingleNode("/xml/MsgId").getText().trim());
+		logger.info("Receive msgId:{} content:{}", msgId, content);
 		synchronized (msgIds) {
 			if (msgIds.contains(msgId)) {
 				return buildEmptyReplyMsg();
@@ -43,7 +44,6 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 			}
 			msgIds.add(msgId);
 		}
-		logger.info("Receive msgId:{} content:{}", msgId, content);
 		logger.info("Check user binding...");
 		TerminalBinding binding = ServiceFactory.getBean(SmartdoorkeeperService.class).getBinding(fromUserName);
 		if (binding == null) {
@@ -56,12 +56,14 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 			boolean flag = ServiceFactory.getBean(SmartdoorkeeperService.class)
 					.authorizeOpenDoor(fromUserName, content);
 			if (flag) {
-				logger.info("Authorize open door({})  for wxuserid({})", binding.getTerminalid(), fromUserName);
+				logger.info("Authorize open terminal({}) door({})  for wxuserid({})", binding.getTerminalid(), content,
+						fromUserName);
 				return buildEmptyReplyMsg(); // buildReplyMsg(toUserName,
 												// fromUserName, "开门成功!");
 			} else {
-				logger.error("Authorize open door({}) fail for wxuserid({})", binding.getTerminalid(), fromUserName);
-				return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.DOOR_REQ_OPEN_FAIL_TOP);
+				logger.error("Authorize open terminal({}) door({}) fail for wxuserid({})", binding.getTerminalid(),
+						content, fromUserName);
+				return buildEmptyReplyMsg();
 			}
 
 		} else {

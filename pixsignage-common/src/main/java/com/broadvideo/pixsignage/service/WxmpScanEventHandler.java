@@ -40,10 +40,17 @@ public class WxmpScanEventHandler extends WxmpEventMsgTypeHandler {
 			return buildEmptyReplyMsg(); // buildReplyMsg(toUserName,
 											// fromUserName, "");
 		}
-		ServiceFactory.getBean(SmartdoorkeeperService.class).bind(eventKey, fromUserName, toUserName, event,
+		boolean isBind = ServiceFactory.getBean(SmartdoorkeeperService.class).bind(eventKey, fromUserName, toUserName,
+				event,
 				createTime * 1000L, orgid);
-		String replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP);
+		String replyMsg = null;
+		if (isBind) {
+			replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP);
 		logger.info("订阅成功，发送回复信息给用户({})", fromUserName);
+		} else {
+			replyMsg = this.buildEmptyReplyMsg();
+			logger.info("绑定失败!");
+		}
 		return replyMsg;
 
 	}
