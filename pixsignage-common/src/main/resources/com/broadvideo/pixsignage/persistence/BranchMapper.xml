@@ -15,58 +15,45 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="childcount" column="{parentid=branchid}" select="selectChildCount" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Branch" extends="BaseResultMap" >
     <association property="parent" column="{id=parentid}" select="selectParent" />
     <association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsignage.persistence.OrgMapper.selectByPrimaryKey" />
     <collection property="children" ofType="com.broadvideo.pixsignage.domain.Branch" column="{parentid=branchid}" select="selectChild" />
-  </resultMap>
-  <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
-    <id column="branchid" property="branchid" jdbcType="INTEGER" />
-    <result column="orgid" property="orgid" jdbcType="INTEGER" />
-    <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
-    <result column="parentid" property="parentid" jdbcType="INTEGER" />
-    <result column="parentid2" property="parentid2" jdbcType="INTEGER" />
-    <result column="parentid3" property="parentid3" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <association property="childcount" column="{parentid=branchid}" select="selectChildCount" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     branchid, orgid, topfolderid, parentid, parentid2, parentid3, name, code, status, description, createtime, createstaffid
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select * from branch
     where branchid = #{branchid}
   </select>
 
-  <select id="selectChildCount" resultType="Integer" >
-    select count(1) from branch
-    where status = 1 and parentid = #{parentid}
-  </select>
-
-  <select id="selectChild" resultMap="MiniResultMap" >
-    select * from branch
-    where status = 1 and parentid = #{parentid} order by branchid
-  </select>
-
-  <select id="selectParent" resultMap="MiniResultMap" >
-    select * from branch
-    where status = 1 and branchid = #{id}
-  </select>
-
-  <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" /> 
     from branch
     where branchid = #{branchid}
   </select>
   
-  <select id="selectRoot" resultMap="BaseResultMap">
+  <select id="selectChildCount" resultType="Integer" >
+    select count(1) from branch
+    where status = 1 and parentid = #{parentid}
+  </select>
+
+  <select id="selectChild" resultMap="BaseResultMap" >
+    select * from branch
+    where status = 1 and parentid = #{parentid} order by branchid
+  </select>
+
+  <select id="selectParent" resultMap="BaseResultMap" >
+    select * from branch
+    where status = 1 and branchid = #{id}
+  </select>
+
+  <select id="selectRoot" resultMap="FullResultMap">
     select * from branch 
     where status=1 
     and parentid=0 
@@ -74,7 +61,7 @@
     order by branchid 
   </select>
 
-  <select id="selectByName" resultMap="MiniResultMap">
+  <select id="selectByName" resultMap="BaseResultMap">
     select * from branch
     where status='1' and name = #{name} 
     <if test="orgid != null" >
@@ -82,7 +69,7 @@
     </if>
   </select>
   
-  <select id="selectTaodianList" resultMap="BaseResultMap">
+  <select id="selectTaodianList" resultMap="FullResultMap">
     select b.* from branch b, org o
     where b.orgid = o.orgid
     and b.status = '1' 

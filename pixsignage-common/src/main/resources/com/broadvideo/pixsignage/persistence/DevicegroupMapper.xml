@@ -39,6 +39,13 @@
     where devicegroupid = '${devicegroupid}'
   </select>
   
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from devicegroup
+    where devicegroupid = '${devicegroupid}'
+  </select>
+  
   <select id="selectCount" resultType="Integer">
     select count(1) from devicegroup 
     where status = 1

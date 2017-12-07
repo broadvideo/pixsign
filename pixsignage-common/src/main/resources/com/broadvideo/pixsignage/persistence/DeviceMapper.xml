@@ -60,8 +60,8 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
-    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectMiniByPrimaryKey" />
-    <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectByPrimaryKey" />
+    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
+    <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectBaseByPrimaryKey" />
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
@@ -77,6 +77,11 @@
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
+    select * from device
+    where deviceid = #{deviceid}
+  </select>
+  
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap">
     select * from device
     where deviceid = #{deviceid}
   </select>
@@ -99,6 +104,9 @@
     </if>
     <if test="status != null">
       and status = #{status}
+    </if>
+    <if test="onlineflag != null">
+      and onlineflag = #{onlineflag}
     </if>
     <if test="devicegroupid != null">
       and devicegroupid = #{devicegroupid}
@@ -153,13 +161,13 @@
     </if>
   </select>
 
-  <select id="selectByDevicegroup" resultMap="FullResultMap">
+  <select id="selectByDevicegroup" resultMap="BaseResultMap">
     select * from device
     where devicegroupid = #{devicegroupid}
     order by deviceid
   </select>
 
-  <select id="selectByDevicegrid" resultMap="FullResultMap">
+  <select id="selectByDevicegrid" resultMap="BaseResultMap">
     select * from device
     where devicegridid = #{devicegridid}
     order by ypos, xpos
