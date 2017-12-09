@@ -1,12 +1,9 @@
 package com.broadvideo.pixsignage.action;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.VideoService;
+import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -103,27 +101,29 @@ public class VideoAction extends BaseDatatableAction {
 					try {
 						// Generate preview gif
 						FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
-						String cmd = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
+						String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
 								+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
 								+ "/video/snapshot/" + video.getVideoid() + ".jpg";
-						logger.info("Begin to generate preview and thumbnail: " + cmd);
-						Process process = Runtime.getRuntime().exec(cmd);
-						InputStream fis = process.getInputStream();
-						BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-						String line;
-						while ((line = br.readLine()) != null) {
-							System.out.println(line);
-						}
-						br.close();
-						fis.close();
-
+						logger.info("Begin to generate preview and thumbnail: " + command);
+						CommonUtil.execCommand(command);
 						File destFile = new File(
 								CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid() + ".jpg");
-						BufferedImage img = ImageIO.read(destFile);
-						video.setWidth(img.getWidth());
-						video.setHeight(img.getHeight());
-						video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
-						logger.info("Finish thumbnail generating.");
+						if (!destFile.exists()) {
+							command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
+									+ " -y -f image2 -ss 1 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+									+ "/video/snapshot/" + video.getVideoid() + ".jpg";
+							CommonUtil.execCommand(command);
+						}
+						if (destFile.exists()) {
+							BufferedImage img = ImageIO.read(destFile);
+							video.setWidth(img.getWidth());
+							video.setHeight(img.getHeight());
+							video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
+							logger.info("Finish thumbnail generating.");
+						} else {
+							logger.info("Failed to generate thumbnail.");
+						}
+
 					} catch (IOException ex) {
 						logger.info("Video parse error, file={}", mymediaFileName[i], ex);
 					}
