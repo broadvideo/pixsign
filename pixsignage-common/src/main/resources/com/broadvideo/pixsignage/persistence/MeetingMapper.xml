@@ -169,10 +169,13 @@
 	   </if>
 	   ) )
 	  </if>
+	  <if test="starttime!=null or endtime!=null">
+	  	  order by m.starttime asc
+	  </if>
+	  <if test="starttime==null and endtime==null">
+	      order by m.starttime desc
 	  
-	  
-	  
-	  order by m.starttime desc
+	  </if>
   </select>
   
   <select  id="selectExistMeetings" resultMap="BaseResultMap"  >

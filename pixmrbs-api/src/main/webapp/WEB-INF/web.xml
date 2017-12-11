@@ -37,7 +37,10 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	<!-- 自定义配置项，初始化配置-->
+	<listener>
+		<listener-class>biz.videoexpress.pixedx.lmsapi.common.PixContextListener</listener-class>
+	</listener>
 	<servlet>
         <servlet-name>SpringApplication</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>

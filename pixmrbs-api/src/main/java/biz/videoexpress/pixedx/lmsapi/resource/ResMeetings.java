@@ -28,7 +28,6 @@ import biz.videoexpress.pixedx.lmsapi.bean.Pagination;
 import biz.videoexpress.pixedx.lmsapi.common.ApiRetCodeEnum;
 import biz.videoexpress.pixedx.lmsapi.common.AppException;
 import biz.videoexpress.pixedx.lmsapi.common.BasicResp;
-import biz.videoexpress.pixedx.lmsapi.common.UserProfile;
 
 import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.domain.Attendee;
@@ -56,9 +55,9 @@ public class ResMeetings extends ResBase {
 	@Path("/meeting_room_categories")
 	public Response getMeetingRoomCategories(@Context HttpServletRequest req) {
 		BasicResp<LocationInfo> basicResp = new BasicResp<LocationInfo>();
-		UserProfile profile = currentUserProfile(req);
+
 		try {
-			List<LocationInfo> locationInfos = this.locationService.getLocationTree(profile.getOrgId());
+			List<LocationInfo> locationInfos = this.locationService.getLocationTree(getOrgId(req));
 			basicResp.setRetcode(ApiRetCodeEnum.SUCCESS);
 			basicResp.setData(locationInfos);
 		} catch (Exception e) {
@@ -74,7 +73,7 @@ public class ResMeetings extends ResBase {
 	public Response getMeetingRooms(@Context HttpServletRequest req, @BeanParam MeetingRoomReq meetingRoomReq) {
 		// UserProfile profile = currentUserProfile(req);
 		try {
-			Integer orgId = 1;
+			Integer orgId = getOrgId(req);
 			com.broadvideo.pixsignage.common.PageInfo pageInfo=new com.broadvideo.pixsignage.common.PageInfo();
 			pageInfo.setStart(meetingRoomReq.getStart());
 			pageInfo.setLength(meetingRoomReq.getLength());
@@ -123,7 +122,7 @@ public class ResMeetings extends ResBase {
 		// UserProfile profile = currentUserProfile(req);
 
 		try {
-			Integer orgId = 1;
+			Integer orgId = getOrgId(req);
 			com.broadvideo.pixsignage.common.PageInfo pageInfo = new com.broadvideo.pixsignage.common.PageInfo();
 			pageInfo.setStart(meetingReq.getStart());
 			pageInfo.setLength(meetingReq.getLength());

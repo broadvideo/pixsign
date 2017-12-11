@@ -33,6 +33,12 @@ public class ResBase {
 		LOG.info("Resource " + this.getClass().getName() + " initialized.");
 	}
 
+	public static Integer getOrgId(HttpServletRequest req) {
+
+		return (Integer) req.getSession().getServletContext().getAttribute("orgid");
+
+	}
+
 	/**
 	 * 从缓存中获取当前登录用户的Profile，找不到则从Openedx中获取用户Profile
 	 * 
