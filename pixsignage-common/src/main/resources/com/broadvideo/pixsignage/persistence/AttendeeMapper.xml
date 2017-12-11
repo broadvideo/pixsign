@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AttendeeMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Attendee" >
+    <id column="attendeeid" property="attendeeid" jdbcType="INTEGER" />
+    <result column="meetingid" property="meetingid" jdbcType="INTEGER" />
+    <result column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="staffname" property="staffname" jdbcType="VARCHAR" />
+    <result column="signtime" property="signtime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attendeeid, meetingid, staffid, signtime, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendee
+    where attendeeid = #{attendeeid,jdbcType=INTEGER}
+  </select>
+  <select id="selectMeetingAttendees"  resultMap="BaseResultMap" >
+	    select 
+	      a.*,st.name AS staffname
+	    from attendee a Left JOIN staff st ON (a.staffid=st.staffid)
+	    where meetingid=#{meetingid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from attendee
+    where attendeeid = #{attendeeid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByMeetingid"  parameterType="java.lang.Integer" >
+    delete from attendee
+    where meetingid = #{meetingid}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Attendee" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendeeid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendee (meetingid, staffid, signtime, 
+      createtime)
+    values (#{meetingid,jdbcType=INTEGER}, #{staffid,jdbcType=INTEGER}, #{signtime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendee" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendeeid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="meetingid != null" >
+        meetingid,
+      </if>
+      <if test="staffid != null" >
+        staffid,
+      </if>
+      <if test="signtime != null" >
+        signtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="meetingid != null" >
+        #{meetingid,jdbcType=INTEGER},
+      </if>
+      <if test="staffid != null" >
+        #{staffid,jdbcType=INTEGER},
+      </if>
+      <if test="signtime != null" >
+        #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Attendee" >
+    update attendee
+    <set >
+      <if test="meetingid != null" >
+        meetingid = #{meetingid,jdbcType=INTEGER},
+      </if>
+      <if test="staffid != null" >
+        staffid = #{staffid,jdbcType=INTEGER},
+      </if>
+      <if test="signtime != null" >
+        signtime = #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where attendeeid = #{attendeeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Attendee" >
+    update attendee
+    set meetingid = #{meetingid,jdbcType=INTEGER},
+      staffid = #{staffid,jdbcType=INTEGER},
+      signtime = #{signtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where attendeeid = #{attendeeid,jdbcType=INTEGER}
+  </update>
+</mapper>

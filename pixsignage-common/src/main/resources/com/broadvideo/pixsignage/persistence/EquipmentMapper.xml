@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.EquipmentMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Equipment" >
+    <id column="equipmentid" property="equipmentid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="ipaddr" property="ipaddr" jdbcType="VARCHAR" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    equipmentid, uuid, meetingroomid, type, code, name, ipaddr, orgid, createtime, createstaffid, 
+    updatetime, updatestaffid, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from equipment
+    where equipmentid = #{equipmentid,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" >
+     select 
+        <include refid="Base_Column_List" />
+     from  equipment 
+     where orgid=#{orgid} and status='1'
+     <if test="search!=null">
+	    and (name like #{search} or code like #{search} or ipaddr like #{search})
+	 </if>
+	 <if test="meetingroomid!=null">
+	   and meetingroomid=#{meetingroomid}
+	 </if>
+	 order by equipmentid desc
+  </select>
+  <select id="existNameCode" resultType="int">
+     select  count(1)
+     from  equipment
+     where orgid=#{orgid} and status='1' 
+          <if test="equipmentid != null" >
+	            and equipmentid !=#{equipmentid}
+	      </if>
+	       <if test="name != null" >
+	           and name=#{name}
+	       </if>
+	       <if test="code != null" >
+	           and code=#{code}
+	       </if>
+       
+  
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from equipment
+    where equipmentid = #{equipmentid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Equipment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="equipmentid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into equipment (uuid, meetingroomid, type, 
+      code, name, ipaddr, 
+      orgid, createtime, createstaffid, 
+      updatetime, updatestaffid, status
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{meetingroomid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{ipaddr,jdbcType=VARCHAR}, 
+      #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Equipment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="equipmentid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into equipment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="meetingroomid != null" >
+        meetingroomid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="ipaddr != null" >
+        ipaddr,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingroomid != null" >
+        #{meetingroomid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ipaddr != null" >
+        #{ipaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Equipment" >
+    update equipment
+    <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingroomid != null" >
+        meetingroomid = #{meetingroomid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ipaddr != null" >
+        ipaddr = #{ipaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where equipmentid = #{equipmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Equipment" >
+    update equipment
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      meetingroomid = #{meetingroomid,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      ipaddr = #{ipaddr,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR}
+    where equipmentid = #{equipmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateEquipment"  parameterType="com.broadvideo.pixsignage.domain.Equipment">
+	  update equipment
+	    <set >
+	      <if test="type != null" >
+	        type = #{type,jdbcType=INTEGER},
+	      </if>
+	      <if test="code != null" >
+	        code = #{code,jdbcType=VARCHAR},
+	      </if>
+	      <if test="name != null" >
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="ipaddr != null" >
+	        ipaddr = #{ipaddr,jdbcType=VARCHAR},
+	      </if>
+	      <if test="updatetime != null" >
+	        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="updatestaffid != null" >
+	        updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+	      </if>
+	      <if test="status != null" >
+	        status = #{status,jdbcType=CHAR},
+	      </if>
+	    </set>
+	    where equipmentid = #{equipmentid,jdbcType=INTEGER}  and orgid=#{orgid}
+  
+  </update>
+  <update id="assginEquipment"  parameterType="com.broadvideo.pixsignage.domain.Equipment">
+  
+     update equipment set meetingroomid=#{meetingroomid},updatestaffid=#{updatestaffid},updatetime=#{updatetime} where equipmentid=#{equipmentid} and orgid=#{orgid} and status='1'
+  
+  </update>
+</mapper>

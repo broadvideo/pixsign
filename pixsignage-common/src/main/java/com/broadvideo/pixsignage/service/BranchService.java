@@ -12,6 +12,8 @@ public interface BranchService {
 
 	public List<Branch> selectChild(String parentid);
 
+	public List<Branch> selectOrgBranchList(String orgid);
+
 	public void addDevices(Branch branch, String[] deviceids);
 
 	public void addBranch(Branch branch);
