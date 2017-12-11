@@ -18,8 +18,6 @@ public interface BundleMapper {
 			@Param(value = "homeflag") String homeflag, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
-	List<Bundle> selectByLayout(@Param(value = "layoutid") String layoutid);
-
 	List<Bundle> selectSubList(@Param(value = "homebundleid") String homebundleid);
 
 	int deleteByPrimaryKey(@Param(value = "bundleid") String bundleid);

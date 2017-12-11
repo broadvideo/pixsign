@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.broadvideo.pixsignage.persistence.BundleMapper" >
+  <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
+    <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+  </resultMap>
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
     <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
@@ -40,21 +45,18 @@
     json
   </sql>
   
+  <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
+    select * from bundle
+    where bundleid = #{bundleid}
+  </select>
+  
   <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from bundle
+    select * from bundle
     where bundleid = #{bundleid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from bundle
+    select * from bundle
     where bundleid = #{bundleid}
   </select>
   
@@ -101,14 +103,7 @@
     </if>
   </select>
 
-  <select id="selectByLayout" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" />
-    from bundle
-    where status=1
-    and layoutid = #{layoutid}
-  </select>
-  
-  <select id="selectSubList" resultMap="BaseResultMap">
+  <select id="selectSubList" resultMap="MiniResultMap">
     select <include refid="Base_Column_List" />
     from bundle
     where status=1

@@ -131,7 +131,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public JSONObject generateBundleScheduleJson(String bindtype, String bindid) {
 		if (bindtype.equals(Schedule.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getDevicegroup() != null) {
+			if (device.getDevicegroupid() > 0) {
 				bindtype = "2";
 				bindid = "" + device.getDevicegroupid();
 			}
@@ -171,7 +171,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		// bindtype: 1-device 2-devicegroup
 		String bindtype = "1";
 		String bindid = deviceid;
-		if (device.getDevicegroup() != null) {
+		if (device.getDevicegroupid() > 0) {
 			bindtype = "2";
 			bindid = "" + device.getDevicegroupid();
 		}

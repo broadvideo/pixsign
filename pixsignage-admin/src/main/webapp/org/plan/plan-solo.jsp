@@ -365,18 +365,25 @@
 								<a href="javascript:;" onClick="PlanModule.refresh();" class="reload"></a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="table-toolbar">
-								<div class="btn-group">
-									<button class="btn green pix-add">
-										<spring:message code="global.add"/> <i class="fa fa-plus"></i>
-									</button>
+						<div class="portlet-body" id="PlanPortlet">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="row"><div class="col-md-12 branchtree"></div></div>
+								</div>
+								<div class="col-md-10">
+									<div class="table-toolbar">
+										<div class="btn-group">
+											<button class="btn green pix-add">
+												<spring:message code="global.add"/> <i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+									<table id="PlanTable" class="table table-striped table-bordered table-hover">
+										<thead></thead>
+										<tbody></tbody>
+									</table>
 								</div>
 							</div>
-							<table id="PlanTable" class="table table-striped table-bordered table-hover">
-								<thead></thead>
-								<tbody></tbody>
-							</table>
 						</div>
 					</div>
 				</div>

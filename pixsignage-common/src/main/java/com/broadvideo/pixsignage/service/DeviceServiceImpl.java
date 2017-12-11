@@ -170,8 +170,8 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONArray topicJsonArray = new JSONArray();
 		msgBodyJson.put("msg_topic", topicJsonArray);
 		topicJsonArray.put("device-" + deviceid);
-		if (device.getDevicegroup() != null) {
-			topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
+		if (device.getDevicegroupid() > 0) {
+			topicJsonArray.put("group-" + device.getDevicegroupid());
 		}
 		topicJsonArray.put("org-" + device.getOrgid());
 

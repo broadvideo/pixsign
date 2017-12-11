@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Appfile;
+import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
@@ -50,6 +51,7 @@ import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
+import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
@@ -80,6 +82,8 @@ public class PixsignageService21 {
 
 	@Autowired
 	private OrgMapper orgMapper;
+	@Autowired
+	private BranchMapper branchMapper;
 	@Autowired
 	private ConfigMapper configMapper;
 	@Autowired
@@ -253,8 +257,8 @@ public class PixsignageService21 {
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
 			topicJsonArray.put("device-" + device.getDeviceid());
-			if (device.getDevicegroup() != null) {
-				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
+			if (device.getDevicegroupid() > 0) {
+				topicJsonArray.put("group-" + device.getDevicegroupid());
 			}
 			topicJsonArray.put("org-" + device.getOrgid());
 
@@ -625,7 +629,7 @@ public class PixsignageService21 {
 				if (device.getUpgradeflag().equals("1")) {
 					appfile = appfileMapper.selectLatest(appname, mtype);
 				} else if (device.getUpgradeflag().equals("2")) {
-					appfile = device.getAppfile();
+					appfile = appfileMapper.selectByPrimaryKey("" + device.getAppfileid());
 				}
 				if (appfile == null) {
 					responseJson.put("version_name", "");
@@ -1419,10 +1423,11 @@ public class PixsignageService21 {
 			if (device == null || !device.getStatus().equals("1")) {
 				return handleResult(1004, "无效终端号" + terminalid);
 			}
-			String branchid1 = "" + device.getBranch().getBranchid();
-			String branchid2 = "" + device.getBranch().getParentid();
-			String branchid3 = "" + device.getBranch().getParentid2();
-			String branchid4 = "" + device.getBranch().getParentid3();
+			Branch branch = branchMapper.selectByPrimaryKey("" + device.getBranchid());
+			String branchid1 = "" + branch.getBranchid();
+			String branchid2 = "" + branch.getParentid();
+			String branchid3 = "" + branch.getParentid2();
+			String branchid4 = "" + branch.getParentid3();
 
 			List<Text> texts1 = textMapper.selectList("" + device.getOrgid(), branchid1, null, null, null);
 			List<Text> texts2 = textMapper.selectList("" + device.getOrgid(), branchid2, null, null, null);

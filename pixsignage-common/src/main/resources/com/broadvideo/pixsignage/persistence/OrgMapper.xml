@@ -54,6 +54,8 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Org" extends="BaseResultMap">
     <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
@@ -67,7 +69,7 @@
     apps, logo, tags, createtime, createstaffid
   </sql>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
     select * from org
     where orgid = #{orgid}
   </select>
@@ -86,12 +88,12 @@
     order by orgid desc 
   </select>
 
-  <select id="selectByName" resultMap="BaseResultMap">
+  <select id="selectByName" resultMap="FullResultMap">
     select * from org
     where status='1' and name = #{name} 
   </select>
 
-  <select id="selectByCode" resultMap="BaseResultMap" >
+  <select id="selectByCode" resultMap="FullResultMap" >
     select * from org
     where status='1' and code = #{code}
   </select>

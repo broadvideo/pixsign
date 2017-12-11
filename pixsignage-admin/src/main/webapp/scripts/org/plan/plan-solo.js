@@ -5,6 +5,7 @@ var PlanModule = function () {
 	var CurrentPlandtl;
 	var CurrentPlandtls;
 	var CurrentPlanbinds;
+	this.PlanTree = new BranchTree($('#PlanPortlet'));
 	
 	var timestamp = new Date().getTime();
 
@@ -134,6 +135,7 @@ var PlanModule = function () {
 				refreshFancybox();
 			},
 			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':PlanTree.branchid });
 				aoData.push({'name':'plantype','value':1 });
 			}
 		});

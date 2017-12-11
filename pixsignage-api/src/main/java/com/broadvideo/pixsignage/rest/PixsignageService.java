@@ -227,8 +227,8 @@ public class PixsignageService {
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
 			topicJsonArray.put("device-" + device.getDeviceid());
-			if (device.getDevicegroup() != null) {
-				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
+			if (device.getDevicegroupid() > 0) {
+				topicJsonArray.put("group-" + device.getDevicegroupid());
 			}
 			topicJsonArray.put("org-" + device.getOrgid());
 
@@ -347,7 +347,7 @@ public class PixsignageService {
 			if (device.getUpgradeflag().equals("1")) {
 				appfile = appfileMapper.selectLatest(appname, mtype);
 			} else if (device.getUpgradeflag().equals("2")) {
-				appfile = device.getAppfile();
+				appfile = appfileMapper.selectByPrimaryKey("" + device.getAppfileid());
 			}
 			if (appfile == null) {
 				JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
@@ -1005,6 +1005,104 @@ public class PixsignageService {
 	@POST
 	@Path("report_flowrate")
 	public String reportflowrate(String request) {
+		try {
+			logger.info("Pixsignage Service report_flowrate: {}", request);
+			JSONObject requestJson = new JSONObject(request);
+			String hardkey = requestJson.getString("hardkey");
+			String terminalid = requestJson.getString("terminal_id");
+			long timestamp = requestJson.getLong("timestamp");
+			JSONArray recordJsonArray = requestJson.getJSONArray("records");
+			int total = recordJsonArray.length();
+			int male = 0;
+			int female = 0;
+			int age1 = 0;
+			int age2 = 0;
+			int age3 = 0;
+			int age4 = 0;
+			int age5 = 0;
+			for (int i = 0; i < total; i++) {
+				JSONObject recordJson = recordJsonArray.getJSONObject(i);
+				timestamp = recordJson.getLong("enterInTime");
+				int age = recordJson.getInt("age");
+				int sex = recordJson.getInt("sex");
+				if (age <= 6) {
+					age1++;
+				} else if (age <= 17) {
+					age2++;
+				} else if (age <= 40) {
+					age3++;
+				} else if (age <= 65) {
+					age4++;
+				} else {
+					age5++;
+				}
+				if (sex == 0) {
+					male++;
+				} else {
+					female++;
+				}
+			}
+
+			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
+				return handleResult(1020, "数据错误");
+			}
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(timestamp);
+			String flowdate = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+			String flowhour = new SimpleDateFormat("yyyyMMddHH").format(c.getTime());
+			Hourflowlog hourflowlog = hourflowlogMapper.selectByDetail("" + device.getDeviceid(), flowhour);
+			if (hourflowlog != null) {
+				hourflowlog.setTotal(hourflowlog.getTotal() + total);
+				hourflowlog.setMale(hourflowlog.getMale() + male);
+				hourflowlog.setFemale(hourflowlog.getFemale() + female);
+				hourflowlog.setAge1(hourflowlog.getAge1() + age1);
+				hourflowlog.setAge2(hourflowlog.getAge2() + age2);
+				hourflowlog.setAge3(hourflowlog.getAge3() + age3);
+				hourflowlog.setAge4(hourflowlog.getAge4() + age4);
+				hourflowlog.setAge5(hourflowlog.getAge5() + age5);
+				hourflowlogMapper.updateByPrimaryKeySelective(hourflowlog);
+			} else {
+				hourflowlog = new Hourflowlog();
+				hourflowlog.setOrgid(device.getOrgid());
+				hourflowlog.setBranchid(device.getBranchid());
+				hourflowlog.setDeviceid(device.getDeviceid());
+				hourflowlog.setFlowdate(flowdate);
+				hourflowlog.setFlowhour(flowhour);
+				hourflowlog.setTotal(total);
+				hourflowlog.setMale(male);
+				hourflowlog.setFemale(female);
+				hourflowlog.setAge1(age1);
+				hourflowlog.setAge2(age2);
+				hourflowlog.setAge3(age3);
+				hourflowlog.setAge4(age4);
+				hourflowlog.setAge5(age5);
+				hourflowlogMapper.insertSelective(hourflowlog);
+			}
+
+			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service report_flowrate exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_flowrate1")
+	public String reportflowrate1(String request) {
 		try {
 			logger.info("Pixsignage Service report_flowrate: {}", request);
 			JSONObject requestJson = new JSONObject(request);

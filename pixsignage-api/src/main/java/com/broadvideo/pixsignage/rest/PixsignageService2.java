@@ -233,8 +233,8 @@ public class PixsignageService2 {
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
 			topicJsonArray.put("device-" + device.getDeviceid());
-			if (device.getDevicegroup() != null) {
-				topicJsonArray.put("group-" + device.getDevicegroup().getDevicegroupid());
+			if (device.getDevicegroupid() > 0) {
+				topicJsonArray.put("group-" + device.getDevicegroupid());
 			}
 			topicJsonArray.put("org-" + device.getOrgid());
 
@@ -603,7 +603,7 @@ public class PixsignageService2 {
 				if (device.getUpgradeflag().equals("1")) {
 					appfile = appfileMapper.selectLatest(appname, mtype);
 				} else if (device.getUpgradeflag().equals("2")) {
-					appfile = device.getAppfile();
+					appfile = appfileMapper.selectByPrimaryKey("" + device.getAppfileid());
 				}
 				if (appfile == null) {
 					responseJson.put("version_name", "");

@@ -19,7 +19,7 @@
     scheduledtlid, scheduleid, objtype, objid, sequence, duration
   </sql>
   
-  <select id="selectBundleid" resultMap="com.broadvideo.pixsignage.persistence.BundleMapper.BaseResultMap" >
+  <select id="selectBundleid" resultMap="com.broadvideo.pixsignage.persistence.BundleMapper.MiniResultMap" >
     select * from bundle
     where '${objtype}' = '1' and bundleid = #{bundleid}
   </select>
