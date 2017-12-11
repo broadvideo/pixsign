@@ -27,18 +27,25 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 	private final static Logger logger = LoggerFactory.getLogger(WxMpServiceImpl.class);
 	private final static String ERRCODE = "errcode";
 	private final static String ERRMSG = "errmsg";
-	private static Map<Integer, MpAccessToken> mpAccessTokenMap = new ConcurrentHashMap<Integer, MpAccessToken>();
+	private static volatile Map<Integer, MpAccessToken> mpAccessTokenMap = new ConcurrentHashMap<Integer, MpAccessToken>();
+	private static Thread tokenRefreshThread = null;
+	private static Object lock = new Object();
+
+	public static Map<Integer, MpAccessToken> getMpAccessTokenMap() {
+		return mpAccessTokenMap;
+	}
+
 	@Autowired
 	private WxappinfoMapper wxappinfoMapper;
 
 	@Override
 	public boolean verifySignature(String signature, String timestamp, String nonce, Integer orgid) {
-		Wxappinfo wxappinfo=wxappinfoMapper.selectWxappinfo(Wxappinfo.WX_MP_TYPE, orgid);
-		if(wxappinfo==null){
-		   throw new ServiceException(ApiRetCodeEnum.WXMP_NO_CONFIG,"wxmp config not found.");	
+		Wxappinfo wxappinfo = wxappinfoMapper.selectWxappinfo(Wxappinfo.WX_MP_TYPE, orgid);
+		if (wxappinfo == null) {
+			throw new ServiceException(ApiRetCodeEnum.WXMP_NO_CONFIG, "wxmp config not found.");
 		}
 		String token = wxappinfo.getToken();
-		//将数组按字典排序
+		// 将数组按字典排序
 		String[] sortedArr = new String[] { token, timestamp, nonce };
 		Arrays.sort(sortedArr);
 		StringBuilder msg = new StringBuilder();
@@ -50,11 +57,11 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 		if (encrptSign.equalsIgnoreCase(signature)) {
 			logger.info("signature（{}） match success.", signature);
 			return true;
-		}else{
+		} else {
 			logger.info("signature（{}） match fail.", signature);
 			return false;
 		}
-		
+
 	}
 
 	@Override
@@ -67,6 +74,7 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 		return mpAccessTokenMap.get(orgid);
 
 	}
+
 	@Override
 	public MpQRCode getQRCode(String scenestr, Integer orgid) {
 
@@ -91,7 +99,7 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 		}
 		final int statusCode = response.getStatusCode();
 		logger.info("createTicketUrl({}) response(code:{},body:{})", createTicketUrl, statusCode, response.getBody());
-		this.checkGetAccessTokenResponse(response);
+		this.checkGetQRCodeResponse(response, orgid);
 		JSONObject ticketJson = new JSONObject(response.getBody());
 		String ticket = ticketJson.getString("ticket");
 		Long expireSeconds = ticketJson.getLong("expire_seconds");
@@ -100,15 +108,15 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 	}
 
 	@Override
-	public void sendMessage(String accessToken, String wxuserid, String content) {
+	public void sendMessage(String accessToken, String wxuserid, String content, Integer orgid) {
 
 		final String sendUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
-        JSONObject bodyJson=new JSONObject();
-        bodyJson.put("touser", wxuserid);
+		JSONObject bodyJson = new JSONObject();
+		bodyJson.put("touser", wxuserid);
 		bodyJson.put("msgtype", "text");
-        JSONObject textJson=new JSONObject();
-        textJson.put("content",content);
-        bodyJson.put("text", textJson);
+		JSONObject textJson = new JSONObject();
+		textJson.put("content", content);
+		bodyJson.put("text", textJson);
 		SimpleHttpResponse response = null;
 		try {
 			response = HttpClientUtils.doPost(sendUrl, bodyJson.toString());
@@ -116,11 +124,10 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 			logger.error("getAccessToken request exception.", ex);
 			throw new ServiceException("getAccessToken request exception:" + ex.getMessage());
 		}
-		checkSendMessageResponse(response);
+		checkSendMessageResponse(response, orgid);
 		logger.info("sendMessage({},{},{}) with response:{}",
 				new Object[] { accessToken, wxuserid, content, response.getBody() });
-		
-		
+
 	}
 
 	@Override
@@ -137,29 +144,29 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 	private MpAccessToken requestAccessToken(Integer orgid) {
 
 		try {
-		logger.info("get wxappinfo: type:{},orgid:{}", Wxappinfo.WX_MP_TYPE, orgid);
-		Wxappinfo wxappinfo = wxappinfoMapper.selectWxappinfo(Wxappinfo.WX_MP_TYPE, orgid);
-		if (wxappinfo == null) {
-			logger.error("wxappinfo(type:{},orgid:{}) not found.", Wxappinfo.WX_MP_TYPE, orgid);
-			throw new ServiceException("orgid(" + orgid + ") not config wxappinfo");
-		}
-		StringBuilder urlBuilder = new StringBuilder(
-				"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=");
-		urlBuilder.append(wxappinfo.getAppid()).append("&secret=").append(wxappinfo.getAppsecret());
-		final String accessTokenUrl = urlBuilder.toString();
-		SimpleHttpResponse response = null;
-		try {
-			response = HttpClientUtils.doGet(accessTokenUrl, null, null);
-		} catch (Exception ex) {
-			logger.error("getAccessToken request exception.", ex);
-			throw new ServiceException("getAccessToken request exception:" + ex.getMessage());
-		}
-		checkGetAccessTokenResponse(response);
-		logger.info("get accessToken({}) with response:{}", accessTokenUrl, response.getBody());
-		JSONObject accessTokenJson = new JSONObject(response.getBody());
-		MpAccessToken mpAccessToken = new MpAccessToken(accessTokenJson.getString("access_token"),
-				accessTokenJson.getLong("expires_in"));
-		return mpAccessToken;
+			logger.info("get wxappinfo: type:{},orgid:{}", Wxappinfo.WX_MP_TYPE, orgid);
+			Wxappinfo wxappinfo = wxappinfoMapper.selectWxappinfo(Wxappinfo.WX_MP_TYPE, orgid);
+			if (wxappinfo == null) {
+				logger.error("wxappinfo(type:{},orgid:{}) not found.", Wxappinfo.WX_MP_TYPE, orgid);
+				throw new ServiceException("orgid(" + orgid + ") not config wxappinfo");
+			}
+			StringBuilder urlBuilder = new StringBuilder(
+					"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=");
+			urlBuilder.append(wxappinfo.getAppid()).append("&secret=").append(wxappinfo.getAppsecret());
+			final String accessTokenUrl = urlBuilder.toString();
+			SimpleHttpResponse response = null;
+			try {
+				response = HttpClientUtils.doGet(accessTokenUrl, null, null);
+			} catch (Exception ex) {
+				logger.error("getAccessToken request exception.", ex);
+				throw new ServiceException("getAccessToken request exception:" + ex.getMessage());
+			}
+			checkGetAccessTokenResponse(response);
+			logger.info("get accessToken({}) with response:{}", accessTokenUrl, response.getBody());
+			JSONObject accessTokenJson = new JSONObject(response.getBody());
+			MpAccessToken mpAccessToken = new MpAccessToken(accessTokenJson.getString("access_token"),
+					accessTokenJson.getLong("expires_in"));
+			return mpAccessToken;
 		} catch (Exception ex) {
 
 			logger.error("requestAccessToken exception.", ex);
@@ -187,7 +194,30 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 
 	}
 
-	private void checkSendMessageResponse(SimpleHttpResponse response) {
+	private void checkGetQRCodeResponse(SimpleHttpResponse response, Integer orgid) {
+		logger.info("Response with statusCode:{},body:{}", response.getStatusCode(), response.getBody());
+		final int statusCode = response.getStatusCode();
+		if (statusCode >= 200 && statusCode <= 300) {
+			JSONObject respBodyJson = new JSONObject(response.getBody());
+			if (respBodyJson.opt(ERRCODE) != null) {
+				int errcode = respBodyJson.getInt(ERRCODE);
+				String errmsg = respBodyJson.getString(ERRMSG);
+				if (errcode == 40001) {
+					logger.error("accesstoken is invalid,do refresh");
+					this.refreshAccessToken(orgid);
+				}
+				logger.error("Response with errcode:{},erromsg:{}", errcode, errmsg);
+				throw new ServiceException("Response with errcode:" + errcode + ",errmsg:" + errmsg);
+			}
+
+		} else {
+			logger.error("Response with error statusCode({})", statusCode);
+			throw new ServiceException("Response with error statusCode:" + statusCode);
+		}
+
+	}
+
+	private void checkSendMessageResponse(SimpleHttpResponse response, Integer orgid) {
 		logger.info("Response with statusCode:{},body:{}", response.getStatusCode(), response.getBody());
 		final int statusCode = response.getStatusCode();
 		if (statusCode >= 200 && statusCode <= 300) {
@@ -200,8 +230,12 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 					logger.info("send message success.");
 
 				} else {
-				logger.error("Response with errcode:{},erromsg:{}", errcode, errmsg);
-				throw new ServiceException("Response with errcode:" + errcode + ",errmsg:" + errmsg);
+					if (errcode == 40001) {
+						logger.error("accesstoken is invalid,do refresh");
+						this.refreshAccessToken(orgid);
+					}
+					logger.error("Response with errcode:{},erromsg:{}", errcode, errmsg);
+					throw new ServiceException("Response with errcode:" + errcode + ",errmsg:" + errmsg);
 				}
 			}
 
@@ -214,20 +248,27 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		logger.info("Init wx mpaccesstoken....");
-		List<Wxappinfo> wxappinfos = this.wxappinfoMapper.selectAllWxappinfo(Wxappinfo.WX_MP_TYPE);
-		if (wxappinfos != null && wxappinfos.size() > 0) {
-			for (Wxappinfo wxappinfo : wxappinfos) {
-				try {
-					this.refreshAccessToken(wxappinfo.getOrgid());
-				} catch (Exception ex) {
-					logger.error("Refresh accessToken exception.", ex);
-				}
-			}
+
+		if (tokenRefreshThread != null) {
+			logger.info("tokenRefreshThread({}) had inited.", tokenRefreshThread.getName());
+			return;
 		}
-		logger.info("Start token refresh thread...");
-		Thread t1 = new TokenRefreshThread();
-		t1.start();
+				tokenRefreshThread = new TokenRefreshThread();
+				tokenRefreshThread.start();
+				logger.info("Init wx mpaccesstoken....");
+				List<Wxappinfo> wxappinfos = this.wxappinfoMapper.selectAllWxappinfo(Wxappinfo.WX_MP_TYPE);
+				if (wxappinfos != null && wxappinfos.size() > 0) {
+					for (Wxappinfo wxappinfo : wxappinfos) {
+						try {
+							this.refreshAccessToken(wxappinfo.getOrgid());
+						} catch (Exception ex) {
+							logger.error("Refresh accessToken exception.", ex);
+						}
+					}
+				}
+				logger.info("Start token refresh thread...");
+
+
 	}
 
 	public class TokenRefreshThread extends Thread {
@@ -269,6 +310,5 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 
 		}
 	}
-
 
 }

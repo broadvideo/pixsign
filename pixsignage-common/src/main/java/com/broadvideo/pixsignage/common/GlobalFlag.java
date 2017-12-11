@@ -29,4 +29,8 @@ public interface GlobalFlag {
 
 	public final Integer NUM_NO = 0;
 
+	public final String INVALID = "0";
+	public final String VALID = "1";
+	public final String DELETE = "9";
+
 }

@@ -16,7 +16,7 @@ public class Doorlog {
     private String doortype;
 
     private String openstate;
-
+	private Date authorizeopentime;
     private Date opentime;
 
     private String closestate;
@@ -82,7 +82,15 @@ public class Doorlog {
         this.openstate = openstate == null ? null : openstate.trim();
     }
 
-    public Date getOpentime() {
+	public Date getAuthorizeopentime() {
+		return authorizeopentime;
+	}
+
+	public void setAuthorizeopentime(Date authorizeopentime) {
+		this.authorizeopentime = authorizeopentime;
+	}
+
+	public Date getOpentime() {
         return opentime;
     }
 

@@ -34,7 +34,7 @@ public interface WxMpService {
 	/**
 	 * 给关注用户发送消息
 	 */
-	void sendMessage(String accessToken, String wxuserid, String content);
+	void sendMessage(String accessToken, String wxuserid, String content, Integer orgid);
 
 
 }

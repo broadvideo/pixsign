@@ -8,6 +8,7 @@
     <result column="wxmpid" property="wxmpid" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="doortype" property="doortype" jdbcType="CHAR" />
+    <result column="authorizeopentime" property="authorizeopentime" jdbcType="TIMESTAMP" />
     <result column="openstate" property="openstate" jdbcType="CHAR" />
     <result column="opentime" property="opentime" jdbcType="TIMESTAMP" />
     <result column="closestate" property="closestate" jdbcType="CHAR" />
@@ -15,8 +16,8 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    doorlogid, wxuserid, terminalid, wxmpid, orgid, doortype, openstate, opentime, closestate, 
-    closetime, createtime
+    doorlogid, wxuserid, terminalid, wxmpid, orgid, doortype, authorizeopentime, openstate, 
+    opentime, closestate, closetime, createtime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -33,13 +34,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into doorlog (wxuserid, terminalid, wxmpid, 
-      orgid, doortype, openstate, 
-      opentime, closestate, closetime, 
-      createtime)
+      orgid, doortype, authorizeopentime, 
+      openstate, opentime, closestate, 
+      closetime, createtime)
     values (#{wxuserid,jdbcType=VARCHAR}, #{terminalid,jdbcType=VARCHAR}, #{wxmpid,jdbcType=VARCHAR}, 
-      #{orgid,jdbcType=INTEGER}, #{doortype,jdbcType=CHAR}, #{openstate,jdbcType=CHAR}, 
-      #{opentime,jdbcType=TIMESTAMP}, #{closestate,jdbcType=CHAR}, #{closetime,jdbcType=TIMESTAMP}, 
-      #{createtime,jdbcType=TIMESTAMP})
+      #{orgid,jdbcType=INTEGER}, #{doortype,jdbcType=CHAR}, #{authorizeopentime,jdbcType=TIMESTAMP}, 
+      #{openstate,jdbcType=CHAR}, #{opentime,jdbcType=TIMESTAMP}, #{closestate,jdbcType=CHAR}, 
+      #{closetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Doorlog" >
     <selectKey resultType="java.lang.Integer" keyProperty="doorlogid" order="AFTER" >
@@ -61,6 +62,9 @@
       </if>
       <if test="doortype != null" >
         doortype,
+      </if>
+      <if test="authorizeopentime != null" >
+        authorizeopentime,
       </if>
       <if test="openstate != null" >
         openstate,
@@ -93,6 +97,9 @@
       </if>
       <if test="doortype != null" >
         #{doortype,jdbcType=CHAR},
+      </if>
+      <if test="authorizeopentime != null" >
+        #{authorizeopentime,jdbcType=TIMESTAMP},
       </if>
       <if test="openstate != null" >
         #{openstate,jdbcType=CHAR},
@@ -129,6 +136,9 @@
       <if test="doortype != null" >
         doortype = #{doortype,jdbcType=CHAR},
       </if>
+      <if test="authorizeopentime != null" >
+        authorizeopentime = #{authorizeopentime,jdbcType=TIMESTAMP},
+      </if>
       <if test="openstate != null" >
         openstate = #{openstate,jdbcType=CHAR},
       </if>
@@ -154,6 +164,7 @@
       wxmpid = #{wxmpid,jdbcType=VARCHAR},
       orgid = #{orgid,jdbcType=INTEGER},
       doortype = #{doortype,jdbcType=CHAR},
+      authorizeopentime = #{authorizeopentime,jdbcType=TIMESTAMP},
       openstate = #{openstate,jdbcType=CHAR},
       opentime = #{opentime,jdbcType=TIMESTAMP},
       closestate = #{closestate,jdbcType=CHAR},

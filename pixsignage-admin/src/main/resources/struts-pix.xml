@@ -1938,7 +1938,7 @@
 		      <param name="includeProperties">errorcode,errormsg</param>
 		   </result>
 		</action>
-		<!-- 
+	
 		<action name="location!list" method="doList" class="locationAction">
 		   <result name="success" type="json">
 		      <param name="ignoreHierarchy">false</param>
@@ -1977,7 +1977,111 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
-		 -->
+		 <action name="meetingroom!add" method="doAdd" class="meetingroomAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="meetingroom!update" method="doUpdate" class="meetingroomAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="meetingroom!delete" method="doDelete" class="meetingroomAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="meetingroom!validate" method="doValidate" class="meetingroomAction">
+		  	<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	   <action name="meetingroom!list" method="doList" class="meetingroomAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="meetingroom!addequipments" method="addEquipments" class="meetingroomAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="meetingroom!deleteequipments" method="deleteEquipments" class="meetingroomAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+	    <action name="meetingroom!listunbind" method="listUnbindTerminals" class="meetingroomAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		
+		
+		
+		<action name="equipment!list" method="doList" class="equipmentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="equipment!add" method="doAdd" class="equipmentAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="equipment!update" method="doUpdate" class="equipmentAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+	    <action name="equipment!delete" method="doDelete" class="equipmentAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="meeting!list" method="doList" class="meetingAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="meeting!delete" method="doDelete" class="meetingAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="meeting!attendees" method="doListAttendees" class="meetingAction">
+		    <result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 	</package>
 
 </struts>

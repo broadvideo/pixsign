@@ -31,7 +31,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 	private SmartdoorService smartdoorService;
 	@Autowired
 	private WxMpService wxmpService;
-	private Thread clearTask = null;
+	private static Thread clearTask = null;
 
 	/**
 	 * 关注公众号触发binding
@@ -130,6 +130,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 				return false;
 			}
 			binding.setAuthorizestate(DoorConst.DoorAuthorizeState.OPEN.getVal());
+			binding.setAuthorizeopentime(new Date());
 			binding.setDoortype(doorType);
 			doorUserMap.put(binding.getTerminalid(), doorType, wxuserid);
 
@@ -211,7 +212,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 			} else if (state.equals(DoorConst.DoorState.SUCCESS.getVal())) {
 				logger.error("terminalid({}) open door({}) success.send message to user", terminalid, doorType);
 				wxmpService.sendMessage(wxmpService.getAccessToken(binding.getOrgid(), false).getAccessToken(),
-						wxuserid, WxmpMessageTips.DOOR_OPEN_SUCESS_TIP);
+						wxuserid, WxmpMessageTips.DOOR_OPEN_SUCESS_TIP, binding.getOrgid());
 			}
 
 		} else if (DoorConst.ActionType.ACTION_CLOSE.getVal().equals(actionType)) {// 上报关门状态
@@ -226,10 +227,16 @@ public class SmartdoorkeeperService implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		if (clearTask != null) {
+			logger.info("clearTask({}) had inited.", clearTask.getName());
+			return;
 
-		clearTask = new ClearTimeoutBindingsTask();
-		logger.info("Start ClearTimeoutBindingsTask......");
-		clearTask.start();
+		}
+			clearTask = new ClearTimeoutBindingsTask();
+			logger.info("Start ClearTimeoutBindingsTask......");
+			clearTask.start();
+
+
 	}
 
 	public static void main(String[] args) {
