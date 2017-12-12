@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.broadvideo.pixsignage.common.GlobalFlag;
+import com.broadvideo.pixsignage.common.POIUtil;
 import com.broadvideo.pixsignage.common.PeriodType;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Classroom;
@@ -351,14 +352,21 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 			}
 
 			String schoolclassname = r.getCell(0) != null ? r.getCell(0).getStringCellValue() : null;
-			String studentno = r.getCell(1) != null ? r.getCell(1).getStringCellValue() : null;
-			String studentname = r.getCell(2) != null ? r.getCell(2).getStringCellValue() : null;
+			String studentno = POIUtil.formatCellValue(r.getCell(1));
+			// Cell studentnoCell = r.getCell(1);
+			// if (studentnoCell != null) {
+			// studentnoCell.setCellType(Cell.CELL_TYPE_STRING);
+			// studentno = r.getCell(1).getStringCellValue();
+			// }
+			String studentname = POIUtil.formatCellValue(r.getCell(2));
+			// r.getCell(2) != null ? r.getCell(2).getStringCellValue() : null;
 			if (StringUtils.isBlank(studentno) || StringUtils.isBlank(studentname)) {
 				logger.error("Invalid rows for studentno or studentname is null.");
 				continue;
 			}
 			String sex = r.getCell(3) != null ? r.getCell(3).getStringCellValue() : null;
-			String hardid = r.getCell(4) != null ? r.getCell(4).getStringCellValue() : null;
+			String hardid = POIUtil.formatCellValue(r.getCell(4));
+			// r.getCell(4) != null ? r.getCell(4).getStringCellValue() : null;
 			Student student = new Student();
 			student.setSchoolclassname(schoolclassname);
 			student.setStudentno(studentno);

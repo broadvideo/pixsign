@@ -238,34 +238,36 @@ function initaction() {
               confirm: {label: common.tips.t03, className: 'default blue-stripe'},
               cancel: {label: common.tips.t04, className: 'default'}
           },
+          
           message: "确认停用课表方案:" + $(this).closest("tr").find("td:first").text()+",停用后,可能会影响已经创建的课表！",
           callback: function (result) {
-              if (result) {
-                  var jsonData = {"courseschedulescheme.id": scheduleschemeid, "courseschedulescheme.enableFlag": "0"};
-                  $.ajax({
-                      url: ctx + '/schedule/setScheduleSchemeFlag.action',
-                      type: 'POST',
-                      contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-                      data: jsonData,
-                      dataType: 'json',
-                      success: function (result) {
-                          switch (result.errorcode) {
-                             
-                              case 0:
-                                 bootbox.alert(common.tips.success);
-                                  $('#scheduleSchemeList').DataTable().ajax.reload(null, false);
-                                  break;
-                              case -1:
-                                  bootbox.alert(common.tips.t01);
-                                  break;
+
+        	     if (result) {
+                     var jsonData = {"courseschedulescheme.coursescheduleschemeid": scheduleschemeid, "courseschedulescheme.enableflag": "0"};
+                     $.ajax({
+                         url: 'courseschedulescheme!setflag.action',
+                         type: 'POST',
+                         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                         data: jsonData,
+                         dataType: 'json',
+                         success: function (result) {
+                             switch (result.errorcode) {
+                              
+                                 case 0:
+                                    bootbox.alert(common.tips.success);
+                                     $('#scheduleSchemeList').DataTable().ajax.reload(null, false);
+                                     break;
+                                 case -1:
+                           			bootbox.alert(result.errorcode + ": " + result.errormsg);
+                                     break;
                             
-                          }
-                      },
-                      error: function (jqXHR, textStatus) {
-                    	  bootbox.alert('请求异常：' + textStatus);
-                      }
-                  });
-              }
+                             }
+                         },
+                         error: function (jqXHR, textStatus) {
+                             bootbox.alert("请求异常:" + textStatus);
+                         }
+                     });
+                 }
           },
           //title: "bootbox confirm也可以添加标题哦",
       });
@@ -451,9 +453,9 @@ $('#scheduleSchemeList').dataTable({
     ],
     "createdRow": function (row, data, index) {
 
-            if (data.enableFlag != 1) {
+            if (data.enableflag != 1) {
                 $(row).find("a.disableschedulescheme").closest("li").remove();
-            }else if (data.enableFlag == 1) {
+            }else if (data.enableflag == 1) {
                 $(row).find("a.enableschedulescheme").closest("li").remove();
             }
             else {
