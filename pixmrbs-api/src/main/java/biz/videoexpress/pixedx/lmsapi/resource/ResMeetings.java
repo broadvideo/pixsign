@@ -152,6 +152,7 @@ public class ResMeetings extends ResBase {
 				data.put("meeting_id", result.getMeetingid());
 				data.put("meetingroom_id", result.getMeetingroomid());
 				data.put("subject", result.getSubject());
+				data.put("description", result.getDescription());
 				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
 				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
 				data.put("book_user", result.getBookstaffname());

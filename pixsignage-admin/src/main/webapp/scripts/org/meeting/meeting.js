@@ -173,6 +173,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 		                {'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '预定人', 'mData' : 'bookstaffname', 'bSortable' : false, 'sWidth' : '10%' },
+		                {'sTitle' : '预定部门', 'mData' : 'bookbranchname', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '12%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
@@ -185,7 +186,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 明细</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			buttonhtml += '</div>';
-			$('td:eq(6)', nRow).html(buttonhtml);
+			$('td:eq(7)', nRow).html(buttonhtml);
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

@@ -15,6 +15,7 @@ public class Meeting {
 
     private String subject;
 
+    private String description;
     private Date starttime;
 
     private Date endtime;
@@ -42,6 +43,7 @@ public class Meeting {
 
     private Integer updatestaffid;
 
+    private String auditstatus;
     private String status;
 	private Integer[] attendeeuserids;
 
@@ -78,6 +80,12 @@ public class Meeting {
 
     public void setSubject(String subject) {
         this.subject = subject == null ? null : subject.trim();
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public Date getStarttime() {
@@ -184,6 +192,12 @@ public class Meeting {
         this.updatestaffid = updatestaffid;
     }
 
+    public String getAuditstatus() {
+        return auditstatus;
+    }
+    public void setAuditstatus(String auditstatus) {
+        this.auditstatus = auditstatus == null ? null : auditstatus.trim();
+    }
     public String getStatus() {
         return status;
     }

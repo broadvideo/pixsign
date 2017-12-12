@@ -6,6 +6,8 @@ public class BookMeetingReq {
 	@JsonProperty("meeting_room_id")
 	private Integer meetingRoomId;
 	private String subject;
+	@JsonProperty("description")
+	private String description;
 	@JsonProperty("start_time")
 	private String startTime;
 	@JsonProperty("end_time")
@@ -29,6 +31,14 @@ public class BookMeetingReq {
 
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getStartTime() {

@@ -13,6 +13,7 @@
     <result column="layout" property="layout" jdbcType="VARCHAR" />
     <result column="peoples" property="peoples" jdbcType="INTEGER" />
     <result column="openflag" property="openflag" jdbcType="CHAR" />
+    <result column="auditflag" property="auditflag" jdbcType="CHAR" />
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -23,7 +24,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     meetingroomid, uuid, terminalid, code, name, description, locationid, layout, peoples, 
-    openflag, qrcode, orgid, createtime, createstaffid, updatetime, updatestaffid, status
+    openflag, auditflag, qrcode, orgid, createtime, createstaffid, updatetime, updatestaffid, 
+    status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -153,15 +155,15 @@
     insert into meetingroom (uuid, terminalid, code, 
       name, description, locationid, 
       layout, peoples, openflag, 
-      qrcode, orgid, createtime, 
-      createstaffid, updatetime, updatestaffid, 
-      status)
+      auditflag, qrcode, orgid, 
+      createtime, createstaffid, updatetime, 
+      updatestaffid, status)
     values (#{uuid,jdbcType=VARCHAR}, #{terminalid,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{locationid,jdbcType=INTEGER}, 
       #{layout,jdbcType=VARCHAR}, #{peoples,jdbcType=INTEGER}, #{openflag,jdbcType=CHAR}, 
-      #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR})
+      #{auditflag,jdbcType=CHAR}, #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Meetingroom" >
     <selectKey resultType="java.lang.Integer" keyProperty="meetingroomid" order="AFTER" >
@@ -195,6 +197,9 @@
       </if>
       <if test="openflag != null" >
         openflag,
+      </if>
+      <if test="auditflag != null" >
+        auditflag,
       </if>
       <if test="qrcode != null" >
         qrcode,
@@ -245,6 +250,9 @@
       </if>
       <if test="openflag != null" >
         #{openflag,jdbcType=CHAR},
+      </if>
+      <if test="auditflag != null" >
+        #{auditflag,jdbcType=CHAR},
       </if>
       <if test="qrcode != null" >
         #{qrcode,jdbcType=VARCHAR},
@@ -299,6 +307,9 @@
       <if test="openflag != null" >
         openflag = #{openflag,jdbcType=CHAR},
       </if>
+      <if test="auditflag != null" >
+        auditflag = #{auditflag,jdbcType=CHAR},
+      </if>
       <if test="qrcode != null" >
         qrcode = #{qrcode,jdbcType=VARCHAR},
       </if>
@@ -334,6 +345,7 @@
       layout = #{layout,jdbcType=VARCHAR},
       peoples = #{peoples,jdbcType=INTEGER},
       openflag = #{openflag,jdbcType=CHAR},
+      auditflag = #{auditflag,jdbcType=CHAR},
       qrcode = #{qrcode,jdbcType=VARCHAR},
       orgid = #{orgid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -348,6 +360,9 @@
     <set > 
       <if test="terminalid != null" >
         terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="auditflag != null" >
+        auditflag = #{auditflag,jdbcType=CHAR},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},

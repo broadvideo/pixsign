@@ -8,7 +8,6 @@ var _leftparent=null;
 //init list
 var classlist = [];
 classlist.push({id:0,text: '投影仪'},{id:2,text:'扬声器'},{ id:1,text:'便携式电脑'});
-
 var MeetingRoomModule=function(){
 	
 };
@@ -197,6 +196,14 @@ MeetingRoomModule.prototype.initEvent=function(){
              $("input[name='meetingroom.openflag']").val("0")
 
          }
+		 var auditflag=$("#AuditFlagSwitch").bootstrapSwitch('state'); 
+		 if(auditflag==true){
+			 $("input[name='meetingroom.auditflag']").val("1")
+			 
+		 }else{
+			 $("input[name='meetingroom.auditflag']").val("0")
+			 
+		 }
 		
 		$.ajax({
 			type : 'POST',
@@ -280,6 +287,13 @@ MeetingRoomModule.prototype.initEvent=function(){
 			$('#OpenFlagSwitch').bootstrapSwitch('state', false); 
 
 		}
+		if(item['auditflag']=='1'){
+			$('#AuditFlagSwitch').bootstrapSwitch('state', true); 
+		}else{
+			$('#AuditFlagSwitch').bootstrapSwitch('state', false); 
+
+		}
+		
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 	     $("#peoples_spinner").spinner({value:item['peoples'], min: 1, max:1000});

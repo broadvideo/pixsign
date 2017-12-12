@@ -11,6 +11,7 @@ public class AdjustMeetingReq {
 	@JsonProperty("meeting_id")
 	private Integer meetingId;
 	private String subject;
+	private String description;
 	@JsonProperty("start_time")
 	private String startTime;
 	@JsonProperty("end_time")
@@ -36,6 +37,14 @@ public class AdjustMeetingReq {
 
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Date getStartTime() {

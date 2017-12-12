@@ -6,6 +6,7 @@
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
     <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
     <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
     <result column="duration" property="duration" jdbcType="INTEGER" />
@@ -18,61 +19,29 @@
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
+    <result column="auditstatus" property="auditstatus" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
   
-  <resultMap id="ExtResultMap" type="com.broadvideo.pixsignage.domain.Meeting" >
-    <id column="meetingid" property="meetingid" jdbcType="INTEGER" />
-    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+  <resultMap id="ExtResultMap" extends="BaseResultMap"  type="com.broadvideo.pixsignage.domain.Meeting" >
     <result column="locationname" property="locationname" jdbcType="VARCHAR" />
-    <result column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
     <result column="meetingroomname" property="meetingroomname" jdbcType="VARCHAR" />
-    <result column="subject" property="subject" jdbcType="VARCHAR" />
-    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
-    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
-    <result column="duration" property="duration" jdbcType="INTEGER" />
-    <result column="amount" property="amount" jdbcType="INTEGER" />
-    <result column="bookstaffid" property="bookstaffid" jdbcType="INTEGER" />
     <result column="bookstaffname" property="bookstaffname" jdbcType="VARCHAR" />
-    <result column="bookbranchid" property="bookbranchid" jdbcType="INTEGER" />
     <result column="bookbranchname" property="bookbranchname" jdbcType="VARCHAR" />
-    <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
-    <result column="orgid" property="orgid" jdbcType="INTEGER" />
-    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
-    <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
-    <resultMap id="ExtResultMap2" type="com.broadvideo.pixsignage.domain.Meeting" >
-    <id column="meetingid" property="meetingid" jdbcType="INTEGER" />
-    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+  
+  <resultMap id="ExtResultMap2"  extends="BaseResultMap"  type="com.broadvideo.pixsignage.domain.Meeting" >
     <result column="locationname" property="locationname" jdbcType="VARCHAR" />
-    <result column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
     <result column="meetingroomname" property="meetingroomname" jdbcType="VARCHAR" />
-    <result column="subject" property="subject" jdbcType="VARCHAR" />
-    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
-    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
-    <result column="duration" property="duration" jdbcType="INTEGER" />
-    <result column="amount" property="amount" jdbcType="INTEGER" />
-    <result column="bookstaffid" property="bookstaffid" jdbcType="INTEGER" />
     <result column="bookstaffname" property="bookstaffname" jdbcType="VARCHAR" />
-    <result column="bookbranchid" property="bookbranchid" jdbcType="INTEGER" />
     <result column="bookbranchname" property="bookbranchname" jdbcType="VARCHAR" />
-    <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
-    <result column="orgid" property="orgid" jdbcType="INTEGER" />
-    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
-    <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="CHAR" />
     <collection property="attendees" ofType="com.broadvideo.pixsignage.domain.Attendee"
       column="{meetingid=meetingid}" select="com.broadvideo.pixsignage.persistence.AttendeeMapper.selectMeetingAttendees" />
   </resultMap>
   <sql id="Base_Column_List" >
-    meetingid, uuid, meetingroomid, subject, starttime, endtime, duration, amount, bookstaffid, 
-    bookbranchid, qrcode, orgid, createtime, createstaffid, updatetime, updatestaffid, 
-    status
+    meetingid, uuid, meetingroomid, subject, description, starttime, endtime, duration, 
+    amount, bookstaffid, bookbranchid, qrcode, orgid, createtime, createstaffid, updatetime, 
+    updatestaffid, auditstatus, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -199,17 +168,19 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into meeting (uuid, meetingroomid, subject, 
-      starttime, endtime, duration, 
-      amount, bookstaffid, bookbranchid, 
-      qrcode, orgid, createtime, 
-      createstaffid, updatetime, updatestaffid, 
-      status)
+      description, starttime, endtime, 
+      duration, amount, bookstaffid, 
+      bookbranchid, qrcode, orgid, 
+      createtime, createstaffid, updatetime, 
+      updatestaffid, auditstatus, status
+      )
     values (#{uuid,jdbcType=VARCHAR}, #{meetingroomid,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, 
-      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{duration,jdbcType=INTEGER}, 
-      #{amount,jdbcType=INTEGER}, #{bookstaffid,jdbcType=INTEGER}, #{bookbranchid,jdbcType=INTEGER}, 
-      #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR})
+      #{description,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{duration,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, #{bookstaffid,jdbcType=INTEGER}, 
+      #{bookbranchid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updatestaffid,jdbcType=INTEGER}, #{auditstatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Meeting" >
     <selectKey resultType="java.lang.Integer" keyProperty="meetingid" order="AFTER" >
@@ -225,6 +196,9 @@
       </if>
       <if test="subject != null" >
         subject,
+      </if>
+      <if test="description != null" >
+        description,
       </if>
       <if test="starttime != null" >
         starttime,
@@ -262,6 +236,9 @@
       <if test="updatestaffid != null" >
         updatestaffid,
       </if>
+      <if test="auditstatus != null" >
+        auditstatus,
+      </if>
       <if test="status != null" >
         status,
       </if>
@@ -275,6 +252,9 @@
       </if>
       <if test="subject != null" >
         #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="starttime != null" >
         #{starttime,jdbcType=TIMESTAMP},
@@ -312,6 +292,9 @@
       <if test="updatestaffid != null" >
         #{updatestaffid,jdbcType=INTEGER},
       </if>
+      <if test="auditstatus != null" >
+        #{auditstatus,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
@@ -328,6 +311,9 @@
       </if>
       <if test="subject != null" >
         subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="starttime != null" >
         starttime = #{starttime,jdbcType=TIMESTAMP},
@@ -365,6 +351,9 @@
       <if test="updatestaffid != null" >
         updatestaffid = #{updatestaffid,jdbcType=INTEGER},
       </if>
+      <if test="auditstatus != null" >
+        auditstatus = #{auditstatus,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -376,6 +365,7 @@
     set uuid = #{uuid,jdbcType=VARCHAR},
       meetingroomid = #{meetingroomid,jdbcType=INTEGER},
       subject = #{subject,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       starttime = #{starttime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP},
       duration = #{duration,jdbcType=INTEGER},
@@ -388,6 +378,7 @@
       createstaffid = #{createstaffid,jdbcType=INTEGER},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      auditstatus = #{auditstatus,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR}
     where meetingid = #{meetingid,jdbcType=INTEGER}
   </update>
@@ -413,6 +404,12 @@
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="auditstatus != null" >
+        auditstatus = #{auditstatus,jdbcType=CHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
       </if>
     </set>
     where meetingid = #{meetingid,jdbcType=INTEGER}  and orgid=#{orgid}

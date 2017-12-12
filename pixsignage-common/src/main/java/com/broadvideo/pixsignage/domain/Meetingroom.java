@@ -22,6 +22,7 @@ public class Meetingroom {
     private Integer peoples;
 
     private String openflag;
+    private String auditflag;
 
     private String qrcode;
 
@@ -122,6 +123,12 @@ public class Meetingroom {
 
     public void setOpenflag(String openflag) {
         this.openflag = openflag == null ? null : openflag.trim();
+    }
+    public String getAuditflag() {
+        return auditflag;
+    }
+    public void setAuditflag(String auditflag) {
+        this.auditflag = auditflag == null ? null : auditflag.trim();
     }
 
     public String getQrcode() {

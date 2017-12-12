@@ -73,6 +73,7 @@ public class ResUsers extends ResBase {
 		final String token = EncryptionUtils.encrypt(ServiceConstants.ENCRYPT_KEY, plainText);
 		return token;
 	}
+
 	@POST
 	@Path("/auth")
 	public Response auth(@Context HttpServletRequest req, UserAuthReq userAuthReq) {
@@ -155,6 +156,7 @@ public class ResUsers extends ResBase {
 			Meeting meeting = new Meeting();
 			meeting.setMeetingroomid(bookMeetingReq.getMeetingRoomId());
 			meeting.setSubject(bookMeetingReq.getSubject());
+			meeting.setDescription(bookMeetingReq.getDescription());
 			meeting.setStarttime(DateUtil.getDate(bookMeetingReq.getStartTime(), "yyyy-MM-dd HH:mm"));
 			meeting.setEndtime(DateUtil.getDate(bookMeetingReq.getEndTime(), "yyyy-MM-dd HH:mm"));
 			meeting.setAttendeeuserids(bookMeetingReq.getAttendeeUserIds());
@@ -287,35 +289,33 @@ public class ResUsers extends ResBase {
 	@Path("/{user_id}/adjust_meeting")
 	public Response adjustMeeting(@Context HttpServletRequest req, AdjustMeetingReq adjustMeetingReq) {
 
-			logger.info("Entry adjust meeting.");
-			UserProfile profile = currentUserProfile(req);
-			if (adjustMeetingReq == null || adjustMeetingReq.getStartTime() == null
-					|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())) {
-				logger.error("adjust meeting room:invalid args.");
-				throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
+		logger.info("Entry adjust meeting.");
+		UserProfile profile = currentUserProfile(req);
+		if (adjustMeetingReq == null || adjustMeetingReq.getStartTime() == null
+				|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())) {
+			logger.error("adjust meeting room:invalid args.");
+			throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
 
-			}
-			try {
-				Meeting meeting = new Meeting();
-				meeting.setMeetingid(adjustMeetingReq.getMeetingId());
-				meeting.setSubject(adjustMeetingReq.getSubject());
-				meeting.setStarttime(adjustMeetingReq.getStartTime());
-				meeting.setEndtime(adjustMeetingReq.getEndTime());
-				meeting.setAttendeeuserids(adjustMeetingReq.getAttendeeUserId());
-				meeting.setUpdatestaffid(profile.getUserId());
-				meeting.setOrgid(profile.getOrgId());
-				meeting.setUpdatetime(new Date());
+		}
+		try {
+			Meeting meeting = new Meeting();
+			meeting.setMeetingid(adjustMeetingReq.getMeetingId());
+			meeting.setSubject(adjustMeetingReq.getSubject());
+			meeting.setDescription(adjustMeetingReq.getDescription());
+			meeting.setStarttime(adjustMeetingReq.getStartTime());
+			meeting.setEndtime(adjustMeetingReq.getEndTime());
+			meeting.setAttendeeuserids(adjustMeetingReq.getAttendeeUserId());
+			meeting.setUpdatestaffid(profile.getUserId());
+			meeting.setOrgid(profile.getOrgId());
+			meeting.setUpdatetime(new Date());
 			this.meetingService.updateMeeting(meeting);
-			} catch (ServiceException e) {
-				throw new AppException(e.getCode(), e.getMessage());
-			}
-			BasicResp resp = new BasicResp();
-			resp.setRetcode(ApiRetCodeEnum.SUCCESS);
-			return Response.status(Status.OK).entity(resp).build();
-
-
+		} catch (ServiceException e) {
+			throw new AppException(e.getCode(), e.getMessage());
+		}
+		BasicResp resp = new BasicResp();
+		resp.setRetcode(ApiRetCodeEnum.SUCCESS);
+		return Response.status(Status.OK).entity(resp).build();
 
 	}
-
 
 }

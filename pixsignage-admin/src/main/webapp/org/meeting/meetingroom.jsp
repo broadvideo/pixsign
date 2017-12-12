@@ -131,6 +131,16 @@
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">是否审核<span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												    <i class="fa"></i> 
+												     <input type="checkbox"  id="AuditFlagSwitch" class="make-switch" data-on-color="success" data-on-text="是" data-off-color="default" data-off-text="否">
+												      <input type="hidden"  name="meetingroom.auditflag"/> 
+												</div>
+											</div>
+										</div>
 								</div>
 							</form>
 						</div>
