@@ -1,4 +1,10 @@
 var Login = function () {
+	var _redirecturl = 'org/main.jsp';
+	
+	var init = function (redirecturl) {
+		_redirecturl = redirecturl;
+		handleLogin();
+	};
 
 	var handleLogin = function() {
 		$('input[name=username]', $('#LoginForm')).attr('value', $.cookie('pixsignage.username'));
@@ -69,7 +75,7 @@ var Login = function () {
 								} else if (data.staff.subsystem == 1) {
 									window.location.href = 'vsp/main.jsp';
 								} else if (data.staff.subsystem == 2) {
-									window.location.href = 'org/main.jsp';
+									window.location.href = _redirecturl;
 								}
 							} else {
 								$('.alert-danger span', $('#LoginForm')).html(common.tips.login_failed);
@@ -94,12 +100,9 @@ var Login = function () {
 	        });
 	};
 
-    return {
-        //main function to initiate the module
-        init: function () {
-            handleLogin();
-        }
-
-    };
-
+	
+	return {
+		init: init,
+	}
+	
 }();

@@ -56,12 +56,10 @@ response.setDateHeader("Expires",0);
 	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
 	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
-	
-	String theme = "darkblue.css";
-	if (sdomain != null) {
-		//theme = "light.css";
-		theme = "darkblue.css";
+	if (sdomain == null) {
+		sdomain = sdomainService.selectByServername("default");
 	}
+	String theme = sdomain.getTheme();
 	
 	String currentPrivilegeid = request.getParameter("CurrentP");
 	if (currentPrivilegeid == null) {
@@ -89,7 +87,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/layout/css/themes/<%=theme%>" rel="stylesheet" type="text/css" id="style_color" />
+<link href="${static_ctx}/admin/layout/css/themes/<%=theme%>.css" rel="stylesheet" type="text/css" id="style_color" />
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="../favicon.ico" />
 
@@ -173,13 +171,13 @@ function hasPrivilege(privilegeid) {
 			<div class="page-logo">
 				<a href="/pixsignage/<%=subsystem%>/main.jsp">
 				<%
-					if (sdomain != null) {
-				%>
-				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
-				<%
-					} else if (session_org != null && session_org.getLogo().length() > 0) {
+					if (session_org != null && session_org.getLogo().length() > 0) {
 				%>
 				<img src="/pixsigdata<%=session_org.getLogo()%>" height="40" alt="logo" />
+				<%
+					} else if (sdomain != null) {
+				%>
+				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
 				<%
 					} else {
 				%>

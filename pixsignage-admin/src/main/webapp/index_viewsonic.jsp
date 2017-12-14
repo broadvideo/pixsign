@@ -145,7 +145,7 @@
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init();
-		Login.init('org/main.jsp');
+		Login.init();
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');

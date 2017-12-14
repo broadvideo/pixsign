@@ -13,6 +13,10 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table sdomain add indexpage varchar(128) default 'index.jsp';
+alter table sdomain add theme varchar(32) default 'darkblue';
+insert into sdomain(name, code) values('Digital Signage', 'default');
+
 alter table templatezone add fixflag char(1) default '1';
 alter table pagezone add fixflag char(1) default '1';
 

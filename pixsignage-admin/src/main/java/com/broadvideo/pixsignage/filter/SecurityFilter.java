@@ -16,14 +16,30 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Sdomain;
+import com.broadvideo.pixsignage.service.SdomainService;
 
 public class SecurityFilter implements Filter {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected FilterConfig filterConfig = null;
 	private List<String> excludeLoginURLs = new ArrayList<String>();
+	private WebApplicationContext springContext;
+
+	public void init(FilterConfig config) throws ServletException {
+		springContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+
+		excludeLoginURLs.add("/admin.jsp");
+		excludeLoginURLs.add("/error.jsp");
+		excludeLoginURLs.add("/preview/preview.jsp");
+		excludeLoginURLs.add("/login.action");
+
+		excludeLoginURLs.add("/org/educloudinit.action");
+		excludeLoginURLs.add("/org/educloudcallback.action");
+	}
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
@@ -34,13 +50,21 @@ public class SecurityFilter implements Filter {
 
 		String servletPath = request.getServletPath();
 		for (int i = 0; i < excludeLoginURLs.size(); i++) {
-			if (servletPath.matches(excludeLoginURLs.get(i))) {
+			if (servletPath.matches(excludeLoginURLs.get(i)) || servletPath.startsWith("/index")) {
 				chain.doFilter(request, response);
 				return;
 			}
 		}
 
+		SdomainService sdomainService = (SdomainService) springContext.getBean("sdomainService");
+		Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
 		String redirectURL = "/index.jsp";
+		if (sdomain != null) {
+			redirectURL = "/" + sdomain.getIndexpage();
+		} else {
+			sdomain = sdomainService.selectByServername("default");
+			redirectURL = "/" + sdomain.getIndexpage();
+		}
 
 		if (session.getAttribute(CommonConstants.SESSION_TOKEN) == null
 				|| session.getAttribute(CommonConstants.SESSION_SUBSYSTEM) == null) {
@@ -77,16 +101,4 @@ public class SecurityFilter implements Filter {
 		excludeLoginURLs.clear();
 	}
 
-	public void init(FilterConfig filterConfig) throws ServletException {
-		this.filterConfig = filterConfig;
-
-		excludeLoginURLs.add("/index.jsp");
-		excludeLoginURLs.add("/admin.jsp");
-		excludeLoginURLs.add("/error.jsp");
-		excludeLoginURLs.add("/preview/preview.jsp");
-		excludeLoginURLs.add("/login.action");
-
-		excludeLoginURLs.add("/org/educloudinit.action");
-		excludeLoginURLs.add("/org/educloudcallback.action");
-	}
 }

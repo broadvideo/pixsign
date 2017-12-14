@@ -11,6 +11,10 @@ public class Sdomain {
 
 	private String description;
 
+	private String indexpage;
+
+	private String theme;
+
 	public Integer getSdomainid() {
 		return sdomainid;
 	}
@@ -49,5 +53,21 @@ public class Sdomain {
 
 	public void setDescription(String description) {
 		this.description = description == null ? null : description.trim();
+	}
+
+	public String getIndexpage() {
+		return indexpage;
+	}
+
+	public void setIndexpage(String indexpage) {
+		this.indexpage = indexpage;
+	}
+
+	public String getTheme() {
+		return theme;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
 }

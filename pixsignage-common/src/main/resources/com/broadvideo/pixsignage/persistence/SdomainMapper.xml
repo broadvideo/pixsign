@@ -7,9 +7,11 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="langflag" property="langflag" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="indexpage" property="indexpage" jdbcType="VARCHAR" />
+    <result column="theme" property="theme" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    sdomainid, name, code, langflag, description
+    sdomainid, name, code, langflag, description, indexpage, theme
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -49,9 +51,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into sdomain (name, code, langflag, 
-      description)
+      description, indexpage, theme)
     values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{langflag,jdbcType=CHAR}, 
-      #{description,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR}, #{indexpage,jdbcType=VARCHAR}, #{theme,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Sdomain" >
     <selectKey resultType="java.lang.Integer" keyProperty="sdomainid" order="AFTER" >
@@ -71,6 +73,12 @@
       <if test="description != null" >
         description,
       </if>
+      <if test="indexpage != null" >
+        indexpage,
+      </if>
+      <if test="theme != null" >
+        theme,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -84,6 +92,12 @@
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="indexpage != null" >
+        #{indexpage,jdbcType=VARCHAR},
+      </if>
+      <if test="theme != null" >
+        #{theme,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -102,6 +116,12 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="indexpage != null" >
+        indexpage = #{indexpage,jdbcType=VARCHAR},
+      </if>
+      <if test="theme != null" >
+        theme = #{theme,jdbcType=VARCHAR},
+      </if>
     </set>
     where sdomainid = #{sdomainid,jdbcType=INTEGER}
   </update>
@@ -110,7 +130,9 @@
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       langflag = #{langflag,jdbcType=CHAR},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      indexpage = #{indexpage,jdbcType=VARCHAR},
+      theme = #{theme,jdbcType=VARCHAR}
     where sdomainid = #{sdomainid,jdbcType=INTEGER}
   </update>
 </mapper>
