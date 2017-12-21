@@ -72,6 +72,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
 					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 307
 					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 307
+					|| org.getMeetingflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 310
+					|| org.getMeetingflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 310
 					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
 					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
 					|| org.getFlowrateflag().equals("1") && p.getPrivilegeid().intValue() == 30822
