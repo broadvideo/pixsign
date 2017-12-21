@@ -19,7 +19,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -40,17 +39,15 @@ public class HttpClientUtils {
 	/**
 	 * 连接超时
 	 */
-	private static final int CONNECTION_TIMEOUT = 3 * 1000;
+	private static final int CONNECTION_TIMEOUT = 10 * 1000;
 
-	private static final int SOCKET_TIMEOUT = 3 * 1000;
+	private static final int SOCKET_TIMEOUT = 10 * 1000;
 
 	public static SimpleHttpResponse doHttpRequest(HttpRequestBase httpRequest, Header[] headers) throws Exception {
 
-		CloseableHttpClient httpclient = HttpClients.custom().disableAutomaticRetries()
-				.setRetryHandler(new DefaultHttpRequestRetryHandler(0, false)).build();
+		CloseableHttpClient httpclient = HttpClients.custom().build();
 		long t1 = System.currentTimeMillis();
 		try {
-			logger.info("Create simple httpclient with no retry...");
 			RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(SOCKET_TIMEOUT)
 					.setConnectTimeout(CONNECTION_TIMEOUT)
 					.build();

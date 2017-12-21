@@ -93,4 +93,18 @@ public class BranchServiceImpl implements BranchService {
 			return (branch.getBranchid().intValue() == list.get(0).getBranchid().intValue());
 		}
 	}
+
+	@Override
+	public Integer syncBranch(Branch branch, Integer orgid) {
+		Branch queryBranch = this.branchMapper.selectByUuid(branch.getUuid(), orgid + "");
+		branch.setOrgid(orgid);
+		if (queryBranch != null) {
+			branch.setBranchid(queryBranch.getBranchid());
+			this.updateBranch(branch);
+		} else {
+			this.addBranch(branch);
+		}
+		return branch.getBranchid();
+
+	}
 }

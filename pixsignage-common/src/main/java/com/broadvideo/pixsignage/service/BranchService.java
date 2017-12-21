@@ -23,4 +23,6 @@ public interface BranchService {
 	public void deleteBranch(Org org, String branchid);
 
 	public boolean validateName(Branch branch, String orgid);
+
+	public Integer syncBranch(Branch branch, Integer orgid);
 }

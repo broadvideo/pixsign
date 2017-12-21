@@ -21,4 +21,6 @@ public interface StaffService {
 	public void deleteStaff(String staffid);
 
 	public boolean validateLoginname(Staff staff);
+
+	Integer syncStaff(Staff staff, Integer orgid);
 }

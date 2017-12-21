@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -15,6 +16,8 @@ public interface MeetingMapper {
 	List<Meeting> selectList2(Meeting meeting, RowBounds rowBounds);
 
 	List<Meeting> selectExistMeetings(Meeting meeting);
+
+	Meeting selectMatchMeeting(@Param("meetingroomid") Integer meetingroomid, @Param("signtime") Date signtime);
     int deleteByPrimaryKey(Integer meetingid);
 
     int insert(Meeting record);

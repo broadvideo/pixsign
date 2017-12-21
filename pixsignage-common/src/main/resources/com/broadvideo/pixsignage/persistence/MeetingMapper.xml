@@ -128,6 +128,14 @@
 	   <if test="endtime!=null">
 	   and m.endtime <![CDATA[<=]]> #{endtime}
 	  </if>
+	  <if test="bookbranchid!=null">
+	   and  m.bookbranchid IN (
+	       select  tmp.branchid
+	          from branch tmp 
+	          where tmp.branchid=#{bookbranchid} or tmp.parentid=#{bookbranchid} 
+	           or tmp.parentid2=#{bookbranchid} or tmp.parentid3=#{bookbranchid}           
+	     )   
+	  </if>
 	   <if test="bookstaffid!=null">
 	   and (m.bookstaffid=#{bookstaffid} 
 	   <if  test="attendeeuserids!=null">
@@ -138,6 +146,29 @@
 	   </if>
 	   ) )
 	  </if>
+	  <if test="locationid != null">
+	      AND EXISTS (
+		          SELECT
+	                 1
+	               FROM location l1
+	                 LEFT JOIN location l2
+	                   ON (l1.locationid = l2.parentid
+	                       AND l2.status = '1')
+	                 LEFT JOIN location l3
+	                   ON (l3.parentid = l2.locationid
+	                       AND l3.status = '1')
+	                 LEFT JOIN location l4
+	                   ON (l4.parentid = l3.locationid
+	                       AND l4.status = '1')
+	               WHERE l1.status = '1'
+	                   AND l1.locationid =#{locationid}
+	                   AND (l1.locationid = mr.locationid
+	                         OR l2.locationid = mr.locationid
+	                         OR l3.locationid = mr.locationid
+	                         OR l4.locationid = mr.locationid
+	                         )
+                   )  
+	  </if> 
 	  <if test="starttime!=null or endtime!=null">
 	  	  order by m.starttime asc
 	  </if>
@@ -157,6 +188,14 @@
          and meetingid!=#{meetingid}
       </if>
        and starttime <![CDATA[<]]> #{endtime}  and  endtime > #{starttime} 
+  
+  </select>
+  <select id="selectMatchMeeting"  resultMap="BaseResultMap">
+	  select  
+	      <include refid="Base_Column_List" />
+	  from meeting
+      where  status='1' and  meetingroomid=#{meetingroomid} 
+       and #{signtime}>=  starttime  and  #{signtime}<![CDATA[<]]> endtime  
   
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

@@ -1,11 +1,18 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.broadvideo.pixsignage.util.DateUtil;
+
 public class Meeting {
 
+	public static String WAITING_FOR_AUDIT = "0";
+	public static String SUCCESS_FOR_AUDIT = "1";
+	public static String REFUSE_FOR_AUDIT = "2";
+	public static String NONE_FOR_AUDIT = "9";
     private Integer meetingid;
 
     private String uuid;
@@ -40,15 +47,13 @@ public class Meeting {
     private Integer createstaffid;
 
     private Date updatetime;
-
     private Integer updatestaffid;
-
     private String auditstatus;
     private String status;
 	private Integer[] attendeeuserids;
-
 	private List<Attendee> attendees = new ArrayList<Attendee>();
 	private String search;
+	private Integer locationid;
 
     public Integer getMeetingid() {
         return meetingid;
@@ -96,6 +101,12 @@ public class Meeting {
         this.starttime = starttime;
     }
 
+	public void setStarttime(String starttime) {
+
+		this.starttime = DateUtil.getDate(starttime, "yyyy-MM-dd HH:mm");
+
+	}
+
     public Date getEndtime() {
         return endtime;
     }
@@ -103,6 +114,10 @@ public class Meeting {
     public void setEndtime(Date endtime) {
         this.endtime = endtime;
     }
+
+	public void setEndtime(String endtime) {
+		this.endtime = DateUtil.getDate(endtime, "yyyy-MM-dd HH:mm");
+	}
 
     public Integer getDuration() {
         return duration;
@@ -206,6 +221,7 @@ public class Meeting {
         this.status = status == null ? null : status.trim();
     }
 
+	@Transient
 	public String getMeetingroomname() {
 		return meetingroomname;
 	}
@@ -214,6 +230,7 @@ public class Meeting {
 		this.meetingroomname = meetingroomname;
 	}
 
+	@Transient
 	public String getBookstaffname() {
 		return bookstaffname;
 	}
@@ -222,6 +239,7 @@ public class Meeting {
 		this.bookstaffname = bookstaffname;
 	}
 
+	@Transient
 	public String getBookbranchname() {
 		return bookbranchname;
 	}
@@ -230,6 +248,7 @@ public class Meeting {
 		this.bookbranchname = bookbranchname;
 	}
 
+	@Transient
 	public String getLocationname() {
 		return locationname;
 	}
@@ -238,6 +257,7 @@ public class Meeting {
 		this.locationname = locationname;
 	}
 
+	@Transient
 	public String getSearch() {
 		return search;
 	}
@@ -246,11 +266,21 @@ public class Meeting {
 		this.search = search;
 	}
 
+	@Transient
 	public List<Attendee> getAttendees() {
 		return attendees;
 	}
 
 	public void setAttendees(List<Attendee> attendees) {
 		this.attendees = attendees;
+	}
+
+	@Transient
+	public Integer getLocationid() {
+		return locationid;
+	}
+
+	public void setLocationid(Integer locationid) {
+		this.locationid = locationid;
 	}
 }

@@ -180,9 +180,49 @@
 		</property>
 		<property name="cronExpression">
 			<value>0 0/2 * * * ?</value>
-			
+
 		</property>
 	</bean>
+
+	<bean id="cmsSyncTask" class="com.broadvideo.pixsignage.task.CmsOrgUserSyncTask"></bean>
+	<bean id="cmsSyncJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="cmsSyncTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="cmsSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="cmsSyncJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/2 * * * ?</value>
+
+		</property>
+	</bean>
+
+
+	<bean id="cmsSignSyncTask" class="com.broadvideo.pixsignage.task.CmsMeetingSiginTask"></bean>
+	<bean id="cmsSignSyncJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="cmsSignSyncTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="cmsSignSyncJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="cmsSignSyncJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+
+		</property>
+	</bean>
+
 
 	<bean id="startQuertz" lazy-init="false" autowire="no"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -200,6 +240,9 @@
 				<ref bean="importJobTrigger" />
 				<ref bean="taodianJobTrigger" />
 				<ref bean="attendanceeventJobTrigger" />
+				<ref bean="cmsSyncJobTrigger" />
+				<ref bean="cmsSignSyncJobTrigger" />
+				
 			</list>
 		</property>
 	</bean>

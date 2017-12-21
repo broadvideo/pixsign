@@ -17,9 +17,15 @@ import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Attendee;
 import com.broadvideo.pixsignage.domain.Meeting;
+import com.broadvideo.pixsignage.domain.Meetingroom;
+import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.persistence.AttendeeMapper;
 import com.broadvideo.pixsignage.persistence.MeetingMapper;
+import com.broadvideo.pixsignage.persistence.MeetingroomMapper;
+import com.broadvideo.pixsignage.persistence.StaffMapper;
+import com.broadvideo.pixsignage.util.DateUtil;
 import com.broadvideo.pixsignage.util.UUIDUtils;
+import com.broadvideo.pixsignage.vo.StaffSwipe;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 
 @Transactional(rollbackFor = Exception.class)
@@ -31,6 +37,10 @@ public class MeetingServiceImpl implements MeetingService {
 	private MeetingMapper meetingMapper;
 	@Autowired
 	private AttendeeMapper attendeeMapper;
+	@Autowired
+	private MeetingroomMapper meetingroomMapper;
+	@Autowired
+	private StaffMapper staffMapper;
 
 	@Override
 	public Meeting getMeeting(Integer meetingid, Integer orgid) {
@@ -63,9 +73,27 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public Integer addMeeting(Meeting meeting) {
 
+		Integer meetingroomid = meeting.getMeetingroomid();
+		Meetingroom meetingroom = this.meetingroomMapper.selectByPrimaryKey(meetingroomid);
+		if (meetingroom == null) {
+			logger.error("meetingroom({}) is null.", meetingroomid);
+			throw new ServiceException(RetCodeEnum.EXCEPTION, "会议室不存在.");
+		}
+
+		if (GlobalFlag.NO.equals(meetingroom.getOpenflag())) {
+			logger.error("meetingroom({}) is null or not open for book.", meetingroomid);
+			throw new ServiceException(RetCodeEnum.EXCEPTION, "会议室不接受预定.");
+
+		}
 		List<Meeting> existMeetings = this.meetingMapper.selectExistMeetings(meeting);
 		if (existMeetings != null && existMeetings.size() > 0) {
 			throw new ServiceException(RetCodeEnum.EXCEPTION, "会议室该时间段已经被占用.");
+		}
+		if (GlobalFlag.YES.equals(meetingroom.getAuditflag())) {
+			logger.info("book meetingroom({},{}) needed audit.", meetingroom.getMeetingroomid(), meetingroom.getName());
+			meeting.setAuditstatus(Meeting.WAITING_FOR_AUDIT);
+		} else {
+			meeting.setAuditstatus(Meeting.NONE_FOR_AUDIT);
 		}
 		meeting.setUuid(UUIDUtils.generateUUID());
 		meeting.setStatus(GlobalFlag.VALID);
@@ -79,10 +107,11 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	private void syncAttedees(Integer meetingid, Integer[] attendeeUserIds) {
+
+		this.attendeeMapper.deleteByMeetingid(meetingid);
 		if (attendeeUserIds == null || attendeeUserIds.length == 0) {
 			return;
 		}	
-		this.attendeeMapper.deleteByMeetingid(meetingid);
 		for (Integer attendeeUserId : attendeeUserIds) {
 			Attendee attendee = new Attendee();
 			attendee.setMeetingid(meetingid);
@@ -115,9 +144,19 @@ public class MeetingServiceImpl implements MeetingService {
 		} else {
 			meeting.setAmount(meeting.getAttendeeuserids().length);
 		}
+		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
 		long duration = (meeting.getEndtime().getTime() - meeting.getStarttime().getTime()) / 1000;
 		meeting.setDuration((int) duration);
+
+		// 检查会议是否处于审核状态
+		if (!Meeting.NONE_FOR_AUDIT.equals(curMeeting.getAuditstatus())) {
+			meeting.setAuditstatus(Meeting.WAITING_FOR_AUDIT);
+			logger.info("Change meeting({}) auditstatus from {} to {}", new Object[] { curMeeting.getMeetingid(),
+					curMeeting.getAuditstatus(), meeting.getAuditstatus() });
+		}
 		this.meetingMapper.updateMeeting(meeting);
+		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
+
 	}
 
 	@Override
@@ -137,6 +176,63 @@ public class MeetingServiceImpl implements MeetingService {
 	@Override
 	public List<Attendee> getMeetingAttendees(Integer meetingid, Integer orgid) {
 		return attendeeMapper.selectMeetingAttendees(meetingid);
+	}
+
+	@Override
+	public void syncMeetingSignin(StaffSwipe staffswipe, Integer orgid) {
+		// 查询门禁绑定的会议室,code关联apid
+		Meetingroom meetingroom = this.meetingroomMapper.selectByCode(staffswipe.getApid() + "", orgid);
+		if (meetingroom == null) {
+			logger.error("swipe(apid:{}) not bind meetingroom.code", staffswipe.getApid());
+			return;
+		}
+		// 检查记录是否已经处理了
+		if ("1".equals(staffswipe.getNtag())) {
+			logger.error("apid:{},nTag:{} is read", staffswipe.getApid(), staffswipe.getNtag());
+			return;
+		}
+		// 根据账号查询员工
+		List<Staff> staffs=staffMapper.selectByLoginname(staffswipe.getAccount());
+		if(staffs==null || staffs.size()==0){
+			logger.error("swipe account({}) not found staff.", staffswipe.getAccount());
+			return;
+		}
+		Staff staff = staffs.get(0);
+		// 查找指定时间的会议
+		Date signtime = staffswipe.getSwipetime();
+		Meeting meeting = this.meetingMapper.selectMatchMeeting(meetingroom.getMeetingroomid(), signtime);
+		if (meeting == null) {
+			logger.info("No meeting found for meetingroomid:{},signtime:{}", meetingroom.getMeetingroomid(), signtime);
+			return;
+		}
+
+		// 检查刷卡人员是否是会议参与者
+		List<Attendee> attendeeList = this.getMeetingAttendees(meeting.getMeetingid(), orgid);
+		Attendee matchAttendee = null;
+		for (Attendee attendee : attendeeList) {
+			if (attendee.getStaffid().equals(staff.getStaffid())) {
+				matchAttendee = attendee;
+				break;
+			}
+		}
+		if (matchAttendee == null) {
+			logger.error("staff(staffid:{},name:{}) is not in attendee.", staff.getStaffid(), staff.getName());
+			return;
+		}
+		// 检查参会这是否已经签到过
+		if (matchAttendee.getSigntime() != null) {
+			logger.info("staff(staffid:{},name:{}) already signin on time:{}",
+					new Object[] { staff.getStaffid(), staff.getName(),
+							DateUtil.getDateStr(matchAttendee.getSigntime(), "yyyy-MM-dd HH:mm:ss") });
+			return;
+
+		}
+		// 插入签到记录
+		matchAttendee.setSigntime(staffswipe.getSwipetime());
+		this.attendeeMapper.updateByPrimaryKeySelective(matchAttendee);
+
+
+
 	}
 
 

@@ -10,8 +10,9 @@ public class BranchInfo {
 	@JsonProperty("branch_id")
 	private Integer branchId;
 	private String name;
-	@JsonIgnore
+	@JsonProperty("parent_id")
 	private Integer parentId;
+	@JsonIgnore
 	private List<BranchInfo> children = new ArrayList<BranchInfo>();
 
 	public Integer getBranchId() {

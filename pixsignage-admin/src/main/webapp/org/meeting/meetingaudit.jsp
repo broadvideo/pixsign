@@ -71,88 +71,99 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="menu.meetingroom"/></h4>
+							<h4 class="modal-title"><spring:message code="menu.meeting"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
-								<input type="hidden" name="meetingroom.meetingroomid" value="0" />
 								<div class="form-body">
-									  <div class="form-group">
-											<label class="col-md-3 control-label">位置<span class="required">*</span></label>
-											<div class="col-md-9">
-												<div class="pre-scrollable" id="BranchTree"></div>	
-												<input type="hidden" name="meetingroom.locationid"/>
-											</div>
-										</div>
-									   <div class="form-group">
-											<label class="col-md-3 control-label">绑定终端</label>
-											<div class="col-md-9">
-												 <input type="hidden" id="ClassSelect" class="form-control select2" name="meetingroom.terminalid">
-											</div>
-									    </div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">名称<span class="required">*</span></label>
+											<label class="col-md-3 control-label">位置</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="meetingroom.name" />
+													<i class="fa"></i> <input type="text" class="form-control" name="meeting.locationname"  readonly/>
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">描述</label>
+											<label class="col-md-3 control-label">会议室</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<textarea class="form-control" rows="2" name="meetingroom.description"></textarea> 
-												</div>
-											</div>
-										</div>
-										<div class="form-group" style="display:none;">
-											<label class="col-md-3 control-label" >布局</label>
-											<div class="col-md-9">
-												<div class="input-icon right">
-												   <i class="fa"></i> <input type="text" class="form-control" name="meetingroom.layout" />
+													<i class="fa"></i> <input type="text" class="form-control" name="meeting.meetingroomname"  readonly/>
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">人数（容纳）<span class="required">*</span></label>
-											<div id="peoples_wrapper_div" class="col-md-9">
-												
+											<label class="col-md-3 control-label">主题</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="meeting.subject"  readonly/>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label" >开始时间</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.starttime" readonly/>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">结束时间</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.endtime" readonly/>
+												</div>
 											</div>
 										</div>
 								
 										<div class="form-group">
-											<label class="col-md-3 control-label">可预订<span class="required">*</span></label>
+											<label class="col-md-3 control-label">预订人</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-												    <i class="fa"></i> 
-												     <input type="checkbox"  id="OpenFlagSwitch" class="make-switch" data-on-color="success" data-on-text="是" data-off-color="default" data-off-text="否" checked>
-												      <input type="hidden"  name="meetingroom.openflag"/> 
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.bookstaffname" readonly/>
+
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">预定审核<span class="required">*</span></label>
+											<label class="col-md-3 control-label">部门</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-												    <i class="fa"></i> 
-												     <input type="checkbox"  id="AuditFlagSwitch" class="make-switch" data-on-color="success" data-on-text="是" data-off-color="default" data-off-text="否">
-												      <input type="hidden"  name="meetingroom.auditflag"/> 
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.bookbranchname" readonly/>
+
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">参会人员</label>
+											<div class="col-md-9">
+										
+											</div>
+										</div>
+									<div class="form-group">
+											<label class="col-md-3 control-label">&nbsp;</label>
+											<div class="col-md-9">
+											   <table id="AttendeeTable" class="table table-striped table-bordered table-hover tree">
+														<thead></thead>
+														<tbody></tbody>
+												</table>
+											</div>
+										</div>
+										
+									
+								
 								</div>
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
 						</div>
 					</div>
 				</div>
 			</div>
 			
-			<h3 class="page-title"><spring:message code="menu.meetingroom"/></h3>
+			<h3 class="page-title"><spring:message code="menu.meeting"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -160,7 +171,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.mrbm"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.meetingroom"/></a>
+					<li><a href="#"><spring:message code="menu.meeting"/></a>
 					</li>
 				</ul>
 			</div>
@@ -170,7 +181,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.meetingroom"/></div>
+							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.meeting"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="BranchModule.refresh();" class="reload"></a>
 							</div>
@@ -182,8 +193,8 @@
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">
-										<div class="btn-group">
-											<button class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+										<div class="btn-group" style="display:none;">
+											<button class="btn green pix-add"  ><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 										</div>
 										<div class="btn-group">
 										
@@ -219,6 +230,7 @@
 
 <div id="SiteMethJavaScript">
 <!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="${static_ctx}/global/plugins/moment/moment.min.js"></script>
 <script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
@@ -239,7 +251,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/meeting/meetingroom.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/meeting/meeting.js?t=${timestamp}"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

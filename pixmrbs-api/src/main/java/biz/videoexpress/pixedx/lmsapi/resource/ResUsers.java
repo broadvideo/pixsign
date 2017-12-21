@@ -255,12 +255,14 @@ public class ResUsers extends ResBase {
 				data.put("meeting_room_id", result.getMeetingroomid());
 				data.put("meeting_room_name", result.getMeetingroomname());
 				data.put("subject", result.getSubject());
+				data.put("description", result.getDescription());
 				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
 				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
 				data.put("book_user_id", result.getBookstaffid());
 				data.put("book_user", result.getBookstaffname());
 				data.put("book_branch", result.getBookbranchname());
 				data.put("qrcode", "");
+				data.put("audit_status", result.getAuditstatus());
 				List<Attendee> attendees = result.getAttendees();
 				List<Map<String, Object>> attendeeMapList = new ArrayList<Map<String, Object>>();
 				for (Attendee attendee : attendees) {

@@ -1,10 +1,14 @@
 package com.broadvideo.pixsignage.service;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 import com.broadvideo.pixsignage.common.DoorConst;
 import com.broadvideo.pixsignage.common.ServiceException;
@@ -71,6 +75,28 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.DOOR_INVLIAD_INPUT_TIP);
 
 		}
+	}
+
+	public static void main(String[] args) {
+
+		String xmlData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><string xmlns=\"http://cmschina.com.cn/\"><NewDataSet><Table><OrgID>OR10000000</OrgID><ADAccountName>zszq</ADAccountName><OrgName>招商证券</OrgName><AdOuPath>OU=招商证券</AdOuPath><ADGrpName>招商证券</ADGrpName><CreatedDate>2009-08-26T13:59:44.213+08:00</CreatedDate><LastUpdateDate>2009-08-26T13:59:44.213+08:00</LastUpdateDate><AutoGrpName>招商证券</AutoGrpName><NodeRelativeNum>100</NodeRelativeNum><DynGrpNum>100</DynGrpNum><ShortName>招商证券</ShortName><Remark /><OrgLayer>0</OrgLayer><Column1>0</Column1><Column2>cmschina</Column2><Column6>12</Column6><Column10>0</Column10><IsUserOrg>False</IsUserOrg></Table></NewDataSet></string>";
+		Document doc;
+		try {
+			xmlData = xmlData.replaceAll("xmlns=\".+?\"", "");
+			doc = DocumentHelper.parseText(xmlData);
+			Element root = doc.getRootElement();
+			List<Element> nodes = root.selectNodes("//NewDataSet/Table");
+			System.out.println("doc.asXml:" + doc.asXML());
+			for (Node node : nodes) {
+				Element ele = (Element) node;
+				String orgId = ele.element("OrgID").getTextTrim();
+				System.out.println(orgId);
+
+			}
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

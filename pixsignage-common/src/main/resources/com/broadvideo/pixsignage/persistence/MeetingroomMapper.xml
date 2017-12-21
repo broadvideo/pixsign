@@ -143,6 +143,12 @@
     where orgid=#{orgid} and status='1' and  terminalid IS NOT NULL
   
   </select>
+  <select id="selectByCode"  resultMap="BaseResultMap">
+    select 
+         <include refid="Base_Column_List" />
+    from meetingroom 
+    where orgid=#{orgid} and status='1' and code=#{code}
+  </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from meetingroom

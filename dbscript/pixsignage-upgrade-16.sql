@@ -241,6 +241,13 @@ ALTER TABLE `meeting`
 ALTER TABLE `meetingroom` 
 	ADD COLUMN `auditflag` char(1)  COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '预定是否需要审核: 0:否 1:是' after `openflag`;
 
+ALTER TABLE `branch` 
+	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `branchid`; 
+ALTER TABLE `doorlog` 
+	ADD COLUMN `authorizeopentime` datetime   NULL COMMENT '授权开门时间' after `doortype`;
+ALTER TABLE `staff` 
+	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `staffid`, 
+	ADD COLUMN `email` varchar(128)  COLLATE utf8_general_ci NULL COMMENT '邮箱' after `name`;
 ############################################################
 ## post script  ############################################
 ############################################################

@@ -1,10 +1,16 @@
 package com.broadvideo.pixsignage.action;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +37,22 @@ public class MeetingAction extends BaseDatatableAction {
 		try {
 			PageInfo pageInfo = super.initPageInfo();
 			String search = getParameter("sSearch");
+			String exportExcelFlag = getParameter("exportexcel");
 			search = SqlUtil.likeEscapeH(search);
-			Integer locationid=null;
-			if (StringUtils.isNotBlank(getParameter("locationid"))) {
-				locationid=NumberUtils.toInt(getParameter("locationid"));
+			if (meeting == null) {
+				meeting = new Meeting();
 			}
-			PageResult pageResult = this.meetingService.getMeetingList(search, locationid, pageInfo, getStaffOrgid());
-			this.setiTotalRecords(pageResult.getTotalCount());
-			this.setiTotalDisplayRecords(pageResult.getTotalCount());
-			this.setAaData(pageResult.getResult());
-			return SUCCESS;
+			meeting.setSearch(search);
+			meeting.setOrgid(getStaffOrgid());
+			if (StringUtils.isNotBlank(exportExcelFlag)) {
+				return doExportMeetings(pageInfo);
+			} else {
+				PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
+				this.setiTotalRecords(pageResult.getTotalCount());
+				this.setiTotalDisplayRecords(pageResult.getTotalCount());
+				this.setAaData(pageResult.getResult());
+				return SUCCESS;
+			}
 		} catch (Exception ex) {
 			logger.error("meetingAction doList exception, ", ex);
 			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
@@ -49,7 +61,22 @@ public class MeetingAction extends BaseDatatableAction {
 	}
 
 
+	public String doExportMeetings(PageInfo pageInfo) {
+		pageInfo.setStart(0);
+		pageInfo.setLength(19999);
+		PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
+		List<Meeting> dataList = pageResult.getResult();
+		try {
+			File templateXls = new File("template_meeting.xls");
+			NPOIFSFileSystem fs = new NPOIFSFileSystem(templateXls);
+			HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
+			ByteArrayOutputStream targetFile = new ByteArrayOutputStream();
 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return NONE;
+	}
 
 	public String doListAttendees() {
 
@@ -100,6 +127,13 @@ public class MeetingAction extends BaseDatatableAction {
 
 	public void setMeeting(Meeting meeting) {
 		this.meeting = meeting;
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		InputStream inp = new FileInputStream("workbook.xls");
+		Workbook wb = WorkbookFactory.create(inp);
+
 	}
 
 }

@@ -8,6 +8,8 @@ import org.apache.struts2.json.annotations.JSON;
 public class Branch {
 	private Integer branchid;
 
+    private String uuid;
+	private String parentuuid;
 	private Integer orgid;
 
 	private Integer topfolderid;
@@ -44,6 +46,21 @@ public class Branch {
 
 	public void setBranchid(Integer branchid) {
 		this.branchid = branchid;
+	}
+
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+	public String getParentuuid() {
+		return parentuuid;
+	}
+
+	public void setParentuuid(String parentuuid) {
+		this.parentuuid = parentuuid;
 	}
 
 	public Integer getOrgid() {

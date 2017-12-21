@@ -3,6 +3,7 @@
 <mapper namespace="com.broadvideo.pixsignage.persistence.StaffMapper" >
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Staff">
     <id column="staffid" property="staffid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="subsystem" property="subsystem" jdbcType="CHAR" />
     <result column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
@@ -10,6 +11,7 @@
     <result column="loginname" property="loginname" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="token" property="token" jdbcType="VARCHAR" />
     <result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
@@ -31,8 +33,9 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    staffid, subsystem, vspid, orgid, branchid, loginname, password, name, status, token, sourcetype, sourceid, 
-    description, createtime, createstaffid, loginflag, logintime
+    staffid, uuid, subsystem, vspid, orgid, branchid, loginname, password, name, email, 
+    status, token, description, createtime, createstaffid, loginflag, logintime, sourcetype, 
+    sourceid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -96,6 +99,18 @@
       limit ${start}, ${length}
     </if>
   </select>
+  
+  <select id="selectBranchStaffs"  resultMap="BaseResultMap">
+	    select
+	       <include refid="Base_Column_List" />
+	    from staff
+	    where status = '1'
+	    and subsystem = '2'
+	    and sourcetype = '1'
+	    and orgid = #{orgid}
+	    and branchid=#{branchid}
+	    order by staffid desc 
+  </select>
 
   <select id="selectByLoginname" resultMap="FullResultMap">
     select
@@ -129,6 +144,13 @@
     and password=#{password}
     and status='1'
   </select>
+  
+  <select  id="selectByUuid"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' and uuid=#{uuid} and orgid=#{orgid}
+  </select>
 
   <delete id="deleteByPrimaryKey" >
     update staff set status='9'
@@ -149,18 +171,20 @@
     <selectKey resultType="java.lang.Integer" keyProperty="staffid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into staff (subsystem, vspid, orgid, 
-      branchid, loginname, password, 
-      name, status, token, 
-      sourcetype, sourceid, description, 
+    insert into staff (uuid, subsystem, vspid, 
+      orgid, branchid, loginname, 
+      password, name, email, 
+      status, token, description, 
       createtime, createstaffid, loginflag, 
-      logintime)
-    values (#{subsystem,jdbcType=CHAR}, #{vspid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, 
-      #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, 
-      #{sourcetype,jdbcType=CHAR}, #{sourceid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      logintime, sourcetype, sourceid
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{subsystem,jdbcType=CHAR}, #{vspid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{loginflag,jdbcType=CHAR}, 
-      #{logintime,jdbcType=TIMESTAMP})
+      #{logintime,jdbcType=TIMESTAMP}, #{sourcetype,jdbcType=CHAR}, #{sourceid,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Staff" >
     <selectKey resultType="java.lang.Integer" keyProperty="staffid" order="AFTER" >
@@ -168,6 +192,9 @@
     </selectKey>
     insert into staff
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
       <if test="subsystem != null" >
         subsystem,
       </if>
@@ -188,6 +215,9 @@
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="email != null" >
+        email,
       </if>
       <if test="status != null" >
         status,
@@ -218,6 +248,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="subsystem != null" >
         #{subsystem,jdbcType=CHAR},
       </if>
@@ -238,6 +271,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -271,6 +307,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Staff" >
     update staff
     <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="subsystem != null" >
         subsystem = #{subsystem,jdbcType=CHAR},
       </if>
@@ -291,6 +330,9 @@
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
@@ -324,13 +366,15 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Staff" >
     update staff
-    set subsystem = #{subsystem,jdbcType=CHAR},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      subsystem = #{subsystem,jdbcType=CHAR},
       vspid = #{vspid,jdbcType=INTEGER},
       orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       loginname = #{loginname,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       token = #{token,jdbcType=VARCHAR},
       sourcetype = #{sourcetype,jdbcType=CHAR},

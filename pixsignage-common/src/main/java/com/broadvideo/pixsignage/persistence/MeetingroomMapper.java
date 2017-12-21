@@ -11,10 +11,9 @@ public interface MeetingroomMapper {
 
 	List<Meetingroom> selectList(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search,
 			@Param("locationid") Integer locationid, RowBounds rowBounds);
-
 	List<Meetingroom> selectList2(Meetingroom meetingroom, RowBounds rowBounds);
-
 	List<Meetingroom> selectBindMeetingrooms(@Param("orgid") Integer orgid);
+	Meetingroom selectByCode(@Param("code") String code, @Param("orgid") Integer orgid);
     int deleteByPrimaryKey(Integer meetingroomid);
 
     int insert(Meetingroom record);

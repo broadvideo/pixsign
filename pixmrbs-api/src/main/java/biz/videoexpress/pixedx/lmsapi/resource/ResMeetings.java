@@ -100,6 +100,7 @@ public class ResMeetings extends ResBase {
 				data.put("code", meetingroom.getCode());
 				data.put("peoples", meetingroom.getPeoples());
 				data.put("openflag", meetingroom.getOpenflag());
+				data.put("audit_flag", meetingroom.getAuditflag());
 				results.add(data);
 
 			}
@@ -158,6 +159,7 @@ public class ResMeetings extends ResBase {
 				data.put("book_user", result.getBookstaffname());
 				data.put("book_branch", result.getBookbranchname());
 				data.put("qrcode", "");
+				data.put("audit_status", result.getAuditstatus());
 				List<Attendee> attendees = result.getAttendees();
 				List<Map<String, Object>> attendeeMapList = new ArrayList<Map<String, Object>>();
 				for (Attendee attendee : attendees) {

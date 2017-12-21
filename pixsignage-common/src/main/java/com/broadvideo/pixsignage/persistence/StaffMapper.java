@@ -20,12 +20,15 @@ public interface StaffMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
+	List<Staff> selectBranchStaffs(@Param("branchid") String branchid, @Param("orgid") String orgid);
+
 	List<Staff> selectByLoginname(@Param(value = "loginname") String loginname);
 
 	Staff selectByToken(@Param(value = "token") String token);
 
 	Staff selectBySource(@Param(value = "sourcetype") String sourcetype, @Param(value = "sourceid") String sourceid);
 
+	Staff selectByUuid(@Param("uuid") String uuid, @Param("orgid") String orgid);
 	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
 
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);

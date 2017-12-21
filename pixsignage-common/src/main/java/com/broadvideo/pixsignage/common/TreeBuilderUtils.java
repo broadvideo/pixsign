@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -37,6 +38,10 @@ public class TreeBuilderUtils {
 			Object parentOfId = ReflectionUtils.getFieldValue(parent, StringUtils.isEmpty(idName) ? "id" : idName);
 			if (ObjectUtils.toString(childOfPId).equals(ObjectUtils.toString(parentOfId))) {
 				List subList = (List) ReflectionUtils.getFieldValue(parent, subListName);
+				if (subList == null) {
+					subList = new ArrayList();
+					ReflectionUtils.setFieldValue(parent, subListName, subList);
+				}
 				subList.add(item);
 				buildTree(item, childs, pidName, idName, subListName);
 			}

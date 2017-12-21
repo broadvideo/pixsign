@@ -3,6 +3,7 @@
 <mapper namespace="com.broadvideo.pixsignage.persistence.BranchMapper" >
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Branch" >
     <id column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="topfolderid" property="topfolderid" jdbcType="INTEGER" />
     <result column="parentid" property="parentid" jdbcType="INTEGER" />
@@ -23,7 +24,8 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    branchid, orgid, topfolderid, parentid, parentid2, parentid3, name, code, status, description, createtime, createstaffid
+    branchid, uuid, orgid, parentid, name, status, description, createtime, createstaffid, 
+    topfolderid, code, parentid2, parentid3
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -76,6 +78,16 @@
     and b.code != '' 
     and o.tagflag = '1'
   </select>
+    <select id="selectOrgBranchList" resultMap="BaseResultMap">
+    select * from branch
+    where status='1'  and orgid = #{orgid}
+    order by branchid asc
+    </select>
+
+  <select id="selectByUuid" resultMap="BaseResultMap">
+    select * from branch
+    where status='1' and uuid = #{uuid}  and orgid = #{orgid}
+  </select>
 
   <delete id="deleteByPrimaryKey">
     update branch set status='9'
@@ -86,16 +98,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="branchid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into branch (orgid, topfolderid, parentid, 
-      parentid2, parentid3, 
-      name, code, 
-      status, description, 
-      createtime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
-      #{parentid2,jdbcType=INTEGER}, #{parentid3,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+    insert into branch (uuid, orgid, parentid, 
+      name, status, description, 
+      createtime, createstaffid, topfolderid, 
+      code, parentid2, parentid3
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, 
+      #{code,jdbcType=VARCHAR}, #{parentid2,jdbcType=INTEGER}, #{parentid3,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     <selectKey resultType="java.lang.Integer" keyProperty="branchid" order="AFTER" >
@@ -103,6 +115,9 @@
     </selectKey>
     insert into branch
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
       <if test="orgid != null" >
         orgid,
       </if>
@@ -138,6 +153,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
       </if>
@@ -176,6 +194,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     update branch
     <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -214,7 +235,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     update branch
-    set orgid = #{orgid,jdbcType=INTEGER},
+    set  uuid = #{uuid,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
       topfolderid = #{topfolderid,jdbcType=INTEGER},
       parentid = #{parentid,jdbcType=INTEGER},
       parentid2 = #{parentid2,jdbcType=INTEGER},

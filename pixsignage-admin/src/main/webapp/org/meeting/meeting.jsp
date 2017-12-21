@@ -5,6 +5,8 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
@@ -163,6 +165,73 @@
 				</div>
 			</div>
 			
+		  <div id="MeetingSearchModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+				<div class="modal-dialog modal-wide">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">会议日程检索</h4>
+						</div>
+						<div class="modal-body">
+							<form id="MeetingSearchForm" class="form-horizontal" method="POST">
+								<input type="hidden" name="meetingroom.meetingroomid" value="0" />
+								<div class="form-body">
+									  <div class="form-group">
+											<label class="col-md-3 control-label">位置<span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="pre-scrollable leftLocationTree" ></div>	
+												<input type="hidden" name="meetingroom.locationid"/>
+											</div>
+										</div>
+									   <div class="form-group">
+											<label class="col-md-3 control-label">会议室</label>
+											<div class="col-md-9">
+												 <input type="hidden" id="ClassSelect" class="form-control select2" name="meetingroom.meetingroomid">
+											</div>
+									    </div>
+									    <div class="form-group" >
+											<label class="col-md-3 control-label" >预定部门</label>
+											<div class="col-md-9">
+												 <div class="pre-scrollable branchtree">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">开始时间</label>
+											<div class="col-md-9">
+												<div class="input-group date form_datetime">
+													<input type="text"  readonly class="form-control"  name="starttime">
+													<span class="input-group-btn">
+														<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+													</span>
+					                        	</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">结束时间</label>
+											<div class="col-md-9">
+											    <div class="input-group date form_datetime">
+													<input type="text"  readonly class="form-control" name="endtime">
+													<span class="input-group-btn">
+														<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+													</span>
+												</div>
+											</div>
+										</div>
+									
+								
+								
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn blue btn-search"  data-dismiss="modal">检索</button>
+							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<h3 class="page-title"><spring:message code="menu.meeting"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
@@ -188,16 +257,16 @@
 						</div>
 						<div class="portlet-body" id="MeetingroomPortlet">
 							<div class="row">
-								<div class="col-md-2">
-									<div class="row"><div class="col-md-12 leftLocationTree"></div></div>
+								<div class="col-md-2" style="display:none;">
+								  <%-- 	<div class="row"><div class="col-md-2 leftLocationTree"></div></div> --%>
 								</div>
-								<div class="col-md-10">
+								<div class="col-md-12">
 									<div class="table-toolbar">
-										<div class="btn-group" style="display:none;">
-											<button class="btn green pix-add"  ><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+										<div class="btn-group">
+											<button class="btn green pix-search"  >检索<i class="fa fa-plus"></i></button>
 										</div>
 										<div class="btn-group">
-										
+										  <button class="btn green pix-export-excel"  >导出Excel<i class="fa fa-file-excel-o"></i></button>									
 										</div>
 									</div>
 									<table id="MeetingroomTable" class="table table-striped table-bordered table-hover tree">
@@ -242,7 +311,9 @@
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.min.js" type="text/javascript"></script>	
-
+<script src="${static_ctx}/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->

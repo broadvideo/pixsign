@@ -24,10 +24,8 @@ import biz.videoexpress.pixedx.lmsapi.bean.BranchInfo;
 import biz.videoexpress.pixedx.lmsapi.common.ApiRetCodeEnum;
 import biz.videoexpress.pixedx.lmsapi.common.AppException;
 import biz.videoexpress.pixedx.lmsapi.common.BasicResp;
-import biz.videoexpress.pixedx.lmsapi.common.UserProfile;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
-import com.broadvideo.pixsignage.common.TreeBuilderUtils;
 import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.BranchService;
@@ -48,11 +46,12 @@ public class ResBranches extends ResBase {
 	@Path("/")
 	public Response getBranchList(@Context HttpServletRequest req) {
 		BasicResp<BranchInfo> basicResp = new BasicResp<BranchInfo>();
-		UserProfile profile = currentUserProfile(req);
+		// UserProfile profile = currentUserProfile(req);
 		try {
-			List<Branch> rootList = this.branchService.selectRoot(profile.getOrgId().toString());
+			Integer orgId = getOrgId(req);
+			List<Branch> rootList = this.branchService.selectRoot(orgId.toString());
 			Branch root = rootList.get(0);
-			List<Branch> branchList = this.branchService.selectOrgBranchList(profile.getOrgId().toString());
+			List<Branch> branchList = this.branchService.selectOrgBranchList(orgId.toString());
 			List<BranchInfo> branchInfoList = new ArrayList<BranchInfo>();
 			for (Branch branch : branchList) {
 				BranchInfo branchInfo = new BranchInfo();
@@ -61,17 +60,18 @@ public class ResBranches extends ResBase {
 				branchInfo.setParentId(branch.getParentid());
 				branchInfoList.add(branchInfo);
 			}
-			BranchInfo rootBranchInfo = new BranchInfo();
-			rootBranchInfo.setBranchId(root.getBranchid());
-			rootBranchInfo.setName(rootBranchInfo.getName());
-			TreeBuilderUtils.buildTree(rootBranchInfo, branchInfoList, "parentId", "branchId", "children");
-			basicResp.setData(rootBranchInfo.getChildren());
+			// BranchInfo rootBranchInfo = new BranchInfo();
+			// rootBranchInfo.setBranchId(root.getBranchid());
+			// rootBranchInfo.setName(rootBranchInfo.getName());
+			// TreeBuilderUtils.buildTree(rootBranchInfo, branchInfoList,
+			// "parentId", "branchId", "children");
+			basicResp.setData(branchInfoList);
 			return Response.status(Status.OK).entity(basicResp).build();
 
 		} catch (Exception e) {
 
 			logger.error("Get course categories exception.", e);
-			throw new AppException(ApiRetCodeEnum.EXCEPTION, "Get course categories exception.");
+			throw new AppException(ApiRetCodeEnum.EXCEPTION, "Get branch categories exception.");
 		}
 
 	}
@@ -80,10 +80,10 @@ public class ResBranches extends ResBase {
 	@Path("/{branch_id}/users")
 	public Response getBranchUsers(@Context HttpServletRequest req, @PathParam("branch_id") Integer branchId) {
 		BasicResp basicResp = new BasicResp();
-		UserProfile profile = currentUserProfile(req);
+		// UserProfile profile = currentUserProfile(req);
 		try {
-			
-			List<Staff> staffList = staffService.selectList(CommonConstants.SUBSYSTEM_ORG, null, profile.getOrgId()
+			Integer orgId = getOrgId(req);
+			List<Staff> staffList = staffService.selectList(CommonConstants.SUBSYSTEM_ORG, null, orgId
 					+ "", branchId + "", null,
 					"0", "200");
 			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();

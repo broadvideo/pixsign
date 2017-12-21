@@ -15,6 +15,8 @@ public interface BranchMapper {
 
 	List<Branch> selectByName(@Param(value = "name") String name, @Param(value = "orgid") String orgid);
 
+	Branch selectByUuid(@Param("uuid") String uuid, @Param("orgid") String orgid);
+
 	List<Branch> selectTaodianList();
 
 	List<Branch> selectOrgBranchList(@Param("orgid") String orgid);

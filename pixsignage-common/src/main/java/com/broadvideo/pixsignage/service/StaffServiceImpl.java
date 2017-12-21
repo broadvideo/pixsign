@@ -1,11 +1,14 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Role;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
@@ -83,6 +86,22 @@ public class StaffServiceImpl implements StaffService {
 		} else {
 			return (staff.getStaffid().intValue() == list.get(0).getStaffid().intValue());
 		}
+	}
+
+	@Override
+	public Integer syncStaff(Staff staff, Integer orgid) {
+		Staff qStaff = this.staffMapper.selectByUuid(staff.getUuid(), orgid + "");
+		staff.setOrgid(orgid);
+		staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
+		staff.setPassword(staff.getUuid());
+		staff.setRoles(new ArrayList<Role>());
+		if (qStaff != null) {
+			staff.setStaffid(qStaff.getStaffid());
+			this.updateStaff(staff);
+		} else {
+			this.addStaff(staff);
+		}
+		return staff.getStaffid();
 	}
 
 }

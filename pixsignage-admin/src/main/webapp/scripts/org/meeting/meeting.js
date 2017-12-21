@@ -1,19 +1,90 @@
 var CurRecord = null;
 var  CurRecordid=-1;
-var _leftparentid=-1;
+var _leftparentid=null;
 var _leftparent=null;
+var _branchparentid=null;
+var  _searchParams=[];
 
 var MeetingRoomModule=function(){
 	
 };
 
-MeetingRoomModule.prototype.initLeftLocationTree=function(){
-	
-	var BranchTree = $('#MeetingroomPortlet .leftLocationTree');
+function initBranchTree() {
+	BranchTree = $('.branchtree');
 	BranchTree.jstree('destroy');
 	BranchTree.jstree({
 		'core' : {
 			'multiple' : false,
+			'data' : {
+				'url': function(node) {
+					return 'branch!listnode.action';
+				},
+				'data': function(node) {
+					return {
+						'id': node.id,
+						'branch':node.branch,
+					}
+				}
+			}
+		},
+		'plugins' : ['unique'],
+	});
+	BranchTree.on('loaded.jstree', function() {
+		_branchparentid = BranchTree.jstree(true).get_json('#')[0].id;
+		BranchTree.jstree('select_node', _branchparentid);
+	});
+	BranchTree.on('select_node.jstree', function(event, data) {
+		_branchparentid = data.instance.get_node(data.selected[0]).id;
+		//_branchparent = data.instance.get_node(data.selected[0]).original.branch;
+	});
+};
+
+
+function initMeetingrooms(){
+	
+	$("#ClassSelect").select2('val','');
+	$.ajax({
+		type : 'GET',
+		url : 'meetingroom!list.action',
+		data : {"iDisplayStart" :0,"iDisplayLength" :999,"locationid": _leftparentid},
+		dataType: 'json',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var classlist = [];
+				for (var i=0; i<data.aaData.length; i++) {
+					classlist.push({
+						id: data.aaData[i].meetingroomid,
+						text: data.aaData[i].name
+					});
+				}
+				$("#ClassSelect").select2({
+					placeholder: common.tips.detail_select,
+					minimumInputLength: 0,
+					data: classlist,
+					dropdownCssClass: "bigdrop", 
+					escapeMarkup: function (m) { return m; } 
+				});
+			} else {
+				bootbox.alert(data.errorcode + ": " + data.errmsg);
+			}
+		},
+		error : function() {
+			bootbox.alert('failure');
+		}
+	});
+	
+	
+	
+	
+	
+};
+MeetingRoomModule.prototype.initLeftLocationTree=function(){
+	
+	var BranchTree =$('.leftLocationTree');    //$('#MeetingroomPortlet .leftLocationTree');
+	BranchTree.jstree('destroy');
+	BranchTree.jstree({
+		'core' : {
+			'multiple' : true,
 			'data' : {
 				'url': function(node) {
 					return 'location!listnode.action';
@@ -33,7 +104,6 @@ MeetingRoomModule.prototype.initLeftLocationTree=function(){
 	BranchTree.on('loaded.jstree', function() {
 		_leftparentid = BranchTree.jstree(true).get_json('#')[0].id;
 		BranchTree.jstree('select_node', _leftparentid );
-		
 		refresh();
 	});
 	BranchTree.on('select_node.jstree', function(event, data) {
@@ -47,8 +117,9 @@ MeetingRoomModule.prototype.initLeftLocationTree=function(){
 
 var refresh = function () {
 	
-	$('#MeetingroomTable').dataTable()._fnAjaxUpdate();
-	$('#MeetingroomPortlet .leftLocationTree').jstree(true).refresh_node(_leftparentid);
+	initMeetingrooms();
+//	$('#MeetingroomTable').dataTable()._fnAjaxUpdate();
+	$('.leftLocationTree').jstree(true).refresh_node(_leftparentid);
 	$('.pix-add').css('display', '');
 	
 	
@@ -98,7 +169,7 @@ MeetingRoomModule.prototype.initEvent=function(){
 		
 	});
 	
-	$('body').on('click', '.pix-meetingdtl', function(event) {
+$('body').on('click', '.pix-meetingdtl', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
@@ -120,9 +191,67 @@ MeetingRoomModule.prototype.initEvent=function(){
     	$('#MyEditForm').loadJSON(formdata);
 		$('#MyEditModal').modal();
 	});
-
 OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
 
+	
+$('body').on('click','.pix-search',function(event){
+	
+	initMeetingrooms();
+	initBranchTree();
+  $(".form_datetime").datetimepicker({
+         autoclose: true,
+         language: "zh-CN",
+         isRTL: Metronic.isRTL(),
+         format: "yyyy-mm-dd hh:ii",
+         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
+    });
+		
+	//refreshForm('MeetingExportForm');
+	$('#MeetingSearchModal').modal();
+	
+	
+	
+});
+
+$('body').on('click','.btn-search',function(event){
+	
+	_searchParams=[];
+	var starttime=$('input[name=starttime]').val();
+	var endtime=$('input[name=endtime]').val();
+	var locationid=_leftparentid;
+	var branchid=_branchparentid;
+	var meetingroomid=$("#ClassSelect").select2('val');
+	if(starttime!=null && starttime.length>0){
+		_searchParams.push({'name' : 'meeting.starttime','value': starttime});
+	}
+	if(endtime!=null && endtime.length>0){
+		_searchParams.push({'name' : 'meeting.endtime','value': endtime});
+	}
+	if(locationid!=null){
+		_searchParams.push({'name' : 'meeting.locationid','value': locationid});
+	}
+	if(meetingroomid!=null){
+		_searchParams.push({'name' : 'meeting.meetingroomid','value': meetingroomid});
+	}
+	if(branchid!=null){
+		_searchParams.push({'name' : 'meeting.bookbranchid','value': branchid});
+	}
+
+    $('#MeetingroomTable').dataTable()._fnAjaxUpdate();
+	
+	
+	
+});
+
+$('body').on('click','.pix-export-excel',function(event){
+	alert('do export');
+	var exportExcelParam={'name' : 'exportexcel','value': true};
+	_searchParams.push(exportExcelParam);
+    $('#MeetingroomTable').dataTable()._fnAjaxUpdate();
+	_searchParams.pop();
+
+	
+});
 
 };
 
@@ -152,6 +281,7 @@ MeetingRoomModule.prototype.initAttendeeTable=function(){
 		},
 		'fnServerParams': function(aoData) { 
 			aoData.push({'name':'meeting.meetingid','value':CurRecordid });
+		
 		}
 	});
 	$('#AttendeeTable').css('width', '100%').css('table-layout', 'fixed');
@@ -190,7 +320,16 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
-			aoData.push({'name':'locationid','value':_leftparentid });
+			if(_leftparentid!=null){
+			   aoData.push({'name':'meeting.locationid','value':_leftparentid });
+			}
+			if(_searchParams.length>0){
+				
+			     for(var key in _searchParams){
+			    	 aoData.push(_searchParams[key]); 
+			     }
+			}
+
 
 		}
 	});

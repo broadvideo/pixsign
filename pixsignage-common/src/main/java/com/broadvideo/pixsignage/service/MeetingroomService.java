@@ -25,4 +25,5 @@ public interface MeetingroomService {
 
 	List<Device> listUnbindTerminals(Integer orgid);
 
+
 }
