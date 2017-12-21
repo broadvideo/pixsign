@@ -92,6 +92,8 @@ public class DeviceAction extends BaseDatatableAction {
 			}
 			String devicegroupid = getParameter("devicegroupid");
 			String devicegridid = getParameter("devicegridid");
+			String cataitemid1 = getParameter("cataitemid1");
+			String cataitemid2 = getParameter("cataitemid2");
 			String order = getParameter("order");
 			if (order == null || order.equals("")) {
 				order = "deviceid";
@@ -102,13 +104,13 @@ public class DeviceAction extends BaseDatatableAction {
 			}
 
 			int count = deviceService.selectCount(orgid, branchid, subbranchflag, status, onlineflag, devicegroupid,
-					devicegridid, search);
+					devicegridid, cataitemid1, cataitemid2, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Device> deviceList = deviceService.selectList(orgid, branchid, subbranchflag, status, onlineflag,
-					devicegroupid, devicegridid, search, start, length, order);
+					devicegroupid, devicegridid, cataitemid1, cataitemid2, search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
 				aaData.add(deviceList.get(i));
 			}

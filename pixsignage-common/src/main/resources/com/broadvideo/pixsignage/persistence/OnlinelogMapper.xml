@@ -69,7 +69,15 @@
     where status = '1' 
     and orgid = #{orgid}
     <if test="branchid != null">
-      and branchid = #{branchid}
+      and exists (select 1 from branch b 
+        where b.branchid=device.branchid 
+        and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+    </if>
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
     </if>
     <if test="search != null">
       and (terminalid like #{search} or name like #{search})
@@ -84,7 +92,15 @@
     and d.status = '1' 
     and d.orgid = #{orgid}
     <if test="branchid != null">
-      and d.branchid = #{branchid}
+      and exists (select 1 from branch bb 
+        where bb.branchid=d.branchid 
+        and (bb.branchid=#{branchid} or bb.parentid=#{branchid} or bb.parentid2=#{branchid} or bb.parentid3=#{branchid}) )
+    </if>
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
     </if>
     <if test="search != null">
       and (d.terminalid like #{search} or d.name like #{search})

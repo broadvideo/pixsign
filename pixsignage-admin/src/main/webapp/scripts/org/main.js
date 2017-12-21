@@ -102,12 +102,12 @@ var DeviceChart = function () {
 					var statdata = [];
 					for (var i=0; i<data.aaData.length; i++) {
 						statdata[i] = {};
-						if (data.aaData[i].label == '1-1') {
+						if (data.aaData[i].label == '1') {
 							statdata[i].label = common.view.online + '(' + data.aaData[i].value + ')';
-						} else if (data.aaData[i].label == '1-0') {
+						} else if (data.aaData[i].label == '0') {
 							statdata[i].label = common.view.offline + '(' + data.aaData[i].value + ')';
-						} else if (data.aaData[i].label == '0-0') {
-							statdata[i].label = common.view.unregister + '(' + data.aaData[i].value + ')';
+						//} else if (data.aaData[i].label == '0-0') {
+						//	statdata[i].label = common.view.unregister + '(' + data.aaData[i].value + ')';
 						} else {
 							statdata[i].label = common.view.unknown + '(' + data.aaData[i].value + ')';
 						}

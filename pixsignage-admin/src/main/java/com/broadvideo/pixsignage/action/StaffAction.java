@@ -25,6 +25,11 @@ public class StaffAction extends BaseDatatableAction {
 	@Autowired
 	private StaffService staffService;
 
+	public String doGet() {
+		staff = getLoginStaff();
+		return SUCCESS;
+	}
+
 	public String doList() {
 		try {
 			this.setsEcho(getParameter("sEcho"));

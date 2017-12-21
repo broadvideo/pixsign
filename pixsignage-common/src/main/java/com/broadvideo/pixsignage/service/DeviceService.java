@@ -6,11 +6,11 @@ import com.broadvideo.pixsignage.domain.Device;
 
 public interface DeviceService {
 	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
-			String devicegroupid, String devicegridid, String search);
+			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search);
 
 	public List<Device> selectList(String orgid, String branchid, String subbranchflag, String status,
-			String onlineflag, String devicegroupid, String devicegridid, String search, String start, String length,
-			String order);
+			String onlineflag, String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2,
+			String search, String start, String length, String order);
 
 	public Device selectByPrimaryKey(String deviceid);
 

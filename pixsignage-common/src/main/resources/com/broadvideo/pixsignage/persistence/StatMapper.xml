@@ -8,15 +8,22 @@
   </resultMap>
 
   <select id="statDevices" resultMap="BaseResultMap" >
-    select concat(status, '-', onlineflag) as label, count(*) as value
+    select onlineflag as label, count(*) as value
     from device
     where testflag = 0
+    and status = 1
     and orgid = #{orgid}
     and exists (select 1 from branch b 
       where b.branchid=device.branchid 
       and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
-    group by status, onlineflag
-    order by onlineflag, status desc
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
+    </if>
+    group by onlineflag
+    order by onlineflag desc
   </select>
 
   <select id="statVideoCount" resultMap="BaseResultMap" >

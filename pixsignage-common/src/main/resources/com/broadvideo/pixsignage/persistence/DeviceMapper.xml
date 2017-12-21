@@ -58,6 +58,8 @@
     <result column="networksignal" property="networksignal" jdbcType="INTEGER" />
     <result column="brightness" property="brightness" jdbcType="INTEGER" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="cataitemid1" property="cataitemid1" jdbcType="INTEGER" />
+    <result column="cataitemid2" property="cataitemid2" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -73,7 +75,7 @@
     devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, tagflag, temperature,
-    downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags
+    downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags, cataitemid1, cataitemid2
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -114,6 +116,12 @@
     <if test="devicegridid != null">
       and devicegridid = #{devicegridid}
     </if>
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
+    </if>
     <if test="search != null">
       and (terminalid like #{search} or name like #{search})
     </if>
@@ -146,6 +154,12 @@
     </if>
     <if test="devicegridid != null">
       and devicegridid = #{devicegridid}
+    </if>
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
     </if>
     <if test="search != null">
       and (terminalid like #{search} or name like #{search})
@@ -247,6 +261,18 @@
     where branchid = #{branchid}
   </update>
 
+  <update id="updateCataitemid1" >
+    update device
+    set cataitemid1 = #{cataitemid1} 
+    where deviceid = #{deviceid}
+  </update>
+
+  <update id="updateCataitemid2" >
+    update device
+    set cataitemid2 = #{cataitemid2} 
+    where deviceid = #{deviceid}
+  </update>
+
   <update id="checkDevicegroup" >
     update device d, devicegroup dg
     set d.devicegroupid = 0 
@@ -303,7 +329,8 @@
       boardinfo, storageused, storageavail, 
       upgradeflag, appfileid, tagflag, temperature,
       downloadspeed, downloadbytes, networkmode,
-      networksignal, brightness, tags)
+      networksignal, brightness, tags, 
+      cataitemid1, cataitemid2)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -321,7 +348,8 @@
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
       #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{tagflag,jdbcType=CHAR}, #{temperature,jdbcType=VARCHAR},
       #{downloadspeed,jdbcType=INTEGER},#{downloadbytes,jdbcType=BIGINT},#{networkmode,jdbcType=CHAR},
-      #{networksignal,jdbcType=INTEGER},#{brightness,jdbcType=INTEGER},#{tags,jdbcType=VARCHAR},)
+      #{networksignal,jdbcType=INTEGER},#{brightness,jdbcType=INTEGER},#{tags,jdbcType=VARCHAR},
+      #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -494,6 +522,12 @@
       <if test="tags != null" >
         tags,
       </if>
+      <if test="cataitemid1 != null" >
+        cataitemid1,
+      </if>
+      <if test="cataitemid2 != null" >
+        cataitemid2,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -660,6 +694,12 @@
       </if>
       <if test="tags != null" >
         #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="cataitemid1 != null" >
+        #{cataitemid1,jdbcType=VARCHAR},
+      </if>
+      <if test="cataitemid2 != null" >
+        #{cataitemid2,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -831,6 +871,12 @@
       <if test="tags != null" >
         tags = #{tags,jdbcType=VARCHAR},
       </if>
+      <if test="cataitemid1 != null" >
+        cataitemid1 = #{cataitemid1,jdbcType=VARCHAR},
+      </if>
+      <if test="cataitemid2 != null" >
+        cataitemid2 = #{cataitemid2,jdbcType=VARCHAR},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -890,7 +936,9 @@
       networkmode = #{networkmode,jdbcType=CHAR},
       networksignal = #{networksignal,jdbcType=INTEGER},
       brightness = #{brightness,jdbcType=INTEGER},
-      tags = #{tags,jdbcType=VARCHAR}
+      tags = #{tags,jdbcType=VARCHAR},
+      cataitemid1 = #{cataitemid1,jdbcType=INTEGER},
+      cataitemid2 = #{cataitemid2,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
 </mapper>

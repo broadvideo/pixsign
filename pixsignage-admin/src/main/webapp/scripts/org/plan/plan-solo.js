@@ -827,16 +827,17 @@ var PlanModule = function () {
 				index = $(event.target).parent().attr('index');
 			}
 			CurrentPlandtl = CurrentPlandtls[index];
-			FormValidateOption.rules = {};
+			var formHandler = new FormHandler($('#PlandtlForm'));
+			formHandler.validateOption.rules = {};
 			if (CurrentPlandtl.duration == 0) {
 				$('#PlandtlForm .plandtl-duration').css('display', 'none');
 			} else {
-				FormValidateOption.rules['duration'] = {};
-				FormValidateOption.rules['duration']['required'] = true;
-				FormValidateOption.rules['duration']['number'] = true;
+				formHandler.validateOption.rules['duration'] = {};
+				formHandler.validateOption.rules['duration']['required'] = true;
+				formHandler.validateOption.rules['duration']['number'] = true;
 				$('#PlandtlForm .plandtl-duration').css('display', '');
 			}
-			$('#PlandtlForm').validate(FormValidateOption);
+			$('#PlandtlForm').validate(formHandler.validateOption);
 
 			$('#PlandtlForm input[name=duration]').val(CurrentPlandtl.duration);
 			$('#PlandtlModal').modal();

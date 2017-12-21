@@ -218,6 +218,12 @@
 			</result>
 		</action>
 
+		<action name="staff!get" method="doGet" class="staffAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">staff.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="staff!list" method="doList" class="staffAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -897,6 +903,47 @@
 			</result>
 		</action>
 		<action name="devicefile!delete" method="doDelete" class="devicefileAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="catalog!list" method="doList" class="catalogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="catalog!update" method="doUpdate" class="catalogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="catalog!additem" method="doAddItem" class="catalogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="catalog!updateitem" method="doUpdateItem" class="catalogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="catalog!deleteitem" method="doDeleteItem" class="catalogAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="catalog!adddevices" method="doAddDevices" class="catalogAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

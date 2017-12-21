@@ -45,7 +45,6 @@ response.setDateHeader("Expires",0);
 <script type="text/javascript">
    var res="${static_ctx}";
    var ctx="${base_ctx}";
-
 </script>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <sitemesh:write property='head'/>
@@ -60,6 +59,10 @@ response.setDateHeader("Expires",0);
 		sdomain = sdomainService.selectByServername("default");
 	}
 	String theme = sdomain.getTheme();
+	String mode = "default";
+	if (sdomain.getIndexpage().equals("index_viewsonic.jsp")) {
+		mode = "viewsonic";
+	}
 	
 	String currentPrivilegeid = request.getParameter("CurrentP");
 	if (currentPrivilegeid == null) {
@@ -96,7 +99,12 @@ response.setDateHeader("Expires",0);
 } 
 .hide-orgtype-2 {
   display: none !important; 
-} 
+}
+<% if (!mode.equals("default")) { %>
+.page-content-wrapper .page-content {
+  margin-left: 0 !important;
+}
+<% } %>
 </style>
 
 <script>
@@ -169,7 +177,7 @@ function hasPrivilege(privilegeid) {
 		<div class="page-header-inner">
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
-				<a href="/pixsignage/<%=subsystem%>/main.jsp">
+				<a href="/pixsignage/">
 				<%
 					if (session_org != null && session_org.getLogo().length() > 0) {
 				%>
@@ -242,6 +250,7 @@ function hasPrivilege(privilegeid) {
 	
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container">
+		<% if (mode.equals("default")) { %>
 		<!-- BEGIN SIDEBAR -->
 		<div class="page-sidebar-wrapper">
 			<div class="page-sidebar navbar-collapse collapse">
@@ -320,6 +329,7 @@ function hasPrivilege(privilegeid) {
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
+		<% } %>
 
 		<sitemesh:write property='body'/>
 	</div>
@@ -356,6 +366,6 @@ function hasPrivilege(privilegeid) {
 <!-- END CORE PLUGINS -->
 
 <sitemesh:write property='div.SiteMethJavaScript'/>
-	 
+
 </body>
 </html>

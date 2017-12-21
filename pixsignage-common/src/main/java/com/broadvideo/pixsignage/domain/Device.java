@@ -121,6 +121,10 @@ public class Device {
 
 	private String tags;
 
+	private Integer cataitemid1;
+
+	private Integer cataitemid2;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -585,6 +589,22 @@ public class Device {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public Integer getCataitemid1() {
+		return cataitemid1;
+	}
+
+	public void setCataitemid1(Integer cataitemid1) {
+		this.cataitemid1 = cataitemid1;
+	}
+
+	public Integer getCataitemid2() {
+		return cataitemid2;
+	}
+
+	public void setCataitemid2(Integer cataitemid2) {
+		this.cataitemid2 = cataitemid2;
 	}
 
 	public Branch getBranch() {
