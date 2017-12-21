@@ -12,15 +12,17 @@
 	ServletContext servletContext = this.getServletContext();
 	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
-	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
+	String servername = request.getServerName();
+	Sdomain sdomain = sdomainService.selectByServername(servername);
 	if (sdomain == null) {
+		servername = "default";
 		sdomain = sdomainService.selectByServername("default");
 	}
 	
 	String title = "";
 	String css = "login-soft.css";
 	String bgcolor = "#666";
-	if (sdomain != null) {
+	if (!servername.equals("default")) {
 		title = sdomain.getName();
 		css = "login3.css";
 		bgcolor = "#E1E1E1";

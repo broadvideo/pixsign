@@ -225,8 +225,6 @@ ALTER TABLE `meetingroom`
 
 ALTER TABLE `branch` 
 	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `branchid`; 
-ALTER TABLE `doorlog` 
-	ADD COLUMN `authorizeopentime` datetime   NULL COMMENT '授权开门时间' after `doortype`;
 ALTER TABLE `staff` 
 	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `staffid`, 
 	ADD COLUMN `email` varchar(128)  COLLATE utf8_general_ci NULL COMMENT '邮箱' after `name`;
