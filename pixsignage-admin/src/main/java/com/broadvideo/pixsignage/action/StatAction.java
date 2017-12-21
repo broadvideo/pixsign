@@ -25,9 +25,21 @@ public class StatAction extends BaseDatatableAction {
 
 	public String statDevices() {
 		try {
+			String branchid = getParameter("branchid");
+			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
+				branchid = "" + getLoginStaff().getBranchid();
+			}
+			String cataitemid1 = getParameter("cataitemid1");
+			if (cataitemid1 != null && cataitemid1.equals("")) {
+				cataitemid1 = null;
+			}
+			String cataitemid2 = getParameter("cataitemid2");
+			if (cataitemid2 != null && cataitemid2.equals("")) {
+				cataitemid2 = null;
+			}
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, String>> statList = statService.statDevices("" + getLoginStaff().getOrgid(),
-					"" + getLoginStaff().getBranchid());
+			List<HashMap<String, String>> statList = statService.statDevices("" + getLoginStaff().getOrgid(), branchid,
+					cataitemid1, cataitemid2);
 			for (int i = 0; i < statList.size(); i++) {
 				aaData.add(statList.get(i));
 			}

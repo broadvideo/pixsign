@@ -29,8 +29,8 @@ var RoleModule = function () {
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				var buttonhtml = '';
 				buttonhtml += '<div class="util-btn-margin-bottom-5">';
-				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> 编辑 </a>';
-				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> 删除</a>';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + ' </a>';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				buttonhtml += '</div>';
 				$('td:eq(2)', nRow).html(buttonhtml);
 				return nRow;

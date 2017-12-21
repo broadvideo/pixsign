@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.CataitemMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Cataitem" >
+    <id column="cataitemid" property="cataitemid" jdbcType="INTEGER" />
+    <result column="catalogid" property="catalogid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cataitemid, catalogid, name
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select *from cataitem
+    where cataitemid = #{cataitemid}
+  </select>
+  
+  <select id="selectListByCatalog" resultMap="BaseResultMap" >
+    select *from cataitem
+    where catalogid = #{catalogid}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" >
+    delete from cataitem
+    where cataitemid = #{cataitemid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Cataitem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="cataitemid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cataitem (catalogid, name)
+    values (#{catalogid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Cataitem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="cataitemid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cataitem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="catalogid != null" >
+        catalogid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="catalogid != null" >
+        #{catalogid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Cataitem" >
+    update cataitem
+    <set >
+      <if test="catalogid != null" >
+        catalogid = #{catalogid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cataitemid = #{cataitemid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Cataitem" >
+    update cataitem
+    set catalogid = #{catalogid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR}
+    where cataitemid = #{cataitemid,jdbcType=INTEGER}
+  </update>
+</mapper>

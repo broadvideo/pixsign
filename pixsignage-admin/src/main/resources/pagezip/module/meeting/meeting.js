@@ -1,73 +1,9 @@
-var meetings = [
-    {
-        "id": 1,
-        "title": "年中市场汇报",
-        "booker": "张红兵",
-        "start_time": "9:00",
-        "end_time": "10:30",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 2,
-        "title": "证券从业考试安排",
-        "booker": "马鸣放",
-        "start_time": "11:00",
-        "end_time": "11:30",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 3,
-        "title": "公司问题讨论会议",
-        "booker": "刘海",
-        "start_time": "12:00",
-        "end_time": "13:00",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 4,
-        "title": "证券公司信用汇总",
-        "booker": "张红兵",
-        "start_time": "14:00",
-        "end_time": "15:30",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 5,
-        "title": "客户问题汇总讨论",
-        "booker": "李琼",
-        "start_time": "16:00",
-        "end_time": "17:00",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 6,
-        "title": "年中市场汇报",
-        "booker": "龚春红",
-        "start_time": "17:30",
-        "end_time": "18:30",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    },
-    {
-        "id": 7,
-        "title": "年终茶话会",
-        "booker": "龚春红",
-        "start_time": "19:30",
-        "end_time": "21:30",
-        "attendee": "孙红雷，张勇，何用，刘芳，胡伟，成中，吴华，陈志刚，牛海涛，张芳芳",
-        "department": "开发部"
-    }
-]
 //日历初始化
 var Meeting = function (zonediv, zone) {
     this.zonediv = zonediv;
     this.zone = zone;
-
+    this.scalew = 1;
+    this.scaleh = 1;
     this.host = window.android && window.android.getHost() || '192.168.0.102:8080';
     this.baseUrl = 'http://' + this.host + '/pixmrbs-api/meetings';
     this.terminalId = window.android && window.android.getTerminalId() || '00001';
@@ -80,7 +16,7 @@ var Meeting = function (zonediv, zone) {
             {{~it:meeting:index}}
             <tr class="meeting" data-id="{{=meeting.id}}">
                 <td width="20%">
-                <p class="time"><i class="fa fa-star"></i> {{=moment(meeting.start_time).format('MM月DD日 HH:mm')}} - {{=moment(meeting.end_time).format('HH:mm')}}</p>
+                <p class="time"><i class="fa fa-star"></i> {{=moment(meeting.start_time).format('HH:mm')}} - {{=moment(meeting.end_time).format('HH:mm')}}</p>
                 <p class="booker">{{=meeting.book_user}}</p>
                 </td>
                 <td width="60%">
@@ -103,6 +39,8 @@ var Meeting = function (zonediv, zone) {
         <a href="#close-modal" rel="modal:close" class="close-modal ">Close</a></div>`
 
     this.resize = function (scalew, scaleh) {
+        this.scalew = scalew
+        this.scaleh = scaleh
         $(zonediv).css({
             'box-sizing': 'border-box',
             'border-color': zone.bdcolor,
@@ -144,18 +82,29 @@ var Meeting = function (zonediv, zone) {
             thiz.meetingRoom = res.data;
             if (res.data.length > 0) thiz.meetingRoom = res.data[0]
             else throw new Error('未绑定会议室')
+            var start_time = moment().startOf('day').format('YYYYMMDDHHmm')
+            var end_time = moment().endOf('day').format('YYYYMMDDHHmm')
+            var data = {
+                ts: Date.now(),
+                meeting_room_id: thiz.meetingRoom.meeting_room_id,
+                start_time: start_time,
+                end_time: end_time
+            }
             return $.ajax({
-                url: `${thiz.baseUrl}?meeting_room_id=${thiz.meetingRoom.meeting_room_id}&ts=${Date.now()}`,
+                url: `${thiz.baseUrl}`,
+                data: data,
                 dataType: 'json'
             });
         }).then(function (res) {
             thiz.meetings = res.data;
             var templ = doT.template(meetingTpl)
             thiz.zonediv.html(templ(thiz.meetings))
+            thiz.resize(thiz.scalew, thiz.scaleh)
         }).catch(function (err) {
             console.log(err.message);
         });
-        $(thiz.zonediv).on('click', '.meeting', function () {
+        $(thiz.zonediv).on('click', '.meeting', function (ev) {
+            ev.preventDefault()
             $('#meeting-detail').remove()
             var id = $(this).data('id')
             var meeting = meetings[id - 1]
@@ -168,5 +117,5 @@ var Meeting = function (zonediv, zone) {
 
     this.init()
     //周期性更新数据
-    //setTimeout(this.init, 300000)
+    setTimeout(this.init, 300000)
 };

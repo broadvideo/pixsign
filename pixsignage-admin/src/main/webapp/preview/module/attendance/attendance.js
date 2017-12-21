@@ -2,6 +2,7 @@
  * Created by Elvis on 2017/6/29.
  */
 var Attendance = function (zonediv, zone) {
+    var self = this
     this.zonediv = zonediv;
     this.zone = zone;
     this.currentEvent = null;
@@ -60,7 +61,6 @@ var Attendance = function (zonediv, zone) {
     }
 
     this.refreshAttendance = function () {
-        var self = this
         var now = Date.now()
         var events = common.attendanceEvents.filter(function (event) {
             return event.start_time < now
@@ -88,7 +88,6 @@ var Attendance = function (zonediv, zone) {
     }
 
     this.init = function () {
-        var self = this
         setInterval(self.refreshAttendance, 300000)
         self.refreshAttendance()
     }
@@ -111,7 +110,6 @@ var Attendance = function (zonediv, zone) {
     };
 
     this.swipe = function (hardId) {
-        var self = this
         if (self.currentEvent && self.currentEvent.end_time > Date.now()) {
             var student = common.students.find(function (student) {
                 return student['hard_id'] == hardId

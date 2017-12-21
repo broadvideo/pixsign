@@ -6,7 +6,7 @@
 	<mapping path="/sys/*.jsp" decorator="/decorator/decorator.jsp" />
 
 	<!-- 指明满足“/exclude.jsp*”的页面，将被排除，不被装饰 -->
-	<mapping path="/org/template-design.jsp" exclue="true" />
+	<mapping path="/org/template-design.jsp" exclude="true" />
 	
 	<content-processor>
 		<tag-rule-bundle class="org.sitemesh.content.tagrules.html.DivExtractingTagRuleBundle" />

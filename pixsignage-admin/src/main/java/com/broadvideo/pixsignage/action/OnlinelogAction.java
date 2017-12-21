@@ -67,13 +67,22 @@ public class OnlinelogAction extends BaseDatatableAction {
 			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String cataitemid1 = getParameter("cataitemid1");
+			if (cataitemid1 != null && cataitemid1.equals("")) {
+				cataitemid1 = null;
+			}
+			String cataitemid2 = getParameter("cataitemid2");
+			if (cataitemid2 != null && cataitemid2.equals("")) {
+				cataitemid2 = null;
+			}
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = onlinelogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, search);
+			int count = onlinelogMapper.selectDeviceStatCount("" + getLoginStaff().getOrgid(), branchid, cataitemid1,
+					cataitemid2, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 			List<HashMap<String, Object>> list = onlinelogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
-					branchid, search, start, length);
+					branchid, cataitemid1, cataitemid2, search, start, length);
 			for (int i = 0; i < list.size(); i++) {
 				aaData.add(list.get(i));
 			}

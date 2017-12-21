@@ -48,76 +48,89 @@
 <link href="${static_ctx}/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
 <!-- END GLOBAL MANDATORY STYLES -->
-<!-- BEGIN PAGE LEVEL STYLES -->
-<link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/pages/css/<%=css%>" rel="stylesheet" type="text/css" />
-<!-- END PAGE LEVEL SCRIPTS -->
-<!-- BEGIN THEME STYLES -->
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-<link id="style_color" href="${static_ctx}/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
-<!-- END THEME STYLES -->
-<link rel="shortcut icon" href="${base_ctx}/favicon.ico" />
-</head>
-<!-- END HEAD -->
 
-<body class="login" style="background-color: <%=bgcolor%> !important;">
-	<!-- BEGIN LOGO -->
-	<div class="logo">
-		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="100" alt="" />
-	</div>
-	
-	<!-- END LOGO -->
-	<!-- BEGIN LOGIN -->
-	<div class="content">
-		<!-- BEGIN LOGIN FORM -->
-		<form id="LoginForm" class="login-form" method="post">
-			<h3 class="form-title"><spring:message code="global.login.hint"/></h3>
+<style>
+    .panel {
+        margin: 80px auto;
+        width: 400px;
+        border: 0 solid #ccc !important;
+        background-color: whitesmoke;
+        border-radius: 20px !important;
+        box-shadow: 0px 0px 30px #444 !important;
+    }
+    .panel-body .title {
+        margin: 0;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 600;
+    }
+    .panel-body form {
+        padding: 10px 45px;
+    }
+    .panel-body form label {
+        color: #888;
+        font-weight: 400;
+    }
+    .panel-body form input {
+        border: 0px solid #ccc !important;
+        border-radius: 20px;
+    }
+    .panel-body form button.btn {
+        border-radius: 20px !important;
+        color: white;
+        margin-top: 30px;
+    }
+    .panel-body form .btn.btn-block {
+        background-color: #F39500;
+    }
+    .panel-body form .lang .btn {
+        background-color: #ccc;
+    }
+    .panel-body form .lang .btn.checked {
+        background-color: #F39500;
+    }
+    .panel-footer {
+        background-color: #F39500;
+        padding: 20px 40px;
+        border-radius: 0 0 20px 20px;
+    }
+    .panel-footer img {
+        width: 100%
+    }
+</style>
+</head>
+
+<!-- BEGIN BODY -->
+<body>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p class="title"><spring:message code="global.login.hint.rsj1"/></p>
+        <p class="title"><spring:message code="global.login.hint.rsj2"/></p>
+        <form id="LoginForm" class="login-form" method="post">
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span></span>
 			</div>
-			<div class="form-group">
-				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-				<spring:message code="global.username" var="global_username"/>
-				<label class="control-label visible-ie8 visible-ie9">${global_username}</label>
-				<div class="input-icon">
-					<i class="fa fa-user"></i>
-					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="${global_username}" name="username"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<spring:message code="global.password" var="global_password"/>
-				<label class="control-label visible-ie8 visible-ie9">${global_password}</label>
-				<div class="input-icon">
-					<i class="fa fa-lock"></i>
-					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="${global_password}" name="password"/>
-				</div>
-			</div>
-			<div class="form-actions">
-				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
-				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
-				</button>
-	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
-	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
-			</div>
-			<br/>
-		</form>
-		<!-- END LOGIN FORM -->
-	</div>
-	<!-- END LOGIN -->
-	<!-- BEGIN COPYRIGHT -->
-	<div class="copyright">
-		<%if (sdomain == null || sdomain.getDescription() == null) { %>
-		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
-		<%=CommonConfig.SYSTEM_COPYRIGHT%> <%=CommonConfig.SYSTEM_ICP%><br/>	
-		<%} else { %>
-		©<%=sdomain.getDescription()%>
-		<%} %>
-	</div>
-	<!-- END COPYRIGHT -->
+            <div class="form-group">
+                <label for="username"><spring:message code="global.username"/></label>
+                <input type="text" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password"><spring:message code="global.password"/></label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <button type="submit" class="submit btn btn-default btn-block"><spring:message code="global.login.login"/></button>
+            <div class="lang">
+                <button class="btn checked pix-language" data-id="zh_CN">简体中文</button>
+                <button class="btn pull-right pix-language" data-id="en_US">English</button>
+            </div>
+        </form>
+    </div>
+    <div class="panel-footer">
+		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" />
+    </div>
+</div>
 
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
@@ -146,10 +159,12 @@
 	jQuery(document).ready(function() {
 		Metronic.init();
 		Login.init('org/main.jsp');
+		$('.pix-language').removeClass('checked');
+		$('.pix-language[data-id=${locale}]').addClass('checked');
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');
-			document.location.href="index.jsp?locale=" + language;
+			document.location.href="index_rsj.jsp?locale=" + language;
 		});
 	});
 </script>

@@ -45,6 +45,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 		int totalCount = pageList.getPaginator().getTotalCount();
 		return new PageResult(totalCount, dataList, page);
 	}
+
 	@Override
 	public PageResult getMeetingroomList(Meetingroom meetingroom, PageInfo page) {
 		RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
@@ -74,7 +75,6 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 		this.meetingroomMapper.updateMeetingroom(meetingroom);
 
 	}
-
 
 	@Override
 	public void deleteMeetingroom(Meetingroom meetingroom) {
@@ -158,21 +158,20 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 	public List<Device> listUnbindTerminals(Integer orgid) {
 
 		List<Device> allDeviceList = this.deviceService.selectList(orgid + "", null, null, null, null, null, null, null,
-				"0", "999", null);
+				null, null, "0", "999", null);
 		List<Meetingroom> bindMeetingrooms = this.meetingroomMapper.selectBindMeetingrooms(orgid);
 		List<String> bindTerminalIds = new ArrayList<String>();
 		for (Meetingroom meetingroom : bindMeetingrooms) {
 			bindTerminalIds.add(meetingroom.getTerminalid());
 		}
 		List<Device> unBindDeviceList = new ArrayList<Device>();
-		for(Device device : allDeviceList){
-			String terminalid=device.getTerminalid();
+		for (Device device : allDeviceList) {
+			String terminalid = device.getTerminalid();
 			if (bindTerminalIds.contains(terminalid)) {
 				continue;
 			}
 			unBindDeviceList.add(device);
 		}
-
 
 		return unBindDeviceList;
 	}

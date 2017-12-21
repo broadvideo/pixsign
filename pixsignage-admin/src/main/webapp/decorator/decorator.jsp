@@ -45,7 +45,6 @@ response.setDateHeader("Expires",0);
 <script type="text/javascript">
    var res="${static_ctx}";
    var ctx="${base_ctx}";
-
 </script>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <sitemesh:write property='head'/>
@@ -56,11 +55,13 @@ response.setDateHeader("Expires",0);
 	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
 	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
-	
-	String theme = "darkblue.css";
-	if (sdomain != null) {
-		//theme = "light.css";
-		theme = "darkblue.css";
+	if (sdomain == null) {
+		sdomain = sdomainService.selectByServername("default");
+	}
+	String theme = sdomain.getTheme();
+	String mode = "default";
+	if (sdomain.getIndexpage().equals("index_viewsonic.jsp")) {
+		mode = "viewsonic";
 	}
 	
 	String currentPrivilegeid = request.getParameter("CurrentP");
@@ -89,7 +90,7 @@ response.setDateHeader("Expires",0);
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/css/plugins.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
-<link href="${static_ctx}/admin/layout/css/themes/<%=theme%>" rel="stylesheet" type="text/css" id="style_color" />
+<link href="${static_ctx}/admin/layout/css/themes/<%=theme%>.css" rel="stylesheet" type="text/css" id="style_color" />
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="../favicon.ico" />
 
@@ -98,7 +99,12 @@ response.setDateHeader("Expires",0);
 } 
 .hide-orgtype-2 {
   display: none !important; 
-} 
+}
+<% if (!mode.equals("default")) { %>
+.page-content-wrapper .page-content {
+  margin-left: 0 !important;
+}
+<% } %>
 </style>
 
 <script>
@@ -171,15 +177,15 @@ function hasPrivilege(privilegeid) {
 		<div class="page-header-inner">
 			<!-- BEGIN LOGO -->  
 			<div class="page-logo">
-				<a href="/pixsignage/<%=subsystem%>/main.jsp">
+				<a href="/pixsignage/">
 				<%
-					if (sdomain != null) {
-				%>
-				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
-				<%
-					} else if (session_org != null && session_org.getLogo().length() > 0) {
+					if (session_org != null && session_org.getLogo().length() > 0) {
 				%>
 				<img src="/pixsigdata<%=session_org.getLogo()%>" height="40" alt="logo" />
+				<%
+					} else if (sdomain != null) {
+				%>
+				<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="40" alt="logo" />
 				<%
 					} else {
 				%>
@@ -244,6 +250,7 @@ function hasPrivilege(privilegeid) {
 	
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container">
+		<% if (mode.equals("default")) { %>
 		<!-- BEGIN SIDEBAR -->
 		<div class="page-sidebar-wrapper">
 			<div class="page-sidebar navbar-collapse collapse">
@@ -322,6 +329,7 @@ function hasPrivilege(privilegeid) {
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
+		<% } %>
 
 		<sitemesh:write property='body'/>
 	</div>
@@ -358,6 +366,6 @@ function hasPrivilege(privilegeid) {
 <!-- END CORE PLUGINS -->
 
 <sitemesh:write property='div.SiteMethJavaScript'/>
-	 
+
 </body>
 </html>

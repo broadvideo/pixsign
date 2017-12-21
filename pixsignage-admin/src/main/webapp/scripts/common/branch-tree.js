@@ -1,8 +1,9 @@
-var BranchTree = function (container) {
+var BranchTree = function (container, refresh) {
 	var _self = this;
 	this.container = container;
 	this.branchid = null;
 	this.folderid = null;
+	var _refresh = refresh;
 	var BranchTree = $(container).find('.branchtree');
 	var FolderTree = $(container).find('.foldertree');
 
@@ -296,7 +297,11 @@ var BranchTree = function (container) {
 	}
 	
 	var refreshTable = function() {
-		$(container).find('table').dataTable()._fnAjaxUpdate();
+		if (_refresh != undefined) {
+			_refresh.call(this);
+		} else {
+			$(container).find('.table').dataTable().fnDraw(true);
+		}
 	}
 	
 	initBranchTree();

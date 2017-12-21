@@ -12,12 +12,14 @@ public interface DeviceMapper {
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "status") String status,
 			@Param(value = "onlineflag") String onlineflag, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "devicegridid") String devicegridid, @Param(value = "search") String search);
+			@Param(value = "devicegridid") String devicegridid, @Param(value = "cataitemid1") String cataitemid1,
+			@Param(value = "cataitemid2") String cataitemid2, @Param(value = "search") String search);
 
 	List<Device> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "status") String status,
 			@Param(value = "onlineflag") String onlineflag, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "devicegridid") String devicegridid, @Param(value = "search") String search,
+			@Param(value = "devicegridid") String devicegridid, @Param(value = "cataitemid1") String cataitemid1,
+			@Param(value = "cataitemid2") String cataitemid2, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length,
 			@Param(value = "order") String order);
 
@@ -54,6 +56,10 @@ public interface DeviceMapper {
 	int changeBranch(@Param(value = "branchid1") String branchid1, @Param(value = "branchid2") String branchid2);
 
 	int updateTags(@Param(value = "branchid") String branchid, @Param(value = "tags") String tags);
+
+	int updateCataitemid1(@Param(value = "deviceid") String deviceid, @Param(value = "cataitemid1") String cataitemid1);
+
+	int updateCataitemid2(@Param(value = "deviceid") String deviceid, @Param(value = "cataitemid2") String cataitemid2);
 
 	int checkDevicegroup();
 

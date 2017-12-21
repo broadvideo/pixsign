@@ -14,8 +14,9 @@ public class StatServiceImpl implements StatService {
 	@Autowired
 	private StatMapper statMapper;
 
-	public List<HashMap<String, String>> statDevices(String orgid, String branchid) {
-		return statMapper.statDevices(orgid, branchid);
+	public List<HashMap<String, String>> statDevices(String orgid, String branchid, String cataitemid1,
+			String cataitemid2) {
+		return statMapper.statDevices(orgid, branchid, cataitemid1, cataitemid2);
 	}
 
 	public List<HashMap<String, String>> statVideoCount(String orgid) {

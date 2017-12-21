@@ -11,10 +11,12 @@ public interface OnlinelogMapper {
 	Onlinelog selectByPrimaryKey(@Param(value = "onlinelogid") String onlinelogid);
 
 	int selectDeviceStatCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
+			@Param(value = "cataitemid1") String cataitemid1, @Param(value = "cataitemid2") String cataitemid2,
 			@Param(value = "search") String search);
 
 	List<HashMap<String, Object>> selectDeviceStatList(@Param(value = "orgid") String orgid,
-			@Param(value = "branchid") String branchid, @Param(value = "search") String search,
+			@Param(value = "branchid") String branchid, @Param(value = "cataitemid1") String cataitemid1,
+			@Param(value = "cataitemid2") String cataitemid2, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "deviceid") String deviceid,
