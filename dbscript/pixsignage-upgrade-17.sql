@@ -232,6 +232,15 @@ ALTER TABLE `branch`
 ALTER TABLE `staff` 
 	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `staffid`, 
 	ADD COLUMN `email` varchar(128)  COLLATE utf8_general_ci NULL COMMENT '邮箱' after `name`;
+	
+ALTER TABLE `meeting` 
+	ADD COLUMN `fee` decimal(8,2)   NULL COMMENT '会议费用' after `duration`, 
+	CHANGE `auditstatus` `auditstatus` char(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' after `updatestaffid`;	
+ALTER TABLE `meetingroom` 
+	ADD COLUMN `terminalid2` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid`, 
+	ADD COLUMN `terminalid3` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid2`, 
+	ADD COLUMN `feeperhour` decimal(8,2)   NULL COMMENT '每小时收费(元)' after `peoples`, 
+	ADD COLUMN `equipmentflag` varchar(10)  COLLATE utf8_general_ci NULL COMMENT '设备标志位,0000000000    ' after `feeperhour`;	
 ############################################################
 ## post script  ############################################
 ############################################################
