@@ -235,7 +235,8 @@ ALTER TABLE `staff`
 	
 ALTER TABLE `meeting` 
 	ADD COLUMN `fee` decimal(8,2)   NULL COMMENT '会议费用' after `duration`, 
-	CHANGE `auditstatus` `auditstatus` char(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' after `updatestaffid`;	
+	ADD COLUMN `auditresult` varchar(1024)  COLLATE utf8_general_ci NULL COMMENT '审核意见' after `auditstatus`, 
+    CHANGE `auditstatus` `auditstatus` char(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' after `updatestaffid`;	
 ALTER TABLE `meetingroom` 
 	ADD COLUMN `terminalid2` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid`, 
 	ADD COLUMN `terminalid3` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid2`, 
