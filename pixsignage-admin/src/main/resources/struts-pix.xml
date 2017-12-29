@@ -2134,6 +2134,18 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="meeting!auditlist" method="doAuditList" class="meetingAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="meeting!auditmeeting" method="doAuditMeeting" class="meetingAction">
+			  <result name="success" type="json">
+					<param name="ignoreHierarchy">false</param>
+					<param name="includeProperties">errorcode,errormsg</param>
+				</result>
+		</action>
 		<action name="meeting!delete" method="doDelete" class="meetingAction">
 		    <result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -2146,6 +2158,15 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="meeting!exportmeetings" method="doExportMeetings" class="meetingAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downloadname}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+
 	</package>
 
 </struts>

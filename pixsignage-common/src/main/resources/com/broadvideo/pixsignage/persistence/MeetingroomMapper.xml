@@ -5,6 +5,8 @@
     <id column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="terminalid2" property="terminalid2" jdbcType="VARCHAR" />
+    <result column="terminalid3" property="terminalid3" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
@@ -12,6 +14,8 @@
     <result column="locationname" property="locationname" jdbcType="VARCHAR" />
     <result column="layout" property="layout" jdbcType="VARCHAR" />
     <result column="peoples" property="peoples" jdbcType="INTEGER" />
+    <result column="feeperhour" property="feeperhour" jdbcType="DECIMAL" />
+    <result column="equipmentflag" property="equipmentflag" jdbcType="VARCHAR" />
     <result column="openflag" property="openflag" jdbcType="CHAR" />
     <result column="auditflag" property="auditflag" jdbcType="CHAR" />
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
@@ -23,9 +27,9 @@
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    meetingroomid, uuid, terminalid, code, name, description, locationid, layout, peoples, 
-    openflag, auditflag, qrcode, orgid, createtime, createstaffid, updatetime, updatestaffid, 
-    status
+    meetingroomid, uuid, terminalid, terminalid2, terminalid3, code, name, description, 
+    locationid, layout, peoples, feeperhour, equipmentflag, openflag, auditflag, qrcode, 
+    orgid, createtime, createstaffid, updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -33,9 +37,10 @@
     from meetingroom
     where meetingroomid = #{meetingroomid,jdbcType=INTEGER}
   </select>
-  <select id="existNameCode" resultType="int">
-  
-	    select count(1) from  meetingroom
+  <select id="selectExists" resultMap="BaseResultMap">
+	    select
+	         <include refid="Base_Column_List" />
+	    from  meetingroom
 	    where orgid=#{orgid} and status='1'
 	      <if test="meetingroomid != null" >
 	            and meetingroomid !=#{meetingroomid}
@@ -50,9 +55,15 @@
 	           and code=#{code}
 	       </if>
 	       <if test="terminalid!=null">
-	         and terminalid=#{terminalid}
+	         and ( terminalid=#{terminalid} or terminalid2=#{terminalid}  or  terminalid3=#{terminalid} )
 	       </if>
-       
+	       <if test="terminalid2!=null">
+	         and ( terminalid=#{terminalid2} or terminalid2=#{terminalid2}  or terminalid3=#{terminalid2})
+	       </if>
+	       <if test="terminalid3!=null">
+	         and ( terminalid=#{terminalid3} or terminalid2=#{terminalid3} or terminalid3=#{terminalid3})
+	       </if>
+         
   </select>
   <select id="selectList" resultMap="BaseResultMap" >
   
@@ -149,6 +160,37 @@
     from meetingroom 
     where orgid=#{orgid} and status='1' and code=#{code}
   </select>
+  <select id="countMeetingrooms"   resultType="java.lang.Integer">
+     select count(1) 
+      from meetingroom 
+      where orgid=#{orgid} and status='1'
+  
+  </select>
+  <select id="selectHottestMeetingrooms"   resultType="map">
+	    select
+		  mr.meetingroomid as meeting_room_id,
+		  mr.name,
+		  l.name   as location_name,
+		  t.book_times
+	  from meetingroom mr,
+	  location l,
+	  (select
+	     m.meetingroomid,
+	     count(1)          as book_times
+	   from meeting m
+	   where m.auditstatus in('1','9')
+	       and status = '1' and starttime>=#{startdate} and endtime <![CDATA[<]]> #{enddate}
+	   group by meetingroomid
+	   order by book_times desc
+	   limit #{length} ) t
+	where mr.status = '1'
+	    and mr.orgid =#{orgid}
+	    and mr.locationid = l.locationid
+	    and mr.meetingroomid = t.meetingroomid
+	order by  t.book_times  desc
+  
+  </select>
+  
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from meetingroom
@@ -158,18 +200,22 @@
     <selectKey resultType="java.lang.Integer" keyProperty="meetingroomid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into meetingroom (uuid, terminalid, code, 
-      name, description, locationid, 
-      layout, peoples, openflag, 
-      auditflag, qrcode, orgid, 
-      createtime, createstaffid, updatetime, 
-      updatestaffid, status)
-    values (#{uuid,jdbcType=VARCHAR}, #{terminalid,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{locationid,jdbcType=INTEGER}, 
-      #{layout,jdbcType=VARCHAR}, #{peoples,jdbcType=INTEGER}, #{openflag,jdbcType=CHAR}, 
-      #{auditflag,jdbcType=CHAR}, #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
+    insert into meetingroom (uuid, terminalid, terminalid2, 
+      terminalid3, code, name, 
+      description, locationid, layout, 
+      peoples, feeperhour, equipmentflag, 
+      openflag, auditflag, qrcode, 
+      orgid, createtime, createstaffid, 
+      updatetime, updatestaffid, status
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{terminalid,jdbcType=VARCHAR}, #{terminalid2,jdbcType=VARCHAR}, 
+      #{terminalid3,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{locationid,jdbcType=INTEGER}, #{layout,jdbcType=VARCHAR}, 
+      #{peoples,jdbcType=INTEGER}, #{feeperhour,jdbcType=DECIMAL}, #{equipmentflag,jdbcType=VARCHAR}, 
+      #{openflag,jdbcType=CHAR}, #{auditflag,jdbcType=CHAR}, #{qrcode,jdbcType=VARCHAR}, 
+      #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Meetingroom" >
     <selectKey resultType="java.lang.Integer" keyProperty="meetingroomid" order="AFTER" >
@@ -182,6 +228,12 @@
       </if>
       <if test="terminalid != null" >
         terminalid,
+      </if>
+      <if test="terminalid2 != null" >
+        terminalid2,
+      </if>
+      <if test="terminalid3 != null" >
+        terminalid3,
       </if>
       <if test="code != null" >
         code,
@@ -200,6 +252,12 @@
       </if>
       <if test="peoples != null" >
         peoples,
+      </if>
+      <if test="feeperhour != null" >
+        feeperhour,
+      </if>
+      <if test="equipmentflag != null" >
+        equipmentflag,
       </if>
       <if test="openflag != null" >
         openflag,
@@ -236,6 +294,12 @@
       <if test="terminalid != null" >
         #{terminalid,jdbcType=VARCHAR},
       </if>
+      <if test="terminalid2 != null" >
+        #{terminalid2,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid3 != null" >
+        #{terminalid3,jdbcType=VARCHAR},
+      </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
       </if>
@@ -253,6 +317,12 @@
       </if>
       <if test="peoples != null" >
         #{peoples,jdbcType=INTEGER},
+      </if>
+      <if test="feeperhour != null" >
+        #{feeperhour,jdbcType=DECIMAL},
+      </if>
+      <if test="equipmentflag != null" >
+        #{equipmentflag,jdbcType=VARCHAR},
       </if>
       <if test="openflag != null" >
         #{openflag,jdbcType=CHAR},
@@ -292,6 +362,12 @@
       <if test="terminalid != null" >
         terminalid = #{terminalid,jdbcType=VARCHAR},
       </if>
+      <if test="terminalid2 != null" >
+        terminalid2 = #{terminalid2,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid3 != null" >
+        terminalid3 = #{terminalid3,jdbcType=VARCHAR},
+      </if>
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
@@ -309,6 +385,12 @@
       </if>
       <if test="peoples != null" >
         peoples = #{peoples,jdbcType=INTEGER},
+      </if>
+      <if test="feeperhour != null" >
+        feeperhour = #{feeperhour,jdbcType=DECIMAL},
+      </if>
+      <if test="equipmentflag != null" >
+        equipmentflag = #{equipmentflag,jdbcType=VARCHAR},
       </if>
       <if test="openflag != null" >
         openflag = #{openflag,jdbcType=CHAR},
@@ -344,12 +426,16 @@
     update meetingroom
     set uuid = #{uuid,jdbcType=VARCHAR},
       terminalid = #{terminalid,jdbcType=VARCHAR},
+      terminalid2 = #{terminalid2,jdbcType=VARCHAR},
+      terminalid3 = #{terminalid3,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       locationid = #{locationid,jdbcType=INTEGER},
       layout = #{layout,jdbcType=VARCHAR},
       peoples = #{peoples,jdbcType=INTEGER},
+      feeperhour = #{feeperhour,jdbcType=DECIMAL},
+      equipmentflag = #{equipmentflag,jdbcType=VARCHAR},
       openflag = #{openflag,jdbcType=CHAR},
       auditflag = #{auditflag,jdbcType=CHAR},
       qrcode = #{qrcode,jdbcType=VARCHAR},
@@ -366,6 +452,12 @@
     <set > 
       <if test="terminalid != null" >
         terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid2 != null" >
+        terminalid2 = #{terminalid2,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid3 != null" >
+        terminalid3 = #{terminalid3,jdbcType=VARCHAR},
       </if>
       <if test="auditflag != null" >
         auditflag = #{auditflag,jdbcType=CHAR},
@@ -384,6 +476,12 @@
       </if>
       <if test="peoples != null" >
         peoples = #{peoples,jdbcType=INTEGER},
+      </if>
+      <if test="feeperhour != null" >
+        feeperhour = #{feeperhour,jdbcType=DECIMAL},
+      </if>
+      <if test="equipmentflag != null" >
+        equipmentflag = #{equipmentflag,jdbcType=VARCHAR},
       </if>
       <if test="openflag != null" >
         openflag = #{openflag,jdbcType=CHAR},

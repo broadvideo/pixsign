@@ -74,6 +74,14 @@ public class ResUsers extends ResBase {
 		return token;
 	}
 
+	public static void main(String[] args) {
+		Staff staff = new Staff();
+		staff.setLoginname("admin@zszq");
+		ResUsers users = new ResUsers();
+		System.out.println(users.genUserToken(staff));
+
+	}
+
 	@POST
 	@Path("/auth")
 	public Response auth(@Context HttpServletRequest req, UserAuthReq userAuthReq) {
@@ -167,6 +175,7 @@ public class ResUsers extends ResBase {
 			meeting.setCreatetime(new Date());
 			this.meetingService.addMeeting(meeting);
 		} catch (ServiceException e) {
+			logger.error("bookMeeting exception.", e);
 			throw new AppException(e.getCode(), e.getMessage());
 		}
 		BasicResp resp = new BasicResp();

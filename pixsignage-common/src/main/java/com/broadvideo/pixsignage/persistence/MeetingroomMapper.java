@@ -1,6 +1,8 @@
 package com.broadvideo.pixsignage.persistence;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -28,6 +30,11 @@ public interface MeetingroomMapper {
 
 	int updateMeetingroom(Meetingroom meetingroom);
 
-	int existNameCode(Meetingroom meetingroom);
+	List<Meetingroom> selectExists(Meetingroom meetingroom);
+
+	int countMeetingrooms(@Param("orgid") Integer orgid);
+
+	List<Map<String, Object>> selectHottestMeetingrooms(@Param("startdate") Date startDate,
+			@Param("enddate") Date endDate, @Param("length") Integer length, @Param("orgid") Integer orgid);
 
 }

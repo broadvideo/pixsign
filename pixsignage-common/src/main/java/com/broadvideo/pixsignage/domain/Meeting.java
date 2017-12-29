@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.beans.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,10 @@ public class Meeting {
     private Date endtime;
 
     private Integer duration;
+	
+    private BigDecimal fee;
+	
+	private String formatduration;
 
     private Integer amount;
 
@@ -40,6 +45,8 @@ public class Meeting {
 
     private String qrcode;
 
+    private String auditstatus;
+    private String auditresult;
     private Integer orgid;
 
     private Date createtime;
@@ -48,12 +55,14 @@ public class Meeting {
 
     private Date updatetime;
     private Integer updatestaffid;
-    private String auditstatus;
+
     private String status;
 	private Integer[] attendeeuserids;
 	private List<Attendee> attendees = new ArrayList<Attendee>();
 	private String search;
 	private Integer locationid;
+	private Integer signamount;
+	private List<String> auditstatuslist;
 
     public Integer getMeetingid() {
         return meetingid;
@@ -126,6 +135,12 @@ public class Meeting {
     public void setDuration(Integer duration) {
         this.duration = duration;
     }
+    public BigDecimal getFee() {
+        return fee;
+    }
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
 
     public Integer getAmount() {
         return amount;
@@ -159,11 +174,23 @@ public class Meeting {
         this.qrcode = qrcode == null ? null : qrcode.trim();
     }
 
+    public String getAuditstatus() {
+        return auditstatus;
+    }
+    public void setAuditstatus(String auditstatus) {
+        this.auditstatus = auditstatus == null ? null : auditstatus.trim();
+    }
+    public String getAuditresult() {
+        return auditresult;
+    }
+    public void setAuditresult(String auditresult) {
+        this.auditresult = auditresult == null ? null : auditresult.trim();
+    }
     public Integer getOrgid() {
         return orgid;
     }
 
-    public void setOrgid(Integer orgid) {
+	public void setOrgid(Integer orgid) {
         this.orgid = orgid;
     }
 
@@ -171,7 +198,9 @@ public class Meeting {
         return createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+
+
+	public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
 
@@ -191,6 +220,15 @@ public class Meeting {
 		return attendeeuserids;
 	}
 
+	@Transient
+	public String getFormatduration() {
+		return formatduration;
+	}
+
+	public void setFormatduration(String formatduration) {
+		this.formatduration = formatduration;
+	}
+
 	public void setAttendeeuserids(Integer[] attendeeuserids) {
 		this.attendeeuserids = attendeeuserids;
 	}
@@ -207,12 +245,6 @@ public class Meeting {
         this.updatestaffid = updatestaffid;
     }
 
-    public String getAuditstatus() {
-        return auditstatus;
-    }
-    public void setAuditstatus(String auditstatus) {
-        this.auditstatus = auditstatus == null ? null : auditstatus.trim();
-    }
     public String getStatus() {
         return status;
     }
@@ -283,4 +315,24 @@ public class Meeting {
 	public void setLocationid(Integer locationid) {
 		this.locationid = locationid;
 	}
+
+	@Transient
+	public Integer getSignamount() {
+		return signamount;
+	}
+
+	public void setSignamount(Integer signamount) {
+		this.signamount = signamount;
+	}
+
+	@Transient
+	public List<String> getAuditstatuslist() {
+		return auditstatuslist;
+	}
+
+	public void setAuditstatuslist(List<String> auditstatuslist) {
+		this.auditstatuslist = auditstatuslist;
+	}
+
+
 }

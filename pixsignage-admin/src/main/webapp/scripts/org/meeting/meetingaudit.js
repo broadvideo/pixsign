@@ -4,6 +4,8 @@ var _leftparentid=null;
 var _leftparent=null;
 var _branchparentid=null;
 var  _searchParams=[];
+var classlist=[];
+classlist.push({id:1,text: '通过'},{id:2,text:'拒绝'});
 
 var MeetingRoomModule=function(){
 	
@@ -39,87 +41,8 @@ function initBranchTree() {
 	});
 };
 
-
-function initMeetingrooms(){
-	
-	$("#ClassSelect").select2('val','');
-	$.ajax({
-		type : 'GET',
-		url : 'meetingroom!list.action',
-		data : {"iDisplayStart" :0,"iDisplayLength" :999,"locationid": _leftparentid},
-		dataType: 'json',
-		success : function(data, status) {
-			if (data.errorcode == 0) {
-				var classlist = [];
-				for (var i=0; i<data.aaData.length; i++) {
-					classlist.push({
-						id: data.aaData[i].meetingroomid,
-						text: data.aaData[i].name
-					});
-				}
-				$("#ClassSelect").select2({
-					placeholder: common.tips.detail_select,
-					minimumInputLength: 0,
-					data: classlist,
-					dropdownCssClass: "bigdrop", 
-					escapeMarkup: function (m) { return m; } 
-				});
-			} else {
-				bootbox.alert(data.errorcode + ": " + data.errmsg);
-			}
-		},
-		error : function() {
-			bootbox.alert('failure');
-		}
-	});
-	
-	
-	
-	
-	
-};
-MeetingRoomModule.prototype.initLeftLocationTree=function(){
-	
-	var BranchTree =$('.leftLocationTree');    //$('#MeetingroomPortlet .leftLocationTree');
-	BranchTree.jstree('destroy');
-	BranchTree.jstree({
-		'core' : {
-			'multiple' : true,
-			'data' : {
-				'url': function(node) {
-					return 'location!listnode.action';
-				},
-				'data': function(node) {
-					return {
-						'id': node.id,
-						'location':node.location,
-
-					}
-				}
-			}
-		},
-		'plugins' : ['unique'],
-	});
-	
-	BranchTree.on('loaded.jstree', function() {
-		_leftparentid = BranchTree.jstree(true).get_json('#')[0].id;
-		BranchTree.jstree('select_node', _leftparentid );
-		refresh();
-	});
-	BranchTree.on('select_node.jstree', function(event, data) {
-	
-		_leftparentid  = data.instance.get_node(data.selected[0]).id;
-		_leftparent  = data.instance.get_node(data.selected[0]).original.location;
-		refresh();
-	});
-	
-};
-
 var refresh = function () {
 	
-	initMeetingrooms();
-//	$('#MeetingroomTable').dataTable()._fnAjaxUpdate();
-	$('.leftLocationTree').jstree(true).refresh_node(_leftparentid);
 	$('.pix-add').css('display', '');
 	
 	
@@ -170,95 +93,97 @@ MeetingRoomModule.prototype.initEvent=function(){
 	});
 	
 $('body').on('click', '.pix-meetingdtl', function(event) {
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+			}
+			CurRecord = $('#MeetingroomTable').dataTable().fnGetData(index);
+			CurRecordid=CurRecord.meetingid
+			$('#AttendeeTable').dataTable()._fnAjaxUpdate();
+	
+			var formdata = new Object();
+			for (var name in CurRecord) {
+				if(name=="starttime" || name=="endtime"){
+				   formdata['meeting.' + name] = moment(CurRecord[name]).format('YYYY-MM-DD HH:mm');
+	
+				}else{
+			       formdata['meeting.' + name] = CurRecord[name];
+				}
+			}
+	         refreshForm('MyEditForm');
+	    	$('#MyEditForm').loadJSON(formdata);
+			$('#MyEditModal').modal();
+		});
+     OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
+
+ 	$('body').on('click', '.pix-audit', function(event) {
 		var index = $(event.target).attr('data-id');
 		if (index == undefined) {
 			index = $(event.target).parent().attr('data-id');
 		}
 		CurRecord = $('#MeetingroomTable').dataTable().fnGetData(index);
-		CurRecordid=CurRecord.meetingid
-		$('#AttendeeTable').dataTable()._fnAjaxUpdate();
+		alert(JSON.stringify(CurRecord));
 
+		CurRecordid=CurRecord.meetingid
+		$("#ClassSelect3").select2('val','');
+		$("#ClassSelect3").select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			data: classlist,
+			dropdownCssClass: "bigdrop", 
+			escapeMarkup: function (m) { return m; } 
+		});
 		var formdata = new Object();
 		for (var name in CurRecord) {
-			if(name=="starttime" || name=="endtime"){
-			   formdata['meeting.' + name] = moment(CurRecord[name]).format('YYYY-MM-DD HH:mm');
-
-			}else{
 		       formdata['meeting.' + name] = CurRecord[name];
-			}
+			
 		}
-         refreshForm('MyEditForm');
-    	$('#MyEditForm').loadJSON(formdata);
-		$('#MyEditModal').modal();
-	});
-OriginalFormData['MyEditForm'] = $('#MyEditForm').serializeObject();
+		alert(CurRecord.auditstatus);
 
+        refreshForm('MeetingAuditForm');
+    	$('#MeetingAuditForm').loadJSON(formdata);
+		$('#MeetingAuditForm').attr('action', 'meeting!auditmeeting.action');
+		$('#MeetingAuditModal').modal();
+		$("#ClassSelect3").select2('val',CurRecord.auditstatus);
+
+	});	
 	
-$('body').on('click','.pix-search',function(event){
-	
-	initMeetingrooms();
-	initBranchTree();
-  $(".form_datetime").datetimepicker({
-         autoclose: true,
-         language: "zh-CN",
-         isRTL: Metronic.isRTL(),
-         format: "yyyy-mm-dd hh:ii",
-         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
-    });
+
+	OriginalFormData['MeetingAuditForm'] = $('#MeetingAuditForm').serializeObject();
+
+	FormValidateOption.rules['meeting.auditstatus'] = {};
+	FormValidateOption.rules['meeting.auditstatus']['required'] = true;
+	FormValidateOption.submitHandler = function(form) {
+
+		$.ajax({
+			type : 'POST',
+			url : $('#MeetingAuditForm').attr('action'),
+			data : $('#MeetingAuditForm').serialize(),
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					$('#MeetingAuditModal').modal('hide');
+					bootbox.alert(common.tips.success);
+					refreshMyTable();
+				} else if(data.errorcode==-3){
+					bootbox.alert("数据校验失败，请按要求填写表单!");
+
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				console.log('failue');
+			}
+		});
+	};
+	$('#MeetingAuditForm').validate(FormValidateOption);
+
+	$('[type=submit]', $('#MeetingAuditModal')).on('click', function(event) {
 		
-	refreshForm('MeetingSearchForm');
-	$('#MeetingSearchModal').modal();
-	
-	
-	
-});
-OriginalFormData['MeetingSearchForm'] = $('#MeetingSearchForm').serializeObject();
-
-
-$('body').on('click','.btn-search',function(event){
-	
-	_searchParams=[];
-	var starttime=$('input[name=starttime]').val();
-	var endtime=$('input[name=endtime]').val();
-	var locationid=_leftparentid;
-	var branchid=_branchparentid;
-	var meetingroomid=$("#ClassSelect").select2('val');
-	if(starttime!=null && starttime.length>0){
-		_searchParams.push({'name' : 'meeting.starttime','value': starttime});
-	}
-	if(endtime!=null && endtime.length>0){
-		_searchParams.push({'name' : 'meeting.endtime','value': endtime});
-	}
-	if(locationid!=null){
-		_searchParams.push({'name' : 'meeting.locationid','value': locationid});
-	}
-	if(meetingroomid!=null){
-		_searchParams.push({'name' : 'meeting.meetingroomid','value': meetingroomid});
-	}
-	if(branchid!=null){
-		_searchParams.push({'name' : 'meeting.bookbranchid','value': branchid});
-	}
-
-    $('#MeetingroomTable').dataTable()._fnAjaxUpdate();
-	
-	
-	
-});
-
-$('body').on('click','.pix-export-excel',function(event){
-	
-	
-	var table =$('#MeetingroomTable').DataTable();
-	var params=table.ajax.params();
-	var querystr="";
-	for(var key in params){
-		querystr+=key+"="+params[key]+"&";	
-	}
-	var exportUrl="meeting!exportmeetings.action?"+querystr;
-	$(this).attr("href",exportUrl);
-	
-});
-
+		if ($('#MeetingAuditForm').valid()) {
+			$('#MeetingAuditForm').submit();
+		}
+	});
 };
 
 MeetingRoomModule.prototype.initAttendeeTable=function(){
@@ -301,28 +226,46 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : 'meeting!list.action',
+		'sAjaxSource' : 'meeting!auditlist.action',
 		'aoColumns' : [
-		                {'sTitle' : '位置', 'mData' : 'locationname', 'bSortable' : false, 'sWidth' : '11%' },
 		                {'sTitle' : '会议室', 'mData' : 'meetingroomname', 'bSortable' : false, 'sWidth' : '11%' },
 		                {'sTitle' : '主题', 'mData' : 'subject', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '预定人', 'mData' : 'bookstaffname', 'bSortable' : false, 'sWidth' : '10%' },
-		                {'sTitle' : '预定部门', 'mData' : 'bookbranchname', 'bSortable' : false, 'sWidth' : '10%' },
-						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '12%' }],
+		                {'sTitle' : '状态', 'mData' : 'auditstatus', 'bSortable' : false, 'sWidth' : '8%' },
+						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '18%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		    $('td:eq(3)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
-		    $('td:eq(4)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
-			var buttonhtml = '';
-			buttonhtml += '<div class="util-btn-margin-bottom-5">';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 明细</a>';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-			buttonhtml += '</div>';
-			$('td:eq(7)', nRow).html(buttonhtml);
+		    $('td:eq(2)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
+		    $('td:eq(3)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
+			$('td:eq(5)', nRow).html(function(){
+				if(aData.auditstatus=='0'){
+					
+					return "待审核";
+				}else if(aData.auditstatus=='1'){
+					return "通过";
+
+				}else if(aData.auditstatus=='2'){
+					return "拒绝";
+
+				}
+				
+			});
+			$('td:eq(6)', nRow).html(function(){
+				var buttonhtml = '';
+				buttonhtml += '<div class="util-btn-margin-bottom-5">';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 明细</a>';
+				if(aData.auditstatus=='0'){
+				    buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-audit"><i class="fa fa-edit"></i>审核</a>';
+			     }
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				buttonhtml += '</div>';
+				
+				return buttonhtml;
+				});
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -350,7 +293,6 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 MeetingRoomModule.prototype.init=function(){
 	this.initMeetingroomTable();
 	this.initAttendeeTable();
-	this.initLeftLocationTree();
 	this.initEvent();
 
 	

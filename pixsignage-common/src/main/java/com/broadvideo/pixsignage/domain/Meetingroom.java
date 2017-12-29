@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Meetingroom {
@@ -8,6 +9,8 @@ public class Meetingroom {
     private String uuid;
 
     private String terminalid;
+    private String terminalid2;
+    private String terminalid3;
     private String code;
 
     private String name;
@@ -21,6 +24,8 @@ public class Meetingroom {
 
     private Integer peoples;
 
+    private BigDecimal feeperhour;
+    private String equipmentflag;
     private String openflag;
     private String auditflag;
 
@@ -59,6 +64,18 @@ public class Meetingroom {
     }
     public void setTerminalid(String terminalid) {
         this.terminalid = terminalid == null ? null : terminalid.trim();
+    }
+    public String getTerminalid2() {
+        return terminalid2;
+    }
+    public void setTerminalid2(String terminalid2) {
+        this.terminalid2 = terminalid2 == null ? null : terminalid2.trim();
+    }
+    public String getTerminalid3() {
+        return terminalid3;
+    }
+    public void setTerminalid3(String terminalid3) {
+        this.terminalid3 = terminalid3 == null ? null : terminalid3.trim();
     }
 
     public String getCode() {
@@ -117,6 +134,18 @@ public class Meetingroom {
         this.peoples = peoples;
     }
 
+    public BigDecimal getFeeperhour() {
+        return feeperhour;
+    }
+    public void setFeeperhour(BigDecimal feeperhour) {
+        this.feeperhour = feeperhour;
+    }
+    public String getEquipmentflag() {
+        return equipmentflag;
+    }
+    public void setEquipmentflag(String equipmentflag) {
+        this.equipmentflag = equipmentflag == null ? null : equipmentflag.trim();
+    }
     public String getOpenflag() {
         return openflag;
     }
