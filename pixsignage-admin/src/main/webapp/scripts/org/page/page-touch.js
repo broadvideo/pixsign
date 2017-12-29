@@ -55,6 +55,7 @@ var PageModule = function () {
 				if (aData.editflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subpage-add"><i class="fa fa-plus"></i> ' + common.view.subpage + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+					pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				} else {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
@@ -67,7 +68,7 @@ var PageModule = function () {
 				pagehtml += '<div class="col-md-4 col-xs-6">';
 				pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="fancybox">';
 				pagehtml += '<div class="thumbs">';
-				if (aData.snapshot != null) {
+				if (aData.snapshot != null && aData.snapshot != '') {
 					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 					pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				}
@@ -91,7 +92,7 @@ var PageModule = function () {
 					pagehtml += '<h5 class="pixtitle">' + aData.subpages[i].name + '</h5>';
 					pagehtml += '<a href="javascript:;" pageid="' + aData.subpages[i].pageid + '" sub-id="' + i + '" class="fancybox">';
 					pagehtml += '<div class="thumbs">';
-					if (aData.subpages[i].snapshot != null) {
+					if (aData.subpages[i].snapshot != null && aData.subpages[i].snapshot != '') {
 						var subthumbwidth = aData.subpages[i].width > aData.subpages[i].height? 100 : 100*aData.subpages[i].width/aData.subpages[i].height;
 						pagehtml += '<img src="/pixsigdata' + aData.subpages[i].snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + subthumbwidth + '%" />';
 					}

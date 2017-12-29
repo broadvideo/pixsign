@@ -78,6 +78,12 @@
 									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.defaultpage"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="DefaultPageSelect" class="form-control select2" name="org.defaultpageid">
+								</div>
+							</div>
 							<div class="form-group sscreen-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 								<div class="col-md-9 radio-list">

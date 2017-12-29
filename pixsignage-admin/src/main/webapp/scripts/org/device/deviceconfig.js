@@ -52,6 +52,17 @@ var DeviceConfigModule = function () {
 					} else {
 						$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, '']);
 					}
+					if (_org.defaultpage != null) {
+						var defaultpagehtml = '';
+						if (_org.defaultpage.snapshot == null) {
+							defaultpagehtml = '<span>' + _org.defaultpage.name + '</span>';
+						} else {
+							defaultpagehtml = '<span><img src="/pixsigdata' + _org.defaultpage.snapshot + '" height="25" /> ' + _org.defaultpage.name + '</span>';
+						}
+						$('#DeviceConfigTable').dataTable().fnAddData([common.view.defaultpage, defaultpagehtml]);
+					} else {
+						$('#DeviceConfigTable').dataTable().fnAddData([common.view.defaultpage, '']);
+					}
 					if (SscreenCtrl) {
 						if (_org.powerflag == 1) {
 							var powerhtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
@@ -225,7 +236,59 @@ var DeviceConfigModule = function () {
 						callback({id: _org.backupvideoid, text: _org.backupvideo.name, video: _org.backupvideo });
 					}
 				},
-				dropdownCssClass: "bigdrop", 
+				dropdownCssClass: 'bigdrop', 
+				escapeMarkup: function (m) { return m; } 
+			});
+
+			$('#DefaultPageSelect').select2({
+				placeholder: common.tips.detail_select,
+				minimumInputLength: 0,
+				ajax: { 
+					url: 'page!list.action',
+					type: 'GET',
+					dataType: 'json',
+					data: function (term, page) {
+						return {
+							sSearch: term, 
+							iDisplayStart: (page-1)*10,
+							iDisplayLength: 10,
+							homeflag: 1,
+						};
+					},
+					results: function (data, page) {
+						var more = (page * 10) < data.iTotalRecords; 
+						return {
+							results : $.map(data.aaData, function (item) { 
+								return { 
+									text:item.name, 
+									id:item.pageid,
+									page:item,
+								};
+							}),
+							more: more
+						};
+					}
+				},
+				formatResult: function (data) {
+					if (data.page == null || data.page.snapshot == null) {
+						return '<span>' + data.text + '</span>';
+					} else {
+						return '<span><img src="/pixsigdata' + data.page.snapshot + '" height="25" /> ' + data.text + '</span>';
+					}
+				},
+				formatSelection: function (data) {
+					if (data.page == null || data.page.snapshot == null) {
+						return '<span>' + data.text + '</span>';
+					} else {
+						return '<span><img src="/pixsigdata' + data.page.snapshot + '" height="25" /> ' + data.text + '</span>';
+					}
+				},
+				initSelection: function(element, callback) {
+					if (_org.defaultpage != null) {
+						callback({id: _org.defaultpageid, text: _org.defaultpage.name, page: _org.defaultpage });
+					}
+				},
+				dropdownCssClass: 'bigdrop', 
 				escapeMarkup: function (m) { return m; } 
 			});
 
@@ -238,7 +301,7 @@ var DeviceConfigModule = function () {
 				max: 100,
 				from: _org.volume,
 				type: 'single',
-				step: 5,
+				step: 1,
 				hasGrid: false
 			});
 			if ($('input[name="org.volumeflag"]:checked').val() == 1) {

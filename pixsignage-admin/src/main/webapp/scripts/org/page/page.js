@@ -55,7 +55,7 @@ var PageModule = function () {
 
 				pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="fancybox">';
 				pagehtml += '<div class="thumbs">';
-				if (aData.snapshot != null) {
+				if (aData.snapshot != null && aData.snapshot != '') {
 					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 					pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				}
@@ -69,6 +69,7 @@ var PageModule = function () {
 					if (aData.privilegeflag == 1) {
 						pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
 					}
+					pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				} else {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';

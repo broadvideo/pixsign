@@ -206,6 +206,7 @@ var common = {
 		devicepassflag: 'Maintain Password Flag',
 		devicepass: 'Maintain Password',
 		backupvideo: 'Backup Video',
+		defaultpage: 'Default Page',
 		powerflag: 'Power Control Flag',
 		poweron: 'Power on',
 		poweroff: 'Power off',

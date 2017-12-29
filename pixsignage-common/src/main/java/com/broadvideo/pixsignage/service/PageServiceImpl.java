@@ -1,21 +1,30 @@
 package com.broadvideo.pixsignage.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +40,7 @@ import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
 import com.broadvideo.pixsignage.persistence.PagezonedtlMapper;
@@ -53,9 +63,15 @@ public class PageServiceImpl implements PageService {
 	private PagezonedtlMapper pagezonedtlMapper;
 	@Autowired
 	private TemplateMapper templateMapper;
+	@Autowired
+	private ImageMapper imageMapper;
 
 	public Page selectByPrimaryKey(String pageid) {
 		return pageMapper.selectByPrimaryKey(pageid);
+	}
+
+	public Page selectByUuid(String orgid, String uuid) {
+		return pageMapper.selectByUuid(orgid, uuid);
 	}
 
 	public int selectCount(String orgid, String branchid, String touchflag, String homeflag, String search) {
@@ -124,6 +140,7 @@ public class PageServiceImpl implements PageService {
 				page.setWidth(1080);
 				page.setHeight(1920);
 			}
+			page.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 
@@ -142,6 +159,7 @@ public class PageServiceImpl implements PageService {
 			page.setWidth(template.getWidth());
 			page.setHomeidletime(template.getHomeidletime());
 			page.setLimitflag(template.getLimitflag());
+			page.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
@@ -277,6 +295,7 @@ public class PageServiceImpl implements PageService {
 				page.setWidth(1080);
 				page.setHeight(1920);
 			}
+			page.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 
@@ -293,6 +312,7 @@ public class PageServiceImpl implements PageService {
 			page.setWidth(frompage.getWidth());
 			page.setHomeidletime(frompage.getHomeidletime());
 			page.setLimitflag(frompage.getLimitflag());
+			page.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
@@ -502,10 +522,9 @@ public class PageServiceImpl implements PageService {
 			CommonUtil.zip(out, imageFile, "image/" + image.getFilename());
 		}
 
-		ClassLoader classLoader = getClass().getClassLoader();
 		for (String font : fontList) {
-			if (classLoader.getResource("/pagezip/fonts/" + font) != null) {
-				File fontFile = new File(classLoader.getResource("/pagezip/fonts/" + font).getFile());
+			File fontFile = new File(CommonConfig.CONFIG_PAGE_HOME + "/fonts", font);
+			if (fontFile.exists()) {
 				CommonUtil.zip(out, fontFile, "fonts/" + font);
 			} else {
 				logger.error("font file {} not exists", font);
@@ -523,8 +542,8 @@ public class PageServiceImpl implements PageService {
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
 
 			File htmlFile = new File(pageDir, "index.html");
-			String htmlContent = FileUtils
-					.readFileToString(new File(classLoader.getResource("/pagezip/index.html").getFile()));
+			String htmlContent = FileUtils.readFileToString(new File(CommonConfig.CONFIG_PAGE_HOME, "index.html"),
+					"UTF-8");
 			htmlContent = htmlContent.replaceFirst("data.js", "" + p.getPageid() + ".js");
 			String diyContent = "";
 			for (Pagezone pz : p.getPagezones()) {
@@ -545,10 +564,219 @@ public class PageServiceImpl implements PageService {
 			}
 		}
 
-		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/pixpage").getFile()), "pixpage");
-		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/module").getFile()), "module");
-		CommonUtil.zip(out, new File(classLoader.getResource("/pagezip/plugin").getFile()), "plugin");
+		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "pixpage"), "pixpage");
+		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "module"), "module");
+		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "plugin"), "plugin");
 		out.close();
+	}
+
+	public void exportZip(String pageid, File zipFile) throws Exception {
+		ArrayList<Page> pageList = new ArrayList<Page>();
+		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		pageList.add(page);
+		for (Page subpage : page.getSubpages()) {
+			Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+			pageList.add(p);
+		}
+		for (Page p : pageList) {
+			for (Pagezone pagezone : p.getPagezones()) {
+				if (pagezone.getType() == Pagezone.Type_Image || pagezone.getType() == Pagezone.Type_Button) {
+					for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+						Image image = pagezonedtl.getImage();
+						if (image != null && imageHash.get(image.getImageid()) == null) {
+							imageHash.put(image.getImageid(), image);
+						}
+					}
+				}
+			}
+		}
+
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+		out.putNextEntry(new ZipEntry("image/"));
+
+		Iterator<Entry<Integer, Image>> iter = imageHash.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, Image> entry = iter.next();
+			Image image = entry.getValue();
+			File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
+			CommonUtil.zip(out, imageFile, "image/" + image.getFilename());
+		}
+
+		for (Page p : pageList) {
+			String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
+			File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
+			FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
+			String jsfname = "index.jsf";
+			String pngname = "index.png";
+			if (p.getHomeflag().equals("0")) {
+				jsfname = "" + p.getPageid() + ".jsf";
+				pngname = "" + p.getPageid() + ".png";
+			}
+			CommonUtil.zip(out, jsfFile, jsfname);
+			if (p.getSnapshot() != null) {
+				File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + p.getSnapshot());
+				CommonUtil.zip(out, snapshot, pngname);
+			}
+		}
+		out.close();
+	}
+
+	@Transactional
+	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception {
+		String fileName = zipFile.getName();
+		logger.info("Begin to import page {}", fileName);
+		fileName = fileName.substring(0, fileName.lastIndexOf("."));
+		String unzipFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/import/" + fileName;
+		FileUtils.deleteQuietly(new File(unzipFilePath));
+		CommonUtil.unzip(zipFile, unzipFilePath, false);
+		FileUtils.forceDelete(zipFile);
+
+		HashMap<Integer, Page> pageHash = new HashMap<Integer, Page>();
+		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
+
+		Date now = Calendar.getInstance().getTime();
+		File indexJsf = new File(unzipFilePath, "index.jsf");
+		logger.info("parse {}", indexJsf.getAbsoluteFile());
+		JSONObject pageJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subpages", Page.class);
+		map.put("pagezones", Pagezone.class);
+		map.put("pagezonedtls", Pagezonedtl.class);
+		Page page = (Page) JSONObject.toBean(pageJson, Page.class, map);
+		Integer fromPageid = page.getPageid();
+		page.setOrgid(orgid);
+		page.setBranchid(branchid);
+		page.setCreatetime(now);
+		Page oldPage = pageMapper.selectByUuid("" + orgid, page.getUuid());
+		if (oldPage != null) {
+			pageMapper.clearSubpages("" + oldPage.getPageid());
+			page.setPageid(oldPage.getPageid());
+			pageMapper.updateByPrimaryKeySelective(page);
+		} else {
+			pageMapper.insertSelective(page);
+		}
+		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		if (fromSnapshotFile.exists()) {
+			String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			page.setSnapshot(snapshotFilePath);
+			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+			pageMapper.updateByPrimaryKeySelective(page);
+		}
+		pageHash.put(fromPageid, page);
+		logger.info("Add page oldid={}, newid={}", fromPageid, page.getPageid());
+
+		for (Page subpage : page.getSubpages()) {
+			File jsf = new File(unzipFilePath, "" + subpage.getPageid() + ".jsf");
+			logger.info("parse {}", jsf.getAbsoluteFile());
+			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
+			Page p = (Page) JSONObject.toBean(json, Page.class, map);
+			fromPageid = p.getPageid();
+			p.setOrgid(orgid);
+			p.setBranchid(branchid);
+			p.setHomepageid(page.getPageid());
+			p.setCreatetime(now);
+			pageMapper.insertSelective(p);
+			fromSnapshotFile = new File(unzipFilePath, "" + fromPageid + ".png");
+			if (fromSnapshotFile.exists()) {
+				String snapshotFilePath = "/page/" + p.getPageid() + "/snapshot/" + p.getPageid() + ".png";
+				p.setSnapshot(snapshotFilePath);
+				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+				pageMapper.updateByPrimaryKeySelective(p);
+			}
+			pageHash.put(fromPageid, p);
+			logger.info("Add subpage oldid={}, newid={}", fromPageid, p.getPageid());
+		}
+
+		Iterator<Entry<Integer, Page>> iter = pageHash.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, Page> entry = iter.next();
+			Page t = entry.getValue();
+			for (Pagezone pagezone : t.getPagezones()) {
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					Image image = pagezonedtl.getImage();
+					if (image != null && imageHash.get(image.getImageid()) == null) {
+						Integer fromImageid = image.getImageid();
+						Image toImage = imageMapper.selectByUuid(image.getUuid());
+						if (toImage == null) {
+							// Insert image
+							File fromFile = new File(unzipFilePath + "/image", image.getFilename());
+							toImage = new Image();
+							toImage.setUuid(image.getUuid());
+							toImage.setOrgid(1);
+							toImage.setBranchid(1);
+							toImage.setFolderid(1);
+							toImage.setName(image.getName());
+							toImage.setFilename(image.getFilename());
+							toImage.setStatus("9");
+							toImage.setObjtype("0");
+							toImage.setObjid(0);
+							toImage.setCreatestaffid(1);
+							imageMapper.insertSelective(toImage);
+							String newFileName = "" + toImage.getImageid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String imageFilePath, thumbFilePath;
+							imageFilePath = "/image/upload/" + newFileName;
+							thumbFilePath = "/image/thumb/" + newFileName;
+							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (imageFile.exists()) {
+								imageFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.copyFile(fromFile, imageFile);
+							CommonUtil.resizeImage(imageFile, thumbFile, 640);
+
+							BufferedImage img = ImageIO.read(imageFile);
+							toImage.setWidth(img.getWidth());
+							toImage.setHeight(img.getHeight());
+							toImage.setFilepath(imageFilePath);
+							toImage.setThumbnail(thumbFilePath);
+							toImage.setFilename(newFileName);
+							toImage.setSize(FileUtils.sizeOf(imageFile));
+							FileInputStream fis = new FileInputStream(imageFile);
+							toImage.setMd5(DigestUtils.md5Hex(fis));
+							fis.close();
+							toImage.setStatus("1");
+							imageMapper.updateByPrimaryKeySelective(toImage);
+							logger.info("Add image oldid={}, newid={}", fromImageid, toImage.getImageid());
+						}
+						imageHash.put(fromImageid, toImage);
+					}
+				}
+			}
+		}
+
+		iter = pageHash.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, Page> entry = iter.next();
+			Page t = entry.getValue();
+			for (Pagezone pagezone : t.getPagezones()) {
+				pagezone.setPageid(pageHash.get(pagezone.getPageid()).getPageid());
+				pagezone.setHomepageid(page.getPageid());
+				Page touchPage = pageHash.get(pagezone.getTouchpageid());
+				if (touchPage != null) {
+					pagezone.setTouchpageid(touchPage.getPageid());
+				} else {
+					pagezone.setTouchpageid(0);
+				}
+				pagezoneMapper.insertSelective(pagezone);
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					if (pagezonedtl.getObjtype().equals("2")) {
+						pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+						pagezonedtl.setObjid(imageHash.get(pagezonedtl.getObjid()).getImageid());
+						pagezonedtlMapper.insertSelective(pagezonedtl);
+					}
+				}
+			}
+		}
+
+		makeHtmlZip("" + page.getPageid());
+		return page;
 	}
 
 	public void addStaffs(Page page, String[] staffids) {

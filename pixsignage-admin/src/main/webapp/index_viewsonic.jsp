@@ -62,40 +62,38 @@
 
 <style>
   .logo {
-    margin: 20px auto 20px auto;
-    text-align: center;
+	margin: 20px auto 20px auto;
+	text-align: center;
   }
   
   .login {
-    background-color: #fff;
-    width: 360px;
-    margin: 0 auto;
-    margin-bottom: 0px;
-    padding: 30px;
-    padding-top: 20px;
-    padding-bottom: 15px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    -ms-border-radius: 7px;
-    -o-border-radius: 7px;
-    border-radius: 7px;
+	background-color: #fff;
+	width: 360px;
+	margin: 0 auto;
+	margin-bottom: 0px;
+	padding: 30px;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-ms-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
   }
   
   .metro {
-    width: 1024px;
-    margin: 0 auto;
-    margin-bottom: 0px;
-    padding: 30px;
-    padding-top: 20px;
-    padding-bottom: 15px;
+	width: 1024px;
+	margin: 0 auto;
+	margin-bottom: 0px;
+	padding: 30px;
+	padding-top: 20px;
+	padding-bottom: 15px;
   }
 
   .copyright {
-    text-align: center;
-    margin: 0 auto;
-    padding: 10px;
-    color: #999;
-    font-size: 13px;
+	text-align: center;
+	margin: 0 auto;
+	padding: 10px;
+	color: #999;
+	font-size: 13px;
   }
  </style>
 </head>
@@ -134,177 +132,179 @@
 				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
 				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
 				</button>
-	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
-	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
+				<!-- 
+				<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
+				<a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
+				-->
 			</div>
 			<br/>
 		</form>
 	</div>
 	
 	<div class="metro level-1" style="display: none">
-            <div class="tile-wide tile-big-y bg-teal menu-devicemanage">
-                <div class="tile-content iconic">
-                    <span class="mif-display mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">终端</div>
-                </div>
-            </div>
-            <div class="tile tile-wide-y tile-super-x bg-amber menu-program">
-                <div class="tile-content iconic">
-                    <span class="mif-paint mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">制作</div>
-                </div>
-            </div>
-            <div class="tile tile-wide-x bg-magenta menu-stat">
-                <div class="tile-content iconic">
-                    <span class="mif-chart-dots mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">统计</div>
-                </div>
-            </div>
-            <div class="tile tile-wide-x bg-olive menu-system">
-                <div class="tile-content iconic">
-                    <span class="mif-windows mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">系统</div>
-                </div>
-            </div>
+			<div class="tile-wide tile-big-y bg-teal menu-devicemanage">
+				<div class="tile-content iconic">
+					<span class="mif-display mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">终端</div>
+				</div>
+			</div>
+			<div class="tile tile-wide-y tile-super-x bg-amber menu-program">
+				<div class="tile-content iconic">
+					<span class="mif-paint mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">制作</div>
+				</div>
+			</div>
+			<div class="tile tile-wide-x bg-magenta menu-stat">
+				<div class="tile-content iconic">
+					<span class="mif-chart-dots mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">统计</div>
+				</div>
+			</div>
+			<div class="tile tile-wide-x bg-olive menu-system">
+				<div class="tile-content iconic">
+					<span class="mif-windows mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">系统</div>
+				</div>
+			</div>
 	</div>
 
 	<div class="metro level-2-1" style="display: none">
-            <div class="tile tile-wide-x tile-wide-y bg-cobalt submenu" privilegeid="30201">
-                <div class="tile-content iconic">
-                    <span class="mif-display mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">终端</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-lime submenu-image submenu" privilegeid="30202">
-                <div class="tile-content iconic">
-                    <span class="mif-versions mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">终端租</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-yellow submenu-return">
-                <div class="tile-content iconic">
-                    <span class="mif-undo mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">返回</div>
-                </div>
-            </div>
-            <div class="tile tile-super-x bg-magenta submenu" privilegeid="30207">
-                <div class="tile-content iconic">
-                    <span class="mif-insert-template mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">分类</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-violet submenu" privilegeid="30204">
-                <div class="tile-content iconic">
-                    <span class="mif-cog mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">配置</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-orange submenu" privilegeid="30205">
-                <div class="tile-content iconic">
-                    <span class="mif-android mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">软件</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-darkGreen submenu" privilegeid="30206">
-                <div class="tile-content iconic">
-                    <span class="mif-tools mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">升级</div>
-                </div>
-            </div>
+			<div class="tile tile-wide-x tile-wide-y bg-cobalt submenu" privilegeid="30201">
+				<div class="tile-content iconic">
+					<span class="mif-display mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">终端</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-lime submenu-image submenu" privilegeid="30202">
+				<div class="tile-content iconic">
+					<span class="mif-versions mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">终端租</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-yellow submenu-return">
+				<div class="tile-content iconic">
+					<span class="mif-undo mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">返回</div>
+				</div>
+			</div>
+			<div class="tile tile-super-x bg-magenta submenu" privilegeid="30207">
+				<div class="tile-content iconic">
+					<span class="mif-insert-template mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">分类</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-violet submenu" privilegeid="30204">
+				<div class="tile-content iconic">
+					<span class="mif-cog mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">配置</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-orange submenu" privilegeid="30205">
+				<div class="tile-content iconic">
+					<span class="mif-android mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">软件</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-darkGreen submenu" privilegeid="30206">
+				<div class="tile-content iconic">
+					<span class="mif-tools mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">升级</div>
+				</div>
+			</div>
 	</div>
 
 	<div class="metro level-2-2" style="display: none">
-            <div class="tile tile-wide bg-cobalt submenu" privilegeid="30102">
-                <div class="tile-content iconic">
-                    <span class="mif-film mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">视频</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-lime submenu" privilegeid="30104">
-                <div class="tile-content iconic">
-                    <span class="mif-image mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">图片</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-yellow submenu-return">
-                <div class="tile-content iconic">
-                    <span class="mif-undo mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">返回</div>
-                </div>
-            </div>
+			<div class="tile tile-wide bg-cobalt submenu" privilegeid="30102">
+				<div class="tile-content iconic">
+					<span class="mif-film mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">视频</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-lime submenu" privilegeid="30104">
+				<div class="tile-content iconic">
+					<span class="mif-image mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">图片</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-yellow submenu-return">
+				<div class="tile-content iconic">
+					<span class="mif-undo mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">返回</div>
+				</div>
+			</div>
 
-            <div class="tile tile-wide-x tile-wide-y bg-violet submenu" privilegeid="30301">
-                <div class="tile-content iconic">
-                    <span class="mif-palette mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">节目</div>
-                </div>
-            </div>
-            <div class="tile tile-super-x bg-orange submenu" privilegeid="30501">
-                <div class="tile-content iconic">
-                    <span class="mif-calendar mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">计划</div>
-                </div>
-            </div>
-            <div class="tile tile-super-x bg-darkGreen submenu" privilegeid="30309">
-                <div class="tile-content iconic">
-                    <span class="mif-thumbs-up mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">审计</div>
-                </div>
-            </div>
+			<div class="tile tile-wide-x tile-wide-y bg-violet submenu" privilegeid="30301">
+				<div class="tile-content iconic">
+					<span class="mif-palette mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">节目</div>
+				</div>
+			</div>
+			<div class="tile tile-super-x bg-orange submenu" privilegeid="30501">
+				<div class="tile-content iconic">
+					<span class="mif-calendar mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">计划</div>
+				</div>
+			</div>
+			<div class="tile tile-super-x bg-darkGreen submenu" privilegeid="30309">
+				<div class="tile-content iconic">
+					<span class="mif-thumbs-up mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">审计</div>
+				</div>
+			</div>
 	</div>
 
 	<div class="metro level-2-3" style="display: none">
-            <div class="tile tile-wide tile-big-y bg-lightOlive submenu" privilegeid="30801">
-                <div class="tile-content iconic">
-                    <span class="mif-wifi-connect mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">在线统计</div>
-                </div>
-            </div>
-            <div class="tile tile-wide tile-big-y bg-lightRed submenu" privilegeid="30802">
-                <div class="tile-content iconic">
-                    <span class="mif-play mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">播放统计</div>
-                </div>
-            </div>
-            <div class="tile tile-wide tile-big-y bg-yellow submenu-return">
-                <div class="tile-content iconic">
-                    <span class="mif-undo mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">返回</div>
-                </div>
-            </div>
+			<div class="tile tile-wide tile-big-y bg-lightOlive submenu" privilegeid="30801">
+				<div class="tile-content iconic">
+					<span class="mif-wifi-connect mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">在线统计</div>
+				</div>
+			</div>
+			<div class="tile tile-wide tile-big-y bg-lightRed submenu" privilegeid="30802">
+				<div class="tile-content iconic">
+					<span class="mif-play mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">播放统计</div>
+				</div>
+			</div>
+			<div class="tile tile-wide tile-big-y bg-yellow submenu-return">
+				<div class="tile-content iconic">
+					<span class="mif-undo mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">返回</div>
+				</div>
+			</div>
 	</div>
 
 	<div class="metro level-2-4" style="display: none">
-            <div class="tile tile-wide-x tile-big-y bg-cobalt submenu" privilegeid="30901">
-                <div class="tile-content iconic">
-                    <span class="mif-display mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">操作员</div>
-                </div>
-            </div>
-            <div class="tile tile-wide tile-wide-y bg-lime submenu-image submenu" privilegeid="30903">
-                <div class="tile-content iconic">
-                    <span class="mif-versions mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">分支机构</div>
-                </div>
-            </div>
-            <div class="tile tile-wide tile-wide-y bg-yellow submenu-return">
-                <div class="tile-content iconic">
-                    <span class="mif-undo mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">返回</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-magenta submenu" privilegeid="30902">
-                <div class="tile-content iconic">
-                    <span class="mif-insert-template mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">角色</div>
-                </div>
-            </div>
-            <div class="tile tile-wide bg-violet submenu" privilegeid="30909">
-                <div class="tile-content iconic">
-                    <span class="mif-cog mif-2x fg-white icon"></span>
-                    <div class="tile-label fg-white">配置</div>
-                </div>
-            </div>
+			<div class="tile tile-wide-x tile-big-y bg-cobalt submenu" privilegeid="30901">
+				<div class="tile-content iconic">
+					<span class="mif-display mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">操作员</div>
+				</div>
+			</div>
+			<div class="tile tile-wide tile-wide-y bg-lime submenu-image submenu" privilegeid="30903">
+				<div class="tile-content iconic">
+					<span class="mif-versions mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">分支机构</div>
+				</div>
+			</div>
+			<div class="tile tile-wide tile-wide-y bg-yellow submenu-return">
+				<div class="tile-content iconic">
+					<span class="mif-undo mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">返回</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-magenta submenu" privilegeid="30902">
+				<div class="tile-content iconic">
+					<span class="mif-insert-template mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">角色</div>
+				</div>
+			</div>
+			<div class="tile tile-wide bg-violet submenu" privilegeid="30909">
+				<div class="tile-content iconic">
+					<span class="mif-cog mif-2x fg-white icon"></span>
+					<div class="tile-label fg-white">配置</div>
+				</div>
+			</div>
 	</div>
 
 <!-- 

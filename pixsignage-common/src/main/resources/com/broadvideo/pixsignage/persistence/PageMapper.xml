@@ -3,6 +3,7 @@
 <mapper namespace="com.broadvideo.pixsignage.persistence.PageMapper" >
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Page" >
     <id column="pageid" property="pageid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="templateid" property="templateid" jdbcType="INTEGER" />
@@ -27,6 +28,7 @@
   
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Page" extends="BaseResultMap" >
     <id column="pageid" property="pageid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="templateid" property="templateid" jdbcType="INTEGER" />
@@ -50,7 +52,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    pageid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
+    pageid, uuid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
     homeflag, homepageid, homeidletime, status, description, createtime, updatetime, 
     createstaffid
   </sql>
@@ -69,11 +71,21 @@
     where pageid = #{pageid}
   </select>
   
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from page
+    where orgid = #{orgid}
+    and uuid = #{uuid}
+  </select>
+
   <select id="selectCount" resultType="Integer" >
     select count(1) from page 
     where status = 1 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="touchflag != null">
       and touchflag = #{touchflag}
     </if>
@@ -91,7 +103,9 @@
     from page
     where status = 1 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="touchflag != null">
       and touchflag = #{touchflag}
     </if>
@@ -193,18 +207,23 @@
     where pageid = #{pageid}
   </delete>
   
+  <delete id="clearSubpages" >
+    delete from page
+    where homepageid = #{pageid}
+  </delete>
+  
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Page" >
     <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into page (orgid, branchid, templateid, 
+    insert into page (uuid, orgid, branchid, templateid, 
       name, snapshot, ratio, 
       height, width, limitflag, 
       privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
       status, description, createtime, 
       updatetime, createstaffid)
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
       #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
       #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
@@ -218,6 +237,9 @@
     </selectKey>
     insert into page
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
       <if test="orgid != null" >
         orgid,
       </if>
@@ -277,6 +299,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
       </if>
@@ -339,6 +364,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Page" >
     update page
     <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -401,7 +429,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Page" >
     update page
-    set orgid = #{orgid,jdbcType=INTEGER},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       templateid = #{templateid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},

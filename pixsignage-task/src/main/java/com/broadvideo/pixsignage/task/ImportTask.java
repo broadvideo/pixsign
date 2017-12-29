@@ -14,6 +14,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.TemplateService;
 
 import net.sf.json.JSONObject;
@@ -23,6 +24,8 @@ public class ImportTask {
 
 	private static boolean workflag = false;
 
+	@Autowired
+	private PageService pageService;
 	@Autowired
 	private TemplateService templateService;
 
@@ -36,12 +39,17 @@ public class ImportTask {
 			File[] zips = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/import").listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File file, String name) {
-					return name.startsWith("template-") && name.endsWith(".zip");
+					return (name.startsWith("page-") || name.startsWith("template-")) && name.endsWith(".zip");
 				}
 			});
 			for (int i = 0; i < zips.length; i++) {
-				logger.info("Begin to import template {}", zips[i].getAbsolutePath());
-				templateService.importZip(zips[i]);
+				if (zips[i].getName().startsWith("page-")) {
+					logger.info("Begin to import page {}", zips[i].getAbsolutePath());
+					pageService.importZip(1, 1, zips[i]);
+				} else {
+					logger.info("Begin to import template {}", zips[i].getAbsolutePath());
+					templateService.importZip(zips[i]);
+				}
 			}
 		} catch (Exception e) {
 			logger.error("ImportTask Quartz Task error: {}", e);
