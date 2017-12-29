@@ -1,6 +1,8 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
@@ -18,7 +20,13 @@ public interface MeetingService {
 	void deleteMeeting(Meeting meeting);
 	List<Attendee> getMeetingAttendees(Integer meetingid, Integer orgid);
 	void syncMeetingSignin(StaffSwipe staffswipe, Integer orgid);
+	byte[] genExportExcel(List<Meeting> meetings, Integer orgid);
 
+	List<Map<String, Integer>> getMeetingSumary(Date startDate, Date endDate, Integer orgid);
+
+	List<Map<String, Integer>> getMeetingroomSumary(Date startDate, Date endDate, Integer orgid);
+
+	void auditMeeting(Meeting meeting);
 
 
 }

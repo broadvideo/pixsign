@@ -85,9 +85,15 @@
 											</div>
 										</div>
 									   <div class="form-group">
-											<label class="col-md-3 control-label">绑定终端</label>
+											<label class="col-md-3 control-label">绑定终端1</label>
 											<div class="col-md-9">
 												 <input type="hidden" id="ClassSelect" class="form-control select2" name="meetingroom.terminalid">
+											</div>
+									    </div>
+									    <div class="form-group">
+											<label class="col-md-3 control-label">绑定终端2</label>
+											<div class="col-md-9">
+												 <input type="hidden" id="ClassSelect2" class="form-control select2" name="meetingroom.terminalid2">
 											</div>
 									    </div>
 										<div class="form-group">
@@ -102,7 +108,7 @@
 											<label class="col-md-3 control-label">描述</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<textarea class="form-control" rows="2" name="meetingroom.description"></textarea> 
+													<textarea class="form-control" rows="3" name="meetingroom.description"></textarea> 
 												</div>
 											</div>
 										</div>
@@ -114,13 +120,34 @@
 												</div>
 											</div>
 										</div>
+									
+										<div class="form-group">
+											<label class="col-md-3 control-label">费用(元/每小时)<span class="required">*</span></label>
+											<div class="col-md-6">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="meetingroom.feeperhour" />
+												</div>
+											</div>
+											<div class="col-md-3">
+									         
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label">人数（容纳）<span class="required">*</span></label>
 											<div id="peoples_wrapper_div" class="col-md-9">
 												
 											</div>
 										</div>
-								
+									    <div class="form-group">
+											<label class="col-md-3 control-label">会议设备</label>
+											<div class="col-md-9">
+											  <div class="input-icon right">
+												   <input type="checkbox" name="equipmentflag" value="0000000001" />投影仪 
+												  <input type="checkbox" name="equipmentflag" value="0000000010" />视讯设备
+												  <input type="hidden" name="meetingroom.equipmentflag" />
+											   </div>
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label">可预订<span class="required">*</span></label>
 											<div class="col-md-9">

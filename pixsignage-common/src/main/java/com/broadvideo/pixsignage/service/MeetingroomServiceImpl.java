@@ -2,7 +2,10 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -99,8 +102,8 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 		record.setCode(meetingroom.getCode());
 		record.setMeetingroomid(meetingroom.getMeetingroomid());
 		record.setOrgid(meetingroom.getOrgid());
-		int nameExistsCount = this.meetingroomMapper.existNameCode(record);
-		if (nameExistsCount > 0) {
+		List<Meetingroom> existsRecords = this.meetingroomMapper.selectExists(record);
+		if (existsRecords != null && existsRecords.size() > 0) {
 			throw new ServiceException(RetCodeEnum.EXCEPTION, "会议室编码已经存在");
 		}
 
@@ -108,23 +111,58 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 	}
 
 	public boolean validateBindTerminalId(Meetingroom meetingroom) {
-		if (StringUtils.isBlank(meetingroom.getTerminalid())) {
+		if (StringUtils.isBlank(meetingroom.getTerminalid()) && StringUtils.isBlank(meetingroom.getTerminalid2())&& StringUtils.isBlank(meetingroom.getTerminalid3())) {
 			return true;
 		}
 		logger.info("Check meetingroom(meetingroomid:{},terminalid{}) is exists:", meetingroom.getMeetingroomid(),
 				meetingroom.getTerminalid());
 		Meetingroom record = new Meetingroom();
-		record.setTerminalid(meetingroom.getTerminalid());
+		List<Meetingroom> existRecords = null;
 		record.setMeetingroomid(meetingroom.getMeetingroomid());
 		record.setOrgid(meetingroom.getOrgid());
-		int nameExistsCount = this.meetingroomMapper.existNameCode(record);
-		if (nameExistsCount > 0) {
-			throw new ServiceException(RetCodeEnum.EXCEPTION, "终端id已经被其他会议室绑定，请绑定其他终端");
+		int containerSize=0;
+		Set<String> containerSet = new HashSet<String>();
+		if (StringUtils.isNotBlank(meetingroom.getTerminalid())) {
+			containerSize++;
+			containerSet.add(meetingroom.getTerminalid());
+			record.setTerminalid(meetingroom.getTerminalid());
+			existRecords = this.meetingroomMapper.selectExists(record);
+			if (existRecords != null && existRecords.size() >= 1) {
+				throw new ServiceException(RetCodeEnum.EXCEPTION, "终端id已经被其他会议室绑定，请绑定其他终端");
+			}
 		}
+		if (StringUtils.isNotBlank(meetingroom.getTerminalid2())) {
+			containerSize++;
+			containerSet.add(meetingroom.getTerminalid2());
+			record.setTerminalid(null);
+			record.setTerminalid2(meetingroom.getTerminalid2());
+			existRecords = this.meetingroomMapper.selectExists(record);
+			if (existRecords != null && existRecords.size() >= 1) {
+				throw new ServiceException(RetCodeEnum.EXCEPTION, "终端id已经被其他会议室绑定，请绑定其他终端");
+			}
+		}
+		if (StringUtils.isNotBlank(meetingroom.getTerminalid3())) {
+			containerSize++;
+			containerSet.add(meetingroom.getTerminalid3());
+			record.setTerminalid2(null);
+			record.setTerminalid3(meetingroom.getTerminalid3());
+			existRecords = this.meetingroomMapper.selectExists(record);
+			if (existRecords != null && existRecords.size() >= 1) {
+				throw new ServiceException(RetCodeEnum.EXCEPTION, "终端id已经被其他会议室绑定，请绑定其他终端");
+			}
+		}
+		// 修改记录，则需要判断本条记录是否设置存在冲突
+			if (containerSize != containerSet.size()) {
+				throw new ServiceException(RetCodeEnum.EXCEPTION, "绑定的终端id不允许重复.");
+			}
+	       
+
+
 
 		return true;
 
 	}
+
 
 	@Override
 	public void addEquipments(Meetingroom meetingroom, String[] equipmentids) {
@@ -174,6 +212,17 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 		}
 
 		return unBindDeviceList;
+	}
+
+	@Override
+	public Integer countMeetingrooms(Integer orgid) {
+		return this.meetingroomMapper.countMeetingrooms(orgid);
+	}
+
+	@Override
+	public List<Map<String, Object>> getHottestMeetingrooms(Date startDate, Date endDate, Integer length, Integer orgid) {
+
+		return this.meetingroomMapper.selectHottestMeetingrooms(startDate, endDate, length, orgid);
 	}
 
 }

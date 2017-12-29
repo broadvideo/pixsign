@@ -1,18 +1,34 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
+import com.broadvideo.pixsignage.common.ReflectionUtils;
 import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Attendee;
@@ -41,7 +57,23 @@ public class MeetingServiceImpl implements MeetingService {
 	private MeetingroomMapper meetingroomMapper;
 	@Autowired
 	private StaffMapper staffMapper;
+	private Resource meetingExcel;
+	private static Map<String, String> cellValueMap = new HashMap<String, String>();
+	static {
+		cellValueMap.put("0", "locationname");
+		cellValueMap.put("1", "meetingroomname");
+		cellValueMap.put("2", "subject");
+		cellValueMap.put("3", "description");
+		cellValueMap.put("4", "starttime");
+		cellValueMap.put("5", "endtime");
+		cellValueMap.put("6", "formatduration");
+		cellValueMap.put("7", "fee");
+		cellValueMap.put("8", "bookstaffname");
+		cellValueMap.put("9", "bookbranchname");
+		cellValueMap.put("10", "amount");
+		cellValueMap.put("11", "signamount");
 
+	}
 	@Override
 	public Meeting getMeeting(Integer meetingid, Integer orgid) {
 
@@ -75,6 +107,16 @@ public class MeetingServiceImpl implements MeetingService {
 
 		Integer meetingroomid = meeting.getMeetingroomid();
 		Meetingroom meetingroom = this.meetingroomMapper.selectByPrimaryKey(meetingroomid);
+		if (meeting.getStarttime().getTime() < System.currentTimeMillis()
+				|| meeting.getEndtime().getTime() < System.currentTimeMillis()) {
+			logger.error("booking time is expired，starttime:{},endtime:{}", meeting.getStarttime(),
+					meeting.getEndtime());
+			throw new ServiceException("预定时间已经过期.");
+		}
+		if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
+			logger.error("starttime({}) is great endtime({})", meeting.getStarttime(), meeting.getEndtime());
+			throw new ServiceException("结束时间大于开始时间.");
+		}
 		if (meetingroom == null) {
 			logger.error("meetingroom({}) is null.", meetingroomid);
 			throw new ServiceException(RetCodeEnum.EXCEPTION, "会议室不存在.");
@@ -99,6 +141,7 @@ public class MeetingServiceImpl implements MeetingService {
 		meeting.setStatus(GlobalFlag.VALID);
 		long duration = (meeting.getEndtime().getTime() - meeting.getStarttime().getTime()) / 1000;
 		meeting.setDuration((int) duration);
+		meeting.setFee(this.getFee(meeting));
 		meeting.setAmount(meeting.getAttendeeuserids() == null ? 0 : meeting.getAttendeeuserids().length);
 		this.meetingMapper.insertSelective(meeting);
 
@@ -147,6 +190,7 @@ public class MeetingServiceImpl implements MeetingService {
 		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
 		long duration = (meeting.getEndtime().getTime() - meeting.getStarttime().getTime()) / 1000;
 		meeting.setDuration((int) duration);
+		meeting.setFee(this.getFee(meeting));
 
 		// 检查会议是否处于审核状态
 		if (!Meeting.NONE_FOR_AUDIT.equals(curMeeting.getAuditstatus())) {
@@ -235,5 +279,128 @@ public class MeetingServiceImpl implements MeetingService {
 
 	}
 
+	@Override
+	public byte[] genExportExcel(List<Meeting> meetings, Integer orgid) {
+		try {
+			Workbook wb = WorkbookFactory.create(meetingExcel.getInputStream());
+			ByteArrayOutputStream targetOutput = new ByteArrayOutputStream();
 
+			if (meetings == null || meetings.size() == 0) {
+				wb.write(targetOutput);
+				return targetOutput.toByteArray();
+			}
+			Sheet sheet = wb.getSheetAt(0);
+			for (int rowIndex = 1; rowIndex <= meetings.size(); rowIndex++) {
+				Meeting meeting = meetings.get(rowIndex - 1);
+				int signamount = 0;
+				for (Attendee attendee : meeting.getAttendees()) {
+					if (attendee.getSigntime() != null) {
+						signamount++;
+					}
+				}
+				meeting.setSignamount(signamount);
+				String formatDuration = DurationFormatUtils.formatDuration(meeting.getDuration() * 1000, "HH:mm");
+				meeting.setFormatduration(formatDuration);
+				Row row = sheet.getRow(rowIndex);
+				if (row == null) {
+					row = sheet.createRow(rowIndex);
+				}
+				for (int cellIndex = 0; cellIndex < cellValueMap.size(); cellIndex++) {
+					Cell cell = row.getCell(cellIndex);
+					if (cell == null) {
+						cell = row.createCell(cellIndex);
+					}
+					cell.setCellType(CellType.STRING);
+					String fieldName = cellValueMap.get(cellIndex + "");
+					Object objectValue = ReflectionUtils.getFieldValue(meeting, fieldName);
+					String fieldValue = null;
+					if (objectValue instanceof Date) {
+						fieldValue = DateUtil.getDateStr((Date) objectValue, "yyyy-MM-dd HH:mm");
+					} else {
+						fieldValue = objectValue == null ? "" : Objects.toString(objectValue);
+					}
+					cell.setCellValue(fieldValue);
+				}
+			}
+			wb.write(targetOutput);
+			return targetOutput.toByteArray();
+		} catch (Exception ex) {
+
+			logger.error("genExportExcel exception.", ex);
+			throw new ServiceException(RetCodeEnum.EXCEPTION, "导出excel失败：" + ex.getMessage());
+
+		}
+	}
+
+	public Resource getMeetingExcel() {
+		return meetingExcel;
+	}
+
+	public void setMeetingExcel(Resource meetingExcel) {
+		this.meetingExcel = meetingExcel;
+	}
+
+	private BigDecimal getFee(Meeting meeting) {
+		Meetingroom meetingroom = this.meetingroomMapper.selectByPrimaryKey(meeting.getMeetingroomid());
+		int duration = meeting.getDuration();
+		int hours = duration / (60 * 60);
+		double minutes = (duration - (hours * 60 * 60)) / 60.00;
+		double totalHours = hours + minutes / 60;
+		BigDecimal fee = meetingroom.getFeeperhour().multiply(new BigDecimal(Double.toString(totalHours)));
+		int precision = fee.precision() + (2 - fee.scale());
+		MathContext ctx = new MathContext(precision, RoundingMode.HALF_UP);
+		fee = new BigDecimal(fee.doubleValue(), ctx);
+		logger.info("meeting(name:{})total fee:{}", meeting.getSubject(), fee);
+		return fee;
+		
+
+	}
+
+	@Override
+	public List<Map<String, Integer>> getMeetingSumary(Date startDate, Date endDate, Integer orgid) {
+		return this.meetingMapper.countMeetingSumary(startDate, endDate, orgid);
+	}
+
+	@Override
+	public List<Map<String, Integer>> getMeetingroomSumary(Date startDate, Date endDate, Integer orgid) {
+		return this.meetingMapper.countMeetingroomUsage(startDate, endDate, orgid);
+	}
+
+	@Override
+	public void auditMeeting(Meeting meeting) {
+
+		if (!Meeting.REFUSE_FOR_AUDIT.equals(meeting.getAuditstatus())
+				&& !Meeting.SUCCESS_FOR_AUDIT.equals(meeting.getAuditstatus())) {
+			logger.error("Invalid  auditstatus:{}.", meeting.getAuditstatus());
+			throw new ServiceException(RetCodeEnum.EXCEPTION, "无效的审核状态!");
+		}
+
+		try {
+		Meeting record = this.getMeeting(meeting.getMeetingid(), meeting.getOrgid());
+			if (!Meeting.WAITING_FOR_AUDIT.equals(record.getAuditstatus())) {
+				logger.error("meeting({})'s auditstatus({}) cannot modify.", record.getSubject(),
+						record.getAuditstatus());
+				throw new ServiceException(RetCodeEnum.EXCEPTION, "已经审核过了，不允许操作!");
+
+			}
+		if (record.getStarttime().getTime() < System.currentTimeMillis()) {
+			logger.error("meeting({})'s starttime({}) is out of date.", record.getSubject(), record.getStarttime());
+			meeting.setAuditstatus(Meeting.REFUSE_FOR_AUDIT);
+		}
+		this.meetingMapper.updateMeeting(meeting);
+		} catch (Exception ex) {
+			logger.error("auditMeeting exception.", ex);
+			throw ex;
+		}
+
+	}
+	public static void main(String[] args) {
+		Meeting meeting = new Meeting();
+		meeting.setSubject("subject");
+		ReflectionUtils.setFieldValue(meeting, "description", "description");
+		System.out.println("meeting.description:" + meeting.getDescription());
+		String formatDuration = DurationFormatUtils.formatDuration(3600 * 1000, "HH小时mm分", true);
+		System.out.println("formatDuration:" + formatDuration);
+
+	}
 }

@@ -1,6 +1,8 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
@@ -24,6 +26,10 @@ public interface MeetingroomService {
 	boolean validateNameCode(Meetingroom meetingroom);
 
 	List<Device> listUnbindTerminals(Integer orgid);
+
+	Integer countMeetingrooms(Integer orgid);
+
+	List<Map<String, Object>> getHottestMeetingrooms(Date startDate, Date endDate, Integer length, Integer orgid);
 
 
 }

@@ -103,6 +103,14 @@
 											</div>
 										</div>
 										<div class="form-group">
+											<label class="col-md-3 control-label">概要</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <textarea class="form-control" rows="2" name="meeting.description" readonly></textarea> 
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
 											<label class="col-md-3 control-label" >开始时间</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -266,7 +274,7 @@
 											<button class="btn green pix-search"  >检索<i class="fa fa-plus"></i></button>
 										</div>
 										<div class="btn-group">
-										  <button class="btn green pix-export-excel"  >导出Excel<i class="fa fa-file-excel-o"></i></button>									
+										 <a href="#" class="btn green pix-export-excel"  target="_self">导出Excel<i class="fa fa-file-excel-o"></i></a>									
 										</div>
 									</div>
 									<table id="MeetingroomTable" class="table table-striped table-bordered table-hover tree">

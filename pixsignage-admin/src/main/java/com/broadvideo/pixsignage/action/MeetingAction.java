@@ -1,17 +1,12 @@
 package com.broadvideo.pixsignage.action;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +26,8 @@ import com.broadvideo.pixsignage.util.SqlUtil;
 public class MeetingAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private Meeting meeting;
+	private InputStream inputStream;
+	private String downloadname;
 	@Autowired
 	private MeetingService meetingService;
 
@@ -38,22 +35,23 @@ public class MeetingAction extends BaseDatatableAction {
 		try {
 			PageInfo pageInfo = super.initPageInfo();
 			String search = getParameter("sSearch");
-			String exportExcelFlag = getParameter("exportexcel");
 			search = SqlUtil.likeEscapeH(search);
 			if (meeting == null) {
 				meeting = new Meeting();
 			}
 			meeting.setSearch(search);
 			meeting.setOrgid(getStaffOrgid());
-			if (StringUtils.isNotBlank(exportExcelFlag)) {
-				return doExportMeetings(pageInfo);
-			} else {
-				PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
-				this.setiTotalRecords(pageResult.getTotalCount());
-				this.setiTotalDisplayRecords(pageResult.getTotalCount());
-				this.setAaData(pageResult.getResult());
-				return SUCCESS;
-			}
+			List<String> auditstatuslist = new ArrayList<String>();
+			// 查询审核通过或者不需要审核的会议列表
+			auditstatuslist.add(Meeting.NONE_FOR_AUDIT);
+			auditstatuslist.add(Meeting.SUCCESS_FOR_AUDIT);
+			meeting.setAuditstatuslist(auditstatuslist);
+			PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
+			this.setiTotalRecords(pageResult.getTotalCount());
+			this.setiTotalDisplayRecords(pageResult.getTotalCount());
+			this.setAaData(pageResult.getResult());
+			return SUCCESS;
+
 		} catch (Exception ex) {
 			logger.error("meetingAction doList exception, ", ex);
 			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
@@ -61,22 +59,79 @@ public class MeetingAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doAuditList() {
 
-	public String doExportMeetings(PageInfo pageInfo) {
+		try {
+		PageInfo pageInfo = super.initPageInfo();
+		String search = getParameter("sSearch");
+		search = SqlUtil.likeEscapeH(search);
+
+		if (meeting == null) {
+			meeting = new Meeting();
+		}
+		meeting.setSearch(search);
+		meeting.setOrgid(getStaffOrgid());
+		List<String> auditstatuslist = new ArrayList<String>();
+		auditstatuslist.add(Meeting.REFUSE_FOR_AUDIT);
+		auditstatuslist.add(Meeting.WAITING_FOR_AUDIT);
+		meeting.setAuditstatuslist(auditstatuslist);
+			PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
+			this.setiTotalRecords(pageResult.getTotalCount());
+			this.setiTotalDisplayRecords(pageResult.getTotalCount());
+			this.setAaData(pageResult.getResult());
+			return SUCCESS;
+		} catch (Exception ex) {
+
+			logger.error("meetingAction doAuditList exception, ", ex);
+			renderError(RetCodeEnum.EXCEPTION, ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doAuditMeeting() {
+		if (meeting == null || meeting.getMeetingid() == null || StringUtils.isBlank(meeting.getAuditstatus())) {
+			logger.error("Audit meeting invliad args.");
+			this.renderError(RetCodeEnum.EXCEPTION, "缺少参数！");
+			return ERROR;
+		}
+		try {
+			meeting.setUpdatestaffid(getStaffid());
+			meeting.setOrgid(getStaffOrgid());
+			this.meetingService.auditMeeting(meeting);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doAuditMeeting exception.", ex);
+			this.renderError(ex, ex.getMessage());
+			return ERROR;
+
+		}
+
+	}
+
+
+	public String doExportMeetings() {
+
+		PageInfo pageInfo = super.initPageInfo();
+		String search = getParameter("sSearch");
+		search = SqlUtil.likeEscapeH(search);
+		if (meeting == null) {
+			meeting = new Meeting();
+		}
 		pageInfo.setStart(0);
-		pageInfo.setLength(19999);
+		pageInfo.setLength(99999);
+		meeting.setSearch(search);
+		meeting.setOrgid(getStaffOrgid());
 		PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
 		List<Meeting> dataList = pageResult.getResult();
 		try {
-			File templateXls = new File("template_meeting.xls");
-			NPOIFSFileSystem fs = new NPOIFSFileSystem(templateXls);
-			HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
-			ByteArrayOutputStream targetFile = new ByteArrayOutputStream();
+			byte[] genBytes = this.meetingService.genExportExcel(dataList, getStaffOrgid());
+			this.downloadname = "meetings.xls";
+			this.inputStream = new ByteArrayInputStream(genBytes);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return NONE;
+		return SUCCESS;
 	}
 
 	public String doListAttendees() {
@@ -130,11 +185,20 @@ public class MeetingAction extends BaseDatatableAction {
 		this.meeting = meeting;
 	}
 
-	public static void main(String[] args) throws Exception {
+	public InputStream getInputStream() {
+		return inputStream;
+	}
 
-		InputStream inp = new FileInputStream("workbook.xls");
-		Workbook wb = WorkbookFactory.create(inp);
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
 
+	public String getDownloadname() {
+		return downloadname;
+	}
+
+	public void setDownloadname(String downloadname) {
+		this.downloadname = downloadname;
 	}
 
 }

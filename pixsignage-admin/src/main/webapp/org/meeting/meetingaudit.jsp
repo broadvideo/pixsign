@@ -5,67 +5,54 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
 </head>
-
 <body>
 	<div class="page-content-wrapper">
 		<div class="page-content">
-		
-			<div id="EquipmentDtlModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-				<div class="modal-dialog modal-full">
+					
+		  <div id="MeetingAuditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+				<div class="modal-dialog modal-wide">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">会议审核</h4>
 						</div>
 						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="portlet box blue">
-										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-reorder"></i>未关联设备</div>
-										</div>
-										<div class="portlet-body">
-											<div class="table-toolbar">
-												<div class="btn-group pull-right">
-													<button class="btn btn-sm blue pix-adddevicegpdtl"><spring:message code="global.add"/> <i class="fa fa-arrow-right"></i></button>
+							<form id="MeetingAuditForm" class="form-horizontal" method="POST">
+								<input type="hidden" name="meeting.meetingid" value="0" />
+								<div class="form-body">
+									     <div class="form-group">
+											<label class="col-md-3 control-label">审核结果<span class="required">*</span></label>
+											<div class="col-md-9">
+												 <input type="hidden" id="ClassSelect3" class="form-control select2" name="meeting.auditstatus">
+											</div>
+									    </div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">说明</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<textarea class="form-control" rows="3" name="meeting.auditresult"></textarea> 
 												</div>
 											</div>
-											<table id="EquipmentTable" class="table table-striped table-bordered table-hover">
-												<thead></thead>
-												<tbody></tbody>
-											</table>
 										</div>
-									</div>
+								
 								</div>
-								<div class="col-md-6">
-									<div class="portlet box green">
-										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-picture"></i>已关联设备</div>
-										</div>
-										<div class="portlet-body">
-											<div class="table-toolbar">
-												<div class="btn-group">
-													<button class="btn btn-sm red pix-deletedevicegpdtl"><i class="fa fa-arrow-left"></i> <spring:message code="global.remove"/></button>
-												</div>
-											</div>
-											<table id="MeetingroomEquipmentTable" class="table table-striped table-bordered table-hover">
-												<thead></thead>
-												<tbody></tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
+							</form>
 						</div>
 						<div class="modal-footer">
-							<button class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+							<button type="submit" class="btn blue">提交</button>
+							<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
 						</div>
 					</div>
 				</div>
 			</div>
+		
+
 			<div id="MyEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 				<div class="modal-dialog modal-wide">
 					<div class="modal-content">
@@ -97,6 +84,14 @@
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<i class="fa"></i> <input type="text" class="form-control" name="meeting.subject"  readonly/>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">概要</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <textarea class="form-control" rows="3" name="meeting.description" readonly></textarea> 
 												</div>
 											</div>
 										</div>
@@ -171,7 +166,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.mrbm"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.meeting"/></a>
+					<li><a href="#"><spring:message code="menu.meetingaudit"/></a>
 					</li>
 				</ul>
 			</div>
@@ -188,17 +183,12 @@
 						</div>
 						<div class="portlet-body" id="MeetingroomPortlet">
 							<div class="row">
-								<div class="col-md-2">
-									<div class="row"><div class="col-md-12 leftLocationTree"></div></div>
-								</div>
-								<div class="col-md-10">
+								<div class="col-md-12">
 									<div class="table-toolbar">
 										<div class="btn-group" style="display:none;">
-											<button class="btn green pix-add"  ><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+											<button class="btn green pix-search"  >检索<i class="fa fa-plus"></i></button>
 										</div>
-										<div class="btn-group">
-										
-										</div>
+								
 									</div>
 									<table id="MeetingroomTable" class="table table-striped table-bordered table-hover tree">
 										<thead></thead>
@@ -212,6 +202,8 @@
 			</div>
 		</div>
 	</div>
+	
+
 	
  <div id="peoples_spinner_tpl"  style="display:none">	
 		<div id="peoples_spinner" class="input-group input-xsmall" >
@@ -242,7 +234,9 @@
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.min.js" type="text/javascript"></script>	
-
+<script src="${static_ctx}/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -251,7 +245,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/meeting/meeting.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/meeting/meetingaudit.js?t=${timestamp}"></script>
 <script>
 var MyBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getBranchid() %>;
 

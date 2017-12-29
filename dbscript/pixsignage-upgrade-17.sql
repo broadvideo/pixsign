@@ -240,7 +240,13 @@ ALTER TABLE `meetingroom`
 	ADD COLUMN `terminalid2` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid`, 
 	ADD COLUMN `terminalid3` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid2`, 
 	ADD COLUMN `feeperhour` decimal(8,2)   NULL COMMENT '每小时收费(元)' after `peoples`, 
-	ADD COLUMN `equipmentflag` varchar(10)  COLLATE utf8_general_ci NULL COMMENT '设备标志位,0000000000    ' after `feeperhour`;	
+	ADD COLUMN `equipmentflag` varchar(10)  COLLATE utf8_general_ci NULL COMMENT '设备标志位,0000000000    ' after `feeperhour`;
+
+
+INSERT INTO location(UUID,parentid,seqno,LEVEL,NAME,orgid,createtime,createstaffid,STATUS)
+
+SELECT  (SELECT REPLACE(UUID(),'-','')) AS UUID,-1 AS parentid,0 AS seqno,0 AS LEVEL,'位置' AS NAME,(SELECT orgid FROM org WHERE CODE='default') AS orgid,NOW(),-1,'1'  FROM DUAL;
+	
 ############################################################
 ## post script  ############################################
 ############################################################

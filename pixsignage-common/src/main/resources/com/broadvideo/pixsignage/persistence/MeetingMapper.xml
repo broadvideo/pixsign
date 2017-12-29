@@ -10,16 +10,18 @@
     <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
     <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
     <result column="duration" property="duration" jdbcType="INTEGER" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="bookstaffid" property="bookstaffid" jdbcType="INTEGER" />
     <result column="bookbranchid" property="bookbranchid" jdbcType="INTEGER" />
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+    <result column="auditstatus" property="auditstatus" jdbcType="CHAR" />
+    <result column="auditresult" property="auditresult" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
-    <result column="auditstatus" property="auditstatus" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
   
@@ -40,8 +42,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     meetingid, uuid, meetingroomid, subject, description, starttime, endtime, duration, 
-    amount, bookstaffid, bookbranchid, qrcode, orgid, createtime, createstaffid, updatetime, 
-    updatestaffid, auditstatus, status
+    fee, amount, bookstaffid, bookbranchid, qrcode, auditstatus, auditresult, orgid, 
+    createtime, createstaffid, updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -128,6 +130,12 @@
 	   <if test="endtime!=null">
 	   and m.endtime <![CDATA[<=]]> #{endtime}
 	  </if>
+	  <if test="auditstatuslist!=null">
+	  and m.auditstatus in 
+	      <foreach close=")" collection="auditstatuslist" item="listItem" open="(" separator=",">
+                    #{listItem}
+          </foreach>
+	  </if>
 	  <if test="bookbranchid!=null">
 	   and  m.bookbranchid IN (
 	       select  tmp.branchid
@@ -198,6 +206,37 @@
        and #{signtime}>=  starttime  and  #{signtime}<![CDATA[<]]> endtime  
   
   </select>
+  <select id="countMeetingSumary"  resultType="map">
+     select
+      date_format(starttime,'%Y-%m-%d') as date,count(1) as meetings_total
+     from meeting
+     where orgid=#{orgid}  and status='1' and auditstatus in ('1','9') 
+     <if test="startdate!=null">
+        and starttime>=#{startdate}  
+     </if>
+     <if test="enddate!=null">
+        and endtime<![CDATA[<]]>#{enddate}
+     </if>
+     group by date
+     order by date asc
+  
+  </select>
+   <select id="countMeetingroomUsage"  resultType="map">
+     select
+      date_format(starttime,'%Y-%m-%d') as date,count(DISTINCT meetingroomid) as used_total
+     from meeting
+     where orgid=#{orgid}  and status='1' and auditstatus in ('1','9')  
+     <if test="startdate!=null">
+          and starttime>=#{startdate}  
+     </if>
+     <if test="enddate!=null">
+          and endtime<![CDATA[<]]>#{enddate}
+     </if> 
+     group by date
+     order by date asc
+  
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from meeting
     where meetingid = #{meetingid,jdbcType=INTEGER}
@@ -208,18 +247,18 @@
     </selectKey>
     insert into meeting (uuid, meetingroomid, subject, 
       description, starttime, endtime, 
-      duration, amount, bookstaffid, 
-      bookbranchid, qrcode, orgid, 
+      duration, fee, amount, 
+      bookstaffid, bookbranchid, qrcode, 
+      auditstatus, auditresult, orgid, 
       createtime, createstaffid, updatetime, 
-      updatestaffid, auditstatus, status
-      )
+      updatestaffid, status)
     values (#{uuid,jdbcType=VARCHAR}, #{meetingroomid,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
-      #{duration,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, #{bookstaffid,jdbcType=INTEGER}, 
-      #{bookbranchid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
+      #{duration,jdbcType=INTEGER}, #{fee,jdbcType=DECIMAL}, #{amount,jdbcType=INTEGER}, 
+      #{bookstaffid,jdbcType=INTEGER}, #{bookbranchid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, 
+      #{auditstatus,jdbcType=CHAR}, #{auditresult,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{updatestaffid,jdbcType=INTEGER}, #{auditstatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}
-      )
+      #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Meeting" >
     <selectKey resultType="java.lang.Integer" keyProperty="meetingid" order="AFTER" >
@@ -248,6 +287,9 @@
       <if test="duration != null" >
         duration,
       </if>
+      <if test="fee != null" >
+        fee,
+      </if>
       <if test="amount != null" >
         amount,
       </if>
@@ -259,6 +301,12 @@
       </if>
       <if test="qrcode != null" >
         qrcode,
+      </if>
+      <if test="auditstatus != null" >
+        auditstatus,
+      </if>
+      <if test="auditresult != null" >
+        auditresult,
       </if>
       <if test="orgid != null" >
         orgid,
@@ -274,9 +322,6 @@
       </if>
       <if test="updatestaffid != null" >
         updatestaffid,
-      </if>
-      <if test="auditstatus != null" >
-        auditstatus,
       </if>
       <if test="status != null" >
         status,
@@ -304,6 +349,9 @@
       <if test="duration != null" >
         #{duration,jdbcType=INTEGER},
       </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DECIMAL},
+      </if>
       <if test="amount != null" >
         #{amount,jdbcType=INTEGER},
       </if>
@@ -315,6 +363,12 @@
       </if>
       <if test="qrcode != null" >
         #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditstatus != null" >
+        #{auditstatus,jdbcType=CHAR},
+      </if>
+      <if test="auditresult != null" >
+        #{auditresult,jdbcType=VARCHAR},
       </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
@@ -330,9 +384,6 @@
       </if>
       <if test="updatestaffid != null" >
         #{updatestaffid,jdbcType=INTEGER},
-      </if>
-      <if test="auditstatus != null" >
-        #{auditstatus,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -363,6 +414,9 @@
       <if test="duration != null" >
         duration = #{duration,jdbcType=INTEGER},
       </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
       <if test="amount != null" >
         amount = #{amount,jdbcType=INTEGER},
       </if>
@@ -374,6 +428,12 @@
       </if>
       <if test="qrcode != null" >
         qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditstatus != null" >
+        auditstatus = #{auditstatus,jdbcType=CHAR},
+      </if>
+      <if test="auditresult != null" >
+        auditresult = #{auditresult,jdbcType=VARCHAR},
       </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
@@ -390,9 +450,6 @@
       <if test="updatestaffid != null" >
         updatestaffid = #{updatestaffid,jdbcType=INTEGER},
       </if>
-      <if test="auditstatus != null" >
-        auditstatus = #{auditstatus,jdbcType=CHAR},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -408,16 +465,18 @@
       starttime = #{starttime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP},
       duration = #{duration,jdbcType=INTEGER},
+      fee = #{fee,jdbcType=DECIMAL},
       amount = #{amount,jdbcType=INTEGER},
       bookstaffid = #{bookstaffid,jdbcType=INTEGER},
       bookbranchid = #{bookbranchid,jdbcType=INTEGER},
       qrcode = #{qrcode,jdbcType=VARCHAR},
+      auditstatus = #{auditstatus,jdbcType=CHAR},
+      auditresult = #{auditresult,jdbcType=VARCHAR},
       orgid = #{orgid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       updatestaffid = #{updatestaffid,jdbcType=INTEGER},
-      auditstatus = #{auditstatus,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR}
     where meetingid = #{meetingid,jdbcType=INTEGER}
   </update>
@@ -435,6 +494,9 @@
       <if test="endtime != null" >
         endtime = #{endtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
       <if test="updatetime != null" >
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
@@ -449,6 +511,9 @@
       </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
+      </if>
+       <if test="auditresult != null" >
+        auditresult = #{auditresult,jdbcType=VARCHAR}
       </if>
     </set>
     where meetingid = #{meetingid,jdbcType=INTEGER}  and orgid=#{orgid}

@@ -253,21 +253,23 @@
 			<version>2.4</version>
 		</dependency>
 		<!-- excel begin -->
+		<!-- 
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
-		    <version>3.14</version>
+		    <version>3.17</version>
 		</dependency>
+		 -->
 		<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>3.6</version>
-				<exclusions>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-					</exclusion>
-				</exclusions>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- excel end -->
 		<dependency>

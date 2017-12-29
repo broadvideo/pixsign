@@ -4,6 +4,13 @@ var  _parentid=-1;
 var  _parent=null;
 var _leftparentid=-1;
 var _leftparent=null;
+var _bitequipmentflags=[];
+
+function initBitEquipmentflags(){
+	
+	_bitequipmentflags=[0,0,0,0,0,0,0,0,0,0];
+}
+
 
 //init list
 var classlist = [];
@@ -30,6 +37,13 @@ function initTerminalList(){
 					});
 				}
 				$("#ClassSelect").select2({
+					placeholder: common.tips.detail_select,
+					minimumInputLength: 0,
+					data: classlist,
+					dropdownCssClass: "bigdrop", 
+					escapeMarkup: function (m) { return m; } 
+				});
+				$("#ClassSelect2").select2({
 					placeholder: common.tips.detail_select,
 					minimumInputLength: 0,
 					data: classlist,
@@ -182,8 +196,10 @@ MeetingRoomModule.prototype.initEvent=function(){
 
 	//FormValidateOption.rules['student.classid'] = {};
 	//FormValidateOption.rules['student.classid']['required'] = true;
-	FormValidateOption.rules['schoolclass.name'] = {};
-	FormValidateOption.rules['schoolclass.name']['required'] = true;
+	FormValidateOption.rules['meetingroom.name'] = {};
+	FormValidateOption.rules['meetingroom.name']['required'] = true;
+	FormValidateOption.rules['meetingroom.feeperhour'] = {};
+	FormValidateOption.rules['meetingroom.feeperhour']['required'] = true;
 	FormValidateOption.submitHandler = function(form) {
 		$("input[name='meetingroom.locationid']").val(_parentid);
 		var openflag=$('#OpenFlagSwitch').bootstrapSwitch('state'); 
@@ -204,7 +220,17 @@ MeetingRoomModule.prototype.initEvent=function(){
 			 $("input[name='meetingroom.auditflag']").val("0")
 			 
 		 }
-		
+		 initBitEquipmentflags();
+		var equipmentflags= $("input[name='equipmentflag']:checked");
+	    $.each(equipmentflags,function(idx,equipmentflag){
+	       var flagIndex=  $(equipmentflag).val().indexOf("1");
+	       _bitequipmentflags[flagIndex]=1;
+	    })
+		var combineequipmentflags="";
+	    for(var i=0;i<_bitequipmentflags.length;i++){
+	    	combineequipmentflags+=_bitequipmentflags[i];
+	    }
+	    $('#MyEditForm').find("input[name='meetingroom.equipmentflag']").attr("value",combineequipmentflags);
 		$.ajax({
 			type : 'POST',
 			url : $('#MyEditForm').attr('action'),
@@ -254,6 +280,8 @@ MeetingRoomModule.prototype.initEvent=function(){
 		initTerminalList();
 		//清理内容数据,解决静态dom加载spiner数字不会恢复初始值
 		$('#peoples_wrapper_div').html('');
+    	$.uniform.update($("input[name='equipmentflag']").attr("checked",false));
+
 		//插入模板数据
 		$('#peoples_wrapper_div').html($("#peoples_spinner_tpl").html());
 		$("#peoples_spinner").spinner({value:1, min: 1, max:1000});
@@ -293,13 +321,31 @@ MeetingRoomModule.prototype.initEvent=function(){
 			$('#AuditFlagSwitch').bootstrapSwitch('state', false); 
 
 		}
-		
+		initBitEquipmentflags();
+		var equipmentflag=item['equipmentflag'];
+        if(equipmentflag!=null){
+			var equipmentflagchks= $("input[name='equipmentflag']");
+			$.each(equipmentflagchks,function(idx,obj){
+				var chkIdx=$(obj).val().indexOf("1");
+			    if(equipmentflag.charAt(chkIdx)=="1"){
+			    	$.uniform.update($(obj).attr("checked",true));
+			    }else{
+			    	$.uniform.update($(obj).attr("checked",false));
+
+	
+			    	
+			    }
+				
+			});
+        }
+
 		refreshForm('MyEditForm');
 		$('#MyEditForm').loadJSON(formdata);
 	     $("#peoples_spinner").spinner({value:item['peoples'], min: 1, max:1000});
 		$('#MyEditForm').attr('action', 'meetingroom!update.action');
 		$('#MyEditModal').modal();
 		$("#ClassSelect").select2('val',item.terminalid);
+		$("#ClassSelect2").select2('val',item.terminalid2);
 
 
 	});
@@ -322,7 +368,8 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 		                {'sTitle' : '名称', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : '人数', 'mData' : 'peoples', 'bSortable' : false, 'sWidth' : '11%' },
 		                {'sTitle' : '接受预定', 'mData' : 'openflag', 'bSortable' : false, 'sWidth' : '10%' },
-		                {'sTitle' : '终端', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' },
+		                {'sTitle' : '终端1', 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '10%' },
+		                {'sTitle' : '终端2', 'mData' : 'terminalid2', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '20%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
@@ -341,7 +388,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			buttonhtml += '</div>';
-			$('td:eq(5)', nRow).html(buttonhtml);
+			$('td:eq(6)', nRow).html(buttonhtml);
 		    //$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 			//$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 			return nRow;
