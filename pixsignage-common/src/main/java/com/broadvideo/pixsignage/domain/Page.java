@@ -8,6 +8,8 @@ import org.apache.struts2.json.annotations.JSON;
 public class Page {
 	private Integer pageid;
 
+	private String uuid;
+
 	private Integer orgid;
 
 	private Integer branchid;
@@ -60,6 +62,14 @@ public class Page {
 
 	public void setPageid(Integer pageid) {
 		this.pageid = pageid;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Integer getOrgid() {

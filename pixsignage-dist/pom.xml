@@ -76,6 +76,19 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>make-page-bundles</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<finalName>pixsignage-page-${project.version}</finalName>
+							<descriptors>
+								<descriptor>src/assembly/assembly-page.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+					<execution>
 						<id>make-db-bundles</id>
 						<goals>
 							<goal>single</goal>

@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Page;
@@ -7,6 +8,8 @@ import com.broadvideo.pixsignage.domain.Staff;
 
 public interface PageService {
 	public Page selectByPrimaryKey(String pageid);
+
+	public Page selectByUuid(String orgid, String uuid);
 
 	public int selectCount(String orgid, String branchid, String touchflag, String homeflag, String search);
 
@@ -32,6 +35,10 @@ public interface PageService {
 	public void design(Page page) throws Exception;
 
 	public void makeHtmlZip(String pageid) throws Exception;
+
+	public void exportZip(String pageid, File zipFile) throws Exception;
+
+	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
 
 	public void addStaffs(Page page, String[] staffids);
 

@@ -37,6 +37,15 @@ create table cataitem(
  )engine = innodb
 default character set utf8;
 
+alter table org add defaultbundleid int default 0;
+alter table org add defaultpageid int default 0;
+alter table page add uuid varchar(64) default '';
+update page set uuid=replace(uuid(), '-', '') where uuid='' and homeflag = 1;
+alter table pagezone drop foreign key pagezone_ibfk_1;
+alter table pagezone add constraint pagezone_ibfk_1 foreign key (pageid) references page(pageid) on delete cascade on update cascade;
+alter table pagezonedtl drop foreign key pagezonedtl_ibfk_1;
+alter table pagezonedtl add constraint pagezonedtl_ibfk_1 foreign key (pagezoneid) references pagezone(pagezoneid) on delete cascade on update cascade;
+
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.opmanage','','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1);
@@ -46,6 +55,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10903,0,109,'menu.crash','crashreport.jsp','',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(201,1,0,'menu.sdomain','sdomain.jsp','fa-desktop',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(202,1,0,'menu.org','org.jsp','fa-cloud',1,2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(204,1,0,'menu.page','page.jsp','fa-html5',1,4);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(300,2,0,'menu.wizard','bundle/wizard.jsp','fa-hand-o-up',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(301,2,0,'menu.resource','','fa-qrcode',1,2);

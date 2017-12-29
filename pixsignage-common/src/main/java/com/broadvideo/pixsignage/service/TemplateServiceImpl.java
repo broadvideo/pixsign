@@ -362,7 +362,7 @@ public class TemplateServiceImpl implements TemplateService {
 		Date now = Calendar.getInstance().getTime();
 		File indexJsf = new File(unzipFilePath, "index.jsf");
 		logger.info("parse {}", indexJsf.getAbsoluteFile());
-		JSONObject templateJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf));
+		JSONObject templateJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
 		Map<String, Class> map = new HashMap<String, Class>();
 		map.put("subtemplates", Template.class);
 		map.put("templatezones", Templatezone.class);
@@ -388,10 +388,10 @@ public class TemplateServiceImpl implements TemplateService {
 		templateHash.put(fromTemplateid, template);
 		logger.info("Add template oldid={}, newid={}", fromTemplateid, template.getTemplateid());
 
-		for (Template subtemplet : template.getSubtemplates()) {
-			File jsf = new File(unzipFilePath, "" + subtemplet.getTemplateid() + ".jsf");
+		for (Template subtemplate : template.getSubtemplates()) {
+			File jsf = new File(unzipFilePath, "" + subtemplate.getTemplateid() + ".jsf");
 			logger.info("parse {}", jsf.getAbsoluteFile());
-			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf));
+			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
 			Template t = (Template) JSONObject.toBean(json, Template.class, map);
 			fromTemplateid = t.getTemplateid();
 			t.setOrgid(1);

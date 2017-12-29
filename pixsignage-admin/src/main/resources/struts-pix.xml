@@ -1264,6 +1264,14 @@
 				<param name="includeProperties">dataid,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="page!export" method="doExport" class="pageAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
 		<action name="page!addstaffs" method="doAddStaffs" class="pageAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="json">
@@ -1283,6 +1291,15 @@
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
+		</action>
+		<action name="page!upload" method="doUpload" class="pageAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">20480000</param>
+				<!-- <param name="allowedTypes">page/png,page/gif,page/jpeg,page/pjpeg</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
 		</action>
 
 		<action name="vchannel!list" method="doList" class="vchannelAction">

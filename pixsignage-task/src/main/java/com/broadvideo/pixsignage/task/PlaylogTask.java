@@ -73,8 +73,11 @@ public class PlaylogTask {
 					} catch (Exception e) {
 						logger.error("Handle {} error. ", zipfile.getAbsolutePath(), e);
 					}
-					String newfilename = zipfile.getAbsolutePath().substring(0, zipfile.getAbsolutePath().length() - 3);
-					zipfile.renameTo(new File(newfilename));
+					// String newfilename =
+					// zipfile.getAbsolutePath().substring(0,
+					// zipfile.getAbsolutePath().length() - 3);
+					// zipfile.renameTo(new File(newfilename));
+					FileUtils.deleteQuietly(zipfile);
 				}
 			}
 		} catch (Exception e) {

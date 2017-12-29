@@ -109,11 +109,17 @@ public class Org {
 
 	private String tags;
 
+	private Integer defaultbundleid;
+
+	private Integer defaultpageid;
+
 	private Date createtime;
 
 	private Integer createstaffid;
 
 	private Video backupvideo;
+
+	private Page defaultpage;
 
 	List<App> applist;
 
@@ -523,6 +529,22 @@ public class Org {
 		this.tags = tags;
 	}
 
+	public Integer getDefaultbundleid() {
+		return defaultbundleid;
+	}
+
+	public void setDefaultbundleid(Integer defaultbundleid) {
+		this.defaultbundleid = defaultbundleid;
+	}
+
+	public Integer getDefaultpageid() {
+		return defaultpageid;
+	}
+
+	public void setDefaultpageid(Integer defaultpageid) {
+		this.defaultpageid = defaultpageid;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -547,6 +569,14 @@ public class Org {
 
 	public void setBackupvideo(Video backupvideo) {
 		this.backupvideo = backupvideo;
+	}
+
+	public Page getDefaultpage() {
+		return defaultpage;
+	}
+
+	public void setDefaultpage(Page defaultpage) {
+		this.defaultpage = defaultpage;
 	}
 
 	public List<App> getApplist() {

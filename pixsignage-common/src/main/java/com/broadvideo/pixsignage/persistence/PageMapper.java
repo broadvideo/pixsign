@@ -10,6 +10,8 @@ import com.broadvideo.pixsignage.domain.Staff;
 public interface PageMapper {
 	Page selectByPrimaryKey(@Param(value = "pageid") String pageid);
 
+	Page selectByUuid(@Param(value = "orgid") String orgid, @Param(value = "uuid") String uuid);
+
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
 			@Param(value = "search") String search);
@@ -36,6 +38,8 @@ public interface PageMapper {
 	int deleteStaff(@Param(value = "pageid") String pageid, @Param(value = "staffid") String staffid);
 
 	int deleteByPrimaryKey(@Param(value = "pageid") String pageid);
+
+	int clearSubpages(@Param(value = "pageid") String pageid);
 
 	// int insert(Page record);
 

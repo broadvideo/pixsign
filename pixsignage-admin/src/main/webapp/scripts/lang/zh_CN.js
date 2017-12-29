@@ -206,6 +206,7 @@ var common = {
 		devicepassflag: '终端密码开关',
 		devicepass: '终端密码',
 		backupvideo: '默认垫片',
+		defaultpage: '默认页面',
 		powerflag: '自动开关机',
 		poweron: '开机时间',
 		poweroff: '关机时间',

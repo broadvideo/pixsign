@@ -2,6 +2,7 @@ package com.broadvideo.pixsignage.service;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.broadvideo.pixsignage.domain.Mediagrid;
 import com.broadvideo.pixsignage.domain.Mediagriddtl;
 import com.broadvideo.pixsignage.domain.Mmediadtl;
 import com.broadvideo.pixsignage.domain.Msgevent;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
@@ -38,6 +40,7 @@ import com.broadvideo.pixsignage.persistence.DevicegridMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MmediadtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
+import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.PlanbindMapper;
@@ -68,6 +71,8 @@ public class PlanServiceImpl implements PlanService {
 	private MsgeventMapper msgeventMapper;
 	@Autowired
 	private PageMapper pageMapper;
+	@Autowired
+	private OrgMapper orgMapper;
 
 	@Autowired
 	private ScheduleMapper scheduleMapper;
@@ -206,6 +211,32 @@ public class PlanServiceImpl implements PlanService {
 			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Devicegroup,
 					"" + device.getDevicegroupid());
 		}
+
+		if (planList.size() == 0) {
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			if (org.getDefaultpage() != null) {
+				Plan plan = new Plan();
+				plan.setPlanid(0);
+				plan.setPlantype(Plan.PlanType_Solo);
+				plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
+				plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
+				plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+				plan.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+				plan.setPriority(0);
+				Plandtl plandtl = new Plandtl();
+				plandtl.setPlandtlid(0);
+				plandtl.setPlanid(0);
+				plandtl.setObjtype(Plandtl.ObjType_Page);
+				plandtl.setObjid(org.getDefaultpageid());
+				plandtl.setDuration(60);
+				plandtl.setMaxtimes(0);
+				List<Plandtl> plandtls = new ArrayList<Plandtl>();
+				plandtls.add(plandtl);
+				plan.setPlandtls(plandtls);
+				planList.add(plan);
+			}
+		}
+
 		for (Plan plan : planList) {
 			JSONObject planJson = new JSONObject();
 			planJsonArray.put(planJson);
