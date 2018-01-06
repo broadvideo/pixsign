@@ -66,4 +66,7 @@ public interface DeviceMapper {
 	int updateOnlineflag();
 
 	int checkAppfile(@Param(value = "appfileid") String appfileid);
+
+	int resetExternalid(String externalid);
+
 }

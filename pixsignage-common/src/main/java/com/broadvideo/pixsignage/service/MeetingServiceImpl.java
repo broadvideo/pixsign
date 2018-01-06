@@ -161,10 +161,7 @@ public class MeetingServiceImpl implements MeetingService {
 			attendee.setStaffid(attendeeUserId);
 			attendee.setCreatetime(new Date());
 			this.attendeeMapper.insertSelective(attendee);
-			
 		}
-	
-
 	}
 
 	@Override
@@ -174,9 +171,27 @@ public class MeetingServiceImpl implements MeetingService {
 		Meeting params = new Meeting();
 		params.setMeetingroomid(curMeeting.getMeetingroomid());
 		params.setOrgid(curMeeting.getOrgid());
-		params.setStarttime(meeting.getStarttime());
-		params.setEndtime(meeting.getEndtime());
 		params.setMeetingid(meeting.getMeetingid());
+		// 不允许修改开始时间
+		params.setStarttime(curMeeting.getStarttime());
+		params.setEndtime(meeting.getEndtime());
+		if (curMeeting.getEndtime().getTime() <= System.currentTimeMillis()) {
+			logger.error("Meeting(id:{},name:{}) already end,can't modify.", curMeeting.getMeetingid(),
+					curMeeting.getSubject());
+			throw new ServiceException("会议已经结束，不允许修改会议信息.");
+		}
+		if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
+			logger.error("meeting({}) starttime({}) great than endtime({})", new Object[] { meeting.getMeetingid(),
+					meeting.getStarttime(), meeting.getEndtime() });
+			throw new ServiceException("会议开始时间必须小于结束时间.");
+
+		}
+		if (meeting.getEndtime().getTime() < System.currentTimeMillis()) {
+			logger.error("modify meeting({}) endtime({}) is less than current time.", meeting.getMeetingid(),
+					meeting.getEndtime());
+			throw new ServiceException("会议结束时间必须大于当前时间.");
+		}
+
 		List<Meeting> existMeetings = this.meetingMapper.selectExistMeetings(params);
 		if (existMeetings != null && existMeetings.size() > 0) {
 			logger.error("Update Meeting(id:{}) fail:times in use.", meeting.getMeetingid());
@@ -357,12 +372,12 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public List<Map<String, Integer>> getMeetingSumary(Date startDate, Date endDate, Integer orgid) {
-		return this.meetingMapper.countMeetingSumary(startDate, endDate, orgid);
+	public List<Map<String, Integer>> getMeetingSummary(Date startDate, Date endDate, Integer orgid) {
+		return this.meetingMapper.countMeetingSummary(startDate, endDate, orgid);
 	}
 
 	@Override
-	public List<Map<String, Integer>> getMeetingroomSumary(Date startDate, Date endDate, Integer orgid) {
+	public List<Map<String, Integer>> getMeetingroomSummary(Date startDate, Date endDate, Integer orgid) {
 		return this.meetingMapper.countMeetingroomUsage(startDate, endDate, orgid);
 	}
 

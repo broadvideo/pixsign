@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AttendancelogMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Attendancelog" >
+    <id column="attendancelogid" property="attendancelogid" jdbcType="INTEGER" />
+    <result column="eventid" property="eventid" jdbcType="INTEGER" />
+    <result column="eventname" property="eventname" jdbcType="VARCHAR" />
+    <result column="personid" property="personid" jdbcType="INTEGER" />
+    <result column="personname" property="personname" jdbcType="VARCHAR" />
+    <result column="roomid" property="roomid" jdbcType="INTEGER" />
+    <result column="roomname" property="roomname" jdbcType="VARCHAR" />
+    <result column="roomterminalid" property="roomterminalid" jdbcType="INTEGER" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="terminalname" property="terminalname" jdbcType="VARCHAR" />
+    <result column="signtype" property="signtype" jdbcType="CHAR" />
+    <result column="signtime" property="signtime" jdbcType="TIMESTAMP" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <association property="person" column="personid"  select="com.broadvideo.pixsignage.persistence.PersonMapper.selectByPrimaryKey" /> 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attendancelogid, eventid, eventname, personid, personname, roomid, roomname, roomterminalid, 
+    terminalid, terminalname, signtype, signtime, orgid, createtime, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendancelog
+    where attendancelogid = #{attendancelogid,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendancelog
+    where orgid=#{orgid} and status='1'
+     <if test="eventid!=null">
+       and eventid=#{eventid}
+     </if>
+     <if test="roomid!=null">
+      and roomid=#{roomid}
+     </if>
+     <if test="terminalid!=null">
+      and terminalid=#{terminalid}
+     </if>
+    <if test="starttime!=null">
+	   and  starttime>=#{starttime}
+	  </if>
+	   <if test="endtime!=null">
+	   and  endtime <![CDATA[<=]]> #{endtime}
+	  </if>
+	  order by attendancelogid asc
+    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from attendancelog
+    where attendancelogid = #{attendancelogid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Attendancelog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendancelogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendancelog (eventid, eventname, personid, 
+      personname, roomid, roomname, 
+      roomterminalid, terminalid, terminalname, 
+      signtype, signtime, orgid, 
+      createtime, status)
+    values (#{eventid,jdbcType=INTEGER}, #{eventname,jdbcType=VARCHAR}, #{personid,jdbcType=INTEGER}, 
+      #{personname,jdbcType=VARCHAR}, #{roomid,jdbcType=INTEGER}, #{roomname,jdbcType=VARCHAR}, 
+      #{roomterminalid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, #{terminalname,jdbcType=VARCHAR}, 
+      #{signtype,jdbcType=CHAR}, #{signtime,jdbcType=TIMESTAMP}, #{orgid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendancelog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="attendancelogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into attendancelog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="eventid != null" >
+        eventid,
+      </if>
+      <if test="eventname != null" >
+        eventname,
+      </if>
+      <if test="personid != null" >
+        personid,
+      </if>
+      <if test="personname != null" >
+        personname,
+      </if>
+      <if test="roomid != null" >
+        roomid,
+      </if>
+      <if test="roomname != null" >
+        roomname,
+      </if>
+      <if test="roomterminalid != null" >
+        roomterminalid,
+      </if>
+      <if test="terminalid != null" >
+        terminalid,
+      </if>
+      <if test="terminalname != null" >
+        terminalname,
+      </if>
+      <if test="signtype != null" >
+        signtype,
+      </if>
+      <if test="signtime != null" >
+        signtime,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="eventid != null" >
+        #{eventid,jdbcType=INTEGER},
+      </if>
+      <if test="eventname != null" >
+        #{eventname,jdbcType=VARCHAR},
+      </if>
+      <if test="personid != null" >
+        #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="personname != null" >
+        #{personname,jdbcType=VARCHAR},
+      </if>
+      <if test="roomid != null" >
+        #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="roomname != null" >
+        #{roomname,jdbcType=VARCHAR},
+      </if>
+      <if test="roomterminalid != null" >
+        #{roomterminalid,jdbcType=INTEGER},
+      </if>
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalname != null" >
+        #{terminalname,jdbcType=VARCHAR},
+      </if>
+      <if test="signtype != null" >
+        #{signtype,jdbcType=CHAR},
+      </if>
+      <if test="signtime != null" >
+        #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Attendancelog" >
+    update attendancelog
+    <set >
+      <if test="eventid != null" >
+        eventid = #{eventid,jdbcType=INTEGER},
+      </if>
+      <if test="eventname != null" >
+        eventname = #{eventname,jdbcType=VARCHAR},
+      </if>
+      <if test="personid != null" >
+        personid = #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="personname != null" >
+        personname = #{personname,jdbcType=VARCHAR},
+      </if>
+      <if test="roomid != null" >
+        roomid = #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="roomname != null" >
+        roomname = #{roomname,jdbcType=VARCHAR},
+      </if>
+      <if test="roomterminalid != null" >
+        roomterminalid = #{roomterminalid,jdbcType=INTEGER},
+      </if>
+      <if test="terminalid != null" >
+        terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalname != null" >
+        terminalname = #{terminalname,jdbcType=VARCHAR},
+      </if>
+      <if test="signtype != null" >
+        signtype = #{signtype,jdbcType=CHAR},
+      </if>
+      <if test="signtime != null" >
+        signtime = #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where attendancelogid = #{attendancelogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Attendancelog" >
+    update attendancelog
+    set eventid = #{eventid,jdbcType=INTEGER},
+      eventname = #{eventname,jdbcType=VARCHAR},
+      personid = #{personid,jdbcType=INTEGER},
+      personname = #{personname,jdbcType=VARCHAR},
+      roomid = #{roomid,jdbcType=INTEGER},
+      roomname = #{roomname,jdbcType=VARCHAR},
+      roomterminalid = #{roomterminalid,jdbcType=INTEGER},
+      terminalid = #{terminalid,jdbcType=VARCHAR},
+      terminalname = #{terminalname,jdbcType=VARCHAR},
+      signtype = #{signtype,jdbcType=CHAR},
+      signtime = #{signtime,jdbcType=TIMESTAMP},
+      orgid = #{orgid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR}
+    where attendancelogid = #{attendancelogid,jdbcType=INTEGER}
+  </update>
+</mapper>

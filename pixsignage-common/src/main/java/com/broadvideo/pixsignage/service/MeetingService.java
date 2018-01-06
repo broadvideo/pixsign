@@ -22,9 +22,9 @@ public interface MeetingService {
 	void syncMeetingSignin(StaffSwipe staffswipe, Integer orgid);
 	byte[] genExportExcel(List<Meeting> meetings, Integer orgid);
 
-	List<Map<String, Integer>> getMeetingSumary(Date startDate, Date endDate, Integer orgid);
+	List<Map<String, Integer>> getMeetingSummary(Date startDate, Date endDate, Integer orgid);
 
-	List<Map<String, Integer>> getMeetingroomSumary(Date startDate, Date endDate, Integer orgid);
+	List<Map<String, Integer>> getMeetingroomSummary(Date startDate, Date endDate, Integer orgid);
 
 	void auditMeeting(Meeting meeting);
 

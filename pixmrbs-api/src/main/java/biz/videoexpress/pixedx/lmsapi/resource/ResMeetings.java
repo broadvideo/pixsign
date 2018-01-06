@@ -38,6 +38,7 @@ import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Attendee;
 import com.broadvideo.pixsignage.domain.Meeting;
 import com.broadvideo.pixsignage.domain.Meetingroom;
+import com.broadvideo.pixsignage.persistence.MeetingMapper;
 import com.broadvideo.pixsignage.service.LocationService;
 import com.broadvideo.pixsignage.service.MeetingService;
 import com.broadvideo.pixsignage.service.MeetingroomService;
@@ -56,6 +57,8 @@ public class ResMeetings extends ResBase {
 	private MeetingroomService meetingroomService;
 	@Autowired
 	private MeetingService meetingService;
+	@Autowired
+	private MeetingMapper meetingMapper;
 	@GET
 	@Path("/meeting_room_categories")
 	public Response getMeetingRoomCategories(@Context HttpServletRequest req) {
@@ -193,11 +196,11 @@ public class ResMeetings extends ResBase {
 	}
 
 	@GET
-	@Path("/meetings_sumary")
-	public Response getMeetingsSumary(@Context HttpServletRequest req, @QueryParam("start_date") String startDate,
+	@Path("/meetings_summary")
+	public Response getMeetingsSummary(@Context HttpServletRequest req, @QueryParam("start_date") String startDate,
 			@QueryParam("end_date") String endDate, @QueryParam("meeting_room_id") Integer meetingroomid) {
 
-		logger.info("getMeetingsSumary with querystring:{}",req.getQueryString());
+		logger.info("getMeetingsSummary with querystring:{}", req.getQueryString());
 		if (StringUtils.isBlank(startDate)) {
 			startDate = DateUtil.getDateStr(new Date(), "yyyyMMdd");
 		}
@@ -213,7 +216,7 @@ public class ResMeetings extends ResBase {
 		wrapEndDate = calendar.getTime();
 			BasicResp<Map<String, Integer>> resp = new BasicResp<Map<String, Integer>>();
 		logger.info("startDate:{},endDate:{}", startDate, endDate);
-			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingSumary(wrapStartDate, wrapEndDate,
+			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingSummary(wrapStartDate, wrapEndDate,
 					getOrgId(req));
 			resp.setData(dataMapList);
 			resp.setRetcode(ApiRetCodeEnum.SUCCESS);
@@ -221,18 +224,18 @@ public class ResMeetings extends ResBase {
 
 		} catch (Exception ex) {
 
-			logger.error("getMeetingsSumary exception:", ex);
+			logger.error("getMeetingsSummary exception:", ex);
 			throw new ServiceException("获取会议统计信息异常:" + ex.getMessage());
 
 		}
 	}
 
 	@GET
-	@Path("/meeting_rooms_sumary")
-	public String getMeetingroomsSumary(@Context HttpServletRequest req, @QueryParam("start_date") String startDate,
+	@Path("/meeting_rooms_summary")
+	public String getMeetingroomsSummary(@Context HttpServletRequest req, @QueryParam("start_date") String startDate,
 			@QueryParam("end_date") String endDate) {
 
-		logger.info("getMeetingroomsSumary with querystring:{}", req.getQueryString());
+		logger.info("getMeetingroomsSummary with querystring:{}", req.getQueryString());
 		if (StringUtils.isBlank(startDate)) {
 			startDate = DateUtil.getDateStr(new Date(), "yyyyMMdd");
 		}
@@ -248,7 +251,7 @@ public class ResMeetings extends ResBase {
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
 			wrapEndDate = calendar.getTime();
 			logger.info("startDate:{},endDate:{}", wrapStartDate, wrapEndDate);
-			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingroomSumary(wrapStartDate,
+			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingroomSummary(wrapStartDate,
 					wrapEndDate,
 					getOrgId(req));
 			resultJson.put("retcode", ApiRetCodeEnum.SUCCESS);
@@ -262,8 +265,40 @@ public class ResMeetings extends ResBase {
 
 		} catch (Exception ex) {
 
-			logger.error("getMeetingroomsSumary exception:", ex);
+			logger.error("getMeetingroomsSummary exception:", ex);
 			throw new ServiceException("获取会议室统计信息异常:" + ex.getMessage());
+
+		}
+	}
+
+	@GET
+	@Path("/basic_summary")
+	public String getBasicSummary(@Context HttpServletRequest req) {
+
+		logger.info("getBasicSummary with querystring:{}", req.getQueryString());
+
+		try {
+			JSONObject resultJson = new JSONObject();
+			resultJson.put("retcode", ApiRetCodeEnum.SUCCESS);
+			resultJson.put("message", "success");
+			JSONObject dataJson = new JSONObject();
+			dataJson.put("meeting_rooms_total", this.meetingroomService.countMeetingrooms(getOrgId(req)));
+			dataJson.put("meetings_total", meetingMapper.countMeetings(null, null, getOrgId(req)));
+			String formatDateStr = DateUtil.getDateStr(new Date(), "yyyyMMdd");
+			Date startDate = DateUtil.getDate(formatDateStr, "yyyyMMdd");
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(startDate);
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			Date endDate = calendar.getTime();
+			dataJson.put("day_meetings_total", meetingMapper.countMeetings(startDate, endDate, getOrgId(req)));
+			dataJson.put("ongoing_meetings_total", meetingMapper.countOngoingMeetings(getOrgId(req)));
+			resultJson.put("data", dataJson);
+			return resultJson.toString();
+
+		} catch (Exception ex) {
+
+			logger.error("getBasicSummary exception:", ex);
+			throw new ServiceException("获取基本统计信息异常:" + ex.getMessage());
 
 		}
 	}

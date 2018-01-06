@@ -122,11 +122,12 @@
 										</div>
 									
 										<div class="form-group">
-											<label class="col-md-3 control-label">费用(元/每小时)<span class="required">*</span></label>
+											<label class="col-md-3 control-label">费用<span class="required">*</span></label>
 											<div class="col-md-6">
-												<div class="input-icon right">
-													<i class="fa"></i> <input type="text" class="form-control" name="meetingroom.feeperhour" />
-												</div>
+											    <div class="input-group input-icon right">
+										            <input type="text" class="form-control" name="meetingroom.feeperhour" />
+										            <span class="input-group-addon">元/每小时</span>
+									            </div>
 											</div>
 											<div class="col-md-3">
 									         
@@ -141,11 +142,13 @@
 									    <div class="form-group">
 											<label class="col-md-3 control-label">会议设备</label>
 											<div class="col-md-9">
-											  <div class="input-icon right">
-												   <input type="checkbox" name="equipmentflag" value="0000000001" />投影仪 
-												  <input type="checkbox" name="equipmentflag" value="0000000010" />视讯设备
-												  <input type="hidden" name="meetingroom.equipmentflag" />
-											   </div>
+											   <div class="checkbox-list">
+													<label class="checkbox-inline">
+													<input type="checkbox" name="equipmentflag" value="0000000001"> 投影仪 </label>
+													<label class="checkbox-inline">
+													<input type="checkbox" name="equipmentflag" value="0000000010"> 视讯设备 </label>
+												</div>
+											   
 											</div>
 										</div>
 										<div class="form-group">

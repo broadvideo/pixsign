@@ -18,12 +18,15 @@ public interface MeetingMapper {
 
 	List<Meeting> selectExistMeetings(Meeting meeting);
 
-	List<Map<String, Integer>> countMeetingSumary(@Param("startdate") Date startDate, @Param("enddate") Date endDate,
+	List<Map<String, Integer>> countMeetingSummary(@Param("startdate") Date startDate, @Param("enddate") Date endDate,
 			@Param("orgid") Integer orgid);
 
 	List<Map<String, Integer>> countMeetingroomUsage(@Param("startdate") Date startDate,
 			@Param("enddate") Date endDate, @Param("orgid") Integer orgid);
 
+	int countMeetings(@Param("starttime") Date starttime, @Param("endtime") Date endtime, @Param("orgid") Integer orgid);
+
+	int countOngoingMeetings(@Param("orgid") Integer orgid);
 	Meeting selectMatchMeeting(@Param("meetingroomid") Integer meetingroomid, @Param("signtime") Date signtime);
     int deleteByPrimaryKey(Integer meetingid);
 

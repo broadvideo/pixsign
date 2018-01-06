@@ -200,6 +200,8 @@ MeetingRoomModule.prototype.initEvent=function(){
 	FormValidateOption.rules['meetingroom.name']['required'] = true;
 	FormValidateOption.rules['meetingroom.feeperhour'] = {};
 	FormValidateOption.rules['meetingroom.feeperhour']['required'] = true;
+	FormValidateOption.rules['meetingroom.feeperhour']['number']=true
+	
 	FormValidateOption.submitHandler = function(form) {
 		$("input[name='meetingroom.locationid']").val(_parentid);
 		var openflag=$('#OpenFlagSwitch').bootstrapSwitch('state'); 

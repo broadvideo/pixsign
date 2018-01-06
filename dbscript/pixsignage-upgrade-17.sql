@@ -230,8 +230,13 @@ INSERT INTO `privilege` VALUES ('310', '2', '0', 'menu.mrbm', NULL, 'fa-cogs', '
 
 
 ALTER TABLE `meeting` 
-	ADD COLUMN `description` varchar(2048)  COLLATE utf8_general_ci NULL COMMENT '会议描述信息' after `subject`, 
-	ADD COLUMN `auditstatus` char(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态： 0：待审核  1：通过 2：拒绝' after `updatestaffid`;
+	ADD COLUMN `description` VARCHAR(2048)  COLLATE utf8_general_ci NULL COMMENT '会议描述信息' AFTER `subject`, 
+    ADD COLUMN `fee` DECIMAL(8,2)   NULL COMMENT '会议费用' AFTER `duration`, 
+	ADD COLUMN `auditstatus` CHAR(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态： 0：待审核  1：通过 2：拒绝' AFTER `updatestaffid`,
+	ADD COLUMN `auditresult` VARCHAR(1024)  COLLATE utf8_general_ci NULL COMMENT '审核意见' AFTER `auditstatus`; 
+	
+ALTER TABLE `meeting` 
+	CHANGE `auditstatus` `auditstatus` CHAR(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' AFTER `updatestaffid`;
 
 ALTER TABLE `meetingroom` 
 	ADD COLUMN `auditflag` char(1)  COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '预定是否需要审核: 0:否 1:是' after `openflag`;
@@ -243,10 +248,6 @@ ALTER TABLE `staff`
 	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `staffid`, 
 	ADD COLUMN `email` varchar(128)  COLLATE utf8_general_ci NULL COMMENT '邮箱' after `name`;
 	
-ALTER TABLE `meeting` 
-	ADD COLUMN `fee` decimal(8,2)   NULL COMMENT '会议费用' after `duration`, 
-	ADD COLUMN `auditresult` varchar(1024)  COLLATE utf8_general_ci NULL COMMENT '审核意见' after `auditstatus`, 
-    CHANGE `auditstatus` `auditstatus` char(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' after `updatestaffid`;	
 ALTER TABLE `meetingroom` 
 	ADD COLUMN `terminalid2` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid`, 
 	ADD COLUMN `terminalid3` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid2`, 

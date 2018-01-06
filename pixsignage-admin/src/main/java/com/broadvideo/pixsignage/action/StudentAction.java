@@ -30,10 +30,6 @@ public class StudentAction extends BaseDatatableAction {
 	@Autowired
 	private StudentMapper studentMapper;
 
-	public String doUpload() {
-
-		return SUCCESS;
-	}
 
 	public String doList() {
 		try {
