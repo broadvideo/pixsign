@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.common.GlobalFlag;
-import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.domain.Device;
@@ -66,6 +65,8 @@ public class ResPersons extends ResBase {
 			List<Person> personlist = this.personMapper.selectChangePersons(device.getOrgid(), lastupdatetime);
 			long returnts = System.currentTimeMillis();
 			JSONObject returnDataJson = new JSONObject();
+			returnDataJson.put("retcode", ApiRetCodeEnum.SUCCESS);
+			returnDataJson.put("message", "success");
 			returnDataJson.put("ts", returnts);
 			JSONArray updatedArr=new JSONArray();
 			JSONArray deletedArr=new JSONArray();
@@ -74,11 +75,13 @@ public class ResPersons extends ResBase {
 					JSONObject updatedJson=new JSONObject();
 					updatedJson.put("person_id",person.getPersonid());
 					updatedJson.put("person_no", person.getPersonno() != null ? person.getPersonno() : "");
+					updatedJson.put("sex", StringUtils.isBlank(person.getSex()) ? "2" : person.getSex());
 					updatedJson.put("name", person.getName());
 					updatedJson.put("avatar", getImageUrl(config.getValue(), person.getAvatar()));
 					updatedJson.put("image_url", getImageUrl(config.getValue(), person.getImageurl()));
 					updatedJson.put("image_content", "");
 					updatedJson.put("rfid", person.getRfid() != null ? person.getRfid() : "");
+					updatedJson.put("voice_prompt", person.getVoiceprompt());
 					updatedArr.put(updatedJson);
 				} else if (GlobalFlag.DELETE.equals(person.getStatus())) {
 					deletedArr.put(person.getPersonid());
@@ -86,8 +89,8 @@ public class ResPersons extends ResBase {
 			}
 			returnDataJson.put("updated_data", updatedArr);
 			returnDataJson.put("deleted_data", deletedArr);
+			return returnDataJson.toString();
 
-			return this.handleResult(RetCodeEnum.SUCCESS, "success", returnDataJson);
 		} catch (Exception e) {
 
 			logger.error("getPersonList exception.", e);

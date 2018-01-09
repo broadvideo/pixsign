@@ -26,6 +26,10 @@
 			<id>Eclipse Paho Repo</id>
 			<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
 		</repository>
+		 <repository>
+          <id>getui-nexus</id>
+          <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+        </repository>
 	</repositories>
 
 	<dependencies>
@@ -311,6 +315,11 @@
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.gexin.platform</groupId>
+		    <artifactId>gexin-rp-sdk-http</artifactId>
+		    <version>4.0.1.9</version>
 		</dependency>
 	</dependencies>
 

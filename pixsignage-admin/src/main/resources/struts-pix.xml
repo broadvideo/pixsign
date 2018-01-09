@@ -2226,6 +2226,13 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+	   <action name="vipattendance!list" method="doList" class="vipattendanceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		
 
 	</package>
 

@@ -123,6 +123,23 @@ FormValidateOption.rules['person.name']['required'] = true;
 FormValidateOption.rules['person.sex'] = {};
 FormValidateOption.rules['person.sex']['required'] = true;
 FormValidateOption.submitHandler = function(form) {
+
+  var action=$('#MyEditForm').attr('action');
+   if(action.indexOf("person!add")>=0){
+	   var avatarfile=$("#avatarfile").val();
+		  var imgfile=$("#imagefile").val();
+		    if($.trim(avatarfile).length==0){
+				   bootbox.alert("请上传头像!");
+				   return;
+		         }
+		    if($.trim(imgfile).length==0){
+		    	 bootbox.alert("请上传用于识别的人脸图像!");
+		    	 return;
+		    }
+   }
+	
+	  
+	
 	$.ajax({
 		type : 'POST',
 		url : $('#MyEditForm').attr('action'),

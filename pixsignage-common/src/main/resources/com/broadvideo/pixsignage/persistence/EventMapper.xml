@@ -39,11 +39,14 @@
 	<if test="roomid!=null">
 	  and e.roomid=#{roomid}
 	</if>
-	 <if test="starttime!=null">
-	   and e.starttime>=#{starttime}
-	  </if>
-	   <if test="endtime!=null">
-	   and e.endtime <![CDATA[<=]]> #{endtime}
+	<if test="starttime!=null and endtime!=null">
+	    
+	  and (
+	       (e.starttime>=#{starttime}  and e.endtime <![CDATA[<=]]> #{endtime}) 
+	        or 
+	       (e.starttime<![CDATA[<=]]>#{starttime} and  e.endtime>=  #{endtime})
+	       
+	       )
 	  </if>
    order by e.eventid asc
   </select>

@@ -57,7 +57,7 @@ public class ResAttendances extends ResBase {
 	@Path("/")
 	public String getAttendanceList(String request, @Context HttpServletRequest req,
 			@QueryParam("event_id") Integer eventid, @QueryParam("terminal_id") String terminalid,
-			@QueryParam("room_id") Integer roomid,
+			@QueryParam("room_id") Integer roomid, @QueryParam("org_id") Integer orgid,
 			@QueryParam("start_date") String startDate, @QueryParam("end_date") String endDate) {
 
 		try {
@@ -78,10 +78,13 @@ public class ResAttendances extends ResBase {
 			searchObj.setEventid(eventid);
 			searchObj.setTerminalid(terminalid);
 			searchObj.setRoomid(roomid);
+			searchObj.setOrgid(orgid);
 			searchObj.setStarttime(wrapStartDate);
 			searchObj.setEndtime(wrapEndDate);
-			Event event = this.eventMapper.selectByPrimaryKey(eventid);
-			searchObj.setOrgid(event.getOrgid());
+			if (eventid != null) {
+				Event event = this.eventMapper.selectByPrimaryKey(eventid);
+				searchObj.setOrgid(event.getOrgid());
+			}
 			List<Attendancelog> attendancelogs = this.attendancelogMapper.selectList(searchObj);
 			JSONArray dataArr = new JSONArray();
 			Config config = configMapper.selectByCode("ServerIP");

@@ -31,6 +31,7 @@ public class Person {
 
     private String rfid;
 
+    private String voiceprompt;
     private Integer orgid;
 
     private Date createtime;
@@ -155,6 +156,12 @@ public class Person {
         this.rfid = rfid == null ? null : rfid.trim();
     }
 
+    public String getVoiceprompt() {
+        return voiceprompt;
+    }
+    public void setVoiceprompt(String voiceprompt) {
+        this.voiceprompt = voiceprompt == null ? null : voiceprompt.trim();
+    }
     public Integer getOrgid() {
         return orgid;
     }

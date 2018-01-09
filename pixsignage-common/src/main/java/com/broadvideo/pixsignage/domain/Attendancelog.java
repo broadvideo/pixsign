@@ -36,6 +36,7 @@ public class Attendancelog {
 	private Date starttime;
 	private Date endtime;
 	private Person person;
+	private String search;
 
     public Integer getAttendancelogid() {
         return attendancelogid;
@@ -164,6 +165,7 @@ public class Attendancelog {
 		this.starttime = starttime;
 	}
 
+
 	@Transient
 	public Date getEndtime() {
 		return endtime;
@@ -180,6 +182,15 @@ public class Attendancelog {
 
 	public void setPerson(Person person) {
 		this.person = person;
+	}
+
+	@Transient
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
 	}
 
 }

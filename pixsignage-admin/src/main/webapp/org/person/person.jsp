@@ -73,12 +73,22 @@
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i>
-												<textarea class="form-control" rows="3" name="person.address"></textarea> 
+												<textarea class="form-control" rows="2" name="person.address"></textarea> 
 											</div>
 										</div>
 									</div>
+								   <div class="form-group">
+										<label class="col-md-3 control-label">语音提示语</label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i>
+												<textarea class="form-control" rows="2" name="person.voiceprompt"></textarea> 
+											</div>
+										</div>
+									</div>
+									
 									<div class="form-group">
-									 <label class="col-md-3 control-label">头像</label>
+									 <label class="col-md-3 control-label">头像<span class="required">*</span></label>
 
 									  <div class="col-md-9">
 									       <input type="file" id="avatarfile" name="avatarfile"  class="filestyle" data-buttonName="btn-primary" data-buttonText="上传" data-icon="false" data-badge="false" data-input="false" onchange="preview(this,'preview')"/>
@@ -94,7 +104,7 @@
 									 
 									 </div>
 									 <div class="form-group">
-									 <label class="col-md-3 control-label">识别图片</label>
+									 <label class="col-md-3 control-label">识别图片<span class="required">*</span></label>
 									  <div class="col-md-9">
 									        <input type="file" id="imagefile" name="imagefile"  class="filestyle" data-buttonName="btn-primary" data-buttonText="上传" data-icon="false" data-badge="false" data-input="false" onchange="preview(this,'preview2')"/>
 							          </div>
