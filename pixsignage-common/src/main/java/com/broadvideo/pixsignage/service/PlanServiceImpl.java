@@ -136,7 +136,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String planid) throws Exception {
+	public void syncPlan(String planid) {
 		Plan plan = planMapper.selectByPrimaryKey(planid);
 		if (plan != null) {
 			List<Planbind> planbinds = plan.getPlanbinds();
@@ -147,7 +147,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String bindtype, String bindid) throws Exception {
+	public void syncPlan(String bindtype, String bindid) {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
 			if (device.getOnlineflag().equals(Device.Online)) {
@@ -180,7 +180,18 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByPage(String pageid) throws Exception {
+	public void syncPlan2All(String orgid) {
+		List<Device> devices = deviceMapper.selectList(orgid, null, null, "1", "1", null, null, null, null, null, null,
+				null, null);
+		for (Device device : devices) {
+			if (device.getOnlineflag().equals(Device.Online)) {
+				generateSyncEvent(device.getDeviceid());
+			}
+		}
+	}
+
+	@Transactional
+	public void syncPlanByPage(String pageid) {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
@@ -188,7 +199,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByMediagrid(String mediagridid) throws Exception {
+	public void syncPlanByMediagrid(String mediagridid) {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Mediagrid, mediagridid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());

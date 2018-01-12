@@ -106,14 +106,17 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		}
 
 		for (Privilege privilege : privilegeList) {
-			privilege.setName(messageSource.getMessage(privilege.getName(), null, LocaleContextHolder.getLocale()));
+			String name = messageSource.getMessage(privilege.getName(), null, privilege.getName(),
+					LocaleContextHolder.getLocale());
+			privilege.setName(name);
 			buildOrgTree(org, privilege.getChildren());
 		}
 	}
 
 	private void buildTree(List<Privilege> privilegeList) {
 		for (Privilege privilege : privilegeList) {
-			privilege.setName(messageSource.getMessage(privilege.getName(), null, LocaleContextHolder.getLocale()));
+			privilege.setName(messageSource.getMessage(privilege.getName(), null, privilege.getName(),
+					LocaleContextHolder.getLocale()));
 			buildTree(privilege.getChildren());
 		}
 	}

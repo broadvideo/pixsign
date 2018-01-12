@@ -126,6 +126,14 @@ var PixPage = function () {
 		if (PixPage.mode != 'preview' && Page.homeflag == 0 && Page.homeidletime > 0) {
 			checkidle();
 		}
+
+		$(window).resize(function(e) {
+			PixPage.resize();
+		});
+		
+		$('body').on('click', function(event) {
+			idletimestamp = new Date().getTime();
+		});
 	};
 
 	var resize = function () {

@@ -12,7 +12,6 @@
 		<fileSet>
 			<directory>${project.parent.basedir}/pixsignage-page</directory>
 			<outputDirectory>.</outputDirectory>
-			<lineEnding>unix</lineEnding>
 			<fileMode>0755</fileMode>
 		</fileSet>
 	</fileSets>

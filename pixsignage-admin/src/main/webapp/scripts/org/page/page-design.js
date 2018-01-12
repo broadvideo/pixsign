@@ -187,12 +187,12 @@ var PageDesignModule = function (mode) {
 				var p_element = document.createElement('p');
 				p_element.className = 'clstextedit';
 				$(inner_div).append(p_element);
-			} else if (pagezone.type == 11 || pagezone.type == 12 || pagezone.type == 31) {
-				//CalendarZone & MeetingZone
+			} else if (pagezone.type == 11 || pagezone.type == 12) {
+				//CalendarZone
 				var table = document.createElement('table');
 				$(inner_div).append(table);
-			} else if (pagezone.type == 21) {
-				//Diy Zone
+			} else if (pagezone.type == 21 || pagezone.type == 31) {
+				//Diy Zone & MeetingZone
 				var img_element = document.createElement('img');
 				$(inner_div).append(img_element);
 			} else {
@@ -403,7 +403,7 @@ var PageDesignModule = function (mode) {
 					text_val = text_val.replace(/&nbsp;/g, ' ');
 				}
 				$(pagezoneDiv).find('p').html(text_val);
-			} else if (pagezone.type == 11 || pagezone.type == 12 || pagezone.type == 31) {
+			} else if (pagezone.type == 11 || pagezone.type == 12) {
 				var table = $(pagezoneDiv).find('table');
 				$(table).attr('width', '100%');
 				$(table).attr('height', '100%');
@@ -448,23 +448,6 @@ var PageDesignModule = function (mode) {
 							}
 						}
 					}
-				} else if (pagezone.type == 31) {
-					for (var row=0; row<pagezone.rows; row++) {
-						var tr_element = document.createElement('tr');
-						$(table).append(tr_element);
-						for (var col=0; col<pagezone.cols; col++) {
-							var td_element = document.createElement('td');
-							$(tr_element).append(td_element);
-							if (col == 0 && row < 2) {
-								$(td_element).html('0' + (row+8) + ':00');
-							} else if (col == 0 && row >=2) {
-								$(td_element).html('' + (row+8) + ':00');
-							} else {
-								$(td_element).html('' + row + col);
-							}
-						}
-					}
-					$(pagezoneDiv).find('tr td:first').attr('width', '30%');
 				}
 				$(pagezoneDiv).find('td').css({
 					'border-width': Math.ceil(pagezone.rulewidth / PageScale) + 'px', 
@@ -503,6 +486,11 @@ var PageDesignModule = function (mode) {
 					$(pagezoneDiv).find('img').attr('width', '100%');
 					$(pagezoneDiv).find('img').attr('height', '100%');
 				}
+			} else if (pagezone.type == 31) {
+				//Meeting Zone
+				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/meeting/snapshot.jpg');
+				$(pagezoneDiv).find('img').attr('width', '100%');
+				$(pagezoneDiv).find('img').attr('height', '100%');
 			} else {
 				$(pagezoneDiv).find('#rotatable').css({
 					'box-sizing': 'border-box',
@@ -1512,9 +1500,6 @@ var PageDesignModule = function (mode) {
 			} else if (pagezone.type == 12) {
 				pagezone.rows = 9;
 				pagezone.cols = 6;
-			} else if (pagezone.type == 31) {
-				pagezone.rows = 5;
-				pagezone.cols = 3;
 			} else {
 				pagezone.rows = 1;
 				pagezone.cols = 1;

@@ -223,7 +223,11 @@ public class PageAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String pageid = getParameter("pageid");
-			planService.syncPlanByPage(pageid);
+			if (pageid.equals("" + getLoginStaff().getOrg().getDefaultpageid())) {
+				planService.syncPlan2All("" + getLoginStaff().getOrgid());
+			} else {
+				planService.syncPlanByPage(pageid);
+			}
 			logger.info("Page sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
