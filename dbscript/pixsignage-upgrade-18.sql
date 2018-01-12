@@ -119,11 +119,11 @@ CREATE TABLE `roomterminal`(
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 	
 
-INSERT INTO `privilege` VALUES ('31101', '2', '311', 'menu.viproom', '/room/room.jsp', NULL, '1', '0', '0', '2018-01-04 18:20:30');
-INSERT INTO `privilege` VALUES ('31102', '2', '311', 'menu.viplist', '/person/person.jsp', NULL, '1', '0', '1', '2018-01-05 14:55:52');
+INSERT INTO `privilege` VALUES ('31101', '2', '311', 'menu.viproom', 'room/room.jsp', NULL, '1', '0', '0', '2018-01-04 18:20:30');
+INSERT INTO `privilege` VALUES ('31102', '2', '311', 'menu.viplist', 'person/person.jsp', NULL, '1', '0', '1', '2018-01-05 14:55:52');
 INSERT INTO `privilege` VALUES ('311', '2', '0', 'menu.vip', NULL, 'fa-group', '1', '0', '-1', '2018-01-04 18:16:17');
-INSERT INTO `privilege` VALUES ('31103', '2', '311', 'menu.vipevent', '/event/vipevent.jsp', NULL, '1', '0', '2', '2018-01-05 19:17:14');
-INSERT INTO `privilege` VALUES ('31104', '2', '311', 'menu.vipattendance', '/event/vipattendance.jsp', NULL, '1', '0', '3', '2018-01-08 16:28:00');
+INSERT INTO `privilege` VALUES ('31103', '2', '311', 'menu.vipevent', 'event/vipevent.jsp', NULL, '1', '0', '2', '2018-01-05 19:17:14');
+INSERT INTO `privilege` VALUES ('31104', '2', '311', 'menu.vipattendance', 'event/vipattendance.jsp', NULL, '1', '0', '3', '2018-01-08 16:28:00');
 
 
 

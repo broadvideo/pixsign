@@ -33,6 +33,9 @@
 		e.*,r.name as roomname
 	FROM event e left join  room r on (e.roomid=r.roomid and r.status='1')  
 	WHERE  e.orgid = #{orgid} and e.status='1'
+	<if test="roomtype!=null">
+	  and r.type=#{roomtype}
+	</if>
 	<if test="search!=null">
 	     and (e.name like #{search} )
 	</if>

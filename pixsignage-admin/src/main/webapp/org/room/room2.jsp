@@ -19,7 +19,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="menu.viproom"/></h4>
+							<h4 class="modal-title"><spring:message code="menu.room2"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -60,15 +60,15 @@
 				</div>
 			</div>
 			
-			<h3 class="page-title"><spring:message code="menu.viproom"/></h3>
+			<h3 class="page-title"><spring:message code="menu.room2"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.vip"/></a><i class="fa fa-angle-right"></i>
+					<li><a href="#"><spring:message code="menu.staffattendance"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.viproom"/></a>
+					<li><a href="#"><spring:message code="menu.room2"/></a>
 					</li>
 				</ul>
 			</div>
@@ -78,7 +78,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.viproom"/></div>
+							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.room2"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="BranchModule.refresh();" class="reload"></a>
 							</div>
@@ -153,7 +153,7 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init('${locale}');
-	RoomModule.init(1);
+	RoomModule.init(2);
 });
 
 </script>

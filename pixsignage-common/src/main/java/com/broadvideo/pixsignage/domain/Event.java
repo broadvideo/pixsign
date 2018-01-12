@@ -10,6 +10,7 @@ public class Event {
 
     private Integer roomid;
 	private String roomname;
+	private Integer roomtype;
 
     private String name;
 
@@ -163,5 +164,14 @@ public class Event {
 
 	public void setSearch(String search) {
 		this.search = search;
+	}
+
+	@Transient
+	public Integer getRoomtype() {
+		return roomtype;
+	}
+
+	public void setRoomtype(Integer roomtype) {
+		this.roomtype = roomtype;
 	}
 }

@@ -43,11 +43,11 @@ public class PersonAction extends BaseDatatableAction {
 			search = SqlUtil.likeEscapeH(search);
 
 			List<Object> aaData = new ArrayList<Object>();
-			int count = personMapper.selectCount("" + getLoginStaff().getOrgid(), search);
+			int count = personMapper.selectCount("" + getLoginStaff().getOrgid(), search, person.getType());
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
-			List<Person> personList = personMapper
-					.selectList("" + getLoginStaff().getOrgid(), search,
+			List<Person> personList = personMapper.selectList("" + getLoginStaff().getOrgid(), search,
+					person.getType(),
 					start, length);
 			for (int i = 0; i < personList.size(); i++) {
 				aaData.add(personList.get(i));
@@ -68,7 +68,6 @@ public class PersonAction extends BaseDatatableAction {
 			person.setOrgid(getStaffOrgid());
 			person.setCreatestaffid(getLoginStaff().getStaffid());
 			person.setCreatetime(Calendar.getInstance().getTime());
-			person.setType(3);
 			Integer personid = this.personService.addPerson(person, avatarfile, imagefile);
 			return SUCCESS;
 		} catch (Exception ex) {

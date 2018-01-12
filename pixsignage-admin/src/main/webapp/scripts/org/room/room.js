@@ -5,8 +5,13 @@ var RoomModule=function(){
 	var  CurRecordid=null;
 	var  _parentid=-1;
 	var  _parent=null;
+	var  _roomtype=1;
 	
-	var init=function(){
+	var init=function(roomtype){
+		if(roomtype!=null){
+			
+			_roomtype=roomtype;
+		}
 		initRoomTable();
 		initEvent();
 		
@@ -40,7 +45,7 @@ var initEvent=function(){
 						},
 						success : function(data, status) {
 							if (data.errorcode == 0) {
-								refreshMyTable();
+								refresh();
 							} else {
 								bootbox.alert(common.tips.error + data.errormsg);
 							}
@@ -69,7 +74,7 @@ var initEvent=function(){
 					if (data.errorcode == 0) {
 						$('#MyEditModal').modal('hide');
 						bootbox.alert(common.tips.success);
-						refreshMyTable();
+						refresh();
 					} else if(data.errorcode==-3){
 						bootbox.alert("数据校验失败，请按要求填写表单!");
 
@@ -93,7 +98,7 @@ var initEvent=function(){
 		$('body').on('click', '.pix-add', function(event) {
 			refreshForm('MyEditForm');
 			initTerminalList();
-			$('#MyEditForm').attr('action', 'room!add.action');
+			$('#MyEditForm').attr('action', 'room!add.action?room.type='+_roomtype);
 			$('#MyEditModal').modal();
 
 		});			
@@ -129,12 +134,7 @@ var refresh = function () {
 		
 	};
 
-var refreshMyTable=function (){
-		
-		$('#MeetingroomTable').dataTable()._fnAjaxUpdate();
-		
-		
-	};	
+
 	
 
 var initRoomTable = function () {
@@ -165,7 +165,7 @@ var initRoomTable = function () {
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
-				//aoData.push({'name':'locationid','value':_leftparentid });
+			      aoData.push({'name':'room.type','value':_roomtype });
 
 			}
 		});

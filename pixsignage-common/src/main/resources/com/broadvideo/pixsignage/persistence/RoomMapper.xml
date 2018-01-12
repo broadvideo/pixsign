@@ -39,8 +39,10 @@
 	 FROM room
 		 
 	 WHERE  orgid = #{orgid} and status='1' 
-      
-	    order by roomid asc
+	 <if test="type!=null">
+	   and type=#{type}
+	 </if>
+	  order by roomid asc
   </select>
   <select id="selectExists" resultMap="BaseResultMap">
 	    select

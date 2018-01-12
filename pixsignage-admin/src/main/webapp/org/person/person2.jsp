@@ -29,13 +29,20 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="menu.viplist"/></h4>
+							<h4 class="modal-title"><spring:message code="menu.staff2"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST" action="person!avatarupload.action"  ENCTYPE="multipart/form-data">
 								<input type="hidden" name="person.personid"/>
 								<div class="form-body">
-									
+									<div class="form-group">
+										<label class="col-md-3 control-label">工号<span class="required">*</span></label>
+										<div class="col-md-9">
+											<div class="input-icon right">
+												<i class="fa"></i> <input type="text" class="form-control" name="person.personno" />
+											</div>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="col-md-3 control-label">姓名<span class="required">*</span></label>
 										<div class="col-md-9">
@@ -65,15 +72,6 @@
 										<div class="col-md-9">
 											<div class="input-icon right">
 												<i class="fa"></i> <input type="text" class="form-control" name="person.email" />
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-3 control-label">地址</label>
-										<div class="col-md-9">
-											<div class="input-icon right">
-												<i class="fa"></i>
-												<textarea class="form-control" rows="2" name="person.address"></textarea> 
 											</div>
 										</div>
 									</div>
@@ -131,15 +129,15 @@
 				</div>
 			</div>
 			
-			<h3 class="page-title"><spring:message code="menu.vip"/></h3>
+			<h3 class="page-title"><spring:message code="menu.staff2"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.vip"/></a><i class="fa fa-angle-right"></i>
+					<li><a href="#"><spring:message code="menu.staffattendance"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.viplist"/></a>
+					<li><a href="#"><spring:message code="menu.staff2"/></a>
 					</li>
 				</ul>
 			</div>
@@ -148,7 +146,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="menu.viplist"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="menu.staff2"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
 							</div>
@@ -202,7 +200,7 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init('${locale}');
-	PersonModule.init(3);
+	PersonModule.init(2);
 });
 
 </script>

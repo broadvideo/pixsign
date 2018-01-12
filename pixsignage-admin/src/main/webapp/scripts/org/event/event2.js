@@ -14,7 +14,7 @@ $('#MyTable').dataTable({
 	'bServerSide' : true,
 	'sAjaxSource' : 'event!list.action',
 	'aoColumns' : [ {'sTitle' : '事件名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
-	                {'sTitle' : 'VIP室', 'mData' : 'roomname', 'bSortable' : false, 'sWidth' : '15%' },
+	                {'sTitle' : '考勤位置', 'mData' : 'roomname', 'bSortable' : false, 'sWidth' : '15%' },
 					{'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '15%' },
 					{'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '20%' },
 					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '8%' },
@@ -51,9 +51,9 @@ $('#MyTable').dataTable({
 		return nRow;
 	},
 	'fnServerParams': function(aoData) { 
-		
-		aoData.push({'name':'event.roomtype','value':1 });
 	
+		aoData.push({'name':'event.roomtype','value':2 });
+
 	}
 });
 
@@ -220,7 +220,7 @@ $('body').on('click', '.pix-update', function(event) {
 
 $.ajax({
 	type : 'GET',
-	url : 'room!list.action?room.type=1',
+	url : 'room!list.action?room.type=2',
 	data : {"iDisplayStart" :0,"iDisplayLength" :999},
 	dataType: 'json',
 	success : function(data, status) {

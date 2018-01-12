@@ -37,8 +37,10 @@
   </select>
     <select id="selectCount" resultType="Integer">
     select count(1) from person
-    where orgid = #{orgid} and status='1'  and type=3
-   
+    where orgid = #{orgid} and status='1'
+     <if test="type!=null">
+      and type=#{type}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -48,7 +50,10 @@
     select
         <include refid="Base_Column_List" />
     from person 
-    where orgid = #{orgid} and status='1'  and type=3
+    where orgid = #{orgid} and status='1'
+    <if test="type!=null">
+      and type=#{type}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>

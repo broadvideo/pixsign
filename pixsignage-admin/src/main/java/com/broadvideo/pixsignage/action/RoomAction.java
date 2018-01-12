@@ -52,7 +52,7 @@ public class RoomAction extends BaseDatatableAction {
 			room.setCreatestaffid(getStaffid());
 			room.setCreatetime(new Date());
 			room.setOrgid(getStaffOrgid());
-			room.setType(1);
+
 			roomService.addRoom(room);
 			return SUCCESS;
 		} catch (Exception ex) {

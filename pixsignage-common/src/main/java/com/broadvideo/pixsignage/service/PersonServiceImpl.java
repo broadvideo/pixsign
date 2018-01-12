@@ -36,7 +36,7 @@ public class PersonServiceImpl implements PersonService {
 		if (StringUtils.isNotBlank(person.getPersonno()) || StringUtils.isNotBlank(person.getRfid())) {
 		if (checkExists(null, person.getPersonno(), person.getRfid(), person.getOrgid())) {
 			logger.error("Person(personno={},rfid={}) has exits.", person.getPersonno(), person.getRfid());
-			throw new ServiceException("Person exists.");
+				throw new ServiceException("员工工号已经存在!");
 		}
 		}
 		person.setUuid(UUIDUtils.generateUUID());

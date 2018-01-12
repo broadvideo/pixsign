@@ -16,10 +16,11 @@ public interface PersonMapper {
     Person selectByPrimaryKey(Integer personid);
 
 	int selectCount(@Param(value = "orgid") String orgid,
-			@Param(value = "search") String search);
+			@Param(value = "search") String search,@Param("type") Integer type);
 
 	List<Person> selectList(@Param(value = "orgid") String orgid,
-			@Param(value = "search") String search, @Param(value = "start") String start,
+ @Param(value = "search") String search,
+			@Param("type") Integer type, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
 	List<Person> selectChangePersons(@Param(value = "orgid") Integer orgid, @Param("lastupdatetime") Date lastupdatetime);
