@@ -180,6 +180,7 @@
 	   from meeting m
 	   where m.auditstatus in('1','9')
 	       and status = '1' and starttime>=#{startdate} and endtime <![CDATA[<]]> #{enddate}
+	       and orgid=#{orgid}
 	   group by meetingroomid
 	   order by book_times desc
 	   limit #{length} ) t

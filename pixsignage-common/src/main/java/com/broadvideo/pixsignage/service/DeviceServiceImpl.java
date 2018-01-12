@@ -366,4 +366,12 @@ public class DeviceServiceImpl implements DeviceService {
 		ActiveMQUtil.publish(topic, msgJson.toString());
 	}
 
+	@Override
+	@Transactional
+	public void resetExternalid(String externalid) {
+
+		this.deviceMapper.resetExternalid(externalid);
+
+	}
+
 }

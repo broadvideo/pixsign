@@ -55,6 +55,9 @@ public abstract class ResBase {
 		return responseJson.toString();
 	}
 
+	protected String getImageUrl(String serverIP, String imgpath) {
+		return "http://" + serverIP + "/pixsigdata" + imgpath;
+	}
 
 
 }

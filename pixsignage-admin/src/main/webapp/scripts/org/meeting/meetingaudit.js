@@ -5,7 +5,23 @@ var _leftparent=null;
 var _branchparentid=null;
 var  _searchParams=[];
 var classlist=[];
-classlist.push({id:1,text: '通过'},{id:2,text:'拒绝'});
+classlist.push({id:'1',text: '通过'},{id:'2',text:'拒绝'});
+
+function getAuditstatusname(auditstatus){
+
+	for(var key in classlist){
+		
+		if(classlist[key].id==auditstatus){
+			
+			return classlist[key].text;
+		}
+		
+		
+		
+	}
+	
+	
+}
 
 var MeetingRoomModule=function(){
 	
@@ -99,13 +115,16 @@ $('body').on('click', '.pix-meetingdtl', function(event) {
 			}
 			CurRecord = $('#MeetingroomTable').dataTable().fnGetData(index);
 			CurRecordid=CurRecord.meetingid
-			$('#AttendeeTable').dataTable()._fnAjaxUpdate();
+			//$('#AttendeeTable').dataTable()._fnAjaxUpdate();
 	
 			var formdata = new Object();
 			for (var name in CurRecord) {
 				if(name=="starttime" || name=="endtime"){
 				   formdata['meeting.' + name] = moment(CurRecord[name]).format('YYYY-MM-DD HH:mm');
 	
+				}else if(name=='auditstatus'){
+					formdata['meeting.auditstatusname']=getAuditstatusname(CurRecord[name]);
+					
 				}else{
 			       formdata['meeting.' + name] = CurRecord[name];
 				}
@@ -122,7 +141,6 @@ $('body').on('click', '.pix-meetingdtl', function(event) {
 			index = $(event.target).parent().attr('data-id');
 		}
 		CurRecord = $('#MeetingroomTable').dataTable().fnGetData(index);
-		alert(JSON.stringify(CurRecord));
 
 		CurRecordid=CurRecord.meetingid
 		$("#ClassSelect3").select2('val','');
@@ -138,7 +156,6 @@ $('body').on('click', '.pix-meetingdtl', function(event) {
 		       formdata['meeting.' + name] = CurRecord[name];
 			
 		}
-		alert(CurRecord.auditstatus);
 
         refreshForm('MeetingAuditForm');
     	$('#MeetingAuditForm').loadJSON(formdata);
@@ -257,7 +274,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 			$('td:eq(6)', nRow).html(function(){
 				var buttonhtml = '';
 				buttonhtml += '<div class="util-btn-margin-bottom-5">';
-				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 明细</a>';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 详情</a>';
 				if(aData.auditstatus=='0'){
 				    buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-audit"><i class="fa fa-edit"></i>审核</a>';
 			     }
@@ -292,7 +309,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 
 MeetingRoomModule.prototype.init=function(){
 	this.initMeetingroomTable();
-	this.initAttendeeTable();
+//	this.initAttendeeTable();
 	this.initEvent();
 
 	

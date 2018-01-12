@@ -37,4 +37,5 @@ public interface MeetingroomMapper {
 	List<Map<String, Object>> selectHottestMeetingrooms(@Param("startdate") Date startDate,
 			@Param("enddate") Date endDate, @Param("length") Integer length, @Param("orgid") Integer orgid);
 
+
 }

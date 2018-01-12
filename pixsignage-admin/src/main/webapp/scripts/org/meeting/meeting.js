@@ -319,7 +319,7 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 		    $('td:eq(4)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
 			var buttonhtml = '';
 			buttonhtml += '<div class="util-btn-margin-bottom-5">';
-			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 明细</a>';
+			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 详情</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			buttonhtml += '</div>';
 			$('td:eq(7)', nRow).html(buttonhtml);

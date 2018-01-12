@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.RoomMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Room" >
+    <id column="roomid" property="roomid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="seqno" property="seqno" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="source_type" property="source_type" jdbcType="CHAR" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+ 
+   <resultMap id="ExtResultMap" extends="BaseResultMap"  type="com.broadvideo.pixsignage.domain.Room" >
+    <collection property="roomterminals" ofType="com.broadvideo.pixsignage.domain.Roomterminal"
+      column="{roomid=roomid}"  select="com.broadvideo.pixsignage.persistence.RoomterminalMapper.selectByRoomid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    roomid, uuid, seqno, type, name, description, source_type, orgid, createtime, createstaffid, 
+    updatetime, updatestaffid, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from room
+    where roomid = #{roomid,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="ExtResultMap" >
+  
+	 SELECT
+		   <include refid="Base_Column_List" />
+	 FROM room
+		 
+	 WHERE  orgid = #{orgid} and status='1' 
+	 <if test="type!=null">
+	   and type=#{type}
+	 </if>
+	  order by roomid asc
+  </select>
+  <select id="selectExists" resultMap="BaseResultMap">
+	    select
+	         <include refid="Base_Column_List" />
+	    from  room
+	    where orgid=#{orgid} and status='1'
+	      <if test="roomid != null" >
+	            and roomid !=#{roomid}
+	      </if>
+	       <if test="name != null" >
+	           and name=#{name}
+	       </if>
+	 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from room
+    where roomid = #{roomid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Room" >
+    <selectKey resultType="java.lang.Integer" keyProperty="roomid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into room (uuid, seqno, type, 
+      name, description, source_type, 
+      orgid, createtime, createstaffid, 
+      updatetime, updatestaffid, status
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{seqno,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{source_type,jdbcType=CHAR}, 
+      #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Room" >
+    <selectKey resultType="java.lang.Integer" keyProperty="roomid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into room
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="seqno != null" >
+        seqno,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="source_type != null" >
+        source_type,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="seqno != null" >
+        #{seqno,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="source_type != null" >
+        #{source_type,jdbcType=CHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Room" >
+    update room
+    <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="seqno != null" >
+        seqno = #{seqno,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="source_type != null" >
+        source_type = #{source_type,jdbcType=CHAR},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where roomid = #{roomid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Room" >
+    update room
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      seqno = #{seqno,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      source_type = #{source_type,jdbcType=CHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR}
+    where roomid = #{roomid,jdbcType=INTEGER}
+  </update>
+    <update id="updateRoom" parameterType="com.broadvideo.pixsignage.domain.Room" >
+        update room
+    <set >
+   
+      <if test="seqno != null" >
+        seqno = #{seqno,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="source_type != null" >
+        source_type = #{source_type,jdbcType=CHAR},
+      </if>   
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where roomid = #{roomid,jdbcType=INTEGER}  and orgid=#{orgid}
+  </update>
+</mapper>

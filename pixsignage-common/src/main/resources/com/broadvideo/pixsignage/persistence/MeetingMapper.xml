@@ -206,7 +206,7 @@
        and #{signtime}>=  starttime  and  #{signtime}<![CDATA[<]]> endtime  
   
   </select>
-  <select id="countMeetingSumary"  resultType="map">
+  <select id="countMeetingSummary"  resultType="map">
      select
       date_format(starttime,'%Y-%m-%d') as date,count(1) as meetings_total
      from meeting
@@ -220,6 +220,23 @@
      group by date
      order by date asc
   
+  </select>
+  <select id="countMeetings" resultType="int">
+    select count(1)  
+    from meeting 
+    where orgid=#{orgid} and status='1'and auditstatus in ('1','9') 
+    <if test="starttime!=null">
+      and  starttime>=#{starttime}
+    </if>
+    <if test="endtime!=null">
+      and endtime<![CDATA[<]]> #{endtime}
+    </if>
+  </select>
+  <select id="countOngoingMeetings" resultType="int">
+    select count(1)
+    from meeting
+    where orgid=#{orgid} and status='1'and auditstatus in ('1','9') 
+          and starttime<![CDATA[<=]]>now()  and endtime>now()
   </select>
    <select id="countMeetingroomUsage"  resultType="map">
      select

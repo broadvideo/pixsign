@@ -20,20 +20,20 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title">会议审核</h4>
+							<h4 class="modal-title"><spring:message code="menu.meetingaudit"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MeetingAuditForm" class="form-horizontal" method="POST">
 								<input type="hidden" name="meeting.meetingid" value="0" />
 								<div class="form-body">
 									     <div class="form-group">
-											<label class="col-md-3 control-label">审核结果<span class="required">*</span></label>
+											<label class="col-md-3 control-label">审核状态<span class="required">*</span></label>
 											<div class="col-md-9">
 												 <input type="hidden" id="ClassSelect3" class="form-control select2" name="meeting.auditstatus">
 											</div>
 									    </div>
 										<div class="form-group">
-											<label class="col-md-3 control-label">说明</label>
+											<label class="col-md-3 control-label">审核意见</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
 													<textarea class="form-control" rows="3" name="meeting.auditresult"></textarea> 
@@ -58,7 +58,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title"><spring:message code="menu.meeting"/></h4>
+							<h4 class="modal-title"><spring:message code="menu.meetingaudit"/></h4>
 						</div>
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
@@ -131,12 +131,29 @@
 											</div>
 										</div>
 										<div class="form-group">
+											<label class="col-md-3 control-label">审核状态</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.auditstatusname" readonly/>
+
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">审核意见</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <textarea class="form-control" rows="3" name="meeting.auditresult" readonly></textarea> 
+												</div>
+											</div>
+										</div>
+										<div class="form-group" style="display:none;">
 											<label class="col-md-3 control-label">参会人员</label>
 											<div class="col-md-9">
 										
 											</div>
 										</div>
-									<div class="form-group">
+									<div class="form-group"  style="display:none;">
 											<label class="col-md-3 control-label">&nbsp;</label>
 											<div class="col-md-9">
 											   <table id="AttendeeTable" class="table table-striped table-bordered table-hover tree">
@@ -158,7 +175,7 @@
 				</div>
 			</div>
 			
-			<h3 class="page-title"><spring:message code="menu.meeting"/></h3>
+			<h3 class="page-title"><spring:message code="menu.meetingaudit"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
@@ -176,7 +193,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.meeting"/></div>
+							<div class="caption"><i class="fa fa-cogs"></i><spring:message code="menu.meetingaudit"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="BranchModule.refresh();" class="reload"></a>
 							</div>

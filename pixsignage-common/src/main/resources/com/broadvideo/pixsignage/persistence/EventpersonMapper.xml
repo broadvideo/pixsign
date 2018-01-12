@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.EventpersonMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Eventperson" >
+    <id column="eventpersonid" property="eventpersonid" jdbcType="INTEGER" />
+    <result column="eventid" property="eventid" jdbcType="INTEGER" />
+    <result column="personid" property="personid" jdbcType="INTEGER" />
+    <result column="signtype" property="signtype" jdbcType="CHAR" />
+    <result column="signtime" property="signtime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    eventpersonid, eventid, personid, signtype, signtime, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from eventperson
+    where eventpersonid = #{eventpersonid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from eventperson
+    where eventpersonid = #{eventpersonid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Eventperson" >
+    <selectKey resultType="java.lang.Integer" keyProperty="eventpersonid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into eventperson (eventid, personid, signtype, 
+      signtime, createtime)
+    values (#{eventid,jdbcType=INTEGER}, #{personid,jdbcType=INTEGER}, #{signtype,jdbcType=CHAR}, 
+      #{signtime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Eventperson" >
+    <selectKey resultType="java.lang.Integer" keyProperty="eventpersonid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into eventperson
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="eventid != null" >
+        eventid,
+      </if>
+      <if test="personid != null" >
+        personid,
+      </if>
+      <if test="signtype != null" >
+        signtype,
+      </if>
+      <if test="signtime != null" >
+        signtime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="eventid != null" >
+        #{eventid,jdbcType=INTEGER},
+      </if>
+      <if test="personid != null" >
+        #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="signtype != null" >
+        #{signtype,jdbcType=CHAR},
+      </if>
+      <if test="signtime != null" >
+        #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Eventperson" >
+    update eventperson
+    <set >
+      <if test="eventid != null" >
+        eventid = #{eventid,jdbcType=INTEGER},
+      </if>
+      <if test="personid != null" >
+        personid = #{personid,jdbcType=INTEGER},
+      </if>
+      <if test="signtype != null" >
+        signtype = #{signtype,jdbcType=CHAR},
+      </if>
+      <if test="signtime != null" >
+        signtime = #{signtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where eventpersonid = #{eventpersonid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Eventperson" >
+    update eventperson
+    set eventid = #{eventid,jdbcType=INTEGER},
+      personid = #{personid,jdbcType=INTEGER},
+      signtype = #{signtype,jdbcType=CHAR},
+      signtime = #{signtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where eventpersonid = #{eventpersonid,jdbcType=INTEGER}
+  </update>
+</mapper>

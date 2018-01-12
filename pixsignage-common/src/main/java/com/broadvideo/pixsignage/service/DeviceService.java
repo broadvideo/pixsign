@@ -46,4 +46,6 @@ public interface DeviceService {
 			String bgcolor, String opacity) throws Exception;
 
 	public void ucancel(String orgid) throws Exception;
+
+	public void resetExternalid(String externalid);
 }

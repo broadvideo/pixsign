@@ -941,4 +941,7 @@
       cataitemid2 = #{cataitemid2,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
+  <update id="resetExternalid">
+     update device set externalid=null where externalid=#{externalid}
+  </update>
 </mapper>
