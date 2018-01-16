@@ -17,6 +17,10 @@ $.fn.serializeObject = function() {
 var FormHandler = function (form) {
 	this.form = form;
 	var _initdata = form.serializeObject();
+	$(form).find('input[type=checkbox]:not(:checked)').map(
+		function() {
+			_initdata[this.name] = this.value;
+	});
 	
 	this.validateOption = {
 		errorElement : 'span',

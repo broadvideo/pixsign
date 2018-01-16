@@ -26,7 +26,7 @@
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="ostype" property="ostype" jdbcType="CHAR" />
     <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
-    <result column="lontitude" property="lontitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="addr1" property="addr1" jdbcType="VARCHAR" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
     filestatus, status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, type, ostype, 
-    devicegroupid, lontitude, latitude, city, addr1, addr2, externalid, externalname, other, 
+    devicegroupid, longitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, tagflag, temperature,
     downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags, cataitemid1, cataitemid2
@@ -218,7 +218,7 @@
     vname = '',
     vcode = 0,
     mtype = '',
-    lontitude = '',
+    longitude = '',
     latitude = '',
     city = '',
     addr1 = '',
@@ -319,7 +319,7 @@
       onlineflag, testflag, appname, sign, 
       vname, vcode, mtype, 
       type, ostype, devicegroupid, 
-      lontitude, latitude, city, 
+      longitude, latitude, city, 
       addr1, addr2, externalid, 
       externalname, other, 
       createtime, activetime, refreshtime,
@@ -338,7 +338,7 @@
       #{onlineflag,jdbcType=CHAR}, #{testflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
       #{vname,jdbcType=VARCHAR}, #{vcode,jdbcType=INTEGER}, #{mtype,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{ostype,jdbcType=CHAR}, #{devicegroupid,jdbcType=INTEGER}, 
-      #{lontitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{externalid,jdbcType=VARCHAR}, 
       #{externalname,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{activetime,jdbcType=TIMESTAMP}, #{refreshtime,jdbcType=TIMESTAMP},
@@ -426,8 +426,8 @@
       <if test="devicegroupid != null" >
         devicegroupid,
       </if>
-      <if test="lontitude != null" >
-        lontitude,
+      <if test="longitude != null" >
+        longitude,
       </if>
       <if test="latitude != null" >
         latitude,
@@ -599,8 +599,8 @@
       <if test="devicegroupid != null" >
         #{devicegroupid,jdbcType=INTEGER},
       </if>
-      <if test="lontitude != null" >
-        #{lontitude,jdbcType=VARCHAR},
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null" >
         #{latitude,jdbcType=VARCHAR},
@@ -775,8 +775,8 @@
       <if test="devicegroupid != null" >
         devicegroupid = #{devicegroupid,jdbcType=INTEGER},
       </if>
-      <if test="lontitude != null" >
-        lontitude = #{lontitude,jdbcType=VARCHAR},
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=VARCHAR},
@@ -905,7 +905,7 @@
       type = #{type,jdbcType=CHAR},
       ostype = #{ostype,jdbcType=CHAR},
       devicegroupid = #{devicegroupid,jdbcType=INTEGER},
-      lontitude = #{lontitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       addr1 = #{addr1,jdbcType=VARCHAR},

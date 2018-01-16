@@ -40,123 +40,25 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">BUNDLE<span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.bundleflag" value="0"> <spring:message code="global.off"/>
+								<label class="col-md-3 control-label">基本功能</label>
+								<div class="col-md-9 checkbox-list">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.bundleflag" value="1">BUNDLE
 									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.bundleflag" value="1" checked> <spring:message code="global.on"/>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.pageflag" value="0">PAGE
 									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label">PAGE<span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.pageflag" value="0" checked> <spring:message code="global.off"/>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.sscreenflag" value="1"><spring:message code="pixsign.org.sscreenflag"/>
 									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.pageflag" value="1"> <spring:message code="global.on"/>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.mscreenflag" value="0"><spring:message code="pixsign.org.mscreenflag"/>
 									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.mscreenflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.mscreenflag" value="0" checked> <spring:message code="global.off"/>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.reviewflag" value="0"><spring:message code="pixsign.org.reviewflag"/>
 									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.mscreenflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.reviewflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.reviewflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.reviewflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.touchflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.touchflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.touchflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.calendarflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.calendarflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.calendarflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.liftflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.liftflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-										<label class="radio-inline">
-										<input type="radio" name="vsp.liftflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.flowrateflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.flowrateflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.flowrateflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.tagflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.tagflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.tagflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.diyflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.diyflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.diyflag" value="1"> <spring:message code="global.on"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.meetingflag"/><span class="required">*</span></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="vsp.meetingflag" value="0" checked> <spring:message code="global.off"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="vsp.meetingflag" value="1"> <spring:message code="global.on"/>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.touchflag" value="0"><spring:message code="pixsign.org.touchflag"/>
 									</label>
 								</div>
 							</div>
@@ -164,13 +66,48 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.media"/></label>
 								<div class="col-md-9 checkbox-list">
 									<label class="checkbox-inline">
-										<input type="checkbox" name="vsp.streamflag" value="1"><spring:message code="pixsign.stream"/>
+										<input type="checkbox" name="vsp.streamflag" value="0"><spring:message code="pixsign.stream"/>
 									</label>
 									<label class="checkbox-inline">
-										<input type="checkbox" name="vsp.dvbflag" value="1"><spring:message code="pixsign.dvb"/>
+										<input type="checkbox" name="vsp.dvbflag" value="0"><spring:message code="pixsign.dvb"/>
 									</label>
 									<label class="checkbox-inline">
-										<input type="checkbox" name="vsp.videoinflag" value="1"><spring:message code="pixsign.videoin"/>
+										<input type="checkbox" name="vsp.videoinflag" value="0"><spring:message code="pixsign.videoin"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.widgetflag" value="0">Widget
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.rssflag" value="0">RSS
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">业务功能</label>
+								<div class="col-md-9 checkbox-list">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.flowrateflag" value="0"><spring:message code="pixsign.org.flowrateflag"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.schoolflag" value="0"><spring:message code="pixsign.org.schoolflag"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.tagflag" value="0"><spring:message code="pixsign.org.tagflag"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.diyflag" value="0"><spring:message code="pixsign.org.diyflag"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.meetingflag" value="0"><spring:message code="pixsign.org.meetingflag"/>
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.vipflag" value="0">VIP识别
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.estateflag" value="0">地产
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.liftflag" value="0">电梯
 									</label>
 								</div>
 							</div>

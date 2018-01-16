@@ -12,33 +12,7 @@ public class Vsp {
 
 	private String code;
 
-	private String bundleflag;
-
-	private String pageflag;
-
-	private String reviewflag;
-
-	private String touchflag;
-
-	private String liftflag;
-
-	private String calendarflag;
-
-	private String mscreenflag;
-
-	private String flowrateflag;
-
-	private String tagflag;
-
-	private String diyflag;
-
-	private String meetingflag;
-
-	private String streamflag;
-
-	private String dvbflag;
-
-	private String videoinflag;
+	private String feature;
 
 	private Integer maxdevices;
 
@@ -84,116 +58,12 @@ public class Vsp {
 		this.code = code == null ? null : code.trim();
 	}
 
-	public String getBundleflag() {
-		return bundleflag;
+	public String getFeature() {
+		return feature;
 	}
 
-	public void setBundleflag(String bundleflag) {
-		this.bundleflag = bundleflag;
-	}
-
-	public String getPageflag() {
-		return pageflag;
-	}
-
-	public void setPageflag(String pageflag) {
-		this.pageflag = pageflag;
-	}
-
-	public String getReviewflag() {
-		return reviewflag;
-	}
-
-	public void setReviewflag(String reviewflag) {
-		this.reviewflag = reviewflag;
-	}
-
-	public String getTouchflag() {
-		return touchflag;
-	}
-
-	public void setTouchflag(String touchflag) {
-		this.touchflag = touchflag;
-	}
-
-	public String getLiftflag() {
-		return liftflag;
-	}
-
-	public void setLiftflag(String liftflag) {
-		this.liftflag = liftflag;
-	}
-
-	public String getCalendarflag() {
-		return calendarflag;
-	}
-
-	public void setCalendarflag(String calendarflag) {
-		this.calendarflag = calendarflag;
-	}
-
-	public String getMscreenflag() {
-		return mscreenflag;
-	}
-
-	public void setMscreenflag(String mscreenflag) {
-		this.mscreenflag = mscreenflag;
-	}
-
-	public String getFlowrateflag() {
-		return flowrateflag;
-	}
-
-	public void setFlowrateflag(String flowrateflag) {
-		this.flowrateflag = flowrateflag;
-	}
-
-	public String getTagflag() {
-		return tagflag;
-	}
-
-	public void setTagflag(String tagflag) {
-		this.tagflag = tagflag;
-	}
-
-	public String getDiyflag() {
-		return diyflag;
-	}
-
-	public void setDiyflag(String diyflag) {
-		this.diyflag = diyflag;
-	}
-
-	public String getMeetingflag() {
-		return meetingflag;
-	}
-
-	public void setMeetingflag(String meetingflag) {
-		this.meetingflag = meetingflag;
-	}
-
-	public String getStreamflag() {
-		return streamflag;
-	}
-
-	public void setStreamflag(String streamflag) {
-		this.streamflag = streamflag;
-	}
-
-	public String getDvbflag() {
-		return dvbflag;
-	}
-
-	public void setDvbflag(String dvbflag) {
-		this.dvbflag = dvbflag;
-	}
-
-	public String getVideoinflag() {
-		return videoinflag;
-	}
-
-	public void setVideoinflag(String videoinflag) {
-		this.videoinflag = videoinflag;
+	public void setFeature(String feature) {
+		this.feature = feature;
 	}
 
 	public Integer getMaxdevices() {
@@ -268,6 +138,196 @@ public class Vsp {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public String getBundleflag() {
+		int i = 1;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setBundleflag(String flag) {
+		int i = 1;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getPageflag() {
+		int i = 2;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setPageflag(String flag) {
+		int i = 2;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getSscreenflag() {
+		int i = 3;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setSscreenflag(String flag) {
+		int i = 3;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getMscreenflag() {
+		int i = 4;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setMscreenflag(String flag) {
+		int i = 4;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getReviewflag() {
+		int i = 5;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setReviewflag(String flag) {
+		int i = 5;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getTouchflag() {
+		int i = 6;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setTouchflag(String flag) {
+		int i = 6;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getStreamflag() {
+		int i = 7;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setStreamflag(String flag) {
+		int i = 7;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getDvbflag() {
+		int i = 8;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setDvbflag(String flag) {
+		int i = 8;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getVideoinflag() {
+		int i = 9;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setVideoinflag(String flag) {
+		int i = 9;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getWidgetflag() {
+		int i = 10;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setWidgetflag(String flag) {
+		int i = 10;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getRssflag() {
+		int i = 11;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setRssflag(String flag) {
+		int i = 11;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getDiyflag() {
+		int i = 12;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setDiyflag(String flag) {
+		int i = 12;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getFlowrateflag() {
+		int i = 13;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setFlowrateflag(String flag) {
+		int i = 13;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getTagflag() {
+		int i = 14;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setTagflag(String flag) {
+		int i = 14;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getSchoolflag() {
+		int i = 15;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setSchoolflag(String flag) {
+		int i = 15;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getMeetingflag() {
+		int i = 16;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setMeetingflag(String flag) {
+		int i = 16;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getVipflag() {
+		int i = 17;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setVipflag(String flag) {
+		int i = 17;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getEstateflag() {
+		int i = 18;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setEstateflag(String flag) {
+		int i = 18;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getLiftflag() {
+		int i = 19;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setLiftflag(String flag) {
+		int i = 19;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
 	public List<App> getApplist() {

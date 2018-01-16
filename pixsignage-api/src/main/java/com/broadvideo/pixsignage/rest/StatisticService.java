@@ -11,51 +11,48 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.broadvideo.pixsignage.domain.House;
-import com.broadvideo.pixsignage.domain.House;
-import com.broadvideo.pixsignage.persistence.HouseMapper;
+import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Component
 @Produces("application/json;charset=UTF-8")
-@Path("/estate")
-public class EstateService {
+@Path("/stat")
+public class StatisticService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private HouseMapper houseMapper;
+	private DeviceMapper deviceMapper;
 
 	@GET
-	@Path("list")
+	@Path("device_locations")
 	@Produces("application/json;charset=UTF-8")
-	public String list() {
+	public String device_locations() {
 		try {
-			logger.info("Estate list");
-			List<House> houses = houseMapper.selectList(null, null, null);
+			logger.info("Stat devices");
+			List<Device> devices = deviceMapper.selectList(null, null, "1", null, null, null, null, null, null, null,
+					null, null, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			JSONArray housesJson = new JSONArray();
-			for (House house : houses) {
-				JSONObject houseJson = new JSONObject();
-				houseJson.put("house_id", house.getHouseid());
-				houseJson.put("name", house.getName());
-				if (house.getThumbnail() != null) {
-					houseJson.put("thumbnail", "/pixsigdata" + house.getThumbnail());
-				} else {
-					houseJson.put("thumbnail", "/pixsignate/img/house.png");
+			JSONArray locationsJson = new JSONArray();
+			for (Device device : devices) {
+				if (device.getLatitude().length() > 0 && device.getLongitude().length() > 0) {
+					JSONObject locationJson = new JSONObject();
+					locationJson.put("name", device.getName());
+					locationJson.put("count", 1);
+					locationJson.put("longitude", device.getLongitude());
+					locationJson.put("latitude", device.getLatitude());
+					locationsJson.add(locationJson);
 				}
-				houseJson.put("zip", "/pixsigdata" + house.getZip());
-				houseJson.put("checksum", house.getChecksum());
-				housesJson.add(houseJson);
 			}
-			responseJson.put("houses", housesJson);
-			logger.info("Estate list response: {}", responseJson.toString());
+			responseJson.put("locations", locationsJson);
+			logger.info("Stat device_locations response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Estate list exception, ", e);
+			logger.error("Stat device_locations exception, ", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

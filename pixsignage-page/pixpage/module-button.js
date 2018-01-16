@@ -18,6 +18,9 @@ var ButtonZone = function (zonediv, zone) {
 		if (zone.touchtype == 0) {
 			if (PixPage.mode != 'preview') {
 				if (typeof(TeaTableAndroidBridge) == 'undefined') {
+					if (typeof(android) != 'undefined') {
+						android.closeAllAndroidWindow();
+					}
 					a_element.href = 'javascript:history.back(-1)';
 				} else {
 					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
@@ -26,6 +29,9 @@ var ButtonZone = function (zonediv, zone) {
 		} else if (zone.touchtype == 1) {
 			if (PixPage.mode != 'preview') {
 				if (typeof(TeaTableAndroidBridge) == 'undefined') {
+					if (typeof(android) != 'undefined') {
+						android.closeAllAndroidWindow();
+					}
 					a_element.href = 'index.html';
 				} else {
 					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
@@ -33,6 +39,9 @@ var ButtonZone = function (zonediv, zone) {
 			}
 		} else if (zone.touchtype == 2) {
 			if (PixPage.mode != 'preview') {
+				if (typeof(android) != 'undefined') {
+					android.closeAllAndroidWindow();
+				}
 				a_element.href = zone.touchpageid + '.html';
 			}
 		} else if (zone.touchtype == 3) {

@@ -258,8 +258,8 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
 
-			String calendarflag = getLoginStaff().getOrg().getCalendarflag();
-			if (calendarflag.equals("1")) {
+			String schoolflag = getLoginStaff().getOrg().getSchoolflag();
+			if (schoolflag.equals("1")) {
 				// PIX
 				String pixedxip = configMapper.selectValueByCode("ServerIP");
 				String pixedxport = configMapper.selectValueByCode("ServerPort");
@@ -275,7 +275,7 @@ public class DeviceAction extends BaseDatatableAction {
 						aaData.add(room);
 					}
 				}
-			} else if (calendarflag.equals("2")) {
+			} else if (schoolflag.equals("2")) {
 				// JYY
 				String s = EduCloudUtil.getClassList(getLoginStaff().getOrg().getCode());
 				if (s.length() > 0) {

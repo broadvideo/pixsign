@@ -591,9 +591,10 @@ var PageModule = function () {
 						if (_design.Object.limitflag == 0) {
 							$('.limit-1').css('display', '');
 						}
-						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
+						$('.school-ctrl').css('display', SchoolCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
+						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						if (_design.Object.limitflag == 1) {
 							$('.limit-1').css('display', 'none');
 						}

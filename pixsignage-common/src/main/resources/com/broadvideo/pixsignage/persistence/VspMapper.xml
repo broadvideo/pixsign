@@ -5,20 +5,7 @@
     <id column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="bundleflag" property="bundleflag" jdbcType="CHAR" />
-    <result column="pageflag" property="pageflag" jdbcType="CHAR" />
-    <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
-    <result column="touchflag" property="touchflag" jdbcType="CHAR" />
-    <result column="liftflag" property="liftflag" jdbcType="CHAR" />
-    <result column="calendarflag" property="calendarflag" jdbcType="CHAR" />
-    <result column="mscreenflag" property="mscreenflag" jdbcType="CHAR" />
-    <result column="flowrateflag" property="flowrateflag" jdbcType="CHAR" />
-    <result column="tagflag" property="tagflag" jdbcType="CHAR" />
-    <result column="diyflag" property="diyflag" jdbcType="CHAR" />
-    <result column="meetingflag" property="meetingflag" jdbcType="CHAR" />
-    <result column="streamflag" property="streamflag" jdbcType="CHAR" />
-    <result column="dvbflag" property="dvbflag" jdbcType="CHAR" />
-    <result column="videoinflag" property="videoinflag" jdbcType="CHAR" />
+    <result column="feature" property="feature" jdbcType="VARCHAR" />
     <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
     <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
     <result column="currentdevices" property="currentdevices" jdbcType="INTEGER" />
@@ -31,8 +18,7 @@
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vspid, name, code, bundleflag, pageflag, reviewflag, touchflag, liftflag, calendarflag, mscreenflag, 
-    flowrateflag, tagflag, diyflag, meetingflag, streamflag, dvbflag, videoinflag, maxdevices, maxstorage, currentdevices, 
+    vspid, name, code, feature, maxdevices, maxstorage, currentdevices, 
     currentstorage, apps, status, description, createtime, createstaffid
   </sql>
   
@@ -52,12 +38,16 @@
   </select>
 
   <select id="selectByName" resultMap="BaseResultMap">
-    select * from vsp
+    select
+    <include refid="Base_Column_List" />
+    from vsp
     where status='1' and name = #{name} 
   </select>
 
   <select id="selectByCode" resultMap="BaseResultMap" >
-    select * from vsp
+    select
+    <include refid="Base_Column_List" />
+    from vsp
     where status='1' and code = #{code}
   </select>
   
@@ -84,22 +74,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="vspid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vsp (name, code, bundleflag, 
-      pageflag, reviewflag, touchflag, 
-      liftflag, calendarflag, mscreenflag, 
-      flowrateflag, tagflag, diyflag, 
-      meetingflag, streamflag, dvbflag, 
-      videoinflag, maxdevices, maxstorage, 
+    insert into vsp (name, code, feature, 
+      maxdevices, maxstorage, 
       currentdevices, currentstorage, apps, 
       status, description, createtime, 
       createstaffid
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{bundleflag,jdbcType=CHAR}, 
-      #{pageflag,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
-      #{liftflag,jdbcType=CHAR}, #{calendarflag,jdbcType=CHAR}, #{mscreenflag,jdbcType=CHAR}, 
-      #{flowrateflag,jdbcType=CHAR}, #{tagflag,jdbcType=CHAR}, #{diyflag,jdbcType=CHAR}, 
-      #{meetingflag,jdbcType=CHAR}, #{streamflag,jdbcType=CHAR}, #{dvbflag,jdbcType=CHAR}, 
-      #{videoinflag,jdbcType=CHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{feature,jdbcType=VARCHAR}, 
+      #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER}
@@ -117,47 +99,8 @@
       <if test="code != null" >
         code,
       </if>
-      <if test="bundleflag != null" >
-        bundleflag,
-      </if>
-      <if test="pageflag != null" >
-        pageflag,
-      </if>
-      <if test="reviewflag != null" >
-        reviewflag,
-      </if>
-      <if test="touchflag != null" >
-        touchflag,
-      </if>
-      <if test="liftflag != null" >
-        liftflag,
-      </if>
-      <if test="calendarflag != null" >
-        calendarflag,
-      </if>
-      <if test="mscreenflag != null" >
-        mscreenflag,
-      </if>
-      <if test="flowrateflag != null" >
-        flowrateflag,
-      </if>
-      <if test="tagflag != null" >
-        tagflag,
-      </if>
-      <if test="diyflag != null" >
-        diyflag,
-      </if>
-      <if test="meetingflag != null" >
-        meetingflag,
-      </if>
-      <if test="streamflag != null" >
-        streamflag,
-      </if>
-      <if test="dvbflag != null" >
-        dvbflag,
-      </if>
-      <if test="videoinflag != null" >
-        videoinflag,
+      <if test="feature != null" >
+        feature,
       </if>
       <if test="maxdevices != null" >
         maxdevices,
@@ -194,47 +137,8 @@
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
       </if>
-      <if test="bundleflag != null" >
-        #{bundleflag,jdbcType=CHAR},
-      </if>
-      <if test="pageflag != null" >
-        #{pageflag,jdbcType=CHAR},
-      </if>
-      <if test="reviewflag != null" >
-        #{reviewflag,jdbcType=CHAR},
-      </if>
-      <if test="touchflag != null" >
-        #{touchflag,jdbcType=CHAR},
-      </if>
-      <if test="liftflag != null" >
-        #{liftflag,jdbcType=CHAR},
-      </if>
-      <if test="calendarflag != null" >
-        #{calendarflag,jdbcType=CHAR},
-      </if>
-      <if test="mscreenflag != null" >
-        #{mscreenflag,jdbcType=CHAR},
-      </if>
-      <if test="flowrateflag != null" >
-        #{flowrateflag,jdbcType=CHAR},
-      </if>
-      <if test="tagflag != null" >
-        #{tagflag,jdbcType=CHAR},
-      </if>
-      <if test="diyflag != null" >
-        #{diyflag,jdbcType=CHAR},
-      </if>
-      <if test="meetingflag != null" >
-        #{meetingflag,jdbcType=CHAR},
-      </if>
-      <if test="streamflag != null" >
-        #{streamflag,jdbcType=CHAR},
-      </if>
-      <if test="dvbflag != null" >
-        #{dvbflag,jdbcType=CHAR},
-      </if>
-      <if test="videoinflag != null" >
-        #{videoinflag,jdbcType=CHAR},
+      <if test="feature != null" >
+        #{feature,jdbcType=VARCHAR},
       </if>
       <if test="maxdevices != null" >
         #{maxdevices,jdbcType=INTEGER},
@@ -274,47 +178,8 @@
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="bundleflag != null" >
-        bundleflag = #{bundleflag,jdbcType=CHAR},
-      </if>
-      <if test="pageflag != null" >
-        pageflag = #{pageflag,jdbcType=CHAR},
-      </if>
-      <if test="reviewflag != null" >
-        reviewflag = #{reviewflag,jdbcType=CHAR},
-      </if>
-      <if test="touchflag != null" >
-        touchflag = #{touchflag,jdbcType=CHAR},
-      </if>
-      <if test="liftflag != null" >
-        liftflag = #{liftflag,jdbcType=CHAR},
-      </if>
-      <if test="calendarflag != null" >
-        calendarflag = #{calendarflag,jdbcType=CHAR},
-      </if>
-      <if test="mscreenflag != null" >
-        mscreenflag = #{mscreenflag,jdbcType=CHAR},
-      </if>
-      <if test="flowrateflag != null" >
-        flowrateflag = #{flowrateflag,jdbcType=CHAR},
-      </if>
-      <if test="tagflag != null" >
-        tagflag = #{tagflag,jdbcType=CHAR},
-      </if>
-      <if test="diyflag != null" >
-        diyflag = #{diyflag,jdbcType=CHAR},
-      </if>
-      <if test="meetingflag != null" >
-        meetingflag = #{meetingflag,jdbcType=CHAR},
-      </if>
-      <if test="streamflag != null" >
-        streamflag = #{streamflag,jdbcType=CHAR},
-      </if>
-      <if test="dvbflag != null" >
-        dvbflag = #{dvbflag,jdbcType=CHAR},
-      </if>
-      <if test="videoinflag != null" >
-        videoinflag = #{videoinflag,jdbcType=CHAR},
+      <if test="feature != null" >
+        feature = #{feature,jdbcType=VARCHAR},
       </if>
       <if test="maxdevices != null" >
         maxdevices = #{maxdevices,jdbcType=INTEGER},
@@ -350,20 +215,7 @@
     update vsp
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
-      bundleflag = #{bundleflag,jdbcType=CHAR},
-      pageflag = #{pageflag,jdbcType=CHAR},
-      reviewflag = #{reviewflag,jdbcType=CHAR},
-      touchflag = #{touchflag,jdbcType=CHAR},
-      liftflag = #{liftflag,jdbcType=CHAR},
-      calendarflag = #{calendarflag,jdbcType=CHAR},
-      mscreenflag = #{mscreenflag,jdbcType=CHAR},
-      flowrateflag = #{flowrateflag,jdbcType=CHAR},
-      tagflag = #{tagflag,jdbcType=CHAR},
-      diyflag = #{diyflag,jdbcType=CHAR},
-      meetingflag = #{meetingflag,jdbcType=CHAR},
-      streamflag = #{streamflag,jdbcType=CHAR},
-      dvbflag = #{dvbflag,jdbcType=CHAR},
-      videoinflag = #{videoinflag,jdbcType=CHAR},
+      feature = #{feature,jdbcType=VARCHAR},
       maxdevices = #{maxdevices,jdbcType=INTEGER},
       maxstorage = #{maxstorage,jdbcType=BIGINT},
       currentdevices = #{currentdevices,jdbcType=INTEGER},

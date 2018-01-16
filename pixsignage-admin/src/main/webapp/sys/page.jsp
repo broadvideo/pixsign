@@ -242,7 +242,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/vsp/page.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/sys/page.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

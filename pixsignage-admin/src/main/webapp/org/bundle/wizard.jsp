@@ -887,7 +887,7 @@ var myBranchid = <%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF))
 var myUser = '<%=((Staff)session.getAttribute(CommonConstants.SESSION_STAFF)).getLoginname() %>';
 
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
-var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+var SchoolCtrl = <%=(session_org != null && session_org.getSchoolflag().equals("1"))%>;
 var LiftCtrl = <%=(session_org != null && session_org.getLiftflag().equals("1"))%>;
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;

@@ -57,7 +57,7 @@ public class Device {
 
 	private Integer devicegroupid;
 
-	private String lontitude;
+	private String longitude;
 
 	private String latitude;
 
@@ -325,12 +325,12 @@ public class Device {
 		this.devicegroupid = devicegroupid;
 	}
 
-	public String getLontitude() {
-		return lontitude;
+	public String getLongitude() {
+		return longitude;
 	}
 
-	public void setLontitude(String lontitude) {
-		this.lontitude = lontitude == null ? null : lontitude.trim();
+	public void setLongitude(String longitude) {
+		this.longitude = longitude == null ? null : longitude.trim();
 	}
 
 	public String getLatitude() {

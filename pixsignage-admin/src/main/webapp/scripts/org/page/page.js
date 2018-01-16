@@ -69,7 +69,6 @@ var PageModule = function () {
 					if (aData.privilegeflag == 1) {
 						pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
 					}
-					pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				} else {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
@@ -393,9 +392,10 @@ var PageModule = function () {
 						if (_design.Object.limitflag == 0) {
 							$('.limit-1').css('display', '');
 						}
-						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
+						$('.school-ctrl').css('display', SchoolCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
+						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						if (_design.Object.limitflag == 1) {
 							$('.limit-1').css('display', 'none');
 						}

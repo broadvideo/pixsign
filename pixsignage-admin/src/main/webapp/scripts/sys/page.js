@@ -60,7 +60,7 @@ var PageModule = function () {
 				pagehtml += '</div></a>';
 				
 				pagehtml += '<div class="util-btn-margin-bottom-5">';
-				pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
+				pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 				pagehtml += '</div>';
 
 				pagehtml += '</div>';

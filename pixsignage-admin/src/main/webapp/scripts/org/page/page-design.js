@@ -25,6 +25,7 @@ var PageDesignModule = function (mode) {
 		ZoneLimits['15'] = 1;
 		ZoneLimits['21'] = 1;
 		ZoneLimits['31'] = 1;
+		ZoneLimits['41'] = 1;
 		
 		initEvent();
 	};

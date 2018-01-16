@@ -347,9 +347,8 @@ var OrgModule = function () {
 					return {"name": this.name, "value": this.value};
 				}).get()
 			);
-
+			
 			var formData = new FormData();
-			var inputs = $(':input', '#OrgEditForm');
 			$.each(data, function (i, val) {
 				formData.append(val.name, val.value);
 			});
@@ -358,6 +357,18 @@ var OrgModule = function () {
 					formData.append(tag.name, file);
 				});
 			});
+			
+			var feature = $('input[name="org.bundleflag"]').val() + $('input[name="org.pageflag"]').val()
+			+ $('input[name="org.sscreenflag"]').val() + $('input[name="org.mscreenflag"]').val()
+			+ $('input[name="org.reviewflag"]').val() + $('input[name="org.touchflag"]').val()
+			+ $('input[name="org.streamflag"]').val() + $('input[name="org.dvbflag"]').val()
+			+ $('input[name="org.videoinflag"]').val() + $('input[name="org.widgetflag"]').val()
+			+ $('input[name="org.rssflag"]').val() + $('input[name="org.diyflag"]').val()
+			+ $('input[name="org.flowrateflag"]:checked').val() + $('input[name="org.tagflag"]').val()
+			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
+			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
+			+ $('input[name="org.liftflag"]').val() + '000000000000000000000';
+			formData.append('org.feature', feature);
 			
 			$.ajax({
 				type : 'POST',
@@ -401,19 +412,24 @@ var OrgModule = function () {
 			
 			$('.pix-ctrl').css('display', PixCtrl?'':'none');
 			$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
+			$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
+			$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 			$('.page-ctrl').css('display', PageCtrl?'':'none');
 			$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 			$('.touch-ctrl').css('display', TouchCtrl?'':'none');
-			$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
-			$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
-			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
-			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
-			$('.tag-ctrl').css('display', TagCtrl?'':'none');
-			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
-			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
+			$('.widget-ctrl').css('display', WidgetCtrl?'':'none');
+			$('.rss-ctrl').css('display', RssCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
+			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
+			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
+			$('.vip-ctrl').css('display', VipCtrl?'':'none');
+			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
+			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			
 			currentApps = {};
 			refreshAppTreeData(currentAppTreeData);
@@ -444,19 +460,24 @@ var OrgModule = function () {
 			$('#OrgEditForm input[name="org.code"]').attr('readonly','readonly');
 			$('.pix-ctrl').css('display', PixCtrl?'':'none');
 			$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
+			$('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
+			$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
 			$('.page-ctrl').css('display', PageCtrl?'':'none');
 			$('.review-ctrl').css('display', ReviewCtrl?'':'none');
 			$('.touch-ctrl').css('display', TouchCtrl?'':'none');
-			$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
-			$('.mscreen-ctrl').css('display', MscreenCtrl?'':'none');
-			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
-			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
-			$('.tag-ctrl').css('display', TagCtrl?'':'none');
-			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
-			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
 			$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 			$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
 			$('.videoin-ctrl').css('display', VideoinCtrl?'':'none');
+			$('.widget-ctrl').css('display', WidgetCtrl?'':'none');
+			$('.rss-ctrl').css('display', RssCtrl?'':'none');
+			$('.diy-ctrl').css('display', DiyCtrl?'':'none');
+			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
+			$('.tag-ctrl').css('display', TagCtrl?'':'none');
+			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
+			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
+			$('.vip-ctrl').css('display', VipCtrl?'':'none');
+			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
+			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			
 			currentApps = {};
 			if (_org.applist != null) {

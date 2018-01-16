@@ -104,26 +104,29 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="11">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="12">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="14">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl" zonetype="15">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl" zonetype="31">
-								<i class="fa fa-arrows"></i><div>会议日程</div>
+								<i class="fa fa-ge"></i><div>会议日程</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone estate-ctrl" zonetype="41">
+								<i class="fa fa-home"></i><div>地产</div>
 							</a>
 						</div>
 					</div>
@@ -1016,9 +1019,10 @@
 <script src="${base_ctx}/scripts/org/page/page-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
 <script>
-var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
+var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
 var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
+var EstateCtrl = <%=(session_org != null && !session_org.getEstateflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

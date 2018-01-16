@@ -224,6 +224,18 @@ var VspModule = function () {
 				).get()
 			);
 			
+			var feature = $('input[name="vsp.bundleflag"]').val() + $('input[name="vsp.pageflag"]').val()
+			+ $('input[name="vsp.sscreenflag"]').val() + $('input[name="vsp.mscreenflag"]').val()
+			+ $('input[name="vsp.reviewflag"]').val() + $('input[name="vsp.touchflag"]').val()
+			+ $('input[name="vsp.streamflag"]').val() + $('input[name="vsp.dvbflag"]').val()
+			+ $('input[name="vsp.videoinflag"]').val() + $('input[name="vsp.widgetflag"]').val()
+			+ $('input[name="vsp.rssflag"]').val() + $('input[name="vsp.diyflag"]').val()
+			+ $('input[name="vsp.flowrateflag"]').val() + $('input[name="vsp.tagflag"]').val()
+			+ $('input[name="vsp.schoolflag"]').val() + $('input[name="vsp.meetingflag"]').val()
+			+ $('input[name="vsp.vipflag"]').val() + $('input[name="vsp.estateflag"]').val()
+			+ $('input[name="vsp.liftflag"]').val() + '000000000000000000000';
+			data.push({'name': 'vsp.feature', 'value': feature});
+
 			$.ajax({
 				type : 'POST',
 				url : $('#VspEditForm').attr('action'),

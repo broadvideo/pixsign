@@ -40,6 +40,7 @@
 	<script src="/pixsignage-page/pixpage/module-date.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-web.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-button.js" type="text/javascript"></script>
+	<script src="/pixsignage-page/pixpage/module-estate.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-other.js" type="text/javascript"></script>
 
 	<script src="/pixsignage-page/module/common/index.js"></script>

@@ -473,7 +473,7 @@ function initData3() {
 		$('#LayoutCol2').attr('class', 'col-md-7 col-sm-7');
 	}
 	$('.touch-ctrl').css('display', TouchCtrl?'':'none');
-	$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+	$('.calendar-ctrl').css('display', SchoolCtrl?'':'none');
 	$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 	$('.stream-ctrl').css('display', StreamCtrl?'':'none');
 	$('.dvb-ctrl').css('display', DvbCtrl?'':'none');
