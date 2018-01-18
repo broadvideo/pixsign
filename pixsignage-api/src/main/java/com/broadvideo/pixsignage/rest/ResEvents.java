@@ -92,7 +92,16 @@ public class ResEvents extends ResBase {
 			searchEvent.setRoomid(eventRoomid);
 			searchEvent.setStarttime(wrapStartDate);
 			searchEvent.setEndtime(wrapEndDate);
-			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, "0", Integer.MAX_VALUE
+			Integer persontype = null;
+			if (room.getType().intValue() == 1) { // VIP类型
+				persontype = 3;
+			} else if (room.getType().intValue() == 2) {// 考勤类型
+				persontype = 2;
+			} else if (room.getType().intValue() == 4) {// 班牌类型
+				persontype = 1;
+			}
+			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, persontype, "0",
+					Integer.MAX_VALUE
 					+ "");
 			List<Event> eventList = eventMapper.selectList(searchEvent, rowBounds);
 			JSONArray dataArr = new JSONArray();
