@@ -178,11 +178,14 @@ var PixPage = function () {
 	};
 	
 	var checkidle = function() {
+		try {
+			idletimestamp = Math.max(idletimestamp, android.getLastTouchedTime());
+		} catch (e) { }
 		var timestamp = new Date().getTime();
 		if (timestamp - idletimestamp > Page.homeidletime * 1000) {
-			if (typeof(android) != 'undefined') {
+			try {
 				android.closeAllAndroidWindow();
-			}
+			} catch (e) { }
 			window.location.href = 'index.html';
 		}
 		setTimeout(checkidle, 1000); 

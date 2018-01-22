@@ -213,6 +213,89 @@
 		</div>
 	</div>
 
+	<div id="CopyModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-full">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-8">
+		
+							<div class="portlet box blue">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.page"/></div>
+									<ul class="nav nav-tabs" style="margin-left: 10px;">
+										<li id="nav_tab1" class="active">
+											<a href="#PageLibTab" data-toggle="tab"><spring:message code="pixsign.page"/></a>
+										</li>
+										<li id="nav_tab2" class="touch-ctl">
+											<a href="#TouchpageLibTab" data-toggle="tab"><spring:message code="pixsign.touchpage"/></a>
+										</li>
+									</ul>
+								</div>
+								<div class="portlet-body">
+									<div class="tab-content">
+										<div class="tab-pane active" id="PageLibTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<div class="image-ctl">
+														<table id="PageLibTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane touchpage-ctl" id="TouchpageLibTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<div class="video-ctl">
+														<table id="TouchpageLibTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="portlet box green">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-responsive">
+										<table id="PageSelectedTable" class="table table-condensed table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">

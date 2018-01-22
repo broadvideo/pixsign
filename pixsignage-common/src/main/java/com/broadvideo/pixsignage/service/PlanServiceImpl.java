@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -206,7 +208,7 @@ public class PlanServiceImpl implements PlanService {
 		}
 	}
 
-	private JSONArray generateSoloPlanJson(String deviceid) {
+	private JSONArray generateSoloPlanJson(String deviceid) throws Exception {
 		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
@@ -287,6 +289,7 @@ public class PlanServiceImpl implements PlanService {
 						plandtlJson.put("path", "/pixsigdata" + zipPath);
 						plandtlJson.put("file", zipFile.getName());
 						plandtlJson.put("size", FileUtils.sizeOf(zipFile));
+						plandtlJson.put("checksum", DigestUtils.md5Hex(new FileInputStream(zipFile)));
 						if (plandtl.getDuration() > 0) {
 							plandtlJson.put("duration", plandtl.getDuration());
 						}
@@ -548,7 +551,7 @@ public class PlanServiceImpl implements PlanService {
 		return planJsonArray;
 	}
 
-	public JSONObject generatePlanJson(String deviceid) {
+	public JSONObject generatePlanJson(String deviceid) throws Exception {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("plans", generateSoloPlanJson(deviceid));
 		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));

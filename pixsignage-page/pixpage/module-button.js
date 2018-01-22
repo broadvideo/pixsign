@@ -18,9 +18,7 @@ var ButtonZone = function (zonediv, zone) {
 		if (zone.touchtype == 0) {
 			if (PixPage.mode != 'preview') {
 				if (typeof(TeaTableAndroidBridge) == 'undefined') {
-					if (typeof(android) != 'undefined') {
-						android.closeAllAndroidWindow();
-					}
+					closeAllAndroidWindow();
 					a_element.href = 'javascript:history.back(-1)';
 				} else {
 					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
@@ -29,9 +27,7 @@ var ButtonZone = function (zonediv, zone) {
 		} else if (zone.touchtype == 1) {
 			if (PixPage.mode != 'preview') {
 				if (typeof(TeaTableAndroidBridge) == 'undefined') {
-					if (typeof(android) != 'undefined') {
-						android.closeAllAndroidWindow();
-					}
+					closeAllAndroidWindow();
 					a_element.href = 'index.html';
 				} else {
 					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
@@ -39,19 +35,19 @@ var ButtonZone = function (zonediv, zone) {
 			}
 		} else if (zone.touchtype == 2) {
 			if (PixPage.mode != 'preview') {
-				if (typeof(android) != 'undefined') {
-					android.closeAllAndroidWindow();
-				}
+				closeAllAndroidWindow();
 				a_element.href = zone.touchpageid + '.html';
 			}
 		} else if (zone.touchtype == 3) {
-			$(a_element).attr('href', 'javascript:;');
-			$(a_element).attr('diyaction', zone.diyaction.code);
-			$(a_element).click(function(e) {
-				if (PixPage.diymodules.length > 0) {
-					PixPage.diymodules[0].doAction($(a_element).attr('diyaction'));
-				}
-			});
+			if (zone.diyaction != null) {
+				$(a_element).attr('href', 'javascript:;');
+				$(a_element).attr('diyaction', zone.diyaction.code);
+				$(a_element).click(function(e) {
+					if (PixPage.diymodules.length > 0) {
+						PixPage.diymodules[0].doAction($(a_element).attr('diyaction'));
+					}
+				});
+			}
 		}
 		$(zonediv).wrap(a_element);
 		var p_element = document.createElement('p');
@@ -113,6 +109,12 @@ var ButtonZone = function (zonediv, zone) {
 				$('#PagezoneDiv' + zone.pagezoneid).css('-webkit-transform', 'translate3d(' + posX +'px,' + posY + 'px, 0 ) rotate(' + rotation + 'deg)' + ' scale3d(' + scale + ', ' + scale + ', 1 )');
 			});
 		}
+	};
+	
+	var closeAllAndroidWindow = function () {
+		try {
+			android.closeAllAndroidWindow();
+		} catch (e) { }
 	};
 
 	this.resize = function (scalew, scaleh) {

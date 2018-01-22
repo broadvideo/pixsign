@@ -250,7 +250,7 @@ var PageModule = function () {
 			disableImageResize: false,
 			autoUpload: false,
 			disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-			maxFileSize: 20480000,
+			maxFileSize: 204800000,
 			acceptFileTypes: /(\.|\/)(zip|ZIP)$/i,
 			// Uncomment the following to send cross-domain cookies:
 			//xhrFields: {withCredentials: true},				

@@ -192,8 +192,8 @@ var PageDesignModule = function (mode) {
 				//CalendarZone
 				var table = document.createElement('table');
 				$(inner_div).append(table);
-			} else if (pagezone.type == 21 || pagezone.type == 31) {
-				//Diy Zone & MeetingZone
+			} else if (pagezone.type == 21 || pagezone.type == 31 || pagezone.type == 41) {
+				//Diy Zone & MeetingZone & EstateZone
 				var img_element = document.createElement('img');
 				$(inner_div).append(img_element);
 			} else {
@@ -490,6 +490,11 @@ var PageDesignModule = function (mode) {
 			} else if (pagezone.type == 31) {
 				//Meeting Zone
 				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/meeting/snapshot.jpg');
+				$(pagezoneDiv).find('img').attr('width', '100%');
+				$(pagezoneDiv).find('img').attr('height', '100%');
+			} else if (pagezone.type == 41) {
+				//Estate Zone
+				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/estate/snapshot.jpg');
 				$(pagezoneDiv).find('img').attr('width', '100%');
 				$(pagezoneDiv).find('img').attr('height', '100%');
 			} else {

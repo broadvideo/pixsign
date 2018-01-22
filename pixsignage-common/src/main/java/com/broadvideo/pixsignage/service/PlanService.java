@@ -29,7 +29,7 @@ public interface PlanService {
 
 	public void syncPlanByMediagrid(String mediagridid);
 
-	public JSONObject generatePlanJson(String deviceid);
+	public JSONObject generatePlanJson(String deviceid) throws Exception;
 
 	public void upgrade2multiplan();
 }

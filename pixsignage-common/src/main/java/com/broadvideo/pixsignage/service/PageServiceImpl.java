@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -74,13 +75,14 @@ public class PageServiceImpl implements PageService {
 		return pageMapper.selectByUuid(orgid, uuid);
 	}
 
-	public int selectCount(String orgid, String branchid, String touchflag, String homeflag, String search) {
-		return pageMapper.selectCount(orgid, branchid, touchflag, homeflag, search);
+	public int selectCount(String orgid, String branchid, String ratio, String touchflag, String homeflag,
+			String search) {
+		return pageMapper.selectCount(orgid, branchid, ratio, touchflag, homeflag, search);
 	}
 
-	public List<Page> selectList(String orgid, String branchid, String touchflag, String homeflag, String search,
-			String start, String length, Staff staff) {
-		List<Page> pageList = pageMapper.selectList(orgid, branchid, touchflag, homeflag, search, start, length);
+	public List<Page> selectList(String orgid, String branchid, String ratio, String touchflag, String homeflag,
+			String search, String start, String length, Staff staff) {
+		List<Page> pageList = pageMapper.selectList(orgid, branchid, ratio, touchflag, homeflag, search, start, length);
 		for (Page page : pageList) {
 			page.setEditflag("1");
 			if (page.getPrivilegeflag().equals("1") && !staff.getLoginname().equals("admin")
@@ -455,6 +457,56 @@ public class PageServiceImpl implements PageService {
 		pageMapper.updateByPrimaryKeySelective(page);
 	}
 
+	public void copySinglePage(String sourcepageid, String destpageids) throws Exception {
+		String[] destpageidList = destpageids.split(",");
+		Page sourcepage = pageMapper.selectByPrimaryKey(sourcepageid);
+		Vector<Integer> pageidVector = new Vector<Integer>();
+		for (int i = 0; i < destpageidList.length; i++) {
+			logger.info("Copy page from sourcepageid={}, destpageid={}", sourcepageid, destpageidList[i]);
+			Page destpage = pageMapper.selectByPrimaryKey(destpageidList[i]);
+			pageMapper.clearPagezones(destpageidList[i]);
+			destpage.setHomeidletime(sourcepage.getHomeidletime());
+			File fromSnapshotFile = new File(
+					CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + sourcepageid + "/snapshot/" + sourcepageid + ".png");
+			if (fromSnapshotFile.exists()) {
+				String snapshotFilePath = "/page/" + destpageidList[i] + "/snapshot/" + destpageidList[i] + ".png";
+				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				destpage.setSnapshot(snapshotFilePath);
+				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+			}
+			pageMapper.updateByPrimaryKeySelective(destpage);
+			if (destpage.getHomeflag().equals("1")) {
+				if (pageidVector.indexOf(destpage.getPageid()) < 0) {
+					pageidVector.add(destpage.getPageid());
+				}
+			} else {
+				if (pageidVector.indexOf(destpage.getHomepageid()) < 0) {
+					pageidVector.add(destpage.getHomepageid());
+				}
+			}
+
+			for (Pagezone pagezone : sourcepage.getPagezones()) {
+				pagezone.setPageid(destpage.getPageid());
+				pagezone.setHomepageid(destpage.getHomepageid());
+				if (pagezone.getTouchtype().equals("2")) {
+					Page touchPage = pageMapper.selectByPrimaryKey("" + pagezone.getTouchpageid());
+					if (touchPage == null || touchPage.getHomepageid().intValue() != destpage.getHomepageid()) {
+						pagezone.setTouchtype("9");
+						pagezone.setTouchpageid(0);
+					}
+				}
+				pagezoneMapper.insertSelective(pagezone);
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+					pagezonedtlMapper.insertSelective(pagezonedtl);
+				}
+			}
+		}
+		for (int pageid : pageidVector) {
+			makeHtmlZip("" + pageid);
+		}
+	}
+
 	public void makeHtmlZip(String pageid) throws Exception {
 		if (CONFIG_FONTS.size() == 0) {
 			Properties properties = new Properties();
@@ -470,6 +522,7 @@ public class PageServiceImpl implements PageService {
 			is.close();
 		}
 
+		logger.info("Making page zip pageid={}", pageid);
 		ArrayList<Page> pageList = new ArrayList<Page>();
 		ArrayList<String> fontList = new ArrayList<String>();
 		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
@@ -651,6 +704,7 @@ public class PageServiceImpl implements PageService {
 		Page oldPage = pageMapper.selectByUuid("" + orgid, page.getUuid());
 		if (oldPage != null) {
 			pageMapper.clearSubpages("" + oldPage.getPageid());
+			pageMapper.clearPagezones("" + oldPage.getPageid());
 			page.setPageid(oldPage.getPageid());
 			pageMapper.updateByPrimaryKeySelective(page);
 		} else {

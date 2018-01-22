@@ -322,6 +322,13 @@ var PagePreviewModule = function () {
 				$(zone_div).find('img').attr('src', '/pixsignage-page/module/meeting/snapshot.jpg');
 				$(zone_div).find('img').attr('width', '100%');
 				$(zone_div).find('img').attr('height', '100%');
+			} else if (zone.type == '41') {
+				//Estate Zone
+				var img_element = document.createElement('img');
+				$(inner_div).append(img_element);
+				$(zone_div).find('img').attr('src', '/pixsignage-page/module/estate/snapshot.jpg');
+				$(zone_div).find('img').attr('width', '100%');
+				$(zone_div).find('img').attr('height', '100%');
 			} else {
 				var p_element = document.createElement('p');
 				$(p_element).html(eval('common.view.pagezone_type_' + zone.type));

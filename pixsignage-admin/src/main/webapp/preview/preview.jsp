@@ -40,7 +40,6 @@
 	<script src="/pixsignage-page/pixpage/module-date.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-web.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-button.js" type="text/javascript"></script>
-	<script src="/pixsignage-page/pixpage/module-estate.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-other.js" type="text/javascript"></script>
 
 	<script src="/pixsignage-page/module/common/index.js"></script>
@@ -51,6 +50,7 @@
 	<script src="/pixsignage-page/module/exam-notice/index.js"></script>
 	<script src="/pixsignage-page/module/an-capacity/an-capacity.js"></script>
 	<script src="/pixsignage-page/module/meeting/index.js"></script>
+	<script src="/pixsignage-page/module/estate/index.js"></script>
 
 <%
 	String content = new String(request.getParameter("content").getBytes("ISO-8859-1"), "UTF-8");

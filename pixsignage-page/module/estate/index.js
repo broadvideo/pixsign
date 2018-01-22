@@ -5,13 +5,13 @@ var Estate = function (zonediv, zone, scalew, scaleh) {
 	this.scaleh = scaleh;
 
 	var init = function () {
-		if (typeof(android) != 'undefined') {
-			var left = parseInt(zone.leftoffset)/scalew;
-			var top = parseInt(zone.topoffset)/scaleh;
-			var width = parseInt(zone.width)/scalew;
-			var height = parseInt(zone.height)/scaleh;
+		var left = parseInt(zone.leftoffset)/scalew;
+		var top = parseInt(zone.topoffset)/scaleh;
+		var width = parseInt(zone.width)/scalew;
+		var height = parseInt(zone.height)/scaleh;
+		try {
 			android.openAndroidWindow(left, top, width, height, 'estate', '');
-		}
+		} catch (e) { }
 	};
 
 	this.resize = function (scalew, scaleh) {
