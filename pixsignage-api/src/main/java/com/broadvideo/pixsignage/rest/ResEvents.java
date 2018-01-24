@@ -60,6 +60,41 @@ public class ResEvents extends ResBase {
 	private DeviceService deviceService;
 
 	@GET
+	@Path("/org_events")
+	public String getOrgEventList(String request, @Context HttpServletRequest req,
+			@QueryParam("org_id") Integer orgid) {
+
+		try {
+			logger.info("getOrgEventList for org_id:{}", orgid);
+			RowBounds rowBounds = new RowBounds(0, Integer.MAX_VALUE);
+			Integer roomType = 2;
+			Event searchEvent = new Event();
+			searchEvent.setOrgid(orgid);
+			searchEvent.setRoomtype(roomType);
+			List<Event> eventList = eventMapper.selectList(searchEvent, rowBounds);
+			JSONArray dataArr = new JSONArray();
+			for (Event event : eventList) {
+				JSONObject json = new JSONObject();
+				json.put("event_id", event.getEventid());
+				json.put("name", event.getName());
+				json.put("room_id", event.getRoomid());
+				json.put("room_name", event.getRoomname());
+				json.put("start_time", DateUtil.getDateStr(event.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
+				json.put("end_time", DateUtil.getDateStr(event.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
+				json.put("person_ids", new JSONArray());
+				dataArr.put(json);
+			}
+
+			return this.handleResult(RetCodeEnum.SUCCESS, "success", dataArr);
+		} catch (Exception e) {
+
+			logger.error("getOrgEventList exception.", e);
+			return this.handleResult(ApiRetCodeEnum.EXCEPTION, e.getMessage());
+		}
+
+	}
+
+	@GET
 	@Path("/")
 	public String getEventList(String request, @Context HttpServletRequest req,
 			@QueryParam("terminal_id") String terminalid, @QueryParam("room_id") Integer roomid,

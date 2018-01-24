@@ -22,7 +22,6 @@ public interface PersonMapper {
  @Param(value = "search") String search,
 			@Param("type") Integer type, @Param(value = "start") String start,
 			@Param(value = "length") String length);
-
 	List<Person> selectChangePersons(@Param(value = "orgid") Integer orgid, @Param("lastupdatetime") Date lastupdatetime);
 
 	int countBy(@Param("excludeid") Integer excludeId, @Param("personno") String personno, @Param("rfid") String rfid,

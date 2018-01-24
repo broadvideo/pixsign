@@ -40,6 +40,9 @@
      <if test="roomid!=null">
       and roomid=#{roomid}
      </if>
+     <if test="personid!=null">
+       and personid=#{personid}
+     </if>
      <if test="terminalid!=null">
       and terminalid=#{terminalid}
      </if>

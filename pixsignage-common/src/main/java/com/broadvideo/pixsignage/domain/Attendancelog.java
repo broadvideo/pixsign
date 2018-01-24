@@ -1,7 +1,9 @@
 package com.broadvideo.pixsignage.domain;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Attendancelog {
     private Integer attendancelogid;
@@ -37,6 +39,7 @@ public class Attendancelog {
 	private Date endtime;
 	private Person person;
 	private String search;
+	private List<Date> signtimes = new ArrayList<Date>();
 
     public Integer getAttendancelogid() {
         return attendancelogid;
@@ -191,6 +194,15 @@ public class Attendancelog {
 
 	public void setSearch(String search) {
 		this.search = search;
+	}
+
+	@Transient
+	public List<Date> getSigntimes() {
+		return signtimes;
+	}
+
+	public void setSigntimes(List<Date> signtimes) {
+		this.signtimes = signtimes;
 	}
 
 }

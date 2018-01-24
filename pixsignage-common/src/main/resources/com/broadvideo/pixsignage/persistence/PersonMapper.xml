@@ -93,6 +93,7 @@
    
    
    </select>
+
   <delete id="deleteByPrimaryKey" >
     delete from person
     where personid = #{personid,jdbcType=INTEGER} and orgid=#{orgid}
