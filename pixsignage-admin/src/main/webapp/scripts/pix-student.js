@@ -169,7 +169,8 @@ $('body').on('click', '.pix-update', function(event) {
 	//初始化图片
 	$('#preview').html("");
 	if(formdata['student.avatar']!=null){
-		$('#preview').append('<img src="/pixsigdata' + formdata['student.avatar'] + '" width="120px" height="120px"/>');
+		
+        $('#preview').append('<img src="/pixsigdata' + formdata['student.avatar'] + '?ts='+Date.now()+'"  width="120px" height="120px"/>');
     }
 	$('#MyEditModal').modal();
 	$("#ClassSelect").select2('val',item.schoolclassid);

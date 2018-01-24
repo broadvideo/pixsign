@@ -284,10 +284,11 @@ function initEvent(){
 			$('#preview2').html("");
 		
 			if(formdata['person.avatar']!=null){
-				$('#preview').append('<img src="/pixsigdata' + formdata['person.avatar'] + '" width="120px" height="120px"/>');
+				$('#preview').append('<img src="/pixsigdata' + formdata['person.avatar'] +  '?ts='+Date.now()+'"  width="120px" height="120px"/>');
+
 		    }
 			if(formdata['person.imageurl']!=null){
-				$('#preview2').append('<img src="/pixsigdata' + formdata['person.imageurl'] + '" width="120px" height="120px"/>');
+				$('#preview2').append('<img src="/pixsigdata' + formdata['person.imageurl'] +  '?ts='+Date.now()+'"  width="120px" height="120px"/>');
 		    }
 			$('#MyEditModal').modal();
 			$("#ClassSelect").select2('val',item.sex);
