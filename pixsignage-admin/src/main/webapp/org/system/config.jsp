@@ -126,7 +126,7 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/system/config.js?t=${timestamp}"></script>
 <script>
-var CalendarCtrl = <%=(session_org != null && session_org.getCalendarflag().equals("1"))%>;
+var SchoolCtrl = <%=(session_org != null && session_org.getSchoolflag().equals("1"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

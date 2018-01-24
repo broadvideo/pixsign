@@ -89,6 +89,10 @@ var PixPage = function () {
 				//Meeting Zone
 				var meeting = new Meeting($(inner_div), zone, scalew, scaleh);
 				allmodules.push(meeting);
+			} else if (zone.type == '41') {
+				//Estate Zone
+				var estate = new Estate($(inner_div), zone, scalew, scaleh);
+				allmodules.push(estate);
 			} else {
 				var otherzone = new OtherZone($(inner_div), zone);
 				allmodules.push(otherzone);
@@ -126,6 +130,14 @@ var PixPage = function () {
 		if (PixPage.mode != 'preview' && Page.homeflag == 0 && Page.homeidletime > 0) {
 			checkidle();
 		}
+
+		$(window).resize(function(e) {
+			PixPage.resize();
+		});
+		
+		$('body').on('click', function(event) {
+			idletimestamp = new Date().getTime();
+		});
 	};
 
 	var resize = function () {
@@ -166,8 +178,14 @@ var PixPage = function () {
 	};
 	
 	var checkidle = function() {
+		try {
+			idletimestamp = Math.max(idletimestamp, android.getLastTouchedTime());
+		} catch (e) { }
 		var timestamp = new Date().getTime();
 		if (timestamp - idletimestamp > Page.homeidletime * 1000) {
+			try {
+				android.closeAllAndroidWindow();
+			} catch (e) { }
 			window.location.href = 'index.html';
 		}
 		setTimeout(checkidle, 1000); 

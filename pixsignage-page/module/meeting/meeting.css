@@ -1,289 +1,267 @@
-.room-name > p {
+/*room name*/
+.meeting3 .room-name {
     position: absolute;
-    left: 210px;
+    left: 213px;
     top: 54px;
     margin: 0;
-    font-size: 60px;
-    color: #E4A111;
+    font-size: 80px;
+    font-weight: bold;
+    color: rgb(255,147,1);
 }
-
-.current-time > p {
+/*time*/
+.meeting3 .today .current-time {
     position: absolute;
-    left: 600px;
-    top: 20px;
+    left: 835px;
+    top: 54px;
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 40px;
-    color: white;
+    font-size: 80px;
+    line-height: 80px;
+    color: rgb(255,147,1);
+}
+.meeting3 .week .current-time {
+    position: absolute;
+    left: 835px;
+    top: 89px;
+    margin: 0;
+    font-size: 80px;
+    line-height: 80px;
+    color: rgb(255,147,1);
 }
 
-.today, .week {
+/*切换星期视图*/
+.meeting3 .week-btn {
+    position: absolute;
+    left: 705px;
+    top: 1790px;
+    width: 300px;
+    height: 60px;
+    margin: 0;
+}
+
+/*切换今天视图*/
+.meeting3 .today-btn {
+    position: absolute;
+    left: 900px;
+    top: 20px;
+    width: 150px;
+    height: 60px;
+    margin: 0;
+}
+
+
+/*layout*/
+.meeting3 .today, .meeting3 .week {
     /*background-image: url("./module/meeting/background.png");*/
     /*background-image: url("./background.png");*/
     position: absolute;
     margin: 0;
     left: 0;
     top: 0;
-    width: 1080px;
-    height: 1920px;
+    width: 1080px !important;
+    height: 1920px !important;
     font-family: SimHei,SimSun,Arial,sans-serif;
 }
 
-.today .meeting-details {
+.meeting3 .today {
+    background-image: url("./today-bg2.png");
+}
+
+.meeting3 .today.current {
+    background-image: url("./today-bg1.png");
+}
+
+.meeting3 .week {
+    background-image: url("./week-bg1.png");
+}
+
+.meeting3 .week.has-today {
+    background-image: url("./week-bg2.png");
+}
+
+/*会议主题*/
+.meeting3 .today .meeting-details .subject {
     position: absolute;
-    left: 40px;
-    top: 240px;
-    width: 1000px;
+    left: 90px;
+    top: 415px;
+    width: 900px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 100px;
+    margin: 0;
+    color: rgb(49,49,49)
+}
+
+/*会议详情*/
+.meeting3 .today .meeting-details .details p {
+    position: absolute;
+    margin: 0;
+    width: 850px;
+    left: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 40px;
+    color: rgb(49,49,49)
+}
+
+.meeting3 .today .meeting-details .details p.time {
+    top: 597px;
+}
+
+.meeting3 .today .meeting-details .details p.booker {
+    top: 685px;
+}
+
+.meeting3 .today .meeting-details .details p.attendee {
+    top: 771px;
+}
+
+/*会议列表*/
+.meeting3 .today .today-meeting-list {
+    position: absolute;
+    left: 80px;
+    top: 1140px;
+    width: 920px;
     height: 600px;
-    background-color: #F3D5CF;
-    border-radius: 20px;
-}
-
-.today .meeting-details .status {
-    position: absolute;
-    left: 50px;
-    top: 50px;
-    width: 220px;
-    height: 500px;
-    border-radius: 20px;
-    background-color: red;
-}
-
-.today .meeting-details .status p{
-    width: 70px;
-    margin: 40px auto;
-    font-size: 70px;
-    font-weight: 500;
-    line-height: 82px;
-    word-wrap: break-word;
-    color: white;
-}
-
-.today .meeting-details .subject {
-    position: absolute;
-    left: 320px;
-    top: 50px;
-    width: 630px;
-    font-size: 76px;
-    font-weight: 600;
-    margin: 0;
-}
-
-.today .meeting-details .details {
-    position: absolute;
-    left: 320px;
-    bottom: 50px;
-    width: 630px;
-    font-size: 40px;
-    margin: 0;
-}
-
-.today .meeting-details .details > p {
-    margin: 20px 0 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.today .meeting-details .time > i {
-    color: red;
-}
-
-.today .meeting-details .booker > i {
-    color: orange;
-}
-
-.today .meeting-details .attendee > i {
-    color: yellow;
-}
-
-.today .today-meeting-list {
-    position: absolute;
-    left: 40px;
-    top: 900px;
-    width: 1000px;
-    height: 970px;
     overflow: auto;
-    border-radius: 20px;
-    background-color: rgba(112,26,5,0.6);
 }
 
-.today .today-meeting-list table {
-    margin: 30px;
-    width: 940px;
-    table-layout: fixed;
+.meeting3 .today .today-meeting-list>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 920px;
+    height: 166px;
     color: white;
-    border: solid 0 white;
-    border-spacing: 0;
+    border-radius: 12px;
 }
 
-.today .today-meeting-list .info {
-    padding-left: 20px;
+.meeting3 .today .today-meeting-list>div>.info {
+    display: flex;
+    align-items: center;
+}
+
+.meeting3 .today .today-meeting-list>div>.info>.time {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.meeting3 .today .today-meeting-list>div>.info>.subject {
+    width: 620px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 60px;
+}
+
+.meeting3 .today .today-meeting-list>div>.qrcode {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 126px;
+    height: 126px;
+    border-radius: 8px;
+    background-color: rgb(255,255,255);
+}
+
+.meeting3 .today .today-meeting-list>div .qrcode>img {
+    width: 106px;
+    height: 106px;
+}
+
+/*.meeting3 .today .today-meeting-list>div.active {
+    background-color: rgb(214,92,81);
+}
+
+.meeting3 .today .today-meeting-list>div.current {
+    color: rgb(250,191,0);
+}*/
+
+.meeting3 .today .today-meeting-list>div.active {
+    color: rgb(250,147,1);
+}
+
+/*星期日期列表视图*/
+.meeting3 .week .week-meeting-list{
+    position: absolute;
+    left: 0px;
+    top: 253px;
+    width: 1080px;
+    height: 1670px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+}
+
+.meeting3 .week .week-meeting-list .day-row {
+    height: 326px;
+    display: flex;
+    flex-direction: row;
+}
+
+/*日期格式*/
+.meeting3 .week .week-meeting-list .day-row .day {
+    width: 186px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.meeting3 .week .week-meeting-list .day-row .day p {
+    margin: 5px;
+}
+
+.meeting3 .week .week-meeting-list .day-row .day .date {
+    font-size: 30px;
+}
+
+.meeting3 .week .week-meeting-list .day-row .day .weekday{
     font-size: 40px;
 }
 
-.today .today-meeting-list .qrcode {
-    width: 160px;
-    padding: 20px;
-}
-
-.today .today-meeting-list tr.active {
-    background-color: #F3D5CF;
-}
-
-.today .today-meeting-list tr.current {
-    color: #E4A111;
-}
-
-.week .day-list{
-    position: absolute;
-    left: 40px;
-    top: 240px;
-    width: 1000px;
-    height: 400px;
-    background-color: white;
-    border-radius: 20px;
-}
-
-.week .day-list .status {
-    position: absolute;
-    left: 50px;
-    top: 50px;
-    width: 900px;
-    height: 150px;
-    border-radius: 20px;
-    background-color: red;
-}
-
-.week .day-list .status i{
-    position: absolute;
-    left: 30px;
-    margin: 0;
-    font-size: 90px;
-    font-weight: 500;
-    line-height: 150px;
-    color: white;
-}
-
-.week .day-list .status p{
-    margin: 0;
-    font-size: 70px;
-    font-weight: 500;
-    line-height: 150px;
-    text-align: center;
-    color: white;
-}
-
-.week .day-list .title{
-    position: absolute;
-    left: 50px;
-    top: 220px;
-    margin: 10px 0 0;
-    font-size: 32px;
-    font-weight: 500;
-    color: black;
-}
-
-.week .day-list .list{
-    position: absolute;
-    left: 50px;
-    top: 280px;
-    width: 900px;
-    height: 80px;
-}
-
-.week .day-list .list table{
-    width: 100%;
-    table-layout: fixed;
-    color: black;
-    border-collapse:collapse;
-    border:none;
-}
-
-.week .day-list .list table td{
-    border-right:solid 3px #000;
-}
-
-.week .day-list .list table td:last-child{
-    border-right:none;
-}
-
-.week .day-list .list table td.active{
-    color: red;
-}
-
-.week .day-list .list table p{
-    font-size: 32px;
-    font-weight: 500;
-    margin: 0;
-    text-align: center;
-}
-
-.week .day-meeting-list {
-    position: absolute;
-    left: 40px;
-    top: 700px;
-    width: 1000px;
-    height: 1170px;
+/*会议列表格式*/
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list {
+    width: 894px;
+    height: 326px;
+    display:flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
     overflow: auto;
-    border-radius: 20px;
-    background-color: rgba(112,26,5,0.6);
 }
 
-.week .no-meeting {
-    text-align: center;
-    font-size: 46px;
-    color: white;
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list p{
+    margin: 0
 }
 
-.week .day-meeting-list table {
-    margin: 30px;
-    width: 940px;
-    table-layout: fixed;
-    color: white;
-    border: none;
-    border-spacing: 0;
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list .day-meeting {
+    width: 894px;
+    height: 65px;
+    flex: 0 0 auto;
+    display:flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-size: 30px;
 }
 
-.week .day-meeting-list tr.active {
-    color: #E4A111;
-    background-color: #F3D5CF;
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list .day-meeting .time {
+    width: 254px;
+    padding-left: 25px;
 }
-
-.week .day-meeting-list .info {
-    margin: 30px 0 20px;
-    padding-left: 20px;
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list .day-meeting .subject {
+    width: 464px;
+    padding-right: 25px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 46px;
 }
-
-.week .day-meeting-list .details > p {
-    margin: 10px 0;
-    padding-left: 20px;
+.meeting3 .week .week-meeting-list .day-row .day-meeting-list .day-meeting .booker {
+    width: 176px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 40px;
-    color: darkred;
 }
-
-.week .day-meeting-list .time > i {
-    color: red;
-}
-
-.week .day-meeting-list .booker > i {
-    color: orange;
-}
-
-.week .day-meeting-list .attendee > i {
-    color: yellow;
-}
-
-

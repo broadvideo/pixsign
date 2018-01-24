@@ -270,7 +270,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group calendar-ctrl">
+							<div class="form-group school-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.externalid"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="ExternalSelect" class="form-control select2" name="device.externalid">
@@ -512,7 +512,7 @@
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/device.js?t=${timestamp}"></script>
 <script>
-var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
+var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 var MscreenCtrl = <%=(session_org != null && session_org.getMscreenflag().equals("1"))%>;

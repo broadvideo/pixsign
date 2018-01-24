@@ -489,12 +489,12 @@ public class PixsignageService21 {
 
 			if (locationJson != null) {
 				String latitude = locationJson.getString("latitude");
-				String lontitude = locationJson.getString("lontitude");
+				String longitude = locationJson.getString("lontitude");
 				String city = locationJson.getString("city");
 				String addr1 = locationJson.getString("addr");
 				String addr2 = locationJson.getString("desc");
 				device.setLatitude(latitude);
-				device.setLontitude(lontitude);
+				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
 					int index = city.indexOf("市");
 					if (index > 0) {
@@ -567,12 +567,12 @@ public class PixsignageService21 {
 
 			if (locationJson != null) {
 				String latitude = locationJson.getString("latitude");
-				String lontitude = locationJson.getString("lontitude");
+				String longitude = locationJson.getString("lontitude");
 				String city = locationJson.getString("city");
 				String addr1 = locationJson.getString("addr");
 				String addr2 = locationJson.getString("desc");
 				device.setLatitude(latitude);
-				device.setLontitude(lontitude);
+				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
 					int index = city.indexOf("市");
 					if (index > 0) {
@@ -1037,7 +1037,7 @@ public class PixsignageService21 {
 			if (device.getExternalid().length() > 0) {
 				String pixedxip = configMapper.selectValueByCode("ServerIP");
 				String pixedxport = configMapper.selectValueByCode("ServerPort");
-				if (org.getCalendarflag().equals("1")) {
+				if (org.getSchoolflag().equals("1")) {
 					String server = "http://" + pixedxip + ":" + pixedxport;
 					String s = PixedxUtil.schedules(server, device.getExternalid());
 					if (s.length() > 0) {
@@ -1081,7 +1081,7 @@ public class PixsignageService21 {
 							t += 86400000L;
 						}
 					}
-				} else if (org.getCalendarflag().equals("2")) {
+				} else if (org.getSchoolflag().equals("2")) {
 					DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 					String s1 = dateFormat.format(new Date(starttime));
 					String s2 = dateFormat.format(new Date(endtime));

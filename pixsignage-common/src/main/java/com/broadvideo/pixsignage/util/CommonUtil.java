@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -87,7 +88,7 @@ public class CommonUtil {
 		}
 
 		// 开始解压
-		ZipFile zip = new ZipFile(zipFile);
+		ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"));
 		Enumeration<? extends ZipEntry> entries = zip.entries();
 		// 循环对压缩包里的每一个文件进行解压
 		while (entries.hasMoreElements()) {

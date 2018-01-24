@@ -151,6 +151,89 @@
 		</div>
 	</div>
 
+	<div id="CopyModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-full">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-8">
+		
+							<div class="portlet box blue">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.page"/></div>
+									<ul class="nav nav-tabs" style="margin-left: 10px;">
+										<li id="nav_tab1" class="active">
+											<a href="#PageLibTab" data-toggle="tab"><spring:message code="pixsign.page"/></a>
+										</li>
+										<li id="nav_tab2" class="touch-ctl">
+											<a href="#TouchpageLibTab" data-toggle="tab"><spring:message code="pixsign.touchpage"/></a>
+										</li>
+									</ul>
+								</div>
+								<div class="portlet-body">
+									<div class="tab-content">
+										<div class="tab-pane active" id="PageLibTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<div class="image-ctl">
+														<table id="PageLibTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane touchpage-ctl" id="TouchpageLibTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<div class="video-ctl">
+														<table id="TouchpageLibTable" class="table table-condensed table-hover">
+															<thead></thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="portlet box green">
+								<div class="portlet-title">
+									<div class="caption"><i class="fa fa-picture"></i><spring:message code="global.detail"/></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-responsive">
+										<table id="PageSelectedTable" class="table table-condensed table-hover">
+											<thead></thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
@@ -182,26 +265,29 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="11">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="12">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="14">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone calendar-ctrl limit-1" zonetype="15">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl limit-1" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl limit-1" zonetype="31">
-								<i class="fa fa-arrows"></i><div>会议日程</div>
+								<i class="fa fa-ge"></i><div>会议日程</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone estate-ctrl limit-1" zonetype="41">
+								<i class="fa fa-home"></i><div>地产</div>
 							</a>
 						</div>
 					</div>
@@ -1101,9 +1187,10 @@
 <script src="${base_ctx}/scripts/org/page/page-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
 <script>
-var CalendarCtrl = <%=(session_org != null && !session_org.getCalendarflag().equals("0"))%>;
+var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
 var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
+var EstateCtrl = <%=(session_org != null && !session_org.getEstateflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

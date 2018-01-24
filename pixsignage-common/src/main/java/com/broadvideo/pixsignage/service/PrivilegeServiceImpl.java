@@ -47,54 +47,68 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 	private void buildOrgTree(Org org, List<Privilege> privilegeList) {
 		Iterator<Privilege> it = privilegeList.iterator();
+		String bundleflag = org.getBundleflag();
+		String pageflag = org.getPageflag();
+		String sscreenflag = org.getSscreenflag();
+		String mscreenflag = org.getMscreenflag();
+		String reviewflag = org.getReviewflag();
+		String touchflag = org.getTouchflag();
+		String streamflag = org.getStreamflag();
+		String dvbflag = org.getDvbflag();
+		String widgetflag = org.getWidgetflag();
+		String rssflag = org.getRssflag();
+		String diyflag = org.getDiyflag();
+		String flowrateflag = org.getFlowrateflag();
+		String schoolflag = org.getSchoolflag();
+		String meetingflag = org.getMeetingflag();
+		String vipflag = org.getVipflag();
+		String estateflag = org.getEstateflag();
 		while (it.hasNext()) {
 			Privilege p = it.next();
-			if (org.getReviewflag().equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED)
-							&& org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30106
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30120
-					|| org.getBundleflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 304
-					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
-					|| org.getPageflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
-					|| org.getReviewflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
-					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
-					|| org.getMscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
-					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30302
-					|| org.getTouchflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
-					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 307
-					|| org.getCalendarflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 307
-					|| org.getMeetingflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 310
-					|| org.getMeetingflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 310
-					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
-					|| org.getFlowrateflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
-					|| org.getFlowrateflag().equals("1") && p.getPrivilegeid().intValue() == 30822
-					|| org.getFlowrateflag().equals("2") && p.getPrivilegeid().intValue() == 30821
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30202
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30821
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30822
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED)
-							&& org.getMscreenflag().equals(Org.FUNCTION_DISABLED)
-							&& p.getPrivilegeid().intValue() == 301
-					|| org.getSscreenflag().equals(Org.FUNCTION_DISABLED)
-							&& org.getMscreenflag().equals(Org.FUNCTION_DISABLED)
-							&& p.getPrivilegeid().intValue() == 308
-					|| org.getDiyflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30111
-					|| org.getStreamflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
-					|| org.getDvbflag().equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108) {
+			if (bundleflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
+					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && pageflag.equals(Org.FUNCTION_DISABLED)
+							&& p.getPrivilegeid().intValue() == 30106
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
+					|| streamflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30107
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
+					|| dvbflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30108
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
+					|| widgetflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30109
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
+					|| rssflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30110
+					|| diyflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30111
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30120
+					|| estateflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30130
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30202
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 303
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 303
+					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30302
+					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
+					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 304
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
+					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30402
+					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30406
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
+					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
+					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
+					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
+					|| !flowrateflag.equals("1") && p.getPrivilegeid().intValue() == 30821
+					|| !flowrateflag.equals("2") && p.getPrivilegeid().intValue() == 30822
+					|| schoolflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 307
+					|| schoolflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 307
+					|| meetingflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 310
+					|| meetingflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 310
+					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 311
+					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 311) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if (!org.getCode().equals("default")
@@ -106,14 +120,17 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		}
 
 		for (Privilege privilege : privilegeList) {
-			privilege.setName(messageSource.getMessage(privilege.getName(), null, LocaleContextHolder.getLocale()));
+			String name = messageSource.getMessage(privilege.getName(), null, privilege.getName(),
+					LocaleContextHolder.getLocale());
+			privilege.setName(name);
 			buildOrgTree(org, privilege.getChildren());
 		}
 	}
 
 	private void buildTree(List<Privilege> privilegeList) {
 		for (Privilege privilege : privilegeList) {
-			privilege.setName(messageSource.getMessage(privilege.getName(), null, LocaleContextHolder.getLocale()));
+			privilege.setName(messageSource.getMessage(privilege.getName(), null, privilege.getName(),
+					LocaleContextHolder.getLocale()));
 			buildTree(privilege.getChildren());
 		}
 	}

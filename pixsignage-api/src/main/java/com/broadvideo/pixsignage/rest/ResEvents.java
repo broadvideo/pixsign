@@ -101,9 +101,9 @@ public class ResEvents extends ResBase {
 			@QueryParam("start_date") String startDate, @QueryParam("end_date") String endDate) {
 
 		try {
-			logger.info("getEventList for terminalid:{},room_id:{} start_date:{},end_date:{}", new Object[] {
-					terminalid, roomid, startDate, endDate });
-            Integer eventRoomid=roomid;
+			logger.info("getEventList for terminalid:{},room_id:{} start_date:{},end_date:{}",
+					new Object[] { terminalid, roomid, startDate, endDate });
+			Integer eventRoomid = roomid;
 			if (StringUtils.isNotBlank(terminalid)) {
 				Roomterminal roomterminal = this.roomterminalMapper.selectRoomterminal(terminalid);
 				eventRoomid = roomterminal.getRoomid();
@@ -138,6 +138,7 @@ public class ResEvents extends ResBase {
 			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, persontype, "0",
 					Integer.MAX_VALUE
 					+ "");
+
 			List<Event> eventList = eventMapper.selectList(searchEvent, rowBounds);
 			JSONArray dataArr = new JSONArray();
 			for (Event event : eventList) {
@@ -205,8 +206,5 @@ public class ResEvents extends ResBase {
 		}
 
 	}
-
-
-
 
 }

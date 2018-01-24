@@ -37,7 +37,6 @@ public class PageAction extends BaseDatatableAction {
 	private String[] staffids;
 
 	private File[] mypage;
-	private String[] mypageContentType;
 	private String[] mypageFileName;
 	private String[] orgids;
 
@@ -66,16 +65,17 @@ public class PageAction extends BaseDatatableAction {
 			if (branchid != null && branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String ratio = getParameter("ratio");
 			String touchflag = getParameter("touchflag");
 			String homeflag = getParameter("homeflag");
 
-			int count = pageService.selectCount(orgid, branchid, touchflag, homeflag, search);
+			int count = pageService.selectCount(orgid, branchid, ratio, touchflag, homeflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Page> pageList = pageService.selectList(orgid, branchid, touchflag, homeflag, search, start, length,
-					getLoginStaff());
+			List<Page> pageList = pageService.selectList(orgid, branchid, ratio, touchflag, homeflag, search, start,
+					length, getLoginStaff());
 			for (int i = 0; i < pageList.size(); i++) {
 				aaData.add(pageList.get(i));
 			}
@@ -223,7 +223,11 @@ public class PageAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String pageid = getParameter("pageid");
-			planService.syncPlanByPage(pageid);
+			if (pageid.equals("" + getLoginStaff().getOrg().getDefaultpageid())) {
+				planService.syncPlan2All("" + getLoginStaff().getOrgid());
+			} else {
+				planService.syncPlanByPage(pageid);
+			}
 			logger.info("Page sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -253,9 +257,26 @@ public class PageAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doCopy() {
+		try {
+			String sourcepageid = getParameter("sourcepageid");
+			String destpageids = getParameter("destpageids");
+			logger.info("PageAction doCopy, staff={}, sourcepageid={}, destpageids={}", getLoginStaff().getLoginname(),
+					sourcepageid, destpageids);
+			pageService.copySinglePage(sourcepageid, destpageids);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doCopy exception. ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doExport() {
 		try {
 			String pageid = getParameter("pageid");
+			logger.info("PageAction doExport, staff={}, pageid={}", getLoginStaff().getLoginname(), pageid);
 			exportname = "page-export-" + pageid + ".zip";
 			String saveDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + pageid;
 			FileUtils.forceMkdir(new File(saveDir));

@@ -659,6 +659,28 @@
 			</result>
 		</action>
 
+		<action name="house!list" method="doList" class="houseAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="house!upload" method="doUpload" class="houseAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">204800000</param>
+				<!-- <param name="allowedTypes">house/png,house/gif,house/jpeg,house/pjpeg</param> -->
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json"></result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="house!delete" method="doDelete" class="houseAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
 		<action name="medialist!list" method="doList" class="medialistAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1264,6 +1286,12 @@
 				<param name="includeProperties">dataid,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="page!copy" method="doCopy" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="page!export" method="doExport" class="pageAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
@@ -1294,7 +1322,7 @@
 		</action>
 		<action name="page!upload" method="doUpload" class="pageAction">
 			<interceptor-ref name="fileUpload">
-				<param name="maximumSize">20480000</param>
+				<param name="maximumSize">204800000</param>
 				<!-- <param name="allowedTypes">page/png,page/gif,page/jpeg,page/pjpeg</param> -->
 			</interceptor-ref>
 			<interceptor-ref name="defaultStack"></interceptor-ref>

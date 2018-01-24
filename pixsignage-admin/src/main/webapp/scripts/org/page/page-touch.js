@@ -11,6 +11,7 @@ var PageModule = function () {
 		initPageEditModal();
 		initPageDesignModal();
 		initStaffPageModal();
+		initCopyModal();
 	};
 
 	var refresh = function () {
@@ -55,7 +56,6 @@ var PageModule = function () {
 				if (aData.editflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subpage-add"><i class="fa fa-plus"></i> ' + common.view.subpage + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-					pagehtml += '<a href="page!export.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				} else {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
@@ -76,6 +76,7 @@ var PageModule = function () {
 				if (aData.editflag == 1) {
 					pagehtml += '<div class="util-btn-margin-bottom-5">';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-copy"><i class="fa fa-copy"></i> ' + common.view.copy + '</a>';
 					if (aData.privilegeflag == 1) {
 						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
 					}
@@ -103,6 +104,7 @@ var PageModule = function () {
 						if (aData.subpages[i].privilegeflag == 1) {
 							pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
 						}
+						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs green pix-copy"><i class="fa fa-copy"></i> ' + common.view.copy + '</a>';
 						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 						pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" sub-id="' + i + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 						pagehtml += '</div>';
@@ -591,9 +593,10 @@ var PageModule = function () {
 						if (_design.Object.limitflag == 0) {
 							$('.limit-1').css('display', '');
 						}
-						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
+						$('.school-ctrl').css('display', SchoolCtrl? '':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
+						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						if (_design.Object.limitflag == 1) {
 							$('.limit-1').css('display', 'none');
 						}
@@ -854,6 +857,323 @@ var PageModule = function () {
 					}
 				},
 				error : function() {
+					console.log('failue');
+				}
+			});
+		});
+	};
+	
+	var initCopyModal = function () {
+		var pageid = 0;
+		var selectedPages = [];
+		
+		$('body').on('click', '.pix-copy', function(event) {
+			var index = $(event.target).attr('data-id');
+			var subid = $(event.target).attr('sub-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+				subid = $(event.target).parent().attr('sub-id');
+			}
+			_page = $('#PageTable').dataTable().fnGetData(index);
+			if (subid != undefined) {
+				_page = _page.subpages[subid];
+			}
+			selectedPages = [];
+			$('#PageSelectedTable').dataTable().fnClearTable();
+			$('#CopyModal').modal();
+		});
+		
+		var PageLibTree = new BranchTree($('#PageLibTab'));
+		$('#PageLibTable thead').css('display', 'none');
+		$('#PageLibTable tbody').css('display', 'none');
+		$('#PageLibTable').dataTable({
+			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'aLengthMenu' : [ [ 18, 30, 48, 96 ],
+							  [ 18, 30, 48, 96 ] 
+							],
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'page!list.action',
+			'aoColumns' : [{'sTitle' : '', 'mData' : 'name', 'bSortable' : false }],
+			'iDisplayLength' : 18,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnPreDrawCallback': function (oSettings) {
+				if ($('#PageLibContainer').length < 1) {
+					$('#PageLibTable').append('<div id="PageLibContainer"></div>');
+				}
+				$('#PageLibContainer').html(''); 
+				return true;
+			},
+			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+				if (iDisplayIndex % 6 == 0) {
+					pagelibhtml = '';
+					pagelibhtml += '<div class="row" >';
+				}
+				pagelibhtml += '<div class="col-md-2 col-xs-2">';
+				
+				pagelibhtml += '<div id="ThumbContainer" style="position:relative">';
+				var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+				pagelibhtml += '<div id="PageLibThumb" class="thumbs">';
+				if (aData.snapshot != null && aData.snapshot != '') {
+					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+					pagelibhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+				}
+				pagelibhtml += '<div class="mask">';
+				pagelibhtml += '<div>';
+				pagelibhtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+				pagelibhtml += '<a class="btn default btn-sm green pix-copypage-add" href="javascript:;" touch="0" data-id="' + iDisplayIndex + '" ><i class="fa fa-plus"></i></a>';
+				pagelibhtml += '</div>';
+				pagelibhtml += '</div>';
+				pagelibhtml += '</div>';
+
+				pagelibhtml += '</div>';
+
+				pagelibhtml += '</div>';
+				if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#PageLibTable').dataTable().fnGetData().length) {
+					pagelibhtml += '</div>';
+					if ((iDisplayIndex+1) != $('#PageLibTable').dataTable().fnGetData().length) {
+						pagelibhtml += '<hr/>';
+					}
+					$('#PageLibContainer').append(pagelibhtml);
+				}
+				return nRow;
+			},
+			'fnDrawCallback': function(oSettings, json) {
+				$('#PageLibContainer .thumbs').each(function(i) {
+					$(this).height($(this).parent().width());
+					$(this).width($(this).parent().width());
+				});
+				$('#PageLibContainer .mask').each(function(i) {
+					$(this).height($(this).parent().parent().width() + 2);
+				});
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':PageLibTree.branchid });
+				aoData.push({'name':'touchflag','value':'0' });
+				if (_page != undefined) {
+					aoData.push({'name':'ratio','value':_page.ratio });
+				}
+			},
+		});
+		$('#PageLibTable_wrapper').addClass('form-inline');
+		$('#PageLibTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#PageLibTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#PageLibTable_wrapper .dataTables_length select').select2();
+		$('#PageLibTable').css('width', '100%').css('table-layout', 'fixed');
+
+		var TouchpageLibTree = new BranchTree($('#TouchpageLibTab'));
+		$('#TouchpageLibTable thead').css('display', 'none');
+		$('#TouchpageLibTable tbody').css('display', 'none');
+		$('#TouchpageLibTable').dataTable({
+			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'aLengthMenu' : [ [ 10, 20, 30, 50 ],
+							  [ 10, 20, 30, 50 ] 
+							],
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'page!list.action',
+			'aoColumns' : [{'sTitle' : '', 'mData' : 'name', 'bSortable' : false }],
+			'iDisplayLength' : 10,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnPreDrawCallback': function (oSettings) {
+				if ($('#TouchpageLibContainer').length < 1) {
+					$('#TouchpageLibTable').append('<div id="TouchpageLibContainer"></div>');
+				}
+				$('#TouchpageLibContainer').html(''); 
+				return true;
+			},
+			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+				var touchpagelibhtml = '';
+				touchpagelibhtml += '<div class="row" >';
+				touchpagelibhtml += '<div class="col-md-12 col-xs-12">';
+				touchpagelibhtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '</div>';
+
+				touchpagelibhtml += '<div class="row" >';
+				touchpagelibhtml += '<div class="col-md-4 col-xs-6">';
+
+				touchpagelibhtml += '<div id="ThumbContainer" style="position:relative">';
+				var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+				touchpagelibhtml += '<div id="PageLibThumb" class="thumbs">';
+				if (aData.snapshot != null && aData.snapshot != '') {
+					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+					touchpagelibhtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+				}
+				touchpagelibhtml += '<div class="mask">';
+				touchpagelibhtml += '<div>';
+				touchpagelibhtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+				touchpagelibhtml += '<a class="btn default btn-sm green pix-copypage-add" href="javascript:;" touch="1" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '</div>';
+				
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '<div class="col-md-8 col-xs-6">';
+				for (var i=0; i<aData.subpages.length; i++) {
+					if (i % 4 == 0) {
+						touchpagelibhtml += '<div class="row" >';
+					}
+					touchpagelibhtml += '<div class="col-md-3 col-xs-3">';
+
+					touchpagelibhtml += '<div id="ThumbContainer" style="position:relative">';
+					var thumbwidth = aData.subpages[i].width > aData.subpages[i].height? 100 : 100*aData.subpages[i].width/aData.subpages[i].height;
+					touchpagelibhtml += '<div id="PageLibThumb" class="thumbs">';
+					if (aData.subpages[i].snapshot != null && aData.subpages[i].snapshot != '') {
+						var thumbwidth = aData.subpages[i].width > aData.subpages[i].height? 100 : 100*aData.subpages[i].width/aData.subpages[i].height;
+						touchpagelibhtml += '<img src="/pixsigdata' + aData.subpages[i].snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" />';
+					}
+					touchpagelibhtml += '<div class="mask">';
+					touchpagelibhtml += '<div>';
+					touchpagelibhtml += '<h6 class="pixtitle" style="color:white;">' + aData.subpages[i].name + '</h6>';
+					touchpagelibhtml += '<a class="btn default btn-sm green pix-copypage-add" href="javascript:;" touch="1" data-id="' + iDisplayIndex + '" sub-id="' + i + '"><i class="fa fa-plus"></i></a>';
+					touchpagelibhtml += '</div>';
+					touchpagelibhtml += '</div>';
+					touchpagelibhtml += '</div>';
+					touchpagelibhtml += '</div>';
+					
+					touchpagelibhtml += '</div>';
+					if ((i+1) % 4 == 0 || (i+1) == aData.subpages.length) {
+						touchpagelibhtml += '</div>';
+					}
+					
+				}
+				touchpagelibhtml += '</div>';
+				touchpagelibhtml += '</div>';
+
+				touchpagelibhtml += '<hr/>';
+				$('#TouchpageLibContainer').append(touchpagelibhtml);
+				return nRow;
+			},
+			'fnDrawCallback': function(oSettings, json) {
+				$('#TouchpageLibContainer .thumbs').each(function(i) {
+					$(this).height($(this).parent().width());
+					$(this).width($(this).parent().width());
+				});
+				$('#TouchpageLibContainer .mask').each(function(i) {
+					$(this).height($(this).parent().parent().width() + 2);
+				});
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':TouchpageLibTree.branchid });
+				aoData.push({'name':'touchflag','value':'1' });
+				aoData.push({'name':'homeflag','value':'1' });
+				if (_page != undefined) {
+					aoData.push({'name':'ratio','value':_page.ratio });
+				}
+			},
+		});
+		$('#TouchpageLibTable_wrapper').addClass('form-inline');
+		$('#TouchpageLibTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#TouchpageLibTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#TouchpageLibTable_wrapper .dataTables_length select').select2();
+		$('#TouchpageLibTable').css('width', '100%').css('table-layout', 'fixed');
+
+		$('#PageSelectedTable').dataTable({
+			'sDom' : 't',
+			'iDisplayLength' : -1,
+			'aoColumns' : [ {'sTitle' : '', 'bSortable' : false, 'sWidth' : '60px' }, 
+							{'sTitle' : '', 'bSortable' : false, 'sClass': 'autowrap' }, 
+							{'sTitle' : '', 'bSortable' : false, 'sWidth' : '5%' }],
+			'aoColumnDefs': [{'bSortable': false, 'aTargets': [ 0 ] }],
+			'oLanguage' : { 'sZeroRecords' : common.view.empty,
+							'sEmptyTable' : common.view.empty }, 
+			'ordering' : false,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(2)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-copypage-delete"><i class="fa fa-trash-o"></i></button>');
+				return nRow;
+			}
+		});
+
+		$('#CopyModal').on('shown.bs.modal', function (e) {
+			$('#PageLibTable').dataTable()._fnAjaxUpdate();
+			$('#TouchpageLibTable').dataTable()._fnAjaxUpdate();
+		})
+		$('#nav_tab1').click(function(event) {
+			$('#PageLibTable').dataTable()._fnAjaxUpdate();
+		});
+		$('#nav_tab2').click(function(event) {
+			$('#TouchpageLibTable').dataTable()._fnAjaxUpdate();
+		});
+
+		$('body').on('click', '.pix-copypage-add', function(event) {
+			var index = $(event.target).attr('data-id');
+			var subid = $(event.target).attr('sub-id');
+			var touch = $(event.target).attr('touch');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+				subid = $(event.target).parent().attr('sub-id');
+				touch = $(event.target).parent().attr('touch');
+			}
+			var selectedPage; 
+			if (touch == 0) {
+				selectedPage = $('#PageLibTable').dataTable().fnGetData(index);
+			} else {
+				selectedPage = $('#TouchpageLibTable').dataTable().fnGetData(index);
+			}
+			if (subid != undefined) {
+				selectedPage = selectedPage.subpages[subid];
+			}
+			var ps = selectedPages.filter(function (el) {
+				return el == selectedPage.pageid;
+			});
+			console.log(selectedPage.pageid, _page.pageid);
+			if (ps.length == 0 && selectedPage.pageid != _page.pageid) {
+				selectedPages.push(selectedPage.pageid);
+				var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"></div>';
+				if (selectedPage.snapshot != null && selectedPage.snapshot != '') {
+					thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + selectedPage.snapshot + '" class="imgthumb" width="100%"></div>';
+				}
+				$('#PageSelectedTable').dataTable().fnAddData([thumbhtml, selectedPage.name, 0]);
+			}
+		});
+		$('body').on('click', '.pix-copypage-delete', function(event) {
+			var rowIndex = $(event.target).attr("data-id");
+			if (rowIndex == undefined) {
+				rowIndex = $(event.target).parent().attr('data-id');
+			}
+			for (var i=rowIndex; i<$('#PageSelectedTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {
+				var data = $('#PageSelectedTable').dataTable().fnGetData(i);
+				$('#PageSelectedTable').dataTable().fnUpdate(i, parseInt(i), 0);
+			}
+			$('#PageSelectedTable').dataTable().fnDeleteRow(rowIndex);
+			selectedPages.splice(rowIndex, 1);
+		});
+
+		$('[type=submit]', $('#CopyModal')).on('click', function(event) {
+			if (_submitflag) {
+				return;
+			}
+			_submitflag = true;
+			Metronic.blockUI({
+				zIndex: 20000,
+				animate: true
+			});
+			$.ajax({
+				type : 'POST',
+				url : 'page!copy.action',
+				data: {
+					'sourcepageid': _page.pageid,
+					'destpageids': selectedPages.join(','),
+				},
+				success : function(data, status) {
+					_submitflag = false;
+					Metronic.unblockUI();
+					$('#CopyModal').modal('hide');
+					if (data.errorcode == 0) {
+						bootbox.alert(common.tips.success);
+						$('#PageTable').dataTable()._fnAjaxUpdate();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					_submitflag = false;
+					Metronic.unblockUI();
+					$('#CopyModal').modal('hide');
 					console.log('failue');
 				}
 			});

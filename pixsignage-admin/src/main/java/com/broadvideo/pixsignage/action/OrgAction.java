@@ -35,7 +35,9 @@ public class OrgAction extends BaseDatatableAction {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
 			List<Org> orgList;
-			if (getLoginStaff().getVspid() == null) {
+			if (getLoginStaff().getVspid() == null && getLoginStaff().getOrgid() == null) {
+				orgList = orgService.selectList(null, null);
+			} else if (getLoginStaff().getVspid() == null) {
 				orgList = orgService.selectList(null, "" + getLoginStaff().getOrgid());
 			} else {
 				orgList = orgService.selectList("" + getLoginStaff().getVspid(), null);

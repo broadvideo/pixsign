@@ -71,7 +71,7 @@ var DeviceModule = function () {
 				} else {
 					$('td:eq(3)', nRow).html('');
 				}
-				if (aData.lontitude > 0 && aData.latitude > 0) {
+				if (aData.longitude > 0 && aData.latitude > 0) {
 					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 				}
 				
@@ -500,7 +500,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('deselect_all', true);
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
 			$('#ExternalSelect').select2('val', _device.externalid);
-			$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#DeviceEditForm').attr('action', 'device!update.action');
 			$('#DeviceEditModal').modal();
 		});
@@ -515,7 +515,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('deselect_all', true);
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
 			$("#ExternalSelect").select2('val', _device.externalid);
-			$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#DeviceEditForm').attr('action', 'device!update.action');
 			$('#DeviceEditModal').modal();
 		});
@@ -1000,7 +1000,7 @@ var DeviceModule = function () {
 			}
 			CurrentMap.clearOverlays();
 			if (MapType == 0) {
-				var point = new BMap.Point(_device.lontitude, _device.latitude);
+				var point = new BMap.Point(_device.longitude, _device.latitude);
 				var marker = new BMap.Marker(point);
 				var sContent =
 					'<div><h4>' + _device.terminalid + ' - ' + _device.name + '</h4>' + 
@@ -1017,8 +1017,8 @@ var DeviceModule = function () {
 				var points = [];
 				for (var i=0; i<CurrentDevices.length; i++) {
 					var device = CurrentDevices[i];
-					if (device.lontitude > 0 && device.latitude > 0) {
-						var point = new BMap.Point(device.lontitude, device.latitude);
+					if (device.longitude > 0 && device.latitude > 0) {
+						var point = new BMap.Point(device.longitude, device.latitude);
 						points.push(point);
 						var marker = new BMap.Marker(point, {title : device.terminalid});
 						CurrentMap.addOverlay(marker);
@@ -1056,7 +1056,7 @@ var DeviceModule = function () {
 			}
 			GoogleMarkers = [];
 			if (MapType == 0) {
-				var point = new google.maps.LatLng(parseFloat(_device.latitude), parseFloat(_device.lontitude));
+				var point = new google.maps.LatLng(parseFloat(_device.latitude), parseFloat(_device.longitude));
 				var marker = new google.maps.Marker({
 					position: point,
 					map: CurrentMap,
@@ -1083,8 +1083,8 @@ var DeviceModule = function () {
 				var bounds = new google.maps.LatLngBounds();
 				for (var i=0; i<CurrentDevices.length; i++) {
 					var device = CurrentDevices[i];
-					if (device.lontitude > 0 && device.latitude > 0) {
-						var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.lontitude));
+					if (device.longitude > 0 && device.latitude > 0) {
+						var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.longitude));
 						var marker = new google.maps.Marker({
 							position: point,
 							map: CurrentMap,

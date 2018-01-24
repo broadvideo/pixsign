@@ -464,8 +464,8 @@ var DevicegroupModule = function () {
 			var points = [];
 			for (var i=0; i<_devicegroup.devices.length; i++) {
 				var device = _devicegroup.devices[i];
-				if (device.lontitude > 0 && device.latitude > 0) {
-					var point = new BMap.Point(device.lontitude, device.latitude);
+				if (device.longitude > 0 && device.latitude > 0) {
+					var point = new BMap.Point(device.longitude, device.latitude);
 					points.push(point);
 					var marker = new BMap.Marker(point, {title : device.terminalid});
 					CurrentMap.addOverlay(marker);
@@ -504,8 +504,8 @@ var DevicegroupModule = function () {
 			CurrentMap.setZoom(1);
 			for (var i=0; i<_devicegroup.devices.length; i++) {
 				var device = _devicegroup.devices[i];
-				if (device.lontitude > 0 && device.latitude > 0) {
-					var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.lontitude));
+				if (device.longitude > 0 && device.latitude > 0) {
+					var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.longitude));
 					var marker = new google.maps.Marker({
 						position: point,
 						map: CurrentMap,

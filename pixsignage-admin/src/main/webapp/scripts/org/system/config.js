@@ -23,10 +23,10 @@ var ConfigModule = function () {
 						} else if (config.code == 'ServerPort') {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_serverport, config.value]);
 							$('#ConfigEditForm input[name=serverport]').val(config.value);
-						} else if (config.code == 'PixedxIP' && CalendarCtrl) {
+						} else if (config.code == 'PixedxIP' && SchoolCtrl) {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_pixedxip, config.value]);
 							$('#ConfigEditForm input[name=pixedxip]').val(config.value);
-						} else if (config.code == 'PixedxPort' && CalendarCtrl) {
+						} else if (config.code == 'PixedxPort' && SchoolCtrl) {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_pixedxport, config.value]);
 							$('#ConfigEditForm input[name=pixedxport]').val(config.value);
 						}
@@ -127,7 +127,7 @@ var ConfigModule = function () {
 		});
 		
 		$('body').on('click', '.pix-update', function(event) {
-			$('.calendar-ctrl').css('display', CalendarCtrl?'':'none');
+			$('.calendar-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#ConfigEditForm').attr('action', 'config!update.action');
 			$('#ConfigEditModal').modal();
 		});

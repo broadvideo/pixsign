@@ -408,9 +408,10 @@ var TemplateModule = function () {
 						}
 						_design.Objectid = data.template.templateid;
 						_design.Zone = null;
-						$('.calendar-ctrl').css('display', CalendarCtrl? '':'none');
+						$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
+						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						$('#PageModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);

@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -136,7 +138,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String planid) throws Exception {
+	public void syncPlan(String planid) {
 		Plan plan = planMapper.selectByPrimaryKey(planid);
 		if (plan != null) {
 			List<Planbind> planbinds = plan.getPlanbinds();
@@ -147,7 +149,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String bindtype, String bindid) throws Exception {
+	public void syncPlan(String bindtype, String bindid) {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
 			if (device.getOnlineflag().equals(Device.Online)) {
@@ -180,7 +182,18 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByPage(String pageid) throws Exception {
+	public void syncPlan2All(String orgid) {
+		List<Device> devices = deviceMapper.selectList(orgid, null, null, "1", "1", null, null, null, null, null, null,
+				null, null);
+		for (Device device : devices) {
+			if (device.getOnlineflag().equals(Device.Online)) {
+				generateSyncEvent(device.getDeviceid());
+			}
+		}
+	}
+
+	@Transactional
+	public void syncPlanByPage(String pageid) {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
@@ -188,14 +201,14 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByMediagrid(String mediagridid) throws Exception {
+	public void syncPlanByMediagrid(String mediagridid) {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Mediagrid, mediagridid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 
-	private JSONArray generateSoloPlanJson(String deviceid) {
+	private JSONArray generateSoloPlanJson(String deviceid) throws Exception {
 		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
@@ -276,6 +289,7 @@ public class PlanServiceImpl implements PlanService {
 						plandtlJson.put("path", "/pixsigdata" + zipPath);
 						plandtlJson.put("file", zipFile.getName());
 						plandtlJson.put("size", FileUtils.sizeOf(zipFile));
+						plandtlJson.put("checksum", DigestUtils.md5Hex(new FileInputStream(zipFile)));
 						if (plandtl.getDuration() > 0) {
 							plandtlJson.put("duration", plandtl.getDuration());
 						}
@@ -537,7 +551,7 @@ public class PlanServiceImpl implements PlanService {
 		return planJsonArray;
 	}
 
-	public JSONObject generatePlanJson(String deviceid) {
+	public JSONObject generatePlanJson(String deviceid) throws Exception {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("plans", generateSoloPlanJson(deviceid));
 		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));
