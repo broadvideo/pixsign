@@ -169,23 +169,29 @@ public class MeetingServiceImpl implements MeetingService {
 
 		Meeting curMeeting = this.getMeeting(meeting.getMeetingid(), meeting.getOrgid());
 		Meeting params = new Meeting();
+		meeting.setMeetingroomid(curMeeting.getMeetingroomid());
 		params.setMeetingroomid(curMeeting.getMeetingroomid());
 		params.setOrgid(curMeeting.getOrgid());
 		params.setMeetingid(meeting.getMeetingid());
+			logger.info("#####update meeting:{},meeting.enddate:{}", meeting.getMeetingid(), meeting.getEndtime());
+
 		// 不允许修改开始时间
 		params.setStarttime(curMeeting.getStarttime());
 		params.setEndtime(meeting.getEndtime());
+
 		if (curMeeting.getEndtime().getTime() <= System.currentTimeMillis()) {
 			logger.error("Meeting(id:{},name:{}) already end,can't modify.", curMeeting.getMeetingid(),
 					curMeeting.getSubject());
 			throw new ServiceException("会议已经结束，不允许修改会议信息.");
 		}
+
 		if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
 			logger.error("meeting({}) starttime({}) great than endtime({})", new Object[] { meeting.getMeetingid(),
 					meeting.getStarttime(), meeting.getEndtime() });
 			throw new ServiceException("会议开始时间必须小于结束时间.");
 
 		}
+
 		if (meeting.getEndtime().getTime() < System.currentTimeMillis()) {
 			logger.error("modify meeting({}) endtime({}) is less than current time.", meeting.getMeetingid(),
 					meeting.getEndtime());
@@ -197,12 +203,13 @@ public class MeetingServiceImpl implements MeetingService {
 			logger.error("Update Meeting(id:{}) fail:times in use.", meeting.getMeetingid());
 			throw new ServiceException("会议室该时间段已经被占用.");
 		}
+
 		if (meeting.getAttendeeuserids() == null || meeting.getAttendeeuserids().length == 0) {
 			meeting.setAmount(0);
 		} else {
 			meeting.setAmount(meeting.getAttendeeuserids().length);
 		}
-		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
+
 		long duration = (meeting.getEndtime().getTime() - meeting.getStarttime().getTime()) / 1000;
 		meeting.setDuration((int) duration);
 		meeting.setFee(this.getFee(meeting));
@@ -213,6 +220,8 @@ public class MeetingServiceImpl implements MeetingService {
 			logger.info("Change meeting({}) auditstatus from {} to {}", new Object[] { curMeeting.getMeetingid(),
 					curMeeting.getAuditstatus(), meeting.getAuditstatus() });
 		}
+
+		logger.info("#####update meeting:{},meeting.enddate:{}", meeting.getMeetingid(), meeting.getEndtime());
 		this.meetingMapper.updateMeeting(meeting);
 		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
 
@@ -357,13 +366,24 @@ public class MeetingServiceImpl implements MeetingService {
 
 	private BigDecimal getFee(Meeting meeting) {
 		Meetingroom meetingroom = this.meetingroomMapper.selectByPrimaryKey(meeting.getMeetingroomid());
+		if (meetingroom.getFeeperhour().compareTo(BigDecimal.ZERO) == 0) {
+			logger.info("Meetingroom({}) feeperhour:{}", meetingroom.getMeetingroomid(), meetingroom.getFeeperhour());
+			return meetingroom.getFeeperhour();
+		}
 		int duration = meeting.getDuration();
 		int hours = duration / (60 * 60);
 		double minutes = (duration - (hours * 60 * 60)) / 60.00;
 		double totalHours = hours + minutes / 60;
 		BigDecimal fee = meetingroom.getFeeperhour().multiply(new BigDecimal(Double.toString(totalHours)));
 		int precision = fee.precision() + (2 - fee.scale());
-		MathContext ctx = new MathContext(precision, RoundingMode.HALF_UP);
+		MathContext ctx = null;
+		try {
+			ctx = new MathContext(precision, RoundingMode.HALF_UP);
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		fee = new BigDecimal(fee.doubleValue(), ctx);
 		logger.info("meeting(name:{})total fee:{}", meeting.getSubject(), fee);
 		return fee;
@@ -410,12 +430,13 @@ public class MeetingServiceImpl implements MeetingService {
 
 	}
 	public static void main(String[] args) {
-		Meeting meeting = new Meeting();
-		meeting.setSubject("subject");
-		ReflectionUtils.setFieldValue(meeting, "description", "description");
-		System.out.println("meeting.description:" + meeting.getDescription());
-		String formatDuration = DurationFormatUtils.formatDuration(3600 * 1000, "HH小时mm分", true);
-		System.out.println("formatDuration:" + formatDuration);
+		Meetingroom meetingroom = new Meetingroom();
+		meetingroom.setFeeperhour(BigDecimal.valueOf(00.00000));
+
+			System.out.println("ZERO EQUALS:"+meetingroom.getFeeperhour().compareTo(BigDecimal.ZERO));
+
+	
+		
 
 	}
 }
