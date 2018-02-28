@@ -302,12 +302,11 @@ public class PageServiceImpl implements PageService {
 			pageMapper.insertSelective(page);
 
 			if (page.getName().equals("UNKNOWN")) {
-				page.setName("TEMPLET-" + page.getPageid());
+				page.setName("PAGE-" + page.getPageid());
 			}
 			pageMapper.updateByPrimaryKeySelective(page);
 		} else {
 			// Copy page
-			page.setPageid(frompage.getPageid());
 			page.setTemplateid(frompage.getTemplateid());
 			page.setRatio(frompage.getRatio());
 			page.setHeight(frompage.getHeight());
@@ -318,7 +317,7 @@ public class PageServiceImpl implements PageService {
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
-				page.setName("TEMPLET-" + page.getPageid());
+				page.setName("PAGE-" + page.getPageid());
 			}
 			if (frompage.getSnapshot() != null) {
 				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";

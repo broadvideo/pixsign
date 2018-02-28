@@ -573,6 +573,16 @@ public class Org {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
+	public String getAttendanceflag() {
+		int i = 20;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setAttendanceflag(String flag) {
+		int i = 20;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
 	public Video getBackupvideo() {
 		return backupvideo;
 	}

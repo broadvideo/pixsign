@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Bundledtl;
+import com.broadvideo.pixsignage.domain.Bundlezonedtl;
 import com.broadvideo.pixsignage.domain.Stream;
-import com.broadvideo.pixsignage.persistence.BundledtlMapper;
+import com.broadvideo.pixsignage.persistence.BundlezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.StreamMapper;
 
 @Service("streamService")
@@ -17,7 +17,7 @@ public class StreamServiceImpl implements StreamService {
 	@Autowired
 	private StreamMapper streamMapper;
 	@Autowired
-	private BundledtlMapper bundledtlMapper;
+	private BundlezonedtlMapper bundlezonedtlMapper;
 
 	public Stream selectByPrimaryKey(String streamid) {
 		return streamMapper.selectByPrimaryKey(streamid);
@@ -43,7 +43,7 @@ public class StreamServiceImpl implements StreamService {
 
 	@Transactional
 	public void deleteStream(String streamid) {
-		bundledtlMapper.clearByObj(Bundledtl.ObjType_Stream, streamid);
+		bundlezonedtlMapper.deleteByObj(Bundlezonedtl.ObjType_Stream, streamid);
 		streamMapper.deleteByPrimaryKey(streamid);
 	}
 

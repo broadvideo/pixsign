@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Rss;
-import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.RssMapper;
 
 @Service("rssService")
@@ -16,8 +14,6 @@ public class RssServiceImpl implements RssService {
 
 	@Autowired
 	private RssMapper rssMapper;
-	@Autowired
-	private BundledtlMapper bundledtlMapper;
 
 	public Rss selectByPrimaryKey(String rssid) {
 		return rssMapper.selectByPrimaryKey(rssid);
@@ -43,7 +39,6 @@ public class RssServiceImpl implements RssService {
 
 	@Transactional
 	public void deleteRss(String rssid) {
-		bundledtlMapper.clearByObj(Bundledtl.ObjType_Rss, rssid);
 		rssMapper.deleteByPrimaryKey(rssid);
 	}
 

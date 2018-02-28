@@ -332,6 +332,8 @@ public class PixsignageService21 {
 			}
 
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
@@ -600,6 +602,8 @@ public class PixsignageService21 {
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {

@@ -5,6 +5,7 @@
     <id column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
     <result column="feature" property="feature" jdbcType="VARCHAR" />
     <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
     <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
@@ -18,7 +19,7 @@
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   <sql id="Base_Column_List" >
-    vspid, name, code, feature, maxdevices, maxstorage, currentdevices, 
+    vspid, name, code, type, feature, maxdevices, maxstorage, currentdevices, 
     currentstorage, apps, status, description, createtime, createstaffid
   </sql>
   
@@ -34,6 +35,7 @@
     <include refid="Base_Column_List" />
     from vsp
     where status=1
+    and type=1
     order by vspid desc 
   </select>
 
@@ -74,14 +76,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="vspid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vsp (name, code, feature, 
-      maxdevices, maxstorage, 
+    insert into vsp (name, code, type, 
+      feature, maxdevices, maxstorage, 
       currentdevices, currentstorage, apps, 
       status, description, createtime, 
       createstaffid
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{feature,jdbcType=VARCHAR}, 
-      #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{feature,jdbcType=VARCHAR}, #{maxdevices,jdbcType=INTEGER}, #{maxstorage,jdbcType=BIGINT}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentstorage,jdbcType=BIGINT}, #{apps,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER}
@@ -98,6 +100,9 @@
       </if>
       <if test="code != null" >
         code,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="feature != null" >
         feature,
@@ -136,6 +141,9 @@
       </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
       </if>
       <if test="feature != null" >
         #{feature,jdbcType=VARCHAR},
@@ -178,6 +186,9 @@
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="feature != null" >
         feature = #{feature,jdbcType=VARCHAR},
       </if>
@@ -215,6 +226,7 @@
     update vsp
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       feature = #{feature,jdbcType=VARCHAR},
       maxdevices = #{maxdevices,jdbcType=INTEGER},
       maxstorage = #{maxstorage,jdbcType=BIGINT},

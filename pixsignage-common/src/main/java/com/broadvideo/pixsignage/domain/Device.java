@@ -95,6 +95,10 @@ public class Device {
 
 	private Integer volume;
 
+	private Integer interval1;
+
+	private Integer interval2;
+
 	private String boardinfo;
 
 	private Long storageused;
@@ -485,6 +489,22 @@ public class Device {
 
 	public void setVolume(Integer volume) {
 		this.volume = volume;
+	}
+
+	public Integer getInterval1() {
+		return interval1;
+	}
+
+	public void setInterval1(Integer interval1) {
+		this.interval1 = interval1;
+	}
+
+	public Integer getInterval2() {
+		return interval2;
+	}
+
+	public void setInterval2(Integer interval2) {
+		this.interval2 = interval2;
 	}
 
 	public String getBoardinfo() {

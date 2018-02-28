@@ -45,6 +45,8 @@
     <result column="poweroff" property="poweroff" jdbcType="TIME" />
     <result column="volumeflag" property="volumeflag" jdbcType="CHAR" />
     <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="interval1" property="interval1" jdbcType="INTEGER" />
+    <result column="interval2" property="interval2" jdbcType="INTEGER" />
     <result column="boardinfo" property="boardinfo" jdbcType="VARCHAR" />
     <result column="storageused" property="storageused" jdbcType="BIGINT" />
     <result column="storageavail" property="storageavail" jdbcType="BIGINT" />
@@ -71,11 +73,12 @@
   
   <sql id="Base_Column_List" >
     deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
-    filestatus, status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, type, ostype, 
-    devicegroupid, longitude, latitude, city, addr1, addr2, externalid, externalname, other, 
+    filestatus, status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, type, 
+    ostype, devicegroupid, longitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
-    volumeflag, volume, boardinfo, storageused, storageavail, upgradeflag, appfileid, tagflag, temperature,
-    downloadspeed, downloadbytes, networkmode, networksignal, brightness, tags, cataitemid1, cataitemid2
+    volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
+    appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
+    tags, cataitemid1, cataitemid2
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -326,6 +329,7 @@
       devicegridid, xpos, ypos,
       powerflag, poweron, 
       poweroff, volumeflag, volume, 
+      interval1, interval2, 
       boardinfo, storageused, storageavail, 
       upgradeflag, appfileid, tagflag, temperature,
       downloadspeed, downloadbytes, networkmode,
@@ -345,6 +349,7 @@
       #{devicegridid,jdbcType=INTEGER}, #{xpos,jdbcType=INTEGER}, #{ypos,jdbcType=INTEGER},
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, 
       #{poweroff,jdbcType=TIME}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
+      #{interval1,jdbcType=INTEGER}, #{interval2,jdbcType=INTEGER}, 
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
       #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{tagflag,jdbcType=CHAR}, #{temperature,jdbcType=VARCHAR},
       #{downloadspeed,jdbcType=INTEGER},#{downloadbytes,jdbcType=BIGINT},#{networkmode,jdbcType=CHAR},
@@ -482,6 +487,12 @@
       </if>
       <if test="volume != null" >
         volume,
+      </if>
+      <if test="interval1 != null" >
+        interval1,
+      </if>
+      <if test="interval2 != null" >
+        interval2,
       </if>
       <if test="boardinfo != null" >
         boardinfo,
@@ -655,6 +666,12 @@
       </if>
       <if test="volume != null" >
         #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="interval1 != null" >
+        #{interval1,jdbcType=INTEGER},
+      </if>
+      <if test="interval2 != null" >
+        #{interval2,jdbcType=INTEGER},
       </if>
       <if test="boardinfo != null" >
         #{boardinfo,jdbcType=VARCHAR},
@@ -832,6 +849,12 @@
       <if test="volume != null" >
         volume = #{volume,jdbcType=INTEGER},
       </if>
+      <if test="interval1 != null" >
+        interval1 = #{interval1,jdbcType=INTEGER},
+      </if>
+      <if test="interval2 != null" >
+        interval2 = #{interval2,jdbcType=INTEGER},
+      </if>
       <if test="boardinfo != null" >
         boardinfo = #{boardinfo,jdbcType=VARCHAR},
       </if>
@@ -924,6 +947,8 @@
       poweroff = #{poweroff,jdbcType=TIME},
       volumeflag = #{volumeflag,jdbcType=CHAR},
       volume = #{volume,jdbcType=INTEGER},
+      interval1 = #{interval1,jdbcType=INTEGER},
+      interval2 = #{interval2,jdbcType=INTEGER},
       boardinfo = #{boardinfo,jdbcType=VARCHAR},
       storageused = #{storageused,jdbcType=BIGINT},
       storageavail = #{storageavail,jdbcType=BIGINT},

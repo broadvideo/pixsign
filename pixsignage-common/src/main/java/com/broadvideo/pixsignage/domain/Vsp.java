@@ -12,6 +12,8 @@ public class Vsp {
 
 	private String code;
 
+	private String type;
+
 	private String feature;
 
 	private Integer maxdevices;
@@ -56,6 +58,14 @@ public class Vsp {
 
 	public void setCode(String code) {
 		this.code = code == null ? null : code.trim();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getFeature() {
@@ -327,6 +337,16 @@ public class Vsp {
 
 	public void setLiftflag(String flag) {
 		int i = 19;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getAttendanceflag() {
+		int i = 20;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setAttendanceflag(String flag) {
+		int i = 20;
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 

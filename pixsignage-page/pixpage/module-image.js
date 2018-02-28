@@ -112,15 +112,22 @@ var ImageZone = function (zonediv, zone) {
 
 		$(zonediv).find('.bx-wrapper').css({
 			'background-color': 'transparent', 
+			'width': $(zonediv).width(),
 			'height': $(zonediv).height(),
 			'border': '0px',
 			'-webkit-box-shadow': '0 0 0px',
 			'box-shadow': '0 0 0px',
 		});
 		$(zonediv).find('.bx-viewport').css({
+			'width': $(zonediv).width(),
 			'height': $(zonediv).height(),
 		});
 		$(zonediv).find('.bx-viewport').find('img').css({
+			'width': $(zonediv).width(),
+			'height': $(zonediv).height(),
+		});
+		$(zonediv).find('.bx-viewport').find('li').css({
+			'width': $(zonediv).width(),
 			'height': $(zonediv).height(),
 		});
 	};
