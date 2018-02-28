@@ -107,6 +107,9 @@
 									<label class="checkbox-inline lift-ctrl">
 										<input type="checkbox" name="org.liftflag" value="0">电梯
 									</label>
+									<label class="checkbox-inline attendance-ctrl">
+										<input type="checkbox" name="org.attendanceflag" value="0">考勤
+									</label>
 								</div>
 							</div>
 							<div class="form-group school-ctrl">
@@ -336,6 +339,7 @@ var MeetingCtrl = <%=(session_vsp != null && session_vsp.getMeetingflag().equals
 var VipCtrl = <%=(session_vsp != null && session_vsp.getVipflag().equals("1"))%>;
 var EstateCtrl = <%=(session_vsp != null && session_vsp.getEstateflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
+var AttendanceCtrl = <%=(session_vsp != null && session_vsp.getAttendanceflag().equals("1"))%>;
 
 var MaxDevices = <%=session_vsp.getMaxdevices()%>;
 var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.persistence.FolderMapper;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -43,6 +44,8 @@ public class VideoAction extends BaseDatatableAction {
 	private String[] branchids;
 	private String[] folderids;
 
+	@Autowired
+	private FolderMapper folderMapper;
 	@Autowired
 	private VideoService videoService;
 
@@ -71,8 +74,16 @@ public class VideoAction extends BaseDatatableAction {
 					video.setOrgid(getLoginStaff().getOrgid());
 					video.setBranchid(getLoginStaff().getBranchid());
 					video.setType(Video.TYPE_INTERNAL);
-					video.setBranchid(Integer.parseInt(branchids[i]));
-					video.setFolderid(Integer.parseInt(folderids[i]));
+					if (branchids == null) {
+						int branchid = getLoginStaff().getOrg().getTopbranchid();
+						int folderid = folderMapper.selectRoot("" + getLoginStaff().getOrgid(), "" + branchid)
+								.getFolderid();
+						video.setBranchid(branchid);
+						video.setFolderid(folderid);
+					} else {
+						video.setBranchid(Integer.parseInt(branchids[i]));
+						video.setFolderid(Integer.parseInt(folderids[i]));
+					}
 					video.setName(names[i]);
 					video.setOname(mymediaFileName[i]);
 					video.setFilename(mymediaFileName[i]);

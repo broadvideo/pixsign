@@ -27,9 +27,7 @@ var TemplateModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'template!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.ratio, 'mData' : 'ratio', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'templateid', 'bSortable' : false }],
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }],
 			'iDisplayLength' : 16,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -188,7 +186,8 @@ var TemplateModule = function () {
 						}
 					});				
 				}
-			 });	
+			 });
+			
 		});
 	};
 
@@ -409,7 +408,7 @@ var TemplateModule = function () {
 						_design.Objectid = data.template.templateid;
 						_design.Zone = null;
 						$('.school-ctrl').css('display', SchoolCtrl?'':'none');
-						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
+						$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						$('#PageModal').modal();
@@ -489,7 +488,6 @@ var TemplateModule = function () {
 				}
 			});
 		});
-
 	}
 	
 	return {

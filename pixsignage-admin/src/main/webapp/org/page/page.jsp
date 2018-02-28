@@ -1159,7 +1159,7 @@
 
 <div id="SiteMethJavaScript">
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-	<script type="text/javascript" src="${base_ctx}/wysiwyg/js/jquery.ui.rotatable.js"></script>
+<script type="text/javascript" src="${base_ctx}/wysiwyg/js/jquery.ui.rotatable.js"></script>
 		
 <script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>

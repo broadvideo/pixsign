@@ -293,7 +293,6 @@ var PageModule = function () {
 			},
 			'fnDrawCallback': function(oSettings, json) {
 				$('#TemplateContainer .thumbs').each(function(i) {
-					console.log($(this).parent().closest('div').width());
 					$(this).width($(this).parent().closest('div').width());
 					$(this).height($(this).parent().closest('div').width());
 				});
@@ -310,11 +309,11 @@ var PageModule = function () {
 										openEffect	: 'none',
 										closeEffect	: 'none',
 										closeBtn : false,
-								        padding : 0,
-								        content: '<div id="TemplatePreview"></div>',
+										padding : 0,
+										content: '<div id="TemplatePreview"></div>',
 								        title: templateid,
-								    });
-									redrawTemplatePreview($('#TemplatePreview'), data.template, 800, 1);
+									});
+									PagePreviewModule.preview($('#TemplatePreview'), data.template, 800);
 								} else {
 									bootbox.alert(common.tips.error + data.errormsg);
 								}
@@ -323,7 +322,7 @@ var PageModule = function () {
 								console.log('failue');
 							}
 						});
-					    return false;
+						return false;
 					})
 				});
 			},

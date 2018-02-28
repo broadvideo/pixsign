@@ -1,7 +1,8 @@
-var FolderVideoSelect = function (container) {
+var FolderVideoSelect = function (container, video) {
 	var _self = this;
 	var _folderid = 0;
 	var _container = container;
+	var _video = video;
 
 	var init = function() {
 		$.ajax({
@@ -11,7 +12,8 @@ var FolderVideoSelect = function (container) {
 			success : function(data, status) {
 				if (data.errorcode == 0) {
 					var folders = data.aaData;
-					_folderid = folders[0].folderid;			
+					_folderid = folders[0].folderid;
+					_self.refresh();
 					var folderTreeDivData = [];
 					createFolderTreeData(folders, folderTreeDivData);
 					$(_container).find('.foldertree').each(function() {
@@ -63,7 +65,7 @@ var FolderVideoSelect = function (container) {
 		}
 	}	
 	
-	this.refresh = function(media) {
+	this.refresh = function() {
 		$(_container).find('.select2').select2({
 			placeholder: common.tips.detail_select,
 			minimumInputLength: 0,
@@ -114,8 +116,8 @@ var FolderVideoSelect = function (container) {
 				return html;
 			},
 			initSelection: function(element, callback) {
-				if (media != null && media.relate != null) {
-					callback({id: media.relateid, text: media.relate.name, video: media.relate });
+				if (_video != null) {
+					callback({id: _video.videoid, text: _video.name, video: _video });
 				}
 			},
 			dropdownCssClass: 'bigdrop', 

@@ -184,17 +184,16 @@ function initTab1() {
 	var templethtml = '';
 	$('#TempletTable').dataTable({
 		'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-		'aLengthMenu' : [ [ 18, 30, 48, 96 ],
-						  [ 18, 30, 48, 96 ] 
+		'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+						  [ 12, 30, 48, 96 ] 
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : myurls['templet.list'],
-		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-						{'sTitle' : common.view.operation, 'mData' : 'templetid', 'bSortable' : false }],
+		'sAjaxSource' : 'templet!list.action',
+		'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }],
 		'iDisplayLength' : 12,
 		'sPaginationType' : 'bootstrap',
-		'oLanguage' : DataTableLanguage,
+		'oLanguage' : PixData.tableLanguage,
 		'fnPreDrawCallback': function (oSettings) {
 			if ($('#TempletContainer').length < 1) {
 				$('#TempletTable').append('<div id="TempletContainer"></div>');

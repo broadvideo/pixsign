@@ -367,7 +367,8 @@ var OrgModule = function () {
 			+ $('input[name="org.flowrateflag"]:checked').val() + $('input[name="org.tagflag"]').val()
 			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
-			+ $('input[name="org.liftflag"]').val() + '000000000000000000000';
+			+ $('input[name="org.liftflag"]').val() + $('input[name="org.attendanceflag"]').val()
+			+ '00000000000000000000';
 			formData.append('org.feature', feature);
 			
 			$.ajax({
@@ -430,6 +431,7 @@ var OrgModule = function () {
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			
 			currentApps = {};
 			refreshAppTreeData(currentAppTreeData);
@@ -478,6 +480,7 @@ var OrgModule = function () {
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			
 			currentApps = {};
 			if (_org.applist != null) {

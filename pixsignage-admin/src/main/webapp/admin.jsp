@@ -41,7 +41,7 @@
 <body class="login">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<img src="${base_ctx}/img/logo-big.png?t=0" height="120" alt="" />
+		<img src="/pixsigdata/sdomain/default/logo.png?t=1" height="100" alt="" />
 	</div>
 	
 	<!-- END LOGO -->
@@ -122,7 +122,7 @@
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init();
-		Login.init();
+		Login.init('org/main.jsp');
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');

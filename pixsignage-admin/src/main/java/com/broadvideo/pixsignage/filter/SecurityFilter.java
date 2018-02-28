@@ -87,7 +87,7 @@ public class SecurityFilter implements Filter {
 			return;
 		}
 		if (session.getAttribute(CommonConstants.SESSION_SUBSYSTEM).equals(CommonConstants.SUBSYSTEM_ORG)
-				&& !servletPath.startsWith("/org/")) {
+				&& !servletPath.startsWith("/org/") && !servletPath.startsWith("/youwang/")) {
 			response.sendRedirect(request.getContextPath() + redirectURL);
 			return;
 		}

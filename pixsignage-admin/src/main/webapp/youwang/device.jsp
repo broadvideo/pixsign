@@ -5,12 +5,13 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="${static_ctx}/admin/pages/css/timeline-old.css" rel="stylesheet" type="text/css"/>
+
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
+<link href="${base_ctx}/youwang/css/custom.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -166,68 +167,12 @@
 														<div class="portlet box blue">
 															<div class="portlet-title">
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
-																<ul class="nav nav-tabs">
-																	<li id="nav_tab4" class="page-ctrl" style="display:none">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchpage"/></a>
-																	</li>
-																	<li id="nav_tab3" class="page-ctrl" style="display:none">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.page"/></a>
-																	</li>
-																	<li id="nav_tab2" class="bundle-ctrl touch-ctrl" style="display:none">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchbundle"/></a>
-																	</li>
-																	<li id="nav_tab1" class="bundle-ctrl" style="display:none">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.bundle"/></a>
-																	</li>
-																</ul>
 															</div>
 															<div class="portlet-body">
-																<div class="tab-content">
-																	<div class="tab-pane active" id="portlet_tab">
-																		<div class="row">
-																			<div class="col-md-12">
-																				<div id="BundleDiv" style="display:none">
-																					<table id="BundleTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
-																				<div id="TouchbundleDiv" style="display:none">
-																					<table id="TouchbundleTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
-																				</div>
-																				<div id="PageDiv" style="display:none">
-																					<div class="row">
-																						<div class="col-md-3">
-																							<div class="row"><div class="col-md-12 branchtree"></div></div>
-																						</div>
-																						<div class="col-md-9">
-																							<table id="PageTable" class="table table-condensed table-hover">
-																								<thead></thead>
-																								<tbody></tbody>
-																							</table>
-																						</div>
-																					</div>
-																				</div>
-																				<div id="TouchpageDiv" style="display:none">
-																					<div class="row">
-																						<div class="col-md-3">
-																							<div class="row"><div class="col-md-12 branchtree"></div></div>
-																						</div>
-																						<div class="col-md-9">
-																							<table id="TouchpageTable" class="table table-condensed table-hover">
-																								<thead></thead>
-																								<tbody></tbody>
-																							</table>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+																<table id="BundleTable" class="table table-condensed table-hover">
+																	<thead></thead>
+																	<tbody></tbody>
+																</table>
 															</div>
 														</div>
 													</div>
@@ -254,46 +199,16 @@
 											<div class="tab-pane" id="tab3">
 												<div class="row">
 													<div class="col-md-7">
-														<div class="portlet box blue tabbable">
+														<div class="portlet box blue">
 															<div class="portlet-title">
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.plan.devicewarehouse"/></div>
-																<ul class="nav nav-tabs">
-																	<li id="nav_dtab1" class="active">
-																		<a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device"/></a>
-																	</li>
-																	<li id="nav_dtab2">
-																		<a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a>
-																	</li>
-																</ul>
 															</div>
 															<div class="portlet-body">
-																<div class="tab-content">
-																	<div class="tab-pane active" id="DeviceTab">
-																		<div class="row">
-																			<div class="col-md-3">
-																				<div class="row"><div class="col-md-12 branchtree"></div></div>
-																			</div>
-																			<div class="col-md-9">
-																				<table id="DeviceTable" class="table table-condensed table-hover">
-																					<thead></thead>
-																					<tbody></tbody>
-																				</table>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="tab-pane" id="DevicegroupTab">
-																		<div class="row">
-																			<div class="col-md-3">
-																				<div class="row"><div class="col-md-12 branchtree"></div></div>
-																			</div>
-																			<div class="col-md-9">
-																				<table id="DevicegroupTable" class="table table-condensed table-hover">
-																					<thead></thead>
-																					<tbody></tbody>
-																				</table>
-																			</div>
-																		</div>
-																	</div>
+																<div class="table-responsive">
+																	<table id="DeviceTable" class="table table-condensed table-hover">
+																		<thead></thead>
+																		<tbody></tbody>
+																	</table>
 																</div>
 															</div>
 														</div>
@@ -341,53 +256,17 @@
 		</div>
 	</div>
 
-	<div class="page-content-wrapper">
-		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.plan"/></h3>
-			<div class="page-bar">
-				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
-						class="fa fa-angle-right"></i>
-					</li>
-					<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
-					</li>
-					<li><a href="#"><spring:message code="menu.plan"/></a>
-					</li>
-				</ul>
+	<div class="row main-content">
+		<div class="row content-bar">
+			<div class="pull-right">
+				<button class="btn blue pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 			</div>
-			
-			<div class="row">
-				<div class="col-md-12">
-					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.plan"/></div>
-							<div class="tools">
-								<a href="javascript:;" onClick="PlanModule.refresh();" class="reload"></a>
-							</div>
-						</div>
-						<div class="portlet-body" id="PlanPortlet">
-							<div class="row">
-								<div class="col-md-2">
-									<div class="row"><div class="col-md-12 branchtree"></div></div>
-								</div>
-								<div class="col-md-10">
-									<div class="table-toolbar">
-										<div class="btn-group">
-											<button class="btn green pix-add">
-												<spring:message code="global.add"/> <i class="fa fa-plus"></i>
-											</button>
-										</div>
-									</div>
-									<table id="PlanTable" class="table table-striped table-bordered table-hover">
-										<thead></thead>
-										<tbody></tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+		</div>
+		<div class="row content-list">
+			<table id="PlanTable" class="table table-striped table-bordered table-hover">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
 		</div>
 	</div>
 </body>
@@ -398,7 +277,7 @@
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js?t=2" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/jquery-validation/localization/messages_${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
@@ -415,23 +294,19 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/plan/plan-solo.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/youwang/scripts/plan.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
 <script>
-var BundleCtrl = false;
-var PageCtrl = <%=(session_org != null && session_org.getPageflag().equals("1"))%>;
-var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
-
 jQuery(document).ready(function() {
 	Metronic.init();
-	Layout.init();
 	PixData.init('${locale}');
-	PlanModule.init();
-});
+    $('.colorful-menu').find('.menu-item').removeClass('selected');
+    $('#Menu4').addClass('selected');
 
+    PlanModule.init();
+})
 </script>
-<!-- END PAGE LEVEL SCRIPTS -->
 </div>
 
 </html>

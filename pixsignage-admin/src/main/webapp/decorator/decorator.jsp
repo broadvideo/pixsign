@@ -95,10 +95,9 @@ response.setDateHeader("Expires",0);
 <link rel="shortcut icon" href="../favicon.ico" />
 
 <style type="text/css">
-.hide-orgtype-1 { 
-} 
-.hide-orgtype-2 {
-  display: none !important; 
+.jstree-children li > a {
+  padding: 0px !important; 
+  display: inline !important;
 }
 <% if (!mode.equals("default")) { %>
 .page-content-wrapper .page-content {

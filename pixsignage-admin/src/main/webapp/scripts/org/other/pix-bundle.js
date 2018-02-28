@@ -35,6 +35,7 @@ $(window).resize(function(e) {
 	}
 });
 
+var BundleTree = new BranchTree($('#BundlePortlet'));
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
 var bundlehtml;
@@ -135,6 +136,7 @@ $('#MyTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':BundleTree.branchid });
 		aoData.push({'name':'touchflag','value':'0' });
 	}
 });
@@ -299,6 +301,7 @@ $('#MyEditForm select[name="bundle.ratio"]').on('change', function(e) {
 $('body').on('click', '.pix-add', function(event) {
 	var action = myurls['bundle.add'];
 	refreshForm('MyEditForm');
+	$('#MyEditForm input[name="bundle.branchid"').val(BundleTree.branchid);
 	$('#MyEditForm').attr('action', action);
 	CurrentBundle = null;
 	CurrentBundleid = 0;

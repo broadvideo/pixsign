@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.persistence.FolderMapper;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -42,6 +43,8 @@ public class ImageAction extends BaseDatatableAction {
 	private String[] branchids;
 	private String[] folderids;
 
+	@Autowired
+	private FolderMapper folderMapper;
 	@Autowired
 	private ImageService imageService;
 
@@ -68,8 +71,16 @@ public class ImageAction extends BaseDatatableAction {
 
 					Image image = new Image();
 					image.setOrgid(getLoginStaff().getOrgid());
-					image.setBranchid(Integer.parseInt(branchids[i]));
-					image.setFolderid(Integer.parseInt(folderids[i]));
+					if (branchids == null) {
+						int branchid = getLoginStaff().getOrg().getTopbranchid();
+						int folderid = folderMapper.selectRoot("" + getLoginStaff().getOrgid(), "" + branchid)
+								.getFolderid();
+						image.setBranchid(branchid);
+						image.setFolderid(folderid);
+					} else {
+						image.setBranchid(Integer.parseInt(branchids[i]));
+						image.setFolderid(Integer.parseInt(folderids[i]));
+					}
 					image.setName(names[i]);
 					image.setOname(mymediaFileName[i]);
 					image.setFilename(mymediaFileName[i]);

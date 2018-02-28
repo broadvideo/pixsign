@@ -51,85 +51,85 @@
 <link href="${static_ctx}/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
 
 <style>
-    .panel {
-        margin: 80px auto;
-        width: 400px;
-        border: 0 solid #ccc !important;
-        background-color: whitesmoke;
-        border-radius: 20px !important;
-        box-shadow: 0px 0px 30px #444 !important;
-    }
-    .panel-body .title {
-        margin: 0;
-        text-align: center;
-        font-size: 32px;
-        font-weight: 600;
-    }
-    .panel-body form {
-        padding: 10px 45px;
-    }
-    .panel-body form label {
-        color: #888;
-        font-weight: 400;
-    }
-    .panel-body form input {
-        border: 0px solid #ccc !important;
-        border-radius: 20px;
-    }
-    .panel-body form button.btn {
-        border-radius: 20px !important;
-        color: white;
-        margin-top: 30px;
-    }
-    .panel-body form .btn.btn-block {
-        background-color: #F39500;
-    }
-    .panel-body form .lang .btn {
-        background-color: #ccc;
-    }
-    .panel-body form .lang .btn.checked {
-        background-color: #F39500;
-    }
-    .panel-footer {
-        background-color: #F39500;
-        padding: 20px 40px;
-        border-radius: 0 0 20px 20px;
-    }
-    .panel-footer img {
-        width: 100%
-    }
+	.panel {
+		margin: 80px auto;
+		width: 400px;
+		border: 0 solid #ccc !important;
+		background-color: whitesmoke;
+		border-radius: 20px !important;
+		box-shadow: 0px 0px 30px #444 !important;
+	}
+	.panel-body .title {
+		margin: 0;
+		text-align: center;
+		font-size: 32px;
+		font-weight: 600;
+	}
+	.panel-body form {
+		padding: 10px 45px;
+	}
+	.panel-body form label {
+		color: #888;
+		font-weight: 400;
+	}
+	.panel-body form input {
+		border: 0px solid #ccc !important;
+		border-radius: 20px;
+	}
+	.panel-body form button.btn {
+		border-radius: 20px !important;
+		color: white;
+		margin-top: 30px;
+	}
+	.panel-body form .btn.btn-block {
+		background-color: #F39500;
+	}
+	.panel-body form .lang .btn {
+		background-color: #ccc;
+	}
+	.panel-body form .lang .btn.checked {
+		background-color: #F39500;
+	}
+	.panel-footer {
+		background-color: #F39500;
+		padding: 20px 40px;
+		border-radius: 0 0 20px 20px;
+	}
+	.panel-footer img {
+		width: 100%
+	}
 </style>
 </head>
 
 <!-- BEGIN BODY -->
 <body>
 <div class="panel panel-default">
-    <div class="panel-body">
-        <p class="title"><spring:message code="global.login.hint.rsj1"/></p>
-        <p class="title"><spring:message code="global.login.hint.rsj2"/></p>
-        <form id="LoginForm" class="login-form" method="post">
+	<div class="panel-body">
+		<p class="title"><spring:message code="global.login.hint.rsj1"/></p>
+		<p class="title"><spring:message code="global.login.hint.rsj2"/></p>
+		<form id="LoginForm" class="login-form" method="post">
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span></span>
 			</div>
-            <div class="form-group">
-                <label for="username"><spring:message code="global.username"/></label>
-                <input type="text" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-                <label for="password"><spring:message code="global.password"/></label>
-                <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="submit btn btn-default btn-block"><spring:message code="global.login.login"/></button>
-            <div class="lang">
-                <button class="btn checked pix-language" data-id="zh_CN">简体中文</button>
-                <button class="btn pull-right pix-language" data-id="en_US">English</button>
-            </div>
-        </form>
-    </div>
-    <div class="panel-footer">
+			<div class="form-group">
+				<label for="username"><spring:message code="global.username"/></label>
+				<input type="text" class="form-control" name="username">
+			</div>
+			<div class="form-group">
+				<label for="password"><spring:message code="global.password"/></label>
+				<input type="password" class="form-control" name="password">
+			</div>
+			<button type="submit" class="submit btn btn-default btn-block"><spring:message code="global.login.login"/></button>
+			<div class="lang">
+				<button class="btn checked pix-language" data-id="zh_CN">简体中文</button>
+				<button class="btn pull-right pix-language" data-id="en_US">English</button>
+			</div>
+		</form>
+	</div>
+	<div class="panel-footer">
 		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" />
-    </div>
+	</div>
 </div>
 
 <!-- BEGIN CORE PLUGINS -->
