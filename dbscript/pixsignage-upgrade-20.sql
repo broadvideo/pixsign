@@ -2,9 +2,9 @@
 ## pre script  #############################################
 ############################################################
 
-set @version = 20;
+set @version = 21;
 set @module = 'pixsignage';
-set @dbscript=concat(@module , '-upgrade-19.sql');
+set @dbscript=concat(@module , '-upgrade-20.sql');
 insert into dbversion(version, dbscript, type, status) values(@version, @dbscript, '2', '0');
 select last_insert_id() into @dbversionid;
 
@@ -13,65 +13,214 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
-alter table vsp add feature varchar(40) default '1010000000000000000000000000000000000000';
-update vsp set feature = concat(bundleflag, pageflag, '1', mscreenflag, reviewflag, touchflag, streamflag, dvbflag, videoinflag, '0', '0', diyflag, flowrateflag, tagflag, calendarflag, meetingflag, '000000000000000000000000');
+alter table vsp add type char(1) default '1';
 
-alter table org add feature varchar(40) default '1010000000000000000000000000000000000000';
-update org set feature = concat(bundleflag, pageflag, sscreenflag, mscreenflag, reviewflag, touchflag, streamflag, dvbflag, videoinflag, '0', '0', diyflag, flowrateflag, tagflag, calendarflag, meetingflag, '000000000000000000000000');
+insert into vsp(name,code,type,createstaffid) values('system','system','2',1);
+insert into staff(subsystem,loginname,password,name) values(0,'system','d1bbbfb6ea37738ba3e2b2c65e6afb91','system');
+select last_insert_id() into @staffid4;
+insert into staffprivilege(staffid,privilegeid) values(@staffid4,0);
 
-alter table vsp drop bundleflag;
-alter table vsp drop pageflag;
-alter table vsp drop reviewflag;
-alter table vsp drop touchflag;
-alter table vsp drop liftflag;
-alter table vsp drop calendarflag;
-alter table vsp drop mscreenflag;
-alter table vsp drop flowrateflag;
-alter table vsp drop tagflag;
-alter table vsp drop diyflag;
-alter table vsp drop meetingflag;
-alter table vsp drop streamflag;
-alter table vsp drop dvbflag;
-alter table vsp drop videoinflag;
+drop table hourplaylog;
+alter table dailyplaylog add persons int default 0;
+alter table dailyplaylog add male int default 0;
+alter table dailyplaylog add female int default 0;
+alter table dailyplaylog add age1 int default 0;
+alter table dailyplaylog add age2 int default 0;
+alter table dailyplaylog add age3 int default 0;
+alter table dailyplaylog add age4 int default 0;
+alter table dailyplaylog add age5 int default 0;
+alter table monthlyplaylog add persons int default 0;
+alter table monthlyplaylog add male int default 0;
+alter table monthlyplaylog add female int default 0;
+alter table monthlyplaylog add age1 int default 0;
+alter table monthlyplaylog add age2 int default 0;
+alter table monthlyplaylog add age3 int default 0;
+alter table monthlyplaylog add age4 int default 0;
+alter table monthlyplaylog add age5 int default 0;
 
-alter table org drop bundleflag;
-alter table org drop pageflag;
-alter table org drop reviewflag;
-alter table org drop touchflag;
-alter table org drop liftflag;
-alter table org drop calendarflag;
-alter table org drop sscreenflag;
-alter table org drop mscreenflag;
-alter table org drop flowrateflag;
-alter table org drop tagflag;
-alter table org drop diyflag;
-alter table org drop meetingflag;
-alter table org drop videoflag;
-alter table org drop imageflag;
-alter table org drop textflag;
-alter table org drop widgetflag;
-alter table org drop streamflag;
-alter table org drop dvbflag;
-alter table org drop videoinflag;
+alter table device add interval1 int default 60;
+alter table device add interval2 int default 60;
 
-alter table device change lontitude longitude varchar(32) default '';
-alter table device modify latitude varchar(32) default '';
-update device set longitude='' where longitude is null;
-update device set latitude='' where latitude is null;
+alter table bundle add uuid varchar(64);
+alter table bundle add updatetime datetime;
+alter table bundle drop layoutid;
+update bundle set uuid=replace(uuid(), '-', '') where uuid is null;
 
-create table house( 
-   houseid int not null auto_increment,
-   orgid int not null,
-   name varchar(64),
-   thumbnail varchar(64),
-   width int default 0,
-   height int default 0,
-   zip varchar(64),
-   checksum varchar(64),
-   createtime timestamp not null default current_timestamp,
-   primary key (houseid)
+create table bundlezone( 
+   bundlezoneid int not null auto_increment,
+   bundleid int not null,
+   homebundleid int,
+   type tinyint not null,
+   mainflag char(1) default '0',
+   height int not null,
+   width int not null,
+   topoffset int not null,
+   leftoffset int not null,
+   zindex int not null default 0,
+   bgcolor varchar(32) default '#FFFFFF',
+   bgopacity int default 0,
+   bgimageid int default 0,
+   sleeptime int default 0,
+   intervaltime int default 10,
+   animation varchar(32) default '',
+   speed char(1) default '2',
+   color varchar(32) default '#000000',
+   size int default 50,
+   dateformat varchar(32) default '',
+   fitflag char(1) default '1',
+   volume int default 50,
+   touchlabel varchar(128) default '',
+   touchtype char(1) default 9,
+   touchobjid int default 0,
+   content longtext,
+   primary key (bundlezoneid),
+   constraint bundlezone_ibfk_1 foreign key (bundleid) references bundle(bundleid) on delete cascade on update cascade
  )engine = innodb
 default character set utf8;
+
+create table bundlezonedtl( 
+   bundlezonedtlid int not null auto_increment,
+   bundlezoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (bundlezonedtlid),
+   constraint bundlezonedtl_ibfk_1 foreign key (bundlezoneid) references bundlezone(bundlezoneid) on delete cascade on update cascade
+ )engine = innodb
+default character set utf8;
+
+create table templetzone( 
+   templetzoneid int not null auto_increment,
+   templetid int not null,
+   hometempletid int,
+   type tinyint not null,
+   mainflag char(1) default '0',
+   height int not null,
+   width int not null,
+   topoffset int not null,
+   leftoffset int not null,
+   zindex int not null default 0,
+   bgcolor varchar(32) default '#FFFFFF',
+   bgopacity int default 0,
+   bgimageid int default 0,
+   sleeptime int default 0,
+   intervaltime int default 10,
+   animation varchar(32) default '',
+   speed char(1) default '2',
+   color varchar(32) default '#000000',
+   size int default 50,
+   dateformat varchar(32) default '',
+   fitflag char(1) default '1',
+   volume int default 50,
+   touchlabel varchar(128) default '',
+   touchtype char(1) default 9,
+   touchobjid int default 0,
+   content longtext,
+   primary key (templetzoneid),
+   constraint templetzone_ibfk_1 foreign key (templetid) references templet(templetid) on delete cascade on update cascade
+ )engine = innodb
+default character set utf8;
+
+create table templetzonedtl( 
+   templetzonedtlid int not null auto_increment,
+   templetzoneid int not null,
+   objtype char(1) not null,
+   objid int not null,
+   sequence int not null,
+   primary key (templetzonedtlid),
+   constraint templetzonedtl_ibfk_1 foreign key (templetzoneid) references templetzone(templetzoneid) on delete cascade on update cascade
+ )engine = innodb
+default character set utf8;
+
+
+alter table bundlezone add oldid int default 0;
+insert into bundlezone select 0,bundleid,homebundleid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from bundle where bgimageid>0 and homebundleid>0;
+insert into bundlezone select 0,bundleid,bundleid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from bundle where bgimageid>0 and homebundleid=0;
+insert into bundlezone select 0,bundleid,homebundleid,type,mainflag,height,width,topoffset,leftoffset,zindex,bgcolor,opacity,bgimageid,sleeptime,intervaltime,animation,speed,color,size,dateformat,fitflag,volume,touchlabel,touchtype,touchbundleid,'',bundledtlid from bundledtl;
+insert into bundlezonedtl select 0,bz.bundlezoneid,mld.objtype,mld.objid,mld.sequence from medialist ml, medialistdtl mld, bundledtl bd, bundlezone bz where bd.type!='7' and bd.objtype='1' and ml.medialistid=bd.objid and bd.bundledtlid=bz.oldid and ml.medialistid=mld.medialistid;
+
+update bundledtl bd, bundlezone bz set bz.type=14 where bd.type=6 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=15 where bd.type=4 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=16 where bd.type=5 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=6 where bd.type=3 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=5 where bd.type=2 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=4 where bd.type=1 and bd.direction=4 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=3 where bd.type=1 and bd.direction!=4 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=2 where bd.type=0 and bd.objtype=5 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=1 where bd.type=0 and bd.objtype=1 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz set bz.type=1 where bd.type=0 and bd.objtype=3 and bd.bundledtlid=bz.oldid;
+update bundledtl bd, bundlezone bz 
+  set bz.touchtype=6, bz.touchobjid=0, bz.content=bd.touchapk 
+  where bd.touchtype='4' and bd.type='7' and bd.bundledtlid=bz.oldid;
+update medialist ml, medialistdtl mld, bundledtl bd, bundlezone bz
+  set bz.touchtype='3', bz.touchobjid=mld.objid
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='1' 
+  and mld.objtype='1' and ml.medialistid=bd.objid 
+  and bd.bundledtlid=bz.oldid and ml.medialistid=mld.medialistid;
+update medialist ml, medialistdtl mld, bundledtl bd, bundlezone bz
+  set bz.touchtype='4', bz.touchobjid=mld.objid
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='1' 
+  and mld.objtype='2' and ml.medialistid=bd.objid 
+  and bd.bundledtlid=bz.oldid and ml.medialistid=mld.medialistid;
+update widget w, bundledtl bd, bundlezone bz
+  set bz.touchtype='5', bz.touchobjid=0, bz.content=w.url
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='5' 
+  and w.widgetid=bd.objid and bd.bundledtlid=bz.oldid;
+update widget w, bundledtl bd, bundlezone bz
+  set bz.content=w.url
+  where bd.type='0' and bd.objtype='5' 
+  and w.widgetid=bd.objid and bd.bundledtlid=bz.oldid;
+update text t, bundledtl bd, bundlezone bz
+  set bz.content=t.text
+  where bd.type='1' and bd.objtype='2' 
+  and t.textid=bd.objid and bd.bundledtlid=bz.oldid;
+update bundlezone set zindex=50 where zindex=0;
+update bundlezone set zindex=51 where zindex=1;
+update bundlezone set zindex=52 where zindex=2;
+
+alter table templetzone add oldid int default 0;
+insert into templetzone select 0,templetid,hometempletid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from templet where bgimageid>0 and hometempletid>0;
+insert into templetzone select 0,templetid,templetid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from templet where bgimageid>0 and hometempletid=0;
+insert into templetzone select 0,templetid,hometempletid,type,mainflag,height,width,topoffset,leftoffset,zindex,bgcolor,opacity,bgimageid,sleeptime,intervaltime,animation,speed,color,size,dateformat,fitflag,volume,touchlabel,touchtype,touchtempletid,'',templetdtlid from templetdtl;
+insert into templetzonedtl select 0,bz.templetzoneid,mld.objtype,mld.objid,mld.sequence from medialist ml, medialistdtl mld, templetdtl bd, templetzone bz where bd.type!='7' and bd.objtype='1' and ml.medialistid=bd.objid and bd.templetdtlid=bz.oldid and ml.medialistid=mld.medialistid;
+
+update templetdtl bd, templetzone bz set bz.type=14 where bd.type=6 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=15 where bd.type=4 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=16 where bd.type=5 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=6 where bd.type=3 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=5 where bd.type=2 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=4 where bd.type=1 and bd.direction=4 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=3 where bd.type=1 and bd.direction!=4 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=2 where bd.type=0 and bd.objtype=5 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=1 where bd.type=0 and bd.objtype=1 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.type=1 where bd.type=0 and bd.objtype=3 and bd.templetdtlid=bz.oldid;
+update templetdtl bd, templetzone bz set bz.touchtype=6, bz.touchobjid=0, bz.content=bd.touchapk 
+  where bd.touchtype='4' and bd.type='7' and bd.templetdtlid=bz.oldid;
+update medialist ml, medialistdtl mld, templetdtl bd, templetzone bz
+  set bz.touchtype='3', bz.touchobjid=mld.objid
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='1' 
+  and mld.objtype='1' and ml.medialistid=bd.objid 
+  and bd.templetdtlid=bz.oldid and ml.medialistid=mld.medialistid;
+update medialist ml, medialistdtl mld, templetdtl bd, templetzone bz
+  set bz.touchtype='4', bz.touchobjid=mld.objid
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='1' 
+  and mld.objtype='2' and ml.medialistid=bd.objid 
+  and bd.templetdtlid=bz.oldid and ml.medialistid=mld.medialistid;
+update widget w, templetdtl bd, templetzone bz
+  set bz.touchtype='5', bz.touchobjid=0, bz.content=w.url
+  where bd.touchtype='3' and bd.type='7' and bd.objtype='5' 
+  and w.widgetid=bd.objid and bd.templetdtlid=bz.oldid;
+update widget w, templetdtl bd, templetzone bz
+  set bz.content=w.url
+  where bd.type='0' and bd.objtype='5' 
+  and w.widgetid=bd.objid and bd.templetdtlid=bz.oldid;
+update text t, templetdtl bd, templetzone bz
+  set bz.content=t.text
+  where bd.type='1' and bd.objtype='2' 
+  and t.textid=bd.objid and bd.templetdtlid=bz.oldid;
+update templetzone set zindex=50 where zindex=0;
+update templetzone set zindex=51 where zindex=1;
+update templetzone set zindex=52 where zindex=2;
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
@@ -119,8 +268,9 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30406,2,304,'menu.touchtemplate','page/template-touch.jsp','',1,6);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','plan/schedule-solo.jsp','',1,1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.plan','plan/plan-solo.jsp','',1,2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.pageplan','plan/plan-page.jsp','',1,2);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mscreen/mediagrid.jsp','',1,2);
@@ -134,6 +284,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30811,2,308,'menu.oplog','stat/oplog.jsp','',1,11);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30821,2,308,'menu.pflowlog','stat/pflowlog.jsp','',1,21);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30822,2,308,'menu.flowlog','stat/flowlog.jsp','',1,22);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30823,2,308,'menu.viewstat','stat/viewstat.jsp','',1,23);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(309,2,0,'menu.systemmanage','','fa-cogs',1,99);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30901,2,309,'menu.staff','system/staff.jsp','',1,1);
@@ -166,6 +317,10 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31103,2,311,'menu.vipevent','event/vipevent.jsp','','1',2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31104,2,311,'menu.vipattendance','event/vipattendance.jsp','','1',3);
 
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(312,2,0,'menu.staffattendance','','fa-group','1',1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31201,2,312,'menu.room2','room/room2.jsp','','1',0);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31202,2,312,'menu.staff2','person/person2.jsp','','1',1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31203,2,312,'menu.event2','event/event2.jsp','','1',2);
 
 ############################################################
 ## post script  ############################################
