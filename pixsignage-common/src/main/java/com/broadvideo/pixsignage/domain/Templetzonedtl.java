@@ -19,6 +19,8 @@ public class Templetzonedtl {
 
 	private Audio audio;
 
+	private Dvb dvb;
+
 	public Integer getTempletzonedtlid() {
 		return templetzonedtlid;
 	}
@@ -89,5 +91,13 @@ public class Templetzonedtl {
 
 	public void setAudio(Audio audio) {
 		this.audio = audio;
+	}
+
+	public Dvb getDvb() {
+		return dvb;
+	}
+
+	public void setDvb(Dvb dvb) {
+		this.dvb = dvb;
 	}
 }

@@ -84,7 +84,8 @@
     select
     <include refid="Base_Column_List" />
     from org
-    where status='1' and code = #{code}
+    where status='1' 
+    and code = #{code}
   </select>
   
   <delete id="deleteByPrimaryKey" >

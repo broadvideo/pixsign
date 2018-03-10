@@ -29,7 +29,15 @@ public interface StaffMapper {
 	Staff selectBySource(@Param(value = "sourcetype") String sourcetype, @Param(value = "sourceid") String sourceid);
 
 	Staff selectByUuid(@Param("uuid") String uuid, @Param("orgid") String orgid);
+
 	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
+
+	Staff select2cByLoginname(@Param(value = "vspid") String vspid, @Param(value = "loginname") String loginname);
+
+	Staff select2cByPhone(@Param(value = "vspid") String vspid, @Param(value = "phone") String phone);
+
+	Staff login2c(@Param(value = "vspid") String vspid, @Param(value = "loginname") String loginname,
+			@Param(value = "password") String password);
 
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);
 

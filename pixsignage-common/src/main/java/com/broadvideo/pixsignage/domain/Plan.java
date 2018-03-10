@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Plan {
-	public final static String PlanType_Solo = "1";
+	public final static String PlanType_Bundle = "0";
+	public final static String PlanType_Page = "1";
 	public final static String PlanType_Multi = "2";
 
 	private Integer planid;

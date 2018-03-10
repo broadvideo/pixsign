@@ -78,6 +78,8 @@ public class PlanServiceImpl implements PlanService {
 
 	@Autowired
 	private ScheduleMapper scheduleMapper;
+	@Autowired
+	private BundleService bundleService;
 
 	public int selectCount(String orgid, String branchid, String plantype) {
 		return planMapper.selectCount(orgid, branchid, plantype);
@@ -208,7 +210,51 @@ public class PlanServiceImpl implements PlanService {
 		}
 	}
 
-	private JSONArray generateSoloPlanJson(String deviceid) throws Exception {
+	public JSONObject generateBundlePlanJson(String deviceid) {
+		JSONObject responseJson = new JSONObject();
+		List<Integer> bundleids = new ArrayList<Integer>();
+		JSONArray planJsonArray = new JSONArray();
+		List<Plan> planList;
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getDevicegroupid().intValue() == 0) {
+			planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Device, deviceid);
+		} else {
+			planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Devicegroup,
+					"" + device.getDevicegroupid());
+		}
+		for (Plan plan : planList) {
+			JSONObject planJson = new JSONObject();
+			planJson.put("schedule_id", plan.getPlanid());
+			planJson.put("priority", plan.getPriority());
+			planJson.put("play_mode", "daily");
+			planJson.put("start_date",
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
+			planJson.put("end_date", new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));
+			planJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
+			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
+
+			JSONArray plandtlJsonArray = new JSONArray();
+			for (Plandtl plandtl : plan.getPlandtls()) {
+				if (plandtl.getObjtype().equals(Plandtl.ObjType_Bundle)) {
+					JSONObject plandtlJson = new JSONObject();
+					plandtlJson.put("scheduledtl_id", plandtl.getPlandtlid());
+					plandtlJson.put("media_type", "bundle");
+					plandtlJson.put("media_id", plandtl.getObjid());
+					plandtlJsonArray.put(plandtlJson);
+					bundleids.add(plandtl.getObjid());
+				}
+
+			}
+			planJson.put("scheduledtls", plandtlJsonArray);
+			planJsonArray.put(planJson);
+		}
+		responseJson.put("schedules", planJsonArray);
+		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
+		return responseJson;
+	}
+
+	private JSONArray generatePagePlanJson(String deviceid) throws Exception {
 		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
@@ -219,9 +265,9 @@ public class PlanServiceImpl implements PlanService {
 		// generate final json
 		List<Plan> planList;
 		if (device.getDevicegroupid().intValue() == 0) {
-			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Device, deviceid);
+			planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Device, deviceid);
 		} else {
-			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Devicegroup,
+			planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Devicegroup,
 					"" + device.getDevicegroupid());
 		}
 
@@ -230,7 +276,7 @@ public class PlanServiceImpl implements PlanService {
 			if (org.getDefaultpage() != null) {
 				Plan plan = new Plan();
 				plan.setPlanid(0);
-				plan.setPlantype(Plan.PlanType_Solo);
+				plan.setPlantype(Plan.PlanType_Page);
 				plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
 				plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
 				plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
@@ -553,7 +599,7 @@ public class PlanServiceImpl implements PlanService {
 
 	public JSONObject generatePlanJson(String deviceid) throws Exception {
 		JSONObject responseJson = new JSONObject();
-		responseJson.put("plans", generateSoloPlanJson(deviceid));
+		responseJson.put("plans", generatePagePlanJson(deviceid));
 		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));
 		return responseJson;
 	}

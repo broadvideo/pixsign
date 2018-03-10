@@ -4,7 +4,7 @@
 
 	<groupId>com.broadvideo</groupId>
 	<artifactId>pixsignage</artifactId>
-	<version>2.3.0</version>
+	<version>2.3.1</version>
 	<packaging>pom</packaging>
 
 	<name>pixsignage</name>
@@ -26,7 +26,7 @@
 			<id>Eclipse Paho Repo</id>
 			<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
 		</repository>
-		 <repository>
+		<repository>
           <id>getui-nexus</id>
           <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
         </repository>
@@ -282,6 +282,12 @@
 			<version>0.4.8</version>
 		</dependency>
 
+		<dependency>
+			<groupId>smn</groupId>
+			<artifactId>cloud-java-sdk-smn</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

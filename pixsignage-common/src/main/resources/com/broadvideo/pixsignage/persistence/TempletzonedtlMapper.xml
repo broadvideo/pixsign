@@ -11,6 +11,7 @@
     <association property="image" column="{objtype=objtype,imageid=objid}" select="selectImage" />
     <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStreamid" />
     <association property="audio" column="{objtype=objtype,audioid=objid}" select="selectAudioid" />
+    <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvb" />
   </resultMap>
   <sql id="Base_Column_List" >
     templetzonedtlid, templetzoneid, objtype, objid, sequence
@@ -31,6 +32,10 @@
   <select id="selectAudioid" resultMap="com.broadvideo.pixsignage.persistence.AudioMapper.BaseResultMap" >
     select * from audio
     where '${objtype}' = '6' and audioid = #{audioid}
+  </select>
+  <select id="selectDvb" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
+    select * from dvb
+    where '${objtype}' = '7' and dvbid = #{dvbid}
   </select>
     
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

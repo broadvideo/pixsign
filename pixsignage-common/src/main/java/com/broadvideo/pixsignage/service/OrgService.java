@@ -15,6 +15,8 @@ public interface OrgService {
 
 	public void updateOrg(Org org);
 
+	public void addOrg2c(String vspid, String loginname, String phone, String password);
+
 	public void resetPassword(String orgid);
 
 	public void deleteOrg(String orgid);

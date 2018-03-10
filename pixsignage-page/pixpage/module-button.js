@@ -21,7 +21,7 @@ var ButtonZone = function (zonediv, zone) {
 					closeAllAndroidWindow();
 					a_element.href = 'javascript:history.back(-1)';
 				} else {
-					a_element.href = 'javascript:TeaTableAndroidBridge.backtohome()';
+					a_element.href = 'javascript:TeaTableAndroidBridge.back()';
 				}
 			}
 		} else if (zone.touchtype == 1) {

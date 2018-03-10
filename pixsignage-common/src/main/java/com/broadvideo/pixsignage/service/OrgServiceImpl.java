@@ -150,6 +150,36 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Transactional
+	public void addOrg2c(String vspid, String loginname, String phone, String password) {
+		Org org = new Org();
+		org.setVspid(Integer.parseInt(vspid));
+		org.setName(phone);
+		org.setCode(phone);
+		orgMapper.insertSelective(org);
+
+		Branch branch = new Branch();
+		branch.setOrgid(org.getOrgid());
+		branch.setParentid(0);
+		branch.setName(org.getName());
+		branch.setStatus("1");
+		branch.setDescription(org.getName());
+		branchService.addBranch(branch);
+		org.setTopbranchid(branch.getBranchid());
+		orgMapper.updateByPrimaryKeySelective(org);
+
+		Staff staff = new Staff();
+		staff.setVspid(Integer.parseInt(vspid));
+		staff.setSubsystem(CommonConstants.SUBSYSTEM_USR);
+		staff.setOrgid(org.getOrgid());
+		staff.setBranchid(branch.getBranchid());
+		staff.setLoginname(loginname);
+		staff.setPhone(phone);
+		staff.setName(loginname);
+		staff.setPassword(password);
+		staffMapper.insertSelective(staff);
+	}
+
+	@Transactional
 	public void resetPassword(String orgid) {
 		Org org = orgMapper.selectByPrimaryKey(orgid);
 		List<Staff> staffs = staffMapper.selectByLoginname("admin@" + org.getCode());

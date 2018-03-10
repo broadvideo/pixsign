@@ -9,6 +9,7 @@
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="loginname" property="loginname" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
@@ -33,7 +34,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    staffid, uuid, subsystem, vspid, orgid, branchid, loginname, password, name, email, 
+    staffid, uuid, subsystem, vspid, orgid, branchid, loginname, phone, password, name, email, 
     status, token, description, createtime, createstaffid, loginflag, logintime, sourcetype, 
     sourceid
   </sql>
@@ -101,15 +102,15 @@
   </select>
   
   <select id="selectBranchStaffs"  resultMap="BaseResultMap">
-	    select
-	       <include refid="Base_Column_List" />
-	    from staff
-	    where status = '1'
-	    and subsystem = '2'
-	    and sourcetype = '1'
-	    and orgid = #{orgid}
-	    and branchid=#{branchid}
-	    order by staffid desc 
+    select
+       <include refid="Base_Column_List" />
+    from staff
+    where status = '1'
+    and subsystem = '2'
+    and sourcetype = '1'
+    and orgid = #{orgid}
+    and branchid=#{branchid}
+    order by staffid desc 
   </select>
 
   <select id="selectByLoginname" resultMap="FullResultMap">
@@ -145,6 +146,33 @@
     and status='1'
   </select>
   
+  <select id="select2cByLoginname" resultMap="FullResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' 
+    and vspid=#{vspid}
+    and loginname = #{loginname}
+  </select>
+
+  <select id="select2cByPhone" resultMap="FullResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from staff
+    where status='1' 
+    and vspid=#{vspid}
+    and phone = #{phone}
+  </select>
+
+  <select id="login2c" resultMap="FullResultMap">
+    select *
+    from staff
+    where vspid=#{vspid} 
+    and loginname=#{loginname} 
+    and password=#{password}
+    and status='1'
+  </select>
+  
   <select  id="selectByUuid"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -172,14 +200,14 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into staff (uuid, subsystem, vspid, 
-      orgid, branchid, loginname, 
+      orgid, branchid, loginname, phone, 
       password, name, email, 
       status, token, description, 
       createtime, createstaffid, loginflag, 
       logintime, sourcetype, sourceid
       )
     values (#{uuid,jdbcType=VARCHAR}, #{subsystem,jdbcType=CHAR}, #{vspid,jdbcType=INTEGER}, 
-      #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, 
+      #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{loginflag,jdbcType=CHAR}, 
@@ -209,6 +237,9 @@
       </if>
       <if test="loginname != null" >
         loginname,
+      </if>
+      <if test="phone != null" >
+        phone,
       </if>
       <if test="password != null" >
         password,
@@ -265,6 +296,9 @@
       </if>
       <if test="loginname != null" >
         #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
         #{password,jdbcType=VARCHAR},
@@ -325,6 +359,9 @@
       <if test="loginname != null" >
         loginname = #{loginname,jdbcType=VARCHAR},
       </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
       <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
@@ -372,6 +409,7 @@
       orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       loginname = #{loginname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
