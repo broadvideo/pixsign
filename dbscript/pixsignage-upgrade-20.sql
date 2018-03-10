@@ -15,8 +15,8 @@ select last_insert_id() into @dbversionid;
 
 alter table vsp add type char(1) default '1';
 
-insert into vsp(name,code,type,createstaffid) values('system','system','2',1);
-insert into staff(subsystem,loginname,password,name) values(0,'system','d1bbbfb6ea37738ba3e2b2c65e6afb91','system');
+insert into vsp(name,code,type,createstaffid) values('VSP2C','system','2',1);
+insert into staff(vspid,subsystem,loginname,password,name) values(2,0,'system','d1bbbfb6ea37738ba3e2b2c65e6afb91','system');
 select last_insert_id() into @staffid4;
 insert into staffprivilege(staffid,privilegeid) values(@staffid4,0);
 
@@ -40,6 +40,16 @@ alter table monthlyplaylog add age5 int default 0;
 
 alter table device add interval1 int default 60;
 alter table device add interval2 int default 60;
+
+alter table staff add phone varchar(32) default '';
+create table phonetoken( 
+   phone varchar(32) not null,
+   token varchar(6) not null,
+   updatetime datetime,
+   primary key (phone)
+ )engine = innodb
+default character set utf8;
+
 
 alter table bundle add uuid varchar(64);
 alter table bundle add updatetime datetime;
@@ -134,6 +144,8 @@ default character set utf8;
 
 
 alter table bundlezone add oldid int default 0;
+delete from bundledtl where type='A1';
+delete from bundledtl where type='A2';
 insert into bundlezone select 0,bundleid,homebundleid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from bundle where bgimageid>0 and homebundleid>0;
 insert into bundlezone select 0,bundleid,bundleid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from bundle where bgimageid>0 and homebundleid=0;
 insert into bundlezone select 0,bundleid,homebundleid,type,mainflag,height,width,topoffset,leftoffset,zindex,bgcolor,opacity,bgimageid,sleeptime,intervaltime,animation,speed,color,size,dateformat,fitflag,volume,touchlabel,touchtype,touchbundleid,'',bundledtlid from bundledtl;
@@ -179,6 +191,8 @@ update bundlezone set zindex=51 where zindex=1;
 update bundlezone set zindex=52 where zindex=2;
 
 alter table templetzone add oldid int default 0;
+delete from templetdtl where type='A1';
+delete from templetdtl where type='A2';
 insert into templetzone select 0,templetid,hometempletid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from templet where bgimageid>0 and hometempletid>0;
 insert into templetzone select 0,templetid,templetid,1,0,height,width,0,0,50,'#FFFFFF',255,bgimageid,0,10,'None',2,'#000000',50,'yyyy-MM-dd HH:mm',1,50,'',0,0,'',0 from templet where bgimageid>0 and hometempletid=0;
 insert into templetzone select 0,templetid,hometempletid,type,mainflag,height,width,topoffset,leftoffset,zindex,bgcolor,opacity,bgimageid,sleeptime,intervaltime,animation,speed,color,size,dateformat,fitflag,volume,touchlabel,touchtype,touchtempletid,'',templetdtlid from templetdtl;
