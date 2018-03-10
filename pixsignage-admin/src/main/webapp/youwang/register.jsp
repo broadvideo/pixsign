@@ -63,40 +63,57 @@
 <div class="login-box">
 	<img class="logo" src="${base_ctx}/youwang/images/logo.png">
 	<div class="form" style="margin-top: 60px;">
-		<form id="LoginForm" class="login-form" method="post">
+		<form id="RegisterForm" class="form-horizontal" method="post">
+			<input type="hidden" name="vspid" value="2" />
 			<div class="form-body">
 				<div class="alert alert-danger display-hide">
 					<button class="close" data-close="alert"></button>
 					<span></span>
 				</div>
 				<div class="form-group">
-					<label><spring:message code="global.username"/></label>
-					<div class="input">
-						<input class="form-control input-circle-right" placeholder="Account" type="text" name="username">
+					<label class="col-md-3 control-label"><spring:message code="global.username"/><span
+							class="required">*</span></label>
+					<div class="col-md-9">
+						<div class="input-icon right">
+							<i class="fa"></i> <input type="text" class="form-control" name="username" />
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
-					<label><spring:message code="global.password"/></label>
-					<div class="input">
-						<input class="form-control" placeholder="Password" type="text" name="password">
+					<label class="col-md-3 control-label"><spring:message code="global.password"/><span
+							class="required">*</span></label>
+					<div class="col-md-9">
+						<div class="input-icon right">
+						<input type="hidden"/>
+							<i class="fa"></i> <input type="password" class="form-control" name="password" autocomplete="new-password" />
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="mt-checkbox-inline">
-			        	<a class="btn btn-xs btn-success pix-language" data-id="zh_CN">中文</a>
-			            <a class="btn btn-xs btn-warning pix-language" data-id="en_US">ENG</a>
-			            <!-- 
-						<label class="mt-checkbox">
-							<input type="checkbox" name="remember" value="1"> 记住用户名
-							<span></span>
-						</label>
-						 -->
+					<label class="col-md-3 control-label">手机号<span class="required">*</span></label>
+					<div class="col-md-9">
+						<div class="input-icon right">
+							<i class="fa"></i> <input type="text" class="form-control" name="phone" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">验证码<span class="required">*</span></label>
+					<div class="col-md-9">
+						<div class="input-group">
+							<div class="input-icon">
+								<input id="newpassword" class="form-control" type="text" name="vcode">
+							</div>
+							<span class="input-group-btn">
+								<button id="GetVCode" class="btn btn-success" type="button"><i class="fa fa-lock fa-fw"></i> </button>
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="form-actions" style="margin-left: 120px;">
-				<a href="youwang/register.jsp" class="btn btn-info"><spring:message code="global.register"/></a>
-				<button type="submit" class="btn btn-danger"><spring:message code="global.login.login"/></button>
+			<div class="form-actions" align="center">
+				<button type="submit" class="btn btn-danger"><spring:message code="global.submit"/></button>
+				<button type="button" onclick="javascript:history.back();" class="btn btn-default"><spring:message code="global.cancel"/></button>
 			</div>
 		</form>
 	</div>
@@ -111,16 +128,11 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/youwang/scripts/app.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/youwang/scripts/login.js?t=${timestamp}" type="text/javascript"></script>
+<script src="${base_ctx}/youwang/scripts/register.js?t=${timestamp}" type="text/javascript"></script>
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init();
-		Login.init('youwang/main.jsp');
-		$('.pix-language').click(function(event){
-			event.preventDefault();
-			var language = $(event.target).attr('data-id');
-			document.location.href="index_yw.jsp?locale=" + language;
-		});
+		Register.init();
 	});
 </script>
 <!-- END JAVASCRIPTS -->

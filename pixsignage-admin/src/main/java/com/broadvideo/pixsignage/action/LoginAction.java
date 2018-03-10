@@ -22,6 +22,7 @@ import com.broadvideo.pixsignage.domain.Vsp;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.OplogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.PhonetokenMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.VspMapper;
 import com.broadvideo.pixsignage.service.PrivilegeService;
@@ -48,6 +49,8 @@ public class LoginAction extends BaseAction {
 	private StaffMapper staffMapper;
 	@Autowired
 	private OplogMapper oplogMapper;
+	@Autowired
+	private PhonetokenMapper phonetokenMapper;
 	@Autowired
 	private PrivilegeService privilegeService;
 
@@ -156,6 +159,57 @@ public class LoginAction extends BaseAction {
 			session.setAttribute(CommonConstants.SESSION_ORG, staff.getOrg());
 		}
 
+		return SUCCESS;
+	}
+
+	public String doLogin2c() throws Exception {
+		String vspid = getParameter("vspid");
+		String username = getParameter("username").trim();
+		String password = getParameter("password");
+		String code = getParameter("code");
+		logger.info("Login2C start, username={}, password={}, md5={}, code={}", username, password,
+				CommonUtil.getPasswordMd5(username, password), code);
+
+		if (!username.equals("system")) {
+			staff = staffMapper.login2c(vspid, username, CommonUtil.getPasswordMd5(username, password));
+		} else {
+			staff = staffMapper.login(username, CommonUtil.getPasswordMd5(username, password));
+		}
+		if (staff == null) {
+			logger.error(
+					"Login2c failed for username & password not match, vspid={}, username={}, password={}, md5={}, code={}",
+					vspid, username, password, CommonUtil.getPasswordMd5(username, password), code);
+			setErrorcode(-1);
+			return ERROR;
+		}
+
+		if (username.equals("system")) {
+			// ORG super user
+			Org org = orgMapper.selectByCode(code);
+			if (org == null) {
+				logger.error("Login2c failed for org not found, vspid={}, username={}, password={}, md5={}, code={}",
+						vspid, username, password, CommonUtil.getPasswordMd5(username, password), code);
+				setErrorcode(-1);
+				return ERROR;
+			}
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_USR);
+			staff.setOrgid(org.getOrgid());
+			staff.setOrg(org);
+		}
+
+		if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_USR)) {
+			Oplog oplog = new Oplog();
+			oplog.setOrgid(staff.getOrgid());
+			oplog.setStaffid(staff.getStaffid());
+			oplog.setType("1");
+			oplogMapper.insertSelective(oplog);
+		}
+
+		HttpSession session = super.getSession();
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		session.setAttribute(CommonConstants.SESSION_TOKEN, token);
+		session.setAttribute(CommonConstants.SESSION_STAFF, staff);
+		session.setAttribute(CommonConstants.SESSION_SUBSYSTEM, staff.getSubsystem());
 		return SUCCESS;
 	}
 

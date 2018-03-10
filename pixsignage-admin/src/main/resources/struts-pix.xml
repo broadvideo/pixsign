@@ -41,7 +41,31 @@
 				<param name="includeProperties">errorcode,errormsg,staff.*</param>
 			</result>
 		</action>
+		<action name="login2c" method="doLogin2c" class="loginAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg,staff.*</param>
+			</result>
+		</action>
 		<action name="logout" method="doLogout" class="loginAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register!validate" method="doValidate" class="registerAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register!getvcode" method="doGetVCode" class="registerAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register" method="doRegister" class="registerAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

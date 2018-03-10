@@ -182,6 +182,7 @@ var common = {
 		option: 'Option',
 		export: 'Export',
 		review: 'Review',
+		send: 'Send',
 		addregion: 'Add Region',
 		password_reset: 'Reset Password',
 		unknown: 'Unknown',
@@ -318,14 +319,17 @@ var common = {
 		code_required: 'ORG code required',
 		input_check: 'Please check the input items',
 		login_failed: 'Input error, login failed',
+		register_failed: 'Input error, register failed',
+		getvcode_failed: 'SMS failed',
 
 		region_remove_failed: 'Cannot remove this region',
 
 		folder_remove_failed: 'Cannot remove this folder',
 
-		loginname_repeat: 'Login name conflicted',
 		name_repeat: 'Name conflicted',
 		code_repeat: 'Code conflicted',
+		username_repeat: 'User name conflicted',
+		phone_repeat: 'Phone number conflicted',
 
 		storage_full: 'Storage reaches the limit',
 		org_full: 'Org devices or storage reaches the limit',

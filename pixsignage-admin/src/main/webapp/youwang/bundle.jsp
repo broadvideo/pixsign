@@ -623,6 +623,39 @@
 		</div>
 	</div>
 
+	<div id="DVBModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.dvb"/></div>
+						</div>
+						<div class="portlet-body">
+							<form id="DVBForm" class="form-horizontal" method="POST">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.dvb"/></label>
+										<div class="col-md-9">
+											<input type="hidden" id="DVBSelect" class="form-control select2" name="dvb" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- 推送对话框  -->
 	<div id="PushModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
@@ -719,6 +752,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/youwang/scripts/bundle.js?t=${timestamp}"></script>
 <script src="${base_ctx}/youwang/scripts/bundle-design.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>

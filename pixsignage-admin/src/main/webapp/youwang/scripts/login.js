@@ -76,6 +76,8 @@ var Login = function () {
 									window.location.href = 'vsp/main.jsp';
 								} else if (data.staff.subsystem == 2) {
 									window.location.href = _redirecturl;
+								} else if (data.staff.subsystem == 3) {
+									window.location.href = _redirecturl;
 								}
 							} else {
 								$('.alert-danger span', $('#LoginForm')).html(common.tips.login_failed);

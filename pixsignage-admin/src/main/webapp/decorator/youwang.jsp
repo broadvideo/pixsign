@@ -67,12 +67,14 @@ response.setDateHeader("Expires",0);
 <div class="container">
 	<div class="right-pane">
 		<div>
-			<img class="avatar" src="${base_ctx}/youwang/images/avatar.png">
-			<p class="text-center avatar-title">登出</p>
+			<a href="logout.action">
+				<img class="avatar" src="${base_ctx}/youwang/images/avatar.png">
+				<p class="text-center avatar-title"><spring:message code="global.logout"/></p>
+			</a>
 		</div>
 		<div>
 			<img class="avatar" src="${base_ctx}/youwang/images/setting.png">
-			<p class="text-center avatar-title">设定</p>
+			<p class="text-center avatar-title"><spring:message code="global.setting"/></p>
 		</div>
 	</div>
 
@@ -82,37 +84,37 @@ response.setDateHeader("Expires",0);
 			<div class="row colorful-menu">
 				<div class="menu-item col-md-2" id="Menu1">
 					<a href="main.jsp">
-						<p class="text-center menu-label">我的首页</p>
+						<p class="text-center menu-label"><spring:message code="global.dashboard"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore1.png">
 					</a>
 				</div>
 				<div class="menu-item col-md-2" id="Menu2">
 					<a href="image.jsp">
-						<p class="text-center menu-label">素材管理</p>
+						<p class="text-center menu-label"><spring:message code="menu.resource"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore2.png">
 					</a>
 				</div>
 				<div class="menu-item col-md-2" id="Menu3">
 					<a href="bundle.jsp">
-						<p class="text-center menu-label">节目制作</p>
+						<p class="text-center menu-label"><spring:message code="menu.bundlemanage"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore3.png">
 					</a>
 				</div>
 				<div class="menu-item col-md-2" id="Menu4">
 					<a href="plan.jsp">
-						<p class="text-center menu-label">播放管理</p>
+						<p class="text-center menu-label"><spring:message code="menu.schedulemanage"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore4.png">
 					</a>
 				</div>
 				<div class="menu-item col-md-2" id="Menu5">
 					<a href="device.jsp">
-						<p class="text-center menu-label">终端管理</p>
+						<p class="text-center menu-label"><spring:message code="menu.devicemanage"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore5.png">
 					</a>
 				</div>
-				<div class="menu-item col-md-2" id="Menu6" href="stat.jsp">
-					<a href="stat.jsp">
-						<p class="text-center menu-label">报表</p>
+				<div class="menu-item col-md-2" id="Menu6">
+					<a href="onlinelog.jsp">
+						<p class="text-center menu-label"><spring:message code="menu.stat"/></p>
 						<img class="underscore" src="${base_ctx}/youwang/images/underscore6.png">
 					</a>
 				</div>

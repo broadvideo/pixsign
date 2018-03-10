@@ -427,6 +427,8 @@ var BundleModule = function () {
 						for (var j=0; j<_design.Object.bundlezones[i].bundlezonedtls.length; j++) {
 							_design.Object.bundlezones[i].bundlezonedtls[j].image = undefined;
 							_design.Object.bundlezones[i].bundlezonedtls[j].video = undefined;
+							_design.Object.bundlezones[i].bundlezonedtls[j].stream = undefined;
+							_design.Object.bundlezones[i].bundlezonedtls[j].dvb = undefined;
 						}
 					}			
 					$.ajax({

@@ -432,7 +432,6 @@ var BundleDesignModule = function (mode) {
 						} else if (bundlezones[0].type == 3 || bundlezones[0].type == 4) {
 							//Text Zone & Scroll Zone
 							_self.Zone = bundlezones[0];
-							console.log(_self.Zone);
 							$('#TextForm').loadJSON(_self.Zone);
 							$('#TextModal').modal();
 						} else if (bundlezones[0].type == 7) {
@@ -454,6 +453,55 @@ var BundleDesignModule = function (mode) {
 							$('#LibraryModal #ImageLiTab').removeClass('active');
 							$('#LibraryModal #ImageLibraryTab').removeClass('active');
 							$('#LibraryModal').modal();
+						} else if (bundlezones[0].type == 16) {
+							//DVB Zone
+							_self.Zone = bundlezones[0];
+							$('#DVBSelect').select2({
+								placeholder: common.tips.detail_select,
+								minimumInputLength: 0,
+								ajax: { 
+									url: 'dvb!list.action',
+									type: 'GET',
+									dataType: 'json',
+									data: function (term, page) {
+										return {
+											sSearch: term, 
+											iDisplayStart: (page-1)*10,
+											iDisplayLength: 10,
+										};
+									},
+									results: function (data, page) {
+										var more = (page * 10) < data.iTotalRecords; 
+										return {
+											results : $.map(data.aaData, function (item) {
+												return {
+													name:item.name, 
+													id:item.dvbid,
+													dvb:item
+												};
+											}),
+											more: more
+										};
+									}
+								},
+								formatResult: function (item) {
+									return item.name;
+								},
+								formatSelection: function (item) {
+									return item.name;				
+								},
+								dropdownCssClass: 'bigdrop', 
+								escapeMarkup: function (m) { return m; } 
+							});
+							console.log(_self.Zone);
+							if (_self.Zone.bundlezonedtls[0] != null && _self.Zone.bundlezonedtls[0].dvb != null) {
+								$('#DVBSelect').select2('data', {
+									name:_self.Zone.bundlezonedtls[0].dvb.name, 
+									id:_self.Zone.bundlezonedtls[0].dvb.dvbid,
+									dvb:_self.Zone.bundlezonedtls[0].dvb
+								});
+							}
+							$('#DVBModal').modal();
 						} else {
 							return;
 						}
@@ -676,6 +724,7 @@ var BundleDesignModule = function (mode) {
 			}
 		}
 		$('#TouchtypeSelect').on('change', function(e) {
+			$('#TouchobjSelect').select2('val', '');
 			var touchtype = $('#TouchtypeSelect').select2('data').id;
 			if (touchtype == 2 || touchtype == 3 || touchtype == 4) {
 				$('#TouchobjSelect').closest('.form-group').css('display', '');
@@ -859,6 +908,26 @@ var BundleDesignModule = function (mode) {
 			_self.Zone.content = $('#TouchModal input[name="content"]').val();
 			refreshBundlezone(_self.Zone);
 			$('#TouchModal').modal('hide');
+		});
+		$('[type=submit]', $('#DVBModal')).on('click', function(event) {
+			var dvb = $('#DVBSelect').select2('data');
+			if (dvb != null) {
+				if (_self.Zone.bundlezonedtls.length == 0) {
+					var bundlezonedtl = {};
+					bundlezonedtl.bundlezonedtlid = 0;
+					bundlezonedtl.bundlezoneid = _self.Zone.bundlezoneid;
+					bundlezonedtl.objtype = '7';
+					bundlezonedtl.objid = dvb.dvb.dvbid;
+					bundlezonedtl.sequence = 1;
+					bundlezonedtl.dvb = dvb.dvb;
+					_self.Zone.bundlezonedtls.push(bundlezonedtl);
+				} else {
+					_self.Zone.bundlezonedtls[0].objtype = '7';
+					_self.Zone.bundlezonedtls[0].objid = dvb.dvb.dvbid;
+					_self.Zone.bundlezonedtls[0].dvb = dvb.dvb;
+				}
+			}
+			$('#DVBModal').modal('hide');
 		});
 
 		//图片table初始化

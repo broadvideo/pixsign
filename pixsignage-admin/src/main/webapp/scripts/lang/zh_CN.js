@@ -182,6 +182,7 @@ var common = {
 		option: '选项',
 		export: '导出',
 		review: '审核',
+		send: '发送',
 		addregion: '新增区域',
 		password_reset: '重置密码',
 		unknown: '未知',
@@ -318,14 +319,17 @@ var common = {
 		code_required: '必须输入企业编码',
 		input_check: '请检查输入项',
 		login_failed: '信息输入有误，登陆失败',
+		register_failed: '信息输入有误，注册失败',
+		getvcode_failed: '短信发送失败',
 
 		region_remove_failed: '无法删除这个区域',
 
 		folder_remove_failed: '无法删除这个文件夹',
 
-		loginname_repeat: '登录名已存在',
 		name_repeat: '名称已存在',
 		code_repeat: '编码已存在',
+		username_repeat: '登录名已存在',
+		phone_repeat: '手机号已存在',
 
 		storage_full: '存储已达上限，无法上传文件',
 		org_full: '企业终端或存储已达上限，无法创建',

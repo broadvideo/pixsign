@@ -104,14 +104,14 @@
 			<div class="tab-item col-md-2 selected">
 				<a href="image.jsp">
 					<p class="text-center tab-label is-orange">
-						<i class="glyphicon glyphicon-picture"></i> 图片
+						<i class="glyphicon glyphicon-picture"></i> <spring:message code="pixsign.image"/>
 					</p>
 				</a>
 			</div>
 			<div class="tab-item col-md-2">
 				<a href="video.jsp">
 					<p class="text-center tab-label is-blue">
-						<i class="glyphicon glyphicon-film"></i> 视频
+						<i class="glyphicon glyphicon-film"></i> <spring:message code="pixsign.video"/>
 					</p>
 				</a>
 			</div>

@@ -38,6 +38,11 @@ public class SecurityFilter implements Filter {
 		excludeLoginURLs.add("/login.action");
 		excludeLoginURLs.add("/org/educloudinit.action");
 		excludeLoginURLs.add("/org/educloudcallback.action");
+		excludeLoginURLs.add("/youwang/register.jsp");
+		excludeLoginURLs.add("/youwang/app.jsp");
+		excludeLoginURLs.add("/register.action");
+		excludeLoginURLs.add("/register!validate.action");
+		excludeLoginURLs.add("/register!getvcode.action");
 	}
 
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
