@@ -78,7 +78,7 @@
 				<div class="form-group">
 					<label><spring:message code="global.password"/></label>
 					<div class="input">
-						<input class="form-control" placeholder="Password" type="text" name="password">
+						<input class="form-control" placeholder="Password" type="password" name="password">
 					</div>
 				</div>
 				<div class="form-group">

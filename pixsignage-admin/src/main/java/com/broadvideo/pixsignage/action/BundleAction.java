@@ -26,6 +26,7 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.ImageService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -50,6 +51,8 @@ public class BundleAction extends BaseDatatableAction {
 	private ImageService imageService;
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 
 	public String doGet() {
 		try {
@@ -104,6 +107,9 @@ public class BundleAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			bundle.setOrgid(getLoginStaff().getOrgid());
+			if (bundle.getBranchid() == null) {
+				bundle.setBranchid(getLoginStaff().getBranchid());
+			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				if (bundle.getHomebundleid() != null && bundle.getHomebundleid() > 0) {
@@ -157,6 +163,7 @@ public class BundleAction extends BaseDatatableAction {
 		try {
 			String bundleid = getParameter("bundleid");
 			scheduleService.syncScheduleByBundle(bundleid);
+			planService.syncPlanByBundle(bundleid);
 			logger.info("Bundle sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

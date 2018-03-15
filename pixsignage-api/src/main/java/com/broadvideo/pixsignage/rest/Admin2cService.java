@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -481,7 +482,7 @@ public class Admin2cService {
 	@POST
 	@Path("upload_image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public String reportpflow(@FormDataParam("name") String name, @FormDataParam("filename") String filename,
+	public String uploadImage(@FormDataParam("name") String name, @FormDataParam("filename") String filename,
 			@FormDataParam("token") String token, @FormDataParam("file") FormDataContentDisposition fileHeader,
 			@FormDataParam("file") InputStream file) {
 		try {
@@ -541,6 +542,94 @@ public class Admin2cService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Admin2c upload_image exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("upload_video")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String uploadVideo(@FormDataParam("name") String name, @FormDataParam("filename") String filename,
+			@FormDataParam("token") String token, @FormDataParam("file") FormDataContentDisposition fileHeader,
+			@FormDataParam("file") InputStream file) {
+		try {
+			logger.info("Admin2c upload_video: name={},filename={},token={},fileHeader={}", name, filename, token,
+					fileHeader);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+
+			Folder folder = folderMapper.selectRoot("" + staff.getOrgid(), "" + staff.getBranchid());
+			Video video = new Video();
+			video.setOrgid(staff.getOrgid());
+			video.setBranchid(staff.getBranchid());
+			video.setFolderid(folder.getFolderid());
+			video.setName(name);
+			video.setFilename(name);
+			video.setStatus("9");
+			video.setDescription(name);
+			video.setCreatestaffid(staff.getStaffid());
+			videoMapper.insertSelective(video);
+
+			String format = FilenameUtils.getExtension(filename).toLowerCase();
+			String newFileName = "" + video.getVideoid() + "." + format;
+			File fileToCreate;
+			logger.info("copy video to {}", newFileName);
+			fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/upload", newFileName);
+			if (fileToCreate.exists()) {
+				fileToCreate.delete();
+			}
+			FileUtils.copyInputStreamToFile(file, fileToCreate);
+			logger.info("Finish content upload: " + newFileName);
+
+			video.setFilepath("/video/upload/" + newFileName);
+			video.setFilename(newFileName);
+			video.setFormat(format);
+			try {
+				// Generate preview gif
+				FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
+				String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
+						+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/"
+						+ video.getVideoid() + ".jpg";
+				logger.info("Begin to generate preview and thumbnail: " + command);
+				CommonUtil.execCommand(command);
+				File destFile = new File(
+						CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid() + ".jpg");
+				if (!destFile.exists()) {
+					command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate + " -y -f image2 -ss 1 -vframes 1 "
+							+ CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/" + video.getVideoid() + ".jpg";
+					CommonUtil.execCommand(command);
+				}
+				if (destFile.exists()) {
+					BufferedImage img = ImageIO.read(destFile);
+					video.setWidth(img.getWidth());
+					video.setHeight(img.getHeight());
+					video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
+					logger.info("Finish thumbnail generating.");
+				} else {
+					logger.info("Failed to generate thumbnail.");
+				}
+
+			} catch (IOException ex) {
+				logger.info("Video parse error, file={}", filename, ex);
+			}
+
+			video.setSize(FileUtils.sizeOf(fileToCreate));
+			FileInputStream fis = new FileInputStream(fileToCreate);
+			video.setMd5(DigestUtils.md5Hex(fis));
+			fis.close();
+			video.setStatus("1");
+			video.setProgress(100);
+			videoMapper.updateByPrimaryKeySelective(video);
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Admin2c upload_video response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin2c upload_video exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

@@ -45,7 +45,6 @@ import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
@@ -157,7 +156,7 @@ public class Pixsign2cService {
 			}
 
 			Device device = deviceMapper.selectByHardkey(hardkey);
-			if (device == null || device.getStatus().equals("1")) {
+			if (device == null || !device.getStatus().equals("1")) {
 				String checkcode = CommonUtil.getMd5(hardkey, CommonConfig.SYSTEM_ID);
 				String qrcode = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 						+ configMapper.selectValueByCode("ServerPort")
@@ -222,6 +221,7 @@ public class Pixsign2cService {
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("terminalid", device.getTerminalid());
+			responseJson.put("name", device.getName());
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
@@ -326,37 +326,6 @@ public class Pixsign2cService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service init exception", e);
-			return handleResult(1001, "系统异常");
-		}
-	}
-
-	@POST
-	@Path("get_bundle")
-	public String getbundle(String request) {
-		try {
-			logger.info("Pixsign2c Service get_bundle: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1002, "硬件码不能为空");
-			}
-			Device device = deviceMapper.selectByHardkey(hardkey);
-			if (device == null) {
-				return handleResult(1004, "无效终端" + hardkey);
-			}
-
-			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-					"" + device.getDeviceid());
-			if (device.getDevicegroupid() > 0) {
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
-			responseJson.put("code", 0).put("message", "成功");
-			logger.info("Pixsign2c Service get_bundle response: {}", responseJson.toString());
-			return responseJson.toString();
-		} catch (Exception e) {
-			logger.error("Pixsign2c Service get_bundle exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -601,14 +570,10 @@ public class Pixsign2cService {
 				eventJsonArray.put(eventJson);
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
-					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
+					eventJson.put("event_content", planService.generateBundlePlanJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
 					eventJson.put("event_type", "plan");
 					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
-					eventJson.put("event_type", "bundle");
-					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-							"" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();
@@ -682,6 +647,8 @@ public class Pixsign2cService {
 			}
 
 			if (responseJson.getString("url").length() > 0 || responseJson.getJSONArray("events").length() > 0) {
+				logger.info("Pixsign2c Service refresh response: {}", responseJson.toString());
+			} else {
 				logger.info("Pixsign2c Service refresh response: {}", responseJson.toString());
 			}
 			return responseJson.toString();

@@ -677,7 +677,39 @@ public class BundleServiceImpl implements BundleService {
 			} else {
 				regionJson.put("region_id", bundlezone.getBundlezoneid());
 			}
-			regionJson.put("type", bundlezone.getType());
+			Byte type = 0;
+			if (bundlezone.getType() == 1) {
+				type = 0; // Play
+			} else if (bundlezone.getType() == 2) {
+				type = 0; // Web
+			} else if (bundlezone.getType() == 3) {
+				type = 1; // Text
+			} else if (bundlezone.getType() == 4) {
+				type = 1; // Scroll
+			} else if (bundlezone.getType() == 5) {
+				type = 2; // Time
+			} else if (bundlezone.getType() == 6) {
+				type = 3; // Weather
+			} else if (bundlezone.getType() == 7) {
+				type = 7; // Button
+			} else if (bundlezone.getType() == 8) {
+				type = 8; // Navigate
+			} else if (bundlezone.getType() == 9) {
+				type = 9; // Control
+			} else if (bundlezone.getType() == 12) {
+				type = 12; // RSS
+			} else if (bundlezone.getType() == 13) {
+				type = 13; // Audio
+			} else if (bundlezone.getType() == 14) {
+				type = 6; // Stream
+			} else if (bundlezone.getType() == 15) {
+				type = 4; // VideoIn
+			} else if (bundlezone.getType() == 16) {
+				type = 5; // DVB
+			} else {
+				type = bundlezone.getType();
+			}
+			regionJson.put("type", type);
 			regionJson.put("main_flag", bundlezone.getMainflag());
 			regionJson.put("width", bundlezone.getWidth());
 			regionJson.put("height", bundlezone.getHeight());
@@ -759,7 +791,7 @@ public class BundleServiceImpl implements BundleService {
 			JSONArray playlistJsonArray = new JSONArray();
 			regionJson.put("playlist", playlistJsonArray);
 
-			byte type = bundlezone.getType();
+			type = bundlezone.getType();
 			if (type == Bundlezone.Type_PLAY) {
 				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
 				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {

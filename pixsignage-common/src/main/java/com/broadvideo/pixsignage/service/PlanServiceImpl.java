@@ -48,6 +48,7 @@ import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.PlanbindMapper;
 import com.broadvideo.pixsignage.persistence.PlandtlMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
+import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("planService")
@@ -127,8 +128,19 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	private void generateSyncEvent(int deviceid) {
+	private void generateSyncEvent(int deviceid) throws Exception {
 		Msgevent msgevent = new Msgevent();
+		msgevent.setMsgtype(Msgevent.MsgType_Schedule);
+		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+		msgevent.setObjid1(deviceid);
+		msgevent.setObjtype2(Msgevent.ObjType_2_None);
+		msgevent.setObjid2(0);
+		msgevent.setStatus(Msgevent.Status_Wait);
+		msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null, null,
+				null);
+		msgeventMapper.insertSelective(msgevent);
+
+		msgevent = new Msgevent();
 		msgevent.setMsgtype(Msgevent.MsgType_Plan);
 		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
 		msgevent.setObjid1(deviceid);
@@ -137,10 +149,16 @@ public class PlanServiceImpl implements PlanService {
 		msgevent.setStatus(Msgevent.Status_Wait);
 		msgeventMapper.deleteByDtl(Msgevent.MsgType_Plan, Msgevent.ObjType_1_Device, "" + deviceid, null, null, null);
 		msgeventMapper.insertSelective(msgevent);
+
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "SCHEDULE");
+		JSONObject msgBodyJson = generateBundlePlanJson("" + deviceid);
+		msgJson.put("msg_body", msgBodyJson);
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
 	}
 
 	@Transactional
-	public void syncPlan(String planid) {
+	public void syncPlan(String planid) throws Exception {
 		Plan plan = planMapper.selectByPrimaryKey(planid);
 		if (plan != null) {
 			List<Planbind> planbinds = plan.getPlanbinds();
@@ -151,7 +169,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String bindtype, String bindid) {
+	public void syncPlan(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
 			if (device.getOnlineflag().equals(Device.Online)) {
@@ -184,7 +202,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan2All(String orgid) {
+	public void syncPlan2All(String orgid) throws Exception {
 		List<Device> devices = deviceMapper.selectList(orgid, null, null, "1", "1", null, null, null, null, null, null,
 				null, null);
 		for (Device device : devices) {
@@ -195,7 +213,15 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByPage(String pageid) {
+	public void syncPlanByBundle(String bundleid) throws Exception {
+		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Bundle, bundleid);
+		for (HashMap<String, Object> bindObj : bindList) {
+			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+		}
+	}
+
+	@Transactional
+	public void syncPlanByPage(String pageid) throws Exception {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
@@ -203,7 +229,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByMediagrid(String mediagridid) {
+	public void syncPlanByMediagrid(String mediagridid) throws Exception {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Mediagrid, mediagridid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());

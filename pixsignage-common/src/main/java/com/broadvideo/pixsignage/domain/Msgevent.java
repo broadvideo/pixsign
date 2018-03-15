@@ -6,7 +6,7 @@ import org.apache.struts2.json.annotations.JSON;
 
 public class Msgevent {
 	public final static String MsgType_Schedule = "0"; // only bundle schedule
-	public final static String MsgType_Bundle_Schedule = "1"; // deprecated
+	// public final static String MsgType_Bundle_Schedule = "1"; // deprecated
 	public final static String MsgType_Plan = "2";
 
 	public final static String MsgType_VChannel_Info_VCSS = "3";

@@ -408,13 +408,19 @@ var PlanModule = function () {
 			'sAjaxSource' : 'device!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 							{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false }, 
+							{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false },
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false }],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(2)', nRow).html(aData.branch.name);
+				if (aData.onlineflag == 1) {
+					$('td:eq(2)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
+				} else if (aData.onlineflag == 0) {
+					$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+				} else if (aData.onlineflag == 9) {
+					$('td:eq(2)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+				}
 				$('td:eq(3)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-planbind-device-add">' + common.view.add + '</button>');
 				return nRow;
 			},

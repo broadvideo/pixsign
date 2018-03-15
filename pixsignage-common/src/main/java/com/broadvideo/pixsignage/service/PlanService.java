@@ -19,15 +19,17 @@ public interface PlanService {
 
 	public void deletePlan(String planid);
 
-	public void syncPlan(String planid);
+	public void syncPlan(String planid) throws Exception;
 
-	public void syncPlan(String bindtype, String bindid);
+	public void syncPlan(String bindtype, String bindid) throws Exception;
 
-	public void syncPlan2All(String orgid);
+	public void syncPlan2All(String orgid) throws Exception;
 
-	public void syncPlanByPage(String pageid);
+	public void syncPlanByBundle(String bundleid) throws Exception;
 
-	public void syncPlanByMediagrid(String mediagridid);
+	public void syncPlanByPage(String pageid) throws Exception;
+
+	public void syncPlanByMediagrid(String mediagridid) throws Exception;
 
 	public JSONObject generateBundlePlanJson(String deviceid);
 
