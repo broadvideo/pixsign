@@ -67,7 +67,9 @@
     select count(1) from bundle
     where status = 1 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="reviewflag != null">
       and reviewflag = #{reviewflag}
     </if>
@@ -87,7 +89,9 @@
     from bundle
     where status=1
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="reviewflag != null">
       and reviewflag = #{reviewflag}
     </if>

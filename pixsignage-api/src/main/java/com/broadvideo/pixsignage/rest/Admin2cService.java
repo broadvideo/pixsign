@@ -34,20 +34,25 @@ import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Folder;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Phonetoken;
+import com.broadvideo.pixsignage.domain.Plan;
+import com.broadvideo.pixsignage.domain.Plandtl;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Templet;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.FolderMapper;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.PhonetokenMapper;
+import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.TempletMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
@@ -82,6 +87,10 @@ public class Admin2cService {
 	private ImageMapper imageMapper;
 	@Autowired
 	private TempletMapper templetMapper;
+	@Autowired
+	private BundleMapper bundleMapper;
+	@Autowired
+	private PlanMapper planMapper;
 
 	@Autowired
 	private OrgService orgService;
@@ -670,6 +679,103 @@ public class Admin2cService {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Admin2c templets exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("bundles")
+	@Produces("application/json;charset=UTF-8")
+	public String bundles(@QueryParam("ratio") String ratio, @QueryParam("touchflag") String touchflag,
+			@QueryParam("start") String start, @QueryParam("length") String length, @QueryParam("token") String token) {
+		try {
+			logger.info("Admin2c bundles: ratio={},touchflag={},start={},length={},token={}", ratio, touchflag, start,
+					length, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+
+			String serverurl = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata";
+			List<Bundle> bundles = bundleMapper.selectList("" + staff.getOrgid(), null, null, touchflag, "1", null,
+					start, length);
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			JSONObject dataJson = new JSONObject();
+			JSONArray bundlesJson = new JSONArray();
+			for (Bundle bundle : bundles) {
+				JSONObject bundleJson = new JSONObject();
+				bundleJson.put("bundle_id", "" + bundle.getBundleid());
+				bundleJson.put("name", bundle.getName());
+				bundleJson.put("width", bundle.getWidth());
+				bundleJson.put("height", bundle.getHeight());
+				bundleJson.put("thumbnail", serverurl + bundle.getSnapshot());
+				bundlesJson.add(bundleJson);
+			}
+			dataJson.put("bundles", bundlesJson);
+			responseJson.put("data", dataJson);
+			logger.info("Admin2c bundles response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin2c bundles exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("plans")
+	@Produces("application/json;charset=UTF-8")
+	public String plans(@QueryParam("start") String start, @QueryParam("length") String length,
+			@QueryParam("token") String token) {
+		try {
+			logger.info("Admin2c plans: start={},length={},token={}", start, length, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+
+			List<Plan> plans = planMapper.selectList("" + staff.getOrgid(), null, "2", start, length);
+
+			String serverurl = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata";
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			JSONObject dataJson = new JSONObject();
+			JSONArray plansJson = new JSONArray();
+			for (Plan plan : plans) {
+				JSONObject planJson = new JSONObject();
+				planJson.put("plan_id", "" + plan.getPlanid());
+				planJson.put("priority", plan.getPriority());
+				planJson.put("start_date",
+						new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
+				planJson.put("end_date",
+						new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));
+				planJson.put("start_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
+				planJson.put("end_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
+				JSONArray plandtlJsonArray = new JSONArray();
+				for (Plandtl plandtl : plan.getPlandtls()) {
+					if (plandtl.getObjtype().equals(Plandtl.ObjType_Bundle)) {
+						JSONObject plandtlJson = new JSONObject();
+						plandtlJson.put("plandtl_id", plandtl.getPlandtlid());
+						plandtlJson.put("media_type", "bundle");
+						plandtlJson.put("media_id", plandtl.getObjid());
+						plandtlJson.put("thumbnail", serverurl + plandtl.getBundle().getSnapshot());
+						plandtlJsonArray.add(plandtlJson);
+					}
+				}
+				plansJson.add(planJson);
+			}
+			dataJson.put("plans", plansJson);
+			responseJson.put("data", dataJson);
+			logger.info("Admin2c plans response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin2c plans exception, ", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

@@ -103,7 +103,7 @@ var PlanModule = function () {
 				for (var i=0; i<aData.planbinds.length; i++) {
 					var planbind = aData.planbinds[i];
 					if (planbind.bindtype == 1) {
-						devicehtml += planbind.device.terminalid + ' ';
+						devicehtml += planbind.device.name + ' ';
 					} else if (planbind.bindtype == 2) {
 						devicegrouphtml += planbind.devicegroup.name + ' ';
 					}
@@ -876,7 +876,7 @@ var PlanModule = function () {
 
 				if (planbind.bindtype == 1) {
 					bindtype = common.view.device;
-					bindname = planbind.device.terminalid;
+					bindname = planbind.device.name;
 				} else if (planbind.bindtype == 2) {
 					bindtype = common.view.devicegroup;
 					bindname = planbind.devicegroup.name;
