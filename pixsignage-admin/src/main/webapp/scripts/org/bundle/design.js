@@ -20,6 +20,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['7'] = 100;
 		ZoneLimits['8'] = 1;
 		ZoneLimits['9'] = 1;
+		ZoneLimits['12'] = 1;
 		ZoneLimits['14'] = 4;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['16'] = 1;
@@ -111,6 +112,10 @@ var BundleDesignModule = function (mode) {
 			//Control Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
+		} else if (bundlezone.type == 12) {
+			//RSS Zone
+			var p_element = document.createElement('p');
+			$(inner_div).append(p_element);
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
 			var img_element = document.createElement('img');
@@ -283,6 +288,14 @@ var BundleDesignModule = function (mode) {
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-qrcode.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
+		} else if (bundlezone.type == 12) {
+			//RSS Zone
+			$(bundlezoneDiv).find('#rotatable').css({
+				'box-sizing': 'border-box',
+				'text-align': 'left', 
+				'word-wrap': 'break-word',
+			});
+			$(bundlezoneDiv).find('p').html(bundlezone.content);
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-stream.jpg');
@@ -440,6 +453,11 @@ var BundleDesignModule = function (mode) {
 							$('#TouchForm').loadJSON(_self.Zone);
 							refreshTouchtypeSelect();
 							$('#TouchModal').modal();
+						} else if (bundlezones[0].type == 12) {
+							//RSS Zone
+							_self.Zone = bundlezones[0];
+							$('#WebForm').loadJSON(_self.Zone);
+							$('#WebModal').modal();
 						} else if (bundlezones[0].type == 14) {
 							//Stream Zone
 							_self.Zone = bundlezones[0];

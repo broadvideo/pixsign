@@ -410,6 +410,7 @@ var TempletModule = function () {
 						_design.Objectid = _design.Object.bundleid;
 						_design.Zone = null;
 						$('.touch-ctrl').css('display', TouchCtrl? '':'none');
+						$('.rss-ctrl').css('display', StreamCtrl? '':'none');
 						$('.stream-ctrl').css('display', StreamCtrl? '':'none');
 						$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');

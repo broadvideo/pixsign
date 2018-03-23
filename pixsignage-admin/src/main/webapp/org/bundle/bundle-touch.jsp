@@ -181,6 +181,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
 								<i class="fa fa-cog"></i><div><spring:message code="pixsign.bundlezone.type.control"/></div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone rss-ctrl" zonetype="12">
+								<i class="fa fa-rss"></i><div>RSS</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone stream-ctrl" zonetype="14">
 								<i class="fa fa-cubes"></i><div><spring:message code="pixsign.bundlezone.type.stream"/></div>
 							</a>
@@ -618,7 +621,7 @@
 				<div class="modal-body">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.widget"/></div>
+							<div class="caption"><i class="fa fa-reorder"></i>URL</div>
 						</div>
 						<div class="portlet-body">
 							<form id="WebForm" class="form-horizontal" method="POST">
@@ -907,6 +910,7 @@
 <script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var RssCtrl = <%=(session_org != null && session_org.getRssflag().equals("1"))%>;
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;

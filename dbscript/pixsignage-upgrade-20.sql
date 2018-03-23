@@ -20,6 +20,8 @@ insert into staff(vspid,subsystem,loginname,password,name) values(2,0,'system','
 select last_insert_id() into @staffid4;
 insert into staffprivilege(staffid,privilegeid) values(@staffid4,0);
 
+alter table diyaction modify code varchar(32) default '';
+
 drop table hourplaylog;
 alter table dailyplaylog add persons int default 0;
 alter table dailyplaylog add male int default 0;

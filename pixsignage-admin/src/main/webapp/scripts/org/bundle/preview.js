@@ -179,6 +179,16 @@ var BundlePreviewModule = function () {
 				$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-qrcode.jpg');
 				$(inner_div).find('img').attr('width', '100%');
 				$(inner_div).find('img').attr('height', '100%');
+			} else if (zone.type == '12') {
+				//RSS Zone
+				var p_element = document.createElement('p');
+				$(p_element).html(zone.content);
+				$(inner_div).append(p_element);
+				$(inner_div).css({
+					'box-sizing': 'border-box',
+					'text-align': 'left', 
+					'word-wrap': 'break-word',
+				});
 			} else if (zone.type == 14) {
 				//Stream Zone
 				var img_element = document.createElement('img');

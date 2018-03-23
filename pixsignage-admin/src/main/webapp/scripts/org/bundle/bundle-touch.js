@@ -585,6 +585,7 @@ var BundleModule = function () {
 						_design.Objectid = data.bundle.bundleid;
 						_design.Zone = null;
 						$('.touch-ctrl').css('display', TouchCtrl? '':'none');
+						$('.rss-ctrl').css('display', StreamCtrl? '':'none');
 						$('.stream-ctrl').css('display', StreamCtrl? '':'none');
 						$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
