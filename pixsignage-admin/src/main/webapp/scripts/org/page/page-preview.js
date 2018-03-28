@@ -229,6 +229,13 @@ var PagePreviewModule = function () {
 					'white-space': 'pre-wrap',
 					'text-decoration': zone.decoration,
 				});
+			} else if (zone.type == '10') {
+				//Camera Zone
+				var img_element = document.createElement('img');
+				$(inner_div).append(img_element);
+				$(zone_div).find('img').attr('src', '/pixsignage-page/module/camera/snapshot.jpg');
+				$(zone_div).find('img').attr('width', '100%');
+				$(zone_div).find('img').attr('height', '100%');
 			} else if (zone.type == '11' || zone.type == '12') {
 				var table = document.createElement('table');
 				$(inner_div).append(table);

@@ -54,6 +54,10 @@ var PixPage = function () {
 				//Button Zone
 				var buttonzone = new ButtonZone($(inner_div), zone);
 				allmodules.push(buttonzone);
+			} else if (zone.type == '10') {
+				//Camera Zone
+				var camera = new Camera($(inner_div), zone, scalew, scaleh);
+				allmodules.push(camera);
 			} else if (zone.type == '11') {
 				//CalendarList Zone
 				var dczone = new DailyCourse($(inner_div), zone, scalew, scaleh);

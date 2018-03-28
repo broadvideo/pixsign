@@ -155,6 +155,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			deviceService.unbind(deviceid);
+			logger.info("Device unbind success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);
@@ -170,6 +171,8 @@ public class DeviceAction extends BaseDatatableAction {
 			String branchid = getParameter("branchid");
 			String upgradeflag = getParameter("upgradeflag");
 			deviceService.updateUpgradeflag(orgid, branchid, upgradeflag);
+			logger.info("Device updateUpgradeflag success, orgid={},branchid={},upgradeflag={}", orgid, branchid,
+					upgradeflag);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doUpdateUpgradeflag exception, ", ex);
@@ -199,10 +202,11 @@ public class DeviceAction extends BaseDatatableAction {
 			String deviceid = getParameter("deviceid");
 			if (deviceid != null && deviceid.length() > 0) {
 				deviceService.config(deviceid);
+				logger.info("Device config success, deviceid={}", deviceid);
 			} else {
 				deviceService.configall("" + getLoginStaff().getOrgid());
+				logger.info("Device configall success, orgid={}", getLoginStaff().getOrgid());
 			}
-			logger.info("Device push config success");
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device push config error ", ex);
@@ -216,7 +220,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			deviceService.reboot(deviceid);
-			logger.info("Device reboot success");
+			logger.info("Device reboot success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device reboot error ", ex);
@@ -230,7 +234,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			deviceService.poweroff(deviceid);
-			logger.info("Device poweroff success");
+			logger.info("Device poweroff success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device poweroff error ", ex);
@@ -244,7 +248,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			deviceService.screen(deviceid);
-			logger.info("Device screen success");
+			logger.info("Device screen success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device screen error ", ex);

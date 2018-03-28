@@ -420,7 +420,7 @@ public class PixsignageService21 {
 			}
 
 			JSONObject responseJson;
-			responseJson = planService.generateBundlePlanJson("" + device.getDeviceid());
+			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0).put("message", "成功");
 			logger.info("Pixsignage Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();

@@ -11,12 +11,6 @@
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<style type="text/css">
-.dropdown-menu li > a {
-  padding: 0px !important; 
-  display: inline !important;
-}
-</style>
 </head>
 
 <body>

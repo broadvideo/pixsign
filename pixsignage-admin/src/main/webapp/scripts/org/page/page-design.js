@@ -18,6 +18,7 @@ var PageDesignModule = function (mode) {
 		ZoneLimits['5'] = 2;
 		ZoneLimits['6'] = 1;
 		ZoneLimits['7'] = 100;
+		ZoneLimits['10'] = 1;
 		ZoneLimits['11'] = 1;
 		ZoneLimits['12'] = 1;
 		ZoneLimits['13'] = 1;
@@ -192,7 +193,7 @@ var PageDesignModule = function (mode) {
 				//CalendarZone
 				var table = document.createElement('table');
 				$(inner_div).append(table);
-			} else if (pagezone.type == 21 || pagezone.type == 31 || pagezone.type == 41) {
+			} else if (pagezone.type == 10 || pagezone.type == 21 || pagezone.type == 31 || pagezone.type == 41) {
 				//Diy Zone & MeetingZone & EstateZone
 				var img_element = document.createElement('img');
 				$(inner_div).append(img_element);
@@ -404,6 +405,11 @@ var PageDesignModule = function (mode) {
 					text_val = text_val.replace(/&nbsp;/g, ' ');
 				}
 				$(pagezoneDiv).find('p').html(text_val);
+			} else if (pagezone.type == 10) {
+				//Camera Zone
+				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/camera/snapshot.jpg');
+				$(pagezoneDiv).find('img').attr('width', '100%');
+				$(pagezoneDiv).find('img').attr('height', '100%');
 			} else if (pagezone.type == 11 || pagezone.type == 12) {
 				var table = $(pagezoneDiv).find('table');
 				$(table).attr('width', '100%');

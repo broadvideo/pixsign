@@ -104,6 +104,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="10">
+								<i class="fa fa-camera"></i><div>摄像头</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
