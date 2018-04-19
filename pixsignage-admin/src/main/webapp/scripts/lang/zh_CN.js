@@ -141,6 +141,7 @@ var common = {
 		pagezone_type_13: '刷卡签到',
 		pagezone_type_14: '家校互动',
 		pagezone_type_15: '考试通告',
+		pagezone_type_16: '个人信息',
 		pagezone_type_21: '互动',
 		pagezone_type_31: '会议',
 		pagezone_type_41: '地产',

@@ -202,11 +202,42 @@
     order by deviceid
   </select>
 
-  <select id="selectCountByOstype" resultType="Integer">
+  <select id="selectMaxCount1" resultType="Integer">
     select count(1) from device 
     where status = 1
     and orgid = #{orgid}
-    and ostype = #{ostype}
+    and appname like 'DigitalBox_%'
+    and appname != 'DigitalBox_LAUNCHER_UWIN'
+  </select>
+  <select id="selectMaxCount2" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and appname = 'DigitalBox_LAUNCHER_UWIN'
+  </select>
+  <select id="selectMaxCount3" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and appname like 'DigitalBox2_%'
+  </select>
+  <select id="selectMaxCount4" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and appname like 'TeaTable_%'
+  </select>
+  <select id="selectMaxCount5" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and appname like 'PixMultiSign%'
+  </select>
+  <select id="selectMaxCount6" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and ostype = 2
   </select>
 
   <delete id="unbind" >

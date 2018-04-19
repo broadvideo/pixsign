@@ -14,8 +14,7 @@
     <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
     <result column="currentdevices" property="currentdevices" jdbcType="INTEGER" />
     <result column="currentdeviceidx" property="currentdeviceidx" jdbcType="INTEGER" />
-    <result column="maxdevices1" property="maxdevices1" jdbcType="INTEGER" />
-    <result column="maxdevices2" property="maxdevices2" jdbcType="INTEGER" />
+    <result column="maxdetail" property="maxdetail" jdbcType="VARCHAR" />
     <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
     <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="copyright" property="copyright" jdbcType="VARCHAR" />
@@ -47,7 +46,7 @@
   
   <sql id="Base_Column_List" >
     orgid, vspid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
-    currentdeviceidx, maxdevices1, maxdevices2, maxstorage, currentstorage, copyright, description, backupvideoid, 
+    currentdeviceidx, maxdetail, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
     apps, logo, tags, defaultbundleid, defaultpageid, createtime, createstaffid
   </sql>
@@ -115,8 +114,7 @@
       code, status, feature, 
       expireflag, expiretime, maxdevices, 
       currentdevices, currentdeviceidx, 
-      maxdevices1, maxdevices2, 
-      maxstorage, currentstorage, 
+      maxdetail, maxstorage, currentstorage, 
       copyright, description, backupvideoid, 
       powerflag, poweron, poweroff, 
       qrcodeflag, devicepassflag, devicepass, 
@@ -128,8 +126,7 @@
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{feature,jdbcType=VARCHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentdeviceidx,jdbcType=INTEGER}, 
-      #{maxdevices1,jdbcType=INTEGER}, #{maxdevices2,jdbcType=INTEGER}, 
-      #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
+      #{maxdetail,jdbcType=VARCHAR}, #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
       #{copyright,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{backupvideoid,jdbcType=INTEGER}, 
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, 
       #{qrcodeflag,jdbcType=CHAR}, #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, 
@@ -177,11 +174,8 @@
       <if test="currentdeviceidx != null" >
         currentdeviceidx,
       </if>
-      <if test="maxdevices1 != null" >
-        maxdevices1,
-      </if>
-      <if test="maxdevices2 != null" >
-        maxdevices2,
+      <if test="maxdetail != null" >
+        maxdetail,
       </if>
       <if test="maxstorage != null" >
         maxstorage,
@@ -284,11 +278,8 @@
       <if test="currentdeviceidx != null" >
         #{currentdeviceidx,jdbcType=INTEGER},
       </if>
-      <if test="maxdevices1 != null" >
-        #{maxdevices1,jdbcType=INTEGER},
-      </if>
-      <if test="maxdevices2 != null" >
-        #{maxdevices2,jdbcType=INTEGER},
+      <if test="maxdetail != null" >
+        #{maxdetail,jdbcType=VARCHAR},
       </if>
       <if test="maxstorage != null" >
         #{maxstorage,jdbcType=BIGINT},
@@ -394,11 +385,8 @@
       <if test="currentdeviceidx != null" >
         currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
       </if>
-      <if test="maxdevices1 != null" >
-        maxdevices1 = #{maxdevices1,jdbcType=INTEGER},
-      </if>
-      <if test="maxdevices2 != null" >
-        maxdevices2 = #{maxdevices2,jdbcType=INTEGER},
+      <if test="maxdetail != null" >
+        maxdetail = #{maxdetail,jdbcType=VARCHAR},
       </if>
       <if test="maxstorage != null" >
         maxstorage = #{maxstorage,jdbcType=BIGINT},
@@ -482,8 +470,7 @@
       maxdevices = #{maxdevices,jdbcType=INTEGER},
       currentdevices = #{currentdevices,jdbcType=INTEGER},
       currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
-      maxdevices1 = #{maxdevices1,jdbcType=INTEGER},
-      maxdevices2 = #{maxdevices2,jdbcType=INTEGER},
+      maxdetail = #{maxdetail,jdbcType=VARCHAR},
       maxstorage = #{maxstorage,jdbcType=BIGINT},
       currentstorage = #{currentstorage,jdbcType=BIGINT},
       copyright = #{copyright,jdbcType=VARCHAR},

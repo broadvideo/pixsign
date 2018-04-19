@@ -53,6 +53,8 @@
 										<option value="4"><spring:message code="pixsign.prop.ratio_4"/></option>
 										<option value="5"><spring:message code="pixsign.prop.ratio_5"/></option>
 										<option value="6"><spring:message code="pixsign.prop.ratio_6"/></option>
+										<option value="7">1920 x 313</option>
+										<option value="8">313 x 1920</option>
 									</select>
 								</div>
 							</div>

@@ -328,6 +328,22 @@ var WizardModule = function () {
 				// 3:4
 				_bundle.width = 1440;
 				_bundle.height = 1920;
+			} else if (ratio == 5) {
+				// 16:3
+				_bundle.width = 1920;
+				_bundle.height = 360;
+			} else if (ratio == 6) {
+				// 3:16
+				_bundle.width = 360;
+				_bundle.height = 1920;
+			} else if (ratio == 7) {
+				// 1920x313
+				_bundle.width = 1920;
+				_bundle.height = 313;
+			} else if (ratio == 8) {
+				// 313x1920
+				_bundle.width = 313;
+				_bundle.height = 1920;
 			}
 		} else {
 			templetid = $('#BundleForm input[name="bundle.templetid"]:checked').val();

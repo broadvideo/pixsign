@@ -3,7 +3,6 @@ package com.broadvideo.pixsignage.task;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -33,9 +32,6 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.VchannelMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
-import com.gif4j.GifEncoder;
-import com.gif4j.GifFrame;
-import com.gif4j.GifImage;
 
 public class PixboxTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -175,54 +171,29 @@ public class PixboxTask {
 								FileUtils.copyFile(new File(oldFilePath), new File(newFilePath));
 							}
 
-							// Generate preview gif
+							FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
 							String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + newFilePath
-									+ " -r 1 -ss 1 -t 15 -f image2 " + CommonConfig.CONFIG_TEMP_HOME + "/"
-									+ video.getVideoid() + "-%03d.jpg";
-							logger.info("Begin to generate preview and thumbnail: {}", command);
+									+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+									+ "/video/snapshot/" + video.getVideoid() + ".jpg";
+							logger.info("Begin to generate preview and thumbnail: " + command);
 							CommonUtil.execCommand(command);
-
-							List<String> jpgList = new ArrayList<String>();
-							for (int j = 1; j < 999; j++) {
-								String jpgName = video.getVideoid() + "-" + String.format("%03d", j) + ".jpg";
-								if (new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgName).exists()) {
-									jpgList.add(jpgName);
-								} else {
-									break;
-								}
+							File destFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot/"
+									+ video.getVideoid() + ".jpg");
+							if (!destFile.exists()) {
+								command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + newFilePath
+										+ " -y -f image2 -ss 1 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+										+ "/video/snapshot/" + video.getVideoid() + ".jpg";
+								CommonUtil.execCommand(command);
 							}
-
-							if (jpgList.size() > 0) {
-								GifImage gifImage = new GifImage();
-								gifImage.setDefaultDelay(100);
-								for (int j = 0; j < jpgList.size(); j++) {
-									BufferedImage img = ImageIO
-											.read(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)));
-									gifImage.addGifFrame(new GifFrame(img));
-								}
-								GifEncoder.encode(gifImage, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/gif/"
-										+ video.getVideoid() + ".gif"));
+							if (destFile.exists()) {
+								BufferedImage img = ImageIO.read(destFile);
+								video.setWidth(img.getWidth());
+								video.setHeight(img.getHeight());
+								video.setThumbnail("/video/snapshot/" + video.getVideoid() + ".jpg");
+								logger.info("Finish thumbnail generating.");
+							} else {
+								logger.info("Failed to generate thumbnail.");
 							}
-							logger.info("Finish preview generating.");
-
-							// Generate thumbnail
-							if (jpgList.size() >= 6) {
-								FileUtils.copyFile(new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(5)),
-										new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot/"
-												+ video.getVideoid() + ".jpg"));
-								video.setThumbnail("/image/snapshot/" + video.getVideoid() + ".jpg");
-							} else if (jpgList.size() >= 1) {
-								FileUtils.copyFile(
-										new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(jpgList.size() - 1)),
-										new File(CommonConfig.CONFIG_PIXDATA_HOME + "/image/snapshot/"
-												+ video.getVideoid() + ".jpg"));
-								video.setThumbnail("/image/snapshot/" + video.getVideoid() + ".jpg");
-							}
-
-							for (int j = 0; j < jpgList.size(); j++) {
-								new File(CommonConfig.CONFIG_TEMP_HOME + "/" + jpgList.get(j)).delete();
-							}
-							logger.info("Finish thumbnail generating.");
 
 							video.setFilepath("/video/external/" + newFileName);
 							video.setFilename(newFileName);

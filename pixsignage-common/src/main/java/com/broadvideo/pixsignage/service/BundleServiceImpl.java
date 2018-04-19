@@ -121,6 +121,14 @@ public class BundleServiceImpl implements BundleService {
 				// 3:16
 				bundle.setWidth(360);
 				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("7")) {
+				// 1920x313
+				bundle.setWidth(1920);
+				bundle.setHeight(313);
+			} else if (bundle.getRatio().equals("8")) {
+				// 313x1920
+				bundle.setWidth(313);
+				bundle.setHeight(1920);
 			}
 			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			bundle.setUpdatetime(Calendar.getInstance().getTime());
@@ -278,6 +286,14 @@ public class BundleServiceImpl implements BundleService {
 			} else if (bundle.getRatio().equals("6")) {
 				// 3:16
 				bundle.setWidth(360);
+				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("7")) {
+				// 1920x313
+				bundle.setWidth(1920);
+				bundle.setHeight(313);
+			} else if (bundle.getRatio().equals("8")) {
+				// 313x1920
+				bundle.setWidth(313);
 				bundle.setHeight(1920);
 			}
 			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));

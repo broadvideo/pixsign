@@ -68,13 +68,11 @@ public class SystemTask extends Thread {
 							JSONObject orgJson = dataJson.getJSONObject("org");
 							String feature2 = orgJson.getString("feature");
 							int maxdevices2 = orgJson.getInt("maxdevices");
-							int maxdevices12 = orgJson.getInt("maxdevices1");
-							int maxdevices22 = orgJson.getInt("maxdevices2");
+							String maxdetail2 = orgJson.getString("maxdetail");
 							long maxstorage2 = orgJson.getLong("maxstorage");
 							org.setFeature(feature2);
 							org.setMaxdevices(maxdevices2);
-							org.setMaxdevices1(maxdevices12);
-							org.setMaxdevices2(maxdevices22);
+							org.setMaxdetail(maxdetail2);
 							org.setMaxstorage(maxstorage2);
 
 							vspService.updateVsp(vsp);

@@ -141,6 +141,7 @@ var common = {
 		pagezone_type_13: 'Attendance Zone',
 		pagezone_type_14: 'Home-School Zone',
 		pagezone_type_15: 'Exam-Notice Zone',
+		pagezone_type_16: 'Person-Info Zone',
 		pagezone_type_21: 'Diy Zone',
 		pagezone_type_31: 'Meeting Zone',
 		pagezone_type_41: 'Estate Zone',

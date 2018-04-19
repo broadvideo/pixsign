@@ -104,6 +104,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
+								<i class="fa fa-steam"></i><div>流媒体</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="10">
 								<i class="fa fa-camera"></i><div>摄像头</div>
 							</a>
@@ -114,13 +117,16 @@
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="13">
-								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
+								<i class="fa fa-credit-card"></i><div>上课考勤</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="16">
+								<i class="fa fa-users"></i><div>个人信息</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
@@ -914,7 +920,7 @@
 		</div>
 	</div>
 
-	<div id="WebModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="ContentModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -923,10 +929,10 @@
 				<div class="modal-body">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>网页</div>
+							<div class="caption"><i class="fa fa-reorder"></i>内容明细</div>
 						</div>
 						<div class="portlet-body">
-							<form id="WebForm" class="form-horizontal" method="POST">
+							<form id="ContentForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
 										<label class="col-md-3 control-label">URL<span class="required">*</span></label>

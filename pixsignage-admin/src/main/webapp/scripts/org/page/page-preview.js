@@ -183,7 +183,7 @@ var PagePreviewModule = function () {
 					'white-space': 'pre-wrap',
 					'text-decoration': zone.decoration,
 				});
-			} else if (zone.type == '6') {
+			} else if (zone.type == '6' || zone.type == '9') {
 				var p_element = document.createElement('p');
 				$(p_element).html(zone.content);
 				$(inner_div).append(p_element);

@@ -22,6 +22,9 @@ insert into staffprivilege(staffid,privilegeid) values(@staffid4,0);
 
 alter table diyaction modify code varchar(32) default '';
 
+alter table org add maxdetail varchar(1024) default '';
+update org set maxdetail = concat(maxdevices1, ',', maxdevices1, ',', maxdevices1, ',', maxdevices1, ',', maxdevices1, ',', maxdevices2);
+
 drop table hourplaylog;
 alter table dailyplaylog add persons int default 0;
 alter table dailyplaylog add male int default 0;

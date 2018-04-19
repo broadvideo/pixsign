@@ -318,6 +318,8 @@
 														<option value="4"><spring:message code="pixsign.prop.ratio_4"/></option>
 														<option value="5"><spring:message code="pixsign.prop.ratio_5"/></option>
 														<option value="6"><spring:message code="pixsign.prop.ratio_6"/></option>
+														<option value="7">1920 x 313</option>
+														<option value="8">313 x 1920</option>
 													</select>
 												</div>
 											</div>
@@ -805,6 +807,7 @@
 <script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var RssCtrl = <%=(session_org != null && session_org.getRssflag().equals("1"))%>;
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;

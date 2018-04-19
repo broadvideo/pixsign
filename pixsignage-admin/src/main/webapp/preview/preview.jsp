@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/pixsignage-page/module/attendance/attendance.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/home-school/home-school.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/exam-notice/exam-notice.css"/>
+	<link rel="stylesheet" href="/pixsignage-page/module/personal-info/personal-info.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/an-capacity/animate-ext.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/meeting/meeting.css"/>
 	
@@ -40,6 +41,7 @@
 	<script src="/pixsignage-page/pixpage/module-date.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-web.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-button.js" type="text/javascript"></script>
+	<script src="/pixsignage-page/pixpage/module-stream.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-other.js" type="text/javascript"></script>
 
 	<script src="/pixsignage-page/module/common/index.js"></script>
@@ -48,8 +50,11 @@
 	<script src="/pixsignage-page/module/attendance/index.js"></script>
 	<script src="/pixsignage-page/module/home-school/index.js"></script>
 	<script src="/pixsignage-page/module/exam-notice/index.js"></script>
+	<script src="/pixsignage-page/module/personal-info/index.js"></script>
+	
 	<script src="/pixsignage-page/module/an-capacity/an-capacity.js"></script>
 	<script src="/pixsignage-page/module/meeting/index.js"></script>
+	<script src="/pixsignage-page/module/camera/index.js"></script>
 	<script src="/pixsignage-page/module/estate/index.js"></script>
 
 <%

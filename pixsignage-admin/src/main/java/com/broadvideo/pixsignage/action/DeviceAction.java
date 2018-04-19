@@ -3,6 +3,8 @@ package com.broadvideo.pixsignage.action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +42,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.ibm.icu.util.Calendar;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -190,7 +198,7 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device schedule sync error", ex);
+			logger.error("DeviceAction schedule sync error", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -209,7 +217,7 @@ public class DeviceAction extends BaseDatatableAction {
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device push config error ", ex);
+			logger.error("DeviceAction push config error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -223,7 +231,7 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device reboot success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device reboot error ", ex);
+			logger.error("DeviceAction reboot error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -237,7 +245,7 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device poweroff success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device poweroff error ", ex);
+			logger.error("DeviceAction poweroff error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -248,7 +256,7 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String deviceid = getParameter("deviceid");
 			deviceService.screen(deviceid);
-			logger.info("Device screen success, deviceid={}", deviceid);
+			logger.info("DeviceAction screen success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device screen error ", ex);
@@ -299,7 +307,7 @@ public class DeviceAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device doRoomList error ", ex);
+			logger.error("DeviceAction doRoomList error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -330,7 +338,7 @@ public class DeviceAction extends BaseDatatableAction {
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device doScreenList error ", ex);
+			logger.error("DeviceAction doScreenList error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -351,7 +359,7 @@ public class DeviceAction extends BaseDatatableAction {
 
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("doExport exception, ", ex);
+			logger.error("DeviceAction doQrcode exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -374,7 +382,7 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device utext success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device utext error ", ex);
+			logger.error("DeviceAction utext error ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -388,7 +396,65 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device ucancel success");
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("Device ucancel error ", ex);
+			logger.error("DeviceAction ucancel error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doExport() {
+		try {
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			HSSFSheet sheet = workbook.createSheet();
+			HSSFCellStyle style = workbook.createCellStyle();
+			style.setWrapText(true);
+			int count = 0;
+			HSSFRow row;
+			HSSFCell cell;
+
+			List<Device> list = deviceService.selectList("" + getLoginStaff().getOrgid(),
+					"" + getLoginStaff().getBranchid(), "1", "1", null, null, null, null, null, null, null, null,
+					"default");
+			for (int i = 0; i < list.size(); i++) {
+				Device device = list.get(i);
+				row = sheet.createRow(count);
+				cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getTerminalid());
+				cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getName());
+				cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getBranch().getName());
+				cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
+				if (device.getOnlineflag().equals("1")) {
+					cell.setCellValue("在线");
+				} else {
+					cell.setCellValue("离线");
+				}
+				cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getIip());
+				cell = row.createCell(5, HSSFCell.CELL_TYPE_STRING);
+				cell.setCellValue(device.getAppname());
+				count++;
+			}
+
+			sheet.setColumnWidth(0, 5000);
+			sheet.setColumnWidth(1, 5000);
+			sheet.setColumnWidth(2, 10000);
+			sheet.setColumnWidth(3, 3000);
+			sheet.setColumnWidth(4, 5000);
+			sheet.setColumnWidth(5, 6000);
+
+			exportname = "device-" + Calendar.getInstance().getTimeInMillis() + ".xls";
+			FileOutputStream fOut = new FileOutputStream("/tmp/" + exportname);
+			workbook.write(fOut);
+			fOut.flush();
+			fOut.close();
+			workbook.close();
+			inputStream = new FileInputStream("/tmp/" + exportname);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doExport exception. ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
