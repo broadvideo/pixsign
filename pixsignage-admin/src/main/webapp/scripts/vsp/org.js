@@ -380,7 +380,8 @@ var OrgModule = function () {
 			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
 			+ $('input[name="org.liftflag"]').val() + $('input[name="org.attendanceflag"]').val()
-			+ '00000000000000000000';
+			+ $('input[name="org.planflag"]').val()
+			+ '0000000000000000000';
 			formData.append('org.feature', feature);
 			
 			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()

@@ -350,6 +350,16 @@ public class Vsp {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
+	public String getPlanflag() {
+		int i = 21;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setPlanflag(String flag) {
+		int i = 21;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
 	public List<App> getApplist() {
 		return applist;
 	}

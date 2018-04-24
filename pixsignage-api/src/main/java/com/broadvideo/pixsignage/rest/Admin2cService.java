@@ -736,7 +736,7 @@ public class Admin2cService {
 				return handleResult(1002, "Token失效");
 			}
 
-			List<Plan> plans = planMapper.selectList("" + staff.getOrgid(), null, "2", start, length);
+			List<Plan> plans = planMapper.selectList("" + staff.getOrgid(), null, null, "2", start, length, null);
 
 			String serverurl = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata";

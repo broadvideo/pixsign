@@ -32,6 +32,8 @@ public class Plan {
 
 	private Date createtime;
 
+	private Branch branch;
+
 	private List<Plandtl> plandtls;
 
 	private List<Planbind> planbinds;
@@ -132,6 +134,14 @@ public class Plan {
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 	public List<Plandtl> getPlandtls() {

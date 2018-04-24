@@ -314,6 +314,8 @@ var common = {
 		date_error: '非法的开始日期与结束日期',
 		plandtl_zero: '请选择节目',
 		planbind_zero: '请选择终端',
+		page_zero: '请选择节目',
+		bind_zero: '请选择终端',
 		
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',

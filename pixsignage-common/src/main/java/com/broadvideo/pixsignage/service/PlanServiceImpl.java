@@ -82,12 +82,13 @@ public class PlanServiceImpl implements PlanService {
 	@Autowired
 	private BundleService bundleService;
 
-	public int selectCount(String orgid, String branchid, String plantype) {
-		return planMapper.selectCount(orgid, branchid, plantype);
+	public int selectCount(String orgid, String branchid, String subbranchflag, String plantype, String search) {
+		return planMapper.selectCount(orgid, branchid, subbranchflag, plantype, search);
 	}
 
-	public List<Plan> selectList(String orgid, String branchid, String plantype, String start, String length) {
-		return planMapper.selectList(orgid, branchid, plantype, start, length);
+	public List<Plan> selectList(String orgid, String branchid, String subbranchflag, String plantype, String start,
+			String length, String search) {
+		return planMapper.selectList(orgid, branchid, subbranchflag, plantype, start, length, search);
 	}
 
 	public List<Plan> selectListByBind(String plantype, String bindtype, String bindid) {
@@ -221,10 +222,18 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByPage(String pageid) throws Exception {
-		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+	public void syncPlanByPage(String orgid, String pageid) throws Exception {
+		Org org = orgMapper.selectByPrimaryKey(orgid);
+		if (org.getPlanflag().equals("1")) {
+			List<Device> deviceList = deviceMapper.selectByDefaultpage(pageid);
+			for (Device device : deviceList) {
+				syncPlan("1", "" + device.getDeviceid());
+			}
+		} else {
+			List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
+			for (HashMap<String, Object> bindObj : bindList) {
+				syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			}
 		}
 	}
 
@@ -284,41 +293,39 @@ public class PlanServiceImpl implements PlanService {
 		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
 
 		// generate final json
-		List<Plan> planList;
-		if (device.getDevicegroupid().intValue() == 0) {
-			planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Device, deviceid);
-		} else {
-			planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Devicegroup,
-					"" + device.getDevicegroupid());
-		}
-
-		if (planList.size() == 0) {
-			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			if (org.getDefaultpage() != null) {
-				Plan plan = new Plan();
-				plan.setPlanid(0);
-				plan.setPlantype(Plan.PlanType_Page);
-				plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
-				plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
-				plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-				plan.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-				plan.setPriority(0);
-				Plandtl plandtl = new Plandtl();
-				plandtl.setPlandtlid(0);
-				plandtl.setPlanid(0);
-				plandtl.setObjtype(Plandtl.ObjType_Page);
-				plandtl.setObjid(org.getDefaultpageid());
-				plandtl.setDuration(60);
-				plandtl.setMaxtimes(0);
-				List<Plandtl> plandtls = new ArrayList<Plandtl>();
-				plandtls.add(plandtl);
-				plan.setPlandtls(plandtls);
-				planList.add(plan);
+		List<Plan> planList = new ArrayList<Plan>();
+		if (org.getPlanflag().equals("1") && device.getDefaultpage() != null) {
+			Plan plan = new Plan();
+			plan.setPlanid(0);
+			plan.setPlantype(Plan.PlanType_Page);
+			plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
+			plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
+			plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			plan.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			plan.setPriority(0);
+			Plandtl plandtl = new Plandtl();
+			plandtl.setPlandtlid(0);
+			plandtl.setPlanid(0);
+			plandtl.setObjtype(Plandtl.ObjType_Page);
+			plandtl.setObjid(device.getDefaultpageid());
+			plandtl.setDuration(60);
+			plandtl.setMaxtimes(0);
+			List<Plandtl> plandtls = new ArrayList<Plandtl>();
+			plandtls.add(plandtl);
+			plan.setPlandtls(plandtls);
+			planList.add(plan);
+		} else if (org.getPlanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Device, deviceid);
+			} else {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Devicegroup,
+						"" + device.getDevicegroupid());
 			}
 		}
 
@@ -631,8 +638,27 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
+	public void handleBatch(Page page, HashMap<String, Object>[] binds) {
+		for (int i = 0; i < binds.length; i++) {
+			HashMap<String, Object> bind = binds[i];
+			String bindtype = "" + bind.get("bindtype");
+			if (bindtype.equals("1")) {
+				Device device = deviceMapper.selectByPrimaryKey("" + bind.get("bindid"));
+				device.setDefaultpageid(page.getPageid());
+				deviceMapper.updateByPrimaryKeySelective(device);
+			} else {
+				List<Device> devices = deviceMapper.selectByDevicegroup("" + bind.get("bindid"));
+				for (Device device : devices) {
+					device.setDefaultpageid(page.getPageid());
+					deviceMapper.updateByPrimaryKeySelective(device);
+				}
+			}
+		}
+	}
+
+	@Transactional
 	public void upgrade2multiplan() {
-		int count = planMapper.selectCount(null, null, Plan.PlanType_Multi);
+		int count = planMapper.selectCount(null, null, null, Plan.PlanType_Multi, null);
 		if (count > 0) {
 			return;
 		}

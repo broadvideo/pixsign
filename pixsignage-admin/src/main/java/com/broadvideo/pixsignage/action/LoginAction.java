@@ -22,7 +22,6 @@ import com.broadvideo.pixsignage.domain.Vsp;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.OplogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
-import com.broadvideo.pixsignage.persistence.PhonetokenMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.VspMapper;
 import com.broadvideo.pixsignage.service.PrivilegeService;
@@ -49,8 +48,6 @@ public class LoginAction extends BaseAction {
 	private StaffMapper staffMapper;
 	@Autowired
 	private OplogMapper oplogMapper;
-	@Autowired
-	private PhonetokenMapper phonetokenMapper;
 	@Autowired
 	private PrivilegeService privilegeService;
 

@@ -31,6 +31,8 @@ public interface DeviceMapper {
 
 	Device selectByTerminalid(@Param(value = "terminalid") String terminalid);
 
+	List<Device> selectByDefaultpage(@Param(value = "defaultpageid") String defaultpageid);
+
 	int selectMaxCount1(@Param(value = "orgid") String orgid);
 
 	int selectMaxCount2(@Param(value = "orgid") String orgid);

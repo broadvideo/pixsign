@@ -40,7 +40,7 @@
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Org" extends="BaseResultMap">
     <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
-    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectBaseByPrimaryKey" />
+    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   

@@ -112,6 +112,17 @@
 									</label>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.planflag"/><span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="org.planflag" value="0"> <spring:message code="pixsign.org.planflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="org.planflag" value="1"> <spring:message code="pixsign.org.planflag_1"/>
+									</label>
+								</div>
+							</div>
 							<div class="form-group school-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.schoolflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">

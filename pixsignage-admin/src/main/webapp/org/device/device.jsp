@@ -457,10 +457,10 @@
 												<div class="btn-group">
 													<button class="btn green pix-allmap"><spring:message code="pixsign.map"/> <i class="fa fa-map-marker"></i></button>
 												</div>
-												<div class="btn-group">
+												<div class="btn-group bundle-ctrl">
 													<button class="btn red pix-utext"><spring:message code="pixsign.utext"/> <i class="fa fa-bolt"></i></button>
 												</div>
-												<div class="btn-group">
+												<div class="btn-group bundle-ctrl">
 													<button class="btn blue pix-ucancel"><spring:message code="pixsign.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
 												</div>
 												<div class="btn-group">
@@ -531,6 +531,8 @@
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/device.js?t=${timestamp}"></script>
 <script>
+var BundleCtrl = <%=(session_org != null && session_org.getBundleflag().equals("1"))%>;
+$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
 var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');

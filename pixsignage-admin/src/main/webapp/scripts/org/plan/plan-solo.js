@@ -40,6 +40,7 @@ var PlanModule = function () {
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				var playtimehtml = '';
 				playtimehtml += '<span><h4><b>Plan-' + aData.planid + '</b></h4></span><hr/>';
+				playtimehtml += aData.branch.name + '<br/>';
 				if (aData.startdate == '1970-01-01') {
 					playtimehtml += common.view.unlimited;
 				} else {

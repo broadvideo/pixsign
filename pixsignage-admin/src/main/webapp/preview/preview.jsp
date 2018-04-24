@@ -32,6 +32,7 @@
 	<script src="/pixsignage-page/plugin/base64/base64.min.js"></script>
 	<script src="/pixsignage-page/plugin/bxslider/jquery.bxslider.min.js"></script>
 	<script src="/pixsignage-page/plugin/hammer/hammer.js"></script>
+	<script src="/pixsignage-page/plugin/vconsole/vconsole.min.js"></script>
 	
 	<script src="/pixsignage-page/pixpage/pixpage.js" type="text/javascript"></script>
 	<script src="/pixsignage-page/pixpage/module-image.js" type="text/javascript"></script>

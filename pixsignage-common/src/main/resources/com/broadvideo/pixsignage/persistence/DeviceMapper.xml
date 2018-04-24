@@ -62,11 +62,14 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="cataitemid1" property="cataitemid1" jdbcType="INTEGER" />
     <result column="cataitemid2" property="cataitemid2" jdbcType="INTEGER" />
+    <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
+    <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectBaseByPrimaryKey" />
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
+    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
   </resultMap>
@@ -78,7 +81,7 @@
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
-    tags, cataitemid1, cataitemid2
+    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -199,6 +202,12 @@
   <select id="selectByTerminalid" resultMap="BaseResultMap">
     select * from device
     where terminalid = #{terminalid}
+    order by deviceid
+  </select>
+
+  <select id="selectByDefaultpage" resultMap="BaseResultMap">
+    select * from device
+    where defaultpageid = #{defaultpageid}
     order by deviceid
   </select>
 
@@ -365,7 +374,8 @@
       upgradeflag, appfileid, tagflag, temperature,
       downloadspeed, downloadbytes, networkmode,
       networksignal, brightness, tags, 
-      cataitemid1, cataitemid2)
+      cataitemid1, cataitemid2, defaultbundleid, 
+      defaultpageid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -383,9 +393,10 @@
       #{interval1,jdbcType=INTEGER}, #{interval2,jdbcType=INTEGER}, 
       #{boardinfo,jdbcType=VARCHAR}, #{storageused,jdbcType=BIGINT}, #{storageavail,jdbcType=BIGINT}, 
       #{upgradeflag,jdbcType=CHAR}, #{appfileid,jdbcType=INTEGER}, #{tagflag,jdbcType=CHAR}, #{temperature,jdbcType=VARCHAR},
-      #{downloadspeed,jdbcType=INTEGER},#{downloadbytes,jdbcType=BIGINT},#{networkmode,jdbcType=CHAR},
-      #{networksignal,jdbcType=INTEGER},#{brightness,jdbcType=INTEGER},#{tags,jdbcType=VARCHAR},
-      #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER})
+      #{downloadspeed,jdbcType=INTEGER}, #{downloadbytes,jdbcType=BIGINT}, #{networkmode,jdbcType=CHAR},
+      #{networksignal,jdbcType=INTEGER}, #{brightness,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR},
+      #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
+      #{defaultpageid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -570,6 +581,12 @@
       <if test="cataitemid2 != null" >
         cataitemid2,
       </if>
+      <if test="defaultbundleid != null" >
+        defaultbundleid,
+      </if>
+      <if test="defaultpageid != null" >
+        defaultpageid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -748,6 +765,12 @@
       </if>
       <if test="cataitemid2 != null" >
         #{cataitemid2,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultbundleid != null" >
+        #{defaultbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpageid != null" >
+        #{defaultpageid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -931,6 +954,12 @@
       <if test="cataitemid2 != null" >
         cataitemid2 = #{cataitemid2,jdbcType=VARCHAR},
       </if>
+      <if test="defaultbundleid != null" >
+        defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpageid != null" >
+        defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -994,7 +1023,9 @@
       brightness = #{brightness,jdbcType=INTEGER},
       tags = #{tags,jdbcType=VARCHAR},
       cataitemid1 = #{cataitemid1,jdbcType=INTEGER},
-      cataitemid2 = #{cataitemid2,jdbcType=INTEGER}
+      cataitemid2 = #{cataitemid2,jdbcType=INTEGER},
+      defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
+      defaultpageid = #{defaultpageid,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">
