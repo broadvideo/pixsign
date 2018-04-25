@@ -370,7 +370,7 @@
 			<h3 class="page-title"><spring:message code="menu.multiplan"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.mscreen"/></a><i class="fa fa-angle-right"></i>
