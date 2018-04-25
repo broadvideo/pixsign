@@ -261,7 +261,7 @@ function hasPrivilege(privilegeid) {
 						<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 					</li>
 					<li class="start <%= currentPrivilegeid.equals("")? "active" : "" %> ">
-						<a href="/pixsignage/<%=subsystem%>/main.jsp">
+						<a href="/pixsignage/<%=mainpage%>">
 						<i class="fa fa-home"></i> 
 						<span class="title"><spring:message code="global.dashboard"/></span>
 						<span class="selected"></span>

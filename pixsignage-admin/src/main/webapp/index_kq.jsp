@@ -60,7 +60,7 @@
 </head>
 <!-- END HEAD -->
 
-<body class="login" style="background-image: url(/pixsignage/img/bg-edu.jpg);background-size: cover;">
+<body class="login" style="background-image: url(/pixsignage/img/bg-kq.jpg);background-size: cover;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
 		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="100" alt="" />
@@ -146,7 +146,7 @@
 		$('.pix-language').click(function(event){
 			event.preventDefault();
 			var language = $(event.target).attr('data-id');
-			document.location.href="index_edu.jsp?locale=" + language;
+			document.location.href="index_kq.jsp?locale=" + language;
 		});
 	});
 </script>

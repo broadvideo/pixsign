@@ -158,7 +158,7 @@
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init();
-		Login.init('org/main.jsp');
+		Login.init();
 		$('.pix-language').removeClass('checked');
 		$('.pix-language[data-id=${locale}]').addClass('checked');
 		$('.pix-language').click(function(event){

@@ -75,6 +75,8 @@ public class Org {
 
 	private Integer defaultpageid;
 
+	private String mainpage;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -353,6 +355,14 @@ public class Org {
 
 	public void setDefaultpageid(Integer defaultpageid) {
 		this.defaultpageid = defaultpageid;
+	}
+
+	public String getMainpage() {
+		return mainpage;
+	}
+
+	public void setMainpage(String mainpage) {
+		this.mainpage = mainpage;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

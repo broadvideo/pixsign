@@ -35,6 +35,7 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
     <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
+    <result column="mainpage" property="mainpage" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
@@ -48,7 +49,7 @@
     orgid, vspid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
     currentdeviceidx, maxdetail, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
-    apps, logo, tags, defaultbundleid, defaultpageid, createtime, createstaffid
+    apps, logo, tags, defaultbundleid, defaultpageid, mainpage, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -121,7 +122,7 @@
       upgradeflag, volumeflag, volume, 
       timezone, apps, logo, 
       tags, defaultbundleid, defaultpageid, 
-      createtime, createstaffid)
+      mainpage, createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{feature,jdbcType=VARCHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
@@ -133,7 +134,7 @@
       #{upgradeflag,jdbcType=CHAR}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{timezone,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
       #{tags,jdbcType=VARCHAR}, #{defaultbundleid,jdbcType=INTEGER}, #{defaultpageid,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{mainpage,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
@@ -236,6 +237,9 @@
       </if>
       <if test="defaultpageid != null" >
         defaultpageid,
+      </if>
+      <if test="mainpage != null" >
+        mainpage,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -340,6 +344,9 @@
       </if>
       <if test="defaultpageid != null" >
         #{defaultpageid,jdbcType=INTEGER},
+      </if>
+      <if test="mainpage != null" >
+        #{mainpage,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -448,6 +455,9 @@
       <if test="defaultpageid != null" >
         defaultpageid = #{defaultpageid,jdbcType=INTEGER},
       </if>
+      <if test="mainpage != null" >
+        mainpage = #{mainpage,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -490,6 +500,7 @@
       logo = #{logo,jdbcType=VARCHAR},
       defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
       defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      mainpage = #{mainpage,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where orgid = #{orgid,jdbcType=INTEGER}

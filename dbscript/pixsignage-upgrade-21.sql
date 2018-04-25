@@ -15,6 +15,7 @@ select last_insert_id() into @dbversionid;
 alter table device add defaultbundleid int default 0;
 alter table device add defaultpageid int default 0;
 
+alter table org add mainpage varchar(32) default 'main.jsp';
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
