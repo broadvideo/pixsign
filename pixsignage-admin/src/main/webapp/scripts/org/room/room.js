@@ -98,6 +98,7 @@ var initEvent=function(){
 		$('body').on('click', '.pix-add', function(event) {
 			refreshForm('MyEditForm');
 			initTerminalList();
+			initPersonList();
 			$('#MyEditForm').attr('action', 'room!add.action?room.type='+_roomtype);
 			$('#MyEditModal').modal();
 
@@ -110,19 +111,44 @@ var initEvent=function(){
 				index = $(event.target).parent().attr('data-id');
 			}
 			initTerminalList();
+			initPersonList();
 			var item = $('#MeetingroomTable').dataTable().fnGetData(index);
 			var formdata = new Object();
 			for (var name in item) {
 			   formdata['room.' + name] = item[name];
 			}
+		
 			refreshForm('MyEditForm');
 			$('#MyEditForm').loadJSON(formdata);
+			if(formdata['room.roompersonflag']=='1'){
+				$('div.persons-form-group').show();
+			}else{
+				$('div.persons-form-group').hide();
+			}
+		
 			$('#MyEditForm').attr('action', 'room!update.action');
 			$('#MyEditModal').modal();
 			//$("#ClassSelect").select2('val',item.terminalid);
 
 
 		});
+		
+		$('input[name="room.roompersonflag"]').click(function(){
+			
+			var selValue=$(this).val();
+			if(selValue=='0'){
+				$('div.persons-form-group').hide();
+				
+			}else if(selValue=='1'){
+				
+				$('div.persons-form-group').show();
+			}
+			
+	
+			
+		});
+		
+
 
 	};
 
@@ -176,6 +202,8 @@ var initRoomTable = function () {
 		$('#MeetingroomTable').css('width', '100%');
 	};
 	
+
+	
 var initTerminalList=function(){
 		
 		$.ajax({
@@ -212,6 +240,43 @@ var initTerminalList=function(){
 		
 
 	};
+	
+var  initPersonList=function(){
+	
+	$.ajax({
+		type : 'GET',
+		url : 'person!list.action',
+		data : {"iDisplayStart" :0,"iDisplayLength" :999,"person.type" : 2},
+		dataType: 'json',
+		success : function(data, status) {
+			if (data.errorcode == 0) {
+				var classlist = [];
+				for (var i=0; i<data.aaData.length; i++) {
+					classlist.push({
+						id: data.aaData[i].personid,
+						text: data.aaData[i].name
+					});
+				}
+				$("#PersonClassSelect").select2({
+					placeholder: common.tips.detail_select,
+					minimumInputLength: 0,
+					multiple:true,
+					data: classlist,
+					dropdownCssClass: "bigdrop", 
+					escapeMarkup: function (m) { return m; } 
+				});
+			
+			} else {
+				bootbox.alert(data.errorcode + ": " + data.errmsg);
+			}
+		},
+		error : function() {
+			bootbox.alert('failure');
+		}
+	});
+	
+	
+}	
 
 	
 	return {

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,10 @@ import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Room;
+import com.broadvideo.pixsignage.domain.Roomperson;
 import com.broadvideo.pixsignage.domain.Roomterminal;
 import com.broadvideo.pixsignage.persistence.RoomMapper;
+import com.broadvideo.pixsignage.persistence.RoompersonMapper;
 import com.broadvideo.pixsignage.persistence.RoomterminalMapper;
 import com.broadvideo.pixsignage.util.UUIDUtils;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -33,6 +36,8 @@ public class RoomServiceImpl implements RoomService {
 	private RoomMapper roomMapper;
 	@Autowired
 	private RoomterminalMapper roomterminalMapper;
+	@Autowired
+	private RoompersonMapper roompersonMapper;
 	@Autowired
 	private DeviceService deviceService;
 
@@ -53,9 +58,27 @@ public class RoomServiceImpl implements RoomService {
 		room.setStatus(GlobalFlag.VALID);
 		this.roomMapper.insertSelective(room);
 		syncRoomTerminals(room, room.getTerminalids());
+		syncRoomPersons(room, room.getPersonids());
 		return room.getRoomid();
 	}
 
+	private void syncRoomPersons(Room room, String personids) {
+		this.roompersonMapper.deleteByRoomid(room.getRoomid());
+		if (StringUtils.isBlank(personids)) {
+			return;
+		}
+		String[] personidArr = personids.split(",");
+		if (personidArr == null || personidArr.length == 0) {
+			return;
+		}
+		for (String personid : personidArr) {
+			Roomperson roomperson = new Roomperson();
+			roomperson.setRoomid(room.getRoomid());
+			roomperson.setPersonid(NumberUtils.toInt(personid));
+			this.roompersonMapper.insertSelective(roomperson);
+		}
+
+	}
 	private void syncRoomTerminals(Room room, String terminalids) {
 		this.roomterminalMapper.deleteByRoomid(room.getRoomid());
 		if (StringUtils.isBlank(terminalids)) {
@@ -94,6 +117,7 @@ public class RoomServiceImpl implements RoomService {
 		this.roomMapper.updateRoom(room);
 		Room record = this.roomMapper.selectByPrimaryKey(room.getRoomid());
 		room.setUuid(record.getUuid());
+		this.syncRoomPersons(room, room.getPersonids());
 		this.syncRoomTerminals(room, room.getTerminalids());
 
 	}
@@ -110,6 +134,7 @@ public class RoomServiceImpl implements RoomService {
 		this.roomMapper.updateRoom(updateRoom);
 		room.setUuid(record.getUuid());
 		room.setTerminalids(null);
+		this.syncRoomPersons(room, null);
 		this.syncRoomTerminals(room, null);
 
 	}

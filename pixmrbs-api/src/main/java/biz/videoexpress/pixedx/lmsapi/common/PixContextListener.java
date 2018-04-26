@@ -22,7 +22,7 @@ public class PixContextListener implements ServletContextListener {
 
 		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext());
 		OrgService orgService = (OrgService) ctx.getBean("orgService");
-		Org org = orgService.selectByCode("zszq");
+		Org org = orgService.selectByCode("default");
 		sce.getServletContext().setAttribute("orgid", org.getOrgid());
 
 

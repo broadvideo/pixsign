@@ -111,6 +111,11 @@ function  initPeriodtimedtl(){
                         showMeridian: false,
                         defaultTime:false
                     });
+                    // handle input group button click
+                    $('.timepicker').parent('.input-group').on('click', '.input-group-btn', function(e){
+                        e.preventDefault();
+                        $(this).parent('.input-group').find('.timepicker').timepicker('showWidget');
+                    });
                     $('input[name=shortstarttime]').timepicker().on('hide.timepicker', function(e) {
                     	
                     	

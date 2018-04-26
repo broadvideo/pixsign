@@ -104,11 +104,4 @@ public class Base64 {
 		return buf.toByteArray();
 	}
 
-	public static void main(String[] args) {
-
-		System.out.println("encode:" + Base64.encode("[]".getBytes()));
-		System.out.println(new String(Base64.decode("rO0ABXNyADJjb20uYnJvYWR2aWRlby5waXhib3guY29tbWFuZC5yZXNwb25zZS5GbG93Q29udGV4dP0UUIm2GNVCAgAETAAKYXR0YWNobWVudHQAEkxqYXZhL2xhbmcvT2JqZWN0O0wAEWxhc3RFeGVjdXRlUmVzdWx0dAASTGphdmEvbGFuZy9TdHJpbmc7TAAQbGFzdEV4ZWN1dGVTdGF0ZXEAfgACTAAKb3V0cHV0UnRzcHEAfgACeHBwcHQAB2ZhaWx1cmV0AB1ydHNwOi8vMTgwLjk2LjE5LjIzOToxMDU1NC8xNA==")));
-
-	}
-
 }

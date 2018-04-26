@@ -61,8 +61,7 @@ public class ResEvents extends ResBase {
 
 	@GET
 	@Path("/org_events")
-	public String getOrgEventList(String request, @Context HttpServletRequest req,
-			@QueryParam("org_id") Integer orgid) {
+	public String getOrgEventList(String request, @Context HttpServletRequest req, @QueryParam("org_id") Integer orgid) {
 
 		try {
 			logger.info("getOrgEventList for org_id:{}", orgid);
@@ -79,6 +78,7 @@ public class ResEvents extends ResBase {
 				json.put("name", event.getName());
 				json.put("room_id", event.getRoomid());
 				json.put("room_name", event.getRoomname());
+
 				json.put("start_time", DateUtil.getDateStr(event.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
 				json.put("end_time", DateUtil.getDateStr(event.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
 				json.put("person_ids", new JSONArray());
@@ -101,8 +101,8 @@ public class ResEvents extends ResBase {
 			@QueryParam("start_date") String startDate, @QueryParam("end_date") String endDate) {
 
 		try {
-			logger.info("getEventList for terminalid:{},room_id:{} start_date:{},end_date:{}",
-					new Object[] { terminalid, roomid, startDate, endDate });
+			logger.info("getEventList for terminalid:{},room_id:{} start_date:{},end_date:{}", new Object[] {
+					terminalid, roomid, startDate, endDate });
 			Integer eventRoomid = roomid;
 			if (StringUtils.isNotBlank(terminalid)) {
 				Roomterminal roomterminal = this.roomterminalMapper.selectRoomterminal(terminalid);
@@ -136,8 +136,7 @@ public class ResEvents extends ResBase {
 				persontype = 1;
 			}
 			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, persontype, "0",
-					Integer.MAX_VALUE
-					+ "");
+					Integer.MAX_VALUE + "");
 
 			List<Event> eventList = eventMapper.selectList(searchEvent, rowBounds);
 			JSONArray dataArr = new JSONArray();
@@ -147,8 +146,21 @@ public class ResEvents extends ResBase {
 				json.put("name", event.getName());
 				json.put("room_id", event.getRoomid());
 				json.put("room_name", event.getRoomname());
-				json.put("start_time", DateUtil.getDateStr(event.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
-				json.put("end_time", DateUtil.getDateStr(event.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
+				Date curDate = new Date();
+				if (wrapStartDate == null) {
+					wrapStartDate = curDate;
+				}
+				if (wrapEndDate == null) {
+					wrapEndDate = curDate;
+				} else {
+
+					wrapEndDate = DateUtil.getDate(endDate, "yyyyMMdd");
+				}
+				String yyyyMMddStart = DateUtil.getDateStr(wrapStartDate, "yyyy-MM-dd");
+				String yyyyMMddEnd = DateUtil.getDateStr(wrapEndDate, "yyyy-MM-dd");
+
+				json.put("start_time", yyyyMMddStart + " " + DateUtil.getDateStr(event.getStarttime(), "HH:mm:ss"));
+				json.put("end_time", yyyyMMddEnd + " " + DateUtil.getDateStr(event.getEndtime(), "HH:mm:ss"));
 				JSONArray personidArr = new JSONArray();
 				for (Person person : personList) {
 					personidArr.put(person.getPersonid());
@@ -207,4 +219,10 @@ public class ResEvents extends ResBase {
 
 	}
 
+	public static void main(String[] args) {
+		Date date = new Date();
+		System.out.println(DateUtil.getDateStr(date, "yyyy-MM-dd"));
+		System.out.println(DateUtil.getDateStr(date, "HH:mm:ss"));
+
+	}
 }

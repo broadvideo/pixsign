@@ -9,24 +9,26 @@ import com.broadvideo.pixsignage.domain.Person;
 
 public interface PersonMapper {
 	int deleteByPrimaryKey(@Param("personid") Integer personid, @Param("orgid") Integer orgid);
-    int insert(Person record);
 
-    int insertSelective(Person record);
+	int insert(Person record);
 
-    Person selectByPrimaryKey(Integer personid);
+	int insertSelective(Person record);
 
-	int selectCount(@Param(value = "orgid") String orgid,
-			@Param(value = "search") String search,@Param("type") Integer type);
+	Person selectByPrimaryKey(Integer personid);
 
-	List<Person> selectList(@Param(value = "orgid") String orgid,
- @Param(value = "search") String search,
-			@Param("type") Integer type, @Param(value = "start") String start,
+	int selectCount(@Param(value = "orgid") String orgid, @Param("branchid") Integer branchid,
+			@Param(value = "search") String search, @Param("type") Integer type);
+
+	List<Person> selectList(@Param(value = "orgid") String orgid, @Param("branchid") Integer branchid,
+			@Param(value = "search") String search, @Param("type") Integer type, @Param(value = "start") String start,
 			@Param(value = "length") String length);
+
 	List<Person> selectChangePersons(@Param(value = "orgid") Integer orgid, @Param("lastupdatetime") Date lastupdatetime);
 
 	int countBy(@Param("excludeid") Integer excludeId, @Param("personno") String personno, @Param("rfid") String rfid,
 			@Param("orgid") Integer orgid);
-    int updateByPrimaryKeySelective(Person record);
 
-    int updateByPrimaryKey(Person record);
+	int updateByPrimaryKeySelective(Person record);
+
+	int updateByPrimaryKey(Person record);
 }

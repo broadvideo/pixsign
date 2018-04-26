@@ -16,12 +16,24 @@ public class AdjustMeetingReq {
 	private String startTime;
 	@JsonProperty("end_time")
 	private String endTime;
+	@JsonProperty("period_flag")
+	private String periodFlag;
+	@JsonProperty("skip_holiday_flag")
+	private String skipHolidayFlag;
+	@JsonProperty("period_type")
+	private String periodType;
+	@JsonProperty("period_end_time")
+	private String periodEndTime;
+	@JsonProperty("period_change_scope")
+	private String periodChangeScope;
 	@JsonProperty("book_user_id")
 	private Integer bookUserId;
 	@JsonProperty("attendee_user_ids")
 	private Integer[] attendeeUserId;
 	@JsonProperty("meeting_room_id")
 	private Integer meetingRoomId;
+	@JsonProperty("service_memo")
+	private String servicememo;
 
 	public Integer getMeetingId() {
 		return meetingId;
@@ -70,6 +82,46 @@ public class AdjustMeetingReq {
 		this.endTime = endTime;
 	}
 
+	public String getPeriodFlag() {
+		return periodFlag;
+	}
+
+	public void setPeriodFlag(String periodFlag) {
+		this.periodFlag = periodFlag;
+	}
+
+	public String getPeriodChangeScope() {
+		return periodChangeScope;
+	}
+
+	public void setPeriodChangeScope(String periodChangeScope) {
+		this.periodChangeScope = periodChangeScope;
+	}
+
+	public String getSkipHolidayFlag() {
+		return skipHolidayFlag;
+	}
+
+	public void setSkipHolidayFlag(String skipHolidayFlag) {
+		this.skipHolidayFlag = skipHolidayFlag;
+	}
+
+	public String getPeriodType() {
+		return periodType;
+	}
+
+	public void setPeriodType(String periodType) {
+		this.periodType = periodType;
+	}
+
+	public String getPeriodEndTime() {
+		return periodEndTime;
+	}
+
+	public void setPeriodEndTime(String periodEndTime) {
+		this.periodEndTime = periodEndTime;
+	}
+
 	public Integer getBookUserId() {
 		return bookUserId;
 	}
@@ -94,5 +146,12 @@ public class AdjustMeetingReq {
 		this.meetingRoomId = meetingRoomId;
 	}
 
+	public String getServicememo() {
+		return servicememo;
+	}
+
+	public void setServicememo(String servicememo) {
+		this.servicememo = servicememo;
+	}
 
 }

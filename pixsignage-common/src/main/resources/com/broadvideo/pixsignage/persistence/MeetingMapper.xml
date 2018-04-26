@@ -4,17 +4,23 @@
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Meeting" >
     <id column="meetingid" property="meetingid" jdbcType="INTEGER" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="periodmeetingid" property="periodmeetingid" jdbcType="INTEGER" />
     <result column="meetingroomid" property="meetingroomid" jdbcType="INTEGER" />
     <result column="subject" property="subject" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
     <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="periodendtime" property="periodendtime" jdbcType="TIMESTAMP" />
     <result column="duration" property="duration" jdbcType="INTEGER" />
     <result column="fee" property="fee" jdbcType="DECIMAL" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="servicememo" property="servicememo" jdbcType="VARCHAR" />
     <result column="bookstaffid" property="bookstaffid" jdbcType="INTEGER" />
     <result column="bookbranchid" property="bookbranchid" jdbcType="INTEGER" />
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+    <result column="periodflag" property="periodflag" jdbcType="CHAR" />
+    <result column="skipholidayflag" property="skipholidayflag" jdbcType="CHAR" />
+    <result column="periodtype" property="periodtype" jdbcType="CHAR" />
     <result column="auditstatus" property="auditstatus" jdbcType="CHAR" />
     <result column="auditresult" property="auditresult" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
@@ -39,10 +45,12 @@
     <result column="bookbranchname" property="bookbranchname" jdbcType="VARCHAR" />
     <collection property="attendees" ofType="com.broadvideo.pixsignage.domain.Attendee"
       column="{meetingid=meetingid}" select="com.broadvideo.pixsignage.persistence.AttendeeMapper.selectMeetingAttendees" />
+
   </resultMap>
   <sql id="Base_Column_List" >
-    meetingid, uuid, meetingroomid, subject, description, starttime, endtime, duration, 
-    fee, amount, bookstaffid, bookbranchid, qrcode, auditstatus, auditresult, orgid, 
+    meetingid, uuid, periodmeetingid, meetingroomid, subject, description, starttime, 
+    endtime, periodendtime, duration, fee, amount, servicememo, bookstaffid, bookbranchid, 
+    qrcode, periodflag, skipholidayflag, periodtype, auditstatus, auditresult, orgid, 
     createtime, createstaffid, updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -118,6 +126,7 @@
 	   LEFT JOIN location l
 	    ON (mr.locationid = l.locationid)
 	  WHERE  mr.orgid = #{orgid} and mr.status='1'
+	  and (periodmeetingid>0 or periodflag='0')
 	  <if test="search!=null">
 	     and (m.subject like #{search} )
 	  </if>
@@ -131,7 +140,96 @@
 	   and m.endtime <![CDATA[<=]]> #{endtime}
 	  </if>
 	  <if test="auditstatuslist!=null">
-	  and m.auditstatus in 
+	    and m.auditstatus in 
+	      <foreach close=")" collection="auditstatuslist" item="listItem" open="(" separator=",">
+                    #{listItem}
+          </foreach>
+          
+	  </if>
+	  <if test="bookbranchid!=null">
+	   and  m.bookbranchid IN (
+	       select  tmp.branchid
+	          from branch tmp 
+	          where tmp.branchid=#{bookbranchid} or tmp.parentid=#{bookbranchid} 
+	           or tmp.parentid2=#{bookbranchid} or tmp.parentid3=#{bookbranchid}           
+	     )   
+	  </if>
+	   <if test="bookstaffid!=null">
+	   and (m.bookstaffid=#{bookstaffid} 
+	   <if  test="attendeeuserids!=null">
+	       or exists( select 1 from  attendee att where att.meetingid=m.meetingid and att.staffid in  
+	     <foreach close=")" collection="attendeeuserids" item="listItem" open="(" separator=",">
+                    #{listItem}
+          </foreach>
+	   </if>
+	   ) )
+	  </if>
+	  <if test="locationid != null">
+	      AND EXISTS (
+		          SELECT
+	                 1
+	               FROM location l1
+	                 LEFT JOIN location l2
+	                   ON (l1.locationid = l2.parentid
+	                       AND l2.status = '1')
+	                 LEFT JOIN location l3
+	                   ON (l3.parentid = l2.locationid
+	                       AND l3.status = '1')
+	                 LEFT JOIN location l4
+	                   ON (l4.parentid = l3.locationid
+	                       AND l4.status = '1')
+	               WHERE l1.status = '1'
+	                   AND l1.locationid =#{locationid}
+	                   AND (l1.locationid = mr.locationid
+	                         OR l2.locationid = mr.locationid
+	                         OR l3.locationid = mr.locationid
+	                         OR l4.locationid = mr.locationid
+	                         )
+                   )  
+	  </if> 
+	  <if test="starttime!=null or endtime!=null">
+	  	  order by m.starttime asc
+	  </if>
+	  <if test="starttime==null and endtime==null">
+	      order by m.starttime desc
+	  
+	  </if>
+  </select>
+  
+ <select id="selectAuditList" resultMap="ExtResultMap2" >
+  
+	 SELECT
+		  m.*,
+		  st.name  as bookstaffname,
+		  br.name as bookbranchname,
+		  mr.name AS meetingroomname,
+		  l.name  AS locationname
+	FROM meeting m
+	  LEFT JOIN meetingroom mr
+	    ON (m.status = '1'
+	        AND m.meetingroomid = mr.meetingroomid)
+	  LEFT JOIN staff st
+	    ON (m.bookstaffid = st.staffid)
+	  LEFT JOIN branch br
+	    ON (m.bookbranchid = br.branchid)
+	   LEFT JOIN location l
+	    ON (mr.locationid = l.locationid)
+	  WHERE  mr.orgid = #{orgid} and mr.status='1'
+	  and periodmeetingid=0
+	  <if test="search!=null">
+	     and (m.subject like #{search} )
+	  </if>
+	  <if test="meetingroomid!=null">
+	   and m.meetingroomid=#{meetingroomid}
+	  </if>
+	  <if test="starttime!=null">
+	   and m.starttime>=#{starttime}
+	  </if>
+	   <if test="endtime!=null">
+	   and m.endtime <![CDATA[<=]]> #{endtime}
+	  </if>
+	  <if test="auditstatuslist!=null">
+	    and m.auditstatus in 
 	      <foreach close=")" collection="auditstatuslist" item="listItem" open="(" separator=",">
                     #{listItem}
           </foreach>
@@ -185,17 +283,17 @@
 	  
 	  </if>
   </select>
-  
   <select  id="selectExistMeetings" resultMap="BaseResultMap"  >
-  
 	  select  
-	      <include refid="Base_Column_List" />
-	  from meeting
-      where  status='1' and  orgid=#{orgid} and meetingroomid=#{meetingroomid} 
+	      m.*
+	  from meeting m
+      where   m.status='1' 
+             and  m.orgid=#{orgid} and m.meetingroomid=#{meetingroomid} 
       <if test="meetingid!=null">
-         and meetingid!=#{meetingid}
+         and m.meetingid!=#{meetingid}
       </if>
-       and starttime <![CDATA[<]]> #{endtime}  and  endtime > #{starttime} 
+      and ( m.periodflag='0' or m.periodmeetingid>0 )
+      and m.starttime <![CDATA[<]]> #{endtime}  and  m.endtime > #{starttime} 
   
   </select>
   <select id="selectMatchMeeting"  resultMap="BaseResultMap">
@@ -209,13 +307,14 @@
   <select id="countMeetingSummary"  resultType="map">
      select
       date_format(starttime,'%Y-%m-%d') as date,count(1) as meetings_total
-     from meeting
-     where orgid=#{orgid}  and status='1' and auditstatus in ('1','9') 
+     from meeting m
+     where  m.orgid=#{orgid}  and m.status='1' and m.auditstatus in ('1','9') 
+     and (m.periodflag='0' or m.periodmeetingid>0)
      <if test="startdate!=null">
-        and starttime>=#{startdate}  
+        and m.starttime>=#{startdate}  
      </if>
      <if test="enddate!=null">
-        and endtime<![CDATA[<]]>#{enddate}
+        and m.endtime<![CDATA[<]]>#{enddate}
      </if>
      group by date
      order by date asc
@@ -223,34 +322,47 @@
   </select>
   <select id="countMeetings" resultType="int">
     select count(1)  
-    from meeting 
-    where orgid=#{orgid} and status='1'and auditstatus in ('1','9') 
-    <if test="starttime!=null">
-      and  starttime>=#{starttime}
-    </if>
-    <if test="endtime!=null">
-      and endtime<![CDATA[<]]> #{endtime}
-    </if>
+    from meeting m
+    where  m.orgid=#{orgid} and m.status='1'and m.auditstatus in ('1','9') 
+         and (m.periodflag='0' or m.periodmeetingid>0)
+	    <if test="starttime!=null">
+	      and  m.starttime>=#{starttime}
+	    </if>
+	    <if test="endtime!=null">
+	      and m.endtime<![CDATA[<]]> #{endtime}
+	    </if>
+    
   </select>
   <select id="countOngoingMeetings" resultType="int">
     select count(1)
-    from meeting
-    where orgid=#{orgid} and status='1'and auditstatus in ('1','9') 
-          and starttime<![CDATA[<=]]>now()  and endtime>now()
+    from meeting m
+    where m.orgid=#{orgid} and m.status='1'and m.auditstatus in ('1','9') 
+       and (m.periodflag='0' or m.periodmeetingid>0)
+       and  m.starttime<![CDATA[<=]]>now()  and m.endtime>now()
+       
   </select>
    <select id="countMeetingroomUsage"  resultType="map">
      select
       date_format(starttime,'%Y-%m-%d') as date,count(DISTINCT meetingroomid) as used_total
-     from meeting
-     where orgid=#{orgid}  and status='1' and auditstatus in ('1','9')  
+     from meeting m
+     where m.orgid=#{orgid}  and m.status='1' and m.auditstatus in ('1','9')   
+       and  (m.periodflag='0' or m.periodmeetingid>0)
      <if test="startdate!=null">
-          and starttime>=#{startdate}  
+          and m.starttime>=#{startdate}  
      </if>
      <if test="enddate!=null">
-          and endtime<![CDATA[<]]>#{enddate}
+          and m.endtime<![CDATA[<]]>#{enddate}
      </if> 
      group by date
      order by date asc
+  
+  </select>
+  
+  <select  id="selectMeetingsAfter"  resultMap="BaseResultMap">
+	   select 
+	    <include refid="Base_Column_List" />
+	    from meeting
+	    where periodmeetingid = #{periodmeetingid}  and  starttime>=#{starttime} and status='1'
   
   </select>
   
@@ -262,17 +374,21 @@
     <selectKey resultType="java.lang.Integer" keyProperty="meetingid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into meeting (uuid, meetingroomid, subject, 
-      description, starttime, endtime, 
-      duration, fee, amount, 
+    insert into meeting (uuid, periodmeetingid, meetingroomid, 
+      subject, description, starttime, 
+      endtime, periodendtime, duration, 
+      fee, amount, servicememo, 
       bookstaffid, bookbranchid, qrcode, 
+      periodflag, skipholidayflag, periodtype, 
       auditstatus, auditresult, orgid, 
       createtime, createstaffid, updatetime, 
       updatestaffid, status)
-    values (#{uuid,jdbcType=VARCHAR}, #{meetingroomid,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
-      #{duration,jdbcType=INTEGER}, #{fee,jdbcType=DECIMAL}, #{amount,jdbcType=INTEGER}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{periodmeetingid,jdbcType=INTEGER}, #{meetingroomid,jdbcType=INTEGER}, 
+      #{subject,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, 
+      #{endtime,jdbcType=TIMESTAMP}, #{periodendtime,jdbcType=TIMESTAMP}, #{duration,jdbcType=INTEGER}, 
+      #{fee,jdbcType=DECIMAL}, #{amount,jdbcType=INTEGER}, #{servicememo,jdbcType=VARCHAR}, 
       #{bookstaffid,jdbcType=INTEGER}, #{bookbranchid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, 
+      #{periodflag,jdbcType=CHAR}, #{skipholidayflag,jdbcType=CHAR}, #{periodtype,jdbcType=CHAR}, 
       #{auditstatus,jdbcType=CHAR}, #{auditresult,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
       #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
@@ -285,6 +401,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uuid != null" >
         uuid,
+      </if>
+      <if test="periodmeetingid != null" >
+        periodmeetingid,
       </if>
       <if test="meetingroomid != null" >
         meetingroomid,
@@ -301,6 +420,9 @@
       <if test="endtime != null" >
         endtime,
       </if>
+      <if test="periodendtime != null" >
+        periodendtime,
+      </if>
       <if test="duration != null" >
         duration,
       </if>
@@ -310,6 +432,9 @@
       <if test="amount != null" >
         amount,
       </if>
+      <if test="servicememo != null" >
+        servicememo,
+      </if>
       <if test="bookstaffid != null" >
         bookstaffid,
       </if>
@@ -318,6 +443,15 @@
       </if>
       <if test="qrcode != null" >
         qrcode,
+      </if>
+      <if test="periodflag != null" >
+        periodflag,
+      </if>
+      <if test="skipholidayflag != null" >
+        skipholidayflag,
+      </if>
+      <if test="periodtype != null" >
+        periodtype,
       </if>
       <if test="auditstatus != null" >
         auditstatus,
@@ -348,6 +482,9 @@
       <if test="uuid != null" >
         #{uuid,jdbcType=VARCHAR},
       </if>
+      <if test="periodmeetingid != null" >
+        #{periodmeetingid,jdbcType=INTEGER},
+      </if>
       <if test="meetingroomid != null" >
         #{meetingroomid,jdbcType=INTEGER},
       </if>
@@ -363,6 +500,9 @@
       <if test="endtime != null" >
         #{endtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="periodendtime != null" >
+        #{periodendtime,jdbcType=TIMESTAMP},
+      </if>
       <if test="duration != null" >
         #{duration,jdbcType=INTEGER},
       </if>
@@ -372,6 +512,9 @@
       <if test="amount != null" >
         #{amount,jdbcType=INTEGER},
       </if>
+      <if test="servicememo != null" >
+        #{servicememo,jdbcType=VARCHAR},
+      </if>
       <if test="bookstaffid != null" >
         #{bookstaffid,jdbcType=INTEGER},
       </if>
@@ -380,6 +523,15 @@
       </if>
       <if test="qrcode != null" >
         #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="periodflag != null" >
+        #{periodflag,jdbcType=CHAR},
+      </if>
+      <if test="skipholidayflag != null" >
+        #{skipholidayflag,jdbcType=CHAR},
+      </if>
+      <if test="periodtype != null" >
+        #{periodtype,jdbcType=CHAR},
       </if>
       <if test="auditstatus != null" >
         #{auditstatus,jdbcType=CHAR},
@@ -413,6 +565,9 @@
       <if test="uuid != null" >
         uuid = #{uuid,jdbcType=VARCHAR},
       </if>
+      <if test="periodmeetingid != null" >
+        periodmeetingid = #{periodmeetingid,jdbcType=INTEGER},
+      </if>
       <if test="meetingroomid != null" >
         meetingroomid = #{meetingroomid,jdbcType=INTEGER},
       </if>
@@ -428,6 +583,9 @@
       <if test="endtime != null" >
         endtime = #{endtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="periodendtime != null" >
+        periodendtime = #{periodendtime,jdbcType=TIMESTAMP},
+      </if>
       <if test="duration != null" >
         duration = #{duration,jdbcType=INTEGER},
       </if>
@@ -437,6 +595,9 @@
       <if test="amount != null" >
         amount = #{amount,jdbcType=INTEGER},
       </if>
+      <if test="servicememo != null" >
+        servicememo = #{servicememo,jdbcType=VARCHAR},
+      </if>
       <if test="bookstaffid != null" >
         bookstaffid = #{bookstaffid,jdbcType=INTEGER},
       </if>
@@ -445,6 +606,15 @@
       </if>
       <if test="qrcode != null" >
         qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="periodflag != null" >
+        periodflag = #{periodflag,jdbcType=CHAR},
+      </if>
+      <if test="skipholidayflag != null" >
+        skipholidayflag = #{skipholidayflag,jdbcType=CHAR},
+      </if>
+      <if test="periodtype != null" >
+        periodtype = #{periodtype,jdbcType=CHAR},
       </if>
       <if test="auditstatus != null" >
         auditstatus = #{auditstatus,jdbcType=CHAR},
@@ -476,17 +646,23 @@
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Meeting" >
     update meeting
     set uuid = #{uuid,jdbcType=VARCHAR},
+      periodmeetingid = #{periodmeetingid,jdbcType=INTEGER},
       meetingroomid = #{meetingroomid,jdbcType=INTEGER},
       subject = #{subject,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       starttime = #{starttime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP},
+      periodendtime = #{periodendtime,jdbcType=TIMESTAMP},
       duration = #{duration,jdbcType=INTEGER},
       fee = #{fee,jdbcType=DECIMAL},
       amount = #{amount,jdbcType=INTEGER},
+      servicememo = #{servicememo,jdbcType=VARCHAR},
       bookstaffid = #{bookstaffid,jdbcType=INTEGER},
       bookbranchid = #{bookbranchid,jdbcType=INTEGER},
       qrcode = #{qrcode,jdbcType=VARCHAR},
+      periodflag = #{periodflag,jdbcType=CHAR},
+      skipholidayflag = #{skipholidayflag,jdbcType=CHAR},
+      periodtype = #{periodtype,jdbcType=CHAR},
       auditstatus = #{auditstatus,jdbcType=CHAR},
       auditresult = #{auditresult,jdbcType=VARCHAR},
       orgid = #{orgid,jdbcType=INTEGER},
@@ -511,8 +687,14 @@
       <if test="endtime != null" >
         endtime = #{endtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="periodendtime != null" >
+        periodendtime = #{periodendtime,jdbcType=TIMESTAMP},
+      </if>
       <if test="fee != null" >
         fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="servicememo != null" >
+        servicememo = #{servicememo,jdbcType=VARCHAR},
       </if>
       <if test="updatetime != null" >
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
@@ -532,10 +714,20 @@
        <if test="auditresult != null" >
         auditresult = #{auditresult,jdbcType=VARCHAR}
       </if>
+      <if test="periodflag != null" >
+        periodflag = #{periodflag,jdbcType=CHAR},
+      </if>
+      <if test="skipholidayflag != null" >
+        skipholidayflag = #{skipholidayflag,jdbcType=CHAR},
+      </if>
+      <if test="periodtype != null" >
+        periodtype = #{periodtype,jdbcType=CHAR},
+      </if>
+     
     </set>
     where meetingid = #{meetingid,jdbcType=INTEGER}  and orgid=#{orgid}
   </update>
-  
+
 
   
 </mapper>

@@ -5,7 +5,8 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
-<link href="${static_ctx}/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+<link  type="text/css" href="${static_ctx}/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"  rel="stylesheet" />
+<link href="${static_ctx}/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
@@ -38,45 +39,250 @@
 								<input type="hidden" name="event.eventid" />
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label">考勤位置<span class="required">*</span></label>
+										<label class="col-md-3 control-label">考勤分组<span class="required">*</span></label>
 										<div class="col-md-9">
 											<i class="fa"></i><input type="hidden" id="ClassSelect" class="form-control select2" name="event.roomid">
 										</div>
 									</div>
-							
-									<div class="form-group">
-										<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
-										<div class="col-md-9">
-											<div class="input-icon right">
-												<i class="fa"></i> <input type="text" class="form-control" name="event.name" />
+									 <div class="form-group">
+											<label class="col-md-3 control-label"><spring:message code="global.name"/><span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<i class="fa"></i> <input type="text" class="form-control" name="event.name" />
+												</div>
+											</div>
+									 </div>
+									  <div class="form-group">
+											<label class="col-md-3 control-label">日期<span class="required">*</span></label>
+											<div class="col-md-3">
+											
+											   <div class="input-group  date date-picker" data-date-format="yyyy-mm-dd" data-date-start-date="+0d">
+														<input type="text" id="startdate" name="event.startdate" class="form-control" readonly>
+														<span class="input-group-btn">
+														<button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+														</span>
+												</div>
+										    </div>		
+										   <label class="control-label col-md-1" style="text-align:center">至</label>
+									
+										   <div class="col-md-3">
+												<div class="input-group  date date-picker" data-date-format="yyyy-mm-dd" data-date-start-date="+0d">
+														<input type="text" id="enddate" name="event.enddate"  class="form-control" readonly>
+														<span class="input-group-btn">
+														  <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+														</span>
+												</div>
 											</div>
 										</div>
-									</div>
-								    <div class="form-group">
-										<label class="col-md-3 control-label">时间段<span class="required">*</span></label>
-										<div class="col-md-9">
-											   <div class="col-md-4">
-													<div class="input-group date form_datetime">
-														<input type="text"  readonly class="form-control"  name="event.starttime">
-														<span class="input-group-btn">
-															<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-														</span>
+									
+									    <div class="form-group">
+											<label class="col-md-3 control-label">时间段<span class="required">*</span></label>
+										    <div class="col-md-3">
+												<div class="input-group">
+													<input type="text" id="shortstarttime" name="event.shortstarttime" class="form-control timepicker timepicker-24">
+													<span class="input-group-btn">
+													  <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+													</span>
+												</div>
+											</div>
+											<label class="control-label col-md-1" style="text-align:center">至</label>
+											<div class="col-md-3">
+												<div class="input-group">
+													<input type="text" id="shortendtime" name="event.shortendtime" class="form-control timepicker timepicker-24">
+													<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+													</span>
+												</div>
+											</div>
+										</div>
+									   <div class="form-group" >
+									        <label class="col-md-3 control-label">&nbsp;</label>
+									        <div class="col-md-9">
+									
+												<div class="md-radio-inline">
+													<div class="md-radio">
+														<input type="radio" id="byDay" name="event.type" class="md-radiobtn"  value="0" >
+														<label for="byDay">
+														<span></span>
+														<span class="check"></span>
+														<span class="box"></span>
+														 每天 </label>
 													</div>
+													<div class="md-radio">
+														<input type="radio" id="workDays" name="event.type" class="md-radiobtn" value="1" checked >
+														<label for="workDays">
+														<span></span>
+														<span class="check"></span>
+														<span class="box"></span>
+														工作日</label>
+													</div>
+													<div class="md-radio">
+														<input type="radio" id="customDays" name="event.type" class="md-radiobtn" value="2" >
+														<label for="customDays">
+														<span></span>
+														<span class="check"></span>
+														<span class="box"></span>
+														自定义</label>
+													</div>
+											      </div>
+										  </div>
+									   </div>
+									   <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										    <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek"  >周一 </label>
+											<div class="col-md-3">
+												  <div class="input-group">
+															<input type="text"  name="shortstarttime" class="form-control timepicker timepicker-24" >
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+													</div>
+													<label class="control-label col-md-1">至</label>
+													<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortendtime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+													</div>
+											</div>
+									   </div>
+									    <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										        <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek" >周二 </label>
+											    <div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortstarttime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+													</div>
+												<label class="control-label col-md-1">至</label>
+												<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortendtime"class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+												 </div>
+									   </div>
+									   <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										    <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek" >周三</label>
+											<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortstarttime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+											</div>
+											<label class="control-label col-md-1">至</label>
+											<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortendtime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+											</div>
+									   </div>
+									   	 
+									   <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										        <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek" >周四</label>
+											    <div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortstarttime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
 												</div>
 												<label class="control-label col-md-1">至</label>
-												<div class="col-md-4">
-													<div class="input-group date form_datetime">
-														<input type="text"  readonly class="form-control" name="event.endtime">
-														<span class="input-group-btn">
-															<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-														</span>
-													</div>
+												<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortendtime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+												 </div>
+								
+									   </div>
+									   	 
+									   <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										        <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek" >周五</label>
+											    <div class="col-md-3">
+														<div class="input-group">
+															<input type="text"  name="shortstarttime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
 												</div>
+												<label class="control-label col-md-1">至</label>
+												<div class="col-md-3">
+														<div class="input-group">
+															<input type="text"  name="shortendtime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+												 </div>
 											
-										</div>
-									</div>
-								 
+									   </div>
+									   	 
+									   <div class="form-group week-form-group" style="display:none;">
+									            <label class="col-md-3 control-label">&nbsp;</label>
+										        <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek" >周六</label>
+											    <div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortstarttime"  class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+												</div>
+												<label class="control-label col-md-1" >至</label>
+												<div class="col-md-3">
+														<div class="input-group">
+															<input type="text" name="shortendtime" class="form-control timepicker timepicker-24">
+															<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+															</span>
+														</div>
+												</div>
+									   </div>
+									   	 
+									   <div class="form-group week-form-group" style="display:none;">
+									        <label class="col-md-3 control-label">&nbsp;</label>
+										    <label class="checkbox-inline col-md-2"><input type="checkbox" name="dayofweek">周日</label>
+										    <div class="col-md-3">
+												<div class="input-group">
+														<input type="text" name="shortstarttime" class="form-control timepicker timepicker-24">
+														<span class="input-group-btn">
+														<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+														</span>
+												</div>
+											</div>
+											<label class="control-label col-md-1" >至</label>
+											<div class="col-md-3">
+												<div class="input-group">
+													<input type="text" name="shortendtime" class="form-control timepicker timepicker-24">
+													<span class="input-group-btn">
+														<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+													</span>
+												</div>
+										    </div>
+									   </div>
+									
 								</div>
+								<input type="hidden"  name="event.timedtls"  value=""/>
 							</form>
 						</div>
 						<div class="modal-footer">
@@ -113,7 +319,7 @@
 						<div class="portlet-body">
 							<div class="table-toolbar">
 								<div class="btn-group">
-									<button id="MyEditModalBtn" privilegeid="101010" class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
+									<button id="MyEditModalBtn"  class="btn green pix-add">新增<i class="fa fa-plus"></i></button>
 								</div>
 							</div>
 							<table id="MyTable" class="table table-striped table-bordered table-hover">
@@ -143,9 +349,12 @@
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <script src="${static_ctx}/global/plugins/bootstrap-filestyle/bootstrap-filestyle.min.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.${locale}.min.js" type="text/javascript"></script>
+
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.min.js" type="text/javascript"></script>	
 
 <!-- END PAGE LEVEL PLUGINS -->
@@ -164,7 +373,6 @@ jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	DataInit.init('${locale}');
-	$("#morning_spinner").spinner({value:2, min: 1, max: 6});
     
 });
 

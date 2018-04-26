@@ -78,7 +78,7 @@
 						<div class="modal-body">
 							<form id="MyEditForm" class="form-horizontal" method="POST">
 								<div class="form-body">
-										<div class="form-group">
+										<div class="form-group" >
 											<label class="col-md-3 control-label">位置</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -110,6 +110,14 @@
 												</div>
 											</div>
 										</div>
+									  <div class="form-group">
+											<label class="col-md-3 control-label" >类型</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.periodtypename" readonly/>
+												</div>
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-md-3 control-label" >开始时间</label>
 											<div class="col-md-9">
@@ -123,6 +131,14 @@
 											<div class="col-md-9">
 												<div class="input-icon right">
 												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.endtime" readonly/>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">结束周期</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+												   <i class="fa"></i> <input type="text" class="form-control" name="meeting.periodendtime" readonly/>
 												</div>
 											</div>
 										</div>

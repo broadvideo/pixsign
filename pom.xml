@@ -22,14 +22,15 @@
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>Eclipse Paho Repo</id>
-			<url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+	     <repository>
+			<id>nexus</id>
+			<name>local nexus server</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
-		 <repository>
-          <id>getui-nexus</id>
-          <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
-        </repository>
+		
 	</repositories>
 
 	<dependencies>
@@ -234,11 +235,7 @@
 			<version>1.9.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>gif4j</groupId>
-			<artifactId>gif4j</artifactId>
-			<version>1.0</version>
-		</dependency>
+		
 
 		<dependency>
 			<groupId>com.google.zxing</groupId>
@@ -316,11 +313,7 @@
 			<artifactId>jaxen</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<dependency>
-		    <groupId>com.gexin.platform</groupId>
-		    <artifactId>gexin-rp-sdk-http</artifactId>
-		    <version>4.0.1.9</version>
-		</dependency>
+		
 	</dependencies>
 
 	<build>

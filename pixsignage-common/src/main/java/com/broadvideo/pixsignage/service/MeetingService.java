@@ -13,13 +13,23 @@ import com.broadvideo.pixsignage.vo.StaffSwipe;
 public interface MeetingService {
 
 	Meeting getMeeting(Integer meetingid, Integer orgid);
+
 	PageResult getMeetingList(String search, Integer locationid, PageInfo pageinfo, Integer orgid);
+
 	PageResult getMeetingList(Meeting meeting, PageInfo pageinfo);
+
+	PageResult getAuditMeetingList(Meeting meeting, PageInfo pageinfo);
+
 	Integer addMeeting(Meeting meeting);
+
 	void updateMeeting(Meeting meeting);
+
 	void deleteMeeting(Meeting meeting);
+
 	List<Attendee> getMeetingAttendees(Integer meetingid, Integer orgid);
+
 	void syncMeetingSignin(StaffSwipe staffswipe, Integer orgid);
+
 	byte[] genExportExcel(List<Meeting> meetings, Integer orgid);
 
 	List<Map<String, Integer>> getMeetingSummary(Date startDate, Date endDate, Integer orgid);
@@ -27,6 +37,5 @@ public interface MeetingService {
 	List<Map<String, Integer>> getMeetingroomSummary(Date startDate, Date endDate, Integer orgid);
 
 	void auditMeeting(Meeting meeting);
-
 
 }

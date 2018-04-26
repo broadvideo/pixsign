@@ -183,6 +183,10 @@ $('body').on('click', '.pix-meetingdtl', function(event) {
 			if(name=="starttime" || name=="endtime"){
 			   formdata['meeting.' + name] = moment(CurRecord[name]).format('YYYY-MM-DD HH:mm');
 
+			}else if(name=='periodtype'){
+				
+				formdata['meeting.periodtypename']=getPeriodTypeName(CurRecord.periodflag,CurRecord.periodType,CurRecord.starttime);
+				
 			}else{
 		       formdata['meeting.' + name] = CurRecord[name];
 			}
@@ -305,24 +309,34 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 		'aoColumns' : [
 		                {'sTitle' : '位置', 'mData' : 'locationname', 'bSortable' : false, 'sWidth' : '11%' },
 		                {'sTitle' : '会议室', 'mData' : 'meetingroomname', 'bSortable' : false, 'sWidth' : '11%' },
+		                {'sTitle' : '类型', 'mData' : 'periodtype', 'bSortable' : false, 'sWidth' : '9%' },
 		                {'sTitle' : '主题', 'mData' : 'subject', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '12%' },
+		                {'sTitle' : '结束周期', 'mData' : 'periodendtime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '预定人', 'mData' : 'bookstaffname', 'bSortable' : false, 'sWidth' : '10%' },
-		                {'sTitle' : '预定部门', 'mData' : 'bookbranchname', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '12%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		    $('td:eq(3)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
-		    $('td:eq(4)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
+		    $('td:eq(4)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
+		    $('td:eq(5)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
+		    $('td:eq(6)',nRow).html(function(){
+		    	if(aData.periodendtime==null){
+		    		return "";
+		    	}else{
+		    	   return moment(aData.periodendtime).format('YYYY-MM-DD HH:mm');
+		    	}
+		    });
+
+		    $('td:eq(2)',nRow).html(getPeriodTypeName(aData.periodflag,aData.periodtype,aData.starttime));
 			var buttonhtml = '';
 			buttonhtml += '<div class="util-btn-margin-bottom-5">';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 详情</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			buttonhtml += '</div>';
-			$('td:eq(7)', nRow).html(buttonhtml);
+			$('td:eq(8)', nRow).html(buttonhtml);
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 
@@ -346,6 +360,42 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 	$('#MeetingroomTable').css('width', '100%');
 };
 
+getPeriodTypeName=function(periodflag,periodtype,starttime){
+	
+	if(periodflag==""  || periodflag=='0'){
+		
+		return '单次';
+	}else{
+		var d = new Date(starttime);
+
+		if(periodtype=='0'){ //每天
+			
+			return '每天';
+			
+		}else if(periodtype=='1'){//每个工作日
+			
+			return '工作日';
+		}else if(periodtype='2'){//每个周
+			
+			var weekday=new Array(7);
+			weekday[0]='周日';
+			weekday[1]='周一';
+			weekday[2]='周二';
+			weekday[3]='周三';
+			weekday[4]='周四';
+			weekday[5]='周五';
+			weekday[6]='周六';
+			return '每周('+weekday[d.getDay()]+')';
+		}else if(periodtype=='3'){//每个月
+			return '每月('+d.day().getDate()+'日)';
+
+		}
+		
+		
+	}
+	
+	
+};
 
 MeetingRoomModule.prototype.init=function(){
 	this.initMeetingroomTable();

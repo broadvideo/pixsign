@@ -2,6 +2,8 @@ package com.broadvideo.pixsignage.service;
 
 import java.io.File;
 
+import org.json.JSONObject;
+
 import com.broadvideo.pixsignage.domain.Person;
 
 public interface PersonService {
@@ -14,6 +16,8 @@ public interface PersonService {
 
 	void updatePerson(Person person);
 
+	JSONObject importPersons(File zipFile, Integer branchid, Integer orgid);
+
 	String saveAvatar(Integer personid, File avatarfile, Integer orgid);
 
 	String saveFaceImage(Integer personid, File imagefile, Integer orgid);
@@ -23,7 +27,5 @@ public interface PersonService {
 	String getFaceImageBaseDir(Integer orgid);
 
 	String getAvatarAbsolutePath(Person person);
-
-
 
 }

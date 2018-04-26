@@ -177,11 +177,11 @@
 	  (select
 	     m.meetingroomid,
 	     count(1)          as book_times
-	   from meeting m
-	   where m.auditstatus in('1','9')
-	       and status = '1' and starttime>=#{startdate} and endtime <![CDATA[<]]> #{enddate}
-	       and orgid=#{orgid}
-	   group by meetingroomid
+	   from meeting m,meetingtime mt
+	   where m.meetingid=mt.meetingid and m.auditstatus in('1','9')  and (m.periodflag='0' or m.periodmeetingid>0)
+	       and m.status = '1' and mt.starttime>=#{startdate} and mt.endtime <![CDATA[<]]> #{enddate}
+	       and m.orgid=#{orgid}
+	   group by m.meetingroomid
 	   order by book_times desc
 	   limit #{length} ) t
 	where mr.status = '1'

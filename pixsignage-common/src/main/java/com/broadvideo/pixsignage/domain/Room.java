@@ -18,8 +18,9 @@ public class Room {
 
     private String description;
 
-    private String source_type;
+    private String sourcetype;
 
+    private String roompersonflag;
     private Integer orgid;
 
     private Date createtime;
@@ -34,6 +35,8 @@ public class Room {
 	private String search;
 	private String terminalids;
 	private List<Roomterminal> roomterminals = new ArrayList<Roomterminal>();
+	private List<Roomperson> roompersons = new ArrayList<Roomperson>();
+	private String personids;
 
 	public Integer getRoomid() {
         return roomid;
@@ -83,14 +86,20 @@ public class Room {
         this.description = description == null ? null : description.trim();
     }
 
-    public String getSource_type() {
-        return source_type;
+    public String getSourcetype() {
+        return sourcetype;
     }
 
-    public void setSource_type(String source_type) {
-        this.source_type = source_type == null ? null : source_type.trim();
+    public void setSourcetype(String sourcetype) {
+        this.sourcetype = sourcetype == null ? null : sourcetype.trim();
     }
 
+    public String getRoompersonflag() {
+        return roompersonflag;
+    }
+    public void setRoompersonflag(String roompersonflag) {
+        this.roompersonflag = roompersonflag == null ? null : roompersonflag.trim();
+    }
     public Integer getOrgid() {
         return orgid;
     }
@@ -177,5 +186,35 @@ public class Room {
 
 	public void setRoomterminals(List<Roomterminal> roomterminals) {
 		this.roomterminals = roomterminals;
+	}
+
+	@Transient
+	public String getPersonids() {
+		if (roompersons != null && roompersons.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < roompersons.size(); i++) {
+				if (i > 0) {
+					sb.append(",");
+				}
+				sb.append(roompersons.get(i).getPersonid());
+
+			}
+			return sb.toString();
+
+		}
+		return personids;
+	}
+
+	public void setPersonids(String personids) {
+		this.personids = personids;
+	}
+
+	@Transient
+	public List<Roomperson> getRoompersons() {
+		return roompersons;
+	}
+
+	public void setRoompersons(List<Roomperson> roompersons) {
+		this.roompersons = roompersons;
 	}
 }

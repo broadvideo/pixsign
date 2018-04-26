@@ -17,6 +17,7 @@
     <result column="imagecontent" property="imagecontent" jdbcType="VARCHAR" />
     <result column="rfid" property="rfid" jdbcType="VARCHAR" />
     <result column="voiceprompt" property="voiceprompt" jdbcType="VARCHAR" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -26,8 +27,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     personid, uuid, type, personno, idcardno, name, sex, email, mobile, address, avatar, 
-    imageurl, imagecontent, rfid, voiceprompt, orgid, createtime, createstaffid, updatetime, 
-    updatestaffid, status
+    imageurl, imagecontent, rfid, voiceprompt, branchid, orgid, createtime, createstaffid, 
+    updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -36,26 +37,37 @@
     where personid = #{personid,jdbcType=INTEGER}
   </select>
     <select id="selectCount" resultType="Integer">
-    select count(1) from person
-    where orgid = #{orgid} and status='1'
+    select count(1) from person p
+    where p.orgid = #{orgid} and p.status='1'
      <if test="type!=null">
-      and type=#{type}
+      and p.type=#{type}
     </if>
+    
     <if test="search != null">
-      and name like #{search}
+      and p.name like #{search}
+    </if>
+    <if test="branchid!=null">
+      and exists (select 1 from branch b 
+        where b.branchid=p.branchid 
+        and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )   
     </if>
   </select>
 
   <select id="selectList" resultMap="BaseResultMap">
     select
         <include refid="Base_Column_List" />
-    from person 
-    where orgid = #{orgid} and status='1'
+    from person p
+    where p.orgid = #{orgid} and p.status='1'
     <if test="type!=null">
-      and type=#{type}
+      and p.type=#{type}
     </if>
     <if test="search != null">
-      and name like #{search}
+      and p.name like #{search}
+    </if>
+    <if test="branchid!=null">
+      and exists (select 1 from branch b 
+        where b.branchid=p.branchid 
+        and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )   
     </if>
     order by  personid desc 
     <if test="start != null and length != null">
@@ -106,16 +118,16 @@
       idcardno, name, sex, email, 
       mobile, address, avatar, 
       imageurl, imagecontent, rfid, 
-      voiceprompt, orgid, createtime, 
-      createstaffid, updatetime, updatestaffid, 
-      status)
+      voiceprompt, branchid, orgid, 
+      createtime, createstaffid, updatetime, 
+      updatestaffid, status)
     values (#{uuid,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{personno,jdbcType=VARCHAR}, 
       #{idcardno,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, 
       #{mobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{imageurl,jdbcType=VARCHAR}, #{imagecontent,jdbcType=VARCHAR}, #{rfid,jdbcType=VARCHAR}, 
-      #{voiceprompt,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR})
+      #{voiceprompt,jdbcType=VARCHAR}, #{branchid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Person" >
     <selectKey resultType="java.lang.Integer" keyProperty="personid" order="AFTER" >
@@ -164,6 +176,9 @@
       </if>
       <if test="voiceprompt != null" >
         voiceprompt,
+      </if>
+      <if test="branchid != null" >
+        branchid,
       </if>
       <if test="orgid != null" >
         orgid,
@@ -226,6 +241,9 @@
       </if>
       <if test="voiceprompt != null" >
         #{voiceprompt,jdbcType=VARCHAR},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
       </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
@@ -292,6 +310,9 @@
       <if test="voiceprompt != null" >
         voiceprompt = #{voiceprompt,jdbcType=VARCHAR},
       </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -329,6 +350,7 @@
       imagecontent = #{imagecontent,jdbcType=VARCHAR},
       rfid = #{rfid,jdbcType=VARCHAR},
       voiceprompt = #{voiceprompt,jdbcType=VARCHAR},
+      branchid = #{branchid,jdbcType=INTEGER},
       orgid = #{orgid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER},

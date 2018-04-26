@@ -5,6 +5,12 @@ import java.util.Locale;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 
+/**
+ * 返回字符串的Cell
+ * 
+ * @author charles
+ *
+ */
 public class POIUtil {
 
 	private static DataFormatter formatter = new DataFormatter(Locale.SIMPLIFIED_CHINESE);

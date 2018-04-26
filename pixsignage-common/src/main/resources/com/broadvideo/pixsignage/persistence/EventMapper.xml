@@ -7,8 +7,14 @@
     <result column="roomid" property="roomid" jdbcType="INTEGER" />
     <result column="roomname" property="roomname" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="startdate" property="startdate" jdbcType="DATE" />
+    <result column="enddate" property="enddate" jdbcType="DATE" />
+    <result column="shortstarttime" property="shortstarttime" jdbcType="TIME" />
+    <result column="shortendtime" property="shortendtime" jdbcType="TIME" />
     <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
     <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="eventdaysflag" property="eventdaysflag" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
@@ -17,10 +23,13 @@
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="updatestaffid" property="updatestaffid" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
+     <collection property="eventdtls" ofType="com.broadvideo.pixsignage.domain.Eventdtl"
+      column="{eventid=eventid}"  select="com.broadvideo.pixsignage.persistence.EventdtlMapper.selectByEventid" /> 
   </resultMap>
   <sql id="Base_Column_List" >
-    eventid, uuid, roomid, name, starttime, endtime, amount, sourcetype, orgid, createtime, 
-    createstaffid, updatetime, updatestaffid, status
+    eventid, uuid, roomid, name, type, startdate, enddate, shortstarttime, shortendtime, 
+    starttime, endtime, eventdaysflag, amount, sourcetype, orgid, createtime, createstaffid, 
+    updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -64,15 +73,19 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into event (uuid, roomid, name, 
-      starttime, endtime, amount, 
-      sourcetype, orgid, createtime, 
-      createstaffid, updatetime, updatestaffid, 
-      status)
+      type, startdate, enddate, shortstarttime, 
+      shortendtime, starttime, endtime, 
+      eventdaysflag, amount, sourcetype, 
+      orgid, createtime, createstaffid, 
+      updatetime, updatestaffid, status
+      )
     values (#{uuid,jdbcType=VARCHAR}, #{roomid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{amount,jdbcType=INTEGER}, 
-      #{sourcetype,jdbcType=CHAR}, #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR})
+      #{type,jdbcType=CHAR}, #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{shortstarttime,jdbcType=TIME}, 
+      #{shortendtime,jdbcType=TIME}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{eventdaysflag,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{sourcetype,jdbcType=CHAR}, 
+      #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Event" >
     <selectKey resultType="java.lang.Integer" keyProperty="eventid" order="AFTER" >
@@ -89,11 +102,29 @@
       <if test="name != null" >
         name,
       </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="startdate != null" >
+        startdate,
+      </if>
+      <if test="enddate != null" >
+        enddate,
+      </if>
+      <if test="shortstarttime != null" >
+        shortstarttime,
+      </if>
+      <if test="shortendtime != null" >
+        shortendtime,
+      </if>
       <if test="starttime != null" >
         starttime,
       </if>
       <if test="endtime != null" >
         endtime,
+      </if>
+      <if test="eventdaysflag != null" >
+        eventdaysflag,
       </if>
       <if test="amount != null" >
         amount,
@@ -130,11 +161,29 @@
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="startdate != null" >
+        #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        #{enddate,jdbcType=DATE},
+      </if>
+      <if test="shortstarttime != null" >
+        #{shortstarttime,jdbcType=TIME},
+      </if>
+      <if test="shortendtime != null" >
+        #{shortendtime,jdbcType=TIME},
+      </if>
       <if test="starttime != null" >
         #{starttime,jdbcType=TIMESTAMP},
       </if>
       <if test="endtime != null" >
         #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventdaysflag != null" >
+        #{eventdaysflag,jdbcType=VARCHAR},
       </if>
       <if test="amount != null" >
         #{amount,jdbcType=INTEGER},
@@ -174,11 +223,29 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="startdate != null" >
+        startdate = #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        enddate = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="shortstarttime != null" >
+        shortstarttime = #{shortstarttime,jdbcType=TIME},
+      </if>
+      <if test="shortendtime != null" >
+        shortendtime = #{shortendtime,jdbcType=TIME},
+      </if>
       <if test="starttime != null" >
         starttime = #{starttime,jdbcType=TIMESTAMP},
       </if>
       <if test="endtime != null" >
         endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventdaysflag != null" >
+        eventdaysflag = #{eventdaysflag,jdbcType=VARCHAR},
       </if>
       <if test="amount != null" >
         amount = #{amount,jdbcType=INTEGER},
@@ -212,8 +279,14 @@
     set uuid = #{uuid,jdbcType=VARCHAR},
       roomid = #{roomid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      startdate = #{startdate,jdbcType=DATE},
+      enddate = #{enddate,jdbcType=DATE},
+      shortstarttime = #{shortstarttime,jdbcType=TIME},
+      shortendtime = #{shortendtime,jdbcType=TIME},
       starttime = #{starttime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP},
+      eventdaysflag = #{eventdaysflag,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
       sourcetype = #{sourcetype,jdbcType=CHAR},
       orgid = #{orgid,jdbcType=INTEGER},
@@ -223,5 +296,51 @@
       updatestaffid = #{updatestaffid,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR}
     where eventid = #{eventid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateEvent" parameterType="com.broadvideo.pixsignage.domain.Event" >
+    update event
+    <set >
+      <if test="roomid != null" >
+        roomid = #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="startdate != null" >
+        startdate = #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        enddate = #{enddate,jdbcType=DATE},
+      </if>
+      <if test="shortstarttime != null" >
+        shortstarttime = #{shortstarttime,jdbcType=TIME},
+      </if>
+      <if test="shortendtime != null" >
+        shortendtime = #{shortendtime,jdbcType=TIME},
+      </if>
+      <if test="eventdaysflag != null" >
+        eventdaysflag = #{eventdaysflag,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="sourcetype != null" >
+        sourcetype = #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatestaffid != null" >
+        updatestaffid = #{updatestaffid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where eventid = #{eventid} and orgid=#{orgid}
   </update>
 </mapper>

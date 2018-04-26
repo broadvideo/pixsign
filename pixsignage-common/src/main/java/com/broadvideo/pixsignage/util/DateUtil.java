@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class DateUtil {
 
 	private final static Logger logger = LoggerFactory.getLogger(DateUtil.class);
+
 	public static Long getTimeStamp(String strDate) {
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -79,6 +80,13 @@ public class DateUtil {
 
 	}
 
+	public static boolean isWorkday(Date date) {
+
+		int workday = getWorkday(date);
+
+		return (workday >= 1 && workday <= 5);
+	}
+
 	public static int getWorkday(Date date) {
 
 		Calendar calendar = Calendar.getInstance();
@@ -104,12 +112,15 @@ public class DateUtil {
 		return c.getTime();
 	}
 
-	public static void main(String[] args) {
+	public static Date getFormatDate(Date date, String pattern) {
+		String dateStr = getDateStr(date, pattern);
+		return getDate(dateStr, pattern);
+	}
 
-		Date date = DateUtil.getDate("207-08-24 12:00", "yyyy-MM-dd HH:mm");
+	public static Date concatDates(Date src1, String p1, Date src2, String p2, String pattern) {
 
-		Date plusDate = DateUtil.add(date, Calendar.MINUTE, 10);
-		System.out.println("plusDate:" + plusDate);
+		String newDateStr = DateUtil.getDateStr(src1, p1) + " " + DateUtil.getDateStr(src2, p2);
+		return DateUtil.getDate(newDateStr, pattern);
 
 	}
 

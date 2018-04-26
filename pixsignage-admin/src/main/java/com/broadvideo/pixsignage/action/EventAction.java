@@ -1,7 +1,5 @@
 package com.broadvideo.pixsignage.action;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.broadvideo.pixsignage.common.EventType;
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.common.RetCodeEnum;
@@ -52,16 +51,24 @@ public class EventAction extends BaseDatatableAction {
 	}
 
 	public String doAdd() {
-		String starttime = Struts2Utils.getParameter("event.starttime");
-		String endtime = Struts2Utils.getParameter("event.endtime");
-		if (StringUtils.isBlank(event.getName()) || event.getRoomid() == null || starttime == null || endtime == null) {
-
+		String shortstarttime = Struts2Utils.getParameter("event.shortstarttime");
+		String shortendtime = Struts2Utils.getParameter("event.shortendtime");
+		String timedtls = event.getTimedtls();
+		if (StringUtils.isBlank(event.getName()) || event.getRoomid() == null || StringUtils.isBlank(event.getType())
+				|| event.getStartdate() == null
+				|| event.getEnddate() == null || StringUtils.isBlank(shortstarttime)
+				|| StringUtils.isBlank(shortendtime)) {
 			logger.error("doAdd event：缺少参数.");
-			renderError(null, "缺少参数.");
+			renderError(null, "表单数据不完整.");
 			return ERROR;
 		}
-		event.setStarttime(DateUtil.getDate(starttime, "yyyy-MM-dd HH:mm"));
-		event.setEndtime(DateUtil.getDate(endtime, "yyyy-MM-dd HH:mm"));
+		if (EventType.CUSTOM.equals(event.getType()) && StringUtils.isBlank(event.getTimedtls())) {
+			renderError(null, "请填写自定义时间段.");
+			return ERROR;
+		}
+
+		event.setShortstarttime(DateUtil.getDate(shortstarttime, "HH:mm"));
+		event.setShortendtime(DateUtil.getDate(shortendtime, "HH:mm"));
 		event.setCreatestaffid(getStaffid());
 		event.setOrgid(getStaffOrgid());
 		eventService.addEvent(event);
@@ -70,20 +77,22 @@ public class EventAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
-			String starttime = Struts2Utils.getParameter("event.starttime");
-			String endtime = Struts2Utils.getParameter("event.endtime");
-			if (event.getEventid() == null || starttime == null || endtime == null) {
-				logger.error("doUpdate event：缺少参数.");
-				renderError(null, "缺少参数.");
+			String shortstarttime = Struts2Utils.getParameter("event.shortstarttime");
+			String shortendtime = Struts2Utils.getParameter("event.shortendtime");
+			if (event.getEventid() == null || StringUtils.isBlank(event.getName()) || event.getRoomid() == null
+					|| StringUtils.isBlank(event.getType()) || event.getStartdate() == null
+					|| event.getEnddate() == null || StringUtils.isBlank(shortstarttime)
+					|| StringUtils.isBlank(shortendtime)) {
+				logger.error("doAdd event：缺少参数.");
+				renderError(null, "表单数据不完整.");
 				return ERROR;
 			}
-			if (StringUtils.isNotBlank(starttime)) {
-				event.setStarttime(DateUtil.getDate(starttime, "yyyy-MM-dd HH:mm"));
+			if (EventType.CUSTOM.equals(event.getType()) && StringUtils.isBlank(event.getTimedtls())) {
+				renderError(null, "请填写自定义时间段.");
+				return ERROR;
 			}
-			if (StringUtils.isNotBlank(endtime)) {
-				event.setEndtime(DateUtil.getDate(endtime, "yyyy-MM-dd HH:mm"));
-			}
-			event.setUpdatetime(new Date());
+			event.setShortstarttime(DateUtil.getDate(shortstarttime, "HH:mm"));
+			event.setShortendtime(DateUtil.getDate(shortendtime, "HH:mm"));
 			event.setUpdatestaffid(getStaffid());
 			event.setOrgid(getStaffOrgid());
 			eventService.updateEvent(event);
@@ -97,6 +106,12 @@ public class EventAction extends BaseDatatableAction {
 
 	public String doDelete() {
 		try {
+			if (event.getEventid() == null) {
+				logger.error("eventid:{}不允许为空!", event.getEventid());
+				renderError(null, "eventid不允许为空.");
+				return ERROR;
+
+			}
 			event.setUpdatestaffid(getStaffid());
 			event.setOrgid(getStaffOrgid());
 			eventService.deleteEvent(event);

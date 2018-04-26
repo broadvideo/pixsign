@@ -43,6 +43,7 @@ import biz.videoexpress.pixedx.lmsapi.common.EncryptionUtils;
 import biz.videoexpress.pixedx.lmsapi.common.ServiceConstants;
 import biz.videoexpress.pixedx.lmsapi.common.UserProfile;
 
+import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
@@ -154,25 +155,44 @@ public class ResUsers extends ResBase {
 		logger.info("entry book meeting.");
 		UserProfile profile = currentUserProfile(req);
 		if (bookMeetingReq == null || bookMeetingReq.getMeetingRoomId() == null
-				|| bookMeetingReq.getStartTime() == null || bookMeetingReq.getEndTime() == null
-				|| StringUtils.isBlank(bookMeetingReq.getSubject())) {
-			logger.error("Book meeting room:invalid args.");
+				|| StringUtils.isBlank(bookMeetingReq.getSubject())
+				|| StringUtils.isBlank(bookMeetingReq.getStartTime())
+				|| StringUtils.isBlank(bookMeetingReq.getEndTime())
+				|| StringUtils.isBlank(bookMeetingReq.getPeriodFlag())) {
+			logger.error("Book meeting:invalid args.");
 			throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
 
 		}
+		String periodFlag = bookMeetingReq.getPeriodFlag();
+
 		try {
 			Meeting meeting = new Meeting();
 			meeting.setMeetingroomid(bookMeetingReq.getMeetingRoomId());
 			meeting.setSubject(bookMeetingReq.getSubject());
 			meeting.setDescription(bookMeetingReq.getDescription());
-			meeting.setStarttime(DateUtil.getDate(bookMeetingReq.getStartTime(), "yyyy-MM-dd HH:mm"));
-			meeting.setEndtime(DateUtil.getDate(bookMeetingReq.getEndTime(), "yyyy-MM-dd HH:mm"));
+			meeting.setPeriodflag(periodFlag);
+
+			Date startTime = DateUtil.getDate(bookMeetingReq.getStartTime(), "yyyy-MM-dd HH:mm");
+			Date endTime = DateUtil.getDate(bookMeetingReq.getEndTime(), "yyyy-MM-dd HH:mm");
+			if (GlobalFlag.YES.equals(periodFlag)) {// 周期类型会议
+				logger.info("periodType:{},periodEndtime:{}", bookMeetingReq.getPeriodType(),
+						bookMeetingReq.getPeriodEndTime());
+				meeting.setPeriodtype(bookMeetingReq.getPeriodType());
+				meeting.setPeriodendtime(DateUtil.getDate(bookMeetingReq.getPeriodEndTime(), "yyyy-MM-dd HH:mm"));
+				meeting.setSkipholidayflag(bookMeetingReq.getSkipHolidayFlag());
+			} else {
+
+				meeting.setPeriodendtime(endTime);
+			}
+			meeting.setStarttime(startTime);
+			meeting.setEndtime(endTime);
 			meeting.setAttendeeuserids(bookMeetingReq.getAttendeeUserIds());
 			meeting.setBookstaffid(profile.getUserId());
 			meeting.setBookbranchid(profile.getBranchid());
 			meeting.setCreatestaffid(profile.getUserId());
 			meeting.setOrgid(profile.getOrgId());
 			meeting.setCreatetime(new Date());
+			meeting.setServicememo(bookMeetingReq.getServicememo());
 			this.meetingService.addMeeting(meeting);
 		} catch (ServiceException e) {
 			logger.error("bookMeeting exception.", e);
@@ -265,8 +285,12 @@ public class ResUsers extends ResBase {
 				data.put("meeting_room_name", result.getMeetingroomname());
 				data.put("subject", result.getSubject());
 				data.put("description", result.getDescription());
-				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
-				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
+				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm"));
+				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm"));
+				data.put("period_flag", result.getPeriodflag());
+				data.put("period_type", result.getPeriodtype());
+				data.put("period_end_time", DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm"));
+				data.put("skip_holiday_flag", result.getSkipholidayflag());
 				data.put("book_user_id", result.getBookstaffid());
 				data.put("book_user", result.getBookstaffname());
 				data.put("book_branch", result.getBookbranchname());
@@ -303,25 +327,40 @@ public class ResUsers extends ResBase {
 		logger.info("Entry adjust meeting.");
 		UserProfile profile = currentUserProfile(req);
 		if (adjustMeetingReq == null || adjustMeetingReq.getStartTime() == null
-				|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())) {
+				|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())
+				|| StringUtils.isBlank(adjustMeetingReq.getPeriodFlag())) {
 			logger.error("adjust meeting room:invalid args.");
 			throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
-
 		}
 		try {
+			logger.info("adjustMeeting({}),startdate:{},endDate:{}",
+					new Object[] { adjustMeetingReq, adjustMeetingReq.getStartTime(), adjustMeetingReq.getEndTime() });
 			Meeting meeting = new Meeting();
 			meeting.setMeetingid(adjustMeetingReq.getMeetingId());
 			meeting.setSubject(adjustMeetingReq.getSubject());
 			meeting.setDescription(adjustMeetingReq.getDescription());
 			meeting.setStarttime(adjustMeetingReq.getStartTime());
 			meeting.setEndtime(adjustMeetingReq.getEndTime());
+			meeting.setPeriodflag(adjustMeetingReq.getPeriodFlag());
+			if (GlobalFlag.YES.equals(adjustMeetingReq.getPeriodFlag())) {// 周期类型
+				logger.info("periodType:{},periodEndtime:{}", adjustMeetingReq.getPeriodType(),
+						adjustMeetingReq.getPeriodEndTime());
+				meeting.setPeriodtype(adjustMeetingReq.getPeriodType());
+				meeting.setPeriodendtime(DateUtil.getDate(adjustMeetingReq.getPeriodEndTime(), "yyyy-MM-dd HH:mm"));
+				meeting.setSkipholidayflag(adjustMeetingReq.getSkipHolidayFlag());
+				meeting.setPeriodChangeScope(adjustMeetingReq.getPeriodChangeScope());
+			}
 			meeting.setAttendeeuserids(adjustMeetingReq.getAttendeeUserId());
 			meeting.setUpdatestaffid(profile.getUserId());
 			meeting.setOrgid(profile.getOrgId());
 			meeting.setUpdatetime(new Date());
+			meeting.setServicememo(adjustMeetingReq.getServicememo());
 			this.meetingService.updateMeeting(meeting);
 		} catch (ServiceException e) {
+			e.printStackTrace();
 			throw new AppException(e.getCode(), e.getMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		BasicResp resp = new BasicResp();
 		resp.setRetcode(ApiRetCodeEnum.SUCCESS);

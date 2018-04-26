@@ -220,28 +220,29 @@ public class ResAttendances extends ResBase {
 							logger.error("signtimes is empty");
 							continue;
 						}
-						if (signtimes.size() == 1) {
+					if (isLeak(event, attendancelog.getSigntimes())) {
 							logger.info("Leak:person(id:{},name:{}) ", attendancelog.getPersonid(),
 									attendancelog.getPersonname());
-							leaks++;
-						} else {
-							if (isLate(event, signtimes)) {
-								logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
-										attendancelog.getPersonname());
-								lates++;
-							}
-							if (isEarlyLeave(event, signtimes)) {
-								logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
-										attendancelog.getPersonname());
-								earlyLeaves++;
-							}
-							if (isNormal(event, signtimes)) {
-								logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
-										attendancelog.getPersonname());
-								normals++;
-							}
-						}
+						leaks++;
 					}
+
+					if (isLate(event, signtimes)) {
+						logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						lates++;
+						}
+						if (isEarlyLeave(event, signtimes)) {
+							logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
+									attendancelog.getPersonname());
+							earlyLeaves++;
+						}
+						if (isNormal(event, signtimes)) {
+							logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
+									attendancelog.getPersonname());
+							normals++;
+						}
+
+				  }
 					absents = total - values.size();
 					logger.info("####Summary info(total：{}，normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
 							new Object[] { total, normals, leaks, lates, earlyLeaves, absents });
@@ -364,12 +365,12 @@ public class ResAttendances extends ResBase {
 						logger.error("signtimes is empty");
 						continue;
 					}
-					if (signtimes.size() == 1) {
+					if (isLeak(event, attendancelog.getSigntimes())) {
 						logger.info("Leak:person(id:{},name:{}) ", attendancelog.getPersonid(),
 								attendancelog.getPersonname());
 						leaks++;
-					} else {
-						if (isLate(event, signtimes)) {
+					}
+					if (isLate(event, signtimes)) {
 							logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
 									attendancelog.getPersonname());
 							lates++;
@@ -384,7 +385,7 @@ public class ResAttendances extends ResBase {
 									attendancelog.getPersonname());
 							normals++;
 						}
-					}
+
 				}
 				logger.info("####Summary info(normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})", new Object[] {
 						normals, leaks, lates, earlyLeaves, absents });
@@ -464,7 +465,11 @@ public class ResAttendances extends ResBase {
 						continue;
 					} else if ("2".equals(state) && !isEarlyLeave(event, attendancelog.getSigntimes())) {// 早退
 						continue;
-					} else if ("3".equals(state) && !isLeak(attendancelog.getSigntimes())) {// 缺卡
+					} else if ("3".equals(state) && !isLeak(event, attendancelog.getSigntimes())) {// 缺卡
+						continue;
+					}
+					Collections.sort(attendancelog.getSigntimes());
+					if ("4".equals(state) && !"4".equals(getState(event, attendancelog.getSigntimes()))) {
 						continue;
 					}
 					JSONObject dataJson = new JSONObject();
@@ -479,13 +484,17 @@ public class ResAttendances extends ResBase {
 					dataJson.put("person_name", attendancelog.getPersonname());
 					dataJson.put("avatar", getImageUrl(config.getValue(), attendancelog.getPerson().getAvatar()));
 					dataJson.put("sign_type", attendancelog.getSigntype());
-					Collections.sort(attendancelog.getSigntimes());
 					List<String> dateStrList = new ArrayList<String>();
 					for (Date signtime : attendancelog.getSigntimes()) {
 						dateStrList.add(DateUtil.getDateStr(signtime, "yyyy-MM-dd HH:mm"));
 					}
+
 					dataJson.put("sign_times", dateStrList);
-					dataJson.put("state", getState(event, attendancelog.getSigntimes()));
+					String userState = state;
+					if (StringUtils.isBlank(userState)) {
+						userState = getState(event, attendancelog.getSigntimes());
+					}
+					dataJson.put("state", userState);
 					returnList.add(dataJson);
 				}
 			}
@@ -575,7 +584,7 @@ public class ResAttendances extends ResBase {
 
 	private String getState(Event event, List<Date> signtimes) {
 
-		if (isLeak(signtimes)) {
+		if (isLeak(event, signtimes)) {
 
 			return "3";
 		} else if (isLate(event, signtimes)) {
@@ -588,16 +597,23 @@ public class ResAttendances extends ResBase {
 
 			return "0";
 		} else {
-
 			return "4";
 		}
 
 	}
 
 	// 缺卡
-	private boolean isLeak(List<Date> signtimes) {
+	private boolean isLeak(Event event, List<Date> signtimes) {
 
-		return signtimes.size() == 1;
+		if (signtimes.size() == 1) {
+			Date signtime = signtimes.get(0);
+			Date endTime = getConvertDate(event.getEndtime(), signtime);
+			if (endTime.getTime() <= System.currentTimeMillis()) {
+				return true;
+			}
+
+		}
+		return false;
 
 	}
 
@@ -606,9 +622,20 @@ public class ResAttendances extends ResBase {
 		Date startTime = event.getStarttime();
 		Date endTime = event.getEndtime();
 		Collections.sort(signtimes);
-		if (signtimes.get(0).getTime() <= startTime.getTime()
-				&& signtimes.get(signtimes.size() - 1).getTime() >= endTime.getTime()) {
-			return true;
+		startTime = getConvertDate(startTime, signtimes.get(0));
+		endTime = getConvertDate(endTime, signtimes.get(signtimes.size() - 1));
+		if (endTime.getTime() <= System.currentTimeMillis()) { // 已经结束的事件签到
+			if (signtimes.size() < 2) {
+				return false;
+			}
+			if (signtimes.get(0).getTime() <= startTime.getTime()
+					&& signtimes.get(signtimes.size() - 1).getTime() >= endTime.getTime()) {
+				return true;
+			}
+		} else {// 未结束时间
+			if (signtimes.get(0).getTime() <= startTime.getTime()) {
+				return true;
+			}
 		}
 
 		return false;
@@ -617,24 +644,40 @@ public class ResAttendances extends ResBase {
 	// 是否迟到
 	private boolean isLate(Event event, List<Date> signtimes) {
 		Date startTime = event.getStarttime();
-		Date endTime = event.getEndtime();
 		Collections.sort(signtimes);
+		startTime = getConvertDate(startTime, signtimes.get(0));
 		if (signtimes.get(0).getTime() > startTime.getTime()) {
 			return true;
 		}
 		return false;
 	}
 
-	// 是否迟到
+	// 是否早退
 	private boolean isEarlyLeave(Event event, List<Date> signtimes) {
-		Date startTime = event.getStarttime();
+		if (signtimes.size() < 2) {
+			return false;
+		}
 		Date endTime = event.getEndtime();
 		Collections.sort(signtimes);
+		endTime = getConvertDate(endTime, signtimes.get(signtimes.size() - 1));
+		if (System.currentTimeMillis() < endTime.getTime()) {// 考勤时间还没结束
+			return false;
+		}
 		if (signtimes.get(signtimes.size() - 1).getTime() < endTime.getTime()) {
 
 			return true;
 		}
 		return false;
+	}
+
+	private static Date getConvertDate(Date time, Date date) {
+
+		String yyyyMMdd = DateUtil.getDateStr(date, "yyyy-MM-dd");
+		String HHmmss = DateUtil.getDateStr(time, "HH:mm:ss");
+		String formatStr = yyyyMMdd + " " + HHmmss;
+		System.out.println("formatStr:" + formatStr);
+		return DateUtil.getDate(formatStr, "yyyy-MM-dd HH:mm:ss");
+
 	}
 
 	private List<Attendancelog> reduceByPerson(List<Attendancelog> values) {
@@ -685,7 +728,18 @@ public class ResAttendances extends ResBase {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(2018, 0, 21);
-		System.out.println("isWeekend:" + isWeekend(calendar.getTime()));
+		Date date = calendar.getTime();
+		calendar.set(2019, 1, 10, 16, 12, 21);
+		Date time = calendar.getTime();
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(2018, 0, 21, 16, 12, 21);
+		calendar2.set(Calendar.MILLISECOND, 0);
+		Date resultDate = calendar2.getTime();
+		System.out
+				.println("convert date:" + DateUtil.getDateStr(getConvertDate(time, date), "yyyy-MM-dd HH:mm:ss SSS"));
+
+
 
 	}
 

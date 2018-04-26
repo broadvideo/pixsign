@@ -296,8 +296,7 @@ public class ResClassrooms {
 		Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
 		if (classroom == null) {
 			return this.handleResult(ApiRetCodeEnum.EXCEPTION,
-					String.format("classroomid:%s is not found.", classroomId),
-					new ArrayList());
+					String.format("classroomid:%s is not found.", classroomId), new ArrayList());
 		}
 		final int orgid = classroom.getOrgid();
 		List<Attendanceevent> attendanceevents = attendanceService.getAttendanceevents(classroomId, yyyyMMdd, orgid);
@@ -334,8 +333,7 @@ public class ResClassrooms {
 		Schoolclass schoolclass = this.schoolclassMapper.selectByClassroomid(orgid, classroomId);
 		List<Student> students = this.studentService.getSchoolclassStudents(schoolclass.getSchoolclassid(), orgid);
 		int total = students.size();
-		List<Attendance> attendances = this.attendanceService.getAttendancesByEventid(
-				NumberUtils.toInt(eventId),
+		List<Attendance> attendances = this.attendanceService.getAttendancesByEventid(NumberUtils.toInt(eventId),
 				classroomId, orgid);
 		Attendanceevent attendanceevent = this.attendanceService.getAttendanceevent(NumberUtils.toInt(eventId), orgid);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -373,8 +371,7 @@ public class ResClassrooms {
 				absentdtl.put("student_id", student.getStudentid());
 				absentdtl.put("student_no", student.getStudentno());
 				absentdtl.put("student_name", student.getName());
-				String avatarpath = "http://" + serverIP + "/pixsigdata/image/avatar/" + student.getStudentno()
-						+ ".jpg";
+				String avatarpath = "http://" + serverIP + "/pixsigdata" + student.getAvatar();
 				absentdtl.put("state", AttendanceStateEnum.ABSENT);
 				absentdtl.put("avatar", avatarpath);
 				absentdtl.put("event_time", -1);

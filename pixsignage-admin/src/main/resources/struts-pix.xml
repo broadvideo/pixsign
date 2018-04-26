@@ -1917,7 +1917,7 @@
 		</action>
 		<action name="student!add" method="doAdd" class="studentAction">
 		    <interceptor-ref name="fileUpload">
-				<param name="maximumSize">512000</param>
+				<param name="maximumSize">2048000</param>
 			</interceptor-ref>
 		   <interceptor-ref name="defaultStack"></interceptor-ref>
 			<result name="success" type="json">
@@ -2204,9 +2204,9 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-			<action name="person!add" method="doAdd" class="personAction">
+		<action name="person!add" method="doAdd" class="personAction">
 			   <interceptor-ref name="fileUpload">
-					<param name="maximumSize">5120000</param>
+					<param name="maximumSize">2048000</param>
 				</interceptor-ref>
 			   <interceptor-ref name="defaultStack"></interceptor-ref>
 			<result name="success" type="json">
@@ -2222,6 +2222,12 @@
 			</result>
 		</action>
 		<action name="person!delete" method="doDelete" class="personAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="person!import" method="doImport" class="personAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

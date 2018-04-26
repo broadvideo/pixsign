@@ -3,17 +3,27 @@ var CurClassid = null;
 var classlist = [];
 classlist.push({id:0,text: '男'},{id:1,text:'女'},{ id:2,text:'未知'});
 var _persontype=0;
-
+var branchTree=null;
 function preview(file,previewid) {
     var filePath=$("#"+file.id).val();
     if($.trim(filePath).length==0){
 		   return false;
          }
     var reg=/\.(jpg|png)/i;
-    if(!reg.test(filePath)){
-    	bootbox.alert("文件格式不合法，请上传jpg或者png格式头像！");
-    	return false;
+    if(previewid=='preview2'){
+    	reg=/\.(jpg)/i;
+    	  if(!reg.test(filePath)){
+    	    	bootbox.alert("文件格式不合法，请上传jpg格式图像！");
+    	    	return false;
+    	    }
+    }else{
+    	
+    	  if(!reg.test(filePath)){
+  	    	bootbox.alert("文件格式不合法，请上传jpg或者png格式头像！");
+  	    	return false;
+  	    }
     }
+  
     var filebytes=file.files[0].size;
     if(filebytes>5*1024*1024){
     	bootbox.alert("上传头像不允许大于5MB！");
@@ -33,7 +43,7 @@ function preview(file,previewid) {
   }
 var PersonModule=function(){
 	
-
+var personBranchTree = new BranchTree($('#PersonPortlet'));
 var init=function(persontype){
 	_persontype=persontype;
 	if(_persontype==3){
@@ -41,10 +51,14 @@ var init=function(persontype){
 	}else if(_persontype==2){	
 		initMyTable2();
 	}
-
 	initEvent();
 	
+
+	
 };
+
+
+
 
 var refresh=function(){
 	
@@ -96,6 +110,8 @@ function initMyTable3(){
 		'fnServerParams': function(aoData) { 
 			if (_persontype != null) {
 				aoData.push({'name':'person.type','value':_persontype });
+				aoData.push({'name':'person.branchid','value':personBranchTree.branchid });
+
 			}
 		}
 	});
@@ -118,13 +134,13 @@ function initMyTable2(){
 		'bServerSide' : true,
 		'sAjaxSource' : 'person!list.action',
 		'aoColumns' : [ 
-                        {'sTitle' : '工号', 'mData' : 'personno', 'bSortable' : false, 'sWidth' : '10%' },
-		                {'sTitle' : '姓名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
-		                {'sTitle' : '性别', 'mData' : 'sex', 'bSortable' : false, 'sWidth' : '15%' },
+                        {'sTitle' : '工号', 'mData' : 'personno', 'bSortable' : false, 'sWidth' : '16%' },
+		                {'sTitle' : '姓名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '16%' },
+		                {'sTitle' : '性别', 'mData' : 'sex', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : '电话', 'mData' : 'mobile', 'bSortable' : false, 'sWidth' : '15%' },
 						{'sTitle' : '邮箱', 'mData' : 'email', 'bSortable' : false, 'sWidth' : '20%' },
-						{'sTitle' : '', 'mData' : 'personid', 'bSortable' : false, 'sWidth' : '8%' },
-						{'sTitle' : '', 'mData' : 'personid', 'bSortable' : false, 'sWidth' : '8%' }],
+						{'sTitle' : '', 'mData' : 'personid', 'bSortable' : false, 'sWidth' : '10%' },
+						{'sTitle' : '', 'mData' : 'personid', 'bSortable' : false, 'sWidth' : '10%' }],
 					
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
@@ -150,6 +166,8 @@ function initMyTable2(){
 			if (_persontype != null) {
 				aoData.push({'name':'person.type','value':_persontype });
 			}
+			aoData.push({'name':'person.branchid','value':personBranchTree.branchid });
+
 		}
 	});
 	
@@ -163,6 +181,8 @@ function initMyTable2(){
 
 function initEvent(){
 	
+	    var  personImportBranchTree=null;
+	    var  personAddBranchTree=null;
 	
 		$('body').on('click', '.pix-delete', function(event) {
 			var index = $(event.target).attr('data-id');
@@ -223,7 +243,14 @@ function initEvent(){
 				    }
 		   }
 			
-			  
+		   if ($("#MyEditForm #BranchTree").jstree('get_selected', false).length > 0) {
+				var branchid = personAddBranchTree.jstree('get_selected', false)[0];
+				$('#MyEditForm input[name="person.branchid"]').val(branchid);
+			}else{
+				
+				bootbox.alert('请选择所属分支机构！');
+				return;
+			}
 			
 			$.ajax({
 				type : 'POST',
@@ -264,7 +291,13 @@ function initEvent(){
 			$('#preview2').html('')
 		
 		});			
+	$('body').on('click', '.pix-person-import', function(event) {
+			
+			$('#PersonImportForm').attr('action', 'person!add.action?person.type='+_persontype);
+			$('#PersonImportModal').modal();
+			
 		
+		});	
 		
 		$('body').on('click', '.pix-update', function(event) {
 			var index = $(event.target).attr('data-id');
@@ -302,7 +335,104 @@ function initEvent(){
 			dropdownCssClass: "bigdrop", 
 			escapeMarkup: function (m) { return m; } 
 		});
-}
+		
+		 
+		//人员导入BranchTree
+		var personImportBranchTree = $('#PersonImportForm #BranchTree');
+		personImportBranchTree.jstree('destroy');
+		personImportBranchTree.jstree({
+			'core' : {
+				'multiple' : false,
+				'data' : {
+					'url': function(node) {
+						return 'branch!listnode.action';
+					},
+					'data': function(node) {
+						return {
+							'id': node.id,
+						}
+					}
+				}
+			},
+			'plugins' : ['unique'],
+		});
+		//新增人员
+		var personAddBranchTree = $('#MyEditForm #BranchTree');
+		personAddBranchTree.jstree('destroy');
+		personAddBranchTree.jstree({
+			'core' : {
+				'multiple' : false,
+				'data' : {
+					'url': function(node) {
+						return 'branch!listnode.action';
+					},
+					'data': function(node) {
+						return {
+							'id': node.id,
+						}
+					}
+				}
+			},
+			'plugins' : ['unique'],
+		});
+		
+		
+		$(":file").filestyle({icon: false,buttonText:"浏览",buttonName: "btn-primary",placeholder:"选择ZIP文件"});
+		$("#uploadFile").click(function () {
+	     	if ($("#PersonImportForm #BranchTree").jstree('get_selected', false).length > 0) {
+				var branchid = personImportBranchTree.jstree('get_selected', false)[0];
+				$('#PersonImportForm input[name="person.branchid"]').val(branchid);
+			}else{
+					
+					bootbox.alert('请选择所属分支机构！');
+					return false;
+			}	
+	        var filePath=$("#personZipFile").val();
+	        if($.trim(filePath).length==0){
+				bootbox.alert("请选择上传ZIP文件！");
+		          return false;
+	             }
+	        var reg=/\.(zip)/i;
+	        if(!reg.test(filePath)){
+	        	bootbox.alert("文件格式不合法，请上传ZIP文件！");
+	        	return false;
+	        	
+	        }
+			$("#uploadFile").attr('disabled','disabled');
+
+	    $('#PersonImportForm').ajaxSubmit({
+	        url: 'person!import.action',
+	        type: 'POST',
+	        beforeSubmit: function (data) {
+	        Metronic.startPageLoading({animate: true});
+	        return true;
+
+	        },
+	        
+	        success: function (data) {
+	        	  Metronic.stopPageLoading();
+	        	$(":file").filestyle('clear');
+				$('#PersonImportModal').modal('hide');
+
+	        	if (data.errorcode == 0) {
+	        		var result=data.importResult;
+					bootbox.alert("<b>导入结果</b><hr/>(总计："+result.total+"&nbsp;&nbsp;成功："+result.success+"条 &nbsp;&nbsp;失败："+result.fail+"条 &nbsp;&nbsp;无效："+result.invalid+")<br/>");
+					refresh();
+	        	} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+	        }
+	    });
+	});
+		
+	
+	
+		
+};
+
+
+
+
 
 return  { 
 	     init: init,

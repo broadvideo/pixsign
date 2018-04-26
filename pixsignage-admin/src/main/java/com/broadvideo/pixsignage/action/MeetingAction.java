@@ -62,20 +62,20 @@ public class MeetingAction extends BaseDatatableAction {
 	public String doAuditList() {
 
 		try {
-		PageInfo pageInfo = super.initPageInfo();
-		String search = getParameter("sSearch");
-		search = SqlUtil.likeEscapeH(search);
+			PageInfo pageInfo = super.initPageInfo();
+			String search = getParameter("sSearch");
+			search = SqlUtil.likeEscapeH(search);
 
-		if (meeting == null) {
-			meeting = new Meeting();
-		}
-		meeting.setSearch(search);
-		meeting.setOrgid(getStaffOrgid());
-		List<String> auditstatuslist = new ArrayList<String>();
-		auditstatuslist.add(Meeting.REFUSE_FOR_AUDIT);
-		auditstatuslist.add(Meeting.WAITING_FOR_AUDIT);
-		meeting.setAuditstatuslist(auditstatuslist);
-			PageResult pageResult = this.meetingService.getMeetingList(meeting, pageInfo);
+			if (meeting == null) {
+				meeting = new Meeting();
+			}
+			meeting.setSearch(search);
+			meeting.setOrgid(getStaffOrgid());
+			List<String> auditstatuslist = new ArrayList<String>();
+			auditstatuslist.add(Meeting.REFUSE_FOR_AUDIT);
+			auditstatuslist.add(Meeting.WAITING_FOR_AUDIT);
+			meeting.setAuditstatuslist(auditstatuslist);
+			PageResult pageResult = this.meetingService.getAuditMeetingList(meeting, pageInfo);
 			this.setiTotalRecords(pageResult.getTotalCount());
 			this.setiTotalDisplayRecords(pageResult.getTotalCount());
 			this.setAaData(pageResult.getResult());
@@ -107,7 +107,6 @@ public class MeetingAction extends BaseDatatableAction {
 		}
 
 	}
-
 
 	public String doExportMeetings() {
 
@@ -147,7 +146,6 @@ public class MeetingAction extends BaseDatatableAction {
 		}
 	}
 
-
 	public String doUpdate() {
 		try {
 
@@ -175,7 +173,6 @@ public class MeetingAction extends BaseDatatableAction {
 			return ERROR;
 		}
 	}
-
 
 	public Meeting getMeeting() {
 		return meeting;

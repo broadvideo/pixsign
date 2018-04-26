@@ -8,7 +8,8 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="source_type" property="source_type" jdbcType="CHAR" />
+    <result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
+    <result column="roompersonflag" property="roompersonflag" jdbcType="CHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -20,11 +21,13 @@
    <resultMap id="ExtResultMap" extends="BaseResultMap"  type="com.broadvideo.pixsignage.domain.Room" >
     <collection property="roomterminals" ofType="com.broadvideo.pixsignage.domain.Roomterminal"
       column="{roomid=roomid}"  select="com.broadvideo.pixsignage.persistence.RoomterminalMapper.selectByRoomid" />
+    <collection property="roompersons" ofType="com.broadvideo.pixsignage.domain.Roomperson"
+      column="{roomid=roomid}"  select="com.broadvideo.pixsignage.persistence.RoompersonMapper.selectByRoomid" /> 
   </resultMap>
   
   <sql id="Base_Column_List" >
-    roomid, uuid, seqno, type, name, description, source_type, orgid, createtime, createstaffid, 
-    updatetime, updatestaffid, status
+    roomid, uuid, seqno, type, name, description, sourcetype, roompersonflag, orgid, 
+    createtime, createstaffid, updatetime, updatestaffid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -66,15 +69,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into room (uuid, seqno, type, 
-      name, description, source_type, 
-      orgid, createtime, createstaffid, 
-      updatetime, updatestaffid, status
-      )
+      name, description, sourcetype, 
+      roompersonflag, orgid, createtime, 
+      createstaffid, updatetime, updatestaffid, 
+      status)
     values (#{uuid,jdbcType=VARCHAR}, #{seqno,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{source_type,jdbcType=CHAR}, 
-      #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
-      #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, #{status,jdbcType=CHAR}
-      )
+      #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{sourcetype,jdbcType=CHAR}, 
+      #{roompersonflag,jdbcType=CHAR}, #{orgid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP}, #{updatestaffid,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Room" >
     <selectKey resultType="java.lang.Integer" keyProperty="roomid" order="AFTER" >
@@ -97,8 +100,11 @@
       <if test="description != null" >
         description,
       </if>
-      <if test="source_type != null" >
-        source_type,
+      <if test="sourcetype != null" >
+        sourcetype,
+      </if>
+      <if test="roompersonflag != null" >
+        roompersonflag,
       </if>
       <if test="orgid != null" >
         orgid,
@@ -135,8 +141,11 @@
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="source_type != null" >
-        #{source_type,jdbcType=CHAR},
+      <if test="sourcetype != null" >
+        #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="roompersonflag != null" >
+        #{roompersonflag,jdbcType=CHAR},
       </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
@@ -176,8 +185,11 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="source_type != null" >
-        source_type = #{source_type,jdbcType=CHAR},
+      <if test="sourcetype != null" >
+        sourcetype = #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="roompersonflag != null" >
+        roompersonflag = #{roompersonflag,jdbcType=CHAR},
       </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
@@ -197,6 +209,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="roompersonflag != null" >
+        #{roompersonflag,jdbcType=CHAR},
+      </if>
     </set>
     where roomid = #{roomid,jdbcType=INTEGER}
   </update>
@@ -207,7 +222,8 @@
       type = #{type,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      source_type = #{source_type,jdbcType=CHAR},
+      sourcetype = #{sourcetype,jdbcType=CHAR},
+      roompersonflag = #{roompersonflag,jdbcType=CHAR},
       orgid = #{orgid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER},
@@ -232,8 +248,8 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="source_type != null" >
-        source_type = #{source_type,jdbcType=CHAR},
+      <if test="sourcetype != null" >
+        sourcetype = #{sourcetype,jdbcType=CHAR},
       </if>   
       <if test="updatetime != null" >
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
