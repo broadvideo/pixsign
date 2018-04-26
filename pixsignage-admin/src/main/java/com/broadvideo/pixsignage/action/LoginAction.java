@@ -68,14 +68,29 @@ public class LoginAction extends BaseAction {
 			return ERROR;
 		}
 
-		if (code == null || code.equals("")) {
-			code = "default";
-		}
 		if (username.equals("root")) {
 			// SYS super user
 			staff.setSubsystem(CommonConstants.SUBSYSTEM_SYS);
 		} else if (username.equals("super")) {
-			// VSP super user
+			// VSP super user, type=1
+			if (code == null || code.equals("")) {
+				code = "default";
+			}
+			Vsp vsp = vspMapper.selectByCode(code);
+			if (vsp == null) {
+				logger.error("Login failed for vsp not found, username={}, password={}, md5={}, code={}", username,
+						password, CommonUtil.getPasswordMd5(username, password), code);
+				setErrorcode(-1);
+				return ERROR;
+			}
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_VSP);
+			staff.setVspid(vsp.getVspid());
+			staff.setVsp(vsp);
+		} else if (username.equals("system")) {
+			// VSP system user, type=2
+			if (code == null || code.equals("")) {
+				code = "system";
+			}
 			Vsp vsp = vspMapper.selectByCode(code);
 			if (vsp == null) {
 				logger.error("Login failed for vsp not found, username={}, password={}, md5={}, code={}", username,
@@ -88,6 +103,9 @@ public class LoginAction extends BaseAction {
 			staff.setVsp(vsp);
 		} else if (username.equals("admin")) {
 			// ORG super user
+			if (code == null || code.equals("")) {
+				code = "default";
+			}
 			Org org = orgMapper.selectByCode(code);
 			if (org == null) {
 				logger.error("Login failed for org not found, username={}, password={}, md5={}, code={}", username,
@@ -138,6 +156,57 @@ public class LoginAction extends BaseAction {
 			session.setAttribute(CommonConstants.SESSION_ORG, staff.getOrg());
 		}
 
+		return SUCCESS;
+	}
+
+	public String doLogin2c() throws Exception {
+		String vspid = getParameter("vspid");
+		String username = getParameter("username").trim();
+		String password = getParameter("password");
+		String code = getParameter("code");
+		logger.info("Login2C start, username={}, password={}, md5={}, code={}", username, password,
+				CommonUtil.getPasswordMd5(username, password), code);
+
+		if (!username.equals("system")) {
+			staff = staffMapper.login2c(vspid, username, CommonUtil.getPasswordMd5(username, password));
+		} else {
+			staff = staffMapper.login(username, CommonUtil.getPasswordMd5(username, password));
+		}
+		if (staff == null) {
+			logger.error(
+					"Login2c failed for username & password not match, vspid={}, username={}, password={}, md5={}, code={}",
+					vspid, username, password, CommonUtil.getPasswordMd5(username, password), code);
+			setErrorcode(-1);
+			return ERROR;
+		}
+
+		if (username.equals("system")) {
+			// ORG super user
+			Org org = orgMapper.selectByCode(code);
+			if (org == null) {
+				logger.error("Login2c failed for org not found, vspid={}, username={}, password={}, md5={}, code={}",
+						vspid, username, password, CommonUtil.getPasswordMd5(username, password), code);
+				setErrorcode(-1);
+				return ERROR;
+			}
+			staff.setSubsystem(CommonConstants.SUBSYSTEM_USR);
+			staff.setOrgid(org.getOrgid());
+			staff.setOrg(org);
+		}
+
+		if (staff.getSubsystem().equals(CommonConstants.SUBSYSTEM_USR)) {
+			Oplog oplog = new Oplog();
+			oplog.setOrgid(staff.getOrgid());
+			oplog.setStaffid(staff.getStaffid());
+			oplog.setType("1");
+			oplogMapper.insertSelective(oplog);
+		}
+
+		HttpSession session = super.getSession();
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+		session.setAttribute(CommonConstants.SESSION_TOKEN, token);
+		session.setAttribute(CommonConstants.SESSION_STAFF, staff);
+		session.setAttribute(CommonConstants.SESSION_SUBSYSTEM, staff.getSubsystem());
 		return SUCCESS;
 	}
 

@@ -224,20 +224,20 @@ var OrgModule = function () {
 				dataType: "json",
 				success : function(data, status) {
 					if (data.errorcode == 0) {
-						var max1 = parseInt(data.vsp.maxdevices) - parseInt(data.vsp.currentdevices);
-						var max2 = parseInt(data.vsp.maxstorage) - parseInt(data.vsp.currentstorage);
+						var maxdevice1 = parseInt(data.vsp.maxdevices) - parseInt(data.vsp.currentdevices);
+						var maxdevice2 = parseInt(data.vsp.maxstorage) - parseInt(data.vsp.currentstorage);
 						if (org != null) {
-							max1 += org.maxdevices;
-							max2 += org.maxstorage;
+							maxdevice1 += org.maxdevices;
+							maxdevice2 += org.maxstorage;
 						}
-						max1 = (max1 < 0 ? 0 : max1);
-						max2 = (max2 < 0 ? 0 : max2);
-						formHandler.validateOption.rules['org.maxdevices']['max'] = max1;
-						formHandler.validateOption.rules['org.maxstorage']['max'] = max2;
+						maxdevice1 = (maxdevice1 < 0 ? 0 : maxdevice1);
+						maxdevice2 = (maxdevice2 < 0 ? 0 : maxdevice2);
+						formHandler.validateOption.rules['org.maxdevices']['max'] = maxdevice1;
+						formHandler.validateOption.rules['org.maxstorage']['max'] = maxdevice2;
 						$.extend($('#OrgEditForm').validate().settings, {
 							rules: formHandler.validateOption.rules
 						});
-						if (max1 == 0 || max2 == 0) {
+						if (maxdevice1 == 0 || maxdevice2 == 0) {
 							$('.pix-add').removeClass('pix-add').addClass('pix-full');
 						} else {
 							$('.pix-full').removeClass('pix-full').addClass('pix-add');
@@ -306,12 +306,24 @@ var OrgModule = function () {
 		formHandler.validateOption.rules['org.maxdevices'] = {};
 		formHandler.validateOption.rules['org.maxdevices']['required'] = true;
 		formHandler.validateOption.rules['org.maxdevices']['number'] = true;
-		formHandler.validateOption.rules['org.maxdevices1'] = {};
-		formHandler.validateOption.rules['org.maxdevices1']['required'] = true;
-		formHandler.validateOption.rules['org.maxdevices1']['number'] = true;
-		formHandler.validateOption.rules['org.maxdevices2'] = {};
-		formHandler.validateOption.rules['org.maxdevices2']['required'] = true;
-		formHandler.validateOption.rules['org.maxdevices2']['number'] = true;
+		formHandler.validateOption.rules['org.max1'] = {};
+		formHandler.validateOption.rules['org.max1']['required'] = true;
+		formHandler.validateOption.rules['org.max1']['number'] = true;
+		formHandler.validateOption.rules['org.max2'] = {};
+		formHandler.validateOption.rules['org.max2']['required'] = true;
+		formHandler.validateOption.rules['org.max2']['number'] = true;
+		formHandler.validateOption.rules['org.max3'] = {};
+		formHandler.validateOption.rules['org.max3']['required'] = true;
+		formHandler.validateOption.rules['org.max3']['number'] = true;
+		formHandler.validateOption.rules['org.max4'] = {};
+		formHandler.validateOption.rules['org.max4']['required'] = true;
+		formHandler.validateOption.rules['org.max4']['number'] = true;
+		formHandler.validateOption.rules['org.max5'] = {};
+		formHandler.validateOption.rules['org.max5']['required'] = true;
+		formHandler.validateOption.rules['org.max5']['number'] = true;
+		formHandler.validateOption.rules['org.max6'] = {};
+		formHandler.validateOption.rules['org.max6']['required'] = true;
+		formHandler.validateOption.rules['org.max6']['number'] = true;
 		formHandler.validateOption.rules['org.maxstorage'] = {};
 		formHandler.validateOption.rules['org.maxstorage']['required'] = true;
 		formHandler.validateOption.rules['org.maxstorage']['number'] = true;
@@ -367,8 +379,15 @@ var OrgModule = function () {
 			+ $('input[name="org.flowrateflag"]:checked').val() + $('input[name="org.tagflag"]').val()
 			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
-			+ $('input[name="org.liftflag"]').val() + '000000000000000000000';
+			+ $('input[name="org.liftflag"]').val() + $('input[name="org.attendanceflag"]').val()
+			+ $('input[name="org.planflag"]').val()
+			+ '0000000000000000000';
 			formData.append('org.feature', feature);
+			
+			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()
+			+ ',' + $('input[name="org.max3"]').val() + ',' + $('input[name="org.max4"]').val()
+			+ ',' + $('input[name="org.max5"]').val() + ',' + $('input[name="org.max6"]').val();
+			formData.append('org.maxdetail', maxdetail);
 			
 			$.ajax({
 				type : 'POST',
@@ -430,6 +449,7 @@ var OrgModule = function () {
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			
 			currentApps = {};
 			refreshAppTreeData(currentAppTreeData);
@@ -449,6 +469,13 @@ var OrgModule = function () {
 				index = $(event.target).parent().attr('data-id');
 			}
 			_org = $('#OrgTable').dataTable().fnGetData(index);
+			var maxs = _org.maxdetail.split(',');
+			_org.max1 = maxs[0];
+			_org.max2 = maxs[1];
+			_org.max3 = maxs[2];
+			_org.max4 = maxs[3];
+			_org.max5 = maxs[4];
+			_org.max6 = maxs[5];
 			refreshVsp(_org);
 			formHandler.setdata('org', _org);
 			if ($('input[name="org.expireflag"]:checked').val() == 0) {
@@ -478,6 +505,7 @@ var OrgModule = function () {
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
+			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			
 			currentApps = {};
 			if (_org.applist != null) {

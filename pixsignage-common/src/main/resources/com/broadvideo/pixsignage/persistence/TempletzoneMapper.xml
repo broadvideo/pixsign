@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.TempletzoneMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Templetzone" >
+    <id column="templetzoneid" property="templetzoneid" jdbcType="INTEGER" />
+    <result column="templetid" property="templetid" jdbcType="INTEGER" />
+    <result column="hometempletid" property="hometempletid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="mainflag" property="mainflag" jdbcType="CHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
+    <result column="leftoffset" property="leftoffset" jdbcType="INTEGER" />
+    <result column="zindex" property="zindex" jdbcType="INTEGER" />
+    <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="bgopacity" property="bgopacity" jdbcType="INTEGER" />
+    <result column="bgimageid" property="bgimageid" jdbcType="INTEGER" />
+    <result column="sleeptime" property="sleeptime" jdbcType="INTEGER" />
+    <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
+    <result column="animation" property="animation" jdbcType="VARCHAR" />
+    <result column="speed" property="speed" jdbcType="CHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="INTEGER" />
+    <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="fitflag" property="fitflag" jdbcType="CHAR" />
+    <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="touchlabel" property="touchlabel" jdbcType="VARCHAR" />
+    <result column="touchtype" property="touchtype" jdbcType="CHAR" />
+    <result column="touchobjid" property="touchobjid" jdbcType="INTEGER" />
+    <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
+    <association property="touchvideo" column="{touchtype=touchtype,videoid=touchobjid}" select="selectVideo" />
+    <association property="touchimage" column="{touchtype=touchtype,imageid=touchobjid}" select="selectImage" />
+    <collection property="templetzonedtls" ofType="com.broadvideo.pixsignage.domain.Templetzonedtl"
+		column="{templetzoneid=templetzoneid}" select="com.broadvideo.pixsignage.persistence.TempletzonedtlMapper.selectList" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsignage.domain.Templetzone" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    templetzoneid, templetid, hometempletid, type, mainflag, height, width, 
+    topoffset, leftoffset, zindex, bgcolor, bgopacity, bgimageid, sleeptime, intervaltime, 
+    animation, speed, color, size, dateformat, fitflag, volume, touchlabel, 
+    touchtype, touchobjid
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <select id="selectVideo" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
+    select * from video
+    where '${touchtype}' = '3' and videoid = #{videoid}
+  </select>
+  <select id="selectImage" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
+    select * from image
+    where '${touchtype}' = '4' and imageid = #{imageid}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from templetzone
+    where templetzoneid = #{templetzoneid}
+  </select>
+  
+  <select id="selectList" resultMap="ResultMapWithBLOBs">
+    select * from templetzone
+    where templetid = #{templetid}
+    order by templetzoneid
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from templetzone
+    where templetzoneid = #{templetzoneid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Templetzone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="templetzoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into templetzone (templetid, hometempletid, type, 
+      mainflag, height, 
+      width, topoffset, leftoffset, 
+      zindex, bgcolor, bgopacity, 
+      bgimageid, sleeptime, intervaltime, 
+      animation, speed, 
+      color, size, dateformat, 
+      fitflag, volume, touchlabel, 
+      touchtype, touchobjid, 
+      content)
+    values (#{templetid,jdbcType=INTEGER}, #{hometempletid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, 
+      #{mainflag,jdbcType=CHAR}, #{height,jdbcType=INTEGER}, 
+      #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
+      #{zindex,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, #{bgopacity,jdbcType=INTEGER}, 
+      #{bgimageid,jdbcType=INTEGER}, #{sleeptime,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, 
+      #{animation,jdbcType=VARCHAR}, #{speed,jdbcType=CHAR}, 
+      #{color,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{dateformat,jdbcType=VARCHAR}, 
+      #{fitflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{touchlabel,jdbcType=VARCHAR}, 
+      #{touchtype,jdbcType=CHAR}, #{touchobjid,jdbcType=INTEGER}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Templetzone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="templetzoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into templetzone
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templetid != null" >
+        templetid,
+      </if>
+      <if test="hometempletid != null" >
+        hometempletid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="mainflag != null" >
+        mainflag,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="topoffset != null" >
+        topoffset,
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset,
+      </if>
+      <if test="zindex != null" >
+        zindex,
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor,
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity,
+      </if>
+      <if test="bgimageid != null" >
+        bgimageid,
+      </if>
+      <if test="sleeptime != null" >
+        sleeptime,
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime,
+      </if>
+      <if test="animation != null" >
+        animation,
+      </if>
+      <if test="speed != null" >
+        speed,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="dateformat != null" >
+        dateformat,
+      </if>
+      <if test="fitflag != null" >
+        fitflag,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="touchlabel != null" >
+        touchlabel,
+      </if>
+      <if test="touchtype != null" >
+        touchtype,
+      </if>
+      <if test="touchobjid != null" >
+        touchobjid,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templetid != null" >
+        #{templetid,jdbcType=INTEGER},
+      </if>
+      <if test="hometempletid != null" >
+        #{hometempletid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="mainflag != null" >
+        #{mainflag,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        #{bgopacity,jdbcType=INTEGER},
+      </if>
+      <if test="bgimageid != null" >
+        #{bgimageid,jdbcType=INTEGER},
+      </if>
+      <if test="sleeptime != null" >
+        #{sleeptime,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="animation != null" >
+        #{animation,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=CHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        #{dateformat,jdbcType=VARCHAR},
+      </if>
+      <if test="fitflag != null" >
+        #{fitflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="touchlabel != null" >
+        #{touchlabel,jdbcType=VARCHAR},
+      </if>
+      <if test="touchtype != null" >
+        #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchobjid != null" >
+        #{touchobjid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Templetzone" >
+    update templetzone
+    <set >
+      <if test="templetid != null" >
+        templetid = #{templetid,jdbcType=INTEGER},
+      </if>
+      <if test="hometempletid != null" >
+        hometempletid = #{hometempletid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="mainflag != null" >
+        mainflag = #{mainflag,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        topoffset = #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset = #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        zindex = #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity = #{bgopacity,jdbcType=INTEGER},
+      </if>
+      <if test="bgimageid != null" >
+        bgimageid = #{bgimageid,jdbcType=INTEGER},
+      </if>
+      <if test="sleeptime != null" >
+        sleeptime = #{sleeptime,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime = #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="animation != null" >
+        animation = #{animation,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null" >
+        speed = #{speed,jdbcType=CHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        dateformat = #{dateformat,jdbcType=VARCHAR},
+      </if>
+      <if test="fitflag != null" >
+        fitflag = #{fitflag,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="touchlabel != null" >
+        touchlabel = #{touchlabel,jdbcType=VARCHAR},
+      </if>
+      <if test="touchtype != null" >
+        touchtype = #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchobjid != null" >
+        touchobjid = #{touchobjid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where templetzoneid = #{templetzoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsignage.domain.Templetzone" >
+    update templetzone
+    set templetid = #{templetid,jdbcType=INTEGER},
+      hometempletid = #{hometempletid,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      mainflag = #{mainflag,jdbcType=CHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
+      bgimageid = #{bgimageid,jdbcType=INTEGER},
+      sleeptime = #{sleeptime,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
+      animation = #{animation,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=CHAR},
+      color = #{color,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      fitflag = #{fitflag,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      touchlabel = #{touchlabel,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchobjid = #{touchobjid,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where templetzoneid = #{templetzoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Templetzone" >
+    update templetzone
+    set templetid = #{templetid,jdbcType=INTEGER},
+      hometempletid = #{hometempletid,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      mainflag = #{mainflag,jdbcType=CHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
+      bgimageid = #{bgimageid,jdbcType=INTEGER},
+      sleeptime = #{sleeptime,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
+      animation = #{animation,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=CHAR},
+      color = #{color,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      fitflag = #{fitflag,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      touchlabel = #{touchlabel,jdbcType=VARCHAR},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchobjid = #{touchobjid,jdbcType=INTEGER}
+    where templetzoneid = #{templetzoneid,jdbcType=INTEGER}
+  </update>
+</mapper>

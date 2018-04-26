@@ -17,6 +17,9 @@ public interface MonthlyplaylogMapper {
 	List<HashMap<String, Object>> statAll(@Param(value = "orgid") String orgid,
 			@Param(value = "branchid") String branchid, @Param(value = "length") String length);
 
+	List<HashMap<String, Object>> viewStat(@Param(value = "orgid") String orgid,
+			@Param(value = "length") String length);
+
 	int deleteByPrimaryKey(@Param(value = "monthlyplaylogid") String monthlyplaylogid);
 
 	// int insert(Monthlyplaylog record);

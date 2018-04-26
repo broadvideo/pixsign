@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
-import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.MedialistMapper;
 import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 
@@ -21,8 +19,6 @@ public class MedialistServiceImpl implements MedialistService {
 	private MedialistMapper medialistMapper;
 	@Autowired
 	private MedialistdtlMapper medialistdtlMapper;
-	@Autowired
-	private BundledtlMapper bundledtlMapper;
 
 	public int selectCount(int orgid, String branchid, String search) {
 		return medialistMapper.selectCount(orgid, branchid, search);
@@ -49,7 +45,6 @@ public class MedialistServiceImpl implements MedialistService {
 	@Transactional
 	public void deleteMedialist(String medialistid) {
 		medialistdtlMapper.deleteByMedialist(medialistid);
-		bundledtlMapper.clearByObj(Bundledtl.ObjType_Medialist, medialistid);
 		medialistMapper.deleteByPrimaryKey(medialistid);
 	}
 

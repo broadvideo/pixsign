@@ -22,6 +22,10 @@ public interface BundleMapper {
 
 	int deleteByPrimaryKey(@Param(value = "bundleid") String bundleid);
 
+	int clearBundlezones(@Param(value = "bundleid") String bundleid);
+
+	int clearSubbundles(@Param(value = "bundleid") String bundleid);
+
 	// int insert(Bundle record);
 
 	int insertSelective(Bundle record);

@@ -29,9 +29,7 @@ var PageModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'page!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.ratio, 'mData' : 'ratio', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }],
 			'iDisplayLength' : 16,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -208,7 +206,8 @@ var PageModule = function () {
 						}
 					});				
 				}
-			 });	
+			 });
+			
 		});
 
 		$('body').on('click', '.pix-sync', function(event) {

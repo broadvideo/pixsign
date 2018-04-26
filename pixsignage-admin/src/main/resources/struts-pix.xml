@@ -41,7 +41,31 @@
 				<param name="includeProperties">errorcode,errormsg,staff.*</param>
 			</result>
 		</action>
+		<action name="login2c" method="doLogin2c" class="loginAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg,staff.*</param>
+			</result>
+		</action>
 		<action name="logout" method="doLogout" class="loginAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register!validate" method="doValidate" class="registerAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register!getvcode" method="doGetVCode" class="registerAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="register" method="doRegister" class="registerAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
@@ -828,6 +852,14 @@
 				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="device!export" method="doExport" class="deviceAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
 
 		<action name="devicegroup!get" method="doGet" class="devicegroupAction">
 			<result name="success" type="json">
@@ -1164,6 +1196,16 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="plan!batch" method="doBatch" class="planAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">dataid,errorcode,errormsg</param>
 			</result>
 		</action>
 

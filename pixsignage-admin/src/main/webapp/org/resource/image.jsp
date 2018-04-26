@@ -11,12 +11,6 @@
 <link href="${static_ctx}/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<style type="text/css">
-.dropdown-menu li > a {
-  padding: 0px !important; 
-  display: inline !important;
-}
-</style>
 </head>
 
 <body>
@@ -133,7 +127,7 @@
 			<h3 class="page-title"><spring:message code="menu.image"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 						class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>

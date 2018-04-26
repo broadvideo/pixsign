@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Branch;
+import com.broadvideo.pixsignage.domain.Catalog;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Privilege;
 import com.broadvideo.pixsignage.domain.Staff;
+import com.broadvideo.pixsignage.persistence.CatalogMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PrivilegeMapper;
@@ -35,6 +37,8 @@ public class OrgServiceImpl implements OrgService {
 	private PrivilegeMapper privilegeMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private CatalogMapper catalogMapper;
 
 	@Autowired
 	private BranchService branchService;
@@ -116,6 +120,17 @@ public class OrgServiceImpl implements OrgService {
 
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();
+
+		Catalog catalog1 = new Catalog();
+		catalog1.setOrgid(org.getOrgid());
+		catalog1.setType("1");
+		catalog1.setName("Category 1");
+		catalogMapper.insertSelective(catalog1);
+		Catalog catalog2 = new Catalog();
+		catalog2.setOrgid(org.getOrgid());
+		catalog2.setType("2");
+		catalog2.setName("Category 2");
+		catalogMapper.insertSelective(catalog2);
 	}
 
 	@Transactional
@@ -147,6 +162,36 @@ public class OrgServiceImpl implements OrgService {
 		orgMapper.updateByPrimaryKeySelective(org);
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();
+	}
+
+	@Transactional
+	public void addOrg2c(String vspid, String loginname, String phone, String password) {
+		Org org = new Org();
+		org.setVspid(Integer.parseInt(vspid));
+		org.setName(phone);
+		org.setCode(phone);
+		orgMapper.insertSelective(org);
+
+		Branch branch = new Branch();
+		branch.setOrgid(org.getOrgid());
+		branch.setParentid(0);
+		branch.setName(org.getName());
+		branch.setStatus("1");
+		branch.setDescription(org.getName());
+		branchService.addBranch(branch);
+		org.setTopbranchid(branch.getBranchid());
+		orgMapper.updateByPrimaryKeySelective(org);
+
+		Staff staff = new Staff();
+		staff.setVspid(Integer.parseInt(vspid));
+		staff.setSubsystem(CommonConstants.SUBSYSTEM_USR);
+		staff.setOrgid(org.getOrgid());
+		staff.setBranchid(branch.getBranchid());
+		staff.setLoginname(loginname);
+		staff.setPhone(phone);
+		staff.setName(loginname);
+		staff.setPassword(password);
+		staffMapper.insertSelective(staff);
 	}
 
 	@Transactional

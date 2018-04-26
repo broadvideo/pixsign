@@ -48,6 +48,7 @@ import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.PlanbindMapper;
 import com.broadvideo.pixsignage.persistence.PlandtlMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
+import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("planService")
@@ -78,13 +79,16 @@ public class PlanServiceImpl implements PlanService {
 
 	@Autowired
 	private ScheduleMapper scheduleMapper;
+	@Autowired
+	private BundleService bundleService;
 
-	public int selectCount(String orgid, String branchid, String plantype) {
-		return planMapper.selectCount(orgid, branchid, plantype);
+	public int selectCount(String orgid, String branchid, String subbranchflag, String plantype, String search) {
+		return planMapper.selectCount(orgid, branchid, subbranchflag, plantype, search);
 	}
 
-	public List<Plan> selectList(String orgid, String branchid, String plantype, String start, String length) {
-		return planMapper.selectList(orgid, branchid, plantype, start, length);
+	public List<Plan> selectList(String orgid, String branchid, String subbranchflag, String plantype, String start,
+			String length, String search) {
+		return planMapper.selectList(orgid, branchid, subbranchflag, plantype, start, length, search);
 	}
 
 	public List<Plan> selectListByBind(String plantype, String bindtype, String bindid) {
@@ -125,8 +129,19 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	private void generateSyncEvent(int deviceid) {
+	private void generateSyncEvent(int deviceid) throws Exception {
 		Msgevent msgevent = new Msgevent();
+		msgevent.setMsgtype(Msgevent.MsgType_Schedule);
+		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+		msgevent.setObjid1(deviceid);
+		msgevent.setObjtype2(Msgevent.ObjType_2_None);
+		msgevent.setObjid2(0);
+		msgevent.setStatus(Msgevent.Status_Wait);
+		msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null, null,
+				null);
+		msgeventMapper.insertSelective(msgevent);
+
+		msgevent = new Msgevent();
 		msgevent.setMsgtype(Msgevent.MsgType_Plan);
 		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
 		msgevent.setObjid1(deviceid);
@@ -135,10 +150,16 @@ public class PlanServiceImpl implements PlanService {
 		msgevent.setStatus(Msgevent.Status_Wait);
 		msgeventMapper.deleteByDtl(Msgevent.MsgType_Plan, Msgevent.ObjType_1_Device, "" + deviceid, null, null, null);
 		msgeventMapper.insertSelective(msgevent);
+
+		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "SCHEDULE");
+		JSONObject msgBodyJson = generateBundlePlanJson("" + deviceid);
+		msgJson.put("msg_body", msgBodyJson);
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
 	}
 
 	@Transactional
-	public void syncPlan(String planid) {
+	public void syncPlan(String planid) throws Exception {
 		Plan plan = planMapper.selectByPrimaryKey(planid);
 		if (plan != null) {
 			List<Planbind> planbinds = plan.getPlanbinds();
@@ -149,7 +170,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan(String bindtype, String bindid) {
+	public void syncPlan(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
 			if (device.getOnlineflag().equals(Device.Online)) {
@@ -182,7 +203,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlan2All(String orgid) {
+	public void syncPlan2All(String orgid) throws Exception {
 		List<Device> devices = deviceMapper.selectList(orgid, null, null, "1", "1", null, null, null, null, null, null,
 				null, null);
 		for (Device device : devices) {
@@ -193,60 +214,118 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByPage(String pageid) {
-		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
+	public void syncPlanByBundle(String bundleid) throws Exception {
+		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Bundle, bundleid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 
 	@Transactional
-	public void syncPlanByMediagrid(String mediagridid) {
+	public void syncPlanByPage(String orgid, String pageid) throws Exception {
+		Org org = orgMapper.selectByPrimaryKey(orgid);
+		if (org.getPlanflag().equals("1")) {
+			List<Device> deviceList = deviceMapper.selectByDefaultpage(pageid);
+			for (Device device : deviceList) {
+				syncPlan("1", "" + device.getDeviceid());
+			}
+		} else {
+			List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid);
+			for (HashMap<String, Object> bindObj : bindList) {
+				syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			}
+		}
+	}
+
+	@Transactional
+	public void syncPlanByMediagrid(String mediagridid) throws Exception {
 		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Mediagrid, mediagridid);
 		for (HashMap<String, Object> bindObj : bindList) {
 			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 	}
 
-	private JSONArray generateSoloPlanJson(String deviceid) throws Exception {
+	public JSONObject generateBundlePlanJson(String deviceid) {
+		JSONObject responseJson = new JSONObject();
+		List<Integer> bundleids = new ArrayList<Integer>();
+		JSONArray planJsonArray = new JSONArray();
+		List<Plan> planList;
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		if (device.getDevicegroupid().intValue() == 0) {
+			planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Device, deviceid);
+		} else {
+			planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Devicegroup,
+					"" + device.getDevicegroupid());
+		}
+		for (Plan plan : planList) {
+			JSONObject planJson = new JSONObject();
+			planJson.put("schedule_id", plan.getPlanid());
+			planJson.put("priority", plan.getPriority());
+			planJson.put("play_mode", "daily");
+			planJson.put("start_date",
+					new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
+			planJson.put("end_date", new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));
+			planJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
+			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
+
+			JSONArray plandtlJsonArray = new JSONArray();
+			for (Plandtl plandtl : plan.getPlandtls()) {
+				if (plandtl.getObjtype().equals(Plandtl.ObjType_Bundle)) {
+					JSONObject plandtlJson = new JSONObject();
+					plandtlJson.put("scheduledtl_id", plandtl.getPlandtlid());
+					plandtlJson.put("media_type", "bundle");
+					plandtlJson.put("media_id", plandtl.getObjid());
+					plandtlJsonArray.put(plandtlJson);
+					bundleids.add(plandtl.getObjid());
+				}
+
+			}
+			planJson.put("scheduledtls", plandtlJsonArray);
+			planJsonArray.put(planJson);
+		}
+		responseJson.put("schedules", planJsonArray);
+		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
+		return responseJson;
+	}
+
+	private JSONArray generatePagePlanJson(String deviceid) throws Exception {
 		JSONArray planJsonArray = new JSONArray();
 
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
 
 		// generate final json
-		List<Plan> planList;
-		if (device.getDevicegroupid().intValue() == 0) {
-			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Device, deviceid);
-		} else {
-			planList = planMapper.selectListByBind(Plan.PlanType_Solo, Planbind.BindType_Devicegroup,
-					"" + device.getDevicegroupid());
-		}
-
-		if (planList.size() == 0) {
-			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			if (org.getDefaultpage() != null) {
-				Plan plan = new Plan();
-				plan.setPlanid(0);
-				plan.setPlantype(Plan.PlanType_Solo);
-				plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
-				plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
-				plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-				plan.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-				plan.setPriority(0);
-				Plandtl plandtl = new Plandtl();
-				plandtl.setPlandtlid(0);
-				plandtl.setPlanid(0);
-				plandtl.setObjtype(Plandtl.ObjType_Page);
-				plandtl.setObjid(org.getDefaultpageid());
-				plandtl.setDuration(60);
-				plandtl.setMaxtimes(0);
-				List<Plandtl> plandtls = new ArrayList<Plandtl>();
-				plandtls.add(plandtl);
-				plan.setPlandtls(plandtls);
-				planList.add(plan);
+		List<Plan> planList = new ArrayList<Plan>();
+		if (org.getPlanflag().equals("1") && device.getDefaultpage() != null) {
+			Plan plan = new Plan();
+			plan.setPlanid(0);
+			plan.setPlantype(Plan.PlanType_Page);
+			plan.setStartdate(CommonUtil.parseDate("1970-01-01", CommonConstants.DateFormat_Date));
+			plan.setEnddate(CommonUtil.parseDate("2037-01-01", CommonConstants.DateFormat_Date));
+			plan.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			plan.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			plan.setPriority(0);
+			Plandtl plandtl = new Plandtl();
+			plandtl.setPlandtlid(0);
+			plandtl.setPlanid(0);
+			plandtl.setObjtype(Plandtl.ObjType_Page);
+			plandtl.setObjid(device.getDefaultpageid());
+			plandtl.setDuration(60);
+			plandtl.setMaxtimes(0);
+			List<Plandtl> plandtls = new ArrayList<Plandtl>();
+			plandtls.add(plandtl);
+			plan.setPlandtls(plandtls);
+			planList.add(plan);
+		} else if (org.getPlanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Device, deviceid);
+			} else {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Devicegroup,
+						"" + device.getDevicegroupid());
 			}
 		}
 
@@ -553,14 +632,33 @@ public class PlanServiceImpl implements PlanService {
 
 	public JSONObject generatePlanJson(String deviceid) throws Exception {
 		JSONObject responseJson = new JSONObject();
-		responseJson.put("plans", generateSoloPlanJson(deviceid));
+		responseJson.put("plans", generatePagePlanJson(deviceid));
 		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));
 		return responseJson;
 	}
 
 	@Transactional
+	public void handleBatch(Page page, HashMap<String, Object>[] binds) {
+		for (int i = 0; i < binds.length; i++) {
+			HashMap<String, Object> bind = binds[i];
+			String bindtype = "" + bind.get("bindtype");
+			if (bindtype.equals("1")) {
+				Device device = deviceMapper.selectByPrimaryKey("" + bind.get("bindid"));
+				device.setDefaultpageid(page.getPageid());
+				deviceMapper.updateByPrimaryKeySelective(device);
+			} else {
+				List<Device> devices = deviceMapper.selectByDevicegroup("" + bind.get("bindid"));
+				for (Device device : devices) {
+					device.setDefaultpageid(page.getPageid());
+					deviceMapper.updateByPrimaryKeySelective(device);
+				}
+			}
+		}
+	}
+
+	@Transactional
 	public void upgrade2multiplan() {
-		int count = planMapper.selectCount(null, null, Plan.PlanType_Multi);
+		int count = planMapper.selectCount(null, null, null, Plan.PlanType_Multi, null);
 		if (count > 0) {
 			return;
 		}

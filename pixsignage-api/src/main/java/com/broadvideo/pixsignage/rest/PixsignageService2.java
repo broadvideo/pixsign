@@ -633,10 +633,6 @@ public class PixsignageService2 {
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
 					eventJson.put("event_type", "plan");
 					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
-					eventJson.put("event_type", "bundle");
-					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-							"" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();

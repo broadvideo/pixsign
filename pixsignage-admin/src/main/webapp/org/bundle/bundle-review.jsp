@@ -52,7 +52,6 @@
 		</div>
 	</div>
 
-	<!-- 内容包设计对话框  -->
 	<div id="BundleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
@@ -72,11 +71,10 @@
 											<div id="BundleDiv" bundleid="0"></div>
 										</div>
 										<div id="BundleCol2">
-											<label class="page-title font-red-sunglo bundledtl-title"></label>
-											<h3 class="bundledtl-objtype"><spring:message code="pixsign.medialist"/></h3>
-											<h3 class="bundledtl-objvalue">http://</h3>
-											<div class="bundledtl-medialist table-responsive">
-												<table id="MedialistDtlTable" class="table table-condensed table-hover">
+											<label class="page-title font-red-sunglo bundlezone-title"></label>
+											<h3 class="bundlezone-content">http://</h3>
+											<div class="bundlezone-dtl table-responsive">
+												<table id="BundlezonedtlTable" class="table table-condensed table-hover">
 													<thead></thead>
 													<tbody></tbody>
 												</table>
@@ -101,7 +99,7 @@
 			<h3 class="page-title"><spring:message code="menu.bundlereview"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 						class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.review"/></a><i class="fa fa-angle-right"></i>
@@ -117,11 +115,11 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cloud"></i><spring:message code="pixsign.bundle"/></div>
 							<div class="tools">
-								<a href="javascript:;" onClick="$('#MyTable').dataTable()._fnAjaxUpdate();" class="reload"></a>
+								<a href="javascript:;" onClick="ReviewModule.refresh();" class="reload"></a>
 							</div>
 						</div>
 						<div class="portlet-body">
-							<table id="MyTable" class="table table-striped table-bordered table-hover">
+							<table id="BundleTable" class="table table-striped table-bordered table-hover">
 								<thead></thead>
 								<tbody></tbody>
 							</table>
@@ -154,14 +152,15 @@
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
-<script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-preview.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-bundle-review.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/bundle/review.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();
 	Layout.init();
-	DataInit.init('${locale}');
+	PixData.init('${locale}');
+	ReviewModule.init();
 });
 
 </script>

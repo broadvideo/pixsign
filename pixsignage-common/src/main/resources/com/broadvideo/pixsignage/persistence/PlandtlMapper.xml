@@ -27,7 +27,7 @@
     where '${objtype}' = '1' and bundleid = #{bundleid}
   </select>
 
-  <select id="selectPage" resultMap="com.broadvideo.pixsignage.persistence.PageMapper.BaseResultMap" >
+  <select id="selectPage" resultMap="com.broadvideo.pixsignage.persistence.PageMapper.MiniResultMap" >
     select * from page
     where '${objtype}' = '2' and pageid = #{pageid}
   </select>

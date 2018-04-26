@@ -14,8 +14,7 @@
     <result column="maxdevices" property="maxdevices" jdbcType="INTEGER" />
     <result column="currentdevices" property="currentdevices" jdbcType="INTEGER" />
     <result column="currentdeviceidx" property="currentdeviceidx" jdbcType="INTEGER" />
-    <result column="maxdevices1" property="maxdevices1" jdbcType="INTEGER" />
-    <result column="maxdevices2" property="maxdevices2" jdbcType="INTEGER" />
+    <result column="maxdetail" property="maxdetail" jdbcType="VARCHAR" />
     <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
     <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="copyright" property="copyright" jdbcType="VARCHAR" />
@@ -36,20 +35,21 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
     <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
+    <result column="mainpage" property="mainpage" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Org" extends="BaseResultMap">
     <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
-    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectBaseByPrimaryKey" />
+    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="applist" ofType="com.broadvideo.pixsignage.domain.App" column="{ids=apps}" select="com.broadvideo.pixsignage.persistence.AppMapper.selectByIds" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     orgid, vspid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
-    currentdeviceidx, maxdevices1, maxdevices2, maxstorage, currentstorage, copyright, description, backupvideoid, 
+    currentdeviceidx, maxdetail, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
-    apps, logo, tags, defaultbundleid, defaultpageid, createtime, createstaffid
+    apps, logo, tags, defaultbundleid, defaultpageid, mainpage, createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -84,7 +84,8 @@
     select
     <include refid="Base_Column_List" />
     from org
-    where status='1' and code = #{code}
+    where status='1' 
+    and code = #{code}
   </select>
   
   <delete id="deleteByPrimaryKey" >
@@ -114,28 +115,26 @@
       code, status, feature, 
       expireflag, expiretime, maxdevices, 
       currentdevices, currentdeviceidx, 
-      maxdevices1, maxdevices2, 
-      maxstorage, currentstorage, 
+      maxdetail, maxstorage, currentstorage, 
       copyright, description, backupvideoid, 
       powerflag, poweron, poweroff, 
       qrcodeflag, devicepassflag, devicepass, 
       upgradeflag, volumeflag, volume, 
       timezone, apps, logo, 
       tags, defaultbundleid, defaultpageid, 
-      createtime, createstaffid)
+      mainpage, createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{feature,jdbcType=VARCHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentdeviceidx,jdbcType=INTEGER}, 
-      #{maxdevices1,jdbcType=INTEGER}, #{maxdevices2,jdbcType=INTEGER}, 
-      #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
+      #{maxdetail,jdbcType=VARCHAR}, #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
       #{copyright,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{backupvideoid,jdbcType=INTEGER}, 
       #{powerflag,jdbcType=CHAR}, #{poweron,jdbcType=TIME}, #{poweroff,jdbcType=TIME}, 
       #{qrcodeflag,jdbcType=CHAR}, #{devicepassflag,jdbcType=CHAR}, #{devicepass,jdbcType=VARCHAR}, 
       #{upgradeflag,jdbcType=CHAR}, #{volumeflag,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, 
       #{timezone,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
       #{tags,jdbcType=VARCHAR}, #{defaultbundleid,jdbcType=INTEGER}, #{defaultpageid,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{mainpage,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
@@ -176,11 +175,8 @@
       <if test="currentdeviceidx != null" >
         currentdeviceidx,
       </if>
-      <if test="maxdevices1 != null" >
-        maxdevices1,
-      </if>
-      <if test="maxdevices2 != null" >
-        maxdevices2,
+      <if test="maxdetail != null" >
+        maxdetail,
       </if>
       <if test="maxstorage != null" >
         maxstorage,
@@ -242,6 +238,9 @@
       <if test="defaultpageid != null" >
         defaultpageid,
       </if>
+      <if test="mainpage != null" >
+        mainpage,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -283,11 +282,8 @@
       <if test="currentdeviceidx != null" >
         #{currentdeviceidx,jdbcType=INTEGER},
       </if>
-      <if test="maxdevices1 != null" >
-        #{maxdevices1,jdbcType=INTEGER},
-      </if>
-      <if test="maxdevices2 != null" >
-        #{maxdevices2,jdbcType=INTEGER},
+      <if test="maxdetail != null" >
+        #{maxdetail,jdbcType=VARCHAR},
       </if>
       <if test="maxstorage != null" >
         #{maxstorage,jdbcType=BIGINT},
@@ -349,6 +345,9 @@
       <if test="defaultpageid != null" >
         #{defaultpageid,jdbcType=INTEGER},
       </if>
+      <if test="mainpage != null" >
+        #{mainpage,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -393,11 +392,8 @@
       <if test="currentdeviceidx != null" >
         currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
       </if>
-      <if test="maxdevices1 != null" >
-        maxdevices1 = #{maxdevices1,jdbcType=INTEGER},
-      </if>
-      <if test="maxdevices2 != null" >
-        maxdevices2 = #{maxdevices2,jdbcType=INTEGER},
+      <if test="maxdetail != null" >
+        maxdetail = #{maxdetail,jdbcType=VARCHAR},
       </if>
       <if test="maxstorage != null" >
         maxstorage = #{maxstorage,jdbcType=BIGINT},
@@ -459,6 +455,9 @@
       <if test="defaultpageid != null" >
         defaultpageid = #{defaultpageid,jdbcType=INTEGER},
       </if>
+      <if test="mainpage != null" >
+        mainpage = #{mainpage,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -481,8 +480,7 @@
       maxdevices = #{maxdevices,jdbcType=INTEGER},
       currentdevices = #{currentdevices,jdbcType=INTEGER},
       currentdeviceidx = #{currentdeviceidx,jdbcType=INTEGER},
-      maxdevices1 = #{maxdevices1,jdbcType=INTEGER},
-      maxdevices2 = #{maxdevices2,jdbcType=INTEGER},
+      maxdetail = #{maxdetail,jdbcType=VARCHAR},
       maxstorage = #{maxstorage,jdbcType=BIGINT},
       currentstorage = #{currentstorage,jdbcType=BIGINT},
       copyright = #{copyright,jdbcType=VARCHAR},
@@ -502,6 +500,7 @@
       logo = #{logo,jdbcType=VARCHAR},
       defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
       defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      mainpage = #{mainpage,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where orgid = #{orgid,jdbcType=INTEGER}

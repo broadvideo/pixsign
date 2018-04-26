@@ -227,6 +227,8 @@ public class DeviceServiceImpl implements DeviceService {
 		} else {
 			msgBodyJson.put("tag_flag", 0);
 		}
+		msgBodyJson.put("interval1", device.getInterval1());
+		msgBodyJson.put("interval2", device.getInterval2());
 
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());

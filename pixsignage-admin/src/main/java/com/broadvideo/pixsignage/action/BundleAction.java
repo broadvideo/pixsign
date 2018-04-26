@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -20,13 +21,12 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.ImageService;
+import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -38,8 +38,7 @@ public class BundleAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Bundle bundle;
-	private Device[] devices;
-	private Devicegroup[] devicegroups;
+	private HashMap<String, Object>[] binds;
 
 	private String exportname;
 	private InputStream inputStream;
@@ -52,6 +51,8 @@ public class BundleAction extends BaseDatatableAction {
 	private ImageService imageService;
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private PlanService planService;
 
 	public String doGet() {
 		try {
@@ -106,7 +107,9 @@ public class BundleAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			bundle.setOrgid(getLoginStaff().getOrgid());
-			bundle.setBranchid(getLoginStaff().getBranchid());
+			if (bundle.getBranchid() == null) {
+				bundle.setBranchid(getLoginStaff().getBranchid());
+			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				if (bundle.getHomebundleid() != null && bundle.getHomebundleid() > 0) {
@@ -160,6 +163,7 @@ public class BundleAction extends BaseDatatableAction {
 		try {
 			String bundleid = getParameter("bundleid");
 			scheduleService.syncScheduleByBundle(bundleid);
+			planService.syncPlanByBundle(bundleid);
 			logger.info("Bundle sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -202,10 +206,10 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doPush() {
 		try {
-			bundleService.push(bundle, devices, devicegroups);
+			bundleService.push(bundle, binds);
 			return SUCCESS;
 		} catch (Exception ex) {
-			logger.error("BundleAction doSchedule exception, ", ex);
+			logger.error("BundleAction doPush exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
@@ -217,7 +221,7 @@ public class BundleAction extends BaseDatatableAction {
 			bundle.setOrgid(getLoginStaff().getOrgid());
 			bundle.setBranchid(getLoginStaff().getBranchid());
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
-			bundleService.handleWizard(getLoginStaff(), bundle, devices, devicegroups);
+			bundleService.handleWizard(getLoginStaff(), bundle, binds);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doWizard exception, ", ex);
@@ -338,20 +342,12 @@ public class BundleAction extends BaseDatatableAction {
 		this.bundle = bundle;
 	}
 
-	public Device[] getDevices() {
-		return devices;
+	public HashMap<String, Object>[] getBinds() {
+		return binds;
 	}
 
-	public void setDevices(Device[] devices) {
-		this.devices = devices;
-	}
-
-	public Devicegroup[] getDevicegroups() {
-		return devicegroups;
-	}
-
-	public void setDevicegroups(Devicegroup[] devicegroups) {
-		this.devicegroups = devicegroups;
+	public void setBinds(HashMap<String, Object>[] binds) {
+		this.binds = binds;
 	}
 
 	public String getExportname() {

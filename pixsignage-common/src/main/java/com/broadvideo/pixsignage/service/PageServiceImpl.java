@@ -302,12 +302,11 @@ public class PageServiceImpl implements PageService {
 			pageMapper.insertSelective(page);
 
 			if (page.getName().equals("UNKNOWN")) {
-				page.setName("TEMPLET-" + page.getPageid());
+				page.setName("PAGE-" + page.getPageid());
 			}
 			pageMapper.updateByPrimaryKeySelective(page);
 		} else {
 			// Copy page
-			page.setPageid(frompage.getPageid());
 			page.setTemplateid(frompage.getTemplateid());
 			page.setRatio(frompage.getRatio());
 			page.setHeight(frompage.getHeight());
@@ -318,7 +317,7 @@ public class PageServiceImpl implements PageService {
 			page.setUpdatetime(Calendar.getInstance().getTime());
 			pageMapper.insertSelective(page);
 			if (page.getName().equals("UNKNOWN")) {
-				page.setName("TEMPLET-" + page.getPageid());
+				page.setName("PAGE-" + page.getPageid());
 			}
 			if (frompage.getSnapshot() != null) {
 				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
@@ -525,6 +524,7 @@ public class PageServiceImpl implements PageService {
 		logger.info("Making page zip pageid={}", pageid);
 		ArrayList<Page> pageList = new ArrayList<Page>();
 		ArrayList<String> fontList = new ArrayList<String>();
+		ArrayList<String> diyList = new ArrayList<String>();
 		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
 
 		Page page = pageMapper.selectByPrimaryKey(pageid);
@@ -551,6 +551,9 @@ public class PageServiceImpl implements PageService {
 						logger.info("Copy one font, family={}, file={}", pagezone.getFontfamily(), font);
 						fontList.add(font);
 					}
+				}
+				if (pagezone.getDiy() != null && diyList.indexOf(pagezone.getDiy().getCode()) < 0) {
+					diyList.add(pagezone.getDiy().getCode());
 				}
 			}
 		}
@@ -584,6 +587,10 @@ public class PageServiceImpl implements PageService {
 			}
 		}
 
+		for (String diy : diyList) {
+			CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/diy/" + diy), diy);
+		}
+
 		String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + page.getPageid();
 		File jsonFile = new File(pageDir, "index.json");
 		FileUtils.writeStringToFile(jsonFile, JSONObject.fromObject(page).toString(2), "UTF-8", false);
@@ -603,8 +610,6 @@ public class PageServiceImpl implements PageService {
 				if (pz.getDiy() != null) {
 					diyContent += "<script src='module/route-guide/route-guide.js'></script>\n";
 					diyContent += "<script src='" + pz.getDiy().getCode() + "/diy.data.js'></script>\n";
-					CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + pz.getDiy().getFilepath()),
-							pz.getDiy().getCode());
 					break;
 				}
 			}

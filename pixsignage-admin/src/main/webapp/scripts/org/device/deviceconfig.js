@@ -41,17 +41,20 @@ var DeviceConfigModule = function () {
 						var devicepasshtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
 						$('#DeviceConfigTable').dataTable().fnAddData([common.view.devicepassflag, devicepasshtml]);
 					}
-					if (_org.backupvideo != null) {
-						var backupvideohtml = '';
-						if (_org.backupvideo.thumbnail == null) {
-							backupvideohtml = '<span><img src="../img/video.jpg" height="25" /> ' + _org.backupvideo.name + '</span>';
+					if (BundleCtrl) {
+						if (_org.backupvideo != null) {
+							var backupvideohtml = '';
+							if (_org.backupvideo.thumbnail == null) {
+								backupvideohtml = '<span><img src="../img/video.jpg" height="25" /> ' + _org.backupvideo.name + '</span>';
+							} else {
+								backupvideohtml = '<span><img src="/pixsigdata' + _org.backupvideo.thumbnail + '" height="25" /> ' + _org.backupvideo.name + '</span>';
+							}
+							$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, backupvideohtml]);
 						} else {
-							backupvideohtml = '<span><img src="/pixsigdata' + _org.backupvideo.thumbnail + '" height="25" /> ' + _org.backupvideo.name + '</span>';
+							$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, '']);
 						}
-						$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, backupvideohtml]);
-					} else {
-						$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, '']);
 					}
+					/*
 					if (_org.defaultpage != null) {
 						var defaultpagehtml = '';
 						if (_org.defaultpage.snapshot == null) {
@@ -63,6 +66,7 @@ var DeviceConfigModule = function () {
 					} else {
 						$('#DeviceConfigTable').dataTable().fnAddData([common.view.defaultpage, '']);
 					}
+					*/
 					if (SscreenCtrl) {
 						if (_org.powerflag == 1) {
 							var powerhtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';

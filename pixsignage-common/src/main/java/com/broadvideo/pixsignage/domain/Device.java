@@ -95,6 +95,10 @@ public class Device {
 
 	private Integer volume;
 
+	private Integer interval1;
+
+	private Integer interval2;
+
 	private String boardinfo;
 
 	private Long storageused;
@@ -125,6 +129,10 @@ public class Device {
 
 	private Integer cataitemid2;
 
+	private Integer defaultbundleid;
+
+	private Integer defaultpageid;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -132,6 +140,8 @@ public class Device {
 	private Appfile appfile;
 
 	private List<Schedule> schedules;
+
+	private Page defaultpage;
 
 	public Integer getDeviceid() {
 		return deviceid;
@@ -487,6 +497,22 @@ public class Device {
 		this.volume = volume;
 	}
 
+	public Integer getInterval1() {
+		return interval1;
+	}
+
+	public void setInterval1(Integer interval1) {
+		this.interval1 = interval1;
+	}
+
+	public Integer getInterval2() {
+		return interval2;
+	}
+
+	public void setInterval2(Integer interval2) {
+		this.interval2 = interval2;
+	}
+
 	public String getBoardinfo() {
 		return boardinfo;
 	}
@@ -607,6 +633,22 @@ public class Device {
 		this.cataitemid2 = cataitemid2;
 	}
 
+	public Integer getDefaultbundleid() {
+		return defaultbundleid;
+	}
+
+	public void setDefaultbundleid(Integer defaultbundleid) {
+		this.defaultbundleid = defaultbundleid;
+	}
+
+	public Integer getDefaultpageid() {
+		return defaultpageid;
+	}
+
+	public void setDefaultpageid(Integer defaultpageid) {
+		this.defaultpageid = defaultpageid;
+	}
+
 	public Branch getBranch() {
 		return branch;
 	}
@@ -637,5 +679,13 @@ public class Device {
 
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+
+	public Page getDefaultpage() {
+		return defaultpage;
+	}
+
+	public void setDefaultpage(Page defaultpage) {
+		this.defaultpage = defaultpage;
 	}
 }

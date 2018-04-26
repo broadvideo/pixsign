@@ -3,11 +3,13 @@
 <mapper namespace="com.broadvideo.pixsignage.persistence.BundleMapper" >
   <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
     <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
     <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="templetid" property="templetid" jdbcType="INTEGER" />
@@ -27,19 +29,20 @@
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="comment" property="comment" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <collection property="subbundles" ofType="com.broadvideo.pixsignage.domain.Bundle" column="{homebundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectSubList" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Bundle" extends="BaseResultMap" >
     <result column="json" property="json" jdbcType="LONGVARCHAR" />
     <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
-    <collection property="bundledtls" ofType="com.broadvideo.pixsignage.domain.Bundledtl" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundledtlMapper.selectList" />
+    <collection property="bundlezones" ofType="com.broadvideo.pixsignage.domain.Bundlezone" column="{bundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundlezoneMapper.selectList" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    bundleid, orgid, branchid, templetid, name, snapshot, ratio, height, width, bgcolor, 
+    bundleid, uuid, orgid, branchid, templetid, name, snapshot, ratio, height, width, bgcolor, 
     bgimageid, touchflag, homeflag, homebundleid, homeidletime, description, status, 
-    reviewflag, comment, createtime, createstaffid
+    reviewflag, comment, createtime, updatetime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
     json
@@ -64,7 +67,9 @@
     select count(1) from bundle
     where status = 1 
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="reviewflag != null">
       and reviewflag = #{reviewflag}
     </if>
@@ -84,7 +89,9 @@
     from bundle
     where status=1
     and orgid = #{orgid}
-    and branchid = #{branchid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
     <if test="reviewflag != null">
       and reviewflag = #{reviewflag}
     </if>
@@ -116,25 +123,37 @@
     where bundleid = #{bundleid}
   </delete>
     
+  <delete id="clearBundlezones" >
+    delete from bundlezone
+    where bundleid = #{bundleid}
+  </delete>
+  
+  <delete id="clearSubbundles" >
+    delete from bundle
+    where homebundleid = #{bundleid}
+  </delete>
+  
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
     <selectKey resultType="java.lang.Integer" keyProperty="bundleid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bundle (orgid, branchid, templetid, 
+    insert into bundle (uuid, orgid, branchid, templetid, 
       name, snapshot, ratio, 
       height, width, bgcolor, 
       bgimageid, touchflag, homeflag, 
       homebundleid, homeidletime, description, 
       status, reviewflag, comment, 
-      createtime, createstaffid, json
+      createtime, updatetime, createstaffid, 
+      json
       )
-    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templetid,jdbcType=INTEGER}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templetid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
       #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
       #{bgimageid,jdbcType=INTEGER}, #{touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, 
       #{homebundleid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{json,jdbcType=LONGVARCHAR}
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
+      #{json,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
@@ -143,6 +162,9 @@
     </selectKey>
     insert into bundle
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
       <if test="orgid != null" >
         orgid,
       </if>
@@ -200,6 +222,9 @@
       <if test="createtime != null" >
         createtime,
       </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
       <if test="createstaffid != null" >
         createstaffid,
       </if>
@@ -208,6 +233,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
       </if>
@@ -265,6 +293,9 @@
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createstaffid != null" >
         #{createstaffid,jdbcType=INTEGER},
       </if>
@@ -276,6 +307,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
     update bundle
     <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -333,6 +367,9 @@
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createstaffid != null" >
         createstaffid = #{createstaffid,jdbcType=INTEGER},
       </if>
@@ -344,7 +381,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
     update bundle
-    set orgid = #{orgid,jdbcType=INTEGER},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       templetid = #{templetid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -363,6 +401,7 @@
       reviewflag = #{reviewflag,jdbcType=CHAR},
       comment = #{comment,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
       json = #{json,jdbcType=LONGVARCHAR}
     where bundleid = #{bundleid,jdbcType=INTEGER}

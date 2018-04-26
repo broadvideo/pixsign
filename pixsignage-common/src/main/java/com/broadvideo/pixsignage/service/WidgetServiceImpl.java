@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.broadvideo.pixsignage.domain.Bundledtl;
 import com.broadvideo.pixsignage.domain.Widget;
-import com.broadvideo.pixsignage.persistence.BundledtlMapper;
 import com.broadvideo.pixsignage.persistence.WidgetMapper;
 
 @Service("widgetService")
@@ -16,8 +14,6 @@ public class WidgetServiceImpl implements WidgetService {
 
 	@Autowired
 	private WidgetMapper widgetMapper;
-	@Autowired
-	private BundledtlMapper bundledtlMapper;
 
 	public Widget selectByPrimaryKey(String widgetid) {
 		return widgetMapper.selectByPrimaryKey(widgetid);
@@ -43,7 +39,6 @@ public class WidgetServiceImpl implements WidgetService {
 
 	@Transactional
 	public void deleteWidget(String widgetid) {
-		bundledtlMapper.clearByObj(Bundledtl.ObjType_Widget, widgetid);
 		widgetMapper.deleteByPrimaryKey(widgetid);
 	}
 

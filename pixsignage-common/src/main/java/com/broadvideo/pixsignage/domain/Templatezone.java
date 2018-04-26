@@ -10,10 +10,7 @@ public class Templatezone {
 	public final static byte Type_Date = 5;
 	public final static byte Type_Weather = 6;
 	public final static byte Type_Button = 7;
-	public final static byte Type_Calendar_List = 11;
-	public final static byte Type_Calendar_Table = 12;
-	public final static byte Type_Attendance = 13;
-	public final static byte Type_Home_School = 14;
+	public final static byte Type_Camera = 10;
 
 	private Integer templatezoneid;
 

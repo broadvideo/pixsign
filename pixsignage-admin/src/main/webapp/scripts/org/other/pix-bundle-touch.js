@@ -35,6 +35,7 @@ $(window).resize(function(e) {
 	}
 });
 
+var BundleTree = new BranchTree($('#BundlePortlet'));
 $("#MyTable thead").css("display", "none");
 $("#MyTable tbody").css("display", "none");
 $('#MyTable').dataTable({
@@ -159,6 +160,7 @@ $('#MyTable').dataTable({
 		});
 	},
 	'fnServerParams': function(aoData) { 
+		aoData.push({'name':'branchid','value':BundleTree.branchid });
 		aoData.push({'name':'touchflag','value':'1' });
 		aoData.push({'name':'homeflag','value':'1' });
 	}
@@ -387,6 +389,7 @@ $('#MyEditForm select[name="bundle.ratio"]').on('change', function(e) {
 $('body').on('click', '.pix-add', function(event) {
 	var action = myurls['bundle.add'];
 	refreshForm('MyEditForm');
+	$('#MyEditForm input[name="bundle.branchid"').val(BundleTree.branchid);
 	$('#MyEditForm').attr('action', action);
 	CurrentBundle = null;
 	CurrentBundleid = 0;
@@ -427,6 +430,7 @@ $('body').on('click', '.pix-subbundle-add', function(event) {
 	formdata['bundle.homebundleid'] = CurrentBundleid;
 	formdata['bundle.homeflag'] = '0';
 	formdata['bundle.ratio'] = CurrentBundle.ratio;
+	formdata['bundle.branchid'] = PageTree.branchid;
 	$('#SubbundleForm').loadJSON(formdata);
 	refreshFromBundleTable();
 	$('#SubbundleModal').modal();

@@ -13,7 +13,7 @@
 <link href="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet"/>
 <link href="${base_ctx}/css/pix.css" rel="stylesheet"/>
-<link href="${base_ctx}/wysiwyg/css/wysiwyg.css" rel="stylesheet"/>
+<link href="${base_ctx}/css/pixpage.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -165,6 +165,12 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
+								<i class="fa fa-steam"></i><div>流媒体</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="10">
+								<i class="fa fa-camera"></i><div>摄像头</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>
 							</a>
@@ -172,13 +178,16 @@
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="13">
-								<i class="fa fa-credit-card"></i><div>刷卡签到</div>
+								<i class="fa fa-credit-card"></i><div>上课考勤</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="15">
 								<i class="fa fa-book"></i><div>考试通告</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="16">
+								<i class="fa fa-users"></i><div>个人信息</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
@@ -972,7 +981,7 @@
 		</div>
 	</div>
 
-	<div id="WebModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="ContentModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -981,10 +990,10 @@
 				<div class="modal-body">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>网页</div>
+							<div class="caption"><i class="fa fa-reorder"></i>内容明细</div>
 						</div>
 						<div class="portlet-body">
-							<form id="WebForm" class="form-horizontal" method="POST">
+							<form id="ContentForm" class="form-horizontal" method="POST">
 								<div class="form-body">
 									<div class="form-group">
 										<label class="col-md-3 control-label">URL<span class="required">*</span></label>
@@ -1061,7 +1070,7 @@
 			<h3 class="page-title"><spring:message code="menu.touchtemplate"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.pagemanage"/></a><i class="fa fa-angle-right"></i>
@@ -1103,8 +1112,6 @@
 
 <div id="SiteMethJavaScript">
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-	<script type="text/javascript" src="${base_ctx}/wysiwyg/js/jquery.ui.rotatable.js"></script>
-		
 <script src="${static_ctx}/global/plugins/select2/select2.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/data-tables/DT_bootstrap.js" type="text/javascript"></script>

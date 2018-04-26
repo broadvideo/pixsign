@@ -174,7 +174,7 @@ var DeviceModule = function () {
 			sOut += '<tr><td>' + common.view.refreshtime + ':</td><td>' + aData.refreshtime + '</td></tr>';
 			sOut += '<tr><td>' + common.view.activetime + ':</td><td>' + aData.activetime + '</td></tr>';
 			sOut += '</table>';
-			 
+			
 			return sOut;
 		}
 

@@ -12,6 +12,8 @@ public class Bundle {
 
 	private Integer bundleid;
 
+	private String uuid;
+
 	private Integer orgid;
 
 	private Integer branchid;
@@ -50,6 +52,8 @@ public class Bundle {
 
 	private Date createtime;
 
+	private Date updatetime;
+
 	private Integer createstaffid;
 
 	private String json;
@@ -58,7 +62,7 @@ public class Bundle {
 
 	private Image bgimage;
 
-	private List<Bundledtl> bundledtls;
+	private List<Bundlezone> bundlezones;
 
 	private List<Bundle> subbundles;
 
@@ -68,6 +72,14 @@ public class Bundle {
 
 	public void setBundleid(Integer bundleid) {
 		this.bundleid = bundleid;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Integer getOrgid() {
@@ -224,6 +236,16 @@ public class Bundle {
 		this.createtime = createtime;
 	}
 
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
 	public Integer getCreatestaffid() {
 		return createstaffid;
 	}
@@ -248,6 +270,17 @@ public class Bundle {
 		this.snapshotdtl = snapshotdtl;
 	}
 
+	public Long getTimestamp() {
+		if (updatetime != null) {
+			return updatetime.getTime();
+		} else {
+			return 0L;
+		}
+	}
+
+	public void setTimestamp(Long timestamp) {
+	}
+
 	public Image getBgimage() {
 		return bgimage;
 	}
@@ -256,12 +289,12 @@ public class Bundle {
 		this.bgimage = bgimage;
 	}
 
-	public List<Bundledtl> getBundledtls() {
-		return bundledtls;
+	public List<Bundlezone> getBundlezones() {
+		return bundlezones;
 	}
 
-	public void setBundledtls(List<Bundledtl> bundledtls) {
-		this.bundledtls = bundledtls;
+	public void setBundlezones(List<Bundlezone> bundlezones) {
+		this.bundlezones = bundlezones;
 	}
 
 	public List<Bundle> getSubbundles() {

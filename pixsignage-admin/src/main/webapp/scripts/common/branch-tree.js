@@ -81,7 +81,9 @@ var BranchTree = function (container, refresh) {
 		BranchTree.on('select_node.jstree', function(event, data) {
 			_self.branchid = data.instance.get_node(data.selected[0]).id;
 			_self.folderid = null;
-			initFolderTree();
+			if (FolderTree.length > 0) {
+				initFolderTree();
+			}
 			refreshTable();
 		});
 	}

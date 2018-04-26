@@ -18,11 +18,14 @@ var PageDesignModule = function (mode) {
 		ZoneLimits['5'] = 2;
 		ZoneLimits['6'] = 1;
 		ZoneLimits['7'] = 100;
+		ZoneLimits['9'] = 1;
+		ZoneLimits['10'] = 1;
 		ZoneLimits['11'] = 1;
 		ZoneLimits['12'] = 1;
 		ZoneLimits['13'] = 1;
 		ZoneLimits['14'] = 1;
 		ZoneLimits['15'] = 1;
+		ZoneLimits['16'] = 1;
 		ZoneLimits['21'] = 1;
 		ZoneLimits['31'] = 1;
 		ZoneLimits['41'] = 1;
@@ -169,8 +172,8 @@ var PageDesignModule = function (mode) {
 				//Date Zone
 				var p_element = document.createElement('p');
 				$(inner_div).append(p_element);
-			} else if (pagezone.type == 6) {
-				//Web Zone
+			} else if (pagezone.type == 6 || pagezone.type == 9) {
+				//Web Zone & Stream Zone
 				var p_element = document.createElement('p');
 				$(inner_div).append(p_element);
 			} else if (pagezone.type == 7) {
@@ -192,7 +195,7 @@ var PageDesignModule = function (mode) {
 				//CalendarZone
 				var table = document.createElement('table');
 				$(inner_div).append(table);
-			} else if (pagezone.type == 21 || pagezone.type == 31 || pagezone.type == 41) {
+			} else if (pagezone.type == 10 || pagezone.type == 21 || pagezone.type == 31 || pagezone.type == 41) {
 				//Diy Zone & MeetingZone & EstateZone
 				var img_element = document.createElement('img');
 				$(inner_div).append(img_element);
@@ -354,8 +357,8 @@ var PageDesignModule = function (mode) {
 					'text-decoration': pagezone.decoration,
 				});
 				$(pagezoneDiv).find('p').html(new Date().pattern(pagezone.dateformat));
-			} else if (pagezone.type == 6) {
-				//Web Zone
+			} else if (pagezone.type == 6 || pagezone.type == 9) {
+				//Web Zone & Stream Zone
 				$(pagezoneDiv).find('#rotatable').css({
 					'box-sizing': 'border-box',
 					'border-color': pagezone.bdcolor, 
@@ -404,6 +407,11 @@ var PageDesignModule = function (mode) {
 					text_val = text_val.replace(/&nbsp;/g, ' ');
 				}
 				$(pagezoneDiv).find('p').html(text_val);
+			} else if (pagezone.type == 10) {
+				//Camera Zone
+				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/camera/snapshot.jpg');
+				$(pagezoneDiv).find('img').attr('width', '100%');
+				$(pagezoneDiv).find('img').attr('height', '100%');
 			} else if (pagezone.type == 11 || pagezone.type == 12) {
 				var table = $(pagezoneDiv).find('table');
 				$(table).attr('width', '100%');
@@ -635,11 +643,11 @@ var PageDesignModule = function (mode) {
 								$('#ScrollModal textarea[name="content"]').attr('readonly','readonly');
 							}
 							$('#ScrollModal').modal();
-						} else if (pagezones[0].type == 6) {
-							//Web Zone
+						} else if (pagezones[0].type == 6 || pagezones[0].type == 9) {
+							//Web Zone & Stream Zone
 							_self.Zone = pagezones[0];
-							$('#WebModal textarea[name="content"]').val(_self.Zone.content);
-							$('#WebModal').modal();
+							$('#ContentModal textarea[name="content"]').val(_self.Zone.content);
+							$('#ContentModal').modal();
 						} else {
 							return;
 						}
@@ -1543,10 +1551,10 @@ var PageDesignModule = function (mode) {
 			}
 		});
 
-		$('[type=submit]', $('#WebModal')).on('click', function(event) {
-			_self.Zone.content = $('#WebModal textarea[name="content"]').val();
+		$('[type=submit]', $('#ContentModal')).on('click', function(event) {
+			_self.Zone.content = $('#ContentModal textarea[name="content"]').val();
 			refreshPagezone(_self.Zone);
-			$('#WebModal').modal('hide');
+			$('#ContentModal').modal('hide');
 		});
 
 

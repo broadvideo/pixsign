@@ -5,8 +5,12 @@
 	<mapping path="/vsp/*.jsp" decorator="/decorator/decorator.jsp" />
 	<mapping path="/sys/*.jsp" decorator="/decorator/decorator.jsp" />
 
+	<mapping path="/youwang/*.jsp" decorator="/decorator/youwang.jsp" />
+
 	<!-- 指明满足“/exclude.jsp*”的页面，将被排除，不被装饰 -->
 	<mapping path="/org/template-design.jsp" exclude="true" />
+	<mapping path="/youwang/register.jsp" exclude="true" />
+	<mapping path="/youwang/app.jsp" exclude="true" />
 	
 	<content-processor>
 		<tag-rule-bundle class="org.sitemesh.content.tagrules.html.DivExtractingTagRuleBundle" />

@@ -131,6 +131,8 @@ public class PixsignageService21 {
 			String ostype = requestJson.getString("os_type");
 			if (ostype.equals("windows")) {
 				ostype = "2";
+			} else if (ostype.equals("linux")) {
+				ostype = "3";
 			} else {
 				ostype = "1";
 			}
@@ -154,7 +156,7 @@ public class PixsignageService21 {
 
 			String mtype = null;
 			if (sign != null) {
-				if (sign.startsWith("win")) {
+				if (sign.startsWith("win") || sign.equals("linux")) {
 					mtype = sign;
 				} else {
 					mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
@@ -188,15 +190,50 @@ public class PixsignageService21 {
 			}
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			int maxDevices = 0;
-			if (ostype.equals("1")) {
-				maxDevices = org.getMaxdevices1();
+			String maxdetail = org.getMaxdetail();
+			String[] maxs = maxdetail.split(",");
+			int max1 = Integer.parseInt(maxs[0]);
+			int max2 = Integer.parseInt(maxs[1]);
+			int max3 = Integer.parseInt(maxs[2]);
+			int max4 = Integer.parseInt(maxs[3]);
+			int max5 = Integer.parseInt(maxs[4]);
+			int max6 = Integer.parseInt(maxs[5]);
+			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+				// 单面屏
+				int currentDevices = deviceMapper.selectMaxCount1("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max1) {
+					return handleResult(1010, "Android单面屏授权数已达上限.");
+				}
+			} else if (appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+				// 双面屏
+				int currentDevices = deviceMapper.selectMaxCount2("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max2) {
+					return handleResult(1010, "Android双面屏授权数已达上限.");
+				}
+			} else if (appname.startsWith("DigitalBox2_")) {
+				// H5标牌
+				int currentDevices = deviceMapper.selectMaxCount3("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max3) {
+					return handleResult(1010, "Android H5标牌授权数已达上限.");
+				}
+			} else if (appname.startsWith("TeaTable_")) {
+				// 茶几
+				int currentDevices = deviceMapper.selectMaxCount4("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max4) {
+					return handleResult(1010, "Android茶几终端授权数已达上限.");
+				}
+			} else if (appname.startsWith("PixMultiSign")) {
+				// 联屏
+				int currentDevices = deviceMapper.selectMaxCount5("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max5) {
+					return handleResult(1010, "Android联屏终端授权数已达上限.");
+				}
 			} else if (ostype.equals("2")) {
-				maxDevices = org.getMaxdevices2();
-			}
-			int currentDevices = deviceMapper.selectCountByOstype("" + device.getOrgid(), ostype);
-			if (!device.getStatus().equals("1") && currentDevices >= maxDevices) {
-				return handleResult(1010, "终端授权数已达上限.");
+				// windows
+				int currentDevices = deviceMapper.selectMaxCount6("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max6) {
+					return handleResult(1010, "Windows终端授权数已达上限.");
+				}
 			}
 
 			try {
@@ -332,6 +369,8 @@ public class PixsignageService21 {
 			}
 
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
@@ -600,6 +639,8 @@ public class PixsignageService21 {
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {
@@ -613,7 +654,7 @@ public class PixsignageService21 {
 				String appname = device.getAppname();
 				String sign = device.getSign();
 				String mtype = null;
-				if (ostype.equals("2")) {
+				if (ostype.equals("2") || ostype.equals("3")) {
 					mtype = sign;
 				} else {
 					if (sign != null && sign.length() > 0) {
@@ -662,10 +703,6 @@ public class PixsignageService21 {
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
 					eventJson.put("event_type", "plan");
 					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle_Schedule)) {
-					eventJson.put("event_type", "bundle");
-					eventJson.put("event_content", scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-							"" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();

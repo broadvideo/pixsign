@@ -2,9 +2,9 @@
 ## pre script  #############################################
 ############################################################
 
-set @version = 19;
+set @version = 20;
 set @module = 'pixsignage';
-set @dbscript=concat(@module , '-upgrade-18.sql');
+set @dbscript=concat(@module , '-upgrade-19.sql');
 insert into dbversion(version, dbscript, type, status) values(@version, @dbscript, '2', '0');
 select last_insert_id() into @dbversionid;
 

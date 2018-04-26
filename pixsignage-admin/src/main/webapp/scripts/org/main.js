@@ -493,3 +493,99 @@ var APPTable = function () {
 		init: init,
 	}
 }();
+
+var AttendanceChart = function () {
+	var init = function () {
+		$.ajax({
+			url: 'stat!devices.action',
+			type : 'POST',
+			data : {},
+			dataType: 'json',
+			success : function(data, status) {
+				if (data.errorcode == 0 && data.aaData.length > 0) {
+					var statdata = [];
+					for (var i=0; i<data.aaData.length; i++) {
+						statdata[i] = {};
+						if (data.aaData[i].label == '1') {
+							statdata[i].label = common.view.online + '(' + data.aaData[i].value + ')';
+						} else if (data.aaData[i].label == '0') {
+							statdata[i].label = common.view.offline + '(' + data.aaData[i].value + ')';
+						//} else if (data.aaData[i].label == '0-0') {
+						//	statdata[i].label = common.view.unregister + '(' + data.aaData[i].value + ')';
+						} else {
+							statdata[i].label = common.view.unknown + '(' + data.aaData[i].value + ')';
+						}
+						statdata[i].data = data.aaData[i].value;
+					}
+
+				    $.plot($('#AttendanceChart'), statdata, {
+				        series: {
+				            pie: {
+				                show: true,
+				                radius: 1,
+				                label: {
+				                    show: true,
+				                    radius: 3 / 4,
+				                    formatter: function(label, series) {
+			                            return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+				                    },
+				                    background: {
+				                        opacity: 0.5
+				                    }
+				                }
+				            }
+				        },
+				        legend: {
+				            show: true
+				        }
+				    });
+				}
+			}
+		});
+	};
+
+	return {
+		init: init,
+	}
+}();
+
+var AttendanceTable = function () {
+	var init = function () {
+		$('#AttendanceTable').dataTable({
+			'sDom' : 'rt',
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'playlog!statall.action',
+			'aoColumns' : [ {'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '5%' },
+							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '45%' },
+							{'sTitle' : common.view.amount, 'mData' : 'amount', 'bSortable' : false, 'sWidth' : '10%' },
+							{'sTitle' : common.view.dcount, 'mData' : 'dcount', 'bSortable' : false, 'sWidth' : '10%' }],
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				var thumbwidth = 100;
+				var thumbhtml = '';
+				var playhtml = '';
+				if (aData.mediatype == 1 && aData.video.length > 0) {
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.video[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml = common.view.video + ': ' + aData.video[0].name;
+				} else if (aData.mediatype == 2 && aData.image.length > 0) {
+					thumbwidth = aData.image[0].width > aData.image[0].height? 100 : 100*aData.image[0].width/aData.image[0].height;
+					thumbhtml += '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + aData.image[0].thumbnail + '" class="imgthumb" width="' + thumbwidth + '%"></div>';
+					playhtml += common.view.image + ': ' + aData.image[0].name;
+				}
+				$('td:eq(0)', nRow).html(thumbhtml);
+				$('td:eq(1)', nRow).html(playhtml);
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'length','value':'20' });
+			}
+		});
+	};
+
+	return {
+		init: init,
+	}
+}();
+

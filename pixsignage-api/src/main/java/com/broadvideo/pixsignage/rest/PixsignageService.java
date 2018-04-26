@@ -300,6 +300,8 @@ public class PixsignageService {
 				responseJson.put("tag_flag", 0);
 			}
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 
 			logger.info("Pixsignage Service init response: {}", responseJson.toString());
 			return responseJson.toString();
@@ -499,6 +501,8 @@ public class PixsignageService {
 
 			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_status exception", e);

@@ -1,8 +1,6 @@
 var Login = function () {
-	var _redirecturl = 'org/main.jsp';
 	
-	var init = function (redirecturl) {
-		_redirecturl = redirecturl;
+	var init = function () {
 		handleLogin();
 	};
 
@@ -75,7 +73,11 @@ var Login = function () {
 								} else if (data.staff.subsystem == 1) {
 									window.location.href = 'vsp/main.jsp';
 								} else if (data.staff.subsystem == 2) {
-									window.location.href = _redirecturl;
+									if (data.staff.org != null) {
+										window.location.href = 'org/' + data.staff.org.mainpage;
+									} else {
+										window.location.href = 'org/main.jsp';
+									}
 								}
 							} else {
 								$('.alert-danger span', $('#LoginForm')).html(common.tips.login_failed);

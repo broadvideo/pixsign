@@ -109,6 +109,9 @@
 									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.liftflag" value="0">电梯
 									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="vsp.attendanceflag" value="0">考勤
+									</label>
 								</div>
 							</div>
 							<div class="form-group">

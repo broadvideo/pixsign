@@ -2,15 +2,20 @@ package com.broadvideo.pixsignage.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.UUID;
+import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,44 +24,39 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Audio;
 import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Bundledtl;
-import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Devicegroup;
+import com.broadvideo.pixsignage.domain.Bundlezone;
+import com.broadvideo.pixsignage.domain.Bundlezonedtl;
 import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Image;
-import com.broadvideo.pixsignage.domain.Medialist;
-import com.broadvideo.pixsignage.domain.Medialistdtl;
-import com.broadvideo.pixsignage.domain.Rss;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Stream;
 import com.broadvideo.pixsignage.domain.Templet;
-import com.broadvideo.pixsignage.domain.Templetdtl;
-import com.broadvideo.pixsignage.domain.Text;
+import com.broadvideo.pixsignage.domain.Templetzone;
+import com.broadvideo.pixsignage.domain.Templetzonedtl;
 import com.broadvideo.pixsignage.domain.Video;
-import com.broadvideo.pixsignage.domain.Widget;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
-import com.broadvideo.pixsignage.persistence.BundledtlMapper;
+import com.broadvideo.pixsignage.persistence.BundlezoneMapper;
+import com.broadvideo.pixsignage.persistence.BundlezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
-import com.broadvideo.pixsignage.persistence.MedialistMapper;
-import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
-import com.broadvideo.pixsignage.persistence.RssMapper;
+import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
-import com.broadvideo.pixsignage.persistence.StreamMapper;
 import com.broadvideo.pixsignage.persistence.TempletMapper;
-import com.broadvideo.pixsignage.persistence.TextMapper;
-import com.broadvideo.pixsignage.persistence.WidgetMapper;
+import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 @Service("bundleService")
 public class BundleServiceImpl implements BundleService {
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private BundleMapper bundleMapper;
 	@Autowired
-	private BundledtlMapper bundledtlMapper;
+	private BundlezoneMapper bundlezoneMapper;
+	@Autowired
+	private BundlezonedtlMapper bundlezonedtlMapper;
 	@Autowired
 	private TempletMapper templetMapper;
 	@Autowired
@@ -64,30 +64,12 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private ScheduledtlMapper scheduledtlMapper;
 	@Autowired
-	private MedialistMapper medialistMapper;
-	@Autowired
-	private MedialistdtlMapper medialistdtlMapper;
-	@Autowired
-	private TextMapper textMapper;
-	@Autowired
-	private StreamMapper streamMapper;
-	@Autowired
-	private WidgetMapper widgetMapper;
-	@Autowired
-	private RssMapper rssMapper;
-	@Autowired
 	private ConfigMapper configMapper;
+	@Autowired
+	private VideoMapper videoMapper;
+	@Autowired
+	private ImageMapper imageMapper;
 
-	@Autowired
-	private MedialistService medialistService;
-	@Autowired
-	private TextService textService;
-	@Autowired
-	private StreamService streamService;
-	@Autowired
-	private WidgetService widgetService;
-	@Autowired
-	private RssService rssService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -139,50 +121,23 @@ public class BundleServiceImpl implements BundleService {
 				// 3:16
 				bundle.setWidth(360);
 				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("7")) {
+				// 1920x313
+				bundle.setWidth(1920);
+				bundle.setHeight(313);
+			} else if (bundle.getRatio().equals("8")) {
+				// 313x1920
+				bundle.setWidth(313);
+				bundle.setHeight(1920);
 			}
+			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
+			bundle.setUpdatetime(Calendar.getInstance().getTime());
 			bundleMapper.insertSelective(bundle);
 
 			if (bundle.getName().equals("UNKNOWN")) {
 				bundle.setName("BUNDLE-" + bundle.getBundleid());
 			}
 			bundleMapper.updateByPrimaryKeySelective(bundle);
-
-			Bundledtl bundledtl = new Bundledtl();
-			bundledtl.setBundleid(bundle.getBundleid());
-			bundledtl.setType(Bundledtl.Type_PLAY);
-			bundledtl.setMainflag("1");
-			if (bundle.getHomeflag().equals("0")) {
-				bundledtl.setHomebundleid(bundle.getHomebundleid());
-			} else {
-				bundledtl.setHomebundleid(bundle.getBundleid());
-			}
-			bundledtl.setWidth((int) (bundle.getWidth() / 2));
-			bundledtl.setHeight((int) (bundle.getHeight() / 2));
-			bundledtl.setTopoffset((int) (bundle.getHeight() / 4));
-			bundledtl.setLeftoffset((int) (bundle.getWidth() / 4));
-			bundledtl.setBgcolor("#FFFFFF");
-			bundledtl.setOpacity(0);
-			bundledtl.setZindex(0);
-			bundledtl.setSleeptime(0);
-			bundledtl.setIntervaltime(10);
-			bundledtl.setDirection("4");
-			bundledtl.setSpeed("2");
-			bundledtl.setColor("#FFFFFF");
-			bundledtl.setSize(50);
-			bundledtl.setObjtype(Bundledtl.ObjType_NONE);
-			bundledtl.setObjid(0);
-			bundledtlMapper.insertSelective(bundledtl);
-
-			Medialist medialist = new Medialist();
-			medialist.setOrgid(bundle.getOrgid());
-			medialist.setBranchid(0);
-			medialist.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-			medialist.setType(Medialist.Type_Private);
-			medialist.setCreatestaffid(bundle.getCreatestaffid());
-			medialistMapper.insertSelective(medialist);
-			bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
-			bundledtl.setObjid(medialist.getMedialistid());
-			bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
 		} else {
 			// Create bundle from templet
 			Hashtable<Integer, Integer> bundleidHash = new Hashtable<Integer, Integer>();
@@ -195,6 +150,8 @@ public class BundleServiceImpl implements BundleService {
 			bundle.setBgcolor(templet.getBgcolor());
 			bundle.setBgimageid(templet.getBgimageid());
 			bundle.setHomeidletime(templet.getHomeidletime());
+			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
+			bundle.setUpdatetime(Calendar.getInstance().getTime());
 			bundleMapper.insertSelective(bundle);
 			if (bundle.getName().equals("UNKNOWN")) {
 				bundle.setName("BUNDLE-" + bundle.getBundleid());
@@ -227,6 +184,7 @@ public class BundleServiceImpl implements BundleService {
 				subbundle.setHomeflag(subtemplet.getHomeflag());
 				subbundle.setHomebundleid(bundle.getBundleid());
 				subbundle.setHomeidletime(subtemplet.getHomeidletime());
+				subbundle.setUpdatetime(bundle.getUpdatetime());
 				bundleMapper.insertSelective(subbundle);
 				bundleidHash.put(subtemplet.getTempletid(), subbundle.getBundleid());
 				templetList.add(subtemplet);
@@ -242,106 +200,59 @@ public class BundleServiceImpl implements BundleService {
 			}
 
 			for (Templet t : templetList) {
-				List<Templetdtl> templetdtls = t.getTempletdtls();
-				for (Templetdtl templetdtl : templetdtls) {
-					Bundledtl bundledtl = new Bundledtl();
-					bundledtl.setBundleid(bundleidHash.get(t.getTempletid()));
+				List<Templetzone> templetzones = t.getTempletzones();
+				for (Templetzone templetzone : templetzones) {
+					Bundlezone bundlezone = new Bundlezone();
+					bundlezone.setBundleid(bundleidHash.get(t.getTempletid()));
 					if (bundle.getHomeflag().equals("0")) {
-						bundledtl.setHomebundleid(bundle.getHomebundleid());
+						bundlezone.setHomebundleid(bundle.getHomebundleid());
 					} else {
-						bundledtl.setHomebundleid(bundle.getBundleid());
+						bundlezone.setHomebundleid(bundle.getBundleid());
 					}
-					bundledtl.setTempletdtlid(templetdtl.getTempletdtlid());
-					bundledtl.setType(templetdtl.getType());
-					bundledtl.setMainflag(templetdtl.getMainflag());
-					bundledtl.setHeight(templetdtl.getHeight());
-					bundledtl.setWidth(templetdtl.getWidth());
-					bundledtl.setTopoffset(templetdtl.getTopoffset());
-					bundledtl.setLeftoffset(templetdtl.getLeftoffset());
-					bundledtl.setZindex(templetdtl.getZindex());
-					bundledtl.setBgcolor(templetdtl.getBgcolor());
-					bundledtl.setOpacity(templetdtl.getOpacity());
-					bundledtl.setBgimageid(templetdtl.getBgimageid());
-					bundledtl.setSleeptime(templetdtl.getSleeptime());
-					bundledtl.setIntervaltime(templetdtl.getIntervaltime());
-					bundledtl.setAnimation(templetdtl.getAnimation());
-					bundledtl.setDirection(templetdtl.getDirection());
-					bundledtl.setSpeed(templetdtl.getSpeed());
-					bundledtl.setColor(templetdtl.getColor());
-					bundledtl.setSize(templetdtl.getSize());
-					bundledtl.setDateformat(templetdtl.getDateformat());
-					bundledtl.setFitflag(templetdtl.getFitflag());
-					bundledtl.setVolume(templetdtl.getVolume());
-					bundledtl.setReferflag(Bundledtl.ReferFlag_Private);
-					bundledtl.setObjtype(templetdtl.getObjtype());
-					bundledtl.setTouchlabel(templetdtl.getTouchlabel());
-					bundledtl.setTouchtype(templetdtl.getTouchtype());
-					Integer touchbundleid = bundleidHash.get(templetdtl.getTouchtempletid());
-					if (touchbundleid == null) {
-						touchbundleid = 0;
-					}
-					bundledtl.setTouchbundleid(touchbundleid);
-					bundledtl.setTouchapk(templetdtl.getTouchapk());
-
-					if (templetdtl.getObjtype().equals(Templetdtl.ObjType_Medialist)) {
-						Medialist temp = medialistMapper.selectByPrimaryKey("" + templetdtl.getObjid());
-						Medialist medialist = new Medialist();
-						medialist.setOrgid(bundle.getOrgid());
-						medialist.setBranchid(bundle.getBranchid());
-						medialist.setName(bundle.getName() + "-" + templetdtl.getTempletdtlid());
-						medialist.setType(Medialist.Type_Private);
-						medialist.setCreatestaffid(bundle.getCreatestaffid());
-						medialistMapper.insertSelective(medialist);
-						for (Medialistdtl md : temp.getMedialistdtls()) {
-							Medialistdtl medialistdtl = new Medialistdtl();
-							medialistdtl.setMedialistid(medialist.getMedialistid());
-							medialistdtl.setObjtype(md.getObjtype());
-							medialistdtl.setObjid(md.getObjid());
-							medialistdtl.setSequence(md.getSequence());
-							medialistdtlMapper.insertSelective(medialistdtl);
+					bundlezone.setType(templetzone.getType());
+					bundlezone.setMainflag(templetzone.getMainflag());
+					bundlezone.setHeight(templetzone.getHeight());
+					bundlezone.setWidth(templetzone.getWidth());
+					bundlezone.setTopoffset(templetzone.getTopoffset());
+					bundlezone.setLeftoffset(templetzone.getLeftoffset());
+					bundlezone.setZindex(templetzone.getZindex());
+					bundlezone.setBgcolor(templetzone.getBgcolor());
+					bundlezone.setBgopacity(templetzone.getBgopacity());
+					bundlezone.setBgimageid(templetzone.getBgimageid());
+					bundlezone.setSleeptime(templetzone.getSleeptime());
+					bundlezone.setIntervaltime(templetzone.getIntervaltime());
+					bundlezone.setAnimation(templetzone.getAnimation());
+					bundlezone.setSpeed(templetzone.getSpeed());
+					bundlezone.setColor(templetzone.getColor());
+					bundlezone.setSize(templetzone.getSize());
+					bundlezone.setDateformat(templetzone.getDateformat());
+					bundlezone.setFitflag(templetzone.getFitflag());
+					bundlezone.setVolume(templetzone.getVolume());
+					bundlezone.setTouchlabel(templetzone.getTouchlabel());
+					bundlezone.setTouchtype(templetzone.getTouchtype());
+					Integer touchobjid = 0;
+					if (templetzone.getTouchtype().equals("2")) {
+						touchobjid = bundleidHash.get(templetzone.getTouchobjid());
+						if (touchobjid == null) {
+							touchobjid = 0;
 						}
-						bundledtl.setObjid(medialist.getMedialistid());
-					} else if (templetdtl.getObjtype().equals(Templetdtl.ObjType_Text)) {
-						Text temp = textMapper.selectByPrimaryKey("" + templetdtl.getObjid());
-						Text text = new Text();
-						text.setOrgid(bundle.getOrgid());
-						text.setBranchid(bundle.getBranchid());
-						text.setName(bundle.getName() + "-" + templetdtl.getTempletdtlid());
-						text.setType(Text.Type_Private);
-						text.setCreatestaffid(bundle.getCreatestaffid());
-						text.setText(temp.getText());
-						textMapper.insertSelective(text);
-						bundledtl.setObjid(text.getTextid());
-					} else if (templetdtl.getObjtype().equals(Templetdtl.ObjType_Widget)) {
-						Widget temp = widgetMapper.selectByPrimaryKey("" + templetdtl.getObjid());
-						Widget widget = new Widget();
-						widget.setOrgid(bundle.getOrgid());
-						widget.setBranchid(bundle.getBranchid());
-						widget.setName(bundle.getName() + "-" + templetdtl.getTempletdtlid());
-						widget.setType(Widget.Type_Private);
-						widget.setCreatestaffid(bundle.getCreatestaffid());
-						widget.setUrl(temp.getUrl());
-						widgetMapper.insertSelective(widget);
-						bundledtl.setObjid(widget.getWidgetid());
-					} else if (templetdtl.getObjtype().equals(Templetdtl.ObjType_Rss)) {
-						Rss temp = rssMapper.selectByPrimaryKey("" + templetdtl.getObjid());
-						Rss rss = new Rss();
-						rss.setOrgid(bundle.getOrgid());
-						rss.setBranchid(bundle.getBranchid());
-						rss.setName(bundle.getName() + "-" + templetdtl.getTempletdtlid());
-						rss.setType(Rss.Type_Private);
-						rss.setCreatestaffid(bundle.getCreatestaffid());
-						rss.setUrl(temp.getUrl());
-						rssMapper.insertSelective(rss);
-						bundledtl.setObjid(rss.getRssid());
-					} else {
-						bundledtl.setObjid(templetdtl.getObjid());
 					}
-					bundledtlMapper.insertSelective(bundledtl);
+					bundlezone.setTouchobjid(touchobjid);
+					bundlezone.setContent(templetzone.getContent());
+					bundlezoneMapper.insertSelective(bundlezone);
+					for (Templetzonedtl templetzonedtl : templetzone.getTempletzonedtls()) {
+						Bundlezonedtl bundlezonedtl = new Bundlezonedtl();
+						bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+						bundlezonedtl.setObjtype(templetzonedtl.getObjtype());
+						bundlezonedtl.setObjid(templetzonedtl.getObjid());
+						bundlezonedtl.setSequence(templetzonedtl.getSequence());
+						bundlezonedtlMapper.insertSelective(bundlezonedtl);
+					}
 				}
 			}
 
 		}
+
 	}
 
 	@Transactional
@@ -376,59 +287,25 @@ public class BundleServiceImpl implements BundleService {
 				// 3:16
 				bundle.setWidth(360);
 				bundle.setHeight(1920);
+			} else if (bundle.getRatio().equals("7")) {
+				// 1920x313
+				bundle.setWidth(1920);
+				bundle.setHeight(313);
+			} else if (bundle.getRatio().equals("8")) {
+				// 313x1920
+				bundle.setWidth(313);
+				bundle.setHeight(1920);
 			}
+			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
+			bundle.setUpdatetime(Calendar.getInstance().getTime());
 			bundleMapper.insertSelective(bundle);
 
 			if (bundle.getName().equals("UNKNOWN")) {
 				bundle.setName("BUNDLE-" + bundle.getBundleid());
 			}
 			bundleMapper.updateByPrimaryKeySelective(bundle);
-
-			Bundledtl bundledtl = new Bundledtl();
-			bundledtl.setBundleid(bundle.getBundleid());
-			bundledtl.setType(Bundledtl.Type_PLAY);
-			bundledtl.setMainflag("1");
-			if (bundle.getHomeflag().equals("0")) {
-				bundledtl.setHomebundleid(bundle.getHomebundleid());
-			} else {
-				bundledtl.setHomebundleid(bundle.getBundleid());
-			}
-			bundledtl.setWidth((int) (bundle.getWidth() / 2));
-			bundledtl.setHeight((int) (bundle.getHeight() / 2));
-			bundledtl.setTopoffset((int) (bundle.getHeight() / 4));
-			bundledtl.setLeftoffset((int) (bundle.getWidth() / 4));
-			bundledtl.setBgcolor("#000000");
-			if (bundledtl.getBgimageid() != null && bundledtl.getBgimageid() > 0) {
-				bundledtl.setOpacity(0);
-			} else {
-				bundledtl.setOpacity(255);
-			}
-			bundledtl.setZindex(0);
-			bundledtl.setSleeptime(0);
-			bundledtl.setIntervaltime(10);
-			bundledtl.setDirection("4");
-			bundledtl.setSpeed("2");
-			bundledtl.setColor("#FFFFFF");
-			bundledtl.setSize(50);
-			bundledtl.setObjtype(Bundledtl.ObjType_NONE);
-			bundledtl.setObjid(0);
-			bundledtlMapper.insertSelective(bundledtl);
-
-			Medialist medialist = new Medialist();
-			medialist.setOrgid(bundle.getOrgid());
-			medialist.setBranchid(0);
-			medialist.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-			medialist.setType(Medialist.Type_Private);
-			medialist.setCreatestaffid(bundle.getCreatestaffid());
-			medialistMapper.insertSelective(medialist);
-			bundledtl.setObjtype(Bundledtl.ObjType_Medialist);
-			bundledtl.setObjid(medialist.getMedialistid());
-			bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
 		} else {
 			// Copy bundle
-			Hashtable<Integer, Integer> bundleidHash = new Hashtable<Integer, Integer>();
-			ArrayList<Bundle> frombundleList = new ArrayList<Bundle>();
-
 			bundle.setTempletid(frombundle.getTempletid());
 			bundle.setRatio(frombundle.getRatio());
 			bundle.setHeight(frombundle.getHeight());
@@ -436,6 +313,8 @@ public class BundleServiceImpl implements BundleService {
 			bundle.setBgcolor(frombundle.getBgcolor());
 			bundle.setBgimageid(frombundle.getBgimageid());
 			bundle.setHomeidletime(frombundle.getHomeidletime());
+			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
+			bundle.setUpdatetime(Calendar.getInstance().getTime());
 			bundleMapper.insertSelective(bundle);
 			if (bundle.getName().equals("UNKNOWN")) {
 				bundle.setName("BUNDLE-" + bundle.getBundleid());
@@ -448,145 +327,55 @@ public class BundleServiceImpl implements BundleService {
 				bundle.setSnapshot(snapshotFilePath);
 			}
 			bundleMapper.updateByPrimaryKeySelective(bundle);
-			bundleidHash.put(frombundle.getTempletid(), bundle.getBundleid());
-			frombundleList.add(frombundle);
 
-			List<Bundle> fromsubbundles = frombundle.getSubbundles();
-			for (Bundle s : fromsubbundles) {
-				Bundle fromsubbundle = bundleMapper.selectByPrimaryKey("" + s.getBundleid());
-				Bundle subbundle = new Bundle();
-				subbundle.setOrgid(bundle.getOrgid());
-				subbundle.setBranchid(bundle.getBranchid());
-				subbundle.setTempletid(fromsubbundle.getTempletid());
-				subbundle.setName(fromsubbundle.getName());
-				subbundle.setRatio(fromsubbundle.getRatio());
-				subbundle.setHeight(fromsubbundle.getHeight());
-				subbundle.setWidth(fromsubbundle.getWidth());
-				subbundle.setBgcolor(fromsubbundle.getBgcolor());
-				subbundle.setBgimageid(fromsubbundle.getBgimageid());
-				subbundle.setTouchflag(fromsubbundle.getTouchflag());
-				subbundle.setHomeflag(fromsubbundle.getHomeflag());
-				subbundle.setHomebundleid(bundle.getBundleid());
-				subbundle.setHomeidletime(fromsubbundle.getHomeidletime());
-				bundleMapper.insertSelective(subbundle);
-				bundleidHash.put(fromsubbundle.getTempletid(), subbundle.getBundleid());
-				frombundleList.add(fromsubbundle);
-				if (fromsubbundle.getSnapshot() != null) {
-					String snapshotFilePath = "/bundle/" + subbundle.getBundleid() + "/snapshot/"
-							+ subbundle.getBundleid() + ".png";
-					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
-					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + fromsubbundle.getSnapshot()),
-							snapshotFile);
-					subbundle.setSnapshot(snapshotFilePath);
-					bundleMapper.updateByPrimaryKeySelective(subbundle);
+			List<Bundlezone> frombundlezones = frombundle.getBundlezones();
+			for (Bundlezone frombundlezone : frombundlezones) {
+				Bundlezone bundlezone = new Bundlezone();
+				bundlezone.setBundleid(bundle.getBundleid());
+				if (bundle.getHomeflag().equals("0")) {
+					bundlezone.setHomebundleid(bundle.getHomebundleid());
+				} else {
+					bundlezone.setHomebundleid(bundle.getBundleid());
+				}
+				bundlezone.setType(frombundlezone.getType());
+				bundlezone.setMainflag(frombundlezone.getMainflag());
+				bundlezone.setHeight(frombundlezone.getHeight());
+				bundlezone.setWidth(frombundlezone.getWidth());
+				bundlezone.setTopoffset(frombundlezone.getTopoffset());
+				bundlezone.setLeftoffset(frombundlezone.getLeftoffset());
+				bundlezone.setZindex(frombundlezone.getZindex());
+				bundlezone.setBgcolor(frombundlezone.getBgcolor());
+				bundlezone.setBgopacity(frombundlezone.getBgopacity());
+				bundlezone.setBgimageid(frombundlezone.getBgimageid());
+				bundlezone.setSleeptime(frombundlezone.getSleeptime());
+				bundlezone.setIntervaltime(frombundlezone.getIntervaltime());
+				bundlezone.setAnimation(frombundlezone.getAnimation());
+				bundlezone.setSpeed(frombundlezone.getSpeed());
+				bundlezone.setColor(frombundlezone.getColor());
+				bundlezone.setSize(frombundlezone.getSize());
+				bundlezone.setDateformat(frombundlezone.getDateformat());
+				bundlezone.setFitflag(frombundlezone.getFitflag());
+				bundlezone.setVolume(frombundlezone.getVolume());
+				bundlezone.setTouchlabel(frombundlezone.getTouchlabel());
+				bundlezone.setTouchtype(frombundlezone.getTouchtype());
+				bundlezone.setTouchobjid(frombundlezone.getTouchobjid());
+				bundlezone.setContent(frombundlezone.getContent());
+				bundlezoneMapper.insertSelective(bundlezone);
+				for (Bundlezonedtl frombundlezonedtl : frombundlezone.getBundlezonedtls()) {
+					Bundlezonedtl bundlezonedtl = new Bundlezonedtl();
+					bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+					bundlezonedtl.setObjtype(frombundlezonedtl.getObjtype());
+					bundlezonedtl.setObjid(frombundlezonedtl.getObjid());
+					bundlezonedtl.setSequence(frombundlezonedtl.getSequence());
+					bundlezonedtlMapper.insertSelective(bundlezonedtl);
 				}
 			}
-
-			for (Bundle t : frombundleList) {
-				List<Bundledtl> frombundledtls = t.getBundledtls();
-				for (Bundledtl frombundledtl : frombundledtls) {
-					Bundledtl bundledtl = new Bundledtl();
-					bundledtl.setBundleid(bundleidHash.get(t.getTempletid()));
-					if (bundle.getHomeflag().equals("0")) {
-						bundledtl.setHomebundleid(bundle.getHomebundleid());
-					} else {
-						bundledtl.setHomebundleid(bundle.getBundleid());
-					}
-					bundledtl.setTempletdtlid(frombundledtl.getTempletdtlid());
-					bundledtl.setType(frombundledtl.getType());
-					bundledtl.setMainflag(frombundledtl.getMainflag());
-					bundledtl.setHeight(frombundledtl.getHeight());
-					bundledtl.setWidth(frombundledtl.getWidth());
-					bundledtl.setTopoffset(frombundledtl.getTopoffset());
-					bundledtl.setLeftoffset(frombundledtl.getLeftoffset());
-					bundledtl.setZindex(frombundledtl.getZindex());
-					bundledtl.setBgcolor(frombundledtl.getBgcolor());
-					bundledtl.setOpacity(frombundledtl.getOpacity());
-					bundledtl.setBgimageid(frombundledtl.getBgimageid());
-					bundledtl.setSleeptime(frombundledtl.getSleeptime());
-					bundledtl.setIntervaltime(frombundledtl.getIntervaltime());
-					bundledtl.setAnimation(frombundledtl.getAnimation());
-					bundledtl.setDirection(frombundledtl.getDirection());
-					bundledtl.setSpeed(frombundledtl.getSpeed());
-					bundledtl.setColor(frombundledtl.getColor());
-					bundledtl.setSize(frombundledtl.getSize());
-					bundledtl.setDateformat(frombundledtl.getDateformat());
-					bundledtl.setFitflag(frombundledtl.getFitflag());
-					bundledtl.setVolume(frombundledtl.getVolume());
-					bundledtl.setReferflag(Bundledtl.ReferFlag_Private);
-					bundledtl.setObjtype(frombundledtl.getObjtype());
-					bundledtl.setTouchlabel(frombundledtl.getTouchlabel());
-					bundledtl.setTouchtype(frombundledtl.getTouchtype());
-					Integer touchbundleid = bundleidHash.get(frombundledtl.getTouchbundleid());
-					if (touchbundleid == null) {
-						touchbundleid = 0;
-					}
-					bundledtl.setTouchbundleid(touchbundleid);
-					bundledtl.setTouchapk(frombundledtl.getTouchapk());
-
-					if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Medialist)) {
-						Medialist temp = medialistMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
-						Medialist medialist = new Medialist();
-						medialist.setOrgid(bundle.getOrgid());
-						medialist.setBranchid(bundle.getBranchid());
-						medialist.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
-						medialist.setType(Medialist.Type_Private);
-						medialist.setCreatestaffid(bundle.getCreatestaffid());
-						medialistMapper.insertSelective(medialist);
-						for (Medialistdtl md : temp.getMedialistdtls()) {
-							Medialistdtl medialistdtl = new Medialistdtl();
-							medialistdtl.setMedialistid(medialist.getMedialistid());
-							medialistdtl.setObjtype(md.getObjtype());
-							medialistdtl.setObjid(md.getObjid());
-							medialistdtl.setSequence(md.getSequence());
-							medialistdtlMapper.insertSelective(medialistdtl);
-						}
-						bundledtl.setObjid(medialist.getMedialistid());
-					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Text)) {
-						Text temp = textMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
-						Text text = new Text();
-						text.setOrgid(bundle.getOrgid());
-						text.setBranchid(bundle.getBranchid());
-						text.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
-						text.setType(Text.Type_Private);
-						text.setCreatestaffid(bundle.getCreatestaffid());
-						text.setText(temp.getText());
-						textMapper.insertSelective(text);
-						bundledtl.setObjid(text.getTextid());
-					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Widget)) {
-						Widget temp = widgetMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
-						Widget widget = new Widget();
-						widget.setOrgid(bundle.getOrgid());
-						widget.setBranchid(bundle.getBranchid());
-						widget.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
-						widget.setType(Widget.Type_Private);
-						widget.setCreatestaffid(bundle.getCreatestaffid());
-						widget.setUrl(temp.getUrl());
-						widgetMapper.insertSelective(widget);
-						bundledtl.setObjid(widget.getWidgetid());
-					} else if (frombundledtl.getObjtype().equals(Templetdtl.ObjType_Rss)) {
-						Rss temp = rssMapper.selectByPrimaryKey("" + frombundledtl.getObjid());
-						Rss rss = new Rss();
-						rss.setOrgid(bundle.getOrgid());
-						rss.setBranchid(bundle.getBranchid());
-						rss.setName(bundle.getName() + "-" + frombundledtl.getTempletdtlid());
-						rss.setType(Rss.Type_Private);
-						rss.setCreatestaffid(bundle.getCreatestaffid());
-						rss.setUrl(temp.getUrl());
-						rssMapper.insertSelective(rss);
-						bundledtl.setObjid(rss.getRssid());
-					} else {
-						bundledtl.setObjid(frombundledtl.getObjid());
-					}
-					bundledtlMapper.insertSelective(bundledtl);
-				}
-			}
-
 		}
 	}
 
 	@Transactional
 	public void updateBundle(Bundle bundle) {
+		bundle.setUpdatetime(Calendar.getInstance().getTime());
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 	}
 
@@ -603,166 +392,38 @@ public class BundleServiceImpl implements BundleService {
 
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 		int bundleid = bundle.getBundleid();
-		List<Bundledtl> bundledtls = bundle.getBundledtls();
-		List<Bundledtl> oldbundledtls = bundledtlMapper.selectList("" + bundleid);
-		HashMap<Integer, Bundledtl> hash = new HashMap<Integer, Bundledtl>();
-		for (Bundledtl bundledtl : bundledtls) {
-			if (bundledtl.getBundledtlid() <= 0) {
-				bundledtl.setBundleid(bundleid);
-				bundledtlMapper.insertSelective(bundledtl);
-			} else {
-				hash.put(bundledtl.getBundledtlid(), bundledtl);
+		List<Bundlezone> bundlezones = bundle.getBundlezones();
+		List<Bundlezone> oldbundlezones = bundlezoneMapper.selectList("" + bundleid);
+		HashMap<Integer, Bundlezone> hash = new HashMap<Integer, Bundlezone>();
+		for (Bundlezone bundlezone : bundlezones) {
+			if (bundlezone.getBundlezoneid() > 0) {
+				hash.put(bundlezone.getBundlezoneid(), bundlezone);
 			}
 		}
-		for (int i = 0; i < oldbundledtls.size(); i++) {
-			Bundledtl oldBundledtl = oldbundledtls.get(i);
-			if (hash.get(oldBundledtl.getBundledtlid()) == null) {
-				// Remove old private records
-				if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
-					medialistService.deleteMedialist("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Text)) {
-					textService.deleteText("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Stream)) {
-					streamService.deleteStream("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
-					widgetService.deleteWidget("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
-					rssService.deleteRss("" + oldBundledtl.getObjid());
-				}
-				bundledtlMapper.deleteByPrimaryKey("" + oldbundledtls.get(i).getBundledtlid());
+		for (int i = 0; i < oldbundlezones.size(); i++) {
+			Bundlezone oldBundlezone = oldbundlezones.get(i);
+			if (hash.get(oldBundlezone.getBundlezoneid()) == null) {
+				bundlezonedtlMapper.deleteByBundlezone("" + oldbundlezones.get(i).getBundlezoneid());
+				bundlezoneMapper.deleteByPrimaryKey("" + oldbundlezones.get(i).getBundlezoneid());
 			}
 		}
-
-		for (Bundledtl bundledtl : bundledtls) {
+		for (Bundlezone bundlezone : bundlezones) {
 			if (bundle.getHomeflag().equals("0")) {
-				bundledtl.setHomebundleid(bundle.getHomebundleid());
+				bundlezone.setHomebundleid(bundle.getHomebundleid());
 			} else {
-				bundledtl.setHomebundleid(bundle.getBundleid());
+				bundlezone.setHomebundleid(bundle.getBundleid());
 			}
-			Bundledtl oldBundledtl = bundledtlMapper.selectByPrimaryKey("" + bundledtl.getBundledtlid());
-			if (oldBundledtl.getReferflag().equals(Bundledtl.ReferFlag_Private)
-					&& (!oldBundledtl.getObjtype().equals(bundledtl.getObjtype())
-							|| oldBundledtl.getObjid().intValue() != bundledtl.getObjid().intValue())) {
-				// Remove old private records
-				if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
-					medialistService.deleteMedialist("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Text)) {
-					textService.deleteText("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Stream)) {
-					streamService.deleteStream("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
-					widgetService.deleteWidget("" + oldBundledtl.getObjid());
-				} else if (oldBundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
-					rssService.deleteRss("" + oldBundledtl.getObjid());
-				}
+			if (bundlezone.getBundlezoneid() <= 0) {
+				bundlezone.setBundleid(bundleid);
+				bundlezoneMapper.insertSelective(bundlezone);
+			} else {
+				bundlezoneMapper.updateByPrimaryKeySelective(bundlezone);
+				bundlezonedtlMapper.deleteByBundlezone("" + bundlezone.getBundlezoneid());
 			}
-			if (bundledtl.getReferflag().equals(Bundledtl.ReferFlag_Private)) {
-				if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
-					Medialist medialist = bundledtl.getMedialist();
-					Medialist oldMedialist = medialistMapper.selectByPrimaryKey("" + bundledtl.getObjid());
-					List<Medialistdtl> oldmedialistdtls;
-					if (oldMedialist == null) {
-						medialist.setOrgid(bundle.getOrgid());
-						medialist.setBranchid(0);
-						medialist.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-						medialist.setType(Medialist.Type_Private);
-						medialist.setCreatestaffid(bundle.getCreatestaffid());
-						medialistMapper.insertSelective(medialist);
-						oldmedialistdtls = new ArrayList<Medialistdtl>();
-					} else {
-						oldmedialistdtls = oldMedialist.getMedialistdtls();
-					}
-
-					HashMap<Integer, Medialistdtl> medialistdtlhash = new HashMap<Integer, Medialistdtl>();
-					for (Medialistdtl medialistdtl : medialist.getMedialistdtls()) {
-						medialistdtl.setMedialistid(medialist.getMedialistid());
-						if (medialistdtl.getMedialistdtlid() == 0) {
-							medialistdtlMapper.insertSelective(medialistdtl);
-						} else {
-							medialistdtlMapper.updateByPrimaryKeySelective(medialistdtl);
-							medialistdtlhash.put(medialistdtl.getMedialistdtlid(), medialistdtl);
-						}
-					}
-					for (int i = 0; i < oldmedialistdtls.size(); i++) {
-						if (medialistdtlhash.get(oldmedialistdtls.get(i).getMedialistdtlid()) == null) {
-							medialistdtlMapper.deleteByPrimaryKey("" + oldmedialistdtls.get(i).getMedialistdtlid());
-						}
-					}
-
-					bundledtl.setObjid(medialist.getMedialistid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Text)) {
-					Text text = bundledtl.getText();
-					Text oldText = textMapper.selectByPrimaryKey("" + bundledtl.getObjid());
-					if (oldText == null) {
-						text.setOrgid(bundle.getOrgid());
-						text.setBranchid(0);
-						text.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-						text.setType(Medialist.Type_Private);
-						text.setCreatestaffid(bundle.getCreatestaffid());
-						textMapper.insertSelective(text);
-					} else {
-						text.setTextid(bundledtl.getObjid());
-						textMapper.updateByPrimaryKeySelective(text);
-					}
-					bundledtl.setObjid(text.getTextid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Stream)) {
-					Stream stream = bundledtl.getStream();
-					Stream oldStream = streamMapper.selectByPrimaryKey("" + bundledtl.getObjid());
-					if (oldStream == null) {
-						stream.setOrgid(bundle.getOrgid());
-						stream.setBranchid(0);
-						stream.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-						stream.setType(Medialist.Type_Private);
-						stream.setCreatestaffid(bundle.getCreatestaffid());
-						streamMapper.insertSelective(stream);
-					} else {
-						stream.setStreamid(bundledtl.getObjid());
-						streamMapper.updateByPrimaryKeySelective(stream);
-					}
-					bundledtl.setObjid(stream.getStreamid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
-					Widget widget = bundledtl.getWidget();
-					Widget oldWidget = widgetMapper.selectByPrimaryKey("" + bundledtl.getObjid());
-					if (oldWidget == null) {
-						widget.setOrgid(bundle.getOrgid());
-						widget.setBranchid(0);
-						widget.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-						widget.setType(Medialist.Type_Private);
-						widget.setCreatestaffid(bundle.getCreatestaffid());
-						widgetMapper.insertSelective(widget);
-					} else {
-						widget.setWidgetid(bundledtl.getObjid());
-						widgetMapper.updateByPrimaryKeySelective(widget);
-					}
-					bundledtl.setObjid(widget.getWidgetid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
-					Rss rss = bundledtl.getRss();
-					Rss oldRss = rssMapper.selectByPrimaryKey("" + bundledtl.getObjid());
-					if (oldRss == null) {
-						rss.setOrgid(bundle.getOrgid());
-						rss.setBranchid(0);
-						rss.setName(bundle.getName() + "-" + bundledtl.getBundledtlid());
-						rss.setType(Medialist.Type_Private);
-						rss.setCreatestaffid(bundle.getCreatestaffid());
-						rssMapper.insertSelective(rss);
-					} else {
-						rss.setRssid(bundledtl.getObjid());
-						rssMapper.updateByPrimaryKeySelective(rss);
-					}
-					bundledtl.setObjid(rss.getRssid());
-				}
+			for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+				bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+				bundlezonedtlMapper.insertSelective(bundlezonedtl);
 			}
-
-			bundledtlMapper.updateByPrimaryKeySelective(bundledtl);
-		}
-
-		List<HashMap<String, Object>> bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Bundle,
-				"" + bundle.getBundleid());
-		if (bundle.getHomeflag().equals("0")) {
-			bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Bundle, "" + bundle.getHomebundleid());
-		}
-		for (HashMap<String, Object> bindObj : bindList) {
-			devicefileService.refreshDevicefiles(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
@@ -773,145 +434,118 @@ public class BundleServiceImpl implements BundleService {
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
+		bundle.setUpdatetime(Calendar.getInstance().getTime());
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 	}
 
-	@Transactional
-	public void push(Bundle bundle, Device[] devices, Devicegroup[] devicegroups) throws Exception {
-		// Handle device schedule
-		for (int i = 0; i < devices.length; i++) {
-			Device device = devices[i];
+	public void copySingleBundle(String sourcebundleid, String destbundleids) throws Exception {
+		String[] destbundleidList = destbundleids.split(",");
+		Bundle sourcebundle = bundleMapper.selectByPrimaryKey(sourcebundleid);
+		Vector<Integer> bundleidVector = new Vector<Integer>();
+		for (int i = 0; i < destbundleidList.length; i++) {
+			logger.info("Copy bundle from sourcebundleid={}, destbundleid={}", sourcebundleid, destbundleidList[i]);
+			Bundle destbundle = bundleMapper.selectByPrimaryKey(destbundleidList[i]);
+			bundleMapper.clearBundlezones(destbundleidList[i]);
+			destbundle.setHomeidletime(sourcebundle.getHomeidletime());
+			File fromSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + sourcebundleid
+					+ "/snapshot/" + sourcebundleid + ".png");
+			if (fromSnapshotFile.exists()) {
+				String snapshotFilePath = "/bundle/" + destbundleidList[i] + "/snapshot/" + destbundleidList[i]
+						+ ".png";
+				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				destbundle.setSnapshot(snapshotFilePath);
+				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+			}
+			bundleMapper.updateByPrimaryKeySelective(destbundle);
+			if (destbundle.getHomeflag().equals("1")) {
+				if (bundleidVector.indexOf(destbundle.getBundleid()) < 0) {
+					bundleidVector.add(destbundle.getBundleid());
+				}
+			} else {
+				if (bundleidVector.indexOf(destbundle.getHomebundleid()) < 0) {
+					bundleidVector.add(destbundle.getHomebundleid());
+				}
+			}
 
-			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Device,
-					"" + device.getDeviceid(), null, null);
-			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Device, "" + device.getDeviceid(),
-					null, null);
-			Schedule schedule = new Schedule();
-			schedule.setScheduletype(Schedule.ScheduleType_Solo);
-			schedule.setBindtype(Schedule.BindType_Device);
-			schedule.setBindid(device.getDeviceid());
-			schedule.setPlaymode(Schedule.PlayMode_Daily);
-			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-			scheduleMapper.insertSelective(schedule);
-
-			Scheduledtl scheduledtl = new Scheduledtl();
-			scheduledtl.setScheduleid(schedule.getScheduleid());
-			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
-			scheduledtl.setObjid(bundle.getBundleid());
-			scheduledtl.setSequence(1);
-			scheduledtlMapper.insertSelective(scheduledtl);
-
-			devicefileService.refreshDevicefiles(Schedule.BindType_Device, "" + device.getDeviceid());
-		}
-
-		// Handle devicegroup schedule
-		for (int i = 0; i < devicegroups.length; i++) {
-			Devicegroup devicegroup = devicegroups[i];
-
-			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
-					"" + devicegroup.getDevicegroupid(), null, null);
-			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
-					"" + devicegroup.getDevicegroupid(), null, null);
-			Schedule schedule = new Schedule();
-			schedule.setScheduletype(Schedule.ScheduleType_Solo);
-			schedule.setBindtype(Schedule.BindType_Devicegroup);
-			schedule.setBindid(devicegroup.getDevicegroupid());
-			schedule.setPlaymode(Schedule.PlayMode_Daily);
-			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
-			scheduleMapper.insertSelective(schedule);
-
-			Scheduledtl scheduledtl = new Scheduledtl();
-			scheduledtl.setScheduleid(schedule.getScheduleid());
-			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
-			scheduledtl.setObjid(bundle.getBundleid());
-			scheduledtl.setSequence(1);
-			scheduledtlMapper.insertSelective(scheduledtl);
-
-			devicefileService.refreshDevicefiles(Schedule.BindType_Devicegroup, "" + devicegroup.getDevicegroupid());
-		}
-
-		// Handle sync
-		for (int i = 0; i < devices.length; i++) {
-			scheduleService.syncSchedule("1", "" + devices[i].getDeviceid());
-		}
-		for (int i = 0; i < devicegroups.length; i++) {
-			scheduleService.syncSchedule("2", "" + devicegroups[i].getDevicegroupid());
+			for (Bundlezone bundlezone : sourcebundle.getBundlezones()) {
+				bundlezone.setBundleid(destbundle.getBundleid());
+				bundlezone.setHomebundleid(destbundle.getHomebundleid());
+				if (bundlezone.getTouchtype().equals("2")) {
+					Bundle touchBundle = bundleMapper.selectByPrimaryKey("" + bundlezone.getTouchobjid());
+					if (touchBundle == null
+							|| touchBundle.getHomebundleid().intValue() != destbundle.getHomebundleid()) {
+						bundlezone.setTouchtype("9");
+						bundlezone.setTouchobjid(0);
+					}
+				}
+				bundlezoneMapper.insertSelective(bundlezone);
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+					bundlezonedtlMapper.insertSelective(bundlezonedtl);
+				}
+			}
 		}
 	}
 
 	@Transactional
-	public void handleWizard(Staff staff, Bundle bundle, Device[] devices, Devicegroup[] devicegroups)
-			throws Exception {
+	public void push(Bundle bundle, HashMap<String, Object>[] binds) throws Exception {
+		for (int i = 0; i < binds.length; i++) {
+			HashMap<String, Object> bind = binds[i];
+			logger.info("Push bundle to device: bindtype={}, bindid={}", bind.get("bindtype"), bind.get("bindid"));
+			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, "" + bind.get("bindtype"),
+					"" + bind.get("bindid"), null, null);
+			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, "" + bind.get("bindtype"), "" + bind.get("bindid"),
+					null, null);
+			Schedule schedule = new Schedule();
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setBindtype("" + bind.get("bindtype"));
+			schedule.setBindid(Integer.parseInt("" + bind.get("bindid")));
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			scheduleMapper.insertSelective(schedule);
+
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduleid(schedule.getScheduleid());
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(bundle.getBundleid());
+			scheduledtl.setSequence(1);
+			scheduledtlMapper.insertSelective(scheduledtl);
+
+			devicefileService.refreshDevicefiles("" + bind.get("bindtype"), "" + bind.get("bindid"));
+		}
+
+		// Handle sync
+		for (int i = 0; i < binds.length; i++) {
+			HashMap<String, Object> bind = binds[i];
+			scheduleService.syncSchedule("" + bind.get("bindtype"), "" + bind.get("bindid"));
+		}
+	}
+
+	@Transactional
+	public void handleWizard(Staff staff, Bundle bundle, HashMap<String, Object>[] binds) throws Exception {
 		if (bundle.getName() == null || bundle.getName().equals("")) {
 			bundle.setName("UNKNOWN");
 		}
-		List<Bundledtl> bundledtls = bundle.getBundledtls();
+		List<Bundlezone> bundlezones = bundle.getBundlezones();
 
 		// Handle bundle
 		bundleMapper.insertSelective(bundle);
 		if (bundle.getName().equals("UNKNOWN")) {
 			bundle.setName("BUNDLE-" + bundle.getBundleid());
 		}
-		for (Bundledtl bundledtl : bundledtls) {
-			bundledtl.setBundleid(bundle.getBundleid());
+		for (Bundlezone bundlezone : bundlezones) {
+			bundlezone.setBundleid(bundle.getBundleid());
 			if (bundle.getHomeflag().equals("0")) {
-				bundledtl.setHomebundleid(bundle.getHomebundleid());
+				bundlezone.setHomebundleid(bundle.getHomebundleid());
 			} else {
-				bundledtl.setHomebundleid(bundle.getBundleid());
+				bundlezone.setHomebundleid(bundle.getBundleid());
 			}
-			if (bundledtl.getReferflag().equals(Bundledtl.ReferFlag_Private)) {
-				if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Medialist)) {
-					Medialist medialist = bundledtl.getMedialist();
-					medialist.setOrgid(bundle.getOrgid());
-					medialist.setBranchid(bundle.getBranchid());
-					medialist.setName(bundle.getName() + "-" + bundledtl.getTempletdtlid());
-					medialist.setType(Medialist.Type_Private);
-					medialist.setCreatestaffid(staff.getStaffid());
-					medialistMapper.insertSelective(medialist);
-					for (Medialistdtl medialistdtl : medialist.getMedialistdtls()) {
-						medialistdtl.setMedialistid(medialist.getMedialistid());
-						medialistdtlMapper.insertSelective(medialistdtl);
-					}
-					bundledtl.setObjid(medialist.getMedialistid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Text)) {
-					Text text = bundledtl.getText();
-					text.setOrgid(bundle.getOrgid());
-					text.setBranchid(bundle.getBranchid());
-					text.setName(bundle.getName() + "-" + bundledtl.getTempletdtlid());
-					text.setType(Medialist.Type_Private);
-					text.setCreatestaffid(staff.getStaffid());
-					textMapper.insertSelective(text);
-					bundledtl.setObjid(text.getTextid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Stream)) {
-					Stream stream = bundledtl.getStream();
-					stream.setOrgid(bundle.getOrgid());
-					stream.setBranchid(bundle.getBranchid());
-					stream.setName(bundle.getName() + "-" + bundledtl.getTempletdtlid());
-					stream.setType(Medialist.Type_Private);
-					stream.setCreatestaffid(staff.getStaffid());
-					streamMapper.insertSelective(stream);
-					bundledtl.setObjid(stream.getStreamid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Widget)) {
-					Widget widget = bundledtl.getWidget();
-					widget.setOrgid(bundle.getOrgid());
-					widget.setBranchid(bundle.getBranchid());
-					widget.setName(bundle.getName() + "-" + bundledtl.getTempletdtlid());
-					widget.setType(Medialist.Type_Private);
-					widget.setCreatestaffid(staff.getStaffid());
-					widgetMapper.insertSelective(widget);
-					bundledtl.setObjid(widget.getWidgetid());
-				} else if (bundledtl.getObjtype().equals(Bundledtl.ObjType_Rss)) {
-					Rss rss = bundledtl.getRss();
-					rss.setOrgid(bundle.getOrgid());
-					rss.setBranchid(bundle.getBranchid());
-					rss.setName(bundle.getName() + "-" + bundledtl.getTempletdtlid());
-					rss.setType(Medialist.Type_Private);
-					rss.setCreatestaffid(staff.getStaffid());
-					rssMapper.insertSelective(rss);
-					bundledtl.setObjid(rss.getRssid());
-				}
+			bundlezone.setBundleid(bundle.getBundleid());
+			bundlezoneMapper.insertSelective(bundlezone);
+			for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+				bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+				bundlezonedtlMapper.insertSelective(bundlezonedtl);
 			}
-			bundledtlMapper.insertSelective(bundledtl);
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
@@ -924,10 +558,7 @@ public class BundleServiceImpl implements BundleService {
 		bundle.setSnapshot(snapshotFilePath);
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 
-		push(bundle, devices, devicegroups);
-	}
-
-	public void syncBundleByTemplet(String templetid) throws Exception {
+		push(bundle, binds);
 	}
 
 	public void setBundleReviewWait(String bundleid) {
@@ -1054,72 +685,113 @@ public class BundleServiceImpl implements BundleService {
 		List<Image> imageList = new ArrayList<Image>();
 		JSONArray regionJsonArray = new JSONArray();
 		responseJson.put("regions", regionJsonArray);
-		for (Bundledtl bundledtl : bundle.getBundledtls()) {
+		for (Bundlezone bundlezone : bundle.getBundlezones()) {
 			JSONObject regionJson = new JSONObject();
 			regionJsonArray.put(regionJson);
-			if (bundledtl.getMainflag().equals("1")) {
+			if (bundlezone.getMainflag().equals("1")) {
 				regionJson.put("region_id", 1);
 			} else {
-				regionJson.put("region_id", bundledtl.getBundledtlid());
+				regionJson.put("region_id", bundlezone.getBundlezoneid());
 			}
-			regionJson.put("main_flag", bundledtl.getMainflag());
-			regionJson.put("width", bundledtl.getWidth());
-			regionJson.put("height", bundledtl.getHeight());
-			regionJson.put("top", bundledtl.getTopoffset());
-			regionJson.put("left", bundledtl.getLeftoffset());
-			regionJson.put("zindex", bundledtl.getZindex());
-			String opacity = Integer.toHexString(bundledtl.getOpacity());
+			Byte type = 0;
+			if (bundlezone.getType() == 1) {
+				type = 0; // Play
+			} else if (bundlezone.getType() == 2) {
+				type = 0; // Web
+			} else if (bundlezone.getType() == 3) {
+				type = 1; // Text
+			} else if (bundlezone.getType() == 4) {
+				type = 1; // Scroll
+			} else if (bundlezone.getType() == 5) {
+				type = 2; // Time
+			} else if (bundlezone.getType() == 6) {
+				type = 3; // Weather
+			} else if (bundlezone.getType() == 7) {
+				type = 7; // Button
+			} else if (bundlezone.getType() == 8) {
+				type = 8; // Navigate
+			} else if (bundlezone.getType() == 9) {
+				type = 9; // Control
+			} else if (bundlezone.getType() == 12) {
+				type = 12; // RSS
+			} else if (bundlezone.getType() == 13) {
+				type = 13; // Audio
+			} else if (bundlezone.getType() == 14) {
+				type = 6; // Stream
+			} else if (bundlezone.getType() == 15) {
+				type = 4; // VideoIn
+			} else if (bundlezone.getType() == 16) {
+				type = 5; // DVB
+			} else {
+				type = bundlezone.getType();
+			}
+			regionJson.put("type", type);
+			regionJson.put("main_flag", bundlezone.getMainflag());
+			regionJson.put("width", bundlezone.getWidth());
+			regionJson.put("height", bundlezone.getHeight());
+			regionJson.put("top", bundlezone.getTopoffset());
+			regionJson.put("left", bundlezone.getLeftoffset());
+			regionJson.put("zindex", bundlezone.getZindex());
+			String opacity = Integer.toHexString(bundlezone.getBgopacity());
 			if (opacity.length() == 1) {
 				opacity = "0" + opacity;
 			}
-			regionJson.put("bgcolor", "#" + opacity + bundledtl.getBgcolor().trim().substring(1));
-			regionJson.put("type", bundledtl.getType());
-			regionJson.put("sleep", bundledtl.getSleeptime());
-			regionJson.put("interval", bundledtl.getIntervaltime());
-			regionJson.put("animation", bundledtl.getAnimation());
-			regionJson.put("fit_flag", Integer.parseInt(bundledtl.getFitflag()));
-			if (bundledtl.getDirection().equals("1")) {
-				regionJson.put("direction", "none");
-			} else if (bundledtl.getDirection().equals("2")) {
-				regionJson.put("direction", "up");
-			} else if (bundledtl.getDirection().equals("3")) {
-				regionJson.put("direction", "down");
-			} else if (bundledtl.getDirection().equals("4")) {
+			regionJson.put("bgcolor", "#" + opacity + bundlezone.getBgcolor().trim().substring(1));
+			regionJson.put("sleep", bundlezone.getSleeptime());
+			regionJson.put("interval", bundlezone.getIntervaltime());
+			regionJson.put("animation", bundlezone.getAnimation());
+			regionJson.put("fit_flag", Integer.parseInt(bundlezone.getFitflag()));
+			if (bundlezone.getType() == Bundlezone.Type_SCROLL) {
 				regionJson.put("direction", "left");
-			} else if (bundledtl.getDirection().equals("5")) {
-				regionJson.put("direction", "right");
+			} else {
+				regionJson.put("direction", "none");
 			}
-			regionJson.put("speed", Integer.parseInt(bundledtl.getSpeed()));
-			regionJson.put("color", "" + bundledtl.getColor());
-			regionJson.put("size", bundledtl.getSize());
-			if (bundledtl.getDateformat() == null) {
+			regionJson.put("speed", Integer.parseInt(bundlezone.getSpeed()));
+			regionJson.put("color", "" + bundlezone.getColor());
+			regionJson.put("size", bundlezone.getSize());
+			if (bundlezone.getDateformat() == null) {
 				regionJson.put("date_format", "yyyy-MM-dd");
 			} else {
-				regionJson.put("date_format", bundledtl.getDateformat());
+				regionJson.put("date_format", bundlezone.getDateformat());
 			}
-			regionJson.put("volume", bundledtl.getVolume());
+			regionJson.put("volume", bundlezone.getVolume());
 
-			if (bundledtl.getType().equals(Bundledtl.Type_TOUCH)) {
-				regionJson.put("touch_label", bundledtl.getTouchlabel());
-				regionJson.put("touch_type", bundledtl.getTouchtype());
-				regionJson.put("touch_bundle_id", bundledtl.getTouchbundleid());
-				regionJson.put("touch_apk", bundledtl.getTouchapk());
+			if (bundlezone.getType().equals(Bundlezone.Type_TOUCH)) {
+				regionJson.put("touch_label", bundlezone.getTouchlabel());
+				if (bundlezone.getTouchtype().equals("2")) {
+					regionJson.put("touch_type", "2");
+					regionJson.put("touch_bundle_id", bundlezone.getTouchobjid());
+					regionJson.put("touch_apk", "");
+				} else if (bundlezone.getTouchtype().equals("3") || bundlezone.getTouchtype().equals("4")
+						|| bundlezone.getTouchtype().equals("5")) {
+					regionJson.put("touch_type", "3");
+					regionJson.put("touch_bundle_id", 0);
+					regionJson.put("touch_apk", "");
+				} else if (bundlezone.getTouchtype().equals("6")) {
+					regionJson.put("touch_type", "4");
+					regionJson.put("touch_bundle_id", 0);
+					regionJson.put("touch_apk", bundlezone.getContent());
+				} else {
+					regionJson.put("touch_type", bundlezone.getTouchtype());
+					regionJson.put("touch_bundle_id", 0);
+					regionJson.put("touch_apk", "");
+				}
 			}
 
 			JSONObject regionBgImageJson = new JSONObject();
 			regionJson.put("bg_image", regionBgImageJson);
-			if (bundledtl.getBgimage() != null) {
-				regionBgImageJson.put("id", bundledtl.getBgimageid());
-				regionBgImageJson.put("name", bundledtl.getBgimage().getName());
-				regionBgImageJson.put("url",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + bundledtl.getBgimage().getFilepath());
-				regionBgImageJson.put("path", "/pixsigdata" + bundledtl.getBgimage().getFilepath());
-				regionBgImageJson.put("file", bundledtl.getBgimage().getFilename());
-				regionBgImageJson.put("size", bundledtl.getBgimage().getSize());
+			if (bundlezone.getBgimage() != null) {
+				regionBgImageJson.put("id", bundlezone.getBgimageid());
+				regionBgImageJson.put("name", bundlezone.getBgimage().getName());
+				regionBgImageJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ bundlezone.getBgimage().getFilepath());
+				regionBgImageJson.put("path", "/pixsigdata" + bundlezone.getBgimage().getFilepath());
+				regionBgImageJson.put("file", bundlezone.getBgimage().getFilename());
+				regionBgImageJson.put("size", bundlezone.getBgimage().getSize());
 				regionBgImageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
-						+ bundledtl.getBgimage().getThumbnail());
-				if (imageHash.get(bundledtl.getBgimageid()) == null) {
-					imageHash.put(bundledtl.getBgimageid(), regionBgImageJson);
+						+ bundlezone.getBgimage().getThumbnail());
+				if (imageHash.get(bundlezone.getBgimageid()) == null) {
+					imageHash.put(bundlezone.getBgimageid(), regionBgImageJson);
 					imageJsonArray.put(regionBgImageJson);
 				}
 			} else {
@@ -1135,14 +807,14 @@ public class BundleServiceImpl implements BundleService {
 			JSONArray playlistJsonArray = new JSONArray();
 			regionJson.put("playlist", playlistJsonArray);
 
-			String objtype = bundledtl.getObjtype();
-			if (objtype.equals(Bundledtl.ObjType_Medialist)) {
-				List<Medialistdtl> medialistdtls = bundledtl.getMedialist().getMedialistdtls();
-				for (Medialistdtl medialistdtl : medialistdtls) {
-					if (medialistdtl.getVideo() != null) {
-						Video video = medialistdtl.getVideo();
+			type = bundlezone.getType();
+			if (type == Bundlezone.Type_PLAY) {
+				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
+				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
+					if (bundlezonedtl.getVideo() != null) {
+						Video video = bundlezonedtl.getVideo();
 						playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
-						if (videoHash.get(medialistdtl.getObjid()) == null) {
+						if (videoHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("name", video.getName());
@@ -1164,10 +836,10 @@ public class BundleServiceImpl implements BundleService {
 							videoJsonArray.put(videoJson);
 							videoList.add(video);
 						}
-					} else if (medialistdtl.getImage() != null) {
-						Image image = medialistdtl.getImage();
+					} else if (bundlezonedtl.getImage() != null) {
+						Image image = bundlezonedtl.getImage();
 						playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
-						if (imageHash.get(medialistdtl.getObjid()) == null) {
+						if (imageHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
 							imageJson.put("name", image.getName());
@@ -1188,20 +860,57 @@ public class BundleServiceImpl implements BundleService {
 							imageJsonArray.put(imageJson);
 							imageList.add(image);
 						}
-					} else if (medialistdtl.getStream() != null) {
-						Stream stream = medialistdtl.getStream();
+					}
+				}
+			} else if (type == Bundlezone.Type_WIDGET) {
+				playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", bundlezone.getBundlezoneid()));
+				if (widgetHash.get(bundlezone.getBundlezoneid()) == null) {
+					JSONObject widgetJson = new JSONObject();
+					widgetJson.put("id", bundlezone.getBundlezoneid());
+					widgetJson.put("url", bundlezone.getContent());
+					widgetHash.put(bundlezone.getBundlezoneid(), widgetJson);
+					widgetJsonArray.put(widgetJson);
+				}
+			} else if (type == Bundlezone.Type_TEXT || type == Bundlezone.Type_SCROLL) {
+				playlistJsonArray.put(new JSONObject().put("type", "text").put("id", bundlezone.getBundlezoneid()));
+				if (textHash.get(bundlezone.getBundlezoneid()) == null) {
+					JSONObject textJson = new JSONObject();
+					textJson.put("id", bundlezone.getBundlezoneid());
+					textJson.put("text", bundlezone.getContent());
+					textHash.put(bundlezone.getBundlezoneid(), textJson);
+					textJsonArray.put(textJson);
+				}
+			} else if (type == Bundlezone.Type_RSS) {
+				playlistJsonArray.put(new JSONObject().put("type", "rss").put("id", bundlezone.getBundlezoneid()));
+				if (rssHash.get(bundlezone.getBundlezoneid()) == null) {
+					JSONObject rssJson = new JSONObject();
+					rssJson.put("id", bundlezone.getBundlezoneid());
+					rssJson.put("url", bundlezone.getContent());
+					rssHash.put(bundlezone.getBundlezoneid(), rssJson);
+					rssJsonArray.put(rssJson);
+				}
+			} else if (type == Bundlezone.Type_STREAM) {
+				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
+				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
+					if (bundlezonedtl.getStream() != null) {
+						Stream stream = bundlezonedtl.getStream();
 						playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
-						if (streamHash.get(medialistdtl.getObjid()) == null) {
+						if (streamHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject streamJson = new JSONObject();
 							streamJson.put("id", stream.getStreamid());
 							streamJson.put("url", stream.getUrl());
 							streamHash.put(stream.getStreamid(), streamJson);
 							streamJsonArray.put(streamJson);
 						}
-					} else if (medialistdtl.getAudio() != null) {
-						Audio audio = medialistdtl.getAudio();
+					}
+				}
+			} else if (type == Bundlezone.Type_AUDIO) {
+				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
+				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
+					if (bundlezonedtl.getAudio() != null) {
+						Audio audio = bundlezonedtl.getAudio();
 						playlistJsonArray.put(new JSONObject().put("type", "audio").put("id", audio.getAudioid()));
-						if (audioHash.get(medialistdtl.getObjid()) == null) {
+						if (audioHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject audioJson = new JSONObject();
 							audioJson.put("id", audio.getAudioid());
 							audioJson.put("name", audio.getName());
@@ -1215,68 +924,87 @@ public class BundleServiceImpl implements BundleService {
 						}
 					}
 				}
-			} else if (objtype.equals(Bundledtl.ObjType_Text)) {
-				Text text = bundledtl.getText();
-				if (text != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "text").put("id", text.getTextid()));
-					if (textHash.get(text.getTextid()) == null) {
-						JSONObject textJson = new JSONObject();
-						textJson.put("id", text.getTextid());
-						textJson.put("text", text.getText());
-						textHash.put(text.getTextid(), textJson);
-						textJsonArray.put(textJson);
+			} else if (type == Bundlezone.Type_DVB) {
+				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
+				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
+					if (bundlezonedtl.getDvb() != null) {
+						Dvb dvb = bundlezonedtl.getDvb();
+						playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
+						if (dvbHash.get(dvb.getDvbid()) == null) {
+							JSONObject dvbJson = new JSONObject();
+							dvbJson.put("id", dvb.getDvbid());
+							dvbJson.put("number", dvb.getNumber());
+							dvbHash.put(dvb.getDvbid(), dvbJson);
+							dvbJsonArray.put(dvbJson);
+						}
 					}
 				}
-			} else if (objtype.equals(Bundledtl.ObjType_Stream)) {
-				Stream stream = bundledtl.getStream();
-				if (stream != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
-					if (streamHash.get(stream.getStreamid()) == null) {
-						JSONObject streamJson = new JSONObject();
-						streamJson.put("id", stream.getStreamid());
-						streamJson.put("url", stream.getUrl());
-						streamHash.put(stream.getStreamid(), streamJson);
-						streamJsonArray.put(streamJson);
+			} else if (type == Bundlezone.Type_TOUCH) {
+				if (bundlezone.getTouchtype().equals("3")) {
+					Video video = videoMapper.selectByPrimaryKey("" + bundlezone.getTouchobjid());
+					if (video != null) {
+						playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
+						if (videoHash.get(video.getVideoid()) == null) {
+							JSONObject videoJson = new JSONObject();
+							videoJson.put("id", video.getVideoid());
+							videoJson.put("name", video.getName());
+							videoJson.put("oname", video.getOname());
+							videoJson.put("url",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getFilepath());
+							videoJson.put("path", "/pixsigdata" + video.getFilepath());
+							videoJson.put("file", video.getFilename());
+							videoJson.put("size", video.getSize());
+							videoJson.put("thumbnail",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
+							if (video.getRelate() != null) {
+								videoJson.put("relate_id", video.getRelateid());
+							} else {
+								videoJson.put("relate_id", 0);
+							}
+							videoJson.put("tags", video.getTags());
+							videoHash.put(video.getVideoid(), videoJson);
+							videoJsonArray.put(videoJson);
+							videoList.add(video);
+						}
 					}
-				}
-			} else if (objtype.equals(Bundledtl.ObjType_Widget)) {
-				Widget widget = bundledtl.getWidget();
-				if (widget != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", widget.getWidgetid()));
-					if (widgetHash.get(widget.getWidgetid()) == null) {
+				} else if (bundlezone.getTouchtype().equals("4")) {
+					Image image = imageMapper.selectByPrimaryKey("" + bundlezone.getTouchobjid());
+					if (image != null) {
+						playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
+						if (imageHash.get(image.getImageid()) == null) {
+							JSONObject imageJson = new JSONObject();
+							imageJson.put("id", image.getImageid());
+							imageJson.put("name", image.getName());
+							imageJson.put("oname", image.getOname());
+							imageJson.put("url",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getFilepath());
+							imageJson.put("path", "/pixsigdata" + image.getFilepath());
+							imageJson.put("file", image.getFilename());
+							imageJson.put("size", image.getSize());
+							imageJson.put("thumbnail",
+									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getThumbnail());
+							if (image.getRelate() != null) {
+								imageJson.put("relate_id", image.getRelateid());
+							} else {
+								imageJson.put("relate_id", 0);
+							}
+							imageHash.put(image.getImageid(), imageJson);
+							imageJsonArray.put(imageJson);
+							imageList.add(image);
+						}
+					}
+				} else if (bundlezone.getTouchtype().equals("5")) {
+					playlistJsonArray
+							.put(new JSONObject().put("type", "widget").put("id", bundlezone.getBundlezoneid()));
+					if (widgetHash.get(bundlezone.getBundlezoneid()) == null) {
 						JSONObject widgetJson = new JSONObject();
-						widgetJson.put("id", widget.getWidgetid());
-						widgetJson.put("url", widget.getUrl());
-						widgetHash.put(widget.getWidgetid(), widgetJson);
+						widgetJson.put("id", bundlezone.getBundlezoneid());
+						widgetJson.put("url", bundlezone.getContent());
+						widgetHash.put(bundlezone.getBundlezoneid(), widgetJson);
 						widgetJsonArray.put(widgetJson);
 					}
 				}
-			} else if (objtype.equals(Bundledtl.ObjType_Dvb)) {
-				Dvb dvb = bundledtl.getDvb();
-				if (dvb != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
-					if (dvbHash.get(dvb.getDvbid()) == null) {
-						JSONObject dvbJson = new JSONObject();
-						dvbJson.put("id", dvb.getDvbid());
-						dvbJson.put("number", dvb.getNumber());
-						dvbHash.put(dvb.getDvbid(), dvbJson);
-						dvbJsonArray.put(dvbJson);
-					}
-				}
-			} else if (objtype.equals(Bundledtl.ObjType_Rss)) {
-				Rss rss = bundledtl.getRss();
-				if (rss != null) {
-					playlistJsonArray.put(new JSONObject().put("type", "rss").put("id", rss.getRssid()));
-					if (rssHash.get(rss.getRssid()) == null) {
-						JSONObject rssJson = new JSONObject();
-						rssJson.put("id", rss.getRssid());
-						rssJson.put("url", rss.getUrl());
-						rssHash.put(rss.getRssid(), rssJson);
-						rssJsonArray.put(rssJson);
-					}
-				}
 			}
-
 		}
 
 		for (Video video : videoList) {

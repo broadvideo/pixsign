@@ -72,18 +72,20 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group bundle-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="org.backupvideoid">
 								</div>
 							</div>
+							<!-- 
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.defaultpage"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="DefaultPageSelect" class="form-control select2" name="org.defaultpageid">
 								</div>
 							</div>
+							 -->
 							<div class="form-group sscreen-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 								<div class="col-md-9 radio-list">
@@ -133,7 +135,7 @@
 			<h3 class="page-title"><spring:message code="menu.deviceconfig"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
@@ -195,6 +197,8 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/deviceconfig.js?t=${timestamp}"></script>
 <script>
+var BundleCtrl = <%=(session_org != null && session_org.getBundleflag().equals("1"))%>;
+$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');
 

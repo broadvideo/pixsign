@@ -11,11 +11,13 @@ public interface PlanMapper {
 	Plan selectByPrimaryKey(@Param(value = "planid") String planid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "plantype") String plantype);
+			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "plantype") String plantype,
+			@Param(value = "search") String search);
 
 	List<Plan> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "plantype") String plantype, @Param(value = "start") String start,
-			@Param(value = "length") String length);
+			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "plantype") String plantype,
+			@Param(value = "start") String start, @Param(value = "length") String length,
+			@Param(value = "search") String search);
 
 	List<Plan> selectListByBind(@Param(value = "plantype") String plantype, @Param(value = "bindtype") String bindtype,
 			@Param(value = "bindid") String bindid);

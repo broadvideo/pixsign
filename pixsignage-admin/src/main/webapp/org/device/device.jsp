@@ -226,6 +226,22 @@
 									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">广告间隔时间</label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.interval1" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">广告展示时间</label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.interval2" />
+									</div>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -406,7 +422,7 @@
 			<h3 class="page-title"><spring:message code="menu.device"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
@@ -441,11 +457,14 @@
 												<div class="btn-group">
 													<button class="btn green pix-allmap"><spring:message code="pixsign.map"/> <i class="fa fa-map-marker"></i></button>
 												</div>
-												<div class="btn-group">
+												<div class="btn-group bundle-ctrl">
 													<button class="btn red pix-utext"><spring:message code="pixsign.utext"/> <i class="fa fa-bolt"></i></button>
 												</div>
-												<div class="btn-group">
+												<div class="btn-group bundle-ctrl">
 													<button class="btn blue pix-ucancel"><spring:message code="pixsign.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
+												</div>
+												<div class="btn-group">
+													<a href="device!export.action" class="btn blue pix-export"><spring:message code="global.export"/> <i class="fa fa-download"></i></a>
 												</div>
 											</div>
 											<div class="row">
@@ -512,6 +531,8 @@
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/device.js?t=${timestamp}"></script>
 <script>
+var BundleCtrl = <%=(session_org != null && session_org.getBundleflag().equals("1"))%>;
+$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
 var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var SscreenCtrl = <%=(session_org != null && session_org.getSscreenflag().equals("1"))%>;
 $('.sscreen-ctrl').css('display', SscreenCtrl?'':'none');

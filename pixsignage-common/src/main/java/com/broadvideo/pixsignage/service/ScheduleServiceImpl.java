@@ -13,11 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Device;
-import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
-import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
@@ -31,13 +29,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private ScheduledtlMapper scheduledtlMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
-	@Autowired
-	private MsgeventMapper msgeventMapper;
 
 	@Autowired
 	private BundleService bundleService;
-	@Autowired
-	private PageService pageService;
 	@Autowired
 	private DevicefileService devicefileService;
 
@@ -61,38 +55,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Transactional
-	private void generateSyncEvent(int deviceid) {
-		Msgevent msgevent = new Msgevent();
-		msgevent.setMsgtype(Msgevent.MsgType_Schedule);
-		msgevent.setObjtype1(Msgevent.ObjType_1_Device);
-		msgevent.setObjid1(deviceid);
-		msgevent.setObjtype2(Msgevent.ObjType_2_None);
-		msgevent.setObjid2(0);
-		msgevent.setStatus(Msgevent.Status_Wait);
-		msgeventMapper.deleteByDtl(Msgevent.MsgType_Schedule, Msgevent.ObjType_1_Device, "" + deviceid, null, null,
-				null);
-		msgeventMapper.insertSelective(msgevent);
-	}
-
-	@Transactional
 	public void syncSchedule(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Schedule.BindType_Device)) {
-			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals(Device.Online) && device.getDevicegridid() == 0) {
-				generateSyncEvent(Integer.parseInt(bindid));
-			}
 			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
 			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "device-" + bindid;
 			ActiveMQUtil.publish(topic, msgJson.toString());
 		} else if (bindtype.equals(Schedule.BindType_Devicegroup)) {
-			List<Device> devices = deviceMapper.selectByDevicegroup(bindid);
-			for (Device device : devices) {
-				if (device.getOnlineflag().equals(Device.Online)) {
-					generateSyncEvent(device.getDeviceid());
-				}
-			}
 			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
 			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
 			msgJson.put("msg_body", msgBodyJson);

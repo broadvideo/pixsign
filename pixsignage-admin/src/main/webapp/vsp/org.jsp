@@ -107,6 +107,20 @@
 									<label class="checkbox-inline lift-ctrl">
 										<input type="checkbox" name="org.liftflag" value="0">电梯
 									</label>
+									<label class="checkbox-inline attendance-ctrl">
+										<input type="checkbox" name="org.attendanceflag" value="0">考勤
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.planflag"/><span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="org.planflag" value="0"> <spring:message code="pixsign.org.planflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="org.planflag" value="1"> <spring:message code="pixsign.org.planflag_1"/>
+									</label>
 								</div>
 							</div>
 							<div class="form-group school-ctrl">
@@ -168,18 +182,50 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">Android<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max1"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices1" value="0" />
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max1" value="0" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">Windows<spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max2"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="org.maxdevices2" value="0" />
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max2" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max3"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max3" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max4"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max4" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max5"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max5" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max6"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max6" value="0" />
 									</div>
 								</div>
 							</div>
@@ -336,6 +382,7 @@ var MeetingCtrl = <%=(session_vsp != null && session_vsp.getMeetingflag().equals
 var VipCtrl = <%=(session_vsp != null && session_vsp.getVipflag().equals("1"))%>;
 var EstateCtrl = <%=(session_vsp != null && session_vsp.getEstateflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
+var AttendanceCtrl = <%=(session_vsp != null && session_vsp.getAttendanceflag().equals("1"))%>;
 
 var MaxDevices = <%=session_vsp.getMaxdevices()%>;
 var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;

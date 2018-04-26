@@ -1,5 +1,6 @@
 var PlanModule = function () {
 	var _submitflag = false;
+	var _plantype = 1; //0-bundle 1-page
 	var CurrentPlan;
 	var CurrentPlanid;
 	var CurrentPlandtl;
@@ -9,7 +10,8 @@ var PlanModule = function () {
 	
 	var timestamp = new Date().getTime();
 
-	var init = function () {
+	var init = function (plantype) {
+		_plantype = plantype;
 		initPlanTable();
 		initPlanEvent();
 		initPlanWizard();
@@ -38,6 +40,7 @@ var PlanModule = function () {
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				var playtimehtml = '';
 				playtimehtml += '<span><h4><b>Plan-' + aData.planid + '</b></h4></span><hr/>';
+				playtimehtml += aData.branch.name + '<br/>';
 				if (aData.startdate == '1970-01-01') {
 					playtimehtml += common.view.unlimited;
 				} else {
@@ -136,7 +139,7 @@ var PlanModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':PlanTree.branchid });
-				aoData.push({'name':'plantype','value':1 });
+				aoData.push({'name':'plantype','value':_plantype });
 			}
 		});
 		$('#PlanTable_wrapper').addClass('form-inline');
@@ -280,7 +283,7 @@ var PlanModule = function () {
 			CurrentPlanbinds = [];
 			CurrentPlanid = 0;
 			CurrentPlan.planid = 0;
-			CurrentPlan.plantype = 1;
+			CurrentPlan.plantype = _plantype;
 			CurrentPlan.startdate = '1970-01-01';
 			CurrentPlan.enddate = '2037-01-01';
 			CurrentPlan.starttime = '00:00:00';
@@ -301,319 +304,325 @@ var PlanModule = function () {
 			$('#PlanModal').modal();
 		});
 
-		//Bundle table初始化
-		$('#BundleTable thead').css('display', 'none');
-		$('#BundleTable tbody').css('display', 'none');	
-		var bundlehtml = '';
-		$('#BundleTable').dataTable({
-			'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 12, 30, 48, 96 ],
-							  [ 12, 30, 48, 96 ] 
-							],
-			'bProcessing' : true,
-			'bServerSide' : true,
-			'sAjaxSource' : 'bundle!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
-			'iDisplayLength' : 12,
-			'sPaginationType' : 'bootstrap',
-			'oLanguage' : PixData.tableLanguage,
-			'fnPreDrawCallback': function (oSettings) {
-				if ($('#BundleContainer').length < 1) {
-					$('#BundleTable').append('<div id="BundleContainer"></div>');
-				}
-				$('#BundleContainer').html(''); 
-				return true;
-			},
-			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-				if (iDisplayIndex % 6 == 0) {
-					bundlehtml = '';
-					bundlehtml += '<div class="row" >';
-				}
-				bundlehtml += '<div class="col-md-2 col-xs-2">';
-				
-				bundlehtml += '<div id="ThumbContainer" style="position:relative">';
-				bundlehtml += '<div id="BundleThumb" class="thumbs">';
-				if (aData.snapshot != null) {
-					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-					bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-				} else {
-					bundlehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
-				}
-				bundlehtml += '<div class="mask">';
-				bundlehtml += '<div>';
-				bundlehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-				bundlehtml += '<a class="btn default btn-sm green pix-plandtl-bundle-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-				bundlehtml += '</div>';
-				bundlehtml += '</div>';
-				bundlehtml += '</div>';
-
-				bundlehtml += '</div>';
-
-				bundlehtml += '</div>';
-				if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#BundleTable').dataTable().fnGetData().length) {
+		if (_plantype == 0) {
+			//Bundle table初始化
+			$('#BundleTable thead').css('display', 'none');
+			$('#BundleTable tbody').css('display', 'none');	
+			var bundlehtml = '';
+			$('#BundleTable').dataTable({
+				'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+				'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+								  [ 12, 30, 48, 96 ] 
+								],
+				'bProcessing' : true,
+				'bServerSide' : true,
+				'sAjaxSource' : 'bundle!list.action',
+				'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+								{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
+				'iDisplayLength' : 12,
+				'sPaginationType' : 'bootstrap',
+				'oLanguage' : PixData.tableLanguage,
+				'fnPreDrawCallback': function (oSettings) {
+					if ($('#BundleContainer').length < 1) {
+						$('#BundleTable').append('<div id="BundleContainer"></div>');
+					}
+					$('#BundleContainer').html(''); 
+					return true;
+				},
+				'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+					if (iDisplayIndex % 6 == 0) {
+						bundlehtml = '';
+						bundlehtml += '<div class="row" >';
+					}
+					bundlehtml += '<div class="col-md-2 col-xs-2">';
+					
+					bundlehtml += '<div id="ThumbContainer" style="position:relative">';
+					bundlehtml += '<div id="BundleThumb" class="thumbs">';
+					if (aData.snapshot != null) {
+						var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+						bundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+					} else {
+						bundlehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
+					}
+					bundlehtml += '<div class="mask">';
+					bundlehtml += '<div>';
+					bundlehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+					bundlehtml += '<a class="btn default btn-sm green pix-plandtl-bundle-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 					bundlehtml += '</div>';
-					if ((iDisplayIndex+1) != $('#BundleTable').dataTable().fnGetData().length) {
-						bundlehtml += '<hr/>';
+					bundlehtml += '</div>';
+					bundlehtml += '</div>';
+
+					bundlehtml += '</div>';
+
+					bundlehtml += '</div>';
+					if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#BundleTable').dataTable().fnGetData().length) {
+						bundlehtml += '</div>';
+						if ((iDisplayIndex+1) != $('#BundleTable').dataTable().fnGetData().length) {
+							bundlehtml += '<hr/>';
+						}
+						$('#BundleContainer').append(bundlehtml);
 					}
-					$('#BundleContainer').append(bundlehtml);
+					return nRow;
+				},
+				'fnDrawCallback': function(oSettings, json) {
+					$('#BundleContainer .thumbs').each(function(i) {
+						$(this).width($(this).parent().width());
+						$(this).height($(this).parent().width());
+					});
+					$('#BundleContainer .mask').each(function(i) {
+						$(this).width($(this).parent().parent().width() + 2);
+						$(this).height($(this).parent().parent().width() + 2);
+					});
+				},
+				'fnServerParams': function(aoData) { 
+					aoData.push({'name':'touchflag','value':'0' });
 				}
-				return nRow;
-			},
-			'fnDrawCallback': function(oSettings, json) {
-				$('#BundleContainer .thumbs').each(function(i) {
-					$(this).width($(this).parent().width());
-					$(this).height($(this).parent().width());
-				});
-				$('#BundleContainer .mask').each(function(i) {
-					$(this).width($(this).parent().parent().width() + 2);
-					$(this).height($(this).parent().parent().width() + 2);
-				});
-			},
-			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'touchflag','value':'0' });
-			}
-		});
-		$('#BundleTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-		$('#BundleTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-		$('#BundleTable').css('width', '100%');
+			});
+			$('#BundleTable_wrapper').addClass('form-inline');
+			$('#BundleTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+			$('#BundleTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+			$('#BundleTable').css('width', '100%');
 
-		//Touchbundle table初始化
-		$('#TouchbundleTable thead').css('display', 'none');
-		$('#TouchbundleTable tbody').css('display', 'none');	
-		var touchbundlehtml = '';
-		$('#TouchbundleTable').dataTable({
-			'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 12, 30, 48, 96 ],
-							  [ 12, 30, 48, 96 ] 
-							],
-			'bProcessing' : true,
-			'bServerSide' : true,
-			'sAjaxSource' : 'bundle!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
-			'iDisplayLength' : 12,
-			'sPaginationType' : 'bootstrap',
-			'oLanguage' : PixData.tableLanguage,
-			'fnPreDrawCallback': function (oSettings) {
-				if ($('#TouchbundleContainer').length < 1) {
-					$('#TouchbundleTable').append('<div id="TouchbundleContainer"></div>');
-				}
-				$('#TouchbundleContainer').html(''); 
-				return true;
-			},
-			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-				if (iDisplayIndex % 6 == 0) {
-					touchbundlehtml = '';
-					touchbundlehtml += '<div class="row" >';
-				}
-				touchbundlehtml += '<div class="col-md-2 col-xs-2">';
-				
-				touchbundlehtml += '<div id="ThumbContainer" style="position:relative">';
-				touchbundlehtml += '<div id="TouchbundleThumb" class="thumbs">';
-				if (aData.snapshot != null) {
-					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-					touchbundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-				} else {
-					touchbundlehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
-				}
-				touchbundlehtml += '<div class="mask">';
-				touchbundlehtml += '<div>';
-				touchbundlehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-				touchbundlehtml += '<a class="btn default btn-sm green pix-plandtl-touchbundle-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-				touchbundlehtml += '</div>';
-				touchbundlehtml += '</div>';
-				touchbundlehtml += '</div>';
-
-				touchbundlehtml += '</div>';
-
-				touchbundlehtml += '</div>';
-				if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#TouchbundleTable').dataTable().fnGetData().length) {
+			//Touchbundle table初始化
+			$('#TouchbundleTable thead').css('display', 'none');
+			$('#TouchbundleTable tbody').css('display', 'none');	
+			var touchbundlehtml = '';
+			$('#TouchbundleTable').dataTable({
+				'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+				'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+								  [ 12, 30, 48, 96 ] 
+								],
+				'bProcessing' : true,
+				'bServerSide' : true,
+				'sAjaxSource' : 'bundle!list.action',
+				'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+								{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
+				'iDisplayLength' : 12,
+				'sPaginationType' : 'bootstrap',
+				'oLanguage' : PixData.tableLanguage,
+				'fnPreDrawCallback': function (oSettings) {
+					if ($('#TouchbundleContainer').length < 1) {
+						$('#TouchbundleTable').append('<div id="TouchbundleContainer"></div>');
+					}
+					$('#TouchbundleContainer').html(''); 
+					return true;
+				},
+				'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+					if (iDisplayIndex % 6 == 0) {
+						touchbundlehtml = '';
+						touchbundlehtml += '<div class="row" >';
+					}
+					touchbundlehtml += '<div class="col-md-2 col-xs-2">';
+					
+					touchbundlehtml += '<div id="ThumbContainer" style="position:relative">';
+					touchbundlehtml += '<div id="TouchbundleThumb" class="thumbs">';
+					if (aData.snapshot != null) {
+						var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+						touchbundlehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+					} else {
+						touchbundlehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
+					}
+					touchbundlehtml += '<div class="mask">';
+					touchbundlehtml += '<div>';
+					touchbundlehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+					touchbundlehtml += '<a class="btn default btn-sm green pix-plandtl-touchbundle-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 					touchbundlehtml += '</div>';
-					if ((iDisplayIndex+1) != $('#TouchbundleTable').dataTable().fnGetData().length) {
-						touchbundlehtml += '<hr/>';
+					touchbundlehtml += '</div>';
+					touchbundlehtml += '</div>';
+
+					touchbundlehtml += '</div>';
+
+					touchbundlehtml += '</div>';
+					if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#TouchbundleTable').dataTable().fnGetData().length) {
+						touchbundlehtml += '</div>';
+						if ((iDisplayIndex+1) != $('#TouchbundleTable').dataTable().fnGetData().length) {
+							touchbundlehtml += '<hr/>';
+						}
+						$('#TouchbundleContainer').append(touchbundlehtml);
 					}
-					$('#TouchbundleContainer').append(touchbundlehtml);
+					return nRow;
+				},
+				'fnDrawCallback': function(oSettings, json) {
+					$('#TouchbundleContainer .thumbs').each(function(i) {
+						$(this).height($(this).parent().width());
+					});
+					$('#TouchbundleContainer .mask').each(function(i) {
+						$(this).height($(this).parent().parent().width() + 2);
+					});
+				},
+				'fnServerParams': function(aoData) { 
+					aoData.push({'name':'touchflag','value':'1' });
+					aoData.push({'name':'homeflag','value':'1' });
 				}
-				return nRow;
-			},
-			'fnDrawCallback': function(oSettings, json) {
-				$('#TouchbundleContainer .thumbs').each(function(i) {
-					$(this).height($(this).parent().width());
-				});
-				$('#TouchbundleContainer .mask').each(function(i) {
-					$(this).height($(this).parent().parent().width() + 2);
-				});
-			},
-			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'touchflag','value':'1' });
-				aoData.push({'name':'homeflag','value':'1' });
-			}
-		});
-		$('#TouchbundleTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-		$('#TouchbundleTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-		$('#TouchbundleTable').css('width', '100%');
-
-		//Page table初始化
-		var PageTree = new BranchTree($('#PageDiv'));
-		$('#PageTable thead').css('display', 'none');
-		$('#PageTable tbody').css('display', 'none');	
-		var pagehtml = '';
-		$('#PageTable').dataTable({
-			'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 12, 30, 48, 96 ],
-							  [ 12, 30, 48, 96 ] 
-							],
-			'bProcessing' : true,
-			'bServerSide' : true,
-			'sAjaxSource' : 'page!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
-			'iDisplayLength' : 12,
-			'sPaginationType' : 'bootstrap',
-			'oLanguage' : PixData.tableLanguage,
-			'fnPreDrawCallback': function (oSettings) {
-				if ($('#PageContainer').length < 1) {
-					$('#PageTable').append('<div id="PageContainer"></div>');
-				}
-				$('#PageContainer').html(''); 
-				return true;
-			},
-			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-				if (iDisplayIndex % 6 == 0) {
-					pagehtml = '';
-					pagehtml += '<div class="row" >';
-				}
-				pagehtml += '<div class="col-md-2 col-xs-2">';
-				
-				pagehtml += '<div id="ThumbContainer" style="position:relative">';
-				pagehtml += '<div id="PageThumb" class="thumbs">';
-				if (aData.snapshot != null) {
-					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-					pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-				} else {
-					pagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
-				}
-				pagehtml += '<div class="mask">';
-				pagehtml += '<div>';
-				pagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-				pagehtml += '<a class="btn default btn-sm green pix-plandtl-page-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-				pagehtml += '</div>';
-				pagehtml += '</div>';
-				pagehtml += '</div>';
-
-				pagehtml += '</div>';
-
-				pagehtml += '</div>';
-				if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#PageTable').dataTable().fnGetData().length) {
+			});
+			$('#TouchbundleTable_wrapper').addClass('form-inline');
+			$('#TouchbundleTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+			$('#TouchbundleTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+			$('#TouchbundleTable').css('width', '100%');
+		}
+		
+		if (_plantype == 1) {
+			//Page table初始化
+			var PageTree = new BranchTree($('#PageDiv'));
+			$('#PageTable thead').css('display', 'none');
+			$('#PageTable tbody').css('display', 'none');	
+			var pagehtml = '';
+			$('#PageTable').dataTable({
+				'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+				'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+								  [ 12, 30, 48, 96 ] 
+								],
+				'bProcessing' : true,
+				'bServerSide' : true,
+				'sAjaxSource' : 'page!list.action',
+				'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+								{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
+				'iDisplayLength' : 12,
+				'sPaginationType' : 'bootstrap',
+				'oLanguage' : PixData.tableLanguage,
+				'fnPreDrawCallback': function (oSettings) {
+					if ($('#PageContainer').length < 1) {
+						$('#PageTable').append('<div id="PageContainer"></div>');
+					}
+					$('#PageContainer').html(''); 
+					return true;
+				},
+				'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+					if (iDisplayIndex % 6 == 0) {
+						pagehtml = '';
+						pagehtml += '<div class="row" >';
+					}
+					pagehtml += '<div class="col-md-2 col-xs-2">';
+					
+					pagehtml += '<div id="ThumbContainer" style="position:relative">';
+					pagehtml += '<div id="PageThumb" class="thumbs">';
+					if (aData.snapshot != null) {
+						var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+						pagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+					} else {
+						pagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
+					}
+					pagehtml += '<div class="mask">';
+					pagehtml += '<div>';
+					pagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+					pagehtml += '<a class="btn default btn-sm green pix-plandtl-page-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 					pagehtml += '</div>';
-					if ((iDisplayIndex+1) != $('#PageTable').dataTable().fnGetData().length) {
-						pagehtml += '<hr/>';
+					pagehtml += '</div>';
+					pagehtml += '</div>';
+
+					pagehtml += '</div>';
+
+					pagehtml += '</div>';
+					if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#PageTable').dataTable().fnGetData().length) {
+						pagehtml += '</div>';
+						if ((iDisplayIndex+1) != $('#PageTable').dataTable().fnGetData().length) {
+							pagehtml += '<hr/>';
+						}
+						$('#PageContainer').append(pagehtml);
 					}
-					$('#PageContainer').append(pagehtml);
+					return nRow;
+				},
+				'fnDrawCallback': function(oSettings, json) {
+					$('#PageContainer .thumbs').each(function(i) {
+						$(this).width($(this).parent().width());
+						$(this).height($(this).parent().width());
+					});
+					$('#PageContainer .mask').each(function(i) {
+						$(this).width($(this).parent().parent().width() + 2);
+						$(this).height($(this).parent().parent().width() + 2);
+					});
+				},
+				'fnServerParams': function(aoData) {
+					aoData.push({'name':'branchid','value':PageTree.branchid });
+					aoData.push({'name':'touchflag','value':'0' });
 				}
-				return nRow;
-			},
-			'fnDrawCallback': function(oSettings, json) {
-				$('#PageContainer .thumbs').each(function(i) {
-					console.log($(this).parent().width());
-					$(this).width($(this).parent().width());
-					$(this).height($(this).parent().width());
-				});
-				$('#PageContainer .mask').each(function(i) {
-					$(this).width($(this).parent().parent().width() + 2);
-					$(this).height($(this).parent().parent().width() + 2);
-				});
-			},
-			'fnServerParams': function(aoData) {
-				aoData.push({'name':'branchid','value':PageTree.branchid });
-				aoData.push({'name':'touchflag','value':'0' });
-			}
-		});
-		$('#PageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-		$('#PageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-		$('#PageTable').css('width', '100%');
+			});
+			$('#PageTable_wrapper').addClass('form-inline');
+			$('#PageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+			$('#PageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+			$('#PageTable').css('width', '100%');
 
-		//Touchpage table初始化
-		var TouchpageTree = new BranchTree($('#TouchpageDiv'));
-		$('#TouchpageTable thead').css('display', 'none');
-		$('#TouchpageTable tbody').css('display', 'none');	
-		var touchpagehtml = '';
-		$('#TouchpageTable').dataTable({
-			'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 12, 30, 48, 96 ],
-							  [ 12, 30, 48, 96 ] 
-							],
-			'bProcessing' : true,
-			'bServerSide' : true,
-			'sAjaxSource' : 'page!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
-			'iDisplayLength' : 12,
-			'sPaginationType' : 'bootstrap',
-			'oLanguage' : PixData.tableLanguage,
-			'fnPreDrawCallback': function (oSettings) {
-				if ($('#TouchpageContainer').length < 1) {
-					$('#TouchpageTable').append('<div id="TouchpageContainer"></div>');
-				}
-				$('#TouchpageContainer').html(''); 
-				return true;
-			},
-			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-				if (iDisplayIndex % 6 == 0) {
-					touchpagehtml = '';
-					touchpagehtml += '<div class="row" >';
-				}
-				touchpagehtml += '<div class="col-md-2 col-xs-2">';
-				
-				touchpagehtml += '<div id="ThumbContainer" style="position:relative">';
-				touchpagehtml += '<div id="TouchpageThumb" class="thumbs">';
-				if (aData.snapshot != null) {
-					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
-					touchpagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
-				} else {
-					touchpagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
-				}
-				touchpagehtml += '<div class="mask">';
-				touchpagehtml += '<div>';
-				touchpagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
-				touchpagehtml += '<a class="btn default btn-sm green pix-plandtl-touchpage-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
-				touchpagehtml += '</div>';
-				touchpagehtml += '</div>';
-				touchpagehtml += '</div>';
-
-				touchpagehtml += '</div>';
-
-				touchpagehtml += '</div>';
-				if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#TouchpageTable').dataTable().fnGetData().length) {
+			//Touchpage table初始化
+			var TouchpageTree = new BranchTree($('#TouchpageDiv'));
+			$('#TouchpageTable thead').css('display', 'none');
+			$('#TouchpageTable tbody').css('display', 'none');	
+			var touchpagehtml = '';
+			$('#TouchpageTable').dataTable({
+				'sDom' : '<"row"<"col-md-1 col-sm-1"><"col-md-11 col-sm-11"f>r>t<"row"<"col-md-12 col-sm-12"i><"col-md-12 col-sm-12"p>>', 
+				'aLengthMenu' : [ [ 12, 30, 48, 96 ],
+								  [ 12, 30, 48, 96 ] 
+								],
+				'bProcessing' : true,
+				'bServerSide' : true,
+				'sAjaxSource' : 'page!list.action',
+				'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
+								{'sTitle' : common.view.operation, 'mData' : 'pageid', 'bSortable' : false }],
+				'iDisplayLength' : 12,
+				'sPaginationType' : 'bootstrap',
+				'oLanguage' : PixData.tableLanguage,
+				'fnPreDrawCallback': function (oSettings) {
+					if ($('#TouchpageContainer').length < 1) {
+						$('#TouchpageTable').append('<div id="TouchpageContainer"></div>');
+					}
+					$('#TouchpageContainer').html(''); 
+					return true;
+				},
+				'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+					if (iDisplayIndex % 6 == 0) {
+						touchpagehtml = '';
+						touchpagehtml += '<div class="row" >';
+					}
+					touchpagehtml += '<div class="col-md-2 col-xs-2">';
+					
+					touchpagehtml += '<div id="ThumbContainer" style="position:relative">';
+					touchpagehtml += '<div id="TouchpageThumb" class="thumbs">';
+					if (aData.snapshot != null) {
+						var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
+						touchpagehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
+					} else {
+						touchpagehtml += '<img src="/pixsignage/img/blank.png" class="imgthumb" width="100%" />';
+					}
+					touchpagehtml += '<div class="mask">';
+					touchpagehtml += '<div>';
+					touchpagehtml += '<h6 class="pixtitle" style="color:white;">' + aData.name + '</h6>';
+					touchpagehtml += '<a class="btn default btn-sm green pix-plandtl-touchpage-add" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-plus"></i></a>';
 					touchpagehtml += '</div>';
-					if ((iDisplayIndex+1) != $('#TouchpageTable').dataTable().fnGetData().length) {
-						touchpagehtml += '<hr/>';
+					touchpagehtml += '</div>';
+					touchpagehtml += '</div>';
+
+					touchpagehtml += '</div>';
+
+					touchpagehtml += '</div>';
+					if ((iDisplayIndex+1) % 6 == 0 || (iDisplayIndex+1) == $('#TouchpageTable').dataTable().fnGetData().length) {
+						touchpagehtml += '</div>';
+						if ((iDisplayIndex+1) != $('#TouchpageTable').dataTable().fnGetData().length) {
+							touchpagehtml += '<hr/>';
+						}
+						$('#TouchpageContainer').append(touchpagehtml);
 					}
-					$('#TouchpageContainer').append(touchpagehtml);
+					return nRow;
+				},
+				'fnDrawCallback': function(oSettings, json) {
+					$('#TouchpageContainer .thumbs').each(function(i) {
+						$(this).width($(this).parent().width());
+						$(this).height($(this).parent().width());
+					});
+					$('#TouchpageContainer .mask').each(function(i) {
+						$(this).width($(this).parent().parent().width() + 2);
+						$(this).height($(this).parent().parent().width() + 2);
+					});
+				},
+				'fnServerParams': function(aoData) { 
+					aoData.push({'name':'branchid','value':TouchpageTree.branchid });
+					aoData.push({'name':'touchflag','value':'1' });
+					aoData.push({'name':'homeflag','value':'1' });
 				}
-				return nRow;
-			},
-			'fnDrawCallback': function(oSettings, json) {
-				$('#TouchpageContainer .thumbs').each(function(i) {
-					console.log($(this).parent().width());
-					$(this).width($(this).parent().width());
-					$(this).height($(this).parent().width());
-				});
-				$('#TouchpageContainer .mask').each(function(i) {
-					$(this).width($(this).parent().parent().width() + 2);
-					$(this).height($(this).parent().parent().width() + 2);
-				});
-			},
-			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'branchid','value':TouchpageTree.branchid });
-				aoData.push({'name':'touchflag','value':'1' });
-				aoData.push({'name':'homeflag','value':'1' });
-			}
-		});
-		$('#TouchpageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
-		$('#TouchpageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
-		$('#TouchpageTable').css('width', '100%');
+			});
+			$('#TouchpageTable_wrapper').addClass('form-inline');
+			$('#TouchpageTable_wrapper .dataTables_filter input').addClass("form-control input-medium"); 
+			$('#TouchpageTable_wrapper .dataTables_length select').addClass("form-control input-small"); 
+			$('#TouchpageTable').css('width', '100%');
+		}
 
 		//SelectedDtlTable初始化
 		$('#SelectedDtlTable').dataTable({
@@ -662,6 +671,7 @@ var PlanModule = function () {
 				aoData.push({'name':'devicegroupid','value':'0' });
 			}
 		});
+		$('#DeviceTable_wrapper').addClass('form-inline');
 		$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#DeviceTable').css('width', '100%');
@@ -695,6 +705,7 @@ var PlanModule = function () {
 				aoData.push({'name':'type','value':'1' });
 			}
 		});
+		$('#DevicegroupTable_wrapper').addClass('form-inline');
 		$('#DevicegroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#DevicegroupTable_wrapper .dataTables_length select').addClass('form-control input-small');
 		$('#DevicegroupTable').css('width', '100%');
@@ -998,8 +1009,12 @@ var PlanModule = function () {
 				onTabShow: function (tab, navigation, index) {
 					handleTitle(tab, navigation, index);
 					if (index == 1) {
-						$('#BundleTable').dataTable()._fnAjaxUpdate();
-						$('#PageTable').dataTable()._fnAjaxUpdate();
+						if (_plantype == 0) {
+							$('#BundleTable').dataTable()._fnAjaxUpdate();
+						}
+						if (_plantype == 1) {
+							$('#PageTable').dataTable()._fnAjaxUpdate();
+						}
 					} else if (index == 2) {
 					}
 				}
@@ -1090,21 +1105,27 @@ var PlanModule = function () {
 		}
 
 		function initData2() {
-			$('.bundle-ctrl').css('display', BundleCtrl?'':'none');
-			$('.page-ctrl').css('display', PageCtrl?'':'none');
-			if (BundleCtrl) {
+			if (_plantype == 0) {
 				$('#nav_tab1').addClass('active');
+				$('#nav_tab2').removeClass('active');
 				$('#BundleDiv').css('display', '');
+				$('#TouchbundleDiv').css('display', 'none');
 				$('#PageDiv').css('display', 'none');
+				$('#TouchpageDiv').css('display', 'none');
 				$('#BundleTable').dataTable()._fnAjaxUpdate();
-			} else if (PageCtrl) {
+			} else if (_plantype == 1) {
 				$('#nav_tab3').addClass('active');
-				$('#PageDiv').css('display', '');
+				$('#nav_tab4').removeClass('active');
 				$('#BundleDiv').css('display', 'none');
+				$('#TouchbundleDiv').css('display', 'none');
+				$('#PageDiv').css('display', '');
+				$('#TouchpageDiv').css('display', 'none');
 				$('#PageTable').dataTable()._fnAjaxUpdate();
 			}
 			if (!TouchCtrl) {
 				$('.touch-ctrl').css('display', 'none');
+			} else {
+				$('.touch-ctrl').css('display', '');
 			}
 			refreshSelectedDtlTable();
 		}

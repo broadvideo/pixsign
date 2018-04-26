@@ -26,9 +26,7 @@ var TemplateModule = function () {
 			'bProcessing' : true,
 			'bServerSide' : true,
 			'sAjaxSource' : 'template!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
-							{'sTitle' : common.view.ratio, 'mData' : 'ratio', 'bSortable' : false }, 
-							{'sTitle' : common.view.operation, 'mData' : 'templateid', 'bSortable' : false }],
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }],
 			'iDisplayLength' : 16,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -38,9 +36,6 @@ var TemplateModule = function () {
 				}
 				$('#TemplateContainer').html(''); 
 				return true;
-			},
-			'fnServerParams': function(aoData) {
-				aoData.push({'name':'templatepkgid','value':0 });
 			},
 			'fnRowCallback': function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 				if (iDisplayIndex % 4 == 0) {
@@ -65,7 +60,7 @@ var TemplateModule = function () {
 
 				templatehtml += '<a href="javascript:;" templateid="' + aData.templateid + '" class="fancybox">';
 				templatehtml += '<div class="thumbs">';
-				if (aData.snapshot != null) {
+				if (aData.snapshot != null && aData.snapshot != '') {
 					var thumbwidth = aData.width > aData.height? 100 : 100*aData.width/aData.height;
 					templatehtml += '<img src="/pixsigdata' + aData.snapshot + '?t=' + new Date().getTime() + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				}

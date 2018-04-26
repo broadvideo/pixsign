@@ -13,6 +13,7 @@
     <result column="starttime" property="starttime" jdbcType="TIME" />
     <result column="endtime" property="endtime" jdbcType="TIME" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
 	<collection property="plandtls" ofType="com.broadvideo.pixsignage.domain.Plandtl"
 		column="{planid=planid}" select="com.broadvideo.pixsignage.persistence.PlandtlMapper.selectList" />
 	<collection property="planbinds" ofType="com.broadvideo.pixsignage.domain.Planbind"
@@ -42,7 +43,28 @@
       and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = #{branchid}
+      <if test="subbranchflag == 0">
+        and branchid = #{branchid}
+      </if>
+      <if test="subbranchflag == 1">
+        and exists (select 1 from branch b 
+          where b.branchid=plan.branchid 
+          and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+      </if>
+    </if>
+    <if test="search != null">
+        and exists 
+        (select 1 from planbind pb,
+          (select if(dg.devicegroupid>0,'2','1') as bindtype, 
+           if(dg.devicegroupid>0,dg.devicegroupid,d.deviceid) as bindid 
+           from device d left join devicegroup dg 
+           on d.devicegroupid=dg.devicegroupid 
+           where d.terminalid like #{search}
+          ) pbd 
+          where pb.planid=plan.planid
+          and pb.bindtype = pbd.bindtype
+          and pb.bindid = pbd.bindid
+        )
     </if>
   </select>
 
@@ -55,7 +77,28 @@
       and orgid = #{orgid}
     </if>
     <if test="branchid != null">
-      and branchid = #{branchid}
+      <if test="subbranchflag == 0">
+        and branchid = #{branchid}
+      </if>
+      <if test="subbranchflag == 1">
+        and exists (select 1 from branch b 
+          where b.branchid=plan.branchid 
+          and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+      </if>
+    </if>
+    <if test="search != null">
+        and exists 
+        (select 1 from planbind pb,
+          (select if(dg.devicegroupid>0,'2','1') as bindtype, 
+           if(dg.devicegroupid>0,dg.devicegroupid,d.deviceid) as bindid 
+           from device d left join devicegroup dg 
+           on d.devicegroupid=dg.devicegroupid 
+           where d.terminalid like #{search}
+          ) pbd 
+          where pb.planid=plan.planid
+          and pb.bindtype = pbd.bindtype
+          and pb.bindid = pbd.bindid
+        )
     </if>
     order by planid desc
     <if test="start != null and length != null">

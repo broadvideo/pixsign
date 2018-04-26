@@ -111,7 +111,7 @@
 			<h3 class="page-title"><spring:message code="menu.appfile"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../main.jsp">Home</a><i
+					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 						class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.devicemanage"/></a><i class="fa fa-angle-right"></i>
@@ -269,7 +269,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/device/appfile.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/device/appfile.js?t=${timestamp}1"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

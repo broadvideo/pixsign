@@ -25,7 +25,7 @@
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Templet" extends="BaseResultMap" >
     <association property="bgimage" column="{imageid=bgimageid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectByPrimaryKey" />
-    <collection property="templetdtls" ofType="com.broadvideo.pixsignage.domain.Templetdtl" column="{templetid=templetid}" select="com.broadvideo.pixsignage.persistence.TempletdtlMapper.selectList" />
+    <collection property="templetzones" ofType="com.broadvideo.pixsignage.domain.Templetzone" column="{templetid=templetid}" select="com.broadvideo.pixsignage.persistence.TempletzoneMapper.selectList" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -103,8 +103,7 @@
   </select>
 
   <delete id="deleteByPrimaryKey" >
-    update templet 
-    set status = '9'
+    delete from templet
     where templetid = #{templetid}
   </delete>
     

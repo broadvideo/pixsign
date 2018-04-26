@@ -48,7 +48,7 @@ public class Templet {
 
 	private Image bgimage;
 
-	private List<Templetdtl> templetdtls;
+	private List<Templetzone> templetzones;
 
 	private List<Templet> subtemplets;
 
@@ -222,12 +222,12 @@ public class Templet {
 		this.bgimage = bgimage;
 	}
 
-	public List<Templetdtl> getTempletdtls() {
-		return templetdtls;
+	public List<Templetzone> getTempletzones() {
+		return templetzones;
 	}
 
-	public void setTempletdtls(List<Templetdtl> templetdtls) {
-		this.templetdtls = templetdtls;
+	public void setTempletzones(List<Templetzone> templetzones) {
+		this.templetzones = templetzones;
 	}
 
 	public List<Templet> getSubtemplets() {

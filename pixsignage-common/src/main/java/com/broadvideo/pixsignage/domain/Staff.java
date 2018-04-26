@@ -7,7 +7,7 @@ import org.apache.struts2.json.annotations.JSON;
 
 public class Staff {
 	private Integer staffid;
-    private String uuid;
+	private String uuid;
 
 	private String subsystem;
 
@@ -19,11 +19,13 @@ public class Staff {
 
 	private String loginname;
 
+	private String phone;
+
 	private String password;
 
 	private String name;
 
-    private String email;
+	private String email;
 	private String status;
 
 	private String token;
@@ -60,12 +62,14 @@ public class Staff {
 
 	public void setStaffid(Integer staffid) {
 		this.staffid = staffid;
-    }
-    public String getUuid() {
-        return uuid;
-    }
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid == null ? null : uuid.trim();
 	}
 
 	public String getSubsystem() {
@@ -108,6 +112,14 @@ public class Staff {
 		this.loginname = loginname == null ? null : loginname.trim();
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -124,12 +136,14 @@ public class Staff {
 		this.name = name == null ? null : name.trim();
 	}
 
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email == null ? null : email.trim();
+	}
+
 	public String getStatus() {
 		return status;
 	}

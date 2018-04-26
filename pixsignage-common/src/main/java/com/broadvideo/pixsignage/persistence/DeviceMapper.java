@@ -31,7 +31,19 @@ public interface DeviceMapper {
 
 	Device selectByTerminalid(@Param(value = "terminalid") String terminalid);
 
-	int selectCountByOstype(@Param(value = "orgid") String orgid, @Param(value = "ostype") String ostype);
+	List<Device> selectByDefaultpage(@Param(value = "defaultpageid") String defaultpageid);
+
+	int selectMaxCount1(@Param(value = "orgid") String orgid);
+
+	int selectMaxCount2(@Param(value = "orgid") String orgid);
+
+	int selectMaxCount3(@Param(value = "orgid") String orgid);
+
+	int selectMaxCount4(@Param(value = "orgid") String orgid);
+
+	int selectMaxCount5(@Param(value = "orgid") String orgid);
+
+	int selectMaxCount6(@Param(value = "orgid") String orgid);
 
 	int unbind(@Param(value = "deviceid") String deviceid);
 

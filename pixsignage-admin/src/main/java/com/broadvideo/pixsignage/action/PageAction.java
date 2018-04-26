@@ -223,11 +223,7 @@ public class PageAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String pageid = getParameter("pageid");
-			if (pageid.equals("" + getLoginStaff().getOrg().getDefaultpageid())) {
-				planService.syncPlan2All("" + getLoginStaff().getOrgid());
-			} else {
-				planService.syncPlanByPage(pageid);
-			}
+			planService.syncPlanByPage("" + getLoginStaff().getOrgid(), pageid);
 			logger.info("Page sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -240,6 +236,7 @@ public class PageAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
+			logger.info("PageAction doDesign pageid={}", page.getPageid());
 			page.setOrgid(getLoginStaff().getOrgid());
 			page.setCreatestaffid(getLoginStaff().getStaffid());
 			pageService.design(page);
