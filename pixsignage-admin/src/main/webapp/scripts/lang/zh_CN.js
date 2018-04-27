@@ -138,7 +138,7 @@ var common = {
 		pagezone_type_7: '按键',
 		pagezone_type_11: '今日课表',
 		pagezone_type_12: '本周课表',
-		pagezone_type_13: '刷卡签到',
+		pagezone_type_13: '考勤签到',
 		pagezone_type_14: '家校互动',
 		pagezone_type_15: '考试通告',
 		pagezone_type_16: '个人信息',

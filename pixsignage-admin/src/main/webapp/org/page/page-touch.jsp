@@ -339,7 +339,7 @@
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="12">
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="13">
+							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl attendance-ctrl limit-1" zonetype="13">
 								<i class="fa fa-credit-card"></i><div>上课考勤</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="14">
@@ -1311,6 +1311,7 @@ var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals(
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
 var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
 var EstateCtrl = <%=(session_org != null && !session_org.getEstateflag().equals("0"))%>;
+var AttendanceCtrl = <%=(session_org != null && !session_org.getAttendanceflag().equals("0"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

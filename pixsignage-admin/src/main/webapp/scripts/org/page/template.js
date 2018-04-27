@@ -238,7 +238,14 @@ var TemplateModule = function () {
 						}
 						_design.Objectid = _design.Object.pageid;
 						_design.Zone = null;
-						$('.school-ctrl').css('display', SchoolCtrl?'':'none');
+						$('.school-ctrl').css('display', 'none');
+						$('.attendance-ctrl').css('display', 'none');
+						if (SchoolCtrl) {
+							$('.school-ctrl').css('display', '');
+						}
+						if (AttendanceCtrl) {
+							$('.attendance-ctrl').css('display', '');
+						}
 						$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
