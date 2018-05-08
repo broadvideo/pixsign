@@ -12,8 +12,6 @@ import java.util.Vector;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,9 @@ import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.persistence.TempletMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service("bundleService")
 public class BundleServiceImpl implements BundleService {
@@ -567,20 +568,20 @@ public class BundleServiceImpl implements BundleService {
 			bundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
 		}
 		if (bundle != null) {
-			bundle.setReviewflag(Bundle.REVIEW_WAIT);
 			if (bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 				JSONObject bundleJson = generateBundleJson("" + bundle.getBundleid());
 				bundle.setJson(bundleJson.toString());
 			}
+			bundle.setReviewflag(Bundle.REVIEW_WAIT);
 			bundleMapper.updateByPrimaryKeySelective(bundle);
 			List<Bundle> subbundles = bundle.getSubbundles();
 			if (subbundles != null) {
 				for (Bundle b : subbundles) {
-					b.setReviewflag(Bundle.REVIEW_WAIT);
 					if (b.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 						JSONObject bundleJson = generateBundleJson("" + b.getBundleid());
 						b.setJson(bundleJson.toString());
 					}
+					b.setReviewflag(Bundle.REVIEW_WAIT);
 					bundleMapper.updateByPrimaryKeySelective(b);
 				}
 			}
@@ -613,7 +614,7 @@ public class BundleServiceImpl implements BundleService {
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
 
 		if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED) && bundle.getJson() != null) {
-			return new JSONObject(bundle.getJson());
+			return JSONObject.fromObject(bundle.getJson());
 		}
 
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
@@ -635,28 +636,19 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("home_idle", bundle.getHomeidletime());
 
 		JSONArray videoJsonArray = new JSONArray();
-		responseJson.put("videos", videoJsonArray);
 		JSONArray imageJsonArray = new JSONArray();
-		responseJson.put("images", imageJsonArray);
 		JSONArray textJsonArray = new JSONArray();
-		responseJson.put("texts", textJsonArray);
 		JSONArray streamJsonArray = new JSONArray();
-		responseJson.put("streams", streamJsonArray);
 		JSONArray widgetJsonArray = new JSONArray();
-		responseJson.put("widgets", widgetJsonArray);
 		JSONArray dvbJsonArray = new JSONArray();
-		responseJson.put("dvbs", dvbJsonArray);
 		JSONArray rssJsonArray = new JSONArray();
-		responseJson.put("rsses", rssJsonArray);
 		JSONArray audioJsonArray = new JSONArray();
-		responseJson.put("audios", audioJsonArray);
 
 		responseJson.put("layout_id", bundle.getTempletid());
 		responseJson.put("width", bundle.getWidth());
 		responseJson.put("height", bundle.getHeight());
 		responseJson.put("bg_color", "#000000");
 		JSONObject bundleBgImageJson = new JSONObject();
-		responseJson.put("bg_image", bundleBgImageJson);
 		if (bundle.getBgimage() != null) {
 			bundleBgImageJson.put("id", bundle.getBgimageid());
 			bundleBgImageJson.put("name", bundle.getBgimage().getName());
@@ -669,7 +661,7 @@ public class BundleServiceImpl implements BundleService {
 					"http://" + serverip + ":" + serverport + "/pixsigdata" + bundle.getBgimage().getThumbnail());
 			if (imageHash.get(bundle.getBgimageid()) == null) {
 				imageHash.put(bundle.getBgimageid(), bundleBgImageJson);
-				imageJsonArray.put(bundleBgImageJson);
+				imageJsonArray.add(bundleBgImageJson);
 			}
 		} else {
 			bundleBgImageJson.put("id", 0);
@@ -680,14 +672,13 @@ public class BundleServiceImpl implements BundleService {
 			bundleBgImageJson.put("size", 0);
 			bundleBgImageJson.put("thumbnail", "");
 		}
+		responseJson.put("bg_image", bundleBgImageJson);
 
 		List<Video> videoList = new ArrayList<Video>();
 		List<Image> imageList = new ArrayList<Image>();
 		JSONArray regionJsonArray = new JSONArray();
-		responseJson.put("regions", regionJsonArray);
 		for (Bundlezone bundlezone : bundle.getBundlezones()) {
 			JSONObject regionJson = new JSONObject();
-			regionJsonArray.put(regionJson);
 			if (bundlezone.getMainflag().equals("1")) {
 				regionJson.put("region_id", 1);
 			} else {
@@ -779,7 +770,6 @@ public class BundleServiceImpl implements BundleService {
 			}
 
 			JSONObject regionBgImageJson = new JSONObject();
-			regionJson.put("bg_image", regionBgImageJson);
 			if (bundlezone.getBgimage() != null) {
 				regionBgImageJson.put("id", bundlezone.getBgimageid());
 				regionBgImageJson.put("name", bundlezone.getBgimage().getName());
@@ -792,7 +782,7 @@ public class BundleServiceImpl implements BundleService {
 						+ bundlezone.getBgimage().getThumbnail());
 				if (imageHash.get(bundlezone.getBgimageid()) == null) {
 					imageHash.put(bundlezone.getBgimageid(), regionBgImageJson);
-					imageJsonArray.put(regionBgImageJson);
+					imageJsonArray.add(regionBgImageJson);
 				}
 			} else {
 				regionBgImageJson.put("id", 0);
@@ -803,9 +793,9 @@ public class BundleServiceImpl implements BundleService {
 				regionBgImageJson.put("size", 0);
 				regionBgImageJson.put("thumbnail", "");
 			}
+			regionJson.put("bg_image", regionBgImageJson);
 
 			JSONArray playlistJsonArray = new JSONArray();
-			regionJson.put("playlist", playlistJsonArray);
 
 			type = bundlezone.getType();
 			if (type == Bundlezone.Type_PLAY) {
@@ -813,7 +803,10 @@ public class BundleServiceImpl implements BundleService {
 				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
 					if (bundlezonedtl.getVideo() != null) {
 						Video video = bundlezonedtl.getVideo();
-						playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "video");
+						playlistJson.put("id", video.getVideoid());
+						playlistJsonArray.add(playlistJson);
 						if (videoHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
@@ -833,12 +826,15 @@ public class BundleServiceImpl implements BundleService {
 							}
 							videoJson.put("tags", video.getTags());
 							videoHash.put(video.getVideoid(), videoJson);
-							videoJsonArray.put(videoJson);
+							videoJsonArray.add(videoJson);
 							videoList.add(video);
 						}
 					} else if (bundlezonedtl.getImage() != null) {
 						Image image = bundlezonedtl.getImage();
-						playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "image");
+						playlistJson.put("id", image.getImageid());
+						playlistJsonArray.add(playlistJson);
 						if (imageHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
@@ -857,50 +853,62 @@ public class BundleServiceImpl implements BundleService {
 								imageJson.put("relate_id", 0);
 							}
 							imageHash.put(image.getImageid(), imageJson);
-							imageJsonArray.put(imageJson);
+							imageJsonArray.add(imageJson);
 							imageList.add(image);
 						}
 					}
 				}
 			} else if (type == Bundlezone.Type_WIDGET) {
-				playlistJsonArray.put(new JSONObject().put("type", "widget").put("id", bundlezone.getBundlezoneid()));
+				JSONObject playlistJson = new JSONObject();
+				playlistJson.put("type", "widget");
+				playlistJson.put("id", bundlezone.getBundlezoneid());
+				playlistJsonArray.add(playlistJson);
 				if (widgetHash.get(bundlezone.getBundlezoneid()) == null) {
 					JSONObject widgetJson = new JSONObject();
 					widgetJson.put("id", bundlezone.getBundlezoneid());
 					widgetJson.put("url", bundlezone.getContent());
 					widgetHash.put(bundlezone.getBundlezoneid(), widgetJson);
-					widgetJsonArray.put(widgetJson);
+					widgetJsonArray.add(widgetJson);
 				}
 			} else if (type == Bundlezone.Type_TEXT || type == Bundlezone.Type_SCROLL) {
-				playlistJsonArray.put(new JSONObject().put("type", "text").put("id", bundlezone.getBundlezoneid()));
+				JSONObject playlistJson = new JSONObject();
+				playlistJson.put("type", "text");
+				playlistJson.put("id", bundlezone.getBundlezoneid());
+				playlistJsonArray.add(playlistJson);
 				if (textHash.get(bundlezone.getBundlezoneid()) == null) {
 					JSONObject textJson = new JSONObject();
 					textJson.put("id", bundlezone.getBundlezoneid());
 					textJson.put("text", bundlezone.getContent());
 					textHash.put(bundlezone.getBundlezoneid(), textJson);
-					textJsonArray.put(textJson);
+					textJsonArray.add(textJson);
 				}
 			} else if (type == Bundlezone.Type_RSS) {
-				playlistJsonArray.put(new JSONObject().put("type", "rss").put("id", bundlezone.getBundlezoneid()));
+				JSONObject playlistJson = new JSONObject();
+				playlistJson.put("type", "rss");
+				playlistJson.put("id", bundlezone.getBundlezoneid());
+				playlistJsonArray.add(playlistJson);
 				if (rssHash.get(bundlezone.getBundlezoneid()) == null) {
 					JSONObject rssJson = new JSONObject();
 					rssJson.put("id", bundlezone.getBundlezoneid());
 					rssJson.put("url", bundlezone.getContent());
 					rssHash.put(bundlezone.getBundlezoneid(), rssJson);
-					rssJsonArray.put(rssJson);
+					rssJsonArray.add(rssJson);
 				}
 			} else if (type == Bundlezone.Type_STREAM) {
 				List<Bundlezonedtl> bundlezonedtls = bundlezone.getBundlezonedtls();
 				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
 					if (bundlezonedtl.getStream() != null) {
 						Stream stream = bundlezonedtl.getStream();
-						playlistJsonArray.put(new JSONObject().put("type", "stream").put("id", stream.getStreamid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "stream");
+						playlistJson.put("id", stream.getStreamid());
+						playlistJsonArray.add(playlistJson);
 						if (streamHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject streamJson = new JSONObject();
 							streamJson.put("id", stream.getStreamid());
 							streamJson.put("url", stream.getUrl());
 							streamHash.put(stream.getStreamid(), streamJson);
-							streamJsonArray.put(streamJson);
+							streamJsonArray.add(streamJson);
 						}
 					}
 				}
@@ -909,7 +917,10 @@ public class BundleServiceImpl implements BundleService {
 				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
 					if (bundlezonedtl.getAudio() != null) {
 						Audio audio = bundlezonedtl.getAudio();
-						playlistJsonArray.put(new JSONObject().put("type", "audio").put("id", audio.getAudioid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "audio");
+						playlistJson.put("id", audio.getAudioid());
+						playlistJsonArray.add(playlistJson);
 						if (audioHash.get(bundlezonedtl.getObjid()) == null) {
 							JSONObject audioJson = new JSONObject();
 							audioJson.put("id", audio.getAudioid());
@@ -920,7 +931,7 @@ public class BundleServiceImpl implements BundleService {
 							audioJson.put("file", audio.getFilename());
 							audioJson.put("size", audio.getSize());
 							audioHash.put(audio.getAudioid(), audioJson);
-							audioJsonArray.put(audioJson);
+							audioJsonArray.add(audioJson);
 						}
 					}
 				}
@@ -929,13 +940,16 @@ public class BundleServiceImpl implements BundleService {
 				for (Bundlezonedtl bundlezonedtl : bundlezonedtls) {
 					if (bundlezonedtl.getDvb() != null) {
 						Dvb dvb = bundlezonedtl.getDvb();
-						playlistJsonArray.put(new JSONObject().put("type", "dvb").put("id", dvb.getDvbid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "dvb");
+						playlistJson.put("id", dvb.getDvbid());
+						playlistJsonArray.add(playlistJson);
 						if (dvbHash.get(dvb.getDvbid()) == null) {
 							JSONObject dvbJson = new JSONObject();
 							dvbJson.put("id", dvb.getDvbid());
 							dvbJson.put("number", dvb.getNumber());
 							dvbHash.put(dvb.getDvbid(), dvbJson);
-							dvbJsonArray.put(dvbJson);
+							dvbJsonArray.add(dvbJson);
 						}
 					}
 				}
@@ -943,7 +957,10 @@ public class BundleServiceImpl implements BundleService {
 				if (bundlezone.getTouchtype().equals("3")) {
 					Video video = videoMapper.selectByPrimaryKey("" + bundlezone.getTouchobjid());
 					if (video != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "video").put("id", video.getVideoid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "video");
+						playlistJson.put("id", video.getVideoid());
+						playlistJsonArray.add(playlistJson);
 						if (videoHash.get(video.getVideoid()) == null) {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
@@ -963,14 +980,17 @@ public class BundleServiceImpl implements BundleService {
 							}
 							videoJson.put("tags", video.getTags());
 							videoHash.put(video.getVideoid(), videoJson);
-							videoJsonArray.put(videoJson);
+							videoJsonArray.add(videoJson);
 							videoList.add(video);
 						}
 					}
 				} else if (bundlezone.getTouchtype().equals("4")) {
 					Image image = imageMapper.selectByPrimaryKey("" + bundlezone.getTouchobjid());
 					if (image != null) {
-						playlistJsonArray.put(new JSONObject().put("type", "image").put("id", image.getImageid()));
+						JSONObject playlistJson = new JSONObject();
+						playlistJson.put("type", "image");
+						playlistJson.put("id", image.getImageid());
+						playlistJsonArray.add(playlistJson);
 						if (imageHash.get(image.getImageid()) == null) {
 							JSONObject imageJson = new JSONObject();
 							imageJson.put("id", image.getImageid());
@@ -989,23 +1009,28 @@ public class BundleServiceImpl implements BundleService {
 								imageJson.put("relate_id", 0);
 							}
 							imageHash.put(image.getImageid(), imageJson);
-							imageJsonArray.put(imageJson);
+							imageJsonArray.add(imageJson);
 							imageList.add(image);
 						}
 					}
 				} else if (bundlezone.getTouchtype().equals("5")) {
-					playlistJsonArray
-							.put(new JSONObject().put("type", "widget").put("id", bundlezone.getBundlezoneid()));
+					JSONObject playlistJson = new JSONObject();
+					playlistJson.put("type", "widget");
+					playlistJson.put("id", bundlezone.getBundlezoneid());
+					playlistJsonArray.add(playlistJson);
 					if (widgetHash.get(bundlezone.getBundlezoneid()) == null) {
 						JSONObject widgetJson = new JSONObject();
 						widgetJson.put("id", bundlezone.getBundlezoneid());
 						widgetJson.put("url", bundlezone.getContent());
 						widgetHash.put(bundlezone.getBundlezoneid(), widgetJson);
-						widgetJsonArray.put(widgetJson);
+						widgetJsonArray.add(widgetJson);
 					}
 				}
 			}
+			regionJson.put("playlist", playlistJsonArray);
+			regionJsonArray.add(regionJson);
 		}
+		responseJson.put("regions", regionJsonArray);
 
 		for (Video video : videoList) {
 			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
@@ -1023,7 +1048,7 @@ public class BundleServiceImpl implements BundleService {
 				videoJson.put("relate_id", 0);
 				videoJson.put("tags", video.getRelate().getTags());
 				videoHash.put(video.getRelateid(), videoJson);
-				videoJsonArray.put(videoJson);
+				videoJsonArray.add(videoJson);
 			}
 		}
 		for (Image image : imageList) {
@@ -1041,9 +1066,17 @@ public class BundleServiceImpl implements BundleService {
 						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getThumbnail());
 				imageJson.put("relate_id", 0);
 				imageHash.put(image.getRelateid(), imageJson);
-				imageJsonArray.put(imageJson);
+				imageJsonArray.add(imageJson);
 			}
 		}
+		responseJson.put("videos", videoJsonArray);
+		responseJson.put("images", imageJsonArray);
+		responseJson.put("texts", textJsonArray);
+		responseJson.put("streams", streamJsonArray);
+		responseJson.put("widgets", widgetJsonArray);
+		responseJson.put("dvbs", dvbJsonArray);
+		responseJson.put("rsses", rssJsonArray);
+		responseJson.put("audios", audioJsonArray);
 
 		String checksum = DigestUtils.md5Hex(responseJson.toString());
 		responseJson.put("checksum", checksum);
@@ -1057,14 +1090,14 @@ public class BundleServiceImpl implements BundleService {
 		for (Integer bundleid : bundleids) {
 			if (bundleHash.get(bundleid) == null) {
 				JSONObject bundleJson = generateBundleJson("" + bundleid);
-				bundleJSONArray.put(bundleJson);
+				bundleJSONArray.add(bundleJson);
 				bundleHash.put(bundleid, bundleJson);
 			}
 			List<Bundle> subbundles = bundleMapper.selectSubList("" + bundleid);
 			for (Bundle subbundle : subbundles) {
 				if (bundleHash.get(subbundle.getBundleid()) == null) {
 					JSONObject bundleJson = generateBundleJson("" + subbundle.getBundleid());
-					bundleJSONArray.put(bundleJson);
+					bundleJSONArray.add(bundleJson);
 					bundleHash.put(subbundle.getBundleid(), bundleJson);
 				}
 			}

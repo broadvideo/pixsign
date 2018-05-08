@@ -51,6 +51,7 @@
 									</select>
 								</div>
 							</div>
+							<!-- 
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.limitflag"/></label>
 								<div class="col-md-9 radio-list">
@@ -62,6 +63,7 @@
 									</label>
 								</div>
 							</div>
+							 -->
 						</div>
 					</form>
 				</div>

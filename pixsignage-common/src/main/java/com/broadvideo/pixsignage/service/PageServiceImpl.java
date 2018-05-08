@@ -75,14 +75,15 @@ public class PageServiceImpl implements PageService {
 		return pageMapper.selectByUuid(orgid, uuid);
 	}
 
-	public int selectCount(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search) {
-		return pageMapper.selectCount(orgid, branchid, ratio, touchflag, homeflag, search);
+	public int selectCount(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search) {
+		return pageMapper.selectCount(orgid, branchid, reviewflag, ratio, touchflag, homeflag, search);
 	}
 
-	public List<Page> selectList(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search, String start, String length, Staff staff) {
-		List<Page> pageList = pageMapper.selectList(orgid, branchid, ratio, touchflag, homeflag, search, start, length);
+	public List<Page> selectList(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search, String start, String length, Staff staff) {
+		List<Page> pageList = pageMapper.selectList(orgid, branchid, reviewflag, ratio, touchflag, homeflag, search,
+				start, length);
 		for (Page page : pageList) {
 			page.setEditflag("1");
 			if (page.getPrivilegeflag().equals("1") && !staff.getLoginname().equals("admin")
@@ -849,4 +850,55 @@ public class PageServiceImpl implements PageService {
 			pageMapper.deleteStaff("" + page.getPageid(), staffids[i]);
 		}
 	}
+
+	public void setPageReviewWait(String pageid) {
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		if (page != null && page.getHomepageid() > 0) {
+			page = pageMapper.selectByPrimaryKey("" + page.getHomepageid());
+		}
+		if (page != null) {
+			if (page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+				JSONObject pageJson = JSONObject.fromObject(page);
+				page.setJson(pageJson.toString());
+			}
+			page.setReviewflag(Page.REVIEW_WAIT);
+			pageMapper.updateByPrimaryKeySelective(page);
+			List<Page> subpages = page.getSubpages();
+			if (subpages != null) {
+				for (Page b : subpages) {
+					if (b.getReviewflag().equals(Page.REVIEW_PASSED)) {
+						JSONObject pageJson = JSONObject.fromObject(b);
+						b.setJson(pageJson.toString());
+					}
+					b.setReviewflag(Page.REVIEW_WAIT);
+					pageMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+		}
+	}
+
+	public void setPageReviewResut(String pageid, String reviewflag, String comment) throws Exception {
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		if (page != null && page.getHomepageid() > 0) {
+			page = pageMapper.selectByPrimaryKey("" + page.getHomepageid());
+		}
+		if (page != null) {
+			page.setReviewflag(reviewflag);
+			page.setComment(comment);
+			pageMapper.updateByPrimaryKeySelective(page);
+			List<Page> subpages = page.getSubpages();
+			if (subpages != null) {
+				for (Page b : subpages) {
+					b.setReviewflag(reviewflag);
+					b.setComment(comment);
+					pageMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+
+			if (reviewflag.equals(Page.REVIEW_PASSED)) {
+				makeHtmlZip("" + page.getPageid());
+			}
+		}
+	}
+
 }

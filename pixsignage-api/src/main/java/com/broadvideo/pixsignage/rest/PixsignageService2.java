@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,11 +20,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Appfile;
+import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Crashreport;
 import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
@@ -44,8 +46,10 @@ import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
+import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
@@ -57,6 +61,7 @@ import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
@@ -65,6 +70,9 @@ import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Component
 @Consumes("application/json;charset=UTF-8")
@@ -75,6 +83,8 @@ public class PixsignageService2 {
 
 	@Autowired
 	private OrgMapper orgMapper;
+	@Autowired
+	private BranchMapper branchMapper;
 	@Autowired
 	private ConfigMapper configMapper;
 	@Autowired
@@ -97,6 +107,8 @@ public class PixsignageService2 {
 	private DevicegridMapper devicegridMapper;
 	@Autowired
 	private DevicefilehisMapper devicefilehisMapper;
+	@Autowired
+	private TextMapper textMapper;
 
 	@Autowired
 	private ScheduleService scheduleService;
@@ -112,26 +124,28 @@ public class PixsignageService2 {
 	public String init(String request, @Context HttpServletRequest req) {
 		try {
 			logger.info("Pixsignage Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			String mac = requestJson.getString("mac");
-			String iip = requestJson.getString("ip");
-			String ostype = requestJson.getString("os_type");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			String mac = requestJson.optString("mac");
+			String iip = requestJson.optString("ip");
+			String ostype = requestJson.optString("os_type");
 			if (ostype.equals("windows")) {
 				ostype = "2";
+			} else if (ostype.equals("linux")) {
+				ostype = "3";
 			} else {
 				ostype = "1";
 			}
-			String appname = requestJson.getString("app_name");
-			String sign = requestJson.getString("sign");
-			String vname = requestJson.getString("version_name");
-			int vcode = requestJson.getInt("version_code");
+			String appname = requestJson.optString("app_name");
+			String sign = requestJson.optString("sign");
+			String vname = requestJson.optString("version_name");
+			int vcode = requestJson.optInt("version_code");
 			String ip = req.getRemoteAddr();
-			String other = requestJson.getString("other");
+			String other = requestJson.optString("other");
 			String boardinfo = "";
-			if (requestJson.getJSONObject("boardinfo") != null) {
-				boardinfo = requestJson.getJSONObject("boardinfo").toString();
+			if (requestJson.optJSONObject("boardinfo") != null) {
+				boardinfo = requestJson.optJSONObject("boardinfo").toString();
 			}
 
 			if (hardkey == null || hardkey.equals("")) {
@@ -143,7 +157,7 @@ public class PixsignageService2 {
 
 			String mtype = null;
 			if (sign != null) {
-				if (sign.startsWith("win")) {
+				if (sign.startsWith("win") || sign.equals("linux")) {
 					mtype = sign;
 				} else {
 					mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
@@ -174,6 +188,53 @@ public class PixsignageService2 {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			} else if (other != null && device.getOther().length() > 0 && !device.getOther().equals(other)) {
 				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
+			}
+
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			String maxdetail = org.getMaxdetail();
+			String[] maxs = maxdetail.split(",");
+			int max1 = Integer.parseInt(maxs[0]);
+			int max2 = Integer.parseInt(maxs[1]);
+			int max3 = Integer.parseInt(maxs[2]);
+			int max4 = Integer.parseInt(maxs[3]);
+			int max5 = Integer.parseInt(maxs[4]);
+			int max6 = Integer.parseInt(maxs[5]);
+			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+				// 单面屏
+				int currentDevices = deviceMapper.selectMaxCount1("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max1) {
+					return handleResult(1010, "Android单面屏授权数已达上限.");
+				}
+			} else if (appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+				// 双面屏
+				int currentDevices = deviceMapper.selectMaxCount2("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max2) {
+					return handleResult(1010, "Android双面屏授权数已达上限.");
+				}
+			} else if (appname.startsWith("DigitalBox2_")) {
+				// H5标牌
+				int currentDevices = deviceMapper.selectMaxCount3("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max3) {
+					return handleResult(1010, "Android H5标牌授权数已达上限.");
+				}
+			} else if (appname.startsWith("TeaTable_")) {
+				// 茶几
+				int currentDevices = deviceMapper.selectMaxCount4("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max4) {
+					return handleResult(1010, "Android茶几终端授权数已达上限.");
+				}
+			} else if (appname.startsWith("PixMultiSign")) {
+				// 联屏
+				int currentDevices = deviceMapper.selectMaxCount5("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max5) {
+					return handleResult(1010, "Android联屏终端授权数已达上限.");
+				}
+			} else if (ostype.equals("2")) {
+				// windows
+				int currentDevices = deviceMapper.selectMaxCount6("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max6) {
+					return handleResult(1010, "Windows终端授权数已达上限.");
+				}
 			}
 
 			try {
@@ -228,17 +289,19 @@ public class PixsignageService2 {
 			onlinelog.setOnlinetime(Calendar.getInstance().getTime());
 			onlinelogMapper.insertSelective(onlinelog);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			responseJson.put("terminalid", device.getTerminalid());
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
-			topicJsonArray.put("device-" + device.getDeviceid());
+			topicJsonArray.add("device-" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
-				topicJsonArray.put("group-" + device.getDevicegroupid());
+				topicJsonArray.add("group-" + device.getDevicegroupid());
 			}
-			topicJsonArray.put("org-" + device.getOrgid());
+			topicJsonArray.add("org-" + device.getOrgid());
 
-			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();
 				// backupvideoJson.put("type", "video");
@@ -247,6 +310,7 @@ public class PixsignageService2 {
 						"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 								+ org.getBackupvideo().getFilepath());
+				backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
 				backupvideoJson.put("file", org.getBackupvideo().getFilename());
 				backupvideoJson.put("size", org.getBackupvideo().getSize());
 				responseJson.put("backup_media", backupvideoJson);
@@ -260,6 +324,7 @@ public class PixsignageService2 {
 							"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 									+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 									+ defaultOrg.getBackupvideo().getFilepath());
+					backupvideoJson.put("path", "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
 					backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
 					backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
 					responseJson.put("backup_media", backupvideoJson);
@@ -305,9 +370,14 @@ public class PixsignageService2 {
 			} else {
 				responseJson.put("tag_flag", 0);
 			}
-
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
+			responseJson.put("hotspot_flag", Integer.parseInt(device.getHotspotflag()));
+			responseJson.put("hotspot_ssid", device.getHotspotssid());
+			responseJson.put("hotspot_password", device.getHotspotpassword());
+			responseJson.put("hotspot_frequency", device.getHotspotfrequency());
 			responseJson.put("devicegrid_id", device.getDevicegridid());
 			responseJson.put("xpos", device.getXpos());
 			responseJson.put("ypos", device.getYpos());
@@ -321,12 +391,12 @@ public class PixsignageService2 {
 			if (devicegrid != null) {
 				List<Device> devices = devicegrid.getDevices();
 				for (Device d : devices) {
-					griddtlArray.put(d.getTerminalid());
+					griddtlArray.add(d.getTerminalid());
 				}
 			}
 			responseJson.put("devicegrid_dtls", griddtlArray);
 
-			logger.info("Pixsignage Service init response: {}", responseJson.toString());
+			logger.info("Pixsignage Service {} init response: {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service init exception", e);
@@ -339,9 +409,9 @@ public class PixsignageService2 {
 	public String getbundle(String request) {
 		try {
 			logger.info("Pixsignage Service get_bundle: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -357,12 +427,8 @@ public class PixsignageService2 {
 
 			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
 					"" + device.getDeviceid());
-			if (device.getDevicegroupid() > 0) {
-				devicefileService.refreshDevicefiles("2", "" + device.getDevicegroupid());
-			} else {
-				devicefileService.refreshDevicefiles("1", "" + device.getDeviceid());
-			}
-			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -376,9 +442,9 @@ public class PixsignageService2 {
 	public String getschedule(String request) {
 		try {
 			logger.info("Pixsignage Service get_schedule: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -394,7 +460,8 @@ public class PixsignageService2 {
 
 			JSONObject responseJson;
 			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
-			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -408,9 +475,9 @@ public class PixsignageService2 {
 	public String getplan(String request) {
 		try {
 			logger.info("Pixsignage Service get_plan: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -426,7 +493,8 @@ public class PixsignageService2 {
 
 			JSONObject responseJson;
 			responseJson = planService.generatePlanJson("" + device.getDeviceid());
-			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service get_plan response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -440,14 +508,14 @@ public class PixsignageService2 {
 	public String reportstatus(String request) {
 		try {
 			logger.info("Pixsignage Service report_status: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
-			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
-			String temperature = requestJson.getString("temperature");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			long sdcard_free_bytes = requestJson.optLong("sdcard_free_bytes");
+			long sdcard_total_bytes = requestJson.optLong("sdcard_total_bytes");
+			String temperature = requestJson.optString("temperature");
 
-			JSONObject locationJson = requestJson.getJSONObject("location");
+			JSONObject locationJson = requestJson.optJSONObject("location");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -463,11 +531,11 @@ public class PixsignageService2 {
 			}
 
 			if (locationJson != null) {
-				String latitude = locationJson.getString("latitude");
-				String longitude = locationJson.getString("lontitude");
-				String city = locationJson.getString("city");
-				String addr1 = locationJson.getString("addr");
-				String addr2 = locationJson.getString("desc");
+				String latitude = locationJson.optString("latitude");
+				String longitude = locationJson.optString("lontitude");
+				String city = locationJson.optString("city");
+				String addr1 = locationJson.optString("addr");
+				String addr2 = locationJson.optString("desc");
 				device.setLatitude(latitude);
 				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
@@ -500,7 +568,9 @@ public class PixsignageService2 {
 			 * playlogMapper.insertSelective(playlog); }
 			 */
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_status exception", e);
@@ -513,19 +583,18 @@ public class PixsignageService2 {
 	public String refresh(String request) {
 		try {
 			logger.info("Pixsignage Service refresh: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			JSONObject locationJson = requestJson.getJSONObject("location");
-			long freebytes = requestJson.has("sdcard_free_bytes") ? requestJson.getLong("sdcard_free_bytes") : 0;
-			long totalbytes = requestJson.has("sdcard_total_bytes") ? requestJson.getLong("sdcard_total_bytes") : 0;
-			String temperature = requestJson.has("temperature") ? requestJson.getString("temperature") : "";
-			int downloadspeed = requestJson.has("download_speed") ? requestJson.getInt("download_speed") : 0;
-			long downloadbytes = requestJson.has("total_download_bytes") ? requestJson.getLong("total_download_bytes")
-					: 0;
-			String networkmode = requestJson.has("network_mode") ? requestJson.getString("network_mode") : "0";
-			int networksignal = requestJson.has("signal_strength") ? requestJson.getInt("signal_strength") : 0;
-			int brightness = requestJson.has("brightness") ? requestJson.getInt("brightness") : 0;
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			JSONObject locationJson = requestJson.optJSONObject("location");
+			long freebytes = requestJson.optLong("sdcard_free_bytes");
+			long totalbytes = requestJson.optLong("sdcard_total_bytes");
+			String temperature = requestJson.optString("temperature");
+			int downloadspeed = requestJson.optInt("download_speed");
+			long downloadbytes = requestJson.optLong("total_download_bytes");
+			String networkmode = requestJson.optString("network_mode", "0");
+			int networksignal = requestJson.optInt("signal_strength");
+			int brightness = requestJson.optInt("brightness");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -541,11 +610,11 @@ public class PixsignageService2 {
 			}
 
 			if (locationJson != null) {
-				String latitude = locationJson.getString("latitude");
-				String longitude = locationJson.getString("lontitude");
-				String city = locationJson.getString("city");
-				String addr1 = locationJson.getString("addr");
-				String addr2 = locationJson.getString("desc");
+				String latitude = locationJson.optString("latitude");
+				String longitude = locationJson.optString("lontitude");
+				String city = locationJson.optString("city");
+				String addr1 = locationJson.optString("addr");
+				String addr2 = locationJson.optString("desc");
 				device.setLatitude(latitude);
 				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
@@ -573,21 +642,30 @@ public class PixsignageService2 {
 
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			responseJson.put("tags", device.getTags());
+			responseJson.put("interval1", device.getInterval1());
+			responseJson.put("interval2", device.getInterval2());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
+			responseJson.put("hotspot_flag", Integer.parseInt(device.getHotspotflag()));
+			responseJson.put("hotspot_ssid", device.getHotspotssid());
+			responseJson.put("hotspot_password", device.getHotspotpassword());
+			responseJson.put("hotspot_frequency", device.getHotspotfrequency());
 
 			if (device.getUpgradeflag().equals("0")) {
 				responseJson.put("version_name", "");
 				responseJson.put("version_code", "0");
 				responseJson.put("url", "");
+				responseJson.put("path", "");
 				logger.info("Auto upgrade disabled: {}", device.getTerminalid());
 			} else {
 				String ostype = device.getOstype();
 				String appname = device.getAppname();
 				String sign = device.getSign();
 				String mtype = null;
-				if (ostype.equals("2")) {
+				if (ostype.equals("2") || ostype.equals("3")) {
 					mtype = sign;
 				} else {
 					if (sign != null && sign.length() > 0) {
@@ -609,24 +687,25 @@ public class PixsignageService2 {
 					responseJson.put("version_name", "");
 					responseJson.put("version_code", "0");
 					responseJson.put("url", "");
+					responseJson.put("path", "");
 					logger.info("Appfile not found, disabled upgrade: {}", device.getTerminalid());
 				} else {
 					String url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 							+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + appfile.getFilepath();
+					String path = "/pixsigdata" + appfile.getFilepath();
 					responseJson.put("version_name", appfile.getVname());
 					responseJson.put("version_code", "" + appfile.getVcode());
 					responseJson.put("url", url);
+					responseJson.put("path", path);
 				}
 			}
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 			JSONArray eventJsonArray = new JSONArray();
-			responseJson.put("events", eventJsonArray);
 			List<Msgevent> msgevents = msgeventMapper.selectList(null, Msgevent.ObjType_1_Device,
 					"" + device.getDeviceid(), null, Msgevent.Status_Wait);
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
-				eventJsonArray.put(eventJson);
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
@@ -644,6 +723,7 @@ public class PixsignageService2 {
 								"http://" + configMapper.selectValueByCode("ServerIP") + ":"
 										+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
 										+ org.getBackupvideo().getFilepath());
+						backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
 						backupvideoJson.put("file", org.getBackupvideo().getFilename());
 						backupvideoJson.put("size", org.getBackupvideo().getSize());
 						contentJson.put("backup_media", backupvideoJson);
@@ -702,10 +782,12 @@ public class PixsignageService2 {
 				}
 				msgevent.setStatus(Msgevent.Status_Sent);
 				msgeventMapper.updateByPrimaryKeySelective(msgevent);
+				eventJsonArray.add(eventJson);
 			}
+			responseJson.put("events", eventJsonArray);
 
-			if (responseJson.getString("url").length() > 0 || responseJson.getJSONArray("events").length() > 0) {
-				logger.info("Pixsignage Service refresh response: {}", responseJson.toString());
+			if (responseJson.optString("url").length() > 0 || responseJson.getJSONArray("events").size() > 0) {
+				logger.info("Pixsignage Service {} refresh response: {}", terminalid, responseJson.toString());
 			}
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -719,9 +801,9 @@ public class PixsignageService2 {
 	public String reportfile(String request) {
 		try {
 			logger.info("Pixsignage Service report_file: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -736,13 +818,13 @@ public class PixsignageService2 {
 			}
 
 			JSONArray fileJsonArray = requestJson.getJSONArray("files");
-			for (int i = 0; i < fileJsonArray.length(); i++) {
+			for (int i = 0; i < fileJsonArray.size(); i++) {
 				JSONObject fileJson = fileJsonArray.getJSONObject(i);
-				String type = fileJson.getString("type");
-				int id = fileJson.getInt("id");
-				int progress = fileJson.getInt("progress");
-				String status = fileJson.getString("status");
-				String desc = fileJson.getString("desc");
+				String type = fileJson.optString("type");
+				int id = fileJson.optInt("id");
+				int progress = fileJson.optInt("progress");
+				String status = fileJson.optString("status");
+				String desc = fileJson.optString("desc");
 				String objtype = "";
 				if (type.equals("video")) {
 					objtype = Devicefile.ObjType_Video;
@@ -792,12 +874,14 @@ public class PixsignageService2 {
 				}
 			}
 
-			String fullflag = requestJson.getString("full_flag");
+			String fullflag = requestJson.optString("full_flag");
 			if (fullflag != null && fullflag.equals("1")) {
 				devicefileService.clearByDevice("" + device.getDeviceid());
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_file exception", e);
@@ -810,9 +894,9 @@ public class PixsignageService2 {
 	public String reportdvb(String request) {
 		try {
 			logger.info("Pixsignage Service report_dvb: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -837,10 +921,10 @@ public class PixsignageService2 {
 			}
 
 			if (dvbJsonArray != null) {
-				for (int i = 0; i < dvbJsonArray.length(); i++) {
+				for (int i = 0; i < dvbJsonArray.size(); i++) {
 					JSONObject dvbJson = dvbJsonArray.getJSONObject(i);
-					String name = dvbJson.getString("name");
-					String num = "" + dvbJson.getInt("num");
+					String name = dvbJson.optString("name");
+					String num = "" + dvbJson.optInt("num");
 					Dvb dvb = oldDvbHash.get(num);
 					if (dvb != null) {
 						dvb.setBranchid(org.getTopbranchid());
@@ -868,7 +952,9 @@ public class PixsignageService2 {
 				}
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_dvb exception", e);
@@ -881,18 +967,18 @@ public class PixsignageService2 {
 	public String reportcrash(String request) {
 		try {
 			logger.info("Pixsignage Service report_crash: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			String clientip = requestJson.getString("client_ip");
-			String clientname = requestJson.getString("client_name");
-			String os = requestJson.getString("os");
-			String appname = requestJson.getString("app_name");
-			String vname = requestJson.getString("version_name");
-			String vcode = requestJson.getString("version_code");
-			String stack = requestJson.getString("stack");
-			String resolution = requestJson.getString("resolution");
-			String other = requestJson.getString("other");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			String clientip = requestJson.optString("client_ip");
+			String clientname = requestJson.optString("client_name");
+			String os = requestJson.optString("os");
+			String appname = requestJson.optString("app_name");
+			String vname = requestJson.optString("version_name");
+			String vcode = requestJson.optString("version_code");
+			String stack = requestJson.optString("stack");
+			String resolution = requestJson.optString("resolution");
+			String other = requestJson.optString("other");
 
 			Crashreport crashreport = new Crashreport();
 			crashreport.setHardkey(hardkey);
@@ -908,7 +994,9 @@ public class PixsignageService2 {
 			crashreport.setOther(other);
 			crashreportMapper.insertSelective(crashreport);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_crash exception", e);
@@ -935,9 +1023,11 @@ public class PixsignageService2 {
 				return handleResult(1008, "无效城市");
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
-			responseJson.put("weather", new JSONObject(weather.getWeather()));
+			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service get_weather exception", e);
@@ -965,8 +1055,10 @@ public class PixsignageService2 {
 
 			Weather weather = weatherService.selectByCity(Weather.Type_Yahoo, city);
 			if (weather.getWeather() != null && weather.getWeather().length() > 0) {
-				JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-				responseJson.put("weather", new JSONObject(weather.getWeather()));
+				JSONObject responseJson = new JSONObject();
+				responseJson.put("code", 0);
+				responseJson.put("message", "成功");
+				responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 				return responseJson.toString();
 			} else {
 				return handleResult(1009, "天气无法获得");
@@ -983,20 +1075,21 @@ public class PixsignageService2 {
 	public String getcalendar(String request) {
 		try {
 			logger.info("Pixsignage Service get_calendar: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			long starttime = requestJson.getLong("start_time");
-			long endtime = requestJson.getLong("end_time");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			long starttime = requestJson.optLong("start_time");
+			long endtime = requestJson.optLong("end_time");
 
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null || !device.getStatus().equals("1")) {
 				return handleResult(1004, "无效终端号" + terminalid);
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			JSONArray scheduleJsonArray = new JSONArray();
-			responseJson.put("schedules", scheduleJsonArray);
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 
@@ -1007,7 +1100,7 @@ public class PixsignageService2 {
 					String server = "http://" + pixedxip + ":" + pixedxport;
 					String s = PixedxUtil.schedules(server, device.getExternalid());
 					if (s.length() > 0) {
-						JSONObject json = new JSONObject(s);
+						JSONObject json = JSONObject.fromObject(s);
 						JSONArray dataJsonArray = json.getJSONArray("data");
 
 						long t = starttime;
@@ -1017,11 +1110,11 @@ public class PixsignageService2 {
 							c.setTimeInMillis(t);
 							int workday = c.get(Calendar.DAY_OF_WEEK) - 1;
 							logger.info("Current timestamp={}, workday={}", t, workday);
-							for (int i = 0; i < dataJsonArray.length(); i++) {
+							for (int i = 0; i < dataJsonArray.size(); i++) {
 								JSONObject dataJson = dataJsonArray.getJSONObject(i);
-								if (dataJson.getInt("workday") == workday) {
-									String s1 = dataJson.getString("start_time");
-									String s2 = dataJson.getString("end_time");
+								if (dataJson.optInt("workday") == workday) {
+									String s1 = dataJson.optString("start_time");
+									String s2 = dataJson.optString("end_time");
 									int h1 = Integer.parseInt(s1.substring(0, 2));
 									int m1 = Integer.parseInt(s1.substring(3, 5));
 									int h2 = Integer.parseInt(s2.substring(0, 2));
@@ -1037,11 +1130,11 @@ public class PixsignageService2 {
 									c.set(Calendar.MILLISECOND, 0);
 									long l2 = c.getTimeInMillis();
 									JSONObject scheduleJson = new JSONObject();
-									scheduleJson.put("name", dataJson.getString("course_name"));
-									scheduleJson.put("host", dataJson.getString("instructor"));
+									scheduleJson.put("name", dataJson.optString("course_name"));
+									scheduleJson.put("host", dataJson.optString("instructor"));
 									scheduleJson.put("start_time", l1);
 									scheduleJson.put("end_time", l2);
-									scheduleJsonArray.put(scheduleJson);
+									scheduleJsonArray.add(scheduleJson);
 								}
 							}
 							t += 86400000L;
@@ -1053,24 +1146,25 @@ public class PixsignageService2 {
 					String s2 = dateFormat.format(new Date(endtime));
 					String s = EduCloudUtil.getScheduleList(device.getExternalid(), s1, s2);
 					if (s.length() > 0) {
-						JSONObject json = new JSONObject(s);
+						JSONObject json = JSONObject.fromObject(s);
 						JSONArray dataJsonArray = json.getJSONArray("result");
 						if (dataJsonArray != null) {
-							for (int i = 0; i < dataJsonArray.length(); i++) {
+							for (int i = 0; i < dataJsonArray.size(); i++) {
 								JSONObject dataJson = dataJsonArray.getJSONObject(i);
-								Date d1 = CommonUtil.parseDate(dataJson.getString("startTime"), "yyyyMMddHHmmss");
-								Date d2 = CommonUtil.parseDate(dataJson.getString("endTime"), "yyyyMMddHHmmss");
+								Date d1 = CommonUtil.parseDate(dataJson.optString("startTime"), "yyyyMMddHHmmss");
+								Date d2 = CommonUtil.parseDate(dataJson.optString("endTime"), "yyyyMMddHHmmss");
 								JSONObject scheduleJson = new JSONObject();
-								scheduleJson.put("name", dataJson.getString("courseName"));
-								scheduleJson.put("host", dataJson.getString("teacherName"));
+								scheduleJson.put("name", dataJson.optString("courseName"));
+								scheduleJson.put("host", dataJson.optString("teacherName"));
 								scheduleJson.put("start_time", d1.getTime());
 								scheduleJson.put("end_time", d2.getTime());
-								scheduleJsonArray.put(scheduleJson);
+								scheduleJsonArray.add(scheduleJson);
 							}
 						}
 					}
 				}
 			}
+			responseJson.put("schedules", scheduleJsonArray);
 
 			logger.info("Pixsignage Service get_calendar response: {}", responseJson.toString());
 			return responseJson.toString();
@@ -1088,9 +1182,9 @@ public class PixsignageService2 {
 			@FormDataParam("screen") InputStream screenFile) {
 		try {
 			logger.info("Pixsignage Service report_screen: {}, screenHeader: {}", request, screenHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1111,7 +1205,9 @@ public class PixsignageService2 {
 			logger.info("Save screen snapshot to: {}", filename);
 			File file = new File(filename);
 			FileUtils.copyInputStreamToFile(screenFile, file);
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service report_screen response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1128,9 +1224,9 @@ public class PixsignageService2 {
 			@FormDataParam("playlog") InputStream playlogFile) {
 		try {
 			logger.info("Pixsignage Service report_playlog: {}, playlogHeader: {}", request, playlogHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1157,7 +1253,9 @@ public class PixsignageService2 {
 			File tempfile = new File(dir, tempname);
 			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
 			FileUtils.moveFile(tempfile, new File(dir, okname));
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1174,9 +1272,9 @@ public class PixsignageService2 {
 			@FormDataParam("pflow") InputStream pflowFile) {
 		try {
 			logger.info("Pixsignage Service report_pflow: {}, pflowHeader: {}", request, pflowHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1199,7 +1297,9 @@ public class PixsignageService2 {
 			File tempfile = new File(tempname);
 			FileUtils.copyInputStreamToFile(pflowFile, tempfile);
 			FileUtils.moveFile(tempfile, new File(filename));
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service report_pflow response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1213,18 +1313,18 @@ public class PixsignageService2 {
 	public String reportflowrate(String request) {
 		try {
 			logger.info("Pixsignage Service report_flowrate: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
-			long starttime = requestJson.getLong("start_time");
-			int total = requestJson.getInt("total_delta");
-			int male = requestJson.getInt("male_delta");
-			int female = requestJson.getInt("female_delta");
-			int age1 = requestJson.getInt("child_delta");
-			int age2 = requestJson.getInt("juvenile_delta");
-			int age3 = requestJson.getInt("youndster_delta");
-			int age4 = requestJson.getInt("middle_delta");
-			int age5 = requestJson.getInt("elder_delta");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			long starttime = requestJson.optLong("start_time");
+			int total = requestJson.optInt("total_delta");
+			int male = requestJson.optInt("male_delta");
+			int female = requestJson.optInt("female_delta");
+			int age1 = requestJson.optInt("child_delta");
+			int age2 = requestJson.optInt("juvenile_delta");
+			int age3 = requestJson.optInt("youndster_delta");
+			int age4 = requestJson.optInt("middle_delta");
+			int age5 = requestJson.optInt("elder_delta");
 
 			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
 				return handleResult(1020, "数据错误");
@@ -1275,10 +1375,61 @@ public class PixsignageService2 {
 				hourflowlogMapper.insertSelective(hourflowlog);
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_flowrate exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("upload_file")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportfile(@FormDataParam("meta") String request,
+			@FormDataParam("file") FormDataContentDisposition fileHeader, @FormDataParam("file") InputStream fileFile) {
+		try {
+			logger.info("Pixsignage Service upload_file: {}, fileHeader: {}", request, fileHeader);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			String ext = FilenameUtils.getExtension(fileHeader.getFileName().toLowerCase());
+			if (ext == null || ext.length() == 0) {
+				ext = "";
+			} else {
+				ext = "." + ext;
+			}
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/file/" + device.getDeviceid()));
+			String filename = "/file/" + device.getDeviceid() + "/file-" + device.getDeviceid() + "-"
+					+ new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()) + ext;
+			logger.info("Save upload file to: {}", CommonConfig.CONFIG_PIXDATA_HOME + filename);
+			File file = new File(CommonConfig.CONFIG_PIXDATA_HOME + filename);
+			FileUtils.copyInputStreamToFile(fileFile, file);
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			responseJson.put("url", "http://" + configMapper.selectValueByCode("ServerIP") + ":"
+					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + filename);
+			responseJson.put("path", "/pixsigdata" + filename);
+			logger.info("Pixsignage Service upload_file response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service upload_file exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1291,9 +1442,9 @@ public class PixsignageService2 {
 			@FormDataParam("debug") InputStream debugFile) {
 		try {
 			logger.info("Pixsignage Service report_debug: {}, debugHeader: {}", request, debugHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String terminalid = requestJson.getString("terminal_id");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1320,11 +1471,70 @@ public class PixsignageService2 {
 			debugreport.setFilepath(filepath);
 			debugreportMapper.insertSelective(debugreport);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service report_debug response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage Service report_debug exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_text")
+	@Produces("application/json;charset=UTF-8")
+	public String gettext(String request) {
+		try {
+			logger.info("Pixsignage Service get_text: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String terminalid = requestJson.optString("terminal_id");
+
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null || !device.getStatus().equals("1")) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			}
+			Branch branch = branchMapper.selectByPrimaryKey("" + device.getBranchid());
+			String branchid1 = "" + branch.getBranchid();
+			String branchid2 = "" + branch.getParentid();
+			String branchid3 = "" + branch.getParentid2();
+			String branchid4 = "" + branch.getParentid3();
+
+			List<Text> texts1 = textMapper.selectList("" + device.getOrgid(), branchid1, null, null, null);
+			List<Text> texts2 = textMapper.selectList("" + device.getOrgid(), branchid2, null, null, null);
+			List<Text> texts3 = textMapper.selectList("" + device.getOrgid(), branchid3, null, null, null);
+			List<Text> texts4 = textMapper.selectList("" + device.getOrgid(), branchid4, null, null, null);
+			List<String> texts = new ArrayList<String>();
+			for (Text text : texts1) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts2) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts3) {
+				texts.add(text.getText());
+			}
+			for (Text text : texts4) {
+				texts.add(text.getText());
+			}
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			JSONArray textJsonArray = new JSONArray();
+			String s = "";
+			for (String text : texts) {
+				s += text;
+				textJsonArray.add(text);
+			}
+			responseJson.put("texts", textJsonArray);
+			responseJson.put("checksum", DigestUtils.md5Hex(s));
+
+			logger.info("Pixsignage Service get_text response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage Service get_text exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

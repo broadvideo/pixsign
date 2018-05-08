@@ -97,6 +97,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30402
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30406
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30409
+					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30409
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
@@ -120,8 +122,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if (!org.getCode().equals("default")
-					&& (p.getPrivilegeid().intValue() == 30205 || p.getPrivilegeid().intValue() == 30405
-							|| p.getPrivilegeid().intValue() == 30406 || p.getPrivilegeid().intValue() == 30909)) {
+					&& (p.getPrivilegeid().intValue() == 30205 || p.getPrivilegeid().intValue() == 30909)) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			}

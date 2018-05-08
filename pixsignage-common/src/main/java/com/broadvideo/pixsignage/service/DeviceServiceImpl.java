@@ -230,6 +230,11 @@ public class DeviceServiceImpl implements DeviceService {
 		msgBodyJson.put("interval1", device.getInterval1());
 		msgBodyJson.put("interval2", device.getInterval2());
 
+		msgBodyJson.put("hotspot_flag", Integer.parseInt(device.getHotspotflag()));
+		msgBodyJson.put("hotspot_ssid", device.getHotspotssid());
+		msgBodyJson.put("hotspot_password", device.getHotspotpassword());
+		msgBodyJson.put("hotspot_frequency", device.getHotspotfrequency());
+
 		String topic = "device-" + deviceid;
 		ActiveMQUtil.publish(topic, msgJson.toString());
 	}

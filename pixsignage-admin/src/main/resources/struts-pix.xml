@@ -1249,6 +1249,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="template!savefrompage" method="doSaveFromPage" class="templateAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="template!fetch" method="doFetch" class="templateAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1307,6 +1313,12 @@
 			</result>
 		</action>
 		<action name="page!delete" method="doDelete" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="page!review" method="doReview" class="pageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

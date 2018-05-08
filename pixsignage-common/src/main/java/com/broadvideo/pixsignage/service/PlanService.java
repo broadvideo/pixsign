@@ -3,10 +3,10 @@ package com.broadvideo.pixsignage.service;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Plan;
+
+import net.sf.json.JSONObject;
 
 public interface PlanService {
 	public int selectCount(String orgid, String branchid, String subbranchflag, String plantype, String search);

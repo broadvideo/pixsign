@@ -26,6 +26,8 @@ public interface TemplateService {
 
 	public void design(Template template) throws Exception;
 
+	public void saveFromPage(String pageid) throws Exception;
+
 	public void exportZip(String templateid) throws Exception;
 
 	public void importZip(File zipfile) throws Exception;

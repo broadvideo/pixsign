@@ -47,10 +47,12 @@ var PageModule = function () {
 				}
 				pagehtml += '<div class="col-md-3 col-xs-3">';
 				pagehtml += '<h3>' + aData.name + '</h3>';
-				if (aData.ratio == 1) {
-					pagehtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span></h6>';
-				} else if (aData.ratio == 2) {
-					pagehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
+				if (aData.reviewflag == 0) {
+					pagehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span></h6>';
+				} else if (aData.reviewflag == 1) {
+					pagehtml += '<h6><span class="label label-sm label-success">' + common.view.review_passed + '</span></h6>';
+				} else if (aData.reviewflag == 2) {
+					pagehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span></h6>';
 				}
 
 				pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="fancybox">';
@@ -65,14 +67,15 @@ var PageModule = function () {
 				if (aData.editflag == 1) {
 					pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs blue pix-page"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-copy"><i class="fa fa-copy"></i> ' + common.view.copy + '</a>';
-					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 					if (aData.privilegeflag == 1) {
 						pagehtml += '<a href="javascript:;" pageid="' + aData.pageid + '" class="btn default btn-xs purple pix-staffpage"><i class="fa fa-key"></i> ' + common.view.privilege + '</a>';
 					}
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-				} else {
+				}
+				if (aData.reviewflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-savetemplate"><i class="fa fa-save"></i> ' + common.view.save_template + '</a>';
 				}
 				pagehtml += '</div>';
 
@@ -178,6 +181,45 @@ var PageModule = function () {
 					$.ajax({
 						type : 'GET',
 						url : 'page!sync.action',
+						cache: false,
+						data : {
+							pageid: page.pageid,
+						},
+						dataType : 'json',
+						contentType : 'application/json;charset=utf-8',
+						beforeSend: function ( xhr ) {
+							Metronic.startPageLoading({animate: true});
+						},
+						success : function(data, status) {
+							Metronic.stopPageLoading();
+							if (data.errorcode == 0) {
+								bootbox.alert(common.tips.success);
+							} else {
+								bootbox.alert(common.tips.error + data.errormsg);
+							}
+						},
+						error : function() {
+							Metronic.stopPageLoading();
+							console.log('failue');
+						}
+					});				
+				}
+			});
+		});
+
+		$('body').on('click', '.pix-savetemplate', function(event) {
+			var target = $(event.target);
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				target = $(event.target).parent();
+				index = $(event.target).parent().attr('data-id');
+			}
+			var page = $('#PageTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.savetemplate, function(result) {
+				if (result == true) {
+					$.ajax({
+						type : 'GET',
+						url : 'template!savefrompage.action',
 						cache: false,
 						data : {
 							pageid: page.pageid,

@@ -11,11 +11,11 @@ public interface PageService {
 
 	public Page selectByUuid(String orgid, String uuid);
 
-	public int selectCount(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search);
+	public int selectCount(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search);
 
-	public List<Page> selectList(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search, String start, String length, Staff staff);
+	public List<Page> selectList(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search, String start, String length, Staff staff);
 
 	public int selectStaffCount(String pageid, String search);
 
@@ -46,5 +46,9 @@ public interface PageService {
 	public void addStaffs(Page page, String[] staffids);
 
 	public void deleteStaffs(Page page, String[] staffids);
+
+	public void setPageReviewWait(String pageid);
+
+	public void setPageReviewResut(String pageid, String reviewflag, String comment) throws Exception;
 
 }

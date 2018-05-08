@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +49,9 @@ import com.broadvideo.pixsignage.persistence.PlandtlMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service("planService")
 public class PlanServiceImpl implements PlanService {
@@ -151,7 +153,9 @@ public class PlanServiceImpl implements PlanService {
 		msgeventMapper.deleteByDtl(Msgevent.MsgType_Plan, Msgevent.ObjType_1_Device, "" + deviceid, null, null, null);
 		msgeventMapper.insertSelective(msgevent);
 
-		JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "SCHEDULE");
+		JSONObject msgJson = new JSONObject();
+		msgJson.put("msg_id", 1);
+		msgJson.put("msg_type", "SCHEDULE");
 		JSONObject msgBodyJson = generateBundlePlanJson("" + deviceid);
 		msgJson.put("msg_body", msgBodyJson);
 		String topic = "device-" + deviceid;
@@ -276,13 +280,13 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJson.put("scheduledtl_id", plandtl.getPlandtlid());
 					plandtlJson.put("media_type", "bundle");
 					plandtlJson.put("media_id", plandtl.getObjid());
-					plandtlJsonArray.put(plandtlJson);
+					plandtlJsonArray.add(plandtlJson);
 					bundleids.add(plandtl.getObjid());
 				}
 
 			}
 			planJson.put("scheduledtls", plandtlJsonArray);
-			planJsonArray.put(planJson);
+			planJsonArray.add(planJson);
 		}
 		responseJson.put("schedules", planJsonArray);
 		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
@@ -297,6 +301,10 @@ public class PlanServiceImpl implements PlanService {
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subpages", Page.class);
+		map.put("pagezones", Pagezone.class);
+		map.put("pagezonedtls", Pagezonedtl.class);
 
 		// generate final json
 		List<Plan> planList = new ArrayList<Plan>();
@@ -331,7 +339,6 @@ public class PlanServiceImpl implements PlanService {
 
 		for (Plan plan : planList) {
 			JSONObject planJson = new JSONObject();
-			planJsonArray.put(planJson);
 			planJson.put("plan_id", plan.getPlanid());
 			planJson.put("priority", plan.getPriority());
 			planJson.put("play_mode", "daily");
@@ -349,10 +356,18 @@ public class PlanServiceImpl implements PlanService {
 			for (Plandtl plandtl : plan.getPlandtls()) {
 				if (plandtl.getObjtype().equals(Plandtl.ObjType_Page)) {
 					Page page = pageMapper.selectByPrimaryKey("" + plandtl.getObjid());
+					if (page != null && !page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+						JSONObject pageJson = JSONObject.fromObject(page.getJson());
+						page = (Page) JSONObject.toBean(pageJson, Page.class, map);
+					}
 					if (page != null && pageHash.get(page.getPageid()) == null) {
 						pageHash.put(page.getPageid(), page);
 						for (Page subpage : page.getSubpages()) {
 							Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+							if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
+								JSONObject pageJson = JSONObject.fromObject(p.getJson());
+								p = (Page) JSONObject.toBean(pageJson, Page.class, map);
+							}
 							pageHash.put(p.getPageid(), p);
 						}
 					}
@@ -372,7 +387,7 @@ public class PlanServiceImpl implements PlanService {
 						if (plandtl.getDuration() > 0) {
 							plandtlJson.put("duration", plandtl.getDuration());
 						}
-						plandtlJsonArray.put(plandtlJson);
+						plandtlJsonArray.add(plandtlJson);
 					}
 				}
 
@@ -397,7 +412,7 @@ public class PlanServiceImpl implements PlanService {
 								videoJson.put("thumbnail",
 										"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
 								videoHash.put(video.getVideoid(), videoJson);
-								videoJsonArray.put(videoJson);
+								videoJsonArray.add(videoJson);
 							}
 						}
 					}
@@ -405,6 +420,7 @@ public class PlanServiceImpl implements PlanService {
 			}
 			planJson.put("plandtls", plandtlJsonArray);
 			planJson.put("videos", videoJsonArray);
+			planJsonArray.add(planJson);
 		}
 
 		return planJsonArray;
@@ -436,7 +452,6 @@ public class PlanServiceImpl implements PlanService {
 		}
 		for (Plan plan : planList) {
 			JSONObject planJson = new JSONObject();
-			planJsonArray.put(planJson);
 			planJson.put("plan_id", plan.getPlanid());
 			planJson.put("priority", plan.getPriority());
 			planJson.put("play_mode", "daily");
@@ -471,7 +486,7 @@ public class PlanServiceImpl implements PlanService {
 						}
 						plandtlJson.put("max_times", plandtl.getMaxtimes());
 						plandtlJson.put("tags", "");
-						plandtlJsonArray.put(plandtlJson);
+						plandtlJsonArray.add(plandtlJson);
 					}
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Video)) {
 					JSONObject plandtlJson = new JSONObject();
@@ -488,7 +503,7 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJson.put("duration", plandtl.getDuration());
 					plandtlJson.put("max_times", plandtl.getMaxtimes());
 					plandtlJson.put("tags", video.getTags());
-					plandtlJsonArray.put(plandtlJson);
+					plandtlJsonArray.add(plandtlJson);
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Image)) {
 					JSONObject plandtlJson = new JSONObject();
 					Image image = plandtl.getImage();
@@ -510,7 +525,7 @@ public class PlanServiceImpl implements PlanService {
 					}
 					plandtlJson.put("max_times", plandtl.getMaxtimes());
 					plandtlJson.put("tags", "");
-					plandtlJsonArray.put(plandtlJson);
+					plandtlJsonArray.add(plandtlJson);
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Mediagrid)) {
 					Mediagrid mediagrid = plandtl.getMediagrid();
 					if (!mediagrid.getStatus().equals(Mediagrid.Status_Active)) {
@@ -562,7 +577,7 @@ public class PlanServiceImpl implements PlanService {
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
-									plandtlJsonArray.put(plandtlJson);
+									plandtlJsonArray.add(plandtlJson);
 								}
 							} else {
 								Mmediadtl mmediadtl = mmediadtlMapper.selectByPos("" + mediagriddtl.getMmediaid(),
@@ -588,7 +603,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("duration", plandtl.getDuration());
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
-									plandtlJsonArray.put(plandtlJson);
+									plandtlJsonArray.add(plandtlJson);
 								} else if (mmediadtl != null
 										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
 									JSONObject plandtlJson = new JSONObject();
@@ -617,7 +632,7 @@ public class PlanServiceImpl implements PlanService {
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
-									plandtlJsonArray.put(plandtlJson);
+									plandtlJsonArray.add(plandtlJson);
 								}
 							}
 						}
@@ -625,6 +640,7 @@ public class PlanServiceImpl implements PlanService {
 				}
 
 			}
+			planJsonArray.add(planJson);
 		}
 
 		return planJsonArray;

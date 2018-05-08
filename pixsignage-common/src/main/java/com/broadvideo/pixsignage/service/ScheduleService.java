@@ -2,9 +2,9 @@ package com.broadvideo.pixsignage.service;
 
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.broadvideo.pixsignage.domain.Schedule;
+
+import net.sf.json.JSONObject;
 
 public interface ScheduleService {
 	public List<Schedule> selectList(String scheduletype, String bindtype, String bindid, String playmode);

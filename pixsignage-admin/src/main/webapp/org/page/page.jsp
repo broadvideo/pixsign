@@ -121,11 +121,9 @@
 									<label class="radio-inline">
 										<input type="radio" name="templateflag" value="0" checked> <spring:message code="pixsign.prop.templateflag_0"/>
 									</label>
-									<!-- 
 									<label class="radio-inline">
 										<input type="radio" name="templateflag" value="1"> <spring:message code="pixsign.prop.templateflag_1"/>
 									</label>
-									-->
 									<label class="radio-inline">
 										<input type="radio" name="templateflag" value="2"> <spring:message code="pixsign.prop.templateflag_2"/>
 									</label>
