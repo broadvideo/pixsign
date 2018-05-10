@@ -41,6 +41,7 @@ import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
@@ -837,6 +838,46 @@ public class PageServiceImpl implements PageService {
 
 		makeHtmlZip("" + page.getPageid());
 		return page;
+	}
+
+	public void exportZipFull(String pageid, File zipFile) throws Exception {
+		ArrayList<Page> pageList = new ArrayList<Page>();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		pageList.add(page);
+		for (Page subpage : page.getSubpages()) {
+			Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+			pageList.add(p);
+		}
+		for (Page p : pageList) {
+			for (Pagezone pagezone : p.getPagezones()) {
+				if (pagezone.getType() == Pagezone.Type_Video) {
+					for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+						Video video = pagezonedtl.getVideo();
+						if (video != null && videoHash.get(video.getVideoid()) == null) {
+							videoHash.put(video.getVideoid(), video);
+						}
+					}
+				}
+			}
+		}
+
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+		out.putNextEntry(new ZipEntry("video/"));
+
+		Iterator<Entry<Integer, Video>> iter = videoHash.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, Video> entry = iter.next();
+			Video video = entry.getValue();
+			File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getFilepath());
+			CommonUtil.zip(out, videoFile, "video/" + video.getFilename());
+		}
+
+		File pagezipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + pageid + "/page-" + pageid + ".zip");
+		if (pagezipFile.exists()) {
+			CommonUtil.zip(out, pagezipFile, "page-" + pageid + ".zip");
+		}
+		out.close();
 	}
 
 	public void addStaffs(Page page, String[] staffids) {

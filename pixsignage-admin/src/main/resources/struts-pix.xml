@@ -1354,6 +1354,14 @@
 				<param name="bufferSize">8192</param>
 			</result>
 		</action>
+		<action name="page!exportfull" method="doExportFull" class="pageAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
 		<action name="page!addstaffs" method="doAddStaffs" class="pageAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="json">

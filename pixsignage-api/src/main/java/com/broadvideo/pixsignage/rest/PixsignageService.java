@@ -278,12 +278,12 @@ public class PixsignageService {
 			responseJson.put("terminalid", device.getTerminalid());
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
-			responseJson.put("msg_topic", topicJsonArray);
 			topicJsonArray.add("device-" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
 				topicJsonArray.add("group-" + device.getDevicegroupid());
 			}
 			topicJsonArray.add("org-" + device.getOrgid());
+			responseJson.put("msg_topic", topicJsonArray);
 
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();

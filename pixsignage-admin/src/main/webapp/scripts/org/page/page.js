@@ -75,6 +75,7 @@ var PageModule = function () {
 				}
 				if (aData.reviewflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+					pagehtml += '<a href="page!exportfull.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-savetemplate"><i class="fa fa-save"></i> ' + common.view.save_template + '</a>';
 				}
 				pagehtml += '</div>';

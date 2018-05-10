@@ -43,6 +43,8 @@ public interface PageService {
 
 	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
 
+	public void exportZipFull(String pageid, File zipFile) throws Exception;
+
 	public void addStaffs(Page page, String[] staffids);
 
 	public void deleteStaffs(Page page, String[] staffids);

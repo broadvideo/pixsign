@@ -462,7 +462,6 @@ public class PlanServiceImpl implements PlanService {
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
 			planJson.put("end_time", new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
 			JSONArray plandtlJsonArray = new JSONArray();
-			planJson.put("plandtls", plandtlJsonArray);
 			for (Plandtl plandtl : plan.getPlandtls()) {
 				if (plandtl.getObjtype().equals(Plandtl.ObjType_Page)) {
 					String zipPath = "/page/" + plandtl.getObjid() + "/page-" + plandtl.getObjid() + ".zip";
@@ -640,6 +639,7 @@ public class PlanServiceImpl implements PlanService {
 				}
 
 			}
+			planJson.put("plandtls", plandtlJsonArray);
 			planJsonArray.add(planJson);
 		}
 

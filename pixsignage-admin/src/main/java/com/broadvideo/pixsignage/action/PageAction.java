@@ -363,6 +363,28 @@ public class PageAction extends BaseDatatableAction {
 		writer.close();
 	}
 
+	public String doExportFull() {
+		try {
+			String pageid = getParameter("pageid");
+			logger.info("PageAction doExportFull, staff={}, pageid={}", getLoginStaff().getLoginname(), pageid);
+			exportname = "page.zip";
+			String saveDir = CommonConfig.CONFIG_PIXDATA_HOME + "/export/page/" + pageid;
+			FileUtils.forceMkdir(new File(saveDir));
+			File zipFile = new File(saveDir, exportname);
+			if (zipFile.exists()) {
+				zipFile.delete();
+			}
+			pageService.exportZipFull(pageid, zipFile);
+			inputStream = new FileInputStream(zipFile);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doExportFull exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doAddStaffs() {
 		try {
 			pageService.addStaffs(page, staffids);
