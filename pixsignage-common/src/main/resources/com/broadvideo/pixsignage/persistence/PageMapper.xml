@@ -486,7 +486,7 @@
       comment = #{comment,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
-      createstaffid = #{createstaffid,jdbcType=INTEGER}
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
       json = #{json,jdbcType=LONGVARCHAR}
     where pageid = #{pageid,jdbcType=INTEGER}
   </update>

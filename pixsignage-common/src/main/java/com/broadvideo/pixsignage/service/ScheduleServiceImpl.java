@@ -168,7 +168,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getEndtime()));
 			}
 			JSONArray scheduledtlJsonArray = new JSONArray();
-			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
 			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
 				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
 					JSONObject scheduledtlJson = new JSONObject();
@@ -181,6 +180,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					continue;
 				}
 			}
+			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
 			scheduleJsonArray.add(scheduleJson);
 		}
 

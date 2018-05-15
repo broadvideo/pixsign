@@ -10,8 +10,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.util.SqlUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -338,8 +339,6 @@ public class PageAction extends BaseDatatableAction {
 		JSONObject result = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 
-		result.put("files", jsonArray);
-
 		if (mypage != null) {
 			for (int i = 0; i < mypage.length; i++) {
 				JSONObject jsonItem = new JSONObject();
@@ -355,9 +354,10 @@ public class PageAction extends BaseDatatableAction {
 					addActionError(e.getMessage());
 					jsonItem.put("error", e.getMessage());
 				}
-				jsonArray.put(jsonItem);
+				jsonArray.add(jsonItem);
 			}
 		}
+		result.put("files", jsonArray);
 
 		writer.write(result.toString());
 		writer.close();
