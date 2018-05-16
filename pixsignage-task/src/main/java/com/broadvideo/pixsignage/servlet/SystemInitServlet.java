@@ -16,7 +16,6 @@ import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DbversionMapper;
 import com.broadvideo.pixsignage.task.SystemTask;
-import com.broadvideo.pixsignage.task.VIPNotifyTask;
 
 @SuppressWarnings("serial")
 public class SystemInitServlet extends HttpServlet {
@@ -47,8 +46,6 @@ public class SystemInitServlet extends HttpServlet {
 
 			SystemTask systemTask = (SystemTask) ctx.getBean("systemTask");
 			systemTask.start();
-			VIPNotifyTask vipNotifyTask = (VIPNotifyTask) ctx.getBean("vipNotifyTask");
-			vipNotifyTask.start();
 
 		} catch (Exception ex) {
 			logger.error("System init exception. ", ex);

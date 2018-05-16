@@ -110,7 +110,7 @@
 												</div>
 											</div>
 										</div>
-									  <div class="form-group">
+									  <div class="form-group hide">
 											<label class="col-md-3 control-label" >类型</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -134,7 +134,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group hide">
 											<label class="col-md-3 control-label">结束周期</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
@@ -231,7 +231,7 @@
 					                        	</div>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group" >
 											<label class="col-md-3 control-label">结束时间</label>
 											<div class="col-md-9">
 											    <div class="input-group date form_datetime">

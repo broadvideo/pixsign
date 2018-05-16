@@ -22,14 +22,7 @@
 	</properties>
 
 	<repositories>
-	     <repository>
-			<id>nexus</id>
-			<name>local nexus server</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+	
 		<repository>
           <id>getui-nexus</id>
           <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
@@ -279,7 +272,6 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
 		</dependency>
-
 		<dependency>
 			<groupId>smn</groupId>
 			<artifactId>cloud-java-sdk-smn</artifactId>

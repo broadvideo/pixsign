@@ -135,7 +135,7 @@ public class ResEvents extends ResBase {
 			} else if (room.getType().intValue() == 4) {// 班牌类型
 				persontype = 1;
 			}
-			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, persontype, "0",
+			List<Person> personList = personMapper.selectList(room.getOrgid() + "", null, null, persontype, "0",
 					Integer.MAX_VALUE + "");
 
 			List<Event> eventList = eventMapper.selectList(searchEvent, rowBounds);

@@ -57,7 +57,7 @@
     select 
     <include refid="Base_Column_List" />
     from meeting
-    where meetingid = #{meetingid,jdbcType=INTEGER}
+    where meetingid = #{meetingid,jdbcType=INTEGER}  and status='1'
   </select>
     <select id="selectList" resultMap="ExtResultMap" >
   

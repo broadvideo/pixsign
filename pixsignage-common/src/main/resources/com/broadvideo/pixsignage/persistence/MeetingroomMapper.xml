@@ -111,7 +111,7 @@
 		FROM meetingroom mr
 		  LEFT JOIN location l
 		    ON (mr.locationid = l.locationid)
-	  WHERE  mr.orgid = #{orgid} and mr.status='1' 
+	  WHERE  mr.orgid = #{orgid} and mr.status='1'  and openflag='1'
       <if test="locationid != null">
 	      AND EXISTS (
 		          SELECT

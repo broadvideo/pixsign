@@ -307,36 +307,39 @@ MeetingRoomModule.prototype.initMeetingroomTable = function () {
 		'bServerSide' : true,
 		'sAjaxSource' : 'meeting!list.action',
 		'aoColumns' : [
-		                {'sTitle' : '位置', 'mData' : 'locationname', 'bSortable' : false, 'sWidth' : '11%' },
-		                {'sTitle' : '会议室', 'mData' : 'meetingroomname', 'bSortable' : false, 'sWidth' : '11%' },
-		                {'sTitle' : '类型', 'mData' : 'periodtype', 'bSortable' : false, 'sWidth' : '9%' },
+		                {'sTitle' : '位置', 'mData' : 'locationname', 'bSortable' : false, 'sWidth' : '12%' },
+		                {'sTitle' : '会议室', 'mData' : 'meetingroomname', 'bSortable' : false, 'sWidth' : '12%' },
+		                {'sTitle' : '类型', 'mData' : 'periodtype', 'bSortable' : false, 'sWidth' : '10%','visible': false},
 		                {'sTitle' : '主题', 'mData' : 'subject', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '12%' },
 		                {'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '12%' },
-		                {'sTitle' : '结束周期', 'mData' : 'periodendtime', 'bSortable' : false, 'sWidth' : '12%' },
+		                {'sTitle' : '结束周期', 'mData' : 'periodendtime', 'bSortable' : false, 'sWidth' : '12%','visible': false },
 		                {'sTitle' : '预定人', 'mData' : 'bookstaffname', 'bSortable' : false, 'sWidth' : '10%' },
 						{'sTitle' : '', 'mData' : 'meetingroomid', 'bSortable' : false, 'sWidth' : '12%' }],
 		'iDisplayLength' : 10,
 		'sPaginationType' : 'bootstrap',
 		'oLanguage' : DataTableLanguage,
 		'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-		    $('td:eq(4)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
-		    $('td:eq(5)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
-		    $('td:eq(6)',nRow).html(function(){
+		    $('td:eq(3)',nRow).html(moment(aData.starttime).format('YYYY-MM-DD HH:mm'));
+		    $('td:eq(4)',nRow).html(moment(aData.endtime).format('YYYY-MM-DD HH:mm'));
+		  
+		    /*
+		     
+		     $('td:eq(6)',nRow).html(function(){
 		    	if(aData.periodendtime==null){
 		    		return "";
 		    	}else{
 		    	   return moment(aData.periodendtime).format('YYYY-MM-DD HH:mm');
 		    	}
 		    });
-
-		    $('td:eq(2)',nRow).html(getPeriodTypeName(aData.periodflag,aData.periodtype,aData.starttime));
+           **/
+		  //  $('td:eq(2)',nRow).html(getPeriodTypeName(aData.periodflag,aData.periodtype,aData.starttime));
 			var buttonhtml = '';
 			buttonhtml += '<div class="util-btn-margin-bottom-5">';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-meetingdtl"><i class="fa fa-edit"></i> 详情</a>';
 			buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 			buttonhtml += '</div>';
-			$('td:eq(8)', nRow).html(buttonhtml);
+			$('td:eq(6)', nRow).html(buttonhtml);
 			return nRow;
 		},
 		'fnServerParams': function(aoData) { 

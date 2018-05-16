@@ -119,7 +119,15 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public Integer addMeeting(Meeting meeting) {
+	public synchronized Integer addMeeting(Meeting meeting) {
+
+		String startStr = DateUtil.getDateStr(meeting.getStarttime(), "yyyyMMdd");
+		String endStr = DateUtil.getDateStr(meeting.getEndtime(), "yyyyMMdd");
+		if (!startStr.equals(endStr)) {
+			logger.error("addMeeting failed: starttime:{},endtime:{} not in one day.", meeting.getStarttime(),
+					meeting.getEndtime());
+			throw new ServiceException("不允许跨天预定会议室！");
+		}
 		int total = 1;
 		int success = 0;
 		int fail = 0;
@@ -317,9 +325,18 @@ public class MeetingServiceImpl implements MeetingService {
 	}
 
 	@Override
-	public void updateMeeting(Meeting meeting) {
-
+	public synchronized void updateMeeting(Meeting meeting) {
+		String startStr = DateUtil.getDateStr(meeting.getStarttime(), "yyyyMMdd");
+		String endStr = DateUtil.getDateStr(meeting.getEndtime(), "yyyyMMdd");
+		if (!startStr.equals(endStr)) {
+			logger.error("updateMeeting failed: starttime:{},endtime:{} not in one day.", meeting.getStarttime(),
+					meeting.getEndtime());
+			throw new ServiceException("不允许跨天预定会议室！");
+		}
 		Meeting curMeeting = this.getMeeting(meeting.getMeetingid(), meeting.getOrgid());
+		if (!curMeeting.getBookstaffid().equals(meeting.getUpdatestaffid())) {
+			throw new ServiceException("非法的删除操作！");
+		}
 		if (GlobalFlag.YES.equals(curMeeting.getPeriodflag())) {
 			String changeScope = meeting.getPeriodChangeScope();
 
@@ -345,7 +362,7 @@ public class MeetingServiceImpl implements MeetingService {
 				List<Meeting> delMeetings = this.meetingMapper.selectMeetingsAfter(meeting.getStarttime(),
 						curMeeting.getPeriodmeetingid());
 				for (Meeting delMeeting : delMeetings) {
-					this.deleteMeeting(delMeeting);
+					this.deleteSelfMeeting(delMeeting);
 				}
 				List<Meetingtime> meetingtimes = this.buildMeetingtimes(meeting);
 				for (Meetingtime meetingtime : meetingtimes) {
@@ -402,16 +419,21 @@ public class MeetingServiceImpl implements MeetingService {
 
 	}
 
+	/**
+	 * 只允许修改结束时间，起始时间不变
+	 * 
+	 * @param meeting
+	 */
 	public void _updateMeeting(Meeting meeting) {
 
 		Meeting curMeeting = this.getMeeting(meeting.getMeetingid(), meeting.getOrgid());
 		Meeting params = new Meeting();
 		meeting.setMeetingroomid(curMeeting.getMeetingroomid());
+		meeting.setPeriodendtime(meeting.getEndtime());
 		params.setMeetingroomid(curMeeting.getMeetingroomid());
 		params.setOrgid(curMeeting.getOrgid());
 		params.setMeetingid(meeting.getMeetingid());
 		logger.info("#####update meeting:{},meeting.enddate:{}", meeting.getMeetingid(), meeting.getEndtime());
-
 		params.setStarttime(meeting.getStarttime());
 		params.setEndtime(meeting.getEndtime());
 		if (GlobalFlag.YES.equals(curMeeting.getPeriodflag())) { // 周期会议，只能修改未开始的
@@ -419,24 +441,48 @@ public class MeetingServiceImpl implements MeetingService {
 				throw new ServiceException("会议已经开始，不允许修改.");
 			}
 		} else {// 非周期会议
-
-			// 进行中的会议，只能修改结束时间
-			if (System.currentTimeMillis() >= curMeeting.getStarttime().getTime()
-					&& System.currentTimeMillis() < curMeeting.getEndtime().getTime()) {
-				params.setStarttime(curMeeting.getStarttime());
-			}
 			// 检查会议是否结束
-			if (curMeeting.getEndtime().getTime() <= System.currentTimeMillis()) {
+			if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
+				logger.error("meeting({}) starttime({}) great than endtime({})", new Object[] { meeting.getMeetingid(),
+						meeting.getStarttime(), meeting.getEndtime() });
+				throw new ServiceException("会议开始时间必须小于结束时间.");
+			}
+			if (meeting.getStarttime().getTime() <= System.currentTimeMillis()
+					&& meeting.getEndtime().getTime() <= System.currentTimeMillis()) {
+				logger.error("_updateMeeting error:starttime({})  endtime({}) litte than current time.",
+						meeting.getStarttime(), meeting.getEndtime());
+				throw new ServiceException("会议时间不允许为小于当前时间！");
+
+			}
+			// 进行中的会议，只能修改结束时间
+			if (curMeeting.getStarttime().getTime() <= System.currentTimeMillis()
+					&& System.currentTimeMillis() < curMeeting.getEndtime().getTime()) {// 会议进行中
 				logger.error("Meeting(id:{},name:{}) already end,can't modify.", curMeeting.getMeetingid(),
 						curMeeting.getSubject());
+				// 标记开始时间为原始meeting的starttime
+				params.setStarttime(curMeeting.getStarttime());
+				meeting.setStarttime(curMeeting.getStarttime());
+				if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
+					throw new ServiceException("结束时间不能小于当前会议开始时间！");
+				}
+
+			} else if (curMeeting.getStarttime().getTime() > System.currentTimeMillis()) {// 未开始的
+
+				if (meeting.getStarttime().getTime() <= System.currentTimeMillis()
+						|| meeting.getEndtime().getTime() <= System.currentTimeMillis()) {
+					throw new ServiceException("预定时间不允许小于当前时间！");
+				}
+				// 检查起始时间
+				params.setStarttime(meeting.getStarttime());
+				params.setEndtime(meeting.getEndtime());
+
+			} else if (curMeeting.getEndtime().getTime() <= System.currentTimeMillis()) {
+
 				throw new ServiceException("会议已经结束，不允许修改会议信息.");
 			}
+
 		}
-		if (meeting.getStarttime().getTime() >= meeting.getEndtime().getTime()) {
-			logger.error("meeting({}) starttime({}) great than endtime({})", new Object[] { meeting.getMeetingid(),
-					meeting.getStarttime(), meeting.getEndtime() });
-			throw new ServiceException("会议开始时间必须小于结束时间.");
-		}
+
 		List<Meeting> existMeetings = this.meetingMapper.selectExistMeetings(params);
 		if (existMeetings != null && existMeetings.size() > 0) {
 			logger.error("Update Meeting(id:{}) fail:times in use.", meeting.getMeetingid());
@@ -460,12 +506,39 @@ public class MeetingServiceImpl implements MeetingService {
 		}
 		logger.info("#####update meeting:{},meeting.enddate:{}", meeting.getMeetingid(), meeting.getEndtime());
 		this.meetingMapper.updateMeeting(meeting);
-		List<Meetingtime> meetingtimes = this.buildMeetingtimes(meeting);
 		this.syncAttedees(meeting.getMeetingid(), meeting.getAttendeeuserids());
 	}
 
 	@Override
 	public void deleteMeeting(Meeting meeting) {
+
+		Meeting curMeeting = this.meetingMapper.selectByPrimaryKey(meeting.getMeetingid());
+		if (curMeeting == null) {
+			return;
+		}
+		Meeting deleteMeeting = new Meeting();
+		deleteMeeting.setMeetingid(meeting.getMeetingid());
+		deleteMeeting.setOrgid(meeting.getOrgid());
+		deleteMeeting.setStatus(GlobalFlag.DELETE);
+		deleteMeeting.setUpdatestaffid(meeting.getUpdatestaffid());
+		deleteMeeting.setUpdatetime(new Date());
+		this.meetingMapper.updateMeeting(deleteMeeting);
+		this.attendeeMapper.deleteByMeetingid(meeting.getMeetingid());
+
+	}
+
+	@Override
+	public void deleteSelfMeeting(Meeting meeting) {
+		Meeting curMeeting = this.meetingMapper.selectByPrimaryKey(meeting.getMeetingid());
+		if (curMeeting == null) {
+			return;
+		}
+		if (curMeeting.getStarttime().getTime() < System.currentTimeMillis()) {
+			throw new ServiceException("删除失败，只允许删除未开始的会议！");
+		}
+		if (!curMeeting.getCreatestaffid().equals(meeting.getBookstaffid())) {
+			throw new ServiceException("非法的删除操作！");
+		}
 		Meeting deleteMeeting = new Meeting();
 		deleteMeeting.setMeetingid(meeting.getMeetingid());
 		deleteMeeting.setOrgid(meeting.getOrgid());

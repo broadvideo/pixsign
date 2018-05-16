@@ -26,6 +26,8 @@ public interface MeetingService {
 
 	void deleteMeeting(Meeting meeting);
 
+	void deleteSelfMeeting(Meeting meeting);
+
 	List<Attendee> getMeetingAttendees(Integer meetingid, Integer orgid);
 
 	void syncMeetingSignin(StaffSwipe staffswipe, Integer orgid);

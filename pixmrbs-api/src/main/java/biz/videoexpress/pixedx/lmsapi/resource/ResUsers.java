@@ -157,8 +157,7 @@ public class ResUsers extends ResBase {
 		if (bookMeetingReq == null || bookMeetingReq.getMeetingRoomId() == null
 				|| StringUtils.isBlank(bookMeetingReq.getSubject())
 				|| StringUtils.isBlank(bookMeetingReq.getStartTime())
-				|| StringUtils.isBlank(bookMeetingReq.getEndTime())
-				|| StringUtils.isBlank(bookMeetingReq.getPeriodFlag())) {
+				|| StringUtils.isBlank(bookMeetingReq.getEndTime())) {
 			logger.error("Book meeting:invalid args.");
 			throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
 
@@ -232,7 +231,7 @@ public class ResUsers extends ResBase {
 			meeting.setMeetingid(meetingId);
 			meeting.setBookstaffid(profile.getUserId());
 			meeting.setOrgid(profile.getOrgId());
-			this.meetingService.deleteMeeting(meeting);
+			this.meetingService.deleteSelfMeeting(meeting);
 			BasicResp basicResp = new BasicResp();
 			basicResp.setRetcode(ApiRetCodeEnum.SUCCESS);
 			return Response.status(Status.OK).entity(basicResp).build();
@@ -327,8 +326,7 @@ public class ResUsers extends ResBase {
 		logger.info("Entry adjust meeting.");
 		UserProfile profile = currentUserProfile(req);
 		if (adjustMeetingReq == null || adjustMeetingReq.getStartTime() == null
-				|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())
-				|| StringUtils.isBlank(adjustMeetingReq.getPeriodFlag())) {
+				|| adjustMeetingReq.getEndTime() == null || StringUtils.isBlank(adjustMeetingReq.getSubject())) {
 			logger.error("adjust meeting room:invalid args.");
 			throw new AppException(RetCodeEnum.EXCEPTION, "缺少参数");
 		}

@@ -61,7 +61,6 @@ public class ResAttendances extends ResBase {
 	@Autowired
 	private ConfigMapper configMapper;
 
-
 	/**
 	 * 考勤明细列表
 	 * 
@@ -185,19 +184,19 @@ public class ResAttendances extends ResBase {
 			// 计算人员考勤状态
 			List<JSONObject> summaryList = new ArrayList<JSONObject>();
 			// 考勤总人数
-			int total = this.personMapper.selectCount(event.getOrgid() + "", null,
+			int total = this.personMapper.selectCount(event.getOrgid() + "", null, null,
 					roomPersonMap.get(bindRoom.getType()));
 
 			Date beginDate = wrapStartDate;
 			while (beginDate.getTime() < wrapEndDate.getTime()) {
-				if (isWeekend(beginDate)) {
-					logger.info("Ingore weekend:{}", beginDate);
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(beginDate);
-					calendar.add(Calendar.DAY_OF_MONTH, 1);
-					beginDate = calendar.getTime();
-					continue;
-				}
+				// TODO: 先关闭周末不做考勤统计的部分
+				/**
+				 * if (isWeekend(beginDate)) { logger.info("Ingore weekend:{}",
+				 * beginDate); Calendar calendar = Calendar.getInstance();
+				 * calendar.setTime(beginDate);
+				 * calendar.add(Calendar.DAY_OF_MONTH, 1); beginDate =
+				 * calendar.getTime(); continue; }
+				 **/
 				int normals = 0;
 				// 漏打卡
 				int leaks = 0;
@@ -215,14 +214,14 @@ public class ResAttendances extends ResBase {
 					values = dataMap.get(key);
 				}
 				for (Attendancelog attendancelog : values) {
-						List<Date> signtimes = attendancelog.getSigntimes();
-						if (signtimes == null || signtimes.size() == 0) {
-							logger.error("signtimes is empty");
-							continue;
-						}
+					List<Date> signtimes = attendancelog.getSigntimes();
+					if (signtimes == null || signtimes.size() == 0) {
+						logger.error("signtimes is empty");
+						continue;
+					}
 					if (isLeak(event, attendancelog.getSigntimes())) {
-							logger.info("Leak:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
+						logger.info("Leak:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
 						leaks++;
 					}
 
@@ -230,29 +229,29 @@ public class ResAttendances extends ResBase {
 						logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
 								attendancelog.getPersonname());
 						lates++;
-						}
-						if (isEarlyLeave(event, signtimes)) {
-							logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
-							earlyLeaves++;
-						}
-						if (isNormal(event, signtimes)) {
-							logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
-							normals++;
-						}
+					}
+					if (isEarlyLeave(event, signtimes)) {
+						logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						earlyLeaves++;
+					}
+					if (isNormal(event, signtimes)) {
+						logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						normals++;
+					}
 
-				  }
-					absents = total - values.size();
-					logger.info("####Summary info(total：{}，normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
-							new Object[] { total, normals, leaks, lates, earlyLeaves, absents });
-					jsonObject.put("total", total);
-					jsonObject.put("normals", normals);
-					jsonObject.put("lates", lates);
-					jsonObject.put("early_leaves", earlyLeaves);
-					jsonObject.put("leaks", leaks);
-					jsonObject.put("absents", absents);
-					summaryList.add(jsonObject);
+				}
+				absents = total - values.size();
+				logger.info("####Summary info(total：{}，normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
+						new Object[] { total, normals, leaks, lates, earlyLeaves, absents });
+				jsonObject.put("total", total);
+				jsonObject.put("normals", normals);
+				jsonObject.put("lates", lates);
+				jsonObject.put("early_leaves", earlyLeaves);
+				jsonObject.put("leaks", leaks);
+				jsonObject.put("absents", absents);
+				summaryList.add(jsonObject);
 
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(beginDate);
@@ -371,20 +370,20 @@ public class ResAttendances extends ResBase {
 						leaks++;
 					}
 					if (isLate(event, signtimes)) {
-							logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
-							lates++;
-						}
-						if (isEarlyLeave(event, signtimes)) {
-							logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
-							earlyLeaves++;
-						}
-						if (isNormal(event, signtimes)) {
-							logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
-									attendancelog.getPersonname());
-							normals++;
-						}
+						logger.info("Late:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						lates++;
+					}
+					if (isEarlyLeave(event, signtimes)) {
+						logger.info("EarlyLeave:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						earlyLeaves++;
+					}
+					if (isNormal(event, signtimes)) {
+						logger.info("Normal:person(id:{},name:{}) ", attendancelog.getPersonid(),
+								attendancelog.getPersonname());
+						normals++;
+					}
 
 				}
 				logger.info("####Summary info(normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})", new Object[] {
@@ -516,8 +515,9 @@ public class ResAttendances extends ResBase {
 				if (personid != null) {
 					persons.add(this.personMapper.selectByPrimaryKey(personid));
 				} else {
-					persons = this.personMapper.selectList(event.getOrgid() + "", null, bindRoom.getType(),
-						"0", Integer.MAX_VALUE + "");
+					persons = this.personMapper.selectList(event.getOrgid() + "", null, null, bindRoom.getType(), "0",
+							Integer.MAX_VALUE + "");
+
 				}
 				Date beginDate = wrapStartDate;
 				while (beginDate.getTime() < wrapEndDate.getTime()) {
@@ -738,8 +738,6 @@ public class ResAttendances extends ResBase {
 		Date resultDate = calendar2.getTime();
 		System.out
 				.println("convert date:" + DateUtil.getDateStr(getConvertDate(time, date), "yyyy-MM-dd HH:mm:ss SSS"));
-
-
 
 	}
 
