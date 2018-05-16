@@ -20,6 +20,8 @@
     <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -30,13 +32,16 @@
   </resultMap>
 
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Page" extends="BaseResultMap" >
+    <result column="json" property="json" jdbcType="LONGVARCHAR" />
     <collection property="pagezones" ofType="com.broadvideo.pixsignage.domain.Pagezone" column="{pageid=pageid}" select="com.broadvideo.pixsignage.persistence.PagezoneMapper.selectList" />
   </resultMap>
 
   <sql id="Base_Column_List" >
     pageid, uuid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
-    homeflag, homepageid, homeidletime, status, description, createtime, updatetime, 
-    createstaffid
+    homeflag, homepageid, homeidletime, status, description, reviewflag, comment, createtime, updatetime, createstaffid
+  </sql>
+  <sql id="Blob_Column_List" >
+    json
   </sql>
   
   <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
@@ -69,6 +74,9 @@
     <if test="branchid != null">
       and branchid = #{branchid}
     </if>
+    <if test="reviewflag != null">
+      and reviewflag = #{reviewflag}
+    </if>
     <if test="ratio != null">
       and ratio = #{ratio}
     </if>
@@ -91,6 +99,9 @@
     and orgid = #{orgid}
     <if test="branchid != null">
       and branchid = #{branchid}
+    </if>
+    <if test="reviewflag != null">
+      and reviewflag = #{reviewflag}
     </if>
     <if test="ratio != null">
       and ratio = #{ratio}
@@ -215,15 +226,19 @@
       height, width, limitflag, 
       privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
-      status, description, createtime, 
-      updatetime, createstaffid)
+      status, description, reviewflag, 
+      comment, createtime, updatetime, 
+      createstaffid, json
+      )
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
       #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
       #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER}, #{json,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Page" >
     <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
@@ -282,6 +297,12 @@
       <if test="description != null" >
         description,
       </if>
+      <if test="reviewflag != null" >
+        reviewflag,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -290,6 +311,9 @@
       </if>
       <if test="createstaffid != null" >
         createstaffid,
+      </if>
+      <if test="json != null" >
+        json,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -344,6 +368,12 @@
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
       </if>
+      <if test="reviewflag != null" >
+        #{reviewflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -352,6 +382,9 @@
       </if>
       <if test="createstaffid != null" >
         #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="json != null" >
+        #{json,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -409,6 +442,12 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="reviewflag != null" >
+        reviewflag = #{reviewflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -417,6 +456,9 @@
       </if>
       <if test="createstaffid != null" >
         createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="json != null" >
+        json = #{json,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where pageid = #{pageid,jdbcType=INTEGER}
@@ -440,9 +482,12 @@
       homeidletime = #{homeidletime,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
+      reviewflag = #{reviewflag,jdbcType=CHAR},
+      comment = #{comment,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
-      createstaffid = #{createstaffid,jdbcType=INTEGER}
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
+      json = #{json,jdbcType=LONGVARCHAR}
     where pageid = #{pageid,jdbcType=INTEGER}
   </update>
 </mapper>

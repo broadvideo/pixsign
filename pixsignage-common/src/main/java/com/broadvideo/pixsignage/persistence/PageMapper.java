@@ -13,13 +13,15 @@ public interface PageMapper {
 	Page selectByUuid(@Param(value = "orgid") String orgid, @Param(value = "uuid") String uuid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "ratio") String ratio, @Param(value = "touchflag") String touchflag,
-			@Param(value = "homeflag") String homeflag, @Param(value = "search") String search);
+			@Param(value = "reviewflag") String reviewflag, @Param(value = "ratio") String ratio,
+			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
+			@Param(value = "search") String search);
 
 	List<Page> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "ratio") String ratio, @Param(value = "touchflag") String touchflag,
-			@Param(value = "homeflag") String homeflag, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "reviewflag") String reviewflag, @Param(value = "ratio") String ratio,
+			@Param(value = "touchflag") String touchflag, @Param(value = "homeflag") String homeflag,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	Staff selectStaffPage(@Param(value = "staffid") String staffid, @Param(value = "pageid") String pageid);
 

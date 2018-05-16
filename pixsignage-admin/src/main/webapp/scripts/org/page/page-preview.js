@@ -125,6 +125,7 @@ var PagePreviewModule = function () {
 					'line-height': (parseInt(zone.lineheight) / scale) + 'px', 
 					'text-shadow': shadow, 
 					'word-wrap': 'break-word',
+					'overflow': 'auto',
 				});
 				$(p_element).css({
 					'word-wrap': 'break-word',

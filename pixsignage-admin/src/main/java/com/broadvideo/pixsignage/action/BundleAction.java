@@ -11,8 +11,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,9 @@ import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -188,6 +189,7 @@ public class BundleAction extends BaseDatatableAction {
 
 	public String doDesign() {
 		try {
+			logger.info("BundleAction doDesign bundleid={}", bundle.getBundleid());
 			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				bundleService.setBundleReviewWait("" + bundle.getBundleid());
 				bundle.setReviewflag(null);
@@ -241,17 +243,17 @@ public class BundleAction extends BaseDatatableAction {
 			JSONObject bundleJson = bundleService.generateBundleJson(bundleid);
 			JSONObject bundleScheduleJson = new JSONObject();
 			JSONArray bundleJsonArray = new JSONArray();
+			bundleJsonArray.add(bundleJson);
 			bundleScheduleJson.put("bundles", bundleJsonArray);
-			bundleJsonArray.put(bundleJson);
 			JSONArray scheduleJsonArray = new JSONArray();
-			bundleScheduleJson.put("bundle_schedules", scheduleJsonArray);
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJson.put("playmode", "daily");
 			scheduleJson.put("start_time", "00:00:00");
 			JSONArray bundleArray = new JSONArray();
-			bundleArray.put(Integer.parseInt(bundleid));
+			bundleArray.add(Integer.parseInt(bundleid));
 			scheduleJson.put("bundles", bundleArray);
-			scheduleJsonArray.put(scheduleJson);
+			scheduleJsonArray.add(scheduleJson);
+			bundleScheduleJson.put("bundle_schedules", scheduleJsonArray);
 
 			File bundleFile = new File(exportDir, "bundle.jsf");
 			File bundleScheduleFile = new File(exportDir, "bundle-schedule.jsf");
@@ -279,7 +281,7 @@ public class BundleAction extends BaseDatatableAction {
 				zip(out, bundleFile, "bundle.jsf");
 				zip(out, bundleScheduleFile, "bundle-schedule.jsf");
 				out.putNextEntry(new ZipEntry("video/"));
-				for (int i = 0; i < videoJsonArray.length(); i++) {
+				for (int i = 0; i < videoJsonArray.size(); i++) {
 					JSONObject videoJson = videoJsonArray.getJSONObject(i);
 					logger.info("videoJson: " + videoJson.toString());
 					String videoid = "" + videoJson.getInt("id");
@@ -289,7 +291,7 @@ public class BundleAction extends BaseDatatableAction {
 					zip(out, videoFile, "video/" + video.getFilename());
 				}
 				out.putNextEntry(new ZipEntry("image/"));
-				for (int i = 0; i < imageJsonArray.length(); i++) {
+				for (int i = 0; i < imageJsonArray.size(); i++) {
 					JSONObject imageJson = imageJsonArray.getJSONObject(i);
 					String imageid = "" + imageJson.getInt("id");
 					Image image = imageService.selectByPrimaryKey(imageid);

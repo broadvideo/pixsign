@@ -14,8 +14,16 @@ select last_insert_id() into @dbversionid;
 
 alter table device add defaultbundleid int default 0;
 alter table device add defaultpageid int default 0;
+alter table device add hotspotflag char(1) default '0';
+alter table device add hotspotssid varchar(32) default '';
+alter table device add hotspotpassword varchar(32) default '';
+alter table device add hotspotfrequency varchar(16) default '';
 
 alter table org add mainpage varchar(32) default 'main.jsp';
+
+alter table page add reviewflag char(1) default '1';
+alter table page add comment varchar(1024) default '';
+alter table page add json longtext;
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
@@ -61,6 +69,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30402,2,304,'menu.touchpage','page/page-touch.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30405,2,304,'menu.template','page/template.jsp','',1,5);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30406,2,304,'menu.touchtemplate','page/template-touch.jsp','',1,6);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30409,2,304,'menu.pagereview','page/page-review.jsp','',1,9);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,1);

@@ -1249,6 +1249,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="template!savefrompage" method="doSaveFromPage" class="templateAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="template!fetch" method="doFetch" class="templateAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1312,6 +1318,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="page!review" method="doReview" class="pageAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="page!sync" method="doSync" class="pageAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -1335,6 +1347,14 @@
 			</result>
 		</action>
 		<action name="page!export" method="doExport" class="pageAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${exportname}"</param>
+				<param name="bufferSize">8192</param>
+			</result>
+		</action>
+		<action name="page!exportfull" method="doExportFull" class="pageAction">
 			<result name="success" type="stream">
 				<param name="contentType">application/octet-stream</param>
 				<param name="inputName">inputStream</param>

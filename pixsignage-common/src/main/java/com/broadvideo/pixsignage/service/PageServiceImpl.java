@@ -41,6 +41,7 @@ import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
@@ -75,14 +76,15 @@ public class PageServiceImpl implements PageService {
 		return pageMapper.selectByUuid(orgid, uuid);
 	}
 
-	public int selectCount(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search) {
-		return pageMapper.selectCount(orgid, branchid, ratio, touchflag, homeflag, search);
+	public int selectCount(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search) {
+		return pageMapper.selectCount(orgid, branchid, reviewflag, ratio, touchflag, homeflag, search);
 	}
 
-	public List<Page> selectList(String orgid, String branchid, String ratio, String touchflag, String homeflag,
-			String search, String start, String length, Staff staff) {
-		List<Page> pageList = pageMapper.selectList(orgid, branchid, ratio, touchflag, homeflag, search, start, length);
+	public List<Page> selectList(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
+			String homeflag, String search, String start, String length, Staff staff) {
+		List<Page> pageList = pageMapper.selectList(orgid, branchid, reviewflag, ratio, touchflag, homeflag, search,
+				start, length);
 		for (Page page : pageList) {
 			page.setEditflag("1");
 			if (page.getPrivilegeflag().equals("1") && !staff.getLoginname().equals("admin")
@@ -838,6 +840,46 @@ public class PageServiceImpl implements PageService {
 		return page;
 	}
 
+	public void exportZipFull(String pageid, File zipFile) throws Exception {
+		ArrayList<Page> pageList = new ArrayList<Page>();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		pageList.add(page);
+		for (Page subpage : page.getSubpages()) {
+			Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+			pageList.add(p);
+		}
+		for (Page p : pageList) {
+			for (Pagezone pagezone : p.getPagezones()) {
+				if (pagezone.getType() == Pagezone.Type_Video) {
+					for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+						Video video = pagezonedtl.getVideo();
+						if (video != null && videoHash.get(video.getVideoid()) == null) {
+							videoHash.put(video.getVideoid(), video);
+						}
+					}
+				}
+			}
+		}
+
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+		out.putNextEntry(new ZipEntry("video/"));
+
+		Iterator<Entry<Integer, Video>> iter = videoHash.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<Integer, Video> entry = iter.next();
+			Video video = entry.getValue();
+			File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getFilepath());
+			CommonUtil.zip(out, videoFile, "video/" + video.getFilename());
+		}
+
+		File pagezipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + pageid + "/page-" + pageid + ".zip");
+		if (pagezipFile.exists()) {
+			CommonUtil.zip(out, pagezipFile, "page-" + pageid + ".zip");
+		}
+		out.close();
+	}
+
 	public void addStaffs(Page page, String[] staffids) {
 		for (int i = 0; i < staffids.length; i++) {
 			pageMapper.addStaff("" + page.getPageid(), staffids[i]);
@@ -849,4 +891,55 @@ public class PageServiceImpl implements PageService {
 			pageMapper.deleteStaff("" + page.getPageid(), staffids[i]);
 		}
 	}
+
+	public void setPageReviewWait(String pageid) {
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		if (page != null && page.getHomepageid() > 0) {
+			page = pageMapper.selectByPrimaryKey("" + page.getHomepageid());
+		}
+		if (page != null) {
+			if (page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+				JSONObject pageJson = JSONObject.fromObject(page);
+				page.setJson(pageJson.toString());
+			}
+			page.setReviewflag(Page.REVIEW_WAIT);
+			pageMapper.updateByPrimaryKeySelective(page);
+			List<Page> subpages = page.getSubpages();
+			if (subpages != null) {
+				for (Page b : subpages) {
+					if (b.getReviewflag().equals(Page.REVIEW_PASSED)) {
+						JSONObject pageJson = JSONObject.fromObject(b);
+						b.setJson(pageJson.toString());
+					}
+					b.setReviewflag(Page.REVIEW_WAIT);
+					pageMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+		}
+	}
+
+	public void setPageReviewResut(String pageid, String reviewflag, String comment) throws Exception {
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		if (page != null && page.getHomepageid() > 0) {
+			page = pageMapper.selectByPrimaryKey("" + page.getHomepageid());
+		}
+		if (page != null) {
+			page.setReviewflag(reviewflag);
+			page.setComment(comment);
+			pageMapper.updateByPrimaryKeySelective(page);
+			List<Page> subpages = page.getSubpages();
+			if (subpages != null) {
+				for (Page b : subpages) {
+					b.setReviewflag(reviewflag);
+					b.setComment(comment);
+					pageMapper.updateByPrimaryKeySelective(b);
+				}
+			}
+
+			if (reviewflag.equals(Page.REVIEW_PASSED)) {
+				makeHtmlZip("" + page.getPageid());
+			}
+		}
+	}
+
 }

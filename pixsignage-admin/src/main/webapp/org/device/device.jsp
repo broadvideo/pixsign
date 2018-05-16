@@ -227,7 +227,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">广告间隔时间</label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval1"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.interval1" />
@@ -235,10 +235,45 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label">广告展示时间</label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval2"/></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.interval2" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="device.hotspotflag" value="0"> <spring:message code="pixsign.prop.hotspotflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="device.hotspotflag" value="1"> <spring:message code="pixsign.prop.hotspotflag_1"/>
+									</label>
+								</div>
+							</div>
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotssid"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotssid" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotpassword"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotpassword" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotfrequency"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotfrequency" />
 									</div>
 								</div>
 							</div>

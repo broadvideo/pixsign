@@ -45,18 +45,22 @@ var PageModule = function () {
 				pagehtml += '<div class="row" >';
 				pagehtml += '<div class="col-md-12 col-xs-12">';
 				pagehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
-				if (aData.ratio == 1) {
-					pagehtml += '<h6><span class="label label-sm label-info">' + common.view.ratio_1 + '</span></h6>';
-				} else if (aData.ratio == 2) {
-					pagehtml += '<h6><span class="label label-sm label-success">' + common.view.ratio_2 + '</span></h6>';
+				if (aData.reviewflag == 0) {
+					pagehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span></h6>';
+				} else if (aData.reviewflag == 1) {
+					pagehtml += '<h6><span class="label label-sm label-success">' + common.view.review_passed + '</span></h6>';
+				} else if (aData.reviewflag == 2) {
+					pagehtml += '<h6><span class="label label-sm label-danger">' + common.view.review_rejected + '</span></h6>';
 				}
 				pagehtml += '<div class="util-btn-margin-bottom-5">';
 				if (aData.editflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-subpage-add"><i class="fa fa-plus"></i> ' + common.view.subpage + '</a>';
-					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
-				} else {
+				}
+				if (aData.reviewflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
+					pagehtml += '<a href="page!exportfull.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-savetemplate"><i class="fa fa-save"></i> ' + common.view.save_template + '</a>';
 				}
 				pagehtml += '</div>';
 				pagehtml += '</div>';
@@ -223,6 +227,45 @@ var PageModule = function () {
 					$.ajax({
 						type : 'GET',
 						url : 'page!sync.action',
+						cache: false,
+						data : {
+							pageid: page.pageid,
+						},
+						dataType : 'json',
+						contentType : 'application/json;charset=utf-8',
+						beforeSend: function ( xhr ) {
+							Metronic.startPageLoading({animate: true});
+						},
+						success : function(data, status) {
+							Metronic.stopPageLoading();
+							if (data.errorcode == 0) {
+								bootbox.alert(common.tips.success);
+							} else {
+								bootbox.alert(common.tips.error + data.errormsg);
+							}
+						},
+						error : function() {
+							Metronic.stopPageLoading();
+							console.log('failue');
+						}
+					});				
+				}
+			});
+		});
+
+		$('body').on('click', '.pix-savetemplate', function(event) {
+			var target = $(event.target);
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				target = $(event.target).parent();
+				index = $(event.target).parent().attr('data-id');
+			}
+			var page = $('#PageTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.savetemplate, function(result) {
+				if (result == true) {
+					$.ajax({
+						type : 'GET',
+						url : 'template!savefrompage.action',
 						cache: false,
 						data : {
 							pageid: page.pageid,
@@ -592,7 +635,14 @@ var PageModule = function () {
 						if (_design.Object.limitflag == 0) {
 							$('.limit-1').css('display', '');
 						}
-						$('.school-ctrl').css('display', SchoolCtrl? '':'none');
+						$('.school-ctrl').css('display', 'none');
+						$('.attendance-ctrl').css('display', 'none');
+						if (SchoolCtrl) {
+							$('.school-ctrl').css('display', '');
+						}
+						if (AttendanceCtrl) {
+							$('.attendance-ctrl').css('display', '');
+						}
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
 						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');

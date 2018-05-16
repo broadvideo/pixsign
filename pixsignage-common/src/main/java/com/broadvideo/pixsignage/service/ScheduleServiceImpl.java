@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +17,9 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service("scheduleService")
 public class ScheduleServiceImpl implements ScheduleService {
@@ -57,13 +58,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Transactional
 	public void syncSchedule(String bindtype, String bindid) throws Exception {
 		if (bindtype.equals(Schedule.BindType_Device)) {
-			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("msg_id", 1);
+			msgJson.put("msg_type", "BUNDLE");
 			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "device-" + bindid;
 			ActiveMQUtil.publish(topic, msgJson.toString());
 		} else if (bindtype.equals(Schedule.BindType_Devicegroup)) {
-			JSONObject msgJson = new JSONObject().put("msg_id", 1).put("msg_type", "BUNDLE");
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("msg_id", 1);
+			msgJson.put("msg_type", "BUNDLE");
 			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "group-" + bindid;
@@ -119,14 +124,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleJson.put("start_time",
 					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
 			JSONArray bundleidJsonArray = new JSONArray();
-			scheduleJson.put("bundles", bundleidJsonArray);
 			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
 				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
-					bundleidJsonArray.put(scheduledtl.getObjid());
+					bundleidJsonArray.add(scheduledtl.getObjid());
 					bundleids.add(scheduledtl.getObjid());
 				}
 			}
-			scheduleJsonArray.put(scheduleJson);
+			scheduleJson.put("bundles", bundleidJsonArray);
+			scheduleJsonArray.add(scheduleJson);
 		}
 
 		JSONObject responseJson = new JSONObject();
@@ -154,7 +159,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				Schedule.PlayMode_Daily);
 		for (Schedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
-			scheduleJsonArray.put(scheduleJson);
 			scheduleJson.put("schedule_id", schedule.getScheduleid());
 			scheduleJson.put("playmode", "daily");
 			scheduleJson.put("start_time",
@@ -164,19 +168,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getEndtime()));
 			}
 			JSONArray scheduledtlJsonArray = new JSONArray();
-			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
 			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
 				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
 					JSONObject scheduledtlJson = new JSONObject();
 					scheduledtlJson.put("scheduledtl_id", scheduledtl.getScheduledtlid());
 					scheduledtlJson.put("media_type", "bundle");
 					scheduledtlJson.put("media_id", scheduledtl.getObjid());
-					scheduledtlJsonArray.put(scheduledtlJson);
+					scheduledtlJsonArray.add(scheduledtlJson);
 					bundleids.add(scheduledtl.getObjid());
 				} else {
 					continue;
 				}
 			}
+			scheduleJson.put("scheduledtls", scheduledtlJsonArray);
+			scheduleJsonArray.add(scheduleJson);
 		}
 
 		JSONObject responseJson = new JSONObject();

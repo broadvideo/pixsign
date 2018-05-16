@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +42,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.domain.Page;
+import com.broadvideo.pixsignage.domain.Pagezone;
+import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
+import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
 import com.broadvideo.pixsignage.persistence.TemplatezoneMapper;
 import com.broadvideo.pixsignage.persistence.TemplatezonedtlMapper;
@@ -65,6 +70,8 @@ public class TemplateServiceImpl implements TemplateService {
 	private TemplatezonedtlMapper templatezonedtlMapper;
 	@Autowired
 	private ImageMapper imageMapper;
+	@Autowired
+	private PageMapper pageMapper;
 
 	public Template selectByPrimaryKey(String templateid) {
 		return templateMapper.selectByPrimaryKey(templateid);
@@ -286,6 +293,141 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 	}
 
+	@Transactional
+	public void saveFromPage(String pageid) throws Exception {
+		Page page = pageMapper.selectByPrimaryKey(pageid);
+		if (page == null) {
+			return;
+		}
+
+		Template oldTemplate = templateMapper.selectByUuid(page.getUuid());
+		if (oldTemplate != null) {
+			deleteTemplate("" + oldTemplate.getTemplateid());
+		}
+		Template template = new Template();
+		Hashtable<Integer, Integer> templateidHash = new Hashtable<Integer, Integer>();
+		ArrayList<Page> pageList = new ArrayList<Page>();
+
+		template.setOrgid(page.getOrgid());
+		template.setName(page.getName());
+		template.setRatio(page.getRatio());
+		template.setHeight(page.getHeight());
+		template.setWidth(page.getWidth());
+		template.setHomeidletime(page.getHomeidletime());
+		template.setLimitflag(page.getLimitflag());
+		template.setTouchflag(page.getTouchflag());
+		template.setHomeflag(page.getHomeflag());
+		template.setUuid(page.getUuid());
+		templateMapper.insertSelective(template);
+		if (page.getSnapshot() != null) {
+			String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
+					+ ".png";
+			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + page.getSnapshot()), snapshotFile);
+			template.setSnapshot(snapshotFilePath);
+		}
+		templateMapper.updateByPrimaryKeySelective(template);
+		templateidHash.put(page.getPageid(), template.getTemplateid());
+		pageList.add(page);
+
+		List<Page> subpages = page.getSubpages();
+		for (Page s : subpages) {
+			Page subpage = pageMapper.selectByPrimaryKey("" + s.getPageid());
+			Template subtemplate = new Template();
+			subtemplate.setOrgid(template.getOrgid());
+			subtemplate.setUuid(UUID.randomUUID().toString().replace("-", ""));
+			subtemplate.setName(subpage.getName());
+			subtemplate.setRatio(subpage.getRatio());
+			subtemplate.setHeight(subpage.getHeight());
+			subtemplate.setWidth(subpage.getWidth());
+			subtemplate.setTouchflag(subpage.getTouchflag());
+			subtemplate.setHomeflag(subpage.getHomeflag());
+			subtemplate.setHometemplateid(template.getTemplateid());
+			subtemplate.setHomeidletime(subpage.getHomeidletime());
+			subtemplate.setLimitflag(subpage.getLimitflag());
+			subtemplate.setCreatestaffid(template.getCreatestaffid());
+			templateMapper.insertSelective(subtemplate);
+			templateidHash.put(subpage.getPageid(), subtemplate.getTemplateid());
+			pageList.add(subpage);
+			if (subpage.getSnapshot() != null) {
+				String snapshotFilePath = "/template/" + subtemplate.getTemplateid() + "/snapshot/"
+						+ subtemplate.getTemplateid() + ".png";
+				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subpage.getSnapshot()), snapshotFile);
+				subtemplate.setSnapshot(snapshotFilePath);
+				templateMapper.updateByPrimaryKeySelective(subtemplate);
+			}
+		}
+
+		for (Page t : pageList) {
+			List<Pagezone> pagezones = t.getPagezones();
+			for (Pagezone pagezone : pagezones) {
+				Templatezone templatezone = new Templatezone();
+				templatezone.setTemplateid(templateidHash.get(t.getPageid()));
+				if (template.getHomeflag().equals("0")) {
+					templatezone.setHometemplateid(template.getHometemplateid());
+				} else {
+					templatezone.setHometemplateid(template.getTemplateid());
+				}
+				templatezone.setType(pagezone.getType());
+				templatezone.setHeight(pagezone.getHeight());
+				templatezone.setWidth(pagezone.getWidth());
+				templatezone.setTopoffset(pagezone.getTopoffset());
+				templatezone.setLeftoffset(pagezone.getLeftoffset());
+				templatezone.setZindex(pagezone.getZindex());
+				templatezone.setTransform(pagezone.getTransform());
+				templatezone.setBdcolor(pagezone.getBdcolor());
+				templatezone.setBdstyle(pagezone.getBdstyle());
+				templatezone.setBdwidth(pagezone.getBdwidth());
+				templatezone.setBdradius(pagezone.getBdradius());
+				templatezone.setBgcolor(pagezone.getBgcolor());
+				templatezone.setBgopacity(pagezone.getBgopacity());
+				templatezone.setOpacity(pagezone.getOpacity());
+				templatezone.setPadding(pagezone.getPadding());
+				templatezone.setShadowh(pagezone.getShadowh());
+				templatezone.setShadowv(pagezone.getShadowv());
+				templatezone.setShadowblur(pagezone.getShadowblur());
+				templatezone.setShadowcolor(pagezone.getShadowcolor());
+				templatezone.setColor(pagezone.getColor());
+				templatezone.setFontfamily(pagezone.getFontfamily());
+				templatezone.setFontsize(pagezone.getFontsize());
+				templatezone.setFontweight(pagezone.getFontweight());
+				templatezone.setFontstyle(pagezone.getFontstyle());
+				templatezone.setDecoration(pagezone.getDecoration());
+				templatezone.setAlign(pagezone.getAlign());
+				templatezone.setLineheight(pagezone.getLineheight());
+				templatezone.setRows(pagezone.getRows());
+				templatezone.setCols(pagezone.getCols());
+				templatezone.setRules(pagezone.getRules());
+				templatezone.setRulecolor(pagezone.getRulecolor());
+				templatezone.setRulewidth(pagezone.getRulewidth());
+				templatezone.setDateformat(pagezone.getDateformat());
+				templatezone.setDiyid(pagezone.getDiyid());
+				templatezone.setTouchtype(pagezone.getTouchtype());
+				Integer touchtemplateid = templateidHash.get(pagezone.getTouchpageid());
+				if (touchtemplateid == null) {
+					touchtemplateid = 0;
+				}
+				templatezone.setTouchtemplateid(touchtemplateid);
+				templatezone.setFixflag(pagezone.getFixflag());
+				templatezone.setDiyactionid(pagezone.getDiyactionid());
+				templatezone.setAnimationinit(pagezone.getAnimationinit());
+				templatezone.setAnimationinitdelay(pagezone.getAnimationinitdelay());
+				templatezone.setAnimationclick(pagezone.getAnimationclick());
+				templatezone.setContent(pagezone.getContent());
+				templatezoneMapper.insertSelective(templatezone);
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					Templatezonedtl templatezonedtl = new Templatezonedtl();
+					templatezonedtl.setTemplatezoneid(templatezone.getTemplatezoneid());
+					templatezonedtl.setObjtype(pagezonedtl.getObjtype());
+					templatezonedtl.setObjid(pagezonedtl.getObjid());
+					templatezonedtl.setSequence(pagezonedtl.getSequence());
+					templatezonedtlMapper.insertSelective(templatezonedtl);
+				}
+			}
+		}
+	}
+
 	public void exportZip(String templateid) throws Exception {
 		ArrayList<Template> templateList = new ArrayList<Template>();
 		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
@@ -371,7 +513,7 @@ public class TemplateServiceImpl implements TemplateService {
 		Integer fromTemplateid = template.getTemplateid();
 		Template oldTemplate = templateMapper.selectByUuid(template.getUuid());
 		if (oldTemplate != null) {
-			templateMapper.deleteByPrimaryKey("" + oldTemplate.getTemplateid());
+			deleteTemplate("" + oldTemplate.getTemplateid());
 		}
 		template.setOrgid(1);
 		template.setCreatetime(now);

@@ -10,8 +10,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.util.SqlUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -65,17 +66,18 @@ public class PageAction extends BaseDatatableAction {
 			if (branchid != null && branchid.equals("")) {
 				branchid = "" + getLoginStaff().getBranchid();
 			}
+			String reviewflag = getParameter("reviewflag");
 			String ratio = getParameter("ratio");
 			String touchflag = getParameter("touchflag");
 			String homeflag = getParameter("homeflag");
 
-			int count = pageService.selectCount(orgid, branchid, ratio, touchflag, homeflag, search);
+			int count = pageService.selectCount(orgid, branchid, reviewflag, ratio, touchflag, homeflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Page> pageList = pageService.selectList(orgid, branchid, ratio, touchflag, homeflag, search, start,
-					length, getLoginStaff());
+			List<Page> pageList = pageService.selectList(orgid, branchid, reviewflag, ratio, touchflag, homeflag,
+					search, start, length, getLoginStaff());
 			for (int i = 0; i < pageList.size(); i++) {
 				aaData.add(pageList.get(i));
 			}
@@ -169,13 +171,26 @@ public class PageAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			page.setOrgid(getLoginStaff().getOrgid());
+			if (page.getBranchid() == null) {
+				page.setBranchid(getLoginStaff().getBranchid());
+			}
 			page.setCreatestaffid(getLoginStaff().getStaffid());
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				if (page.getHomepageid() != null && page.getHomepageid() > 0) {
+					pageService.setPageReviewWait("" + page.getHomepageid());
+				}
+				page.setReviewflag(Page.REVIEW_WAIT);
+			} else {
+				page.setReviewflag(Page.REVIEW_PASSED);
+			}
+
 			String frompageid = getParameter("frompageid");
 			if (frompageid != null) {
 				pageService.copyPage(frompageid, page);
 			} else {
 				pageService.addPage(page);
 			}
+
 			if (page.getHomeflag().equals("1")) {
 				pageService.makeHtmlZip("" + page.getPageid());
 			} else {
@@ -193,11 +208,18 @@ public class PageAction extends BaseDatatableAction {
 
 	public String doUpdate() {
 		try {
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				pageService.setPageReviewWait("" + page.getPageid());
+				page.setReviewflag(null);
+				page.setJson(null);
+			}
 			pageService.updatePage(page);
-			if (page.getHomeflag().equals("1")) {
-				pageService.makeHtmlZip("" + page.getPageid());
-			} else {
-				pageService.makeHtmlZip("" + page.getHomepageid());
+			if (page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+				if (page.getHomeflag().equals("1")) {
+					pageService.makeHtmlZip("" + page.getPageid());
+				} else {
+					pageService.makeHtmlZip("" + page.getHomepageid());
+				}
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -234,16 +256,34 @@ public class PageAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doReview() {
+		try {
+			pageService.setPageReviewResut("" + page.getPageid(), page.getReviewflag(), page.getComment());
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("PageAction doReview exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDesign() {
 		try {
 			logger.info("PageAction doDesign pageid={}", page.getPageid());
-			page.setOrgid(getLoginStaff().getOrgid());
+			if (getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				pageService.setPageReviewWait("" + page.getPageid());
+				page.setReviewflag(null);
+				page.setJson(null);
+			}
 			page.setCreatestaffid(getLoginStaff().getStaffid());
 			pageService.design(page);
-			if (page.getHomeflag().equals("1")) {
-				pageService.makeHtmlZip("" + page.getPageid());
-			} else {
-				pageService.makeHtmlZip("" + page.getHomepageid());
+			if (!getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				if (page.getHomeflag().equals("1")) {
+					pageService.makeHtmlZip("" + page.getPageid());
+				} else {
+					pageService.makeHtmlZip("" + page.getHomepageid());
+				}
 			}
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -299,8 +339,6 @@ public class PageAction extends BaseDatatableAction {
 		JSONObject result = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 
-		result.put("files", jsonArray);
-
 		if (mypage != null) {
 			for (int i = 0; i < mypage.length; i++) {
 				JSONObject jsonItem = new JSONObject();
@@ -316,12 +354,35 @@ public class PageAction extends BaseDatatableAction {
 					addActionError(e.getMessage());
 					jsonItem.put("error", e.getMessage());
 				}
-				jsonArray.put(jsonItem);
+				jsonArray.add(jsonItem);
 			}
 		}
+		result.put("files", jsonArray);
 
 		writer.write(result.toString());
 		writer.close();
+	}
+
+	public String doExportFull() {
+		try {
+			String pageid = getParameter("pageid");
+			logger.info("PageAction doExportFull, staff={}, pageid={}", getLoginStaff().getLoginname(), pageid);
+			exportname = "page.zip";
+			String saveDir = CommonConfig.CONFIG_PIXDATA_HOME + "/export/page/" + pageid;
+			FileUtils.forceMkdir(new File(saveDir));
+			File zipFile = new File(saveDir, exportname);
+			if (zipFile.exists()) {
+				zipFile.delete();
+			}
+			pageService.exportZipFull(pageid, zipFile);
+			inputStream = new FileInputStream(zipFile);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doExportFull exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
 	}
 
 	public String doAddStaffs() {

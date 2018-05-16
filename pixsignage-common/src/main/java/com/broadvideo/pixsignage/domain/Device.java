@@ -133,6 +133,14 @@ public class Device {
 
 	private Integer defaultpageid;
 
+	private String hotspotflag;
+
+	private String hotspotssid;
+
+	private String hotspotpassword;
+
+	private String hotspotfrequency;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -647,6 +655,38 @@ public class Device {
 
 	public void setDefaultpageid(Integer defaultpageid) {
 		this.defaultpageid = defaultpageid;
+	}
+
+	public String getHotspotflag() {
+		return hotspotflag;
+	}
+
+	public void setHotspotflag(String hotspotflag) {
+		this.hotspotflag = hotspotflag;
+	}
+
+	public String getHotspotssid() {
+		return hotspotssid;
+	}
+
+	public void setHotspotssid(String hotspotssid) {
+		this.hotspotssid = hotspotssid;
+	}
+
+	public String getHotspotpassword() {
+		return hotspotpassword;
+	}
+
+	public void setHotspotpassword(String hotspotpassword) {
+		this.hotspotpassword = hotspotpassword;
+	}
+
+	public String getHotspotfrequency() {
+		return hotspotfrequency;
+	}
+
+	public void setHotspotfrequency(String hotspotfrequency) {
+		this.hotspotfrequency = hotspotfrequency;
 	}
 
 	public Branch getBranch() {

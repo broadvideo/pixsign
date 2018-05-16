@@ -64,6 +64,10 @@
     <result column="cataitemid2" property="cataitemid2" jdbcType="INTEGER" />
     <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
     <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
+    <result column="hotspotflag" property="hotspotflag" jdbcType="CHAR" />
+    <result column="hotspotssid" property="hotspotssid" jdbcType="VARCHAR" />
+    <result column="hotspotpassword" property="hotspotpassword" jdbcType="VARCHAR" />
+    <result column="hotspotfrequency" property="hotspotfrequency" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -81,7 +85,7 @@
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
-    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid
+    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, hotspotfrequency
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -375,7 +379,8 @@
       downloadspeed, downloadbytes, networkmode,
       networksignal, brightness, tags, 
       cataitemid1, cataitemid2, defaultbundleid, 
-      defaultpageid)
+      defaultpageid, hotspotflag, hotspotssid, 
+      hotspotpassword, hotspotfrequency)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -396,7 +401,8 @@
       #{downloadspeed,jdbcType=INTEGER}, #{downloadbytes,jdbcType=BIGINT}, #{networkmode,jdbcType=CHAR},
       #{networksignal,jdbcType=INTEGER}, #{brightness,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR},
       #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
-      #{defaultpageid,jdbcType=INTEGER})
+      #{defaultpageid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
+      #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -587,6 +593,18 @@
       <if test="defaultpageid != null" >
         defaultpageid,
       </if>
+      <if test="hotspotflag != null" >
+        hotspotflag,
+      </if>
+      <if test="hotspotssid != null" >
+        hotspotssid,
+      </if>
+      <if test="hotspotpassword != null" >
+        hotspotpassword,
+      </if>
+      <if test="hotspotfrequency != null" >
+        hotspotfrequency,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -761,16 +779,28 @@
         #{tags,jdbcType=VARCHAR},
       </if>
       <if test="cataitemid1 != null" >
-        #{cataitemid1,jdbcType=VARCHAR},
+        #{cataitemid1,jdbcType=INTEGER},
       </if>
       <if test="cataitemid2 != null" >
-        #{cataitemid2,jdbcType=VARCHAR},
+        #{cataitemid2,jdbcType=INTEGER},
       </if>
       <if test="defaultbundleid != null" >
         #{defaultbundleid,jdbcType=INTEGER},
       </if>
       <if test="defaultpageid != null" >
         #{defaultpageid,jdbcType=INTEGER},
+      </if>
+      <if test="hotspotflag != null" >
+        #{hotspotflag,jdbcType=CHAR},
+      </if>
+      <if test="hotspotssid != null" >
+        #{hotspotssid,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotpassword != null" >
+        #{hotspotpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotfrequency != null" >
+        #{hotspotfrequency,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -949,16 +979,28 @@
         tags = #{tags,jdbcType=VARCHAR},
       </if>
       <if test="cataitemid1 != null" >
-        cataitemid1 = #{cataitemid1,jdbcType=VARCHAR},
+        cataitemid1 = #{cataitemid1,jdbcType=INTEGER},
       </if>
       <if test="cataitemid2 != null" >
-        cataitemid2 = #{cataitemid2,jdbcType=VARCHAR},
+        cataitemid2 = #{cataitemid2,jdbcType=INTEGER},
       </if>
       <if test="defaultbundleid != null" >
         defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
       </if>
       <if test="defaultpageid != null" >
         defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      </if>
+      <if test="hotspotflag != null" >
+        hotspotflag = #{hotspotflag,jdbcType=CHAR},
+      </if>
+      <if test="hotspotssid != null" >
+        hotspotssid = #{hotspotssid,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotpassword != null" >
+        hotspotpassword = #{hotspotpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotfrequency != null" >
+        hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR},
       </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
@@ -1025,7 +1067,11 @@
       cataitemid1 = #{cataitemid1,jdbcType=INTEGER},
       cataitemid2 = #{cataitemid2,jdbcType=INTEGER},
       defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
-      defaultpageid = #{defaultpageid,jdbcType=INTEGER}
+      defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      hotspotflag = #{hotspotflag,jdbcType=CHAR},
+      hotspotssid = #{hotspotssid,jdbcType=VARCHAR},
+      hotspotpassword = #{hotspotpassword,jdbcType=VARCHAR},
+      hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">

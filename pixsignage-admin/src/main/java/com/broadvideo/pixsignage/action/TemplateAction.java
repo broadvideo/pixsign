@@ -188,6 +188,20 @@ public class TemplateAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doSaveFromPage() {
+		try {
+			String pageid = getParameter("pageid");
+			logger.info("TemplateAction doSaveFromPage, staff={}, pageid={}", getLoginStaff().getLoginname(), pageid);
+			templateService.saveFromPage(pageid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("doSaveFromPage exception. ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doImageUpload() {
 		try {
 			String templateid = getParameter("templateid");

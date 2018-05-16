@@ -23,8 +23,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +61,12 @@ import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.TextMapper;
 import com.broadvideo.pixsignage.service.DevicefileService;
 import com.broadvideo.pixsignage.service.PlanService;
-import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Component
 @Consumes("application/json;charset=UTF-8")
@@ -105,8 +105,6 @@ public class Pixsign2cService {
 	private TextMapper textMapper;
 
 	@Autowired
-	private ScheduleService scheduleService;
-	@Autowired
 	private PlanService planService;
 	@Autowired
 	private DevicefileService devicefileService;
@@ -118,22 +116,22 @@ public class Pixsign2cService {
 	public String init(String request, @Context HttpServletRequest req) {
 		try {
 			logger.info("Pixsign2c Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String mac = requestJson.getString("mac");
-			String iip = requestJson.getString("ip");
-			String ostype = requestJson.getString("os_type");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String mac = requestJson.optString("mac");
+			String iip = requestJson.optString("ip");
+			String ostype = requestJson.optString("os_type");
 			if (ostype.equals("windows")) {
 				ostype = "2";
 			} else {
 				ostype = "1";
 			}
-			String appname = requestJson.getString("app_name");
-			String sign = requestJson.getString("sign");
-			String vname = requestJson.getString("version_name");
-			int vcode = requestJson.getInt("version_code");
+			String appname = requestJson.optString("app_name");
+			String sign = requestJson.optString("sign");
+			String vname = requestJson.optString("version_name");
+			int vcode = requestJson.optInt("version_code");
 			String ip = req.getRemoteAddr();
-			String other = requestJson.getString("other");
+			String other = requestJson.optString("other");
 			String boardinfo = "";
 			if (requestJson.getJSONObject("boardinfo") != null) {
 				boardinfo = requestJson.getJSONObject("boardinfo").toString();
@@ -162,7 +160,9 @@ public class Pixsign2cService {
 						+ configMapper.selectValueByCode("ServerPort")
 						+ "/pixsignage/youwang/app.jsp?appname=pixsign2c&hardkey=" + hardkey + "&checkcode="
 						+ checkcode;
-				JSONObject responseJson = new JSONObject().put("code", 2002).put("message", "终端未注册");
+				JSONObject responseJson = new JSONObject();
+				responseJson.put("code", 2002);
+				responseJson.put("message", "终端未注册");
 				responseJson.put("qrcode", qrcode);
 				logger.info("Pixsign2c Service init response: {}", responseJson.toString());
 				return responseJson.toString();
@@ -219,17 +219,19 @@ public class Pixsign2cService {
 			onlinelog.setOnlinetime(Calendar.getInstance().getTime());
 			onlinelogMapper.insertSelective(onlinelog);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			responseJson.put("terminalid", device.getTerminalid());
 			responseJson.put("name", device.getName());
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			responseJson.put("msg_topic", topicJsonArray);
-			topicJsonArray.put("device-" + device.getDeviceid());
+			topicJsonArray.add("device-" + device.getDeviceid());
 			if (device.getDevicegroupid() > 0) {
-				topicJsonArray.put("group-" + device.getDevicegroupid());
+				topicJsonArray.add("group-" + device.getDevicegroupid());
 			}
-			topicJsonArray.put("org-" + device.getOrgid());
+			topicJsonArray.add("org-" + device.getOrgid());
 
 			if (org.getBackupvideo() != null) {
 				JSONObject backupvideoJson = new JSONObject();
@@ -317,7 +319,7 @@ public class Pixsign2cService {
 			if (devicegrid != null) {
 				List<Device> devices = devicegrid.getDevices();
 				for (Device d : devices) {
-					griddtlArray.put(d.getTerminalid());
+					griddtlArray.add(d.getTerminalid());
 				}
 			}
 			responseJson.put("devicegrid_dtls", griddtlArray);
@@ -335,8 +337,8 @@ public class Pixsign2cService {
 	public String getschedule(String request) {
 		try {
 			logger.info("Pixsign2c Service get_schedule: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -347,7 +349,8 @@ public class Pixsign2cService {
 
 			JSONObject responseJson;
 			responseJson = planService.generateBundlePlanJson("" + device.getDeviceid());
-			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -361,8 +364,8 @@ public class Pixsign2cService {
 	public String getplan(String request) {
 		try {
 			logger.info("Pixsign2c Service get_plan: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -373,7 +376,8 @@ public class Pixsign2cService {
 
 			JSONObject responseJson;
 			responseJson = planService.generatePlanJson("" + device.getDeviceid());
-			responseJson.put("code", 0).put("message", "成功");
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service get_plan response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -387,11 +391,11 @@ public class Pixsign2cService {
 	public String reportstatus(String request) {
 		try {
 			logger.info("Pixsign2c Service report_status: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			long sdcard_free_bytes = requestJson.getLong("sdcard_free_bytes");
-			long sdcard_total_bytes = requestJson.getLong("sdcard_total_bytes");
-			String temperature = requestJson.getString("temperature");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			long sdcard_free_bytes = requestJson.optLong("sdcard_free_bytes");
+			long sdcard_total_bytes = requestJson.optLong("sdcard_total_bytes");
+			String temperature = requestJson.optString("temperature");
 
 			JSONObject locationJson = requestJson.getJSONObject("location");
 
@@ -404,11 +408,11 @@ public class Pixsign2cService {
 			}
 
 			if (locationJson != null) {
-				String latitude = locationJson.getString("latitude");
-				String longitude = locationJson.getString("lontitude");
-				String city = locationJson.getString("city");
-				String addr1 = locationJson.getString("addr");
-				String addr2 = locationJson.getString("desc");
+				String latitude = locationJson.optString("latitude");
+				String longitude = locationJson.optString("lontitude");
+				String city = locationJson.optString("city");
+				String addr1 = locationJson.optString("addr");
+				String addr2 = locationJson.optString("desc");
 				device.setLatitude(latitude);
 				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
@@ -441,7 +445,9 @@ public class Pixsign2cService {
 			 * playlogMapper.insertSelective(playlog); }
 			 */
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service report_status exception", e);
@@ -454,18 +460,17 @@ public class Pixsign2cService {
 	public String refresh(String request) {
 		try {
 			logger.info("Pixsign2c Service refresh: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			JSONObject locationJson = requestJson.getJSONObject("location");
-			long freebytes = requestJson.has("sdcard_free_bytes") ? requestJson.getLong("sdcard_free_bytes") : 0;
-			long totalbytes = requestJson.has("sdcard_total_bytes") ? requestJson.getLong("sdcard_total_bytes") : 0;
-			String temperature = requestJson.has("temperature") ? requestJson.getString("temperature") : "";
-			int downloadspeed = requestJson.has("download_speed") ? requestJson.getInt("download_speed") : 0;
-			long downloadbytes = requestJson.has("total_download_bytes") ? requestJson.getLong("total_download_bytes")
-					: 0;
-			String networkmode = requestJson.has("network_mode") ? requestJson.getString("network_mode") : "0";
-			int networksignal = requestJson.has("signal_strength") ? requestJson.getInt("signal_strength") : 0;
-			int brightness = requestJson.has("brightness") ? requestJson.getInt("brightness") : 0;
+			long freebytes = requestJson.optLong("sdcard_free_bytes");
+			long totalbytes = requestJson.optLong("sdcard_total_bytes");
+			String temperature = requestJson.optString("temperature");
+			int downloadspeed = requestJson.optInt("download_speed");
+			long downloadbytes = requestJson.optLong("total_download_bytes");
+			String networkmode = requestJson.optString("network_mode", "0");
+			int networksignal = requestJson.optInt("signal_strength");
+			int brightness = requestJson.optInt("brightness");
 
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
@@ -476,11 +481,11 @@ public class Pixsign2cService {
 			}
 
 			if (locationJson != null) {
-				String latitude = locationJson.getString("latitude");
-				String longitude = locationJson.getString("lontitude");
-				String city = locationJson.getString("city");
-				String addr1 = locationJson.getString("addr");
-				String addr2 = locationJson.getString("desc");
+				String latitude = locationJson.optString("latitude");
+				String longitude = locationJson.optString("lontitude");
+				String city = locationJson.optString("city");
+				String addr1 = locationJson.optString("addr");
+				String addr2 = locationJson.optString("desc");
 				device.setLatitude(latitude);
 				device.setLongitude(longitude);
 				if (city != null && city.length() > 0) {
@@ -508,7 +513,9 @@ public class Pixsign2cService {
 
 			onlinelogMapper.updateLast2Online("" + device.getDeviceid());
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			responseJson.put("tags", device.getTags());
 			responseJson.put("interval1", device.getInterval1());
 			responseJson.put("interval2", device.getInterval2());
@@ -567,7 +574,6 @@ public class Pixsign2cService {
 					"" + device.getDeviceid(), null, Msgevent.Status_Wait);
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
-				eventJsonArray.put(eventJson);
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
 					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", planService.generateBundlePlanJson("" + device.getDeviceid()));
@@ -644,9 +650,10 @@ public class Pixsign2cService {
 				}
 				msgevent.setStatus(Msgevent.Status_Sent);
 				msgeventMapper.updateByPrimaryKeySelective(msgevent);
+				eventJsonArray.add(eventJson);
 			}
 
-			if (responseJson.getString("url").length() > 0 || responseJson.getJSONArray("events").length() > 0) {
+			if (responseJson.optString("url").length() > 0 || responseJson.getJSONArray("events").size() > 0) {
 				logger.info("Pixsign2c Service refresh response: {}", responseJson.toString());
 			} else {
 				logger.info("Pixsign2c Service refresh response: {}", responseJson.toString());
@@ -663,8 +670,8 @@ public class Pixsign2cService {
 	public String reportfile(String request) {
 		try {
 			logger.info("Pixsign2c Service report_file: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -674,13 +681,13 @@ public class Pixsign2cService {
 			}
 
 			JSONArray fileJsonArray = requestJson.getJSONArray("files");
-			for (int i = 0; i < fileJsonArray.length(); i++) {
+			for (int i = 0; i < fileJsonArray.size(); i++) {
 				JSONObject fileJson = fileJsonArray.getJSONObject(i);
-				String type = fileJson.getString("type");
-				int id = fileJson.getInt("id");
-				int progress = fileJson.getInt("progress");
-				String status = fileJson.getString("status");
-				String desc = fileJson.getString("desc");
+				String type = fileJson.optString("type");
+				int id = fileJson.optInt("id");
+				int progress = fileJson.optInt("progress");
+				String status = fileJson.optString("status");
+				String desc = fileJson.optString("desc");
 				String objtype = "";
 				if (type.equals("video")) {
 					objtype = Devicefile.ObjType_Video;
@@ -730,12 +737,14 @@ public class Pixsign2cService {
 				}
 			}
 
-			String fullflag = requestJson.getString("full_flag");
+			String fullflag = requestJson.optString("full_flag");
 			if (fullflag != null && fullflag.equals("1")) {
 				devicefileService.clearByDevice("" + device.getDeviceid());
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service report_file exception", e);
@@ -748,8 +757,8 @@ public class Pixsign2cService {
 	public String reportdvb(String request) {
 		try {
 			logger.info("Pixsign2c Service report_dvb: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -769,10 +778,10 @@ public class Pixsign2cService {
 			}
 
 			if (dvbJsonArray != null) {
-				for (int i = 0; i < dvbJsonArray.length(); i++) {
+				for (int i = 0; i < dvbJsonArray.size(); i++) {
 					JSONObject dvbJson = dvbJsonArray.getJSONObject(i);
-					String name = dvbJson.getString("name");
-					String num = "" + dvbJson.getInt("num");
+					String name = dvbJson.optString("name");
+					String num = "" + dvbJson.optInt("num");
 					Dvb dvb = oldDvbHash.get(num);
 					if (dvb != null) {
 						dvb.setBranchid(org.getTopbranchid());
@@ -800,7 +809,9 @@ public class Pixsign2cService {
 				}
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service report_dvb exception", e);
@@ -813,17 +824,17 @@ public class Pixsign2cService {
 	public String reportcrash(String request) {
 		try {
 			logger.info("Pixsign2c Service report_crash: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			String clientip = requestJson.getString("client_ip");
-			String clientname = requestJson.getString("client_name");
-			String os = requestJson.getString("os");
-			String appname = requestJson.getString("app_name");
-			String vname = requestJson.getString("version_name");
-			String vcode = requestJson.getString("version_code");
-			String stack = requestJson.getString("stack");
-			String resolution = requestJson.getString("resolution");
-			String other = requestJson.getString("other");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String clientip = requestJson.optString("client_ip");
+			String clientname = requestJson.optString("client_name");
+			String os = requestJson.optString("os");
+			String appname = requestJson.optString("app_name");
+			String vname = requestJson.optString("version_name");
+			String vcode = requestJson.optString("version_code");
+			String stack = requestJson.optString("stack");
+			String resolution = requestJson.optString("resolution");
+			String other = requestJson.optString("other");
 
 			Crashreport crashreport = new Crashreport();
 			crashreport.setHardkey(hardkey);
@@ -839,7 +850,9 @@ public class Pixsign2cService {
 			crashreport.setOther(other);
 			crashreportMapper.insertSelective(crashreport);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service report_crash exception", e);
@@ -868,9 +881,11 @@ public class Pixsign2cService {
 				return handleResult(1008, "无效城市");
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
-			responseJson.put("weather", new JSONObject(weather.getWeather()));
+			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service get_weather exception", e);
@@ -898,8 +913,10 @@ public class Pixsign2cService {
 
 			Weather weather = weatherService.selectByCity(Weather.Type_Yahoo, city);
 			if (weather.getWeather() != null && weather.getWeather().length() > 0) {
-				JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
-				responseJson.put("weather", new JSONObject(weather.getWeather()));
+				JSONObject responseJson = new JSONObject();
+				responseJson.put("code", 0);
+				responseJson.put("message", "成功");
+				responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 				return responseJson.toString();
 			} else {
 				return handleResult(1009, "天气无法获得");
@@ -918,8 +935,8 @@ public class Pixsign2cService {
 			@FormDataParam("screen") InputStream screenFile) {
 		try {
 			logger.info("Pixsign2c Service report_screen: {}, screenHeader: {}", request, screenHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -935,7 +952,9 @@ public class Pixsign2cService {
 			logger.info("Save screen snapshot to: {}", filename);
 			File file = new File(filename);
 			FileUtils.copyInputStreamToFile(screenFile, file);
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service report_screen response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -952,8 +971,8 @@ public class Pixsign2cService {
 			@FormDataParam("playlog") InputStream playlogFile) {
 		try {
 			logger.info("Pixsign2c Service report_playlog: {}, playlogHeader: {}", request, playlogHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -975,7 +994,9 @@ public class Pixsign2cService {
 			File tempfile = new File(dir, tempname);
 			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
 			FileUtils.moveFile(tempfile, new File(dir, okname));
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -992,8 +1013,8 @@ public class Pixsign2cService {
 			@FormDataParam("pflow") InputStream pflowFile) {
 		try {
 			logger.info("Pixsign2c Service report_pflow: {}, pflowHeader: {}", request, pflowHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1011,7 +1032,9 @@ public class Pixsign2cService {
 			File tempfile = new File(tempname);
 			FileUtils.copyInputStreamToFile(pflowFile, tempfile);
 			FileUtils.moveFile(tempfile, new File(filename));
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service report_pflow response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1025,17 +1048,17 @@ public class Pixsign2cService {
 	public String reportflowrate(String request) {
 		try {
 			logger.info("Pixsign2c Service report_flowrate: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
-			long starttime = requestJson.getLong("start_time");
-			int total = requestJson.getInt("total_delta");
-			int male = requestJson.getInt("male_delta");
-			int female = requestJson.getInt("female_delta");
-			int age1 = requestJson.getInt("child_delta");
-			int age2 = requestJson.getInt("juvenile_delta");
-			int age3 = requestJson.getInt("youndster_delta");
-			int age4 = requestJson.getInt("middle_delta");
-			int age5 = requestJson.getInt("elder_delta");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			long starttime = requestJson.optLong("start_time");
+			int total = requestJson.optInt("total_delta");
+			int male = requestJson.optInt("male_delta");
+			int female = requestJson.optInt("female_delta");
+			int age1 = requestJson.optInt("child_delta");
+			int age2 = requestJson.optInt("juvenile_delta");
+			int age3 = requestJson.optInt("youndster_delta");
+			int age4 = requestJson.optInt("middle_delta");
+			int age5 = requestJson.optInt("elder_delta");
 
 			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
 				return handleResult(1020, "数据错误");
@@ -1081,7 +1104,9 @@ public class Pixsign2cService {
 				hourflowlogMapper.insertSelective(hourflowlog);
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsign2c Service report_flowrate exception", e);
@@ -1096,8 +1121,8 @@ public class Pixsign2cService {
 			@FormDataParam("file") FormDataContentDisposition fileHeader, @FormDataParam("file") InputStream fileFile) {
 		try {
 			logger.info("Pixsign2c Service upload_file: {}, fileHeader: {}", request, fileHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1118,7 +1143,9 @@ public class Pixsign2cService {
 			logger.info("Save upload file to: {}", CommonConfig.CONFIG_PIXDATA_HOME + filename);
 			File file = new File(CommonConfig.CONFIG_PIXDATA_HOME + filename);
 			FileUtils.copyInputStreamToFile(fileFile, file);
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			responseJson.put("url", "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + filename);
 			responseJson.put("path", "/pixsigdata" + filename);
@@ -1138,8 +1165,8 @@ public class Pixsign2cService {
 			@FormDataParam("debug") InputStream debugFile) {
 		try {
 			logger.info("Pixsign2c Service report_debug: {}, debugHeader: {}", request, debugHeader);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1161,7 +1188,9 @@ public class Pixsign2cService {
 			debugreport.setFilepath(filepath);
 			debugreportMapper.insertSelective(debugreport);
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			logger.info("Pixsign2c Service report_debug response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
@@ -1176,8 +1205,8 @@ public class Pixsign2cService {
 	public String gettext(String request) {
 		try {
 			logger.info("Pixsign2c Service get_text: {}", request);
-			JSONObject requestJson = new JSONObject(request);
-			String hardkey = requestJson.getString("hardkey");
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
 			if (hardkey == null || hardkey.equals("")) {
 				return handleResult(1002, "硬件码不能为空");
 			}
@@ -1209,12 +1238,14 @@ public class Pixsign2cService {
 				texts.add(text.getText());
 			}
 
-			JSONObject responseJson = new JSONObject().put("code", 0).put("message", "成功");
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
 			JSONArray textJsonArray = new JSONArray();
 			String s = "";
 			for (String text : texts) {
 				s += text;
-				textJsonArray.put(text);
+				textJsonArray.add(text);
 			}
 			responseJson.put("texts", textJsonArray);
 			responseJson.put("checksum", DigestUtils.md5Hex(s));

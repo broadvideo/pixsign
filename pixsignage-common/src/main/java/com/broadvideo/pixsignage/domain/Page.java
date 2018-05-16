@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Page {
+	public final static String REVIEW_WAIT = "0";
+	public final static String REVIEW_PASSED = "1";
+	public final static String REVIEW_REJECTED = "2";
+
 	private Integer pageid;
 
 	private String uuid;
@@ -42,11 +46,17 @@ public class Page {
 
 	private String description;
 
+	private String reviewflag;
+
+	private String comment;
+
 	private Date createtime;
 
 	private Date updatetime;
 
 	private Integer createstaffid;
+
+	private String json;
 
 	private String snapshotdtl;
 
@@ -200,6 +210,22 @@ public class Page {
 		this.description = description == null ? null : description.trim();
 	}
 
+	public String getReviewflag() {
+		return reviewflag;
+	}
+
+	public void setReviewflag(String reviewflag) {
+		this.reviewflag = reviewflag;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -226,6 +252,14 @@ public class Page {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
 	}
 
 	public String getSnapshotdtl() {

@@ -598,7 +598,7 @@ var DeviceModule = function () {
 		});
 
 		$('#ConfigModal').on('shown.bs.modal', function (e) {
-			$(".volumeRange").ionRangeSlider({
+			$('.volumeRange').ionRangeSlider({
 				min: 0,
 				max: 100,
 				from: _device.volume,
@@ -610,6 +610,11 @@ var DeviceModule = function () {
 				$('.volumeflag').css('display', '');
 			} else {
 				$('.volumeflag').css('display', 'none');
+			}
+			if ($('input[name="device.hotspotflag"]:checked').val() == 1) {
+				$('.hotspotflag').css('display', '');
+			} else {
+				$('.hotspotflag').css('display', 'none');
 			}
 		})
 		$('input[name="device.volumeflag"]').click(function(e) {
@@ -632,6 +637,13 @@ var DeviceModule = function () {
 				$('.powerflag').css('display', 'none');
 			}
 		});  
+		$('input[name="device.hotspotflag"]').click(function(e) {
+			if ($('input[name="device.hotspotflag"]:checked').val() == 1) {
+				$('.hotspotflag').css('display', '');
+			} else {
+				$('.hotspotflag').css('display', 'none');
+			}
+		});
 	};
 	
 	var initScreenModal = function () {
