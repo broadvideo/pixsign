@@ -42,23 +42,24 @@ public class ResTerminals {
 	@Path("/{terminal_id}/classroom")
 	public String getClassroomByTerminalId(@Context HttpServletRequest req, @PathParam("terminal_id") String terminalId) {
 		try {
-		Device device = deviceMapper.selectByTerminalid(terminalId);
-		String externalId = device.getExternalid();
+			Device device = deviceMapper.selectByTerminalid(terminalId);
+			String externalId = device.getExternalid();
 			if (StringUtils.isBlank(externalId)) {
 				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "No binding classroom.");
 			}
-		logger.info("terminal_id={} fetch externalid={}", terminalId, externalId);
-		Classroom classroom = classroomService.loadClassroom(NumberUtils.toInt(externalId), device.getOrgid());
+			logger.info("terminal_id={} fetch externalid={}", terminalId, externalId);
+			Classroom classroom = classroomService.loadClassroom(NumberUtils.toInt(externalId), device.getOrgid());
 			if (classroom == null) {
 				return this.handleResult(ApiRetCodeEnum.EXCEPTION, "classroom not found.");
 			}
-		JSONObject responseJson = new JSONObject();
-		responseJson.put("retcode", ApiRetCodeEnum.SUCCESS);
-		responseJson.put("message", "success");
-		JSONObject classroomJson = new JSONObject();
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("retcode", ApiRetCodeEnum.SUCCESS);
+			responseJson.put("message", "success");
+			JSONObject classroomJson = new JSONObject();
 			classroomJson.put("id", classroom.getClassroomid());
-		classroomJson.put("name", classroom.getName());
-		classroomJson.put("description", classroom.getDescription());
+			classroomJson.put("uuid", classroom.getUuid());
+			classroomJson.put("name", classroom.getName());
+			classroomJson.put("description", classroom.getDescription());
 			responseJson.put("classroom", classroomJson);
 
 			return responseJson.toString();
@@ -85,6 +86,5 @@ public class ResTerminals {
 		logger.info("Terminal Service response: {}", responseJson.toString());
 		return responseJson.toString();
 	}
-
 
 }
