@@ -220,10 +220,13 @@ var BundleModule = function () {
 						dataType : 'json',
 						contentType : 'application/json;charset=utf-8',
 						beforeSend: function ( xhr ) {
-							Metronic.startBundleLoading({animate: true});
+							Metronic.blockUI({
+								zIndex: 20000,
+								animate: true
+							});
 						},
 						success : function(data, status) {
-							Metronic.stopBundleLoading();
+							Metronic.unblockUI();
 							if (data.errorcode == 0) {
 								bootbox.alert(common.tips.success);
 							} else {
@@ -231,7 +234,7 @@ var BundleModule = function () {
 							}
 						},
 						error : function() {
-							Metronic.stopBundleLoading();
+							Metronic.unblockUI();
 							console.log('failue');
 						}
 					});				

@@ -77,6 +77,8 @@ public class Org {
 
 	private String mainpage;
 
+	private String city;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -363,6 +365,14 @@ public class Org {
 
 	public void setMainpage(String mainpage) {
 		this.mainpage = mainpage;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
