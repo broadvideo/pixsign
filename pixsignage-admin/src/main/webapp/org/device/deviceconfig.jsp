@@ -23,6 +23,14 @@
 					<form id="DeviceConfigForm" class="form-horizontal" method="POST">
 						<input type="hidden" name="org.orgid" value="0" />
 						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.city"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.city" />
+									</div>
+								</div>
+							</div>
 							<!-- 
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.upgradeflag"/></label>

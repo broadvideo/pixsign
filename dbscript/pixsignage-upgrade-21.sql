@@ -26,6 +26,9 @@ alter table page add reviewflag char(1) default '1';
 alter table page add comment varchar(1024) default '';
 alter table page add json longtext;
 
+drop index city on weather;
+alter table weather add unique key weather_unique_index1(city, type);
+
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(104,0,0,'menu.page','page.jsp','fa-html5',1,4);

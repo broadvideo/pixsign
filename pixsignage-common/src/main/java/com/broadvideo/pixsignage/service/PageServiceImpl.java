@@ -571,6 +571,7 @@ public class PageServiceImpl implements PageService {
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
 		out.putNextEntry(new ZipEntry("fonts/"));
 		out.putNextEntry(new ZipEntry("image/"));
+		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "image"), "image");
 
 		Iterator<Entry<Integer, Image>> iter = imageHash.entrySet().iterator();
 		while (iter.hasNext()) {

@@ -18,6 +18,7 @@ var PageDesignModule = function (mode) {
 		ZoneLimits['5'] = 2;
 		ZoneLimits['6'] = 1;
 		ZoneLimits['7'] = 100;
+		ZoneLimits['8'] = 1;
 		ZoneLimits['9'] = 1;
 		ZoneLimits['10'] = 1;
 		ZoneLimits['11'] = 1;
@@ -191,6 +192,10 @@ var PageDesignModule = function (mode) {
 				var p_element = document.createElement('p');
 				p_element.className = 'clstextedit';
 				$(inner_div).append(p_element);
+			} else if (pagezone.type == 8) {
+				//Weather Zone
+				var span_element = document.createElement('span');
+				$(inner_div).append(span_element);
 			} else if (pagezone.type == 11 || pagezone.type == 12) {
 				//CalendarZone
 				var table = document.createElement('table');
@@ -408,6 +413,44 @@ var PageDesignModule = function (mode) {
 					text_val = text_val.replace(/&nbsp;/g, ' ');
 				}
 				$(pagezoneDiv).find('p').html(text_val);
+			} else if (pagezone.type == 8) {
+				//Weather Zone
+				$(pagezoneDiv).find('#rotatable').css({
+					'box-sizing': 'border-box',
+					'border-color': pagezone.bdcolor, 
+					'border-style': pagezone.bdstyle, 
+					'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
+					'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
+					'color': pagezone.color, 
+					'font-family': pagezone.fontfamily, 
+					'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
+					'text-decoration': pagezone.decoration, 
+					'text-align': pagezone.align, 
+					'font-weight': pagezone.fontweight, 
+					'font-style': pagezone.fontstyle, 
+					'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
+					'text-shadow': shadow,  
+					'word-wrap': 'break-word',
+					'overflow': 'hidden',
+				});
+				$(pagezoneDiv).find('span').css({
+					'text-align': 'center',
+					'overflow': 'hidden',
+					'text-overflow': 'clip',
+					'white-space': 'nowrap',
+					'color': pagezone.color,
+					'font-size': Math.ceil(pagezone.fontsize / PageScale) + 'px', 
+					'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
+					'vertical-align': 'middle',
+				});
+				$(pagezoneDiv).find('span').html('深圳  <img src="/pixsignage-page/image/weather/30.png" /> 30℃');
+				$(pagezoneDiv).find('img').each(function() {
+					$(this).css({
+						'height': Math.ceil(pagezone.fontsize / PageScale + 10) + 'px',
+						'vertical-align': 'middle',
+						'vertical-display': 'inline',
+					});
+				});
 			} else if (pagezone.type == 10) {
 				//Camera Zone
 				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/camera/snapshot.jpg');
@@ -513,7 +556,7 @@ var PageDesignModule = function (mode) {
 					'border-style': pagezone.bdstyle, 
 					'border-width': Math.ceil(pagezone.bdwidth / PageScale) + 'px', 
 					'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
-					'color': '#FFFFFF', 
+					'color': '#000000', 
 					'font-size': (50 / PageScale) + 'px', 
 					'word-wrap': 'break-word',
 				});
@@ -1508,6 +1551,11 @@ var PageDesignModule = function (mode) {
 				pagezone.bgcolor = '#FFFFFF';
 				pagezone.bgopacity = 0;
 				pagezone.bdwidth = 1;
+			}
+			if (pagezone.type == 8) {
+				pagezone.color = '#000000';
+				pagezone.bgcolor = '#FFFFFF';
+				pagezone.bgopacity = 0;
 			}
 			if (pagezone.type == 11) {
 				pagezone.rows = 5;

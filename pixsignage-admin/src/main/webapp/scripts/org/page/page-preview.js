@@ -230,6 +230,46 @@ var PagePreviewModule = function () {
 					'white-space': 'pre-wrap',
 					'text-decoration': zone.decoration,
 				});
+			} else if (zone.type == '8') {
+				//Weather Zone
+				var span_element = document.createElement('span');
+				$(inner_div).append(span_element);
+				$(inner_div).css({
+					'box-sizing': 'border-box',
+					'border-color': zone.bdcolor, 
+					'border-style': zone.bdstyle, 
+					'border-width': Math.ceil(zone.bdwidth / scale) + 'px', 
+					'border-radius': Math.ceil(zone.bdradius / scale) + 'px', 
+					'color': zone.color, 
+					'font-family': zone.fontfamily, 
+					'font-size': Math.ceil(zone.fontsize / scale) + 'px', 
+					'text-decoration': zone.decoration, 
+					'text-align': zone.align, 
+					'font-weight': zone.fontweight, 
+					'font-style': zone.fontstyle, 
+					'line-height': Math.ceil(zone.lineheight / scale) + 'px', 
+					'text-shadow': shadow,  
+					'word-wrap': 'break-word',
+					'overflow': 'hidden',
+				});
+				$(inner_div).find('span').css({
+					'text-align': 'center',
+					'overflow': 'hidden',
+					'text-overflow': 'clip',
+					'white-space': 'nowrap',
+					'color': zone.color,
+					'font-size': Math.ceil(zone.fontsize / scale) + 'px', 
+					'line-height': Math.ceil(zone.lineheight / scale) + 'px', 
+					'vertical-align': 'middle',
+				});
+				$(inner_div).find('span').html('深圳  <img src="/pixsignage-page/image/weather/30.png" /> 30℃');
+				$(inner_div).find('img').each(function() {
+					$(this).css({
+						'height': Math.ceil(zone.fontsize / scale + 10) + 'px',
+						'vertical-align': 'middle',
+						'vertical-display': 'inline',
+					});
+				});
 			} else if (zone.type == '10') {
 				//Camera Zone
 				var img_element = document.createElement('img');
