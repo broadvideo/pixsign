@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import EIAC.EAC.SSO.AppSSOBLL;
+import EIAC.EAC.SSO.ReadConfig;
 
 import com.broadvideo.pixsignage.common.EncryptionUtils;
 import com.broadvideo.pixsignage.common.ServiceConstants;
@@ -30,10 +31,10 @@ public class LoginCallBackServlet extends HttpServlet {
 	private static final long serialVersionUID = -7460045635456314022L;
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public LoginCallBackServlet() {
-        super();
+	public LoginCallBackServlet() {
+		super();
 
-    }
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -42,9 +43,14 @@ public class LoginCallBackServlet extends HttpServlet {
 		String errorDescription = request.getParameter("ErrorDescription");
 		String authenticator = request.getParameter("Authenticator");
 		String timestamp = request.getParameter("TimeStamp");
+		logger.info(
+				"#####LoginCallBackServlet with UserAccount:{},Result:{},ErrorDescription:{},Authenticator:{},TimeStamp:{}",
+				userAccount, result, errorDescription, authenticator, timestamp);
 		AppSSOBLL app = new AppSSOBLL();
 		if (StringUtils.isNotBlank(userAccount)) {
 			String iasId = CmsSSOServiceBuilder.getConfig().getIasId();
+			String IASkey = ReadConfig.getString("IASKey");
+			logger.info("#####LoginCallBackServlet:iASKey:{}", IASkey);
 			if (!"0".equals(result)) {
 				logger.error("Result({})验证不成功！", result);
 				logger.info(iasId + ":" + timestamp + ":" + userAccount + ":" + result + ":" + errorDescription + ":"
@@ -92,7 +98,9 @@ public class LoginCallBackServlet extends HttpServlet {
 		final String token = EncryptionUtils.encrypt(ServiceConstants.ENCRYPT_KEY, plainText);
 		return token;
 	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
 
 		doGet(request, response);
 	}
