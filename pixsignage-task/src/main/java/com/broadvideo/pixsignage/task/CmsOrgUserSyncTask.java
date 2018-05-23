@@ -43,14 +43,12 @@ public class CmsOrgUserSyncTask {
 	@Autowired
 	private StaffMapper staffMapper;
 	public static Map<String, String> serverMap = new HashMap<String, String>();
-	static{
+	static {
 		serverMap.put("development", "http://192.168.2.102:8080");
-		serverMap.put("test", "http://172.253.40.250:8081");
-		serverMap.put("product", "http://172.253.40.250:8081");
+		serverMap.put("test", "http://172.253.40.249:8081");
+		serverMap.put("product", "http://172.253.40.249:8081");
 	}
 	private static boolean workflag = false;
-
-
 
 	public void work() {
 		try {
@@ -100,6 +98,9 @@ public class CmsOrgUserSyncTask {
 				}
 				TreeBuilderUtils.buildTree(top, syncBranchList, "parentuuid", "uuid", "children");
 				Branch root = this.branchService.selectRoot(org.getOrgid() + "").get(0);
+				root.setName(top.getName());
+				root.setUuid(top.getUuid());
+				this.branchService.updateBranch(root);
 				logger.info("sync Branch ......");
 				this.syncBranch(syncbranchIds, top, root.getParentid(), org.getOrgid());
 				logger.info("Clear invalid branch.....");
@@ -130,8 +131,7 @@ public class CmsOrgUserSyncTask {
 
 				SimpleHttpResponse staffResp = HttpClientUtils.doGet(
 						staffServiceUrl + "?" + java.net.URLEncoder.encode("\"" + selBranch.getUuid() + "\"", "UTF-8"),
-						null,
-						null);
+						null, null);
 				List<Integer> syncStaffIds = new ArrayList<Integer>();
 				if (statusCode >= 200 && statusCode <= 300) {
 					logger.info("cms: get branch staffs  resp body:{}", staffResp.getBody());
@@ -161,7 +161,7 @@ public class CmsOrgUserSyncTask {
 						if (syncStaffIds.contains(staff.getStaffid())) {
 							logger.info("staff(uuid:{},name:{}) has exits.", staff.getUuid(), staff.getName());
 							continue;
-						}else{
+						} else {
 							logger.info("Delete staff(uuid:{},name:{}) ", staff.getUuid(), staff.getName());
 							this.staffService.deleteStaff(staff.getStaffid() + "");
 						}
@@ -170,8 +170,6 @@ public class CmsOrgUserSyncTask {
 				}
 
 			}
-			
-
 
 			logger.info("cms:end Quartz Task.");
 
@@ -206,7 +204,5 @@ public class CmsOrgUserSyncTask {
 		logger.info("cms:get service url({})", urlBuilder.toString());
 		return urlBuilder.toString();
 	}
-
-
 
 }

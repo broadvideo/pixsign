@@ -288,7 +288,11 @@ public class ResUsers extends ResBase {
 				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm"));
 				data.put("period_flag", result.getPeriodflag());
 				data.put("period_type", result.getPeriodtype());
-				data.put("period_end_time", DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm"));
+				if (result.getPeriodendtime() == null) {
+					data.put("period_end_time", "");
+				} else {
+					data.put("period_end_time", DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm"));
+				}
 				data.put("skip_holiday_flag", result.getSkipholidayflag());
 				data.put("book_user_id", result.getBookstaffid());
 				data.put("book_user", result.getBookstaffname());

@@ -17,7 +17,9 @@ import biz.videoexpress.pixedx.lmsapi.common.UserProfile;
 import biz.videoexpress.pixedx.lmsapi.service.UsersCache;
 
 import com.broadvideo.pixsignage.common.ServiceException;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Staff;
+import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.StaffMapper;
 
 public class ResBase {
@@ -28,6 +30,8 @@ public class ResBase {
 	protected UsersCache userCache;
 	@Autowired
 	protected StaffMapper staffMapper;
+	@Autowired
+	protected OrgMapper orgMapper;
 
 	public ResBase() {
 		LOG.info("Resource " + this.getClass().getName() + " initialized.");
@@ -78,6 +82,8 @@ public class ResBase {
 				List<Staff> staffs = staffMapper.selectByLoginname(loginName);
 				if (staffs != null && staffs.size() > 0) {
 					staff = staffs.get(0);
+				} else {
+					throw new AppException(ApiRetCodeEnum.EXCEPTION, "用户未同步过来！");
 				}
 			} catch (ServiceException e) {
 				throw new AppException(ApiRetCodeEnum.EXCEPTION, "Load user excepton.");
@@ -140,7 +146,13 @@ public class ResBase {
 		UserProfile userProfile = new UserProfile();
 		userProfile.setUsername(staff.getLoginname());
 		userProfile.setUserId(staff.getStaffid());
-		userProfile.setOrgId(staff.getOrgid());
+		if (staff.getOrgid() == null) {
+			Org org = this.orgMapper.selectByCode("default");
+			userProfile.setOrgId(org.getOrgid());
+		} else {
+			userProfile.setOrgId(staff.getOrgid());
+
+		}
 		userProfile.setBranchid(staff.getBranchid());
 		userProfile.setEmail("");
 		userProfile.setAccessToken("");

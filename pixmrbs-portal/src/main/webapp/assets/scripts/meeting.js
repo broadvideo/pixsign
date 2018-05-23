@@ -7,16 +7,14 @@ var Meeting = function (user) {
     var renderUserStatus = function () {
         if (typeof sessionStorage.username != 'undefined') {
             $("#userinfo").text(sessionStorage.username + ": 欢迎您！");
-            $('#login').hide()
-            $('#my-meeting').show()
-            $('#logout').show()
         } else {
             $("#userinfo").text("未登录");
-            $('#login').show()
-            $('#my-meeting').hide()
-            $('#logout').hide()
         }
     };
+
+    /*根据token获取用户信息*/
+    var token = 'pixmrbs ' + $.cookie('Token');
+    user.autoLogin(token, renderUserStatus);
 
     /*导航栏行为定义*/
     var handleNavbar = function () {
@@ -84,30 +82,6 @@ var Meeting = function (user) {
                     break;
             }
             App.handleLayout();
-        });
-
-        /*用户登入登出*/
-        $('#login').click(function () {
-            $("#modal_login").modal("toggle");
-        })
-        $('#logout').click(function () {
-            user.logout(renderUserStatus);
-        })
-
-        /*登录界面提交点击事件*/
-        $("body").on("click", "#modal_login #login_submit", function (event) {
-            event.preventDefault();
-            var data = {
-                grant_type: "password",
-                client_id: "pixmrbs-portal",
-                client_secret: "pixmrbs-portal",
-                username: $("#username").val(),
-                password: $("#password").val()
-            };
-            user.login(data, function () {
-                $("#modal_login").modal("hide");
-                renderUserStatus();
-            });
         });
 
         /*APP下载*/
@@ -807,7 +781,6 @@ var Meeting = function (user) {
     return {
         init: function () {
             getBranches();
-            renderUserStatus();
             handleDashboard();
             handleNavbar();
             handleBuilding();

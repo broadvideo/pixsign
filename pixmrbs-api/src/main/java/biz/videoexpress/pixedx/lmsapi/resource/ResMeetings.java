@@ -168,7 +168,11 @@ public class ResMeetings extends ResBase {
 				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm"));
 				data.put("period_flag", result.getPeriodflag());
 				data.put("period_type", result.getPeriodtype());
-				data.put("period_end_time", DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm"));
+				String strPeriodtimeend = "";
+				if (result.getPeriodendtime() != null) {
+					strPeriodtimeend = DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm");
+				}
+				data.put("period_end_time", strPeriodtimeend);
 				data.put("skip_holiday_flag", result.getSkipholidayflag());
 				data.put("book_user", result.getBookstaffname());
 				data.put("book_branch", result.getBookbranchname());
@@ -193,8 +197,8 @@ public class ResMeetings extends ResBase {
 
 		} catch (Exception e) {
 
-			logger.error("getMeetingRooms exception.", e);
-			throw new AppException(ApiRetCodeEnum.EXCEPTION, "getMeetingRooms exception.");
+			logger.error("getMeetings exception.", e);
+			throw new AppException(ApiRetCodeEnum.EXCEPTION, "getMeetings exception:" + e.getMessage());
 		}
 
 	}

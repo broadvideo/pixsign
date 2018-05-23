@@ -1,5 +1,5 @@
 /*Live Module*/
-var origin = 'http://192.168.0.102:8080/pixmrbs-api';
+var origin = 'http://172.253.32.226:8080/pixmrbs-api';
 var user = function () {
     var user = {};
     /*登录方法*/
@@ -46,7 +46,7 @@ var user = function () {
     user.autoLogin = function (data, success) {
         sessionStorage.authorization = data;
         $.ajax({
-            url: origin + "/pixedxapi/lms/users/self/profile",
+            url: origin + "/users/self/profile",
             type: "GET",
             headers: {Authorization: sessionStorage.authorization},
             contentType: 'application/json; charset=utf-8',
