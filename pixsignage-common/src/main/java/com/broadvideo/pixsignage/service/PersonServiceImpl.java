@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.GlobalFlag;
+import com.broadvideo.pixsignage.common.POIUtil;
 import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Person;
@@ -336,28 +337,28 @@ public class PersonServiceImpl implements PersonService {
 				continue;
 			}
 
-			String personno = r.getCell(0) != null ? r.getCell(0).getStringCellValue() : null;
+			String personno = POIUtil.formatCellValue(r.getCell(0));
 			if (StringUtils.isBlank(personno)) {
 				logger.error("Invalid rows for personno is null.");
 				invalidCount++;
 				continue;
 			}
-			String name = r.getCell(1) != null ? r.getCell(1).getStringCellValue() : null;
+			String name = POIUtil.formatCellValue(r.getCell(1));
 			if (StringUtils.isBlank(name)) {
 				logger.error("Invalid rows for name is null.");
 				invalidCount++;
 				continue;
 
 			}
-			String genderName = r.getCell(2) != null ? r.getCell(2).getStringCellValue() : null;
+			String genderName = POIUtil.formatCellValue(r.getCell(2));
 			String gender = "2";
 			if ("男".equals(genderName)) {
 				gender = "0";
 			} else if ("女".equals(genderName)) {
 				gender = "1";
 			}
-			String mobile = r.getCell(3) != null ? r.getCell(3).getStringCellValue() : null;
-			String email = r.getCell(4) != null ? r.getCell(4).getStringCellValue() : null;
+			String mobile = POIUtil.formatCellValue(r.getCell(3));
+			String email = POIUtil.formatCellValue(r.getCell(4));
 			Person person = new Person();
 			person.setPersonno(personno);
 			person.setName(name);
