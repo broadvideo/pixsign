@@ -13,68 +13,50 @@ $('#MyTable').dataTable({
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'event!list.action',
-	'aoColumns' : [ 
-	                {'sTitle' : '考勤分组', 'mData' : 'roomname', 'bSortable' : false, 'sWidth' : '15%' },
-	                {'sTitle' : '事件名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
-	                {'sTitle' : '类型', 'mData' : 'type', 'bSortable' : false, 'sWidth' : '8%' },
-					{'sTitle' : '开始日期', 'mData' : 'startdate', 'bSortable' : false, 'sWidth' : '10%' },
-					{'sTitle' : '结束日期', 'mData' : 'enddate', 'bSortable' : false, 'sWidth' : '10%' },
-					{'sTitle' : '时间段', 'mData' : 'shortstarttime', 'bSortable' : false, 'sWidth' : '10%' },
-					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '10%' },
-					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '10%' }],
+	'aoColumns' : [ {'sTitle' : '事件名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
+	                {'sTitle' : '考勤位置', 'mData' : 'roomname', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '开始日期', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '结束日期', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '时间段', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '8%' },
+					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '8%' }],
 				
 	'iDisplayLength' : 10,
 	'sPaginationType' : 'bootstrap',
 	'oLanguage' : DataTableLanguage,
 	'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 		
-
 		 $('td:eq(2)',nRow).html(function(){
-			 if(aData.type=='0'){
-				   return '每天';
-			    }else if(aData.type=='1'){
-			    	return '工作日';
-			    }else if(aData.type=='2'){
-			    	
-			    	return '自定义';
-			    }
+			 if(aData.starttime!=null){
+				   return moment(aData.starttime).format('YYYY-MM-DD');
+			    }else{
+				   return null;
+			   }
 			 
 		 });
 		 $('td:eq(3)',nRow).html(function(){
-			 if(aData.startdate!=null){
-				   return moment(aData.startdate).format('YYYY-MM-DD');
-			    }else{
-				   return null;
-			   }
 			 
-		 });
-		 $('td:eq(4)',nRow).html(function(){
-			 
-			 if(aData.enddate!=null){
-				   return moment(aData.enddate).format('YYYY-MM-DD')
+			 if(aData.endtime!=null){
+				   return moment(aData.endtime).format('YYYY-MM-DD') 
 			    }else{
 				   return null;
 			   }
 			 
 			 
 		 });
-		 $('td:eq(5)',nRow).html(function(){
-			 if(aData.type=='0' || aData.type=='1'){
-			 if(aData.shortstarttime!=null && aData.shortendtime!=null){
-				
-				   return moment(aData.shortstarttime).format('HH:mm')+"-"+moment(aData.shortendtime).format('HH:mm');
+	 $('td:eq(4)',nRow).html(function(){
+			 
+			 if(aData.endtime!=null && aData.starttime!=null){
+				   return moment(aData.startime).format('HH:mm')+'-'+ moment(aData.endtime).format('HH:mm')
 			    }else{
 				   return null;
 			   }
-			 }else{
-				 
-				 return null;
-			 }
+			 
+			 
 		 });
-		 
 
-		$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-		$('td:eq(7)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+		$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+		$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 		
 
 		return nRow;
@@ -177,122 +159,24 @@ FormValidateOption.rules['event.name'] = {};
 FormValidateOption.rules['event.name']['required'] = true;
 FormValidateOption.rules['event.roomid'] = {};
 FormValidateOption.rules['event.roomid']['required'] = true;
-FormValidateOption.rules['event.startdate'] = {};
-FormValidateOption.rules['event.startdate']['required'] = true;
-FormValidateOption.rules['event.enddate'] = {};
-FormValidateOption.rules['event.enddate']['required'] = true;
-FormValidateOption.rules['event.shortstarttime'] = {};
-FormValidateOption.rules['event.shortstarttime']['required'] = true;
-FormValidateOption.rules['event.shortendtime'] = {};
-FormValidateOption.rules['event.shortendtime']['required'] = true;
-
-function validateHHmm(shorttime){
-	
-	  var reg=/^[0-2]?[0-9]:[0-5][0-9]$/i;
-	  if(!reg.test(shorttime) ){
-	    	console.log('shorttime:%s时间格式不合法！',shorttime);
-	    	return false;
-	    }
-	
-	  return true;
-}
-
-function validateRangeDate(startdate,enddate){
-	
-	var startdatewrap=new Date(startdate+' '+'00:00:00');
-	var enddatewrap=new Date(enddate+' '+'00:00:00');
-	if(startdatewrap.getTime()<=enddatewrap.getTime()){
-		return true;
-	}
-	
-	return false;
-}
-
-function validateRangeShorttime(shortstarttime,shortendtime){
-	
-	var dt1=new Date('1997-01-01'+' '+shortstarttime);
-	var dt2=new Date('1997-01-01'+' '+shortendtime);
-	if(dt1.getTime()<dt2.getTime()){
-		return true;
-	}
-	
-	return false;
-}
+FormValidateOption.rules['startdate'] = {};
+FormValidateOption.rules['startdate']['required'] = true;
+FormValidateOption.rules['enddate'] = {};
+FormValidateOption.rules['enddate']['required'] = true;
+FormValidateOption.rules['shortstarttime'] = {};
+FormValidateOption.rules['shortstarttime']['required'] = true;
+FormValidateOption.rules['shortendtime'] = {};
+FormValidateOption.rules['shortendtime']['required'] = true;
 
 FormValidateOption.submitHandler = function(form) {
 	
-	var checkedRadio=$('input[name="event.type"]:checked');
-	var  checkedflag=$(checkedRadio).val();
-	var eventdtls=[];
-	var startdate=$('#startdate').attr("value");
-	var enddate=$('#enddate').attr("value");
-	var shortstarttime=$('#shortstarttime').val();
-	var shortendtime=$('#shortendtime').val();
-	if(startdate==null || enddate==null){
-			alert("日期不允许为空！");
-			return;
-	 }
-	if(!validateRangeDate(startdate,enddate)){
-			alert("日期开始时间不能大于结束时间！");
-			return;
-	  }
-	if($.trim(shortstarttime)=='' || $.trim(shortendtime)==''){
-			alert("时间段不允许为空！");
-			return;
-		}
-	if(!validateHHmm(shortstarttime) || !validateHHmm(shortendtime)){
-			
-			alert("时间格式不正确！");
-			return;
-	}
-	
-	if(!validateRangeShorttime(shortstarttime,shortendtime)){
-			alert("时间段开始时间必须小于结束时间！");
-			return;
-	}
-	if(checkedflag=='2'){
-	   
-		$('div.week-form-group').each(function(){
-			var eventdtl={};
-			 var dayofweekchk=$(this).find('input[name=dayofweek]');
-			 if(dayofweekchk.is(':checked')){
-				 var dayofweek=$(dayofweekchk).attr('value');
-				 var shortstarttime=$(this).find("input[name=shortstarttime]").val();
-				 var shortendtime=$(this).find("input[name=shortendtime]").val();
-				 if($.trim(shortstarttime)=='' || $.trim(shortendtime)==''){
-				      console.log("Invalid data:shortstarttime:%s,shortendtime:%s",shortstarttime,shortendtime);
+	var starttime=$('#startdate').val()+' '+$('#shortstarttime').val();
+	var endtime=$('#enddate').val()+' '+$('#shortendtime').val();
+	starttime=moment(starttime).format('YYYY-MM-DD HH:mm:ss');
+	endtime=moment(endtime).format('YYYY-MM-DD HH:mm:ss');
+    $('input[name="event.starttime"]').val(starttime);
+    $('input[name="event.endtime"]').val(endtime);
 
-				 }
-				eventdtl={'dayofweek': dayofweek,'shortstarttime':shortstarttime,'shortendtime':shortendtime};
-			    eventdtls.push(eventdtl);
-			 }
-			
-		});
-		if(eventdtls.length==0){
-			
-		   alert('自定义时间段不能为空！');
-		   return;
-		}
-		for(var i=0;i<eventdtls.length;i++){
-		  var eventdtl= eventdtls[i];
-		  if($.trim(eventdtl.shortstarttime)=='' || $.trim(eventdtl.shortendtime)==''){
-			  alert('请输入完整的时间段！');
-			  return;
-		  }
-		  if(!validateHHmm(eventdtl.shortstarttime) || !validateHHmm(eventdtl.shortendtime) ){
-  	    	   alert('时间格式不合法！');
-  	    	return;
-  	       }
-		  if(!validateRangeShorttime(eventdtl.shortstarttime,eventdtl.shortendtime)){
-			  
-				alert("时间段开始时间必须小于结束时间！");
-			  return;
-		  }
-		  
-		  
-		}
-	}
-	$('input[name="event.timedtls"]').attr('value',JSON.stringify(eventdtls));
 	$.ajax({
 		type : 'POST',
 		url : $('#MyEditForm').attr('action'),
@@ -320,81 +204,14 @@ $('[type=submit]', $('#MyEditModal')).on('click', function(event) {
 	}
 });
 
-function initEventForm(eventdtls){
-	
-    	var checkedRadio=$('input[name="event.type"]:checked');
-		var  checkedflag=$(checkedRadio).val();
-		
-		if(checkedflag=='0' || checkedflag=='1'){ //每天或者工作日考勤
-			$('div.week-form-group input[type=text]').attr('value','');
-			$('div.week-form-group').hide();
-		}else if(checkedflag=='2'){//自定义考勤
-			
-			$('div.week-form-group input').attr('value','');
-			var  checkedCheckers= $("input[name='dayofweek']:lt(5)");
-			var uncheckedCheckers=$("input[name='dayofweek']:gt(4)");
-			var dayofweek=1;
-			$.each(checkedCheckers,function(idx,obj){
-				$(obj).attr("value",dayofweek);
-				$(obj).attr("checked",true)
-			    $.uniform.update($(obj));
-			    dayofweek++;
-			});
-			$.each(uncheckedCheckers,function(idx,obj){
-				$(obj).attr("checked",false);
-				$(obj).attr("value",dayofweek);
-			    dayofweek++;
-	            $.uniform.update($(obj));
-		     });
-			$('div.week-form-group').each(function(){
-				var dayofweekchk=  $(this).find('input[name=dayofweek]');
-				if($(dayofweekchk).is(':checked')){
-					$(this).find('input[name=shortstarttime]').attr('value',$('#shortstarttime').val());
-					$(this).find('input[name=shortendtime]').attr('value',$('#shortendtime').val());
-				}
-			});
-			//初始化数据
-			if(eventdtls!=null){
-			$('div.week-form-group input[type=text]').attr('value','');
-		    $('input[name=dayofweek]').removeAttr("checked");
-			 $.uniform.update($('input[name=dayofweek]'));
-			 $.each(eventdtls,function(idx,eventdtl){
-				 var dayofweek=eventdtl.dayofweek;
-				 var shortstarttime=eventdtl.shortstarttime;
-				 var shortendtime=eventdtl.shortendtime;
-				 var dayofweekchk='input[name=dayofweek][value='+dayofweek+']';
-				 $(dayofweekchk).attr("checked",true)
-				 $.uniform.update($(dayofweekchk))
-				 $(dayofweekchk).closest('.week-form-group').find('input[name=shortstarttime]').attr('value',shortstarttime);
-				 $(dayofweekchk).closest('.week-form-group').find('input[name=shortendtime]').attr('value',shortendtime);
-				 
-				 
-			 });
-				
-				
-				
-			}
-			
-			
-			$('div.week-form-group').show();
-		}
-
-	
-	
-}
-
-$('input[name="event.type"]').click(function(){
-
-	initEventForm();
-	
-});
 $('body').on('click', '.pix-add', function(event) {
 	refreshForm('MyEditForm');
 	$('#MyEditForm').attr('action', 'event!add.action');
 	$('#MyEditModal').modal();
 	$("#ClassSelect").select2('val','');
 	$("#ClassSelect").prop("disabled", false);
-	initEventForm();
+
+	$('#preview').html('')
 
 });			
 
@@ -407,13 +224,20 @@ $('body').on('click', '.pix-update', function(event) {
 	var item = $('#MyTable').dataTable().fnGetData(index);
 	var formdata = new Object();
 	for (var name in item) {
-		if(name=='startdate' || name=='enddate'){
-			formdata['event.' + name] =moment(item[name]).format('YYYY-MM-DD') 
-		}else if(name=='shortstarttime' || name=='shortendtime'){
-			formdata['event.' + name] =moment(item[name]).format('HH:mm') 
+		if(name=='starttime'){
+			formdata['startdate'] =moment(item[name]).format('YYYY-MM-DD'); 
+			formdata['shortstarttime'] =moment(item[name]).format('HH:mm'); 
+
+		}else if(name=='endtime'){
+			
+			formdata['enddate']=moment(item[name]).format('YYYY-MM-DD');
+			formdata['shortendtime'] =moment(item[name]).format('HH:mm'); 
+
+			
 		}else{
 		    formdata['event.' + name] = item[name];
 	    }
+		
 		
 	}
 	refreshForm('MyEditForm');
@@ -422,7 +246,7 @@ $('body').on('click', '.pix-update', function(event) {
 	$('#MyEditModal').modal();
 	$("#ClassSelect").select2('val',item.roomid);
 	//$("#ClassSelect").prop("disabled", true);
-	initEventForm(item.eventdtls);
+
 
 });
 
@@ -441,7 +265,6 @@ $.ajax({
 				});
 			}
 			$("#ClassSelect").select2({
-	            allowClear: true,
 				placeholder: common.tips.detail_select,
 				minimumInputLength: 0,
 				data: classlist,
@@ -457,10 +280,6 @@ $.ajax({
 		bootbox.alert('failure');
 	}
 });
-
-
-
-
 
 $('.date-picker').datepicker({
     rtl: Metronic.isRTL(),
@@ -488,8 +307,63 @@ $(".form_datetime").datetimepicker({
     autoclose: true,
     isRTL: Metronic.isRTL(),
     format: "yyyy-mm-dd hh:ii",
-    language: "zh-CN",
+    language:  'zh-CN',
     pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
 });
 
 
+
+function initTimeconfigs(type,timeconfigs){
+	
+     
+	$.each(timeconfigs,function(index,value,arr){
+    
+		var tmpId='tmp'+type+'_attendance_times';
+		var attendanceTimesTmp=$('#'+tmpId).clone();
+		attendanceTimesTmp.css("display","block").removeAttr("id");
+		
+		if(type=='0'){
+			    
+			    //初始化timerpicker
+			    $('.timepicker-24').timepicker({
+			        autoclose: true,
+			        minuteStep: 5,
+			        showSeconds: false,
+			        showMeridian: false,
+			        defaultTime: false
+			        });
+			
+			    // handle input group button click
+			    $('.timepicker').parent('.input-group').on('click', '.input-group-btn', function(e){
+			        e.preventDefault();
+			        $(this).parent('.input-group').find('.timepicker').timepicker('showWidget');
+			    });
+			    attendanceTimesTmp.find('input[name=shortstarttime]').attr("value",value.shortstarttime);
+			    attendanceTimesTmp.find('input[name=shortendtime]').attr("value",value.shortendtime);
+			    attendanceTimesTmp.find('input[name=eventname]').attr('value',value.eventname);
+
+			   
+		}else if(type=='1'){
+			
+		    attendanceTimesTmp.find('input[name=beforeminstart]').attr("value",value.beforeminstart);
+		    attendanceTimesTmp.find('input[name=afterminend]').attr("value",value.afterminend);
+		}else if(type=='2'){
+			
+	        $(".form_datetime").datetimepicker({
+	            autoclose: true,
+	            isRTL: Metronic.isRTL(),
+	            format: "yyyy-mm-dd hh:ii",
+	            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
+	        });
+			
+			
+		}
+		
+		$("div.form-body").append(attendanceTimesTmp.prop("outerHTML"));
+
+	
+	});
+	
+	
+	
+}

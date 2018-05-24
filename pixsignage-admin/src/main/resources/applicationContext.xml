@@ -18,7 +18,7 @@
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://pixsignage-db:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
+			value="jdbc:mysql://pixsignage-db:3306/pixsignage_product?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
 		<property name="username" value="pixsignage" />
 		<property name="password" value="pixsignage@01" />
 		<property name="initialSize" value="20" />

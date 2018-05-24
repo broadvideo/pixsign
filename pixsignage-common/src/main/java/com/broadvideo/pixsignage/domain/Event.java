@@ -2,7 +2,6 @@ package com.broadvideo.pixsignage.domain;
 
 import java.beans.Transient;
 import java.util.Date;
-import java.util.List;
 
 public class Event {
     private Integer eventid;
@@ -15,15 +14,9 @@ public class Event {
 
     private String name;
 
-    private String type;
-    private Date startdate;
-    private Date enddate;
-    private Date shortstarttime;
-    private Date shortendtime;
     private Date starttime;
 
     private Date endtime;
-    private String eventdaysflag;
 
     private Integer amount;
 
@@ -41,8 +34,6 @@ public class Event {
 
     private String status;
 	private String search;
-	private List<Eventdtl> eventdtls;
-	private String timedtls;
 
     public Integer getEventid() {
         return eventid;
@@ -76,40 +67,6 @@ public class Event {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getType() {
-        return type;
-    }
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
-
-    public Date getStartdate() {
-        return startdate;
-    }
-    public void setStartdate(Date startdate) {
-        this.startdate = startdate;
-    }
-
-    public Date getEnddate() {
-        return enddate;
-    }
-    public void setEnddate(Date enddate) {
-        this.enddate = enddate;
-    }
-
-    public Date getShortstarttime() {
-        return shortstarttime;
-    }
-    public void setShortstarttime(Date shortstarttime) {
-        this.shortstarttime = shortstarttime;
-    }
-
-    public Date getShortendtime() {
-        return shortendtime;
-    }
-    public void setShortendtime(Date shortendtime) {
-        this.shortendtime = shortendtime;
-    }
     public Date getStarttime() {
         return starttime;
     }
@@ -126,12 +83,6 @@ public class Event {
         this.endtime = endtime;
     }
 
-    public String getEventdaysflag() {
-        return eventdaysflag;
-    }
-    public void setEventdaysflag(String eventdaysflag) {
-        this.eventdaysflag = eventdaysflag == null ? null : eventdaysflag.trim();
-    }
 
     public Integer getAmount() {
         return amount;
@@ -153,7 +104,14 @@ public class Event {
         return orgid;
     }
 
+	@Transient
+	public String getRoomname() {
+		return roomname;
+	}
 
+	public void setRoomname(String roomname) {
+		this.roomname = roomname;
+	}
 
 	public void setOrgid(Integer orgid) {
         this.orgid = orgid;
@@ -200,15 +158,6 @@ public class Event {
     }
 
 	@Transient
-	public String getRoomname() {
-		return roomname;
-	}
-
-	public void setRoomname(String roomname) {
-		this.roomname = roomname;
-	}
-
-	@Transient
 	public String getSearch() {
 		return search;
 	}
@@ -224,24 +173,5 @@ public class Event {
 
 	public void setRoomtype(Integer roomtype) {
 		this.roomtype = roomtype;
-	}
-
-	@Transient
-	public List<Eventdtl> getEventdtls() {
-		return eventdtls;
-	}
-
-	public void setEventdtls(List<Eventdtl> eventdtls) {
-		this.eventdtls = eventdtls;
-	}
-
-	@Transient
-	public String getTimedtls() {
-		return timedtls;
-	}
-
-
-	public void setTimedtls(String timedtls) {
-		this.timedtls = timedtls;
 	}
 }

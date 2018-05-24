@@ -98,7 +98,7 @@ PersonAttendanceModule.prototype.initMyTable = function () {
 						],
 		'bProcessing' : true,
 		'bServerSide' : true,
-		'sAjaxSource' : 'vipattendance!list.action',
+		'sAjaxSource' : 'personattendance!list.action',
 		'aoColumns' : [
                         {'sTitle' : '事件名称', 'mData' : 'eventname', 'bSortable' : false, 'sWidth' : '20%' },
 		                {'sTitle' : '终端', 'mData' : 'terminalname', 'bSortable' : false, 'sWidth' : '20%' },

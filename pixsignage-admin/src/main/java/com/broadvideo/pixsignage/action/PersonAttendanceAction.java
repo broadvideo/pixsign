@@ -21,8 +21,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 
 @SuppressWarnings("serial")
 @Scope("request")
-@Controller("vipattendanceAction")
-public class VIPAttendanceAction extends BaseDatatableAction {
+@Controller("personattendanceAction")
+public class PersonAttendanceAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private Attendancelog attendancelog;
 	private InputStream inputStream;
@@ -51,7 +51,7 @@ public class VIPAttendanceAction extends BaseDatatableAction {
 			attendancelog.setSearch(search);
 			attendancelog.setOrgid(getStaffOrgid());
 			RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
-			List dataList = this.atteandancelogMapper.selectListForVip(attendancelog, rowBounds);
+			List dataList = this.atteandancelogMapper.selectListForPerson(attendancelog, rowBounds);
 			PageList pageList = (PageList) dataList;
 			int totalCount = pageList.getPaginator().getTotalCount();
 			this.setiTotalRecords(totalCount);
