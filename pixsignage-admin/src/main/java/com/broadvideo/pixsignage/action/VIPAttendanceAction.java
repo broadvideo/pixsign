@@ -51,7 +51,7 @@ public class VIPAttendanceAction extends BaseDatatableAction {
 			attendancelog.setSearch(search);
 			attendancelog.setOrgid(getStaffOrgid());
 			RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
-			List dataList = this.atteandancelogMapper.selectList3(attendancelog, rowBounds);
+			List dataList = this.atteandancelogMapper.selectListForVip(attendancelog, rowBounds);
 			PageList pageList = (PageList) dataList;
 			int totalCount = pageList.getPaginator().getTotalCount();
 			this.setiTotalRecords(totalCount);
@@ -66,13 +66,6 @@ public class VIPAttendanceAction extends BaseDatatableAction {
 		}
 	}
 
-
-
-	
-
-
-
-
 	public Attendancelog getAttendancelog() {
 		return attendancelog;
 	}
@@ -80,6 +73,7 @@ public class VIPAttendanceAction extends BaseDatatableAction {
 	public void setAttendancelog(Attendancelog attendancelog) {
 		this.attendancelog = attendancelog;
 	}
+
 	public InputStream getInputStream() {
 		return inputStream;
 	}

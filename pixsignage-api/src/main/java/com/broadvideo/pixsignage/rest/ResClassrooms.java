@@ -90,7 +90,7 @@ public class ResClassrooms {
 	@GET
 	@Path("/")
 	public String list(@Context HttpServletRequest req, @QueryParam("org_code") String orgCode) {
-		logger.debug("Get classrooms(orgCode={}) request...", orgCode);
+		logger.info("Get classrooms(orgCode={}) request...", orgCode);
 		if (StringUtils.isBlank(orgCode)) {
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "org_code is null!");
 
@@ -119,7 +119,7 @@ public class ResClassrooms {
 	@GET
 	@Path("/{classroom_id}/schedules")
 	public String getClassroomSchedules(@Context HttpServletRequest req, @PathParam("classroom_id") Integer classroomId) {
-		logger.debug("Get ClassroomSchedules(classroomId={}) request...", classroomId);
+		logger.info("Get ClassroomSchedules(classroomId={}) request...", classroomId);
 		if (classroomId == null) {
 			logger.error("classroom_id参数为空！");
 			return this.handleResult(ApiRetCodeEnum.INVALID_ARGS, "classroom_id is null.");
@@ -168,7 +168,7 @@ public class ResClassrooms {
 	@GET
 	@Path("/{classroom_id}/students")
 	public String getClassroomStudents(@Context HttpServletRequest req, @PathParam("classroom_id") Integer classroomId) {
-		logger.debug("Get getClassroomStudents(classroomId={}) request...", classroomId);
+		logger.info("Get getClassroomStudents(classroomId={}) request...", classroomId);
 		if (classroomId == null) {
 			logger.error("classroom_id参数为空！");
 			return handleResult(ApiRetCodeEnum.INVALID_ARGS, "classroom_id is null.");
@@ -223,7 +223,7 @@ public class ResClassrooms {
 	@GET
 	@Path("/{classroom_id}/messagesum")
 	public String getClassroomMsgSum(@Context HttpServletRequest req, @PathParam("classroom_id") Integer classroomId) {
-		logger.debug("Get getClassroomMsgSum(classroomId={}) request...", classroomId);
+		logger.info("Get getClassroomMsgSum(classroomId={}) request...", classroomId);
 
 		try {
 			Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
@@ -258,7 +258,7 @@ public class ResClassrooms {
 	@Path("/{classroom_id}/examinationrooms")
 	public String getClassroomExaminationrooms(@Context HttpServletRequest req,
 			@PathParam("classroom_id") Integer classroomId) {
-		logger.debug("getClassroomExaminationrooms(classroomId={}) request...", classroomId);
+		logger.info("getClassroomExaminationrooms(classroomId={}) request...", classroomId);
 		try {
 			List<Examinationroom> examinationrooms = this.examinationroomService
 					.getExaminationroomsByClassroomid(classroomId);
@@ -296,8 +296,7 @@ public class ResClassrooms {
 		Classroom classroom = this.classroomMapper.selectByPrimaryKey(classroomId);
 		if (classroom == null) {
 			return this.handleResult(ApiRetCodeEnum.EXCEPTION,
-					String.format("classroomid:%s is not found.", classroomId),
-					new ArrayList());
+					String.format("classroomid:%s is not found.", classroomId), new ArrayList());
 		}
 		final int orgid = classroom.getOrgid();
 		List<Attendanceevent> attendanceevents = attendanceService.getAttendanceevents(classroomId, yyyyMMdd, orgid);
@@ -334,8 +333,7 @@ public class ResClassrooms {
 		Schoolclass schoolclass = this.schoolclassMapper.selectByClassroomid(orgid, classroomId);
 		List<Student> students = this.studentService.getSchoolclassStudents(schoolclass.getSchoolclassid(), orgid);
 		int total = students.size();
-		List<Attendance> attendances = this.attendanceService.getAttendancesByEventid(
-				NumberUtils.toInt(eventId),
+		List<Attendance> attendances = this.attendanceService.getAttendancesByEventid(NumberUtils.toInt(eventId),
 				classroomId, orgid);
 		Attendanceevent attendanceevent = this.attendanceService.getAttendanceevent(NumberUtils.toInt(eventId), orgid);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -373,8 +371,7 @@ public class ResClassrooms {
 				absentdtl.put("student_id", student.getStudentid());
 				absentdtl.put("student_no", student.getStudentno());
 				absentdtl.put("student_name", student.getName());
-				String avatarpath = "http://" + serverIP + "/pixsigdata/image/avatar/" + student.getStudentno()
-						+ ".jpg";
+				String avatarpath = "http://" + serverIP + "/pixsigdata" + student.getAvatar();
 				absentdtl.put("state", AttendanceStateEnum.ABSENT);
 				absentdtl.put("avatar", avatarpath);
 				absentdtl.put("event_time", -1);

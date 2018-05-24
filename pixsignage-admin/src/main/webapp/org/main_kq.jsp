@@ -86,7 +86,7 @@
 								<i class="fa fa-bell-o"></i><spring:message code="pixsign.main.title.kq2"/>
 							</div>
 							<div class="actions">
-								<a href="event/event2.jsp?CurrentP=31203&ParentP=312" class="btn btn-sm default easy-pie-chart-reload"><i
+								<a href="event/personattendance.jsp?CurrentP=31204&ParentP=312" class="btn btn-sm default easy-pie-chart-reload"><i
 									class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
 							</div>
 						</div>

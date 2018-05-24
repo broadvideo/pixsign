@@ -11,9 +11,9 @@ import com.broadvideo.pixsignage.domain.Attendancelog;
 public interface AttendancelogMapper {
 	int deleteByPrimaryKey(Integer attendancelogid);
 
-    int insert(Attendancelog record);
+	int insert(Attendancelog record);
 
-    int insertSelective(Attendancelog record);
+	int insertSelective(Attendancelog record);
 
 	Attendancelog selectByPrimaryKey(Integer attendancelogid);
 
@@ -26,5 +26,9 @@ public interface AttendancelogMapper {
 	int updateByPrimaryKeySelective(Attendancelog record);
 
 	int updateByPrimaryKey(Attendancelog record);
+
+	List<Attendancelog> selectListForVip(Attendancelog attendancelog, RowBounds rowBounds);
+
+	List<Attendancelog> selectListForPerson(Attendancelog attendancelog, RowBounds rowBounds);
 
 }

@@ -43,13 +43,8 @@
 	  and e.roomid=#{roomid}
 	</if>
 	<if test="starttime!=null and endtime!=null">
-	    
-	  and (
-	       (e.starttime>=#{starttime}  and e.endtime <![CDATA[<=]]> #{endtime}) 
-	        or 
-	       (e.starttime<![CDATA[<=]]>#{starttime} and  e.endtime>=  #{endtime})
-	       
-	       )
+	  and 
+	       (#{starttime}>=DATE_FORMAT(e.starttime,'%Y-%m-%d')  and  #{endtime} <![CDATA[<=]]>DATE_FORMAT(e.endtime,'%Y-%m-%d')) 
 	  </if>
    order by e.eventid asc
   </select>

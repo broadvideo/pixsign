@@ -13,10 +13,11 @@ $('#MyTable').dataTable({
 	'bProcessing' : true,
 	'bServerSide' : true,
 	'sAjaxSource' : 'event!list.action',
-	'aoColumns' : [ {'sTitle' : '事件名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
+	'aoColumns' : [ {'sTitle' : '事件名', 'mData' : 'name', 'bSortable' : false, 'sWidth' : '15%' },
 	                {'sTitle' : '考勤位置', 'mData' : 'roomname', 'bSortable' : false, 'sWidth' : '15%' },
-					{'sTitle' : '开始时间', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '15%' },
-					{'sTitle' : '结束时间', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '20%' },
+					{'sTitle' : '开始日期', 'mData' : 'starttime', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '结束日期', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '15%' },
+					{'sTitle' : '时间段', 'mData' : 'endtime', 'bSortable' : false, 'sWidth' : '15%' },
 					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '8%' },
 					{'sTitle' : '', 'mData' : 'eventid', 'bSortable' : false, 'sWidth' : '8%' }],
 				
@@ -27,7 +28,7 @@ $('#MyTable').dataTable({
 		
 		 $('td:eq(2)',nRow).html(function(){
 			 if(aData.starttime!=null){
-				   return moment(aData.starttime).format('YYYY-MM-DD HH:mm');
+				   return moment(aData.starttime).format('YYYY-MM-DD');
 			    }else{
 				   return null;
 			   }
@@ -36,7 +37,17 @@ $('#MyTable').dataTable({
 		 $('td:eq(3)',nRow).html(function(){
 			 
 			 if(aData.endtime!=null){
-				   return moment(aData.endtime).format('YYYY-MM-DD HH:mm') 
+				   return moment(aData.endtime).format('YYYY-MM-DD') 
+			    }else{
+				   return null;
+			   }
+			 
+			 
+		 });
+	 $('td:eq(4)',nRow).html(function(){
+			 
+			 if(aData.endtime!=null && aData.starttime!=null){
+				   return moment(aData.startime).format('HH:mm')+'-'+ moment(aData.endtime).format('HH:mm')
 			    }else{
 				   return null;
 			   }
@@ -44,8 +55,8 @@ $('#MyTable').dataTable({
 			 
 		 });
 
-		$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-		$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+		$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+		$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 		
 
 		return nRow;
@@ -148,11 +159,24 @@ FormValidateOption.rules['event.name'] = {};
 FormValidateOption.rules['event.name']['required'] = true;
 FormValidateOption.rules['event.roomid'] = {};
 FormValidateOption.rules['event.roomid']['required'] = true;
+FormValidateOption.rules['startdate'] = {};
+FormValidateOption.rules['startdate']['required'] = true;
+FormValidateOption.rules['enddate'] = {};
+FormValidateOption.rules['enddate']['required'] = true;
+FormValidateOption.rules['shortstarttime'] = {};
+FormValidateOption.rules['shortstarttime']['required'] = true;
+FormValidateOption.rules['shortendtime'] = {};
+FormValidateOption.rules['shortendtime']['required'] = true;
 
 FormValidateOption.submitHandler = function(form) {
 	
+	var starttime=$('#startdate').val()+' '+$('#shortstarttime').val();
+	var endtime=$('#enddate').val()+' '+$('#shortendtime').val();
+	starttime=moment(starttime).format('YYYY-MM-DD HH:mm:ss');
+	endtime=moment(endtime).format('YYYY-MM-DD HH:mm:ss');
+    $('input[name="event.starttime"]').val(starttime);
+    $('input[name="event.endtime"]').val(endtime);
 
-	
 	$.ajax({
 		type : 'POST',
 		url : $('#MyEditForm').attr('action'),
@@ -200,8 +224,16 @@ $('body').on('click', '.pix-update', function(event) {
 	var item = $('#MyTable').dataTable().fnGetData(index);
 	var formdata = new Object();
 	for (var name in item) {
-		if(name=='starttime' || name=='endtime'){
-			formdata['event.' + name] =moment(item[name]).format('YYYY-MM-DD HH:mm') 
+		if(name=='starttime'){
+			formdata['startdate'] =moment(item[name]).format('YYYY-MM-DD'); 
+			formdata['shortstarttime'] =moment(item[name]).format('HH:mm'); 
+
+		}else if(name=='endtime'){
+			
+			formdata['enddate']=moment(item[name]).format('YYYY-MM-DD');
+			formdata['shortendtime'] =moment(item[name]).format('HH:mm'); 
+
+			
 		}else{
 		    formdata['event.' + name] = item[name];
 	    }
@@ -249,7 +281,27 @@ $.ajax({
 	}
 });
 
+$('.date-picker').datepicker({
+    rtl: Metronic.isRTL(),
+    orientation: "left",
+    language: "zh-CN",
+    autoclose: true
+  
 
+});
+//初始化timerpicker
+$('.timepicker-24').timepicker({
+    autoclose: true,
+    minuteStep: 5,
+    showSeconds: false,
+    showMeridian: false,
+    defaultTime:'00:00'
+});
+// handle input group button click
+$('.timepicker').parent('.input-group').on('click', '.input-group-btn', function(e){
+    e.preventDefault();
+    $(this).parent('.input-group').find('.timepicker').timepicker('showWidget');
+});
 
 $(".form_datetime").datetimepicker({
     autoclose: true,

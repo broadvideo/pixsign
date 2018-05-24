@@ -44,10 +44,39 @@
 											<label class="col-md-3 control-label">描述</label>
 											<div class="col-md-9">
 												<div class="input-icon right">
-													<textarea class="form-control" rows="3" name="room.description"></textarea> 
+													<textarea class="form-control" rows="2" name="room.description"></textarea> 
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">考勤人员<span class="required">*</span></label>
+											<div class="col-md-9">
+												<div class="md-radio-inline">
+													<div class="md-radio">
+														<input type="radio" id="roompersonflag1" name="room.roompersonflag" class="md-radiobtn"  value="0" checked>
+														<label for="roompersonflag1">
+														<span></span>
+														<span class="check"></span>
+														<span class="box"></span>
+														 全部 </label>
+													</div>
+													<div class="md-radio">
+														<input type="radio" id="roompersonflag2" name="room.roompersonflag" class="md-radiobtn" value="1" >
+														<label for="roompersonflag2">
+														<span></span>
+														<span class="check"></span>
+														<span class="box"></span>
+														 自定义</label>
+													</div>
+											      </div>
+											</div>
+										</div>
+										 <div class="form-group persons-form-group" style="display:none;">
+											<label class="col-md-3 control-label">人员列表</label>
+											<div class="col-md-9">
+												 <input type="hidden" id="PersonClassSelect" class="form-control select2" name="room.personids">
+											</div>
+									    </div>
 								
 								</div>
 							</form>

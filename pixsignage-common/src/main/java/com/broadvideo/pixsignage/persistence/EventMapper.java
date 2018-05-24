@@ -19,4 +19,6 @@ public interface EventMapper {
     int updateByPrimaryKeySelective(Event record);
 
     int updateByPrimaryKey(Event record);
+
+	int updateEvent(Event event);
 }

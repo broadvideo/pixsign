@@ -30,7 +30,7 @@
       and schoolclassid = #{schoolclassid}
     </if>
     <if test="search != null">
-      and ( st.name like #{search} or st.studentno like #{search}  or st.hardid like #{search} or sc.name like #{search})
+      and ( name like #{search} or studentno like #{search}  or hardid like #{search} or name like #{search})
     </if>
   </select>
 

@@ -1,0 +1,13 @@
+#Created by JInto - www.guh-software.de
+#Thu Apr 26 10:00:15 CST 2018
+#武侯考勤和选课系统代理服务配置
+AttendanceServiceURL=http://10.30.6.102:8088/ClassPlate
+CourseServiceURL=http://10.30.6.101/big-data/viewQueryDetailWS?wsdl
+UserName=admin
+Password = 13B3E9DC60323BE98717EC2B27572A87
+
+#都江堰考勤和选课系统代理服务配置
+AttendanceServiceURL=http://10.66.160.200:8088/ClassPlate
+CourseServiceURL=http://10.66.160.200:81/big-data/viewQueryDetailWS?wsdl
+UserName=admin
+Password = 13B3E9DC60323BE98717EC2B27572A87

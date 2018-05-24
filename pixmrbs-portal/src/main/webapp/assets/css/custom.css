@@ -1,0 +1,365 @@
+/*界面调整*/
+
+.basic-summary .col-md-3 {
+    padding: 0 10px;
+}
+
+.basic-summary .col-md-3 div{
+    position: relative;
+    height: 120px;
+    color: white;
+    background-color: yellow;
+}
+
+.basic-summary .col-md-3 i{
+    position: absolute;
+    font-size: 80px;
+    line-height: 120px;
+    left: 20px;
+}
+
+.basic-summary .col-md-3 p {
+    margin: 0 10px;
+    text-align: right;
+
+}
+
+.basic-summary .col-md-3 .number{
+    font-size: 60px;
+    line-height: 80px;
+}
+
+.basic-summary .col-md-3 .text{
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.footer {
+    width: 100%;
+    padding: 20px;
+}
+
+.footer p {
+    margin: 0;
+    text-align: center;
+}
+
+.row {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.col-md-12 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#meeting2, #my-meeting2 {
+    margin: 20px auto;
+}
+
+.fc-widget-content.fc-time {
+    cursor: default;
+}
+
+.fc-widget-content {
+    cursor: crosshair;
+}
+
+.fc-event {
+    cursor: pointer;
+}
+
+.attendees span {
+    white-space: normal!important;
+    line-height: 30px;
+    margin-right: 5px;
+}
+
+#cate_course {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.course-list h3, #my_course h3, #cate_course h3, #live_room h3 {
+    color: #000;
+    padding: 10px;
+    border-bottom: solid 3px red;
+    /*color: #fff;
+    padding: 10px 20px;
+    background-color: rgba(104, 208, 153, 0.9);
+    -moz-border-radius: 20px !important; !* Gecko browsers *!
+    -webkit-border-radius: 20px !important; !* Webkit browsers *!
+    border-radius: 20px !important;*/
+}
+
+li.course {
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 5px 5px 10px #444;
+}
+
+#course_details_info .row, #live_room_list .row {
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 5px 5px 10px #444;
+    margin-bottom: 10px;
+}
+
+.pagination li.checked a{
+    background-color: #eee;
+    border-color: #ddd;
+    color: #2a6496;
+}
+
+#course_details_info h4, #live_room_list h4 {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-bottom: solid 3px green;
+    /*background-color: rgba(104, 208, 153, 0.9);
+    -moz-border-radius: 20px !important; !* Gecko browsers *!
+    -webkit-border-radius: 20px !important; !* Webkit browsers *!
+    border-radius: 20px !important;*/
+}
+
+.listimg {
+    cursor: pointer;
+}
+
+/*#category {
+    height: 55px;
+    background-color: rgba(220, 220, 220, 0.6);
+    margin: 0 -15px;
+    padding: 10px 20px;
+}*/
+
+#category .bx-wrapper {
+    margin-bottom: 10px !important;
+}
+#category .bx-viewport {
+    height: 36px !important;
+}
+#category1 {
+    height: 36px;
+}
+#category2 {
+    height: 30px;
+}
+
+#category1 li, #category2 li{
+    height: 28px !important;
+    margin-left: 0 !important;
+}
+
+nav {
+    min-height: 0 !important;
+    min-width: 0 !important;
+    width:80px !important;
+    margin:0px 0px !important;
+    padding: 10px !important;
+    display: inline-block !important;
+    z-index: 1000;
+}
+
+nav label, nav a {
+    line-height: 60px !important;
+}
+
+nav label span, nav a span {
+    display: inline-block;
+    line-height: 14px !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    vertical-align: middle;
+}
+
+#top_category {
+    background-color: rgba(200, 200, 200, 0.7);
+    margin: 0 -10px 0 -10px;
+    padding: 2px 10px;
+}
+
+#sub_category {
+    background-color: rgba(220, 220, 220, 0.7);
+    margin: 0 -10px 0 -10px;
+    padding: 2px 10px;
+}
+
+.all-content .row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+/*End--界面调整--End*/
+
+img#logoimg {
+    height: 70px;
+    margin: 4px;
+}
+
+#header {
+    min-height: 100px;
+}
+
+#my_course_schedule {
+    font-size: 16px;
+}
+
+#my_course_schedule a{
+    font-size: 16px;
+}
+
+.listtitle a{
+    font-size: 16px!important;
+}
+
+.listdate {
+    font-size: 14px!important;
+}
+
+#course_details_info p {
+    font-size: 16px !important;
+}
+
+.message-title {
+    background-color: #fff;
+    border: 0 none;
+    box-shadow: 0 0 3px #35aa47;
+    color: #35aa47;
+    padding: 8px 5px;
+}
+
+#online-sum {
+    font-size: 10px;
+    margin-right: 10px;
+}
+
+#chatlog-clear {
+    margin-top: -2px;
+}
+
+.ctime {
+    font-size: 9px;
+    margin-top: 2px;
+}
+
+.messages {
+    background-color: #fff;
+    border: 0 none;
+    box-shadow: 0 0 3px #35aa47;
+    color: #35aa47;
+    position: relative;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 3px 5px 3px 5px;
+    color: #333;
+    display: block;
+    height: 281px;
+    text-align: left;
+    text-decoration: none;
+}
+
+.messages .note {
+    margin: 0 0 4px;
+    padding: 6px;
+}
+
+.messages .alert {
+    margin: 0 0 2px;
+    padding: 2px 5px 2px 5px;
+}
+
+.label-danger {
+    margin-bottom: 5px !important;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.alert-success {
+    border-radius: 4px;
+    margin-bottom: 6px;
+    padding: 6px;
+}
+
+#cate_course_list {
+    margin-top: 20px !important;
+}
+
+#userinfo {
+    color: red;
+}
+
+#outer-url {
+    height: 30px;
+    line-height: 30px;
+    position: fixed;
+    top: 70px;
+    right: 0px;
+    background-color: rgba(104, 208, 153, 0.9);
+    -moz-border-radius: 15px !important;
+    -webkit-border-radius: 15px !important;
+    border-radius: 15px !important;
+    color: #FFF;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.navbar-nav li {
+    cursor: pointer;
+}
+
+.navbar-nav li a{
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+.navbar-nav li.active a{
+    border-bottom: solid 3px red;
+}
+
+
+#loading {
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-left:-88px;
+    margin-top:-110px;
+    z-index:10000;
+}
+
+
+/* BEDIN LAYER SLIDER */
+.page-slider {
+    margin-top: -23px;
+}
+.ls-ct-half, .ls-ct-center {
+    border-radius: 100px !important;
+}
+.ls-fullwidth .ls-nav-prev,
+.ls-fullwidth .ls-nav-next {
+    width: 49px;
+    height: 59px;
+    z-index: 10000;
+    top: 50%;
+    margin-top: -30px;
+    position: absolute;
+    opacity: 0.7;
+}
+.ls-fullwidth .ls-nav-prev:hover,
+.ls-fullwidth .ls-nav-next:hover {
+    opacity: 1;
+}
+.ls-fullwidth .ls-nav-prev {
+    left: 26px;
+    background: url(../img/layerslider-arrows.png) no-repeat;
+}
+
+.ls-fullwidth .ls-nav-next {
+    right: 26px;
+    background: url(../img/layerslider-arrows.png) no-repeat -51px 0;
+}
+
+.ls-circle-timer {
+    top: 30px !important;
+}

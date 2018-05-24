@@ -166,6 +166,11 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31103,2,311,'menu.vipevent','event/vipevent.jsp','','1',2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31104,2,311,'menu.vipattendance','event/vipattendance.jsp','','1',3);
 
+INSERT INTO `privilege`(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) VALUES (312, 2, 0, 'menu.staffattendance', NULL, 'fa-group', '1','1');
+INSERT INTO `privilege`(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) VALUES (31201, 2, 312, 'menu.room2', 'room/room2.jsp', '', '1','0');
+INSERT INTO `privilege`(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) VALUES (31202, 2, 312, 'menu.staff2', 'person/person2.jsp', '', '1','1');
+INSERT INTO `privilege`(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) VALUES (31203, 2, 312, 'menu.event2', 'event/event2.jsp', '', '1', '2');
+
 
 ############################################################
 ## post script  ############################################

@@ -5,6 +5,7 @@
 <head>
 <link href="${static_ctx}/global/plugins/select2/select2.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+<link  type="text/css" href="${static_ctx}/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"  rel="stylesheet" />
 <link href="${static_ctx}/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
 <link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
@@ -52,29 +53,51 @@
 											</div>
 										</div>
 									</div>
-								    <div class="form-group">
-										<label class="col-md-3 control-label">时间段<span class="required">*</span></label>
-										<div class="col-md-9">
-											   <div class="col-md-4">
-													<div class="input-group date form_datetime">
-														<input type="text"  readonly class="form-control"  name="event.starttime">
-														<span class="input-group-btn">
-															<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-														</span>
-													</div>
-												</div>
-												<label class="control-label col-md-1">至</label>
-												<div class="col-md-4">
-													<div class="input-group date form_datetime">
-														<input type="text"  readonly class="form-control" name="event.endtime">
-														<span class="input-group-btn">
-															<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-														</span>
-													</div>
-												</div>
+									<div class="form-group">
+											<label class="col-md-3 control-label">日期<span class="required">*</span></label>
+											<div class="col-md-3">
 											
-										</div>
+											   <div class="input-group  date date-picker" data-date-format="yyyy-mm-dd" data-date-start-date="+0d">
+														<input type="text" id="startdate" name="startdate" class="form-control" readonly>
+														<span class="input-group-btn">
+														<button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+														</span>
+												</div>
+										    </div>		
+										   <label class="control-label col-md-1" style="text-align:center">至</label>
+									
+										   <div class="col-md-3">
+												<div class="input-group  date date-picker" data-date-format="yyyy-mm-dd" data-date-start-date="+0d">
+														<input type="text" id="enddate" name="enddate"  class="form-control" readonly>
+														<span class="input-group-btn">
+														  <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+														</span>
+												</div>
+											</div>
 									</div>
+								   <div class="form-group">
+											<label class="col-md-3 control-label">时间段<span class="required">*</span></label>
+										    <div class="col-md-3">
+												<div class="input-group">
+													<input type="text" id="shortstarttime" name="shortstarttime" class="form-control timepicker timepicker-24">
+													<span class="input-group-btn">
+													  <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+													</span>
+												</div>
+											</div>
+											<label class="control-label col-md-1" style="text-align:center">至</label>
+											<div class="col-md-3">
+												<div class="input-group">
+													<input type="text" id="shortendtime" name="shortendtime" class="form-control timepicker timepicker-24">
+													<span class="input-group-btn">
+															<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+													</span>
+												</div>
+											</div>
+										</div>
+									<input type="hidden" name="event.starttime" >
+									<input type="hidden"  name="event.endtime" >
+							
 								 
 								</div>
 							</form>
@@ -91,7 +114,7 @@
 			<h3 class="page-title"><spring:message code="menu.event2"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
-					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
+					<li><i class="fa fa-home"></i><a href="main.jsp">Home</a><i
 							class="fa fa-angle-right"></i>
 					</li>
 					<li><a href="#"><spring:message code="menu.staffattendance"/></a><i class="fa fa-angle-right"></i>
@@ -146,6 +169,9 @@
 <script src="${static_ctx}/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.${locale}.min.js" type="text/javascript"></script>
+
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.min.js" type="text/javascript"></script>	
 
 <!-- END PAGE LEVEL PLUGINS -->

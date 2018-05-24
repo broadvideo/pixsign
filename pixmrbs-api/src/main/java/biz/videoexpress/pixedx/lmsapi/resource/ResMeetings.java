@@ -59,6 +59,7 @@ public class ResMeetings extends ResBase {
 	private MeetingService meetingService;
 	@Autowired
 	private MeetingMapper meetingMapper;
+
 	@GET
 	@Path("/meeting_room_categories")
 	public Response getMeetingRoomCategories(@Context HttpServletRequest req) {
@@ -76,13 +77,14 @@ public class ResMeetings extends ResBase {
 		return Response.status(Status.OK).entity(basicResp).build();
 
 	}
+
 	@GET
 	@Path("/meeting_rooms")
 	public Response getMeetingRooms(@Context HttpServletRequest req, @BeanParam MeetingRoomReq meetingRoomReq) {
 		// UserProfile profile = currentUserProfile(req);
 		try {
 			Integer orgId = getOrgId(req);
-			com.broadvideo.pixsignage.common.PageInfo pageInfo=new com.broadvideo.pixsignage.common.PageInfo();
+			com.broadvideo.pixsignage.common.PageInfo pageInfo = new com.broadvideo.pixsignage.common.PageInfo();
 			pageInfo.setStart(meetingRoomReq.getStart());
 			pageInfo.setLength(meetingRoomReq.getLength());
 			Meetingroom sMeetingroom = new Meetingroom();
@@ -124,7 +126,6 @@ public class ResMeetings extends ResBase {
 
 	}
 
-
 	@GET
 	@Path("/")
 	public Response getMeetings(@Context HttpServletRequest req, @BeanParam MeetingReq meetingReq) {
@@ -160,13 +161,23 @@ public class ResMeetings extends ResBase {
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("meeting_id", result.getMeetingid());
 				data.put("meetingroom_id", result.getMeetingroomid());
+				data.put("period_meeting_id", result.getPeriodmeetingid());
 				data.put("subject", result.getSubject());
 				data.put("description", result.getDescription());
-				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm:ss"));
-				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm:ss"));
+				data.put("start_time", DateUtil.getDateStr(result.getStarttime(), "yyyy-MM-dd HH:mm"));
+				data.put("end_time", DateUtil.getDateStr(result.getEndtime(), "yyyy-MM-dd HH:mm"));
+				data.put("period_flag", result.getPeriodflag());
+				data.put("period_type", result.getPeriodtype());
+				String strPeriodtimeend = "";
+				if (result.getPeriodendtime() != null) {
+					strPeriodtimeend = DateUtil.getDateStr(result.getPeriodendtime(), "yyyy-MM-dd HH:mm");
+				}
+				data.put("period_end_time", strPeriodtimeend);
+				data.put("skip_holiday_flag", result.getSkipholidayflag());
 				data.put("book_user", result.getBookstaffname());
 				data.put("book_branch", result.getBookbranchname());
 				data.put("qrcode", "");
+				data.put("service_memo", result.getServicememo());
 				data.put("audit_status", result.getAuditstatus());
 				List<Attendee> attendees = result.getAttendees();
 				List<Map<String, Object>> attendeeMapList = new ArrayList<Map<String, Object>>();
@@ -181,17 +192,14 @@ public class ResMeetings extends ResBase {
 				results.add(data);
 
 			}
-
 			resp.setData(results);
 			return Response.status(Status.OK).entity(resp).build();
 
 		} catch (Exception e) {
 
-			logger.error("getMeetingRooms exception.", e);
-			throw new AppException(ApiRetCodeEnum.EXCEPTION, "getMeetingRooms exception.");
+			logger.error("getMeetings exception.", e);
+			throw new AppException(ApiRetCodeEnum.EXCEPTION, "getMeetings exception:" + e.getMessage());
 		}
-
-
 
 	}
 
@@ -208,14 +216,14 @@ public class ResMeetings extends ResBase {
 			endDate = DateUtil.getDateStr(new Date(), "yyyyMMdd");
 		}
 		try {
-		Date wrapStartDate = DateUtil.getDate(startDate, "yyyyMMdd");
-		Date wrapEndDate = null;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(DateUtil.getDate(endDate, "yyyyMMdd"));
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		wrapEndDate = calendar.getTime();
+			Date wrapStartDate = DateUtil.getDate(startDate, "yyyyMMdd");
+			Date wrapEndDate = null;
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(DateUtil.getDate(endDate, "yyyyMMdd"));
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			wrapEndDate = calendar.getTime();
 			BasicResp<Map<String, Integer>> resp = new BasicResp<Map<String, Integer>>();
-		logger.info("startDate:{},endDate:{}", startDate, endDate);
+			logger.info("startDate:{},endDate:{}", startDate, endDate);
 			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingSummary(wrapStartDate, wrapEndDate,
 					getOrgId(req));
 			resp.setData(dataMapList);
@@ -252,8 +260,7 @@ public class ResMeetings extends ResBase {
 			wrapEndDate = calendar.getTime();
 			logger.info("startDate:{},endDate:{}", wrapStartDate, wrapEndDate);
 			List<Map<String, Integer>> dataMapList = this.meetingService.getMeetingroomSummary(wrapStartDate,
-					wrapEndDate,
-					getOrgId(req));
+					wrapEndDate, getOrgId(req));
 			resultJson.put("retcode", ApiRetCodeEnum.SUCCESS);
 			resultJson.put("message", "success");
 			resultJson.put("data", dataMapList);
@@ -317,7 +324,6 @@ public class ResMeetings extends ResBase {
 			endDate = DateUtil.getDateStr(new Date(), "yyyyMMdd");
 		}
 		try {
-			JSONObject resultJson = new JSONObject();
 			Date wrapStartDate = DateUtil.getDate(startDate, "yyyyMMdd");
 			Date wrapEndDate = null;
 			Calendar calendar = Calendar.getInstance();

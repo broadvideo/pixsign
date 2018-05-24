@@ -22,7 +22,7 @@
 	    select 
 	      a.*,st.name AS staffname
 	    from attendee a Left JOIN staff st ON (a.staffid=st.staffid)
-	    where meetingid=#{meetingid}
+	    where meetingid=#{meetingid} and st.staffid>0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from attendee

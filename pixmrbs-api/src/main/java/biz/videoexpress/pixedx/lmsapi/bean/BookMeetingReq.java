@@ -12,10 +12,21 @@ public class BookMeetingReq {
 	private String startTime;
 	@JsonProperty("end_time")
 	private String endTime;
+	@JsonProperty("period_end_time")
+	private String periodEndTime;
 	@JsonProperty("attendee_user_ids")
 	private Integer[] attendeeUserIds;
 	@JsonProperty("book_user_id")
 	private Integer bookUserId;
+	@JsonProperty("service_memo")
+	private String servicememo;
+	@JsonProperty("period_flag")
+	private String periodFlag;
+	@JsonProperty("skip_holiday_flag")
+	private String skipHolidayFlag;
+	@JsonProperty("period_type")
+	private String periodType;
+
 
 	public Integer getMeetingRoomId() {
 		return meetingRoomId;
@@ -41,6 +52,8 @@ public class BookMeetingReq {
 		this.description = description;
 	}
 
+
+
 	public String getStartTime() {
 		return startTime;
 	}
@@ -55,6 +68,14 @@ public class BookMeetingReq {
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public String getPeriodEndTime() {
+		return periodEndTime;
+	}
+
+	public void setPeriodEndTime(String periodEndTime) {
+		this.periodEndTime = periodEndTime;
 	}
 
 	public Integer[] getAttendeeUserIds() {
@@ -73,4 +94,35 @@ public class BookMeetingReq {
 		this.bookUserId = bookUserId;
 	}
 
+	public String getServicememo() {
+		return servicememo;
+	}
+
+	public void setServicememo(String servicememo) {
+		this.servicememo = servicememo;
+	}
+
+	public String getPeriodFlag() {
+		return periodFlag;
+	}
+
+	public void setPeriodFlag(String periodFlag) {
+		this.periodFlag = periodFlag;
+	}
+
+	public String getSkipHolidayFlag() {
+		return skipHolidayFlag;
+	}
+
+	public void setSkipHolidayFlag(String skipHolidayFlag) {
+		this.skipHolidayFlag = skipHolidayFlag;
+	}
+
+	public String getPeriodType() {
+		return periodType;
+	}
+
+	public void setPeriodType(String periodType) {
+		this.periodType = periodType;
+	}
 }

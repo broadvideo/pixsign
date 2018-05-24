@@ -161,18 +161,20 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 				} else {
 					Integer coursescheduleschemeid = scheme.getCoursescheduleschemeid();
 					final Integer classroomid = classroom.getClassroomid();
-				//	List<Courseschedule> existCourseschedules = this.coursescheduleService.getClassroomCourseSchedules(
+					// List<Courseschedule> existCourseschedules =
+					// this.coursescheduleService.getClassroomCourseSchedules(
 					// classroomid, coursescheduleschemeid, orgId);
-				//	if (existCourseschedules != null && existCourseschedules.size() > 0) {
-				//		logger.error("classroomid={},coursescheduleschemeid:{} has exists.import courseschedule fail!",
-				//				classroomid, coursescheduleschemeid);
-				//		coursescheduleImportFail++;
-					//} else {
+					// if (existCourseschedules != null &&
+					// existCourseschedules.size() > 0) {
+					// logger.error("classroomid={},coursescheduleschemeid:{} has exists.import courseschedule fail!",
+					// classroomid, coursescheduleschemeid);
+					// coursescheduleImportFail++;
+					// } else {
 
-						Courseschedulescheme schemedtl = this.coursescheduleschemeService.getSchemeDtl(
-								coursescheduleschemeid, orgId);
+					Courseschedulescheme schemedtl = this.coursescheduleschemeService.getSchemeDtl(
+							coursescheduleschemeid, orgId);
 					String scheduleWorkDays = "," + scheme.getWorkdays() + ",";
-						for (Courseschedule tCourseschedule : courseschedules) {
+					for (Courseschedule tCourseschedule : courseschedules) {
 						String curWorkday = "," + tCourseschedule.getWorkday() + ",";
 						if (scheduleWorkDays.indexOf(curWorkday) == -1) {
 							logger.error("Improt courseschedule.workday:{} not in schedule.workdays.",
@@ -180,12 +182,12 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 							coursescheduleImportFail++;
 							continue;
 						}
-						
-							tCourseschedule.setOrgid(orgId);
-							tCourseschedule.setCoursescheduleschemeid(coursescheduleschemeid);
-							tCourseschedule.setCreatepsnid(staffid);
-							tCourseschedule.setClassroomid(classroomid);
-							tCourseschedule.setCreatetime(new Date());
+
+						tCourseschedule.setOrgid(orgId);
+						tCourseschedule.setCoursescheduleschemeid(coursescheduleschemeid);
+						tCourseschedule.setCreatepsnid(staffid);
+						tCourseschedule.setClassroomid(classroomid);
+						tCourseschedule.setCreatetime(new Date());
 						Integer periodtimedtlId = getPeriodtimedtlId(schemedtl, tCourseschedule.getPeriodtimedtl());
 						if (periodtimedtlId == null) {
 							logger.error("Import courseschedule not in periodtimedtl.");
@@ -193,15 +195,15 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 							continue;
 						}
 						tCourseschedule.setPeriodtimedtlid(periodtimedtlId);
-							try {
-								this.coursescheduleService.addCourseSchedule(tCourseschedule);
+						try {
+							this.coursescheduleService.addCourseSchedule(tCourseschedule);
 						} catch (Exception ex) {
-								logger.error("addCourseSchedule fail.", ex);
-								coursescheduleImportFail++;
-							}
-
+							logger.error("addCourseSchedule fail.", ex);
+							coursescheduleImportFail++;
 						}
-				//	}
+
+					}
+					// }
 
 				}
 
@@ -513,7 +515,7 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 			for (int colNum = 1; colNum <= 7; colNum++) {
 				Cell courseCell = sheet.getRow(rowNum).getCell(colNum);
 				Cell teacherCell = sheet.getRow(rowNum + 1).getCell(colNum);
-				if (courseCell == null ) {//|| teacherCell == null
+				if (courseCell == null) {// || teacherCell == null
 					continue;
 				}
 				Courseschedule courseschedule = buildCourseschedule(courseCell, teacherCell, PeriodType.MORNING,
@@ -622,6 +624,9 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 	}
 
 	public static void main(String[] args) throws Exception {
+
+		Date curDate = new Date(1526985015472L);
+		System.out.print(curDate + "");
 		// HSSFWorkbook, File
 		NPOIFSFileSystem fs = new NPOIFSFileSystem(new File("C:\\Users\\charles\\Desktop\\template.xls"));
 		HSSFWorkbook wb = new HSSFWorkbook(fs.getRoot(), true);
@@ -653,4 +658,5 @@ public class ClasscardimportServiceImpl implements ClasscardimportService {
 		}
 
 	}
+
 }

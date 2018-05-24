@@ -10,13 +10,20 @@ import org.apache.ibatis.session.RowBounds;
 import com.broadvideo.pixsignage.domain.Meeting;
 
 public interface MeetingMapper {
-	
+
 	List<Meeting> selectList(@Param(value = "orgid") Integer orgid, @Param(value = "search") String search,
 			@Param("locationid") Integer locationid, RowBounds rowBounds);
 
 	List<Meeting> selectList2(Meeting meeting, RowBounds rowBounds);
 
+	List<Meeting> selectList3(Meeting meeting, RowBounds rowBounds);
+
+	List<Meeting> selectAuditList(Meeting meeting, RowBounds rowBounds);
+
 	List<Meeting> selectExistMeetings(Meeting meeting);
+
+	List<Meeting> selectMeetingsAfter(@Param("starttime") Date startttime,
+			@Param("periodmeetingid") Integer periodmeetingid);
 
 	List<Map<String, Integer>> countMeetingSummary(@Param("startdate") Date startDate, @Param("enddate") Date endDate,
 			@Param("orgid") Integer orgid);
@@ -27,18 +34,22 @@ public interface MeetingMapper {
 	int countMeetings(@Param("starttime") Date starttime, @Param("endtime") Date endtime, @Param("orgid") Integer orgid);
 
 	int countOngoingMeetings(@Param("orgid") Integer orgid);
+
 	Meeting selectMatchMeeting(@Param("meetingroomid") Integer meetingroomid, @Param("signtime") Date signtime);
-    int deleteByPrimaryKey(Integer meetingid);
 
-    int insert(Meeting record);
+	int deleteByPrimaryKey(Integer meetingid);
 
-    int insertSelective(Meeting record);
+	int deleteMeetings(@Param("periodmeetingid") Integer periodmeetingid, @Param("starttime") Date starttime);
 
-    Meeting selectByPrimaryKey(Integer meetingid);
+	int insert(Meeting record);
 
-    int updateByPrimaryKeySelective(Meeting record);
+	int insertSelective(Meeting record);
 
-    int updateByPrimaryKey(Meeting record);
-    
+	Meeting selectByPrimaryKey(Integer meetingid);
+
+	int updateByPrimaryKeySelective(Meeting record);
+
+	int updateByPrimaryKey(Meeting record);
+
 	void updateMeeting(Meeting meeting);
 }

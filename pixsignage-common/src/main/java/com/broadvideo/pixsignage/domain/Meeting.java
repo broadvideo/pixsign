@@ -6,215 +6,281 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.broadvideo.pixsignage.util.DateUtil;
-
 public class Meeting {
 
 	public static String WAITING_FOR_AUDIT = "0";
 	public static String SUCCESS_FOR_AUDIT = "1";
 	public static String REFUSE_FOR_AUDIT = "2";
 	public static String NONE_FOR_AUDIT = "9";
-    private Integer meetingid;
+	// 周期为每天
+	public static String EVERYDAY_PERIOD = "0";
+	// 周期为工作日
+	public static String WORKDAY_PERIOD = "1";
+	// 周期为星期N(N:1-7)
+	public static String WEEK_PERIOD = "2";
+	// 周期为每个月的第几天
+	public static String MONTH_DAY_PERIOD = "3";
+	// 周期为每个月的周几
+	public static String MONTH_DAY_WEEK_PERIOD = "4";
 
-    private String uuid;
+	private Integer meetingid;
 
-    private Integer meetingroomid;
+	private String uuid;
+	private Integer periodmeetingid;
+
+	private Integer meetingroomid;
 	private String meetingroomname;
 
-    private String subject;
+	private String subject;
 
-    private String description;
-    private Date starttime;
+	private String description;
 
-    private Date endtime;
+	private Date starttime;
 
-    private Integer duration;
-	
-    private BigDecimal fee;
-	
+	private Date endtime;
+
+	private Date periodendtime;
+
+	private Integer duration;
+
+	private BigDecimal fee;
+
 	private String formatduration;
 
-    private Integer amount;
+	private Integer amount;
 
-    private Integer bookstaffid;
+	private String servicememo;
+
+	private Integer bookstaffid;
 	private String bookstaffname;
 
-    private Integer bookbranchid;
+	private Integer bookbranchid;
 	private String bookbranchname;
 	private String locationname;
 
-    private String qrcode;
+	private String qrcode;
 
-    private String auditstatus;
-    private String auditresult;
-    private Integer orgid;
+	private String periodflag;
 
-    private Date createtime;
+	private String skipholidayflag;
 
-    private Integer createstaffid;
+	private String periodtype;
 
-    private Date updatetime;
-    private Integer updatestaffid;
+	private String auditstatus;
+	private String auditresult;
+	private Integer orgid;
 
-    private String status;
+	private Date createtime;
+
+	private Integer createstaffid;
+
+	private Date updatetime;
+	private Integer updatestaffid;
+
+	private String status;
 	private Integer[] attendeeuserids;
 	private List<Attendee> attendees = new ArrayList<Attendee>();
 	private String search;
 	private Integer locationid;
 	private Integer signamount;
 	private List<String> auditstatuslist;
+	private String periodChangeScope;
 
-    public Integer getMeetingid() {
-        return meetingid;
-    }
-
-    public void setMeetingid(Integer meetingid) {
-        this.meetingid = meetingid;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
-    }
-
-    public Integer getMeetingroomid() {
-        return meetingroomid;
-    }
-
-    public void setMeetingroomid(Integer meetingroomid) {
-        this.meetingroomid = meetingroomid;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject == null ? null : subject.trim();
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
-    public Date getStarttime() {
-        return starttime;
-    }
-
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
-    }
-
-	public void setStarttime(String starttime) {
-
-		this.starttime = DateUtil.getDate(starttime, "yyyy-MM-dd HH:mm");
-
+	public Integer getMeetingid() {
+		return meetingid;
 	}
 
-    public Date getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
-    }
-
-	public void setEndtime(String endtime) {
-		this.endtime = DateUtil.getDate(endtime, "yyyy-MM-dd HH:mm");
+	public void setMeetingid(Integer meetingid) {
+		this.meetingid = meetingid;
 	}
 
-    public Integer getDuration() {
-        return duration;
-    }
+	public String getUuid() {
+		return uuid;
+	}
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-    public BigDecimal getFee() {
-        return fee;
-    }
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
-    }
+	public void setUuid(String uuid) {
+		this.uuid = uuid == null ? null : uuid.trim();
+	}
 
-    public Integer getAmount() {
-        return amount;
-    }
+	public Integer getPeriodmeetingid() {
+		return periodmeetingid;
+	}
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
+	public void setPeriodmeetingid(Integer periodmeetingid) {
+		this.periodmeetingid = periodmeetingid;
+	}
 
-    public Integer getBookstaffid() {
-        return bookstaffid;
-    }
+	public Integer getMeetingroomid() {
+		return meetingroomid;
+	}
+
+	public void setMeetingroomid(Integer meetingroomid) {
+		this.meetingroomid = meetingroomid;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject == null ? null : subject.trim();
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description == null ? null : description.trim();
+	}
+
+	public Date getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+
+	public Date getPeriodendtime() {
+		return periodendtime;
+	}
+
+	public void setPeriodendtime(Date periodendtime) {
+		this.periodendtime = periodendtime;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public BigDecimal getFee() {
+		return fee;
+	}
+
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+
+	public String getServicememo() {
+		return servicememo;
+	}
+
+	public void setServicememo(String servicememo) {
+		this.servicememo = servicememo == null ? null : servicememo.trim();
+	}
+
+	public Integer getBookstaffid() {
+		return bookstaffid;
+	}
 
 	public void setBookstaffid(Integer bookstaffid) {
-        this.bookstaffid = bookstaffid;
-    }
+		this.bookstaffid = bookstaffid;
+	}
 
-    public Integer getBookbranchid() {
-        return bookbranchid;
-    }
+	public Integer getBookbranchid() {
+		return bookbranchid;
+	}
 
-    public void setBookbranchid(Integer bookbranchid) {
-        this.bookbranchid = bookbranchid;
-    }
+	public void setBookbranchid(Integer bookbranchid) {
+		this.bookbranchid = bookbranchid;
+	}
 
-    public String getQrcode() {
-        return qrcode;
-    }
+	public String getQrcode() {
+		return qrcode;
+	}
 
-    public void setQrcode(String qrcode) {
-        this.qrcode = qrcode == null ? null : qrcode.trim();
-    }
+	public void setQrcode(String qrcode) {
+		this.qrcode = qrcode == null ? null : qrcode.trim();
+	}
 
-    public String getAuditstatus() {
-        return auditstatus;
-    }
-    public void setAuditstatus(String auditstatus) {
-        this.auditstatus = auditstatus == null ? null : auditstatus.trim();
-    }
-    public String getAuditresult() {
-        return auditresult;
-    }
-    public void setAuditresult(String auditresult) {
-        this.auditresult = auditresult == null ? null : auditresult.trim();
-    }
-    public Integer getOrgid() {
-        return orgid;
-    }
+	public String getPeriodflag() {
+		return periodflag;
+	}
+
+	public void setPeriodflag(String periodflag) {
+		this.periodflag = periodflag == null ? null : periodflag.trim();
+	}
+
+	public String getSkipholidayflag() {
+		return skipholidayflag;
+	}
+
+	public void setSkipholidayflag(String skipholidayflag) {
+		this.skipholidayflag = skipholidayflag == null ? null : skipholidayflag.trim();
+	}
+
+	public String getPeriodtype() {
+		return periodtype;
+	}
+
+	public void setPeriodtype(String periodtype) {
+		this.periodtype = periodtype == null ? null : periodtype.trim();
+	}
+
+	public String getAuditstatus() {
+		return auditstatus;
+	}
+
+	public void setAuditstatus(String auditstatus) {
+		this.auditstatus = auditstatus == null ? null : auditstatus.trim();
+	}
+
+	public String getAuditresult() {
+		return auditresult;
+	}
+
+	public void setAuditresult(String auditresult) {
+		this.auditresult = auditresult == null ? null : auditresult.trim();
+	}
+
+	public Integer getOrgid() {
+		return orgid;
+	}
 
 	public void setOrgid(Integer orgid) {
-        this.orgid = orgid;
-    }
+		this.orgid = orgid;
+	}
 
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-
+	public Date getCreatetime() {
+		return createtime;
+	}
 
 	public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
+		this.createtime = createtime;
+	}
 
-    public Integer getCreatestaffid() {
-        return createstaffid;
-    }
+	public Integer getCreatestaffid() {
+		return createstaffid;
+	}
 
-    public void setCreatestaffid(Integer createstaffid) {
-        this.createstaffid = createstaffid;
-    }
+	public void setCreatestaffid(Integer createstaffid) {
+		this.createstaffid = createstaffid;
+	}
 
-    public Date getUpdatetime() {
-        return updatetime;
-    }
+	public Date getUpdatetime() {
+		return updatetime;
+	}
 
 	public Integer[] getAttendeeuserids() {
 		return attendeeuserids;
@@ -234,24 +300,24 @@ public class Meeting {
 	}
 
 	public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
-    }
+		this.updatetime = updatetime;
+	}
 
-    public Integer getUpdatestaffid() {
-        return updatestaffid;
-    }
+	public Integer getUpdatestaffid() {
+		return updatestaffid;
+	}
 
-    public void setUpdatestaffid(Integer updatestaffid) {
-        this.updatestaffid = updatestaffid;
-    }
+	public void setUpdatestaffid(Integer updatestaffid) {
+		this.updatestaffid = updatestaffid;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
 
 	@Transient
 	public String getMeetingroomname() {
@@ -334,5 +400,13 @@ public class Meeting {
 		this.auditstatuslist = auditstatuslist;
 	}
 
+	@Transient
+	public String getPeriodChangeScope() {
+		return periodChangeScope;
+	}
+
+	public void setPeriodChangeScope(String periodChangeScope) {
+		this.periodChangeScope = periodChangeScope;
+	}
 
 }
