@@ -132,8 +132,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31203,2,312,'menu.event2','event/event2.jsp','','1',2);
 
 
-ALTER TABLE `person` 
-	ADD COLUMN `branchid` int(11)   NULL COMMENT 'branchid' after `voiceprompt`;
+
 
 ############################################################
 ## post script  ############################################
