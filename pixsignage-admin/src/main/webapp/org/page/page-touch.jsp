@@ -325,6 +325,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div>按键</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="8">
+								<i class="fa fa-sun-o"></i><div>天气</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone limit-1" zonetype="9">
 								<i class="fa fa-steam"></i><div>流媒体</div>
 							</a>
@@ -483,7 +486,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15 zonetype-31">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-7 zonetype-8 zonetype-11 zonetype-12 zonetype-13 zonetype-14 zonetype-15 zonetype-31">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse5">字体样式</a>

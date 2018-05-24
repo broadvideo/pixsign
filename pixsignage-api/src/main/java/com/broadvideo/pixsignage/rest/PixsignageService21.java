@@ -1020,12 +1020,17 @@ public class PixsignageService21 {
 				city = device.getCity();
 			}
 			if (city == null || city.length() == 0) {
+				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+				city = org.getCity();
+			}
+			if (city == null || city.length() == 0) {
 				return handleResult(1008, "无效城市");
 			}
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
+			responseJson.put("city", city);
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
 			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
@@ -1050,6 +1055,10 @@ public class PixsignageService21 {
 				city = device.getCity();
 			}
 			if (city == null || city.length() == 0) {
+				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+				city = org.getCity();
+			}
+			if (city == null || city.length() == 0) {
 				return handleResult(1008, "无效城市");
 			}
 
@@ -1058,6 +1067,7 @@ public class PixsignageService21 {
 				JSONObject responseJson = new JSONObject();
 				responseJson.put("code", 0);
 				responseJson.put("message", "成功");
+				responseJson.put("city", city);
 				responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 				return responseJson.toString();
 			} else {

@@ -57,7 +57,7 @@ var BundleModule = function () {
 				if (aData.reviewflag == 1) {
 					bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm blue pix-push"><i class="fa fa-desktop"></i> ' + common.view.device + '</a>';
 					bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-					//bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
+					bundlehtml += '<a href="bundle!export.action?bundleid=' + aData.bundleid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 				}
 				bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				bundlehtml += '</div>';
@@ -220,10 +220,13 @@ var BundleModule = function () {
 						dataType : 'json',
 						contentType : 'application/json;charset=utf-8',
 						beforeSend: function ( xhr ) {
-							Metronic.startBundleLoading({animate: true});
+							Metronic.blockUI({
+								zIndex: 20000,
+								animate: true
+							});
 						},
 						success : function(data, status) {
-							Metronic.stopBundleLoading();
+							Metronic.unblockUI();
 							if (data.errorcode == 0) {
 								bootbox.alert(common.tips.success);
 							} else {
@@ -231,7 +234,7 @@ var BundleModule = function () {
 							}
 						},
 						error : function() {
-							Metronic.stopBundleLoading();
+							Metronic.unblockUI();
 							console.log('failue');
 						}
 					});				

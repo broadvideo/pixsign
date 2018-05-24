@@ -20,10 +20,14 @@ alter table device add hotspotpassword varchar(32) default '';
 alter table device add hotspotfrequency varchar(16) default '';
 
 alter table org add mainpage varchar(32) default 'main.jsp';
+alter table org add city varchar(64) default '';
 
 alter table page add reviewflag char(1) default '1';
 alter table page add comment varchar(1024) default '';
 alter table page add json longtext;
+
+drop index city on weather;
+alter table weather add unique key weather_unique_index1(city, type);
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);

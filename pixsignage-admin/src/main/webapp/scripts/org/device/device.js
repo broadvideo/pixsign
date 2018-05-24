@@ -575,6 +575,24 @@ var DeviceModule = function () {
 				$('.powerflag').css('display', 'none');
 			}
 			$('#TagSelect').select2('val', $(_device.tags.split(",")));
+			$('.volumeRange').ionRangeSlider({
+				min: 0,
+				max: 100,
+				from: 0,
+				type: 'single',
+				step: 5,
+				hasGrid: false
+			});
+			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
+				$('.volumeflag').css('display', '');
+			} else {
+				$('.volumeflag').css('display', 'none');
+			}
+			if ($('input[name="device.hotspotflag"]:checked').val() == 1) {
+				$('.hotspotflag').css('display', '');
+			} else {
+				$('.hotspotflag').css('display', 'none');
+			}
 			$('#ConfigModal').modal();
 		});
 		$('[type=submit]', $('#ConfigModal')).on('click', function(event) {
@@ -598,24 +616,9 @@ var DeviceModule = function () {
 		});
 
 		$('#ConfigModal').on('shown.bs.modal', function (e) {
-			$('.volumeRange').ionRangeSlider({
-				min: 0,
-				max: 100,
+			$('.volumeRange').ionRangeSlider('update', {
 				from: _device.volume,
-				type: 'single',
-				step: 5,
-				hasGrid: false
 			});
-			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
-				$('.volumeflag').css('display', '');
-			} else {
-				$('.volumeflag').css('display', 'none');
-			}
-			if ($('input[name="device.hotspotflag"]:checked').val() == 1) {
-				$('.hotspotflag').css('display', '');
-			} else {
-				$('.hotspotflag').css('display', 'none');
-			}
 		})
 		$('input[name="device.volumeflag"]').click(function(e) {
 			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
