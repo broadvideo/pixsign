@@ -1012,7 +1012,7 @@
 		</action>
 		<action name="appfile!upload" method="doUpload" class="appfileAction">
 			<interceptor-ref name="fileUpload">
-				<param name="maximumSize">102400000</param>
+				<param name="maximumSize">204800000</param>
 			</interceptor-ref>
 			<interceptor-ref name="defaultStack"></interceptor-ref>
 			<result name="success" type="json"></result>

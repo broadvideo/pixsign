@@ -605,12 +605,26 @@ var BundleDesignModule = function (mode) {
 				step: 1,
 				hasGrid: false,
 				onChange: function(data) {
-					_self.Zone.interval = $('input[name=intervaltime]').val();
-					refreshBundlezone(_self.Zone);
+					_self.Zone.intervaltime = $('input[name=intervaltime]').val();
 				}
 			});
 			$('.intervalRange').ionRangeSlider('update', {
 				from: bundlezone.intervaltime
+			});
+
+			$('.sleepRange').ionRangeSlider({
+				min: 0,
+				max: 60,
+				from: 10,
+				type: 'single',
+				step: 1,
+				hasGrid: false,
+				onChange: function(data) {
+					_self.Zone.sleeptime = $('input[name=sleeptime]').val();
+				}
+			});
+			$('.sleepRange').ionRangeSlider('update', {
+				from: bundlezone.sleeptime
 			});
 
 			$('.volumeRange').ionRangeSlider({
@@ -684,6 +698,7 @@ var BundleDesignModule = function (mode) {
 
 		$('.collapse').on('shown.bs.collapse', function () {
 			$('.intervalRange').ionRangeSlider('update');
+			$('.sleepRange').ionRangeSlider('update');
 			$('.volumeRange').ionRangeSlider('update');
 			$('.sizeRange').ionRangeSlider('update');
 			$('.bgopacityRange').ionRangeSlider('update');
@@ -819,6 +834,7 @@ var BundleDesignModule = function (mode) {
 			}
 			_self.Zone.sleeptime = $('.zoneform input[name=sleeptime]').attr('value');
 			_self.Zone.intervaltime = $('.zoneform input[name=intervaltime]').attr('value');
+			_self.Zone.sleeptime = $('.zoneform input[name=sleeptime]').attr('value');
 			_self.Zone.fitflag = $('.zoneform input[name=fitflag]:checked').attr('value');
 			_self.Zone.volume = $('.zoneform input[name=volume]').attr('value');
 			_self.Zone.direction = $('.zoneform input[name=direction]:checked').attr('value');
@@ -871,6 +887,7 @@ var BundleDesignModule = function (mode) {
 			bundlezone.bgopacity = 120;
 			bundlezone.sleeptime = 0;
 			bundlezone.intervaltime = 10;
+			bundlezone.sleeptime = 0;
 			bundlezone.animation = 'None';
 			bundlezone.fitflag = 1;
 			bundlezone.volume = 50;

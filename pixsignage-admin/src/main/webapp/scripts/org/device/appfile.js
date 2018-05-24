@@ -124,7 +124,7 @@ var AppfileModule = function () {
 			autoUpload: false,
 			//disableAppfileResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 			disableAppfileResize: true,
-			maxFileSize: 102400000,
+			maxFileSize: 204800000,
 			acceptFileTypes: /(\.|\/)(apk|exe|zip)$/i,
 			// Uncomment the following to send cross-domain cookies:
 			//xhrFields: {withCredentials: true},				

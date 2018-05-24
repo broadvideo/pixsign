@@ -190,6 +190,12 @@
 													</div>
 												</div>
 												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.sleeptime"/></label>
+													<div class="col-md-9">
+														<input class="sleepRange" type="text" name="sleeptime" value="0"/>
+													</div>
+												</div>
+												<div class="form-group">
 													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.fitflag"/></label>
 													<div class="col-md-9 radio-list">
 														<label class="radio-inline">
