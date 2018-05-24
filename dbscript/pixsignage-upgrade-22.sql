@@ -20,7 +20,8 @@ ALTER TABLE `meeting`
 	ADD COLUMN `periodflag` char(1)  COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '周期会议事件 0：否  1：是' after `qrcode`, 
 	ADD COLUMN `skipholidayflag` char(1)  COLLATE utf8_general_ci NULL COMMENT '周期会议是否忽略节假日 0：否  1：是' after `periodflag`, 
 	ADD COLUMN `periodtype` char(1)  COLLATE utf8_general_ci NULL COMMENT '周期类型  0：每天 1:工作日 2:每周 3：每个月' after `skipholidayflag`;
-
+ALTER TABLE `person` 
+	ADD COLUMN `branchid` int(11)   NULL COMMENT 'branchid' after `voiceprompt`;
 
 
 
