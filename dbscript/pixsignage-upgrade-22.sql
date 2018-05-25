@@ -12,7 +12,6 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
-/* Alter table in target */
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 
 	ADD COLUMN `periodendtime` datetime   NULL COMMENT '周期结束日期 e.g. yyyy-MM-dd' after `endtime`, 
@@ -20,9 +19,14 @@ ALTER TABLE `meeting`
 	ADD COLUMN `periodflag` char(1)  COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '周期会议事件 0：否  1：是' after `qrcode`, 
 	ADD COLUMN `skipholidayflag` char(1)  COLLATE utf8_general_ci NULL COMMENT '周期会议是否忽略节假日 0：否  1：是' after `periodflag`, 
 	ADD COLUMN `periodtype` char(1)  COLLATE utf8_general_ci NULL COMMENT '周期类型  0：每天 1:工作日 2:每周 3：每个月' after `skipholidayflag`;
+
+
 ALTER TABLE `person` 
 	ADD COLUMN `branchid` int(11)   NULL COMMENT 'branchid' after `voiceprompt`;
 
+UPDATE person p SET branchid=(SELECT branchid FROM branch b WHERE b.orgid=p.orgid  AND parentid=0)  WHERE STATUS='1' AND TYPE='2';
+
+insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(31204,'2',312,'menu.personattendance','event/personattendance.jsp',NULL,'1','0','3');
 
 
 ############################################################

@@ -223,12 +223,14 @@ public class ResCourseProxy {
 			if (_courseService == null) {
 				getCourseService();
 			}
-			if (serverIP.indexOf("192.168.0.212") != -1) {
-				resp.sendRedirect("http://" + serverIP + ":" + serverPort + "/oa/userPicture?username=" + username);
+
+			if (serverIP.indexOf("10.30.6.101") != -1) {// 武侯走80端口
+				resp.sendRedirect("http://" + serverIP + "/oa/userPicture?username=" + username);
 
 			} else {
-				resp.sendRedirect("http://" + serverIP + "/oa/userPicture?username=" + username);
+				resp.sendRedirect("http://" + serverIP + ":" + serverPort + "/oa/userPicture?username=" + username);
 			}
+
 			// Response.created(new
 			// URI("http://10.30.6.101/oa/userPicture?username=" +
 			// username)).build();
