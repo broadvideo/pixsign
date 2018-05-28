@@ -68,30 +68,6 @@ public class ResCourseProxy {
 		return _courseService;
 	}
 
-	public synchronized ViewQueryDetailWS getCourseService2() {
-		logger.info("######Init ViewQueryDetailWS.....");
-		if (_courseService == null) {
-			try {
-				String courseServiceURL = configDao.selectValueByCode(code);
-				if (StringUtils.isBlank(courseServiceURL)) {
-					logger.error("code:{} is not config.", code);
-				}
-				// "http://" + SERVERIP + "/big-data/viewQueryDetailWS?wsdl"
-				URL url = new URL(courseServiceURL);
-
-				serverIP = url.getHost();
-				serverPort = url.getPort();
-				logger.info("Parse Url({}) serverIP:{}, serverPort:{}", courseServiceURL, serverIP, serverPort);
-				_courseService = new ViewQueryDetailWS(new URL(
-						"file:/C:/Users/Bensonpc/Documents/viewQueryDetailWS.xml"));
-				logger.info("After init Service:{}", _courseService);
-			} catch (Exception e) {
-				logger.error("######Load wsdl error:", e);
-			}
-		}
-		return _courseService;
-	}
-
 	@Path("getDataByView")
 	@POST
 	public Response getDataByView(String request, @Context HttpServletRequest req) {
@@ -223,12 +199,14 @@ public class ResCourseProxy {
 			if (_courseService == null) {
 				getCourseService();
 			}
-			if (serverIP.indexOf("192.168.0.212") != -1) {
-				resp.sendRedirect("http://" + serverIP + ":" + serverPort + "/oa/userPicture?username=" + username);
+
+			if (serverIP.indexOf("10.30.6.101") != -1) {// 武侯走80端口
+				resp.sendRedirect("http://" + serverIP + "/oa/userPicture?username=" + username);
 
 			} else {
-				resp.sendRedirect("http://" + serverIP + "/oa/userPicture?username=" + username);
+				resp.sendRedirect("http://" + serverIP + ":" + serverPort + "/oa/userPicture?username=" + username);
 			}
+
 			// Response.created(new
 			// URI("http://10.30.6.101/oa/userPicture?username=" +
 			// username)).build();

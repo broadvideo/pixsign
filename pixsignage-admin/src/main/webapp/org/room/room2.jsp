@@ -48,7 +48,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group" style="display:none;">
 											<label class="col-md-3 control-label">考勤人员<span class="required">*</span></label>
 											<div class="col-md-9">
 												<div class="md-radio-inline">
