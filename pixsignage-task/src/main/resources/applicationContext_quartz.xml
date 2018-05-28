@@ -238,7 +238,9 @@
 				<ref bean="playlogJobTrigger" />
 				<ref bean="pflowJobTrigger" />
 				<ref bean="importJobTrigger" />
+				<!-- 
 				<ref bean="taodianJobTrigger" />
+				-->
 				<ref bean="attendanceeventJobTrigger" />
 				<ref bean="cmsSyncJobTrigger" />
 				<ref bean="cmsSignSyncJobTrigger" />

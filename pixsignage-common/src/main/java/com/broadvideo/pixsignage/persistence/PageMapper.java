@@ -23,6 +23,8 @@ public interface PageMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
+	List<Page> selectExportList();
+
 	Staff selectStaffPage(@Param(value = "staffid") String staffid, @Param(value = "pageid") String pageid);
 
 	int selectStaffCount(@Param(value = "pageid") String pageid, @Param(value = "search") String search);

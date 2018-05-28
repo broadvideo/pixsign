@@ -12,6 +12,13 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table bundle add exportflag char(1) default 0;
+alter table bundle add exportsize bigint default 0;
+
+alter table page add exportflag char(1) default 0;
+alter table page add exportsize bigint default 0;
+
+
 /* Alter table in target */
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 

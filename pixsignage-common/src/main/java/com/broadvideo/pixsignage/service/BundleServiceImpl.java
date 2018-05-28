@@ -90,6 +90,10 @@ public class BundleServiceImpl implements BundleService {
 		return bundleMapper.selectList(orgid, branchid, reviewflag, touchflag, homeflag, search, start, length);
 	}
 
+	public List<Bundle> selectExportList() {
+		return bundleMapper.selectExportList();
+	}
+
 	@Transactional
 	public void addBundle(Bundle bundle) throws Exception {
 		if (bundle.getName() == null || bundle.getName().equals("")) {
@@ -436,6 +440,14 @@ public class BundleServiceImpl implements BundleService {
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
 		bundle.setUpdatetime(Calendar.getInstance().getTime());
+
+		if (bundle.getHomeflag().equals("1")) {
+			bundle.setExportflag("0");
+		} else {
+			Bundle homebundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
+			homebundle.setExportflag("0");
+			bundleMapper.updateByPrimaryKeySelective(homebundle);
+		}
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 	}
 

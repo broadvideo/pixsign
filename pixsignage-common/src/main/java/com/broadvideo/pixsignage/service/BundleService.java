@@ -18,6 +18,8 @@ public interface BundleService {
 	public List<Bundle> selectList(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
 			String search, String start, String length);
 
+	public List<Bundle> selectExportList();
+
 	public void addBundle(Bundle bundle) throws Exception;
 
 	public void copyBundle(String frombundleid, Bundle bundle) throws Exception;

@@ -2,7 +2,6 @@ package com.broadvideo.pixsignage.action.signage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +18,13 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
-import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -237,71 +230,9 @@ public class BundleAction extends BaseDatatableAction {
 	public String doExport() {
 		try {
 			String bundleid = getParameter("bundleid");
-			String exportDir = "/pixdata/pixsignage/export/bundle/" + bundleid;
+			logger.info("BundleAction doExport, staff={}, bundleid={}", getLoginStaff().getLoginname(), bundleid);
 			exportname = "bundle.zip";
-			FileUtils.forceMkdir(new File(exportDir));
-
-			JSONObject bundleJson = bundleService.generateBundleJson(bundleid);
-			JSONObject bundleScheduleJson = new JSONObject();
-			JSONArray bundleJsonArray = new JSONArray();
-			bundleJsonArray.add(bundleJson);
-			bundleScheduleJson.put("bundles", bundleJsonArray);
-			JSONArray scheduleJsonArray = new JSONArray();
-			JSONObject scheduleJson = new JSONObject();
-			scheduleJson.put("playmode", "daily");
-			scheduleJson.put("start_time", "00:00:00");
-			JSONArray bundleArray = new JSONArray();
-			bundleArray.add(Integer.parseInt(bundleid));
-			scheduleJson.put("bundles", bundleArray);
-			scheduleJsonArray.add(scheduleJson);
-			bundleScheduleJson.put("bundle_schedules", scheduleJsonArray);
-
-			File bundleFile = new File(exportDir, "bundle.jsf");
-			File bundleScheduleFile = new File(exportDir, "bundle-schedule.jsf");
-			File zipFile = new File(exportDir, "bundle.zip");
-
-			boolean exists = false;
-			if (bundleFile.exists() && zipFile.exists()) {
-				String bundleStr = FileUtils.readFileToString(bundleFile, "UTF-8");
-				if (bundleStr.equals(bundleJson.toString())) {
-					exists = true;
-				}
-			}
-
-			if (!exists) {
-				FileUtils.writeStringToFile(bundleFile, bundleJson.toString(), "UTF-8", false);
-				FileUtils.writeStringToFile(bundleScheduleFile, bundleScheduleJson.toString(), "UTF-8", false);
-
-				JSONArray videoJsonArray = bundleJson.getJSONArray("videos");
-				JSONArray imageJsonArray = bundleJson.getJSONArray("images");
-
-				if (zipFile.exists()) {
-					zipFile.delete();
-				}
-				ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
-				zip(out, bundleFile, "bundle.jsf");
-				zip(out, bundleScheduleFile, "bundle-schedule.jsf");
-				out.putNextEntry(new ZipEntry("video/"));
-				for (int i = 0; i < videoJsonArray.size(); i++) {
-					JSONObject videoJson = videoJsonArray.getJSONObject(i);
-					logger.info("videoJson: " + videoJson.toString());
-					String videoid = "" + videoJson.getInt("id");
-					logger.info("videoid: " + videoid);
-					Video video = videoService.selectByPrimaryKey(videoid);
-					File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getFilepath());
-					zip(out, videoFile, "video/" + video.getFilename());
-				}
-				out.putNextEntry(new ZipEntry("image/"));
-				for (int i = 0; i < imageJsonArray.size(); i++) {
-					JSONObject imageJson = imageJsonArray.getJSONObject(i);
-					String imageid = "" + imageJson.getInt("id");
-					Image image = imageService.selectByPrimaryKey(imageid);
-					File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
-					zip(out, imageFile, "image/" + image.getFilename());
-				}
-				out.close();
-			}
-
+			File zipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + bundleid, "bundle-export.zip");
 			inputStream = new FileInputStream(zipFile);
 			return SUCCESS;
 		} catch (Exception ex) {

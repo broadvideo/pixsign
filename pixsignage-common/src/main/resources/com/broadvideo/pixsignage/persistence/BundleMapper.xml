@@ -28,6 +28,8 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="exportflag" property="exportflag" jdbcType="CHAR" />
+    <result column="exportsize" property="exportsize" jdbcType="BIGINT" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -42,7 +44,7 @@
   <sql id="Base_Column_List" >
     bundleid, uuid, orgid, branchid, templetid, name, snapshot, ratio, height, width, bgcolor, 
     bgimageid, touchflag, homeflag, homebundleid, homeidletime, description, status, 
-    reviewflag, comment, createtime, updatetime, createstaffid
+    reviewflag, comment, exportflag, exportsize, createtime, updatetime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
     json
@@ -117,6 +119,14 @@
     and homebundleid = #{homebundleid}
   </select>
 
+  <select id="selectExportList" resultMap="MiniResultMap">
+    select <include refid="Base_Column_List" />
+    from bundle
+    where status=1
+    and homeflag = 1
+    and exportflag = 0
+   </select>
+
   <delete id="deleteByPrimaryKey" >
     update bundle 
     set status = '9'
@@ -143,6 +153,7 @@
       bgimageid, touchflag, homeflag, 
       homebundleid, homeidletime, description, 
       status, reviewflag, comment, 
+      exportflag, exportsize, 
       createtime, updatetime, createstaffid, 
       json
       )
@@ -152,6 +163,7 @@
       #{bgimageid,jdbcType=INTEGER}, #{touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, 
       #{homebundleid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{exportflag,jdbcType=CHAR}, #{exportsize,jdbcType=BIGINT}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
       #{json,jdbcType=LONGVARCHAR}
       )
@@ -218,6 +230,12 @@
       </if>
       <if test="comment != null" >
         comment,
+      </if>
+      <if test="exportflag != null" >
+        exportflag,
+      </if>
+      <if test="exportsize != null" >
+        exportsize,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -289,6 +307,12 @@
       </if>
       <if test="comment != null" >
         #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="exportflag != null" >
+        #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        #{exportsize,jdbcType=BIGINT},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -364,6 +388,12 @@
       <if test="comment != null" >
         comment = #{comment,jdbcType=VARCHAR},
       </if>
+      <if test="exportflag != null" >
+        exportflag = #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        exportsize = #{exportsize,jdbcType=BIGINT},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -400,6 +430,8 @@
       status = #{status,jdbcType=CHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       comment = #{comment,jdbcType=VARCHAR},
+      exportflag = #{exportflag,jdbcType=CHAR},
+      exportsize = #{exportsize,jdbcType=BIGINT},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
