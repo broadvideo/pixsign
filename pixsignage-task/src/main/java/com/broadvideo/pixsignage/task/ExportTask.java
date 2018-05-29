@@ -173,7 +173,7 @@ public class ExportTask extends Thread {
 
 					logger.info("Page export successfully, pageid={}", page.getPageid());
 				}
-				Thread.sleep(600000);
+				Thread.sleep(30000);
 			} catch (Exception ex) {
 				logger.error("Export Task error: {}", ex);
 			}

@@ -199,7 +199,9 @@ public class PixsignageService2 {
 			int max4 = Integer.parseInt(maxs[3]);
 			int max5 = Integer.parseInt(maxs[4]);
 			int max6 = Integer.parseInt(maxs[5]);
-			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+			int max7 = maxs.length > 6 ? Integer.parseInt(maxs[6]) : 0;
+			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")
+					&& !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
 				// 单面屏
 				int currentDevices = deviceMapper.selectMaxCount1("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max1) {
@@ -234,6 +236,12 @@ public class PixsignageService2 {
 				int currentDevices = deviceMapper.selectMaxCount6("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max6) {
 					return handleResult(1010, "Windows终端授权数已达上限.");
+				}
+			} else if (appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+				// 投屏
+				int currentDevices = deviceMapper.selectMaxCount7("" + device.getOrgid());
+				if (!device.getStatus().equals("1") && currentDevices >= max7) {
+					return handleResult(1010, "Android投屏终端授权数已达上限.");
 				}
 			}
 
@@ -1020,12 +1028,17 @@ public class PixsignageService2 {
 				city = device.getCity();
 			}
 			if (city == null || city.length() == 0) {
+				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+				city = org.getCity();
+			}
+			if (city == null || city.length() == 0) {
 				return handleResult(1008, "无效城市");
 			}
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
+			responseJson.put("city", city);
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
 			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
@@ -1050,6 +1063,10 @@ public class PixsignageService2 {
 				city = device.getCity();
 			}
 			if (city == null || city.length() == 0) {
+				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+				city = org.getCity();
+			}
+			if (city == null || city.length() == 0) {
 				return handleResult(1008, "无效城市");
 			}
 
@@ -1058,6 +1075,7 @@ public class PixsignageService2 {
 				JSONObject responseJson = new JSONObject();
 				responseJson.put("code", 0);
 				responseJson.put("message", "成功");
+				responseJson.put("city", city);
 				responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 				return responseJson.toString();
 			} else {
