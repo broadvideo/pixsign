@@ -43,7 +43,7 @@ public class ResCourseProxy {
 	@Autowired
 	private ConfigDao configDao;
 	private final static String USERNAME = "admin";
-	private final static String PASSWORD = "13B3E9DC60323BE98717EC2B27572A87";
+	private final static String PASSWORD ="13B3E9DC60323BE98717EC2B27572A87";
 	private final static String code = "CourseServiceURL";
 
 	public synchronized ViewQueryDetailWS getCourseService() {

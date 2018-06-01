@@ -26,7 +26,7 @@
     select 
     <include refid="Base_Column_List" />
     from event
-    where eventid = #{eventid,jdbcType=INTEGER}
+    where eventid = #{eventid,jdbcType=INTEGER} and status='1'
   </select>
   <select id="selectList" resultMap="BaseResultMap" >
 	SELECT
@@ -44,11 +44,16 @@
 	</if>
 	<if test="starttime!=null and endtime!=null">
 	  and 
-	       (#{starttime}>=DATE_FORMAT(e.starttime,'%Y-%m-%d')  and  #{endtime} <![CDATA[<=]]>DATE_FORMAT(e.endtime,'%Y-%m-%d')) 
+	       (DATE_FORMAT(#{starttime},'%Y-%m-%d')>=e.starttime  and  DATE_FORMAT(#{endtime},'%Y-%m-%d') <![CDATA[<=]]>e.endtime) 
 	  </if>
    order by e.eventid asc
   </select>
-  
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+	   select 
+	    <include refid="Base_Column_List" />
+	    from event
+	    where uuid=#{uuid} and status='1' and orgid=#{orgid}
+  </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from event

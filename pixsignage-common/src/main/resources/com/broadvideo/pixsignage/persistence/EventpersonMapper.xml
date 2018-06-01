@@ -22,6 +22,11 @@
     delete from eventperson
     where eventpersonid = #{eventpersonid,jdbcType=INTEGER}
   </delete>
+   <delete id="deleteByEventid" >
+    delete from eventperson
+    where eventid=#{eventid} 
+  </delete>
+  
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Eventperson" >
     <selectKey resultType="java.lang.Integer" keyProperty="eventpersonid" order="AFTER" >
       SELECT LAST_INSERT_ID()

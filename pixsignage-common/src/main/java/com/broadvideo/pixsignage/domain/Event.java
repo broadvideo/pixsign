@@ -2,107 +2,108 @@ package com.broadvideo.pixsignage.domain;
 
 import java.beans.Transient;
 import java.util.Date;
+import java.util.List;
 
 public class Event {
-    private Integer eventid;
+	private Integer eventid;
 
-    private String uuid;
+	private String uuid;
 
-    private Integer roomid;
+	private Integer roomid;
 	private String roomname;
 	private Integer roomtype;
 
-    private String name;
+	private String name;
 
-    private Date starttime;
+	private Date starttime;
 
-    private Date endtime;
+	private Date endtime;
 
-    private Integer amount;
+	private Integer amount;
 
-    private String sourcetype;
+	private String sourcetype;
 
-    private Integer orgid;
+	private Integer orgid;
 
-    private Date createtime;
+	private Date createtime;
 
-    private Integer createstaffid;
+	private Integer createstaffid;
 
-    private Date updatetime;
+	private Date updatetime;
 
-    private Integer updatestaffid;
+	private Integer updatestaffid;
 
-    private String status;
+	private String status;
 	private String search;
+	private List<String> personUuids;
 
-    public Integer getEventid() {
-        return eventid;
-    }
+	public Integer getEventid() {
+		return eventid;
+	}
 
-    public void setEventid(Integer eventid) {
-        this.eventid = eventid;
-    }
+	public void setEventid(Integer eventid) {
+		this.eventid = eventid;
+	}
 
-    public String getUuid() {
-        return uuid;
-    }
+	public String getUuid() {
+		return uuid;
+	}
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
-    }
+	public void setUuid(String uuid) {
+		this.uuid = uuid == null ? null : uuid.trim();
+	}
 
-    public Integer getRoomid() {
-        return roomid;
-    }
+	public Integer getRoomid() {
+		return roomid;
+	}
 
-    public void setRoomid(Integer roomid) {
-        this.roomid = roomid;
-    }
+	public void setRoomid(Integer roomid) {
+		this.roomid = roomid;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public Date getStarttime() {
-        return starttime;
-    }
+	public Date getStarttime() {
+		return starttime;
+	}
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
-    }
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
 
-    public Date getEndtime() {
-        return endtime;
-    }
+	public Date getEndtime() {
+		return endtime;
+	}
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
-    }
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
 
+	public Integer getAmount() {
+		return amount;
+	}
 
-    public Integer getAmount() {
-        return amount;
-    }
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
+	public String getSourcetype() {
+		return sourcetype;
+	}
 
-    public String getSourcetype() {
-        return sourcetype;
-    }
+	public void setSourcetype(String sourcetype) {
+		this.sourcetype = sourcetype == null ? null : sourcetype.trim();
+	}
 
-    public void setSourcetype(String sourcetype) {
-        this.sourcetype = sourcetype == null ? null : sourcetype.trim();
-    }
-
-    public Integer getOrgid() {
-        return orgid;
-    }
+	public Integer getOrgid() {
+		return orgid;
+	}
 
 	@Transient
 	public String getRoomname() {
@@ -114,48 +115,48 @@ public class Event {
 	}
 
 	public void setOrgid(Integer orgid) {
-        this.orgid = orgid;
-    }
+		this.orgid = orgid;
+	}
 
-    public Date getCreatetime() {
-        return createtime;
-    }
+	public Date getCreatetime() {
+		return createtime;
+	}
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
 
-    public Integer getCreatestaffid() {
-        return createstaffid;
-    }
+	public Integer getCreatestaffid() {
+		return createstaffid;
+	}
 
-    public void setCreatestaffid(Integer createstaffid) {
-        this.createstaffid = createstaffid;
-    }
+	public void setCreatestaffid(Integer createstaffid) {
+		this.createstaffid = createstaffid;
+	}
 
-    public Date getUpdatetime() {
-        return updatetime;
-    }
+	public Date getUpdatetime() {
+		return updatetime;
+	}
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
-    }
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
 
-    public Integer getUpdatestaffid() {
-        return updatestaffid;
-    }
+	public Integer getUpdatestaffid() {
+		return updatestaffid;
+	}
 
-    public void setUpdatestaffid(Integer updatestaffid) {
-        this.updatestaffid = updatestaffid;
-    }
+	public void setUpdatestaffid(Integer updatestaffid) {
+		this.updatestaffid = updatestaffid;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
 
 	@Transient
 	public String getSearch() {
@@ -173,5 +174,13 @@ public class Event {
 
 	public void setRoomtype(Integer roomtype) {
 		this.roomtype = roomtype;
+	}
+
+	public List<String> getPersonUuids() {
+		return personUuids;
+	}
+
+	public void setPersonUuids(List<String> personUuids) {
+		this.personUuids = personUuids;
 	}
 }

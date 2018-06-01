@@ -47,7 +47,7 @@ $('#MyTable').dataTable({
 	 $('td:eq(4)',nRow).html(function(){
 			 
 			 if(aData.endtime!=null && aData.starttime!=null){
-				   return moment(aData.startime).format('HH:mm')+'-'+ moment(aData.endtime).format('HH:mm')
+				   return moment(aData.starttime).format('HH:mm')+'-'+ moment(aData.endtime).format('HH:mm')
 			    }else{
 				   return null;
 			   }

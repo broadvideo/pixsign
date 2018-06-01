@@ -28,6 +28,14 @@ UPDATE person p SET branchid=(SELECT branchid FROM branch b WHERE b.orgid=p.orgi
 
 insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(31204,'2',312,'menu.personattendance','event/personattendance.jsp',NULL,'1','0','3');
 
+ALTER TABLE `attendancelog` 
+	ADD COLUMN `syncstatus` char(1)   NULL DEFAULT '0' COMMENT '同步标识，0:未同步 1：已同步 9：不需要同步' after `createtime`;
+insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('205','AttendanceServiceURL','AttendanceServiceURL','',NULL,'1');
+insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('206','CourseServiceURL','CourseServiceURL','',NULL,'1');
+
+	
+insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('207','SafeCampusServer','SafeCampusServer','',NULL,'1');
+
 
 ############################################################
 ## post script  ############################################

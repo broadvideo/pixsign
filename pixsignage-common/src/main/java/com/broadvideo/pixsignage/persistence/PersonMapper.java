@@ -16,6 +16,8 @@ public interface PersonMapper {
 
 	Person selectByPrimaryKey(Integer personid);
 
+	Person selectByUuid(@Param("uuid") String uuid, @Param("orgid") Integer orgid);
+
 	int selectCount(@Param(value = "orgid") String orgid, @Param("branchid") Integer branchid,
 			@Param(value = "search") String search, @Param("type") Integer type);
 
