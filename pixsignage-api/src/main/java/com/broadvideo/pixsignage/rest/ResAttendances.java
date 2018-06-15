@@ -246,8 +246,9 @@ public class ResAttendances extends ResBase {
 
 				}
 				absents = total - values.size();
-				logger.info("####Summary info(total：{}，normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
-						new Object[] { total, normals, leaks, lates, earlyLeaves, absents });
+				logger.info(
+						"####Summary info(total：{}，avails:{},normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
+						new Object[] { total, avails, normals, leaks, lates, earlyLeaves, absents });
 				jsonObject.put("total", total);
 				jsonObject.put("avails", avails);
 				jsonObject.put("normals", normals);
