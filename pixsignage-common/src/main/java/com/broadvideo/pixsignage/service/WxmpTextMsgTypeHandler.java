@@ -52,7 +52,13 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 		TerminalBinding binding = ServiceFactory.getBean(SmartdoorkeeperService.class).getBinding(fromUserName);
 		if (binding == null) {
 			logger.error("wxuser({}) no binding record found.");
-			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.DOOR_NOBINDING_TIP);// buildEmptyReplyMsg();
+			// return buildReplyMsg(toUserName, fromUserName,
+			// WxmpMessageTips.DOOR_NOBINDING_TIP);// buildEmptyReplyMsg();
+			return buildEmptyReplyMsg();
+
+		}
+		if (DoorConst.DoorVersion.VERSION_2.equals(binding.getDoorversion())) {
+			return buildEmptyReplyMsg();
 		}
 		logger.info("Wxmp({}) receive user({}) msg:{}", new Object[] { toUserName, fromUserName, content });
 		if (DoorConst.DoorType.UP.getVal().equals(content) || DoorConst.DoorType.DOWN.getVal().equals(content)) {

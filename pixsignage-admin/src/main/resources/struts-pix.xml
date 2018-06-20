@@ -2335,6 +2335,31 @@
 			</result>
 		</action>
 		
+		<action name="smartbox!add" method="doAdd" class="smartboxAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="smartbox!update" method="doUpdate" class="smartboxAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+		<action name="smartbox!delete" method="doDelete" class="smartboxAction">
+		   <result name="success" type="json">
+		      <param name="ignoreHierarchy">false</param>
+		      <param name="includeProperties">errorcode,errormsg</param>
+		   </result>
+		</action>
+	   <action name="smartbox!list" method="doList" class="smartboxAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		
 
 	</package>
 

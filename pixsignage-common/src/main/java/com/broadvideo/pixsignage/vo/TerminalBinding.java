@@ -1,14 +1,15 @@
 package com.broadvideo.pixsignage.vo;
 
-import com.broadvideo.pixsignage.domain.Doorlog;
+import com.broadvideo.pixsignage.domain.Smartboxlog;
 
-public  class TerminalBinding extends Doorlog {
+public class TerminalBinding extends Smartboxlog {
 	// 对应微信事件
 	private String event;
 	// 记录事件时间
 	private Long eventtime;
 	// 授权状态
 	private String authorizestate;
+	private String doorversion;
 	private long createts;
 
 	public TerminalBinding(String terminalid, String wxuserid, String wxmpid) {
@@ -58,6 +59,12 @@ public  class TerminalBinding extends Doorlog {
 		this.createts = createts;
 	}
 
+	public String getDoorversion() {
+		return doorversion;
+	}
 
+	public void setDoorversion(String doorversion) {
+		this.doorversion = doorversion;
+	}
 
 }

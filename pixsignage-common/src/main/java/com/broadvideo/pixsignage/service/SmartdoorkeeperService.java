@@ -19,6 +19,8 @@ import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.common.DoorConst;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.domain.Smartbox;
+import com.broadvideo.pixsignage.persistence.SmartboxMapper;
 import com.broadvideo.pixsignage.util.CommonUtils;
 import com.broadvideo.pixsignage.vo.TerminalBinding;
 
@@ -26,11 +28,16 @@ public class SmartdoorkeeperService implements InitializingBean {
 	private final static Logger logger = LoggerFactory.getLogger(SmartdoorkeeperService.class);
 	private final static Object lock = new Object();
 	private final Map<String, TerminalBinding> userBindingsMap = new ConcurrentHashMap<String, TerminalBinding>();
+	private final Map<String, TerminalBinding> terminalBindingsMap = new ConcurrentHashMap<String, TerminalBinding>();
+
 	private final MultiKeyMap doorUserMap = new MultiKeyMap();
 	@Autowired
-	private SmartdoorService smartdoorService;
+	private SmartboxService smartboxService;
 	@Autowired
 	private WxMpService wxmpService;
+	@Autowired
+	private SmartboxMapper smartboxMapper;
+
 	private static Thread clearTask = null;
 
 	/**
@@ -55,8 +62,15 @@ public class SmartdoorkeeperService implements InitializingBean {
 				}
 			}
 			TerminalBinding newBinding = new TerminalBinding(terminalid, wxuserid, wxmpid, event, eventtime, orgid);
+			Smartbox smartbox = this.smartboxMapper.selectByTerminalid(terminalid, orgid);
+			if (smartbox != null) {
+				newBinding.setDoorversion(smartbox.getDoorversion());
+			} else {
+				newBinding.setDoorversion(DoorConst.DoorVersion.VERSION_1.getVal());
+			}
 			newBinding.setAuthorizestate(DoorConst.DoorAuthorizeState.SUBSCRIBE.getVal());
 			userBindingsMap.put(wxuserid, newBinding);
+			terminalBindingsMap.put(terminalid, newBinding);
 		}
 		return true;
 
@@ -69,8 +83,13 @@ public class SmartdoorkeeperService implements InitializingBean {
 	 * @return
 	 */
 	public TerminalBinding getBinding(String wxuserid) {
-			return userBindingsMap.get(wxuserid);
+		return userBindingsMap.get(wxuserid);
 
+	}
+
+	public TerminalBinding getBindingByTermminalid(String terminalid) {
+
+		return terminalBindingsMap.get(terminalid);
 
 	}
 
@@ -82,9 +101,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 	 */
 	public boolean isAuthorizedBinding(String terminalid, String doorType) {
 
-			return doorUserMap.containsKey(terminalid, doorType);
-
-
+		return doorUserMap.containsKey(terminalid, doorType);
 
 	}
 
@@ -96,14 +113,15 @@ public class SmartdoorkeeperService implements InitializingBean {
 			if (binding != null) {
 				try {
 					if (binding.getOpentime() != null && binding.getOpenstate() != null) {
-						smartdoorService.saveDoorlog(binding);
+						smartboxService.savelog(binding);
 					}
 				} catch (Exception ex) {
 					logger.error("Save door log error.", ex);
 				}
-                //移除terminalid、wxuserid、doortype绑定关系
+				// 移除terminalid、wxuserid、doortype绑定关系
 				doorUserMap.remove(binding.getTerminalid(), binding.getDoortype());
 				userBindingsMap.remove(wxuserid);
+				terminalBindingsMap.remove(binding.getTerminalid());
 			}
 
 		}
@@ -125,7 +143,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 				return false;
 			}
 			// 检查wxuserid是否已经在终端上存在授权,则不允许在发送其他的授权开门请求
-			if(doorUserMap.containsValue(wxuserid)){
+			if (doorUserMap.containsValue(wxuserid)) {
 				logger.info("wxuserid({}) had Authorized open door.", wxuserid);
 				return false;
 			}
@@ -162,12 +180,33 @@ public class SmartdoorkeeperService implements InitializingBean {
 		JSONObject resultJson = new JSONObject();
 		resultJson.put("door_type", doorType);
 		String authorizedVal = null;
-		if (StringUtils.isNotBlank(wxuserid)) {
-			authorizedVal = DoorConst.DoorAuthorizeState.OPEN.getVal();
-			logger.info("terminalid({}) door({}) authorized by wxuserid({})", new Object[] { terminalid, doorType,
-					wxuserid });
-		} else {
+		TerminalBinding binding = terminalBindingsMap.get(terminalid);
+		if (binding == null) {
+
 			authorizedVal = DoorConst.DoorAuthorizeState.INIT.getVal();
+
+		} else {
+
+			if (DoorConst.DoorVersion.VERSION_1.getVal().equals(binding.getDoorversion())) {
+
+				if (StringUtils.isNotBlank(wxuserid)) {
+					authorizedVal = DoorConst.DoorAuthorizeState.OPEN.getVal();
+					logger.info("terminalid({}) door({}) authorized by wxuserid({})", new Object[] { terminalid,
+							doorType, wxuserid });
+				} else {
+					authorizedVal = DoorConst.DoorAuthorizeState.INIT.getVal();
+
+				}
+
+			} else if (DoorConst.DoorVersion.VERSION_2.getVal().equals(binding.getDoorversion())) {
+
+				authorizedVal = binding.getAuthorizestate();
+
+			} else {
+
+				authorizedVal = DoorConst.DoorAuthorizeState.INIT.getVal();
+
+			}
 		}
 		resultJson.put("authorize_state", authorizedVal);
 
@@ -225,6 +264,51 @@ public class SmartdoorkeeperService implements InitializingBean {
 
 	}
 
+	public void doorStateCallback(String terminalid, String doorType, String actionType, String state,
+			Integer stocknum, String extra) {
+
+		TerminalBinding binding = getBindingByTermminalid(terminalid);
+		if (binding == null) {
+			logger.error("terminalid({})不存在绑定关系.", terminalid);
+			throw new ServiceException(ApiRetCodeEnum.TERMINAL_NOAUTH_OPT_DOOR, "终端未授权开门");
+		}
+		// 刷新库存
+		Smartbox smartbox = this.smartboxMapper.selectByTerminalid(terminalid, binding.getOrgid());
+		smartbox.setStocknum(stocknum);
+		this.smartboxMapper.updateByPrimaryKeySelective(smartbox);
+		logger.info("doorStateCallback:terminalid({})  stocknum({}) extra({})",
+				new Object[] { terminalid, state, extra });
+		// 上报开门状态
+		if (DoorConst.DoorState.SUCCESS.getVal().equals(binding.getOpenstate())) {
+			logger.info("terminalid({}) doorType({}) openstate({}) has already success.", new Object[] { terminalid,
+					doorType, binding.getOpenstate() });
+			return;
+		}
+		if (state.equals(binding.getOpenstate())) {
+			logger.info("terminalid({}) doorType({}) openstate({}) repeat report.", terminalid, doorType, state);
+			return;
+		}
+		binding.setStocknum(stocknum);
+		binding.setExtra(extra);
+		binding.setOpenstate(state);
+		binding.setOpentime(new Date());
+		if (state.equals(DoorConst.DoorState.FAIL.getVal())) {
+			logger.error("doorStateCallback:terminalid({}) open door({}) fail.", terminalid, doorType);
+		} else if (state.equals(DoorConst.DoorState.SUCCESS.getVal())) {
+			try {
+				logger.error("doorStateCallback:terminalid({}) open door({}) success.send message to user", terminalid,
+						doorType);
+				wxmpService.sendMessage(wxmpService.getAccessToken(binding.getOrgid(), false).getAccessToken(),
+						binding.getWxuserid(), WxmpMessageTips.DOOR_OPEN_SUCESS_TIP2, binding.getOrgid());
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		logger.info("Close door({}) for terminalid({})", doorType, terminalid);
+		unbind(binding.getWxuserid());
+
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (clearTask != null) {
@@ -232,10 +316,9 @@ public class SmartdoorkeeperService implements InitializingBean {
 			return;
 
 		}
-			clearTask = new ClearTimeoutBindingsTask();
-			logger.info("Start ClearTimeoutBindingsTask......");
-			clearTask.start();
-
+		clearTask = new ClearTimeoutBindingsTask();
+		logger.info("Start ClearTimeoutBindingsTask......");
+		clearTask.start();
 
 	}
 
