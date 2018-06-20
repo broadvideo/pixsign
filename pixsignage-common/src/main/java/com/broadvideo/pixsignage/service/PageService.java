@@ -17,6 +17,8 @@ public interface PageService {
 	public List<Page> selectList(String orgid, String branchid, String reviewflag, String ratio, String touchflag,
 			String homeflag, String search, String start, String length, Staff staff);
 
+	public List<Page> selectExportList();
+
 	public int selectStaffCount(String pageid, String search);
 
 	public List<Staff> selectStaff(String pageid, String search, String start, String length);
@@ -42,8 +44,6 @@ public interface PageService {
 	public void exportZip(String pageid, File zipFile) throws Exception;
 
 	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
-
-	public void exportZipFull(String pageid, File zipFile) throws Exception;
 
 	public void addStaffs(Page page, String[] staffids);
 

@@ -219,8 +219,9 @@
     select count(1) from device 
     where status = 1
     and orgid = #{orgid}
-    and appname like 'DigitalBox_%'
+    and appname like 'DigitalBox\_%'
     and appname != 'DigitalBox_LAUNCHER_UWIN'
+    and !appname like 'DigitalBox_LAUNCHER_TOUPING%'
   </select>
   <select id="selectMaxCount2" resultType="Integer">
     select count(1) from device 
@@ -232,13 +233,13 @@
     select count(1) from device 
     where status = 1
     and orgid = #{orgid}
-    and appname like 'DigitalBox2_%'
+    and appname like 'DigitalBox2\_%'
   </select>
   <select id="selectMaxCount4" resultType="Integer">
     select count(1) from device 
     where status = 1
     and orgid = #{orgid}
-    and appname like 'TeaTable_%'
+    and appname like 'TeaTable\_%'
   </select>
   <select id="selectMaxCount5" resultType="Integer">
     select count(1) from device 
@@ -251,6 +252,12 @@
     where status = 1
     and orgid = #{orgid}
     and ostype = 2
+  </select>
+  <select id="selectMaxCount7" resultType="Integer">
+    select count(1) from device 
+    where status = 1
+    and orgid = #{orgid}
+    and appname like 'DigitalBox_LAUNCHER_TOUPING%'
   </select>
 
   <delete id="unbind" >

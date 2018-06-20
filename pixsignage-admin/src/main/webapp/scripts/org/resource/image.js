@@ -61,14 +61,14 @@ var ImageModule = function () {
 				imagehtml += '</div>';
 				imagehtml += '</div>';
 
-				if (aData.relate != null) {
-					aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
-					aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
-					thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
-					thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
-					imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.relate.filepath + '" title="' + aData.relate.name + '">';
+				if (aData.relateimage != null) {
+					aData.relateimage.width = aData.relateimage.width == null ? 100: aData.relateimage.width;
+					aData.relateimage.height = aData.relateimage.height == null ? 100: aData.relateimage.height;
+					thumbwidth = aData.relateimage.width > aData.relateimage.height ? 50 : 50*aData.relateimage.width/aData.relateimage.height;
+					thumbheight = aData.relateimage.height > aData.relateimage.width ? 50 : 50*aData.relateimage.height/aData.relateimage.width;
+					imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.relateimage.filepath + '" title="' + aData.relateimage.name + '">';
 					imagehtml += '<div id="RelateThumb" class="thumbs">';
-					imagehtml += '<img src="/pixsigdata' + aData.relate.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+					imagehtml += '<img src="/pixsigdata' + aData.relateimage.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relateimage.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					imagehtml += '</div>';
 					imagehtml += '</a>';
 				}
@@ -106,7 +106,7 @@ var ImageModule = function () {
 					$(this).css('top', '0');
 					$(this).css('width', thumbwidth + '%');
 				});
-				$(".fancybox").fancybox({
+				$('.fancybox').fancybox({
 					openEffect	: 'none',
 					closeEffect	: 'none',
 					closeBtn : false,

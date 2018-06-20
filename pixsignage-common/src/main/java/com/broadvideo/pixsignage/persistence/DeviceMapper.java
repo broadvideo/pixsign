@@ -45,6 +45,8 @@ public interface DeviceMapper {
 
 	int selectMaxCount6(@Param(value = "orgid") String orgid);
 
+	int selectMaxCount7(@Param(value = "orgid") String orgid);
+
 	int unbind(@Param(value = "deviceid") String deviceid);
 
 	int updateUpgradeflag(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,

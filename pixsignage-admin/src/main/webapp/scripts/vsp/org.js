@@ -324,6 +324,9 @@ var OrgModule = function () {
 		formHandler.validateOption.rules['org.max6'] = {};
 		formHandler.validateOption.rules['org.max6']['required'] = true;
 		formHandler.validateOption.rules['org.max6']['number'] = true;
+		formHandler.validateOption.rules['org.max7'] = {};
+		formHandler.validateOption.rules['org.max7']['required'] = true;
+		formHandler.validateOption.rules['org.max7']['number'] = true;
 		formHandler.validateOption.rules['org.maxstorage'] = {};
 		formHandler.validateOption.rules['org.maxstorage']['required'] = true;
 		formHandler.validateOption.rules['org.maxstorage']['number'] = true;
@@ -386,7 +389,8 @@ var OrgModule = function () {
 			
 			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()
 			+ ',' + $('input[name="org.max3"]').val() + ',' + $('input[name="org.max4"]').val()
-			+ ',' + $('input[name="org.max5"]').val() + ',' + $('input[name="org.max6"]').val();
+			+ ',' + $('input[name="org.max5"]').val() + ',' + $('input[name="org.max6"]').val()
+			+ ',' + $('input[name="org.max7"]').val();
 			formData.append('org.maxdetail', maxdetail);
 			
 			$.ajax({
@@ -476,6 +480,7 @@ var OrgModule = function () {
 			_org.max4 = maxs[3];
 			_org.max5 = maxs[4];
 			_org.max6 = maxs[5];
+			_org.max7 = maxs.length>6? maxs[6] : 0;
 			refreshVsp(_org);
 			formHandler.setdata('org', _org);
 			if ($('input[name="org.expireflag"]:checked').val() == 0) {

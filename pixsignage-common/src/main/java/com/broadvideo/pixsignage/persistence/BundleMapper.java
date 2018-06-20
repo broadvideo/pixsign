@@ -20,6 +20,8 @@ public interface BundleMapper {
 
 	List<Bundle> selectSubList(@Param(value = "homebundleid") String homebundleid);
 
+	List<Bundle> selectExportList();
+
 	int deleteByPrimaryKey(@Param(value = "bundleid") String bundleid);
 
 	int clearBundlezones(@Param(value = "bundleid") String bundleid);

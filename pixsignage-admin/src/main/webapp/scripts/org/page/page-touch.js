@@ -59,8 +59,10 @@ var PageModule = function () {
 				}
 				if (aData.reviewflag == 1) {
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-sync"><i class="fa fa-rss"></i> ' + common.view.sync + '</a>';
-					pagehtml += '<a href="page!exportfull.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 					pagehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-sm yellow pix-savetemplate"><i class="fa fa-save"></i> ' + common.view.save_template + '</a>';
+				}
+				if (aData.reviewflag == 1 && aData.exportflag == 1) {
+					pagehtml += '<a href="page!exportfull.action?pageid=' + aData.pageid + '" data-id="' + iDisplayIndex + '" class="btn default btn-sm green pix-export"><i class="fa fa-download"></i> ' + common.view.export + '</a>';
 				}
 				pagehtml += '</div>';
 				pagehtml += '</div>';

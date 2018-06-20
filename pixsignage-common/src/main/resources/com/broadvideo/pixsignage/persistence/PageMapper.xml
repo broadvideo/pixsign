@@ -22,6 +22,8 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="exportflag" property="exportflag" jdbcType="CHAR" />
+    <result column="exportsize" property="exportsize" jdbcType="BIGINT" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
@@ -38,7 +40,8 @@
 
   <sql id="Base_Column_List" >
     pageid, uuid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
-    homeflag, homepageid, homeidletime, status, description, reviewflag, comment, createtime, updatetime, createstaffid
+    homeflag, homepageid, homeidletime, status, description, reviewflag, comment, exportflag, exportsize, createtime, 
+    updatetime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
     json
@@ -126,6 +129,14 @@
     from page
     where status=1
     and homepageid = #{homepageid}
+  </select>
+
+  <select id="selectExportList" resultMap="MiniResultMap">
+    select <include refid="Base_Column_List" />
+    from page
+    where status=1
+   and homeflag = 1
+    and exportflag = 0
   </select>
 
   <select id="selectStaffPage" resultMap="com.broadvideo.pixsignage.persistence.StaffMapper.BaseResultMap">
@@ -227,7 +238,8 @@
       privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
       status, description, reviewflag, 
-      comment, createtime, updatetime, 
+      comment, exportflag, exportsize, 
+      createtime, updatetime, 
       createstaffid, json
       )
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
@@ -236,7 +248,8 @@
       #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
-      #{comment,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{comment,jdbcType=VARCHAR}, #{exportflag,jdbcType=CHAR}, #{exportsize,jdbcType=BIGINT}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER}, #{json,jdbcType=LONGVARCHAR}
       )
   </insert>
@@ -302,6 +315,12 @@
       </if>
       <if test="comment != null" >
         comment,
+      </if>
+      <if test="exportflag != null" >
+        exportflag,
+      </if>
+      <if test="exportsize != null" >
+        exportsize,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -373,6 +392,12 @@
       </if>
       <if test="comment != null" >
         #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="exportflag != null" >
+        #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        #{exportsize,jdbcType=BIGINT},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -448,6 +473,12 @@
       <if test="comment != null" >
         comment = #{comment,jdbcType=VARCHAR},
       </if>
+      <if test="exportflag != null" >
+        exportflag = #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        exportsize = #{exportsize,jdbcType=BIGINT},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -484,6 +515,8 @@
       description = #{description,jdbcType=VARCHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       comment = #{comment,jdbcType=VARCHAR},
+      exportflag = #{exportflag,jdbcType=CHAR},
+      exportsize = #{exportsize,jdbcType=BIGINT},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER},

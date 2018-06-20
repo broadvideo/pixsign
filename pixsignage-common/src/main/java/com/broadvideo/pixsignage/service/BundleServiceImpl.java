@@ -90,6 +90,10 @@ public class BundleServiceImpl implements BundleService {
 		return bundleMapper.selectList(orgid, branchid, reviewflag, touchflag, homeflag, search, start, length);
 	}
 
+	public List<Bundle> selectExportList() {
+		return bundleMapper.selectExportList();
+	}
+
 	@Transactional
 	public void addBundle(Bundle bundle) throws Exception {
 		if (bundle.getName() == null || bundle.getName().equals("")) {
@@ -436,6 +440,14 @@ public class BundleServiceImpl implements BundleService {
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
 		bundle.setUpdatetime(Calendar.getInstance().getTime());
+
+		if (bundle.getHomeflag().equals("1")) {
+			bundle.setExportflag("0");
+		} else {
+			Bundle homebundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
+			homebundle.setExportflag("0");
+			bundleMapper.updateByPrimaryKeySelective(homebundle);
+		}
 		bundleMapper.updateByPrimaryKeySelective(bundle);
 	}
 
@@ -819,7 +831,8 @@ public class BundleServiceImpl implements BundleService {
 							videoJson.put("size", video.getSize());
 							videoJson.put("thumbnail",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
-							if (video.getRelate() != null) {
+							videoJson.put("relate_type", "image");
+							if (video.getRelateimage() != null) {
 								videoJson.put("relate_id", video.getRelateid());
 							} else {
 								videoJson.put("relate_id", 0);
@@ -847,7 +860,8 @@ public class BundleServiceImpl implements BundleService {
 							imageJson.put("size", image.getSize());
 							imageJson.put("thumbnail",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getThumbnail());
-							if (image.getRelate() != null) {
+							imageJson.put("relate_type", "image");
+							if (image.getRelateimage() != null) {
 								imageJson.put("relate_id", image.getRelateid());
 							} else {
 								imageJson.put("relate_id", 0);
@@ -973,7 +987,8 @@ public class BundleServiceImpl implements BundleService {
 							videoJson.put("size", video.getSize());
 							videoJson.put("thumbnail",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getThumbnail());
-							if (video.getRelate() != null) {
+							videoJson.put("relate_type", "image");
+							if (video.getRelateimage() != null) {
 								videoJson.put("relate_id", video.getRelateid());
 							} else {
 								videoJson.put("relate_id", 0);
@@ -1003,7 +1018,8 @@ public class BundleServiceImpl implements BundleService {
 							imageJson.put("size", image.getSize());
 							imageJson.put("thumbnail",
 									"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getThumbnail());
-							if (image.getRelate() != null) {
+							imageJson.put("relate_type", "image");
+							if (image.getRelateimage() != null) {
 								imageJson.put("relate_id", image.getRelateid());
 							} else {
 								imageJson.put("relate_id", 0);
@@ -1033,37 +1049,38 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("regions", regionJsonArray);
 
 		for (Video video : videoList) {
-			if (video.getRelate() != null && videoHash.get(video.getRelateid()) == null) {
-				JSONObject videoJson = new JSONObject();
-				videoJson.put("id", video.getRelateid());
-				videoJson.put("name", video.getRelate().getName());
-				videoJson.put("oname", video.getRelate().getOname());
-				videoJson.put("url",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getFilepath());
-				videoJson.put("path", "/pixsigdata" + video.getRelate().getFilepath());
-				videoJson.put("file", video.getRelate().getFilename());
-				videoJson.put("size", video.getRelate().getSize());
-				videoJson.put("thumbnail",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelate().getThumbnail());
-				videoJson.put("relate_id", 0);
-				videoJson.put("tags", video.getRelate().getTags());
-				videoHash.put(video.getRelateid(), videoJson);
-				videoJsonArray.add(videoJson);
+			if (video.getRelateimage() != null && imageHash.get(video.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", video.getRelateid());
+				imageJson.put("name", video.getRelateimage().getName());
+				imageJson.put("oname", video.getRelateimage().getOname());
+				imageJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("file", video.getRelateimage().getFilename());
+				imageJson.put("size", video.getRelateimage().getSize());
+				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ video.getRelateimage().getThumbnail());
+				imageJson.put("relate_type", "image");
+				imageJson.put("relate_id", 0);
+				imageHash.put(video.getRelateid(), imageJson);
+				imageJsonArray.add(imageJson);
 			}
 		}
 		for (Image image : imageList) {
-			if (image.getRelate() != null && imageHash.get(image.getRelateid()) == null) {
+			if (image.getRelateimage() != null && imageHash.get(image.getRelateid()) == null) {
 				JSONObject imageJson = new JSONObject();
 				imageJson.put("id", image.getRelateid());
-				imageJson.put("name", image.getRelate().getName());
-				imageJson.put("oname", image.getRelate().getOname());
+				imageJson.put("name", image.getRelateimage().getName());
+				imageJson.put("oname", image.getRelateimage().getOname());
 				imageJson.put("url",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getFilepath());
-				imageJson.put("path", "/pixsigdata" + image.getRelate().getFilepath());
-				imageJson.put("file", image.getRelate().getFilename());
-				imageJson.put("size", image.getRelate().getSize());
-				imageJson.put("thumbnail",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelate().getThumbnail());
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("file", image.getRelateimage().getFilename());
+				imageJson.put("size", image.getRelateimage().getSize());
+				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ image.getRelateimage().getThumbnail());
+				imageJson.put("relate_type", "image");
 				imageJson.put("relate_id", 0);
 				imageHash.put(image.getRelateid(), imageJson);
 				imageJsonArray.add(imageJson);

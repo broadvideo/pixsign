@@ -26,7 +26,7 @@
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <association property="relate" column="{videoid=relateid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectRelateVideo" />
+    <association property="relateimage" column="{imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -127,16 +127,18 @@
       width, height, format, filepath, 
       filename, size, md5, 
       previewflag, status, progress, 
-      description, thumbnail, relateid, 
-      tags, createtime, createstaffid
+      description, thumbnail, 
+      relateid, tags, createtime, 
+      createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
       #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{format,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
       #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
-      #{tags,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, 
+      #{relateid,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Video" >

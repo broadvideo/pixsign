@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
+import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Smartbox;
 import com.broadvideo.pixsignage.domain.Smartboxlog;
 import com.broadvideo.pixsignage.persistence.SmartboxMapper;
@@ -40,16 +42,29 @@ public class SmartboxServiceImpl implements SmartboxService {
 	}
 
 	@Override
-	public Integer addSmartbox(Smartbox smartbox) {
+	public synchronized Integer addSmartbox(Smartbox smartbox) {
 
+		if (StringUtils.isNotBlank(smartbox.getTerminalid())) {
+			Smartbox record = this.smartboxMapper.selectByTerminalid(smartbox.getTerminalid(), smartbox.getOrgid());
+			if (record != null) {
+				logger.error("addSmartbox fail:terminalid:{} has bind.", smartbox.getTerminalid());
+				throw new ServiceException(String.format("终端id:%s已经被占用了!", smartbox.getTerminalid()));
+			}
+		}
 		smartbox.setStatus(GlobalFlag.VALID);
 		this.smartboxMapper.insertSelective(smartbox);
 		return smartbox.getSmartboxid();
 	}
 
 	@Override
-	public void updateSmartbox(Smartbox smartbox) {
-
+	public synchronized void updateSmartbox(Smartbox smartbox) {
+		if (StringUtils.isNotBlank(smartbox.getTerminalid())) {
+			Smartbox record = this.smartboxMapper.selectByTerminalid(smartbox.getTerminalid(), smartbox.getOrgid());
+			if (record != null && !smartbox.getSmartboxid().equals(record.getSmartboxid())) {
+				logger.error("addSmartbox fail:terminalid:{} has bind.", smartbox.getTerminalid());
+				throw new ServiceException(String.format("终端id:%s已经被占用了!", smartbox.getTerminalid()));
+			}
+		}
 		this.smartboxMapper.updateByPrimaryKeySelective(smartbox);
 
 	}

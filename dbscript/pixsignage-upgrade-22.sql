@@ -12,6 +12,14 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 
+alter table bundle add exportflag char(1) default 0;
+alter table bundle add exportsize bigint default 0;
+
+alter table page add exportflag char(1) default 0;
+alter table page add exportsize bigint default 0;
+
+update video set relateid = 0;
+
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 
 	ADD COLUMN `periodendtime` datetime   NULL COMMENT '周期结束日期 e.g. yyyy-MM-dd' after `endtime`, 
@@ -73,7 +81,7 @@ CREATE TABLE `smartboxlog`(
 
 
 insert into `privilege` (`privilegeid`, `subsystem`, `parentid`, `name`, `menuurl`, `icon`, `type`, `orgtype`, `sequence`) values(313,'2',0,'menu.smartboxmanage',NULL,'fa-group','1','0','0');
-insert into `privilege` (`privilegeid`, `subsystem`, `parentid`, `name`, `menuurl`, `icon`, `type`, `orgtype`, `sequence`) values(31301,'2',313,'menu.smartbox','/smartbox/smartbox.jsp',NULL,'1','0','1');
+insert into `privilege` (`privilegeid`, `subsystem`, `parentid`, `name`, `menuurl`, `icon`, `type`, `orgtype`, `sequence`) values(31301,'2',313,'menu.smartbox','smartbox/smartbox.jsp',NULL,'1','0','1');
 
 ############################################################
 ## post script  ############################################
