@@ -77,37 +77,16 @@ var VideoModule = function () {
 				videohtml += '</div>';
 				videohtml += '</div>';
 
-				if (aData.relate != null) {
-					var thumbnail = '../img/video.jpg';
-					var thumbwidth = 50;
-					var thumbheight = 50;
-					if (aData.relate.thumbnail != null) {
-						thumbnail = '/pixsigdata' + aData.relate.thumbnail;
-						aData.relate.width = aData.relate.width == null ? 100: aData.relate.width;
-						aData.relate.height = aData.relate.height == null ? 100: aData.relate.height;
-						thumbwidth = aData.relate.width > aData.relate.height ? 50 : 50*aData.relate.width/aData.relate.height;
-						thumbheight = aData.relate.height > aData.relate.width ? 50 : 50*aData.relate.height/aData.relate.width;
-					}
-					if (aData.relate.filepath == null || aData.relate.previewflag != 1) {
-						videohtml += '<div id="RelateThumb" class="thumbs">';
-						videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
-						videohtml += '</div>';
-					} else {
-						var previewwidth = 760;
-						if (aData.relate.width > aData.relate.height) {
-							previewwidth = 760;
-							previewheight = previewwidth * aData.relate.height / aData.relate.width;
-						} else {
-							previewheight = 760;
-							previewwidth = previewheight * aData.relate.width / aData.relate.height;
-						}
-						var videourl = '/pixsigdata/video/preview/' + aData.relateid + ".mp4";
-						videohtml += '<a class="fancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '">';
-						videohtml += '<div id="RelateThumb" class="thumbs">';
-						videohtml += '<img src="' + thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relate.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
-						videohtml += '</div>';
-						videohtml += '</a>';
-					}
+				if (aData.relateimage != null) {
+					aData.relateimage.width = aData.relateimage.width == null ? 100: aData.relateimage.width;
+					aData.relateimage.height = aData.relateimage.height == null ? 100: aData.relateimage.height;
+					thumbwidth = aData.relateimage.width > aData.relateimage.height ? 50 : 50*aData.relateimage.width/aData.relateimage.height;
+					thumbheight = aData.relateimage.height > aData.relateimage.width ? 50 : 50*aData.relateimage.height/aData.relateimage.width;
+					videohtml += '<a class="imagefancybox" href="/pixsigdata' + aData.relateimage.filepath + '" title="' + aData.relateimage.name + '">';
+					videohtml += '<div id="RelateThumb" class="thumbs">';
+					videohtml += '<img src="/pixsigdata' + aData.relateimage.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relateimage.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+					videohtml += '</div>';
+					videohtml += '</a>';
 				}
 				videohtml += '</div>';
 				
@@ -169,6 +148,11 @@ var VideoModule = function () {
 					$(this).css('top', '0');
 					$(this).css('width', thumbwidth + '%');
 				});
+				$('.imagefancybox').fancybox({
+					openEffect	: 'none',
+					closeEffect	: 'none',
+					closeBtn : false,
+				});
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':VideoTree.branchid });
@@ -220,7 +204,7 @@ var VideoModule = function () {
 	};
 
 	var initVideoEditModal = function () {
-		var RelateVideoSelect = new FolderVideoSelect($('#RelateVideoSelect'));
+		var RelateImageSelect = new FolderImageSelect($('#RelateImageSelect'));
 		
 		var EditFolderTreeData = [];
 		function createFolderTreeData(folderes, treeData) {
@@ -341,7 +325,7 @@ var VideoModule = function () {
 			$('#VideoEditForm').attr('action', 'video!update.action');
 			$('#TagSelect').select2('val', $(_video.tags.split(',')));
 			createEditFolderTree();
-			RelateVideoSelect.refresh(_video);
+			RelateImageSelect.refresh(_video);
 			$('#VideoEditModal').modal();
 		});
 	};

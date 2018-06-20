@@ -50,6 +50,10 @@ public class Page {
 
 	private String comment;
 
+	private String exportflag;
+
+	private Long exportsize;
+
 	private Date createtime;
 
 	private Date updatetime;
@@ -224,6 +228,22 @@ public class Page {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getExportflag() {
+		return exportflag;
+	}
+
+	public void setExportflag(String exportflag) {
+		this.exportflag = exportflag;
+	}
+
+	public Long getExportsize() {
+		return exportsize;
+	}
+
+	public void setExportsize(Long exportsize) {
+		this.exportsize = exportsize;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

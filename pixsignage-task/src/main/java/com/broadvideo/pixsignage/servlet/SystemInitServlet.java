@@ -15,6 +15,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Config;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DbversionMapper;
+import com.broadvideo.pixsignage.task.ExportTask;
 import com.broadvideo.pixsignage.task.SystemTask;
 
 @SuppressWarnings("serial")
@@ -46,6 +47,9 @@ public class SystemInitServlet extends HttpServlet {
 
 			SystemTask systemTask = (SystemTask) ctx.getBean("systemTask");
 			systemTask.start();
+
+			ExportTask exportTask = (ExportTask) ctx.getBean("exportTask");
+			exportTask.start();
 
 		} catch (Exception ex) {
 			logger.error("System init exception. ", ex);

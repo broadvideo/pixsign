@@ -47,7 +47,7 @@ public class Image {
 
 	private Integer createstaffid;
 
-	private Image relate;
+	private Image relateimage;
 
 	public Integer getImageid() {
 		return imageid;
@@ -219,11 +219,11 @@ public class Image {
 		this.createstaffid = createstaffid;
 	}
 
-	public Image getRelate() {
-		return relate;
+	public Image getRelateimage() {
+		return relateimage;
 	}
 
-	public void setRelate(Image relate) {
-		this.relate = relate;
+	public void setRelateimage(Image relateimage) {
+		this.relateimage = relateimage;
 	}
 }

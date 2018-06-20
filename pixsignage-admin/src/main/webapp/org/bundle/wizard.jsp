@@ -459,12 +459,6 @@
 																							</label>
 																						</div>
 																					</div>
-																					<div class="form-group">
-																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
-																						<div class="col-md-9">
-																							<input class="volumeRange" type="text" name="volume" value="50"/>
-																						</div>
-																					</div>
 																				</div>
 																			</form>
 																		</div>
@@ -558,6 +552,12 @@
 																		<div id="Collapse5" class="panel-collapse collapse in">
 																			<form id="ZoneEditForm5" class="form-horizontal pix-bordered zoneform">
 																				<div class="form-body">
+																					<div class="form-group">
+																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
+																						<div class="col-md-9">
+																							<input class="volumeRange" type="text" name="volume" value="50"/>
+																						</div>
+																					</div>
 																					<div class="form-group">
 																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgimage"/></label>
 																						<div class="col-md-9">

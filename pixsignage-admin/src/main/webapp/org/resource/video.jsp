@@ -100,9 +100,9 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.relatevideo"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.relateimage"/></label>
 								<div class="col-md-9">
-									<div id="RelateVideoSelect" class="input-group">
+									<div id="RelateImageSelect" class="input-group">
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
 											<ul class="dropdown-menu" role="menu">
@@ -329,7 +329,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/resource/video.js?t=${timestamp}"></script>
 <script>
 var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
