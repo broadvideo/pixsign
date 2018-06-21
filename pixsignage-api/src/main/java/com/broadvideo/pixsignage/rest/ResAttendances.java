@@ -206,6 +206,8 @@ public class ResAttendances extends ResBase {
 				int lates = 0;
 				// 早退
 				int earlyLeaves = 0;
+				// 实到
+				int avails = 0;
 				JSONObject jsonObject = new JSONObject();
 				String key = DateUtil.getDateStr(beginDate, "yyyy-MM-dd");
 				jsonObject.put("date", key);
@@ -213,6 +215,7 @@ public class ResAttendances extends ResBase {
 				if (dataMap.containsKey(key)) {
 					values = dataMap.get(key);
 				}
+				avails = values.size();
 				for (Attendancelog attendancelog : values) {
 					List<Date> signtimes = attendancelog.getSigntimes();
 					if (signtimes == null || signtimes.size() == 0) {
@@ -243,9 +246,11 @@ public class ResAttendances extends ResBase {
 
 				}
 				absents = total - values.size();
-				logger.info("####Summary info(total：{}，normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
-						new Object[] { total, normals, leaks, lates, earlyLeaves, absents });
+				logger.info(
+						"####Summary info(total：{}，avails:{},normals:{},leaks:{},lates:{},earlyleaves:{},absents:{})",
+						new Object[] { total, avails, normals, leaks, lates, earlyLeaves, absents });
 				jsonObject.put("total", total);
+				jsonObject.put("avails", avails);
 				jsonObject.put("normals", normals);
 				jsonObject.put("lates", lates);
 				jsonObject.put("early_leaves", earlyLeaves);

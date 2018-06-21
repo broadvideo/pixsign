@@ -3,6 +3,25 @@ package com.broadvideo.pixsignage.common;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class DoorConst {
+
+	public static enum DoorVersion {
+		VERSION_UNKOWN("0"), VERSION_1("1"), VERSION_2("2");
+		private String val;
+
+		DoorVersion(String value) {
+			this.val = value;
+		}
+
+		public String getVal() {
+			return val;
+		}
+
+		public void setVal(String val) {
+			this.val = val;
+		}
+
+	}
+
 	// 柜门类型
 	public static enum DoorType {
 
@@ -44,7 +63,7 @@ public class DoorConst {
 		}
 
 	}
-	
+
 	// DOOR STATE
 	public static enum DoorState {
 

@@ -116,9 +116,7 @@ public class ResEvents extends ResBase {
 			if (StringUtils.isNotBlank(endDate)) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(DateUtil.getDate(endDate, "yyyyMMdd"));
-				calendar.add(Calendar.DAY_OF_MONTH, 1);
 				wrapEndDate = calendar.getTime();
-
 			}
 			Room room = this.roomMapper.selectByPrimaryKey(eventRoomid);
 			RowBounds rowBounds = new RowBounds(0, Integer.MAX_VALUE);

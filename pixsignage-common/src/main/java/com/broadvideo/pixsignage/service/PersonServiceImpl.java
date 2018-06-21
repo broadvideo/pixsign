@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,13 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.xerces.impl.dv.util.Base64;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,9 @@ import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.POIUtil;
 import com.broadvideo.pixsignage.common.RetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
+import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Person;
+import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.PersonMapper;
 import com.broadvideo.pixsignage.util.UUIDUtils;
 import com.broadvideo.pixsignage.util.ZipUtil;
@@ -43,6 +46,8 @@ public class PersonServiceImpl implements PersonService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private PersonMapper personMapper;
+	@Autowired
+	private BranchMapper branchMapper;
 
 	@Override
 	public Integer addPerson(Person person) {
@@ -121,9 +126,8 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public String saveAvatar(Integer personid, File avatarfile, Integer orgid) {
-
-		if (avatarfile == null) {
+	public String saveAvatar(Integer personid, final InputStream is, Integer orgid) {
+		if (is == null) {
 			logger.error("avatarfile is not exists.");
 			return null;
 		}
@@ -132,7 +136,6 @@ public class PersonServiceImpl implements PersonService {
 		String avatarpath = this.getAvatarBaseDir(orgid) + "/" + person.getPersonid() + ".jpg";
 		String targetAvatarpath = CommonConfig.CONFIG_PIXDATA_HOME + avatarpath;
 		FileUtils.deleteQuietly(new File(targetAvatarpath));
-		InputStream is = null;
 		OutputStream os = null;
 		try {
 
@@ -141,7 +144,6 @@ public class PersonServiceImpl implements PersonService {
 				boolean flag = targetFile.getParentFile().mkdirs();
 				logger.info("mkdir parent dir:{} ret val:{}", targetFile.getParent(), flag);
 			}
-			is = new FileInputStream(avatarfile);
 			os = new FileOutputStream(targetFile);
 			IOUtils.copy(is, os);
 
@@ -159,18 +161,28 @@ public class PersonServiceImpl implements PersonService {
 		return avatarpath;
 	}
 
-	public String saveFaceImage(Integer personid, File imageFile, Integer orgid) {
+	@Override
+	public String saveAvatar(Integer personid, File avatarfile, Integer orgid) {
 
-		if (imageFile == null) {
-			logger.error("avatarfile is not exists.");
+		try {
+			return this.saveAvatar(personid, new FileInputStream(avatarfile), orgid);
+		} catch (FileNotFoundException e) {
+
+			throw new ServiceException("File:" + avatarfile.getName() + " not found.");
+
+		}
+	}
+
+	@Override
+	public String saveFaceImage(Integer personid, final InputStream is, Integer orgid) {
+		if (is == null) {
+			logger.error("face  is not exists.");
 			return null;
 		}
-		FilenameUtils.getExtension(imageFile.getName());
 		Person person = this.personMapper.selectByPrimaryKey(personid);
 		String faceimagepath = this.getFaceImageBaseDir(orgid) + "/" + person.getPersonid() + ".jpg";
 		String targetAvatarpath = CommonConfig.CONFIG_PIXDATA_HOME + faceimagepath;
 		FileUtils.deleteQuietly(new File(targetAvatarpath));
-		InputStream is = null;
 		OutputStream os = null;
 		try {
 
@@ -179,7 +191,6 @@ public class PersonServiceImpl implements PersonService {
 				boolean flag = targetFile.getParentFile().mkdirs();
 				logger.info("mkdir parent dir:{} ret val:{}", targetFile.getParent(), flag);
 			}
-			is = new FileInputStream(imageFile);
 			os = new FileOutputStream(targetFile);
 			IOUtils.copy(is, os);
 		} catch (FileNotFoundException e) {
@@ -195,6 +206,16 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		return faceimagepath;
+	}
+
+	public String saveFaceImage(Integer personid, File imageFile, Integer orgid) {
+
+		try {
+			return this.saveFaceImage(personid, new FileInputStream(imageFile), orgid);
+		} catch (FileNotFoundException e) {
+
+			throw new ServiceException("imageFile:" + imageFile.getName() + " not found.");
+		}
 	}
 
 	@Override
@@ -373,4 +394,48 @@ public class PersonServiceImpl implements PersonService {
 
 	}
 
+	@Override
+	public void syncPersons(List<Person> newPersons, Integer orgid) {
+
+		List<Branch> branchList = branchMapper.selectRoot(orgid + "");
+		for (Person newPerson : newPersons) {
+			try {
+				byte[] avatarBytes = Base64.decode(newPerson.getAvatar());
+				byte[] faceBytes = Base64.decode(newPerson.getImageurl());
+				InputStream avatarInputStream = new ByteArrayInputStream(avatarBytes);
+				InputStream faceInputStream = new ByteArrayInputStream(faceBytes);
+				Person qPerson = this.personMapper.selectByUuid(newPerson.getUuid(), orgid);
+				if (qPerson != null) {
+					newPerson.setPersonid(qPerson.getPersonid());
+					newPerson.setAvatar(null);
+					newPerson.setImageurl(null);
+					this.personMapper.updateByPrimaryKeySelective(newPerson);
+				} else {
+
+					newPerson.setBranchid(branchList.get(0).getBranchid());
+					newPerson.setCreatetime(new Date());
+					newPerson.setOrgid(orgid);
+					newPerson.setCreatestaffid(-1);
+					newPerson.setStatus(GlobalFlag.VALID);
+					newPerson.setType(2);
+					newPerson.setAvatar(null);
+					newPerson.setImageurl(null);
+					this.personMapper.insertSelective(newPerson);
+				}
+				String avatarpath = this.saveAvatar(newPerson.getPersonid(), avatarInputStream, orgid);
+				String facepath = this.saveFaceImage(newPerson.getPersonid(), faceInputStream, orgid);
+				Person updateRecord = new Person();
+				updateRecord.setPersonid(newPerson.getPersonid());
+				updateRecord.setAvatar(avatarpath);
+				updateRecord.setImageurl(facepath);
+				this.personMapper.updateByPrimaryKeySelective(updateRecord);
+
+			} catch (Exception ex) {
+
+				logger.error("Sync person:{} exception.", newPerson, ex);
+				continue;
+			}
+		}
+
+	}
 }

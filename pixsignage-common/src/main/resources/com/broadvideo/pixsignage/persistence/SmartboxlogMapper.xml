@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.SmartboxlogMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Smartboxlog" >
+    <id column="smartboxlogid" property="smartboxlogid" jdbcType="INTEGER" />
+    <result column="smartboxid" property="smartboxid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="wxuserid" property="wxuserid" jdbcType="VARCHAR" />
+    <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="wxmpid" property="wxmpid" jdbcType="VARCHAR" />
+    <result column="doorversion" property="doorversion" jdbcType="CHAR" />
+    <result column="doortype" property="doortype" jdbcType="CHAR" />
+    <result column="stocknum" property="stocknum" jdbcType="INTEGER" />
+    <result column="extra" property="extra" jdbcType="VARCHAR" />
+    <result column="authorizeopentime" property="authorizeopentime" jdbcType="TIMESTAMP" />
+    <result column="openstate" property="openstate" jdbcType="CHAR" />
+    <result column="opentime" property="opentime" jdbcType="TIMESTAMP" />
+    <result column="closestate" property="closestate" jdbcType="CHAR" />
+    <result column="closetime" property="closetime" jdbcType="TIMESTAMP" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    smartboxlogid, smartboxid, orgid, wxuserid, terminalid, wxmpid, doorversion, doortype, 
+    stocknum, extra, authorizeopentime, openstate, opentime, closestate, closetime, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from smartboxlog
+    where smartboxlogid = #{smartboxlogid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from smartboxlog
+    where smartboxlogid = #{smartboxlogid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Smartboxlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="smartboxlogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into smartboxlog (smartboxid, orgid, wxuserid, 
+      terminalid, wxmpid, doorversion, 
+      doortype, stocknum, extra, 
+      authorizeopentime, openstate, opentime, 
+      closestate, closetime, createtime
+      )
+    values (#{smartboxid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER}, #{wxuserid,jdbcType=VARCHAR}, 
+      #{terminalid,jdbcType=VARCHAR}, #{wxmpid,jdbcType=VARCHAR}, #{doorversion,jdbcType=CHAR}, 
+      #{doortype,jdbcType=CHAR}, #{stocknum,jdbcType=INTEGER}, #{extra,jdbcType=VARCHAR}, 
+      #{authorizeopentime,jdbcType=TIMESTAMP}, #{openstate,jdbcType=CHAR}, #{opentime,jdbcType=TIMESTAMP}, 
+      #{closestate,jdbcType=CHAR}, #{closetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Smartboxlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="smartboxlogid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into smartboxlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="smartboxid != null" >
+        smartboxid,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="wxuserid != null" >
+        wxuserid,
+      </if>
+      <if test="terminalid != null" >
+        terminalid,
+      </if>
+      <if test="wxmpid != null" >
+        wxmpid,
+      </if>
+      <if test="doorversion != null" >
+        doorversion,
+      </if>
+      <if test="doortype != null" >
+        doortype,
+      </if>
+      <if test="stocknum != null" >
+        stocknum,
+      </if>
+      <if test="extra != null" >
+        extra,
+      </if>
+      <if test="authorizeopentime != null" >
+        authorizeopentime,
+      </if>
+      <if test="openstate != null" >
+        openstate,
+      </if>
+      <if test="opentime != null" >
+        opentime,
+      </if>
+      <if test="closestate != null" >
+        closestate,
+      </if>
+      <if test="closetime != null" >
+        closetime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="smartboxid != null" >
+        #{smartboxid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="wxuserid != null" >
+        #{wxuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid != null" >
+        #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxmpid != null" >
+        #{wxmpid,jdbcType=VARCHAR},
+      </if>
+      <if test="doorversion != null" >
+        #{doorversion,jdbcType=CHAR},
+      </if>
+      <if test="doortype != null" >
+        #{doortype,jdbcType=CHAR},
+      </if>
+      <if test="stocknum != null" >
+        #{stocknum,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizeopentime != null" >
+        #{authorizeopentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openstate != null" >
+        #{openstate,jdbcType=CHAR},
+      </if>
+      <if test="opentime != null" >
+        #{opentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closestate != null" >
+        #{closestate,jdbcType=CHAR},
+      </if>
+      <if test="closetime != null" >
+        #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Smartboxlog" >
+    update smartboxlog
+    <set >
+      <if test="smartboxid != null" >
+        smartboxid = #{smartboxid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="wxuserid != null" >
+        wxuserid = #{wxuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalid != null" >
+        terminalid = #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxmpid != null" >
+        wxmpid = #{wxmpid,jdbcType=VARCHAR},
+      </if>
+      <if test="doorversion != null" >
+        doorversion = #{doorversion,jdbcType=CHAR},
+      </if>
+      <if test="doortype != null" >
+        doortype = #{doortype,jdbcType=CHAR},
+      </if>
+      <if test="stocknum != null" >
+        stocknum = #{stocknum,jdbcType=INTEGER},
+      </if>
+      <if test="extra != null" >
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizeopentime != null" >
+        authorizeopentime = #{authorizeopentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openstate != null" >
+        openstate = #{openstate,jdbcType=CHAR},
+      </if>
+      <if test="opentime != null" >
+        opentime = #{opentime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closestate != null" >
+        closestate = #{closestate,jdbcType=CHAR},
+      </if>
+      <if test="closetime != null" >
+        closetime = #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where smartboxlogid = #{smartboxlogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Smartboxlog" >
+    update smartboxlog
+    set smartboxid = #{smartboxid,jdbcType=INTEGER},
+      orgid = #{orgid,jdbcType=INTEGER},
+      wxuserid = #{wxuserid,jdbcType=VARCHAR},
+      terminalid = #{terminalid,jdbcType=VARCHAR},
+      wxmpid = #{wxmpid,jdbcType=VARCHAR},
+      doorversion = #{doorversion,jdbcType=CHAR},
+      doortype = #{doortype,jdbcType=CHAR},
+      stocknum = #{stocknum,jdbcType=INTEGER},
+      extra = #{extra,jdbcType=VARCHAR},
+      authorizeopentime = #{authorizeopentime,jdbcType=TIMESTAMP},
+      openstate = #{openstate,jdbcType=CHAR},
+      opentime = #{opentime,jdbcType=TIMESTAMP},
+      closestate = #{closestate,jdbcType=CHAR},
+      closetime = #{closetime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where smartboxlogid = #{smartboxlogid,jdbcType=INTEGER}
+  </update>
+</mapper>

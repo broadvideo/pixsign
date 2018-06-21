@@ -117,7 +117,6 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public boolean validateNameCode(Room room) {
 
-
 		logger.info("Check room(name:{}) is exists:", room.getName());
 		Room record = new Room();
 		record.setRoomid(room.getRoomid());
@@ -137,8 +136,23 @@ public class RoomServiceImpl implements RoomService {
 		return null;
 	}
 
+	@Override
+	public synchronized void syncRooms(List<Room> newRooms, Integer orgid) {
+		logger.info("syncRoom: sync new Rooms:{}", newRooms);
+		for (Room newRoom : newRooms) {
 
+			Room qRoom = this.roomMapper.selectByUuid(newRoom.getUuid(), orgid);
+			if (qRoom != null) {
+				logger.info("syncRooms update room:{}", qRoom.getName());
+				newRoom.setRoomid(qRoom.getRoomid());
+				this.roomMapper.updateByPrimaryKeySelective(newRoom);
+			} else {
+				logger.info("syncRooms add room:{}", newRoom.getName());
+				this.roomMapper.insertSelective(newRoom);
+			}
 
+		}
 
+	}
 
 }

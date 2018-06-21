@@ -14,6 +14,8 @@ import com.broadvideo.pixsignage.common.GlobalFlag;
 import com.broadvideo.pixsignage.common.PageInfo;
 import com.broadvideo.pixsignage.common.PageResult;
 import com.broadvideo.pixsignage.domain.Event;
+import com.broadvideo.pixsignage.domain.Eventperson;
+import com.broadvideo.pixsignage.domain.Person;
 import com.broadvideo.pixsignage.persistence.EventMapper;
 import com.broadvideo.pixsignage.persistence.EventpersonMapper;
 import com.broadvideo.pixsignage.persistence.PersonMapper;
@@ -30,6 +32,7 @@ public class VIPEventServiceImpl implements EventService {
 	private EventpersonMapper eventpersonMapper;
 	@Autowired
 	private PersonMapper personMapper;
+
 	@Override
 	public PageResult getEventList(Event event, PageInfo page) {
 		RowBounds rowBounds = new RowBounds(page.getStart(), page.getLength());
@@ -61,6 +64,47 @@ public class VIPEventServiceImpl implements EventService {
 
 		event.setStatus(GlobalFlag.DELETE);
 		this.eventMapper.updateByPrimaryKeySelective(event);
+
+	}
+
+	@Override
+	public synchronized void syncEvents(List<Event> newEvents, Integer orgid) {
+
+		logger.info("syncEvents: sync new events:{}", newEvents);
+		for (Event newEvent : newEvents) {
+			try {
+				Event qEvent = this.eventMapper.selectByUuid(newEvent.getUuid(), orgid);
+				if (qEvent != null) {
+					logger.info("syncEvents update event:{}", qEvent.getName());
+					newEvent.setEventid(qEvent.getEventid());
+					this.eventMapper.updateByPrimaryKeySelective(newEvent);
+				} else {
+					logger.info("syncEvents add event:{}", newEvent.getName());
+					newEvent.setOrgid(orgid);
+					newEvent.setCreatestaffid(-1);
+					newEvent.setCreatetime(new Date());
+					newEvent.setStatus(GlobalFlag.VALID);
+					newEvent.setSourcetype("1");
+					this.eventMapper.insertSelective(newEvent);
+				}
+				this.eventpersonMapper.deleteByEventid(newEvent.getEventid());
+				List<String> personUuids = newEvent.getPersonUuids();
+				for (String personUuid : personUuids) {
+					Eventperson eventPerson = new Eventperson();
+					eventPerson.setEventid(newEvent.getEventid());
+					Person qPerson = this.personMapper.selectByUuid(personUuid, orgid);
+					eventPerson.setPersonid(qPerson.getPersonid());
+					eventPerson.setCreatetime(new Date());
+					this.eventpersonMapper.insertSelective(eventPerson);
+
+				}
+			} catch (Exception ex) {
+				logger.error("Sync event:{} exception.", newEvent);
+				continue;
+
+			}
+
+		}
 
 	}
 

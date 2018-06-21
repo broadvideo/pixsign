@@ -16,12 +16,13 @@
     <result column="signtime" property="signtime" jdbcType="TIMESTAMP" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="syncstatus" property="syncstatus" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <association property="person" column="personid"  select="com.broadvideo.pixsignage.persistence.PersonMapper.selectByPrimaryKey" /> 
   </resultMap>
   <sql id="Base_Column_List" >
     attendancelogid, eventid, eventname, personid, personname, roomid, roomname, roomterminalid, 
-    terminalid, terminalname, signtype, signtime, orgid, createtime, status
+    terminalid, terminalname, signtype, signtime, orgid, createtime, syncstatus, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -126,6 +127,15 @@
 	   )
       order by signtime desc
   </select>
+  <select id="selectListFrom"   resultMap="BaseResultMap">
+      select 
+          <include refid="Base_Column_List" />
+      from attendancelog
+      where status='1' and orgid=#{orgid}
+            and attendancelogid>#{lastattendancelogid} and syncstatus='0'
+      order by attendancelogid asc
+      limit #{length}
+  </select>
   
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -140,12 +150,14 @@
       personname, roomid, roomname, 
       roomterminalid, terminalid, terminalname, 
       signtype, signtime, orgid, 
-      createtime, status)
+      createtime, syncstatus, status
+      )
     values (#{eventid,jdbcType=INTEGER}, #{eventname,jdbcType=VARCHAR}, #{personid,jdbcType=INTEGER}, 
       #{personname,jdbcType=VARCHAR}, #{roomid,jdbcType=INTEGER}, #{roomname,jdbcType=VARCHAR}, 
       #{roomterminalid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, #{terminalname,jdbcType=VARCHAR}, 
       #{signtype,jdbcType=CHAR}, #{signtime,jdbcType=TIMESTAMP}, #{orgid,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
+      #{createtime,jdbcType=TIMESTAMP}, #{syncstatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Attendancelog" >
     <selectKey resultType="java.lang.Integer" keyProperty="attendancelogid" order="AFTER" >
@@ -192,6 +204,9 @@
       <if test="createtime != null" >
         createtime,
       </if>
+      <if test="syncstatus != null" >
+        syncstatus,
+      </if>
       <if test="status != null" >
         status,
       </if>
@@ -235,6 +250,9 @@
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syncstatus != null" >
+        #{syncstatus,jdbcType=CHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -283,6 +301,9 @@
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="syncstatus != null" >
+        syncstatus = #{syncstatus,jdbcType=CHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -304,6 +325,7 @@
       signtime = #{signtime,jdbcType=TIMESTAMP},
       orgid = #{orgid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
+      syncstatus = #{syncstatus,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR}
     where attendancelogid = #{attendancelogid,jdbcType=INTEGER}
   </update>

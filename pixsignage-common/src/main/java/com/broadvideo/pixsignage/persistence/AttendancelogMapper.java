@@ -17,6 +17,9 @@ public interface AttendancelogMapper {
 
 	Attendancelog selectByPrimaryKey(Integer attendancelogid);
 
+	List<Attendancelog> selectListFrom(@Param("lastattendancelogid") Integer lastAttendancelogid,
+			@Param("length") Integer length, @Param("orgid") Integer orgid);
+
 	List<Attendancelog> selectList(Attendancelog attendancelog);
 
 	List<Attendancelog> selectList2(@Param("lasttime") Date lasttime);
