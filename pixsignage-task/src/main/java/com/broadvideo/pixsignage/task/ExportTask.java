@@ -124,6 +124,7 @@ public class ExportTask extends Thread {
 				for (Page page : pages) {
 					logger.info("Begin to export page, pageid={}", page.getPageid());
 					String exportdir = "/pixdata/pixsignage/page/" + page.getPageid();
+					FileUtils.forceMkdir(new File(exportdir));
 					File zipFile = new File(exportdir, "page-export.zip");
 					if (zipFile.exists()) {
 						zipFile.delete();

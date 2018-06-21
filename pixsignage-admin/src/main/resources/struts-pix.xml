@@ -944,24 +944,6 @@
 				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
-		<action name="devicefile!add" method="doAdd" class="devicefileAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="devicefile!update" method="doUpdate" class="devicefileAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="devicefile!delete" method="doDelete" class="devicefileAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
 
 		<action name="catalog!list" method="doList" class="catalogAction">
 			<result name="success" type="json">

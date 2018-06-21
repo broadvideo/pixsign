@@ -247,6 +247,23 @@ var OrgModule = function () {
 			});
 		}
 
+		var boardtypelist = [];
+		boardtypelist.push({id: 'Common', text: 'Common' });
+		boardtypelist.push({id: 'JHC', text: 'JHC' });
+		boardtypelist.push({id: 'YS', text: 'YS' });
+		boardtypelist.push({id: 'YH', text: 'YH' });
+		boardtypelist.push({id: 'XH', text: 'XH' });
+		boardtypelist.push({id: 'XL', text: 'XL' });
+		boardtypelist.push({id: 'YZ', text: 'YZ' });
+		boardtypelist.push({id: 'SMDT', text: 'SMDT' });
+		$('#BoardtypeSelect').select2({
+			multiple: true,
+			minimumInputLength: 0,
+			data: boardtypelist,
+			dropdownCssClass: 'bigdrop', 
+			escapeMarkup: function (m) { return m; } 
+		});
+
 		var formHandler = new FormHandler($('#OrgEditForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['org.name'] = {
@@ -521,6 +538,7 @@ var OrgModule = function () {
 			refreshAppTreeData(currentAppTreeData);
 			createAppTree(currentAppTreeData);
 			refreshTimezone();
+			$('#BoardtypeSelect').select2('val', $(_org.boardtype.split(',')));
 			
 			$('#OrgEditModal').modal();
 		});

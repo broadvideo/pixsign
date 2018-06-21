@@ -301,6 +301,19 @@ public class PixsignageService21 {
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
 			responseJson.put("terminalid", device.getTerminalid());
+
+			String boardtype = device.getBoardtype();
+			if (boardtype.length() == 0) {
+				boardtype = org.getBoardtype();
+				if (boardtype.indexOf(",") > 0) {
+					boardtype = boardtype.substring(0, boardtype.indexOf(","));
+				}
+				if (boardtype.length() == 0) {
+					boardtype = "Common";
+				}
+			}
+			responseJson.put("board_type", boardtype);
+
 			responseJson.put("msg_server", configMapper.selectValueByCode("ServerIP") + ":1883");
 			JSONArray topicJsonArray = new JSONArray();
 			topicJsonArray.add("device-" + device.getDeviceid());

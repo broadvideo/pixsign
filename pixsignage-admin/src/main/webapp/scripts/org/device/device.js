@@ -24,8 +24,8 @@ var DeviceModule = function () {
 
 		var oTable = $('#DeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-							[ 10, 25, 50, 100 ] 
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ] 
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
@@ -39,7 +39,7 @@ var DeviceModule = function () {
 			'aoColumnDefs': [
 		 					{'bSortable': false, 'aTargets': [ 0 ] }
 		 				],
-			'iDisplayLength' : 10,
+			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnPreDrawCallback': function (oSettings) {
@@ -113,8 +113,8 @@ var DeviceModule = function () {
 
 		$('#UnDeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-							[ 10, 25, 50, 100 ]
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ]
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
@@ -125,7 +125,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.devicegroup, 'mData' : 'devicegroupid', 'bSortable' : false }, 
 							{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false },
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '5%' }],
-			'iDisplayLength' : 10,
+			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
@@ -162,7 +162,7 @@ var DeviceModule = function () {
 			sOut += '<tr><td>' + common.view.storage + ':</td><td>' + PixData.transferIntToByte(aData.storageused) + '/' + PixData.transferIntToByte(aData.storageavail) + '</td></tr>';
 			sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 			sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
-			sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
+			sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.boardtype + ' ' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
 			sOut += '<tr><td>' + common.view.temperature + ':</td><td>' + aData.temperature + '</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadspeed + ':</td><td>' + aData.downloadspeed + ' KB/s</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + PixData.transferIntToByte(aData.downloadbytes) + '</td></tr>';
@@ -452,6 +452,40 @@ var DeviceModule = function () {
 			}
 		});
 
+		$.ajax({
+			type : 'GET',
+			url : 'org!get.action',
+			data : '',
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					var boardtype = $(data.org.boardtype.split(','));
+					var boardtypelist = [];
+					for (var i=0; i<boardtype.length; i++) {
+						boardtypelist.push({
+							id: boardtype[i],
+							text: boardtype[i],
+						})
+					}
+					if (boardtypelist.length < 2) {
+						$('#BoardtypeSelect').parents('.form-group').css('display', 'none');
+					} else {
+						$('#BoardtypeSelect').select2({
+							placeholder: common.tips.detail_select,
+							minimumInputLength: 0,
+							data: boardtypelist,
+							dropdownCssClass: 'bigdrop', 
+							escapeMarkup: function (m) { return m; } 
+						});
+					}
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				console.log('failue');
+			}
+		});
+
 		var formHandler = new FormHandler($('#DeviceEditForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['device.name'] = {};
@@ -500,6 +534,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('deselect_all', true);
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
 			$('#ExternalSelect').select2('val', _device.externalid);
+			$('#BoardtypeSelect').select2('val', _device.boardtype);
 			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#DeviceEditForm').attr('action', 'device!update.action');
 			$('#DeviceEditModal').modal();
@@ -515,6 +550,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('deselect_all', true);
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
 			$("#ExternalSelect").select2('val', _device.externalid);
+			$("#BoardtypeSelect").select2('val', _device.boardtype);
 			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#DeviceEditForm').attr('action', 'device!update.action');
 			$('#DeviceEditModal').modal();

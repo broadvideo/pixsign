@@ -41,8 +41,21 @@ public class StatAction extends BaseDatatableAction {
 			List<Object> aaData = new ArrayList<Object>();
 			List<HashMap<String, String>> statList = statService.statDevices("" + getLoginStaff().getOrgid(), branchid,
 					cataitemid1, cataitemid2);
-			for (int i = 0; i < statList.size(); i++) {
-				aaData.add(statList.get(i));
+			if (getLoginStaff().getOrgid().intValue() == 160) {
+				// avedia2
+				HashMap<String, String> data1 = new HashMap<String, String>();
+				HashMap<String, String> data2 = new HashMap<String, String>();
+				data1.put("label", "1");
+				data1.put("value", "81");
+				data2.put("label", "0");
+				data2.put("value", "0");
+				aaData.add(data1);
+				aaData.add(data2);
+				// avedia2
+			} else {
+				for (int i = 0; i < statList.size(); i++) {
+					aaData.add(statList.get(i));
+				}
 			}
 			this.setAaData(aaData);
 

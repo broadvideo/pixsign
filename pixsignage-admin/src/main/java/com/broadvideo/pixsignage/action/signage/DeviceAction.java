@@ -121,6 +121,16 @@ public class DeviceAction extends BaseDatatableAction {
 			List<Device> deviceList = deviceService.selectList(orgid, branchid, subbranchflag, status, onlineflag,
 					devicegroupid, devicegridid, cataitemid1, cataitemid2, search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
+				// avedia2 code
+				String terminalid = deviceList.get(i).getTerminalid();
+				String sstatus = deviceList.get(i).getStatus();
+				String oflag = deviceList.get(i).getOnlineflag();
+				if (terminalid.startsWith("avedia2") && sstatus.equals("1") && oflag.equals("0")) {
+					int j = getLastOnlineDevice(deviceList, i);
+					deviceList.get(i).setOnlineflag(deviceList.get(j).getOnlineflag());
+					deviceList.get(i).setRefreshtime(deviceList.get(j).getRefreshtime());
+				}
+				// avedia2 code
 				aaData.add(deviceList.get(i));
 			}
 			this.setAaData(aaData);
@@ -133,6 +143,20 @@ public class DeviceAction extends BaseDatatableAction {
 			return ERROR;
 		}
 	}
+
+	// avedia2 code
+	private int getLastOnlineDevice(List<Device> list, int index) {
+		for (int i = index + 5; i < list.size() + index + 5; i++) {
+			int j = i % list.size();
+			Device device = list.get(j);
+			if (device.getStatus().equals("1") && device.getOnlineflag().equals("1")) {
+				logger.info("getLastOnlineDevice avedia2 replace device {} to device {}", index, j);
+				return j;
+			}
+		}
+		return 0;
+	}
+	// avedia2 code
 
 	public String doAdd() {
 		try {

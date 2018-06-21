@@ -34,8 +34,8 @@ var ScheduleModule = function () {
 		var ScheduleTree = new BranchTree($('#SchedulePortlet'), refresh);
 		$('#DeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-							[ 10, 25, 50, 100 ] 
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ] 
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
@@ -45,7 +45,7 @@ var ScheduleModule = function () {
 							{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '60%' }, 
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }],
-			'iDisplayLength' : 10,
+			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

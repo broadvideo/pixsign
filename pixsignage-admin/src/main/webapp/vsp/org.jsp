@@ -152,6 +152,12 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label">主板类型</label>
+								<div class="col-md-9">
+									<input type="hidden" id="BoardtypeSelect" class="form-control select2" name="org.boardtype">
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.expiretime"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">

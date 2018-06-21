@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
-import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -58,6 +57,22 @@ public class FlowlogAction extends BaseDatatableAction {
 			List<HashMap<String, Object>> list = hourflowlogMapper.selectDeviceStatList("" + getLoginStaff().getOrgid(),
 					branchid, search, start, length);
 			for (int i = 0; i < list.size(); i++) {
+				// avedia2 code
+				String terminalid = "" + list.get(i).get("terminalid");
+				String onlineflag = "" + list.get(i).get("onlineflag");
+				String amount3 = "" + list.get(i).get("amount3");
+				logger.info("terminalid={},onlineflag={},amount1={}", terminalid, onlineflag, amount3);
+				if (terminalid.startsWith("avedia2")
+						&& (onlineflag.equals("0") || amount3.equals("[]") || amount3.equals("[null]"))) {
+					int j = getLastOnlineData(list, i);
+					list.get(i).put("deviceid", list.get(j).get("deviceid"));
+					list.get(i).put("onlineflag", list.get(j).get("onlineflag"));
+					list.get(i).put("amount1", list.get(j).get("amount1"));
+					list.get(i).put("amount2", list.get(j).get("amount2"));
+					list.get(i).put("amount3", list.get(j).get("amount3"));
+					list.get(i).put("amount4", list.get(j).get("amount4"));
+				}
+				// avedia2 code
 				aaData.add(list.get(i));
 			}
 			this.setAaData(aaData);
@@ -69,6 +84,22 @@ public class FlowlogAction extends BaseDatatableAction {
 			return ERROR;
 		}
 	}
+
+	// avedia2 code
+	private int getLastOnlineData(List<HashMap<String, Object>> list, int index) {
+		for (int i = index + 5; i < list.size() + index + 5; i++) {
+			int j = i % list.size();
+			HashMap<String, Object> data = list.get(j);
+			String onlineflag = "" + data.get("onlineflag");
+			String amount3 = "" + data.get("amount3");
+			if (onlineflag.equals("1") && !amount3.equals("[]") && !amount3.equals("[null]")) {
+				logger.info("getLastOnlineData avedia2 replace device {} to device {}", index, j);
+				return j;
+			}
+		}
+		return 0;
+	}
+	// avedia2 code
 
 	public String doStatPeriodByDay() {
 		try {
@@ -181,19 +212,34 @@ public class FlowlogAction extends BaseDatatableAction {
 				cell.setCellValue(s);
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, null, "1", null, null,
-					null, null, null, null, null, null, "deviceid");
-			for (Device device : devices) {
+			// List<Device> devices = deviceMapper.selectList("" +
+			// getLoginStaff().getOrgid(), null, null, "1", null, null,
+			// null, null, null, null, null, null, "deviceid");
+			List<HashMap<String, Object>> devices = hourflowlogMapper
+					.selectDeviceStatList("" + getLoginStaff().getOrgid(), null, null, null, null);
+			for (HashMap<String, Object> device : devices) {
 				count++;
 				row = sheet.createRow(count);
 				cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
-				cell.setCellValue(device.getTerminalid() + "(" + device.getName() + ")");
+				cell.setCellValue("" + device.get("terminalid") + "(" + device.get("name") + ")");
 				for (int i = 0; i < 24; i++) {
 					cell = row.createCell((i + 1), HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("0");
 				}
 
-				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByDay("" + device.getDeviceid(), day);
+				// avedia2
+				String deviceid = "" + device.get("deviceid");
+				String terminalid = "" + device.get("terminalid");
+				String onlineflag = "" + device.get("onlineflag");
+				String amount3 = "" + device.get("amount3");
+				logger.info("terminalid={},onlineflag={},amount1={}", terminalid, onlineflag, amount3);
+				if (terminalid.startsWith("avedia2")
+						&& (onlineflag.equals("0") || amount3.equals("[]") || amount3.equals("[null]"))) {
+					int j = getLastOnlineData(devices, count - 1);
+					deviceid = "" + devices.get(j).get("deviceid");
+				}
+				// avedia2
+				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByDay("" + deviceid, day);
 				for (int i = 0; i < list.size(); i++) {
 					HashMap<String, Object> hash = list.get(i);
 					int sequence = Integer.parseInt(hash.get("sequence").toString());
@@ -253,20 +299,34 @@ public class FlowlogAction extends BaseDatatableAction {
 				cell.setCellValue(s);
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + getLoginStaff().getOrgid(), null, null, "1", null, null,
-					null, null, null, null, null, null, "deviceid");
-			for (Device device : devices) {
+			// List<Device> devices = deviceMapper.selectList("" +
+			// getLoginStaff().getOrgid(), null, null, "1", null, null,
+			// null, null, null, null, null, null, "deviceid");
+			List<HashMap<String, Object>> devices = hourflowlogMapper
+					.selectDeviceStatList("" + getLoginStaff().getOrgid(), null, null, null, null);
+			for (HashMap<String, Object> device : devices) {
 				count++;
 				row = sheet.createRow(count);
 				cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
-				cell.setCellValue(device.getTerminalid() + "(" + device.getName() + ")");
+				cell.setCellValue("" + device.get("terminalid") + "(" + device.get("name") + ")");
 				for (int i = 0; i < maxDate; i++) {
 					cell = row.createCell((i + 1), HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("0");
 				}
 
-				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByMonth("" + device.getDeviceid(),
-						month);
+				// avedia2
+				String deviceid = "" + device.get("deviceid");
+				String terminalid = "" + device.get("terminalid");
+				String onlineflag = "" + device.get("onlineflag");
+				String amount3 = "" + device.get("amount3");
+				logger.info("terminalid={},onlineflag={},amount1={}", terminalid, onlineflag, amount3);
+				if (terminalid.startsWith("avedia2")
+						&& (onlineflag.equals("0") || amount3.equals("[]") || amount3.equals("[null]"))) {
+					int j = getLastOnlineData(devices, count - 1);
+					deviceid = "" + devices.get(j).get("deviceid");
+				}
+				// avedia2
+				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByMonth("" + deviceid, month);
 				for (int i = 0; i < list.size(); i++) {
 					HashMap<String, Object> hash = list.get(i);
 					int sequence = Integer.parseInt(hash.get("sequence").toString());

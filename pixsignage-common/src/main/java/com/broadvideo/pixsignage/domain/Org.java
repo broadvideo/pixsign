@@ -79,6 +79,8 @@ public class Org {
 
 	private String city;
 
+	private String boardtype;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -373,6 +375,14 @@ public class Org {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getBoardtype() {
+		return boardtype;
+	}
+
+	public void setBoardtype(String boardtype) {
+		this.boardtype = boardtype;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

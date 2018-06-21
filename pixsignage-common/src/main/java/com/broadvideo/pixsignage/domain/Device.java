@@ -51,6 +51,8 @@ public class Device {
 
 	private String mtype;
 
+	private String boardtype;
+
 	private String type;
 
 	private String ostype;
@@ -317,6 +319,14 @@ public class Device {
 
 	public void setMtype(String mtype) {
 		this.mtype = mtype;
+	}
+
+	public String getBoardtype() {
+		return boardtype;
+	}
+
+	public void setBoardtype(String boardtype) {
+		this.boardtype = boardtype;
 	}
 
 	public String getType() {

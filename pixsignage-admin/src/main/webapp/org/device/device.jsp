@@ -321,6 +321,12 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.boardtype"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="BoardtypeSelect" class="form-control select2" name="device.boardtype">
+								</div>
+							</div>
 							<div class="form-group school-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.externalid"/></label>
 								<div class="col-md-9">
@@ -333,14 +339,6 @@
 								<div class="col-md-9">
 									<div class="pre-scrollable" id="BranchTree"></div>
 								</div>	
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label">SSID</label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.other" />
-									</div>
-								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.description"/></label>
