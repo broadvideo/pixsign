@@ -9,6 +9,8 @@ public class Smartbox {
 
     private String terminalid;
 
+    private String qrcodeid;
+
     private String name;
 
     private String description;
@@ -45,6 +47,14 @@ public class Smartbox {
 
     public void setTerminalid(String terminalid) {
         this.terminalid = terminalid == null ? null : terminalid.trim();
+    }
+
+    public String getQrcodeid() {
+        return qrcodeid;
+    }
+
+    public void setQrcodeid(String qrcodeid) {
+        this.qrcodeid = qrcodeid == null ? null : qrcodeid.trim();
     }
 
     public String getName() {

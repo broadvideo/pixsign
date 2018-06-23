@@ -48,6 +48,7 @@ CREATE TABLE `smartbox`(
 	`smartboxid` INT(11) NOT NULL  AUTO_INCREMENT , 
 	`orgid` INT(11) NOT NULL  , 
 	`terminalid` VARCHAR(32)   NOT NULL  COMMENT '终端id' , 
+	`qrcodeid` varchar(32) DEFAULT NULL COMMENT '绑定的二维码id',
 	`name` VARCHAR(256)   NOT NULL  COMMENT '名称' , 
 	`description` VARCHAR(2048)   NULL  , 
 	`doorversion` VARCHAR(1)   NOT NULL  COMMENT '1:双柜门  2：新式收货机' , 

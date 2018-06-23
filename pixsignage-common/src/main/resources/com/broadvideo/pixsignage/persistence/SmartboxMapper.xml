@@ -5,6 +5,7 @@
     <id column="smartboxid" property="smartboxid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="terminalid" property="terminalid" jdbcType="VARCHAR" />
+    <result column="qrcodeid" property="qrcodeid" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="doorversion" property="doorversion" jdbcType="VARCHAR" />
@@ -14,8 +15,8 @@
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    smartboxid, orgid, terminalid, name, description, doorversion, stocknum, extra, createtime, 
-    status
+    smartboxid, orgid, terminalid, qrcodeid, name, description, doorversion, stocknum, 
+    extra, createtime, status
   </sql>
   <select id="selectList" resultMap="BaseResultMap" >
     select 
@@ -49,14 +50,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="smartboxid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into smartbox (orgid, terminalid, name, 
-      description, doorversion, stocknum, 
-      extra, createtime, status
-      )
-    values (#{orgid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{doorversion,jdbcType=VARCHAR}, #{stocknum,jdbcType=INTEGER}, 
-      #{extra,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
-      )
+    insert into smartbox (orgid, terminalid, qrcodeid, 
+      name, description, doorversion, 
+      stocknum, extra, createtime, 
+      status)
+    values (#{orgid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, #{qrcodeid,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{doorversion,jdbcType=VARCHAR}, 
+      #{stocknum,jdbcType=INTEGER}, #{extra,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Smartbox" >
     <selectKey resultType="java.lang.Integer" keyProperty="smartboxid" order="AFTER" >
@@ -69,6 +70,9 @@
       </if>
       <if test="terminalid != null" >
         terminalid,
+      </if>
+      <if test="qrcodeid != null" >
+        qrcodeid,
       </if>
       <if test="name != null" >
         name,
@@ -98,6 +102,9 @@
       </if>
       <if test="terminalid != null" >
         #{terminalid,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcodeid != null" >
+        #{qrcodeid,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -131,6 +138,9 @@
       <if test="terminalid != null" >
         terminalid = #{terminalid,jdbcType=VARCHAR},
       </if>
+      <if test="qrcodeid != null" >
+        qrcodeid = #{qrcodeid,jdbcType=VARCHAR},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -159,6 +169,7 @@
     update smartbox
     set orgid = #{orgid,jdbcType=INTEGER},
       terminalid = #{terminalid,jdbcType=VARCHAR},
+      qrcodeid = #{qrcodeid,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       doorversion = #{doorversion,jdbcType=VARCHAR},

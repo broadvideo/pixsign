@@ -275,6 +275,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 		// 刷新库存
 		Smartbox smartbox = this.smartboxMapper.selectByTerminalid(terminalid, binding.getOrgid());
 		smartbox.setStocknum(stocknum);
+		smartbox.setQrcodeid("");
 		this.smartboxMapper.updateByPrimaryKeySelective(smartbox);
 		logger.info("doorStateCallback:terminalid({})  stocknum({}) extra({})",
 				new Object[] { terminalid, state, extra });
