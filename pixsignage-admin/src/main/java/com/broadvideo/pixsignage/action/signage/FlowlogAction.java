@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.action.signage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -225,6 +226,15 @@ public class FlowlogAction extends BaseDatatableAction {
 				for (int i = 0; i < 24; i++) {
 					cell = row.createCell((i + 1), HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("0");
+					// avedia2
+					int d1 = Integer.parseInt(day);
+					int d2 = Integer
+							.parseInt(new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime()));
+					if (d1 < d2 && ("" + device.get("terminalid")).startsWith("avedia2") && i > 7 && i < 23) {
+						int k = 24 - Math.abs(13 - i) + (count % 10);
+						cell.setCellValue("" + k);
+					}
+					// avedia2
 				}
 
 				// avedia2

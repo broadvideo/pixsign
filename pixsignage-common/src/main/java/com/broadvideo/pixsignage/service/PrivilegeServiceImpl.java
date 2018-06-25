@@ -118,7 +118,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 311
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 311
 					|| attendanceflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 312
-					|| attendanceflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 312) {
+					|| attendanceflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 312
+					|| !org.getCode().equals("jkcd") && p.getPrivilegeid().intValue() == 313) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if (!org.getCode().equals("default")
