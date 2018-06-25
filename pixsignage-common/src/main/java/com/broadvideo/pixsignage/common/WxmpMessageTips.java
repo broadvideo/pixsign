@@ -8,7 +8,7 @@ public class WxmpMessageTips {
 	// 开门成功提示
 	public static String DOOR_OPEN_SUCESS_TIP = "开门成功,取件后请随手关门";
 	// 开门成功提示2
-	public static String DOOR_OPEN_SUCESS_TIP2 = "开门成功";
+	public static String DOOR_OPEN_SUCESS_TIP2 = "出货成功";
 	// 普通关注公众号提示
 	public static String QRCODE_SUBSCRIBE_TIP = "欢迎关注成都免费避孕药具公众号";
 	// 带场景关注公众号提示
@@ -18,5 +18,6 @@ public class WxmpMessageTips {
 
 	// 终端和公众号未绑定提示
 	public static String DOOR_NOBINDING_TIP = "扫描终端二维码，进入公众号，开柜门领取避孕套，输入数字0开上柜门，输入数字1开下柜门";
-
+	// 二维码已经过期
+	public static String QRCODE_OUT_OF_DATE = "二维码已经过期";
 }

@@ -18,9 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
+import com.broadvideo.pixsignage.common.DoorConst;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Smartbox;
+import com.broadvideo.pixsignage.persistence.SmartboxMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.WxMpService;
+import com.broadvideo.pixsignage.util.UUIDUtils;
 import com.broadvideo.pixsignage.vo.MpQRCode;
 
 @Component
@@ -33,6 +37,8 @@ public class ResQRCodes extends ResBase {
 	private WxMpService wxmpService;
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+	private SmartboxMapper smartboxMapper;
 
 	@GET
 	@Path("/wxmp_qrcode")
@@ -43,13 +49,25 @@ public class ResQRCodes extends ResBase {
 		}
 		try {
 			logger.info("GetWxmpQRCode with terminalId:{}", terminalId);
-			Device device=deviceService.selectByTerminalid(terminalId);
-			if(device==null){
+			Device device = deviceService.selectByTerminalid(terminalId);
+			if (device == null) {
 
-				return handleResult(ApiRetCodeEnum.TERMINAL_NOT_FOUND, "terminal_id:"+terminalId+"not found.");
+				return handleResult(ApiRetCodeEnum.TERMINAL_NOT_FOUND, "terminal_id:" + terminalId + "not found.");
 			}
 			try {
-				MpQRCode mpqrcode = wxmpService.getQRCode(terminalId, device.getOrgid());
+				Smartbox smartbox = smartboxMapper.selectByTerminalid(terminalId, device.getOrgid());
+				String sceneStr = terminalId;
+				if (smartbox != null && DoorConst.DoorVersion.VERSION_2.getVal().equals(smartbox.getDoorversion())) {
+					String qrcodeid = UUIDUtils.generateUUID();
+					sceneStr = terminalId + "_" + qrcodeid;
+					Smartbox record = new Smartbox();
+					record.setSmartboxid(smartbox.getSmartboxid());
+					record.setQrcodeid(qrcodeid);
+					logger.info("ResQRCodes.wxmp_qrcode: generate terminal({}) qrcodeid({})", terminalId, qrcodeid);
+					this.smartboxMapper.updateByPrimaryKeySelective(record);
+				}
+				logger.info("ResQRCodes.wxmp_qrcode: getQRCode with sceneStr({})", sceneStr);
+				MpQRCode mpqrcode = wxmpService.getQRCode(sceneStr, device.getOrgid());
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("url", mpqrcode.getUrl());
 				return handleResult(ApiRetCodeEnum.SUCCESS, "", dataMap);
@@ -66,9 +84,4 @@ public class ResQRCodes extends ResBase {
 		}
 
 	}
-
-
-
-
-
 }

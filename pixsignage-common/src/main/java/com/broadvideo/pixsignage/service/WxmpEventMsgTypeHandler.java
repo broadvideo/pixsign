@@ -65,7 +65,8 @@ public class WxmpEventMsgTypeHandler extends WxmpMsgTypeHandler {
 		final String toUserName = root.selectSingleNode("/xml/ToUserName").getText();
 		final Integer createTime = NumberUtils.toInt(root.selectSingleNode("/xml/CreateTime").getText());
 		final String eventKey = root.selectSingleNode("/xml/EventKey").getText();
-		String terminalid = getTerminalid(eventKey);
+		String terminalid = getTerminalid(event, eventKey);
+		logger.info("WxmpEventMsgTypeHandler.handle:extract terminalid({}) from EventKey({})", terminalid, eventKey);
 		String doorversion = DoorConst.DoorVersion.VERSION_1.getVal();
 		if (StringUtils.isNotBlank(terminalid)) {
 			Smartbox smartbox = ServiceFactory.getBean(SmartboxMapper.class).selectByTerminalid(terminalid, orgid);
@@ -97,18 +98,22 @@ public class WxmpEventMsgTypeHandler extends WxmpMsgTypeHandler {
 		this.event = event;
 	}
 
-	protected String getTerminalid(String eventKey) {
+	protected String getTerminalid(String event, String eventKey) {
 
-		String[] eventKeySplits = eventKey.split("_");
-		if (eventKeySplits.length == 1) {
-
-			return eventKey;
-		} else if (eventKeySplits.length > 1) {
-			logger.info("事件场景值(eventKey:{})", eventKey);
-			return eventKeySplits[1];
+		if ("unsubscribe".equals(event)) {
+			return null;
 		}
-		return null;
+		String[] eventKeySplits = eventKey.split("_");
+		if ("subscribe".equals(event)) {
 
+			return eventKeySplits[1];
+
+		} else if ("SCAN".equals(event)) {
+
+			return eventKeySplits[0];
+		}
+
+		return null;
 	}
 
 }

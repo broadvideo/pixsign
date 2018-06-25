@@ -7,6 +7,8 @@ import org.dom4j.Element;
 
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.domain.Smartbox;
+import com.broadvideo.pixsignage.persistence.SmartboxMapper;
 
 /**
  * smartbox智能柜新版本Handler
@@ -42,11 +44,17 @@ public class WxmpSubscribeEventHandler2 extends WxmpEventMsgTypeHandler {
 			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_TIP);
 		}
 		String[] eventKeySplits = eventKey.split("_");
-		if (eventKeySplits.length < 2 || StringUtils.isBlank(eventKeySplits[1])) {
+		if (eventKeySplits.length < 3 || StringUtils.isBlank(eventKeySplits[1])) {
 			logger.info("关注二维码，场景值为空，返回欢迎提示");
 			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_TIP);
 		}
+
 		String terminalid = eventKeySplits[1];
+		String qrcodeid = eventKeySplits[2];
+		Smartbox smartbox = ServiceFactory.getBean(SmartboxMapper.class).selectByTerminalid(terminalid, orgid);
+		if (StringUtils.isBlank(qrcodeid) || !qrcodeid.equals(smartbox.getQrcodeid())) {
+			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_OUT_OF_DATE);
+		}
 		ServiceFactory.getBean(SmartdoorkeeperService.class).bind(terminalid, fromUserName, toUserName, event,
 				createTime * 1000L, orgid);
 		logger.info("用户({})关注了公众号({}) eventkey({})", new Object[] { fromUserName, toUserName, eventKey });
