@@ -60,8 +60,8 @@ public class WxmpScanEventHandler2 extends WxmpEventMsgTypeHandler {
 			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_OUT_OF_DATE);
 		}
 
-		boolean isBind = ServiceFactory.getBean(SmartdoorkeeperService.class).bind(eventKey, fromUserName, toUserName,
-				event, createTime * 1000L, orgid);
+		boolean isBind = ServiceFactory.getBean(SmartdoorkeeperService.class).bind(terminalid, fromUserName,
+				toUserName, event, createTime * 1000L, orgid);
 		String replyMsg = null;
 		if (isBind) {
 			replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP2);
