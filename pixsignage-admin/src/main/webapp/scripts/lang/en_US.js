@@ -316,6 +316,7 @@ var common = {
 		date_error: 'Invalid date period',
 		plandtl_zero: 'Please select program',
 		planbind_zero: 'Please select device',
+		bundle_zero: 'Please select program',
 		page_zero: 'Please select program',
 		bind_zero: 'Please select device',
 

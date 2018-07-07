@@ -19,6 +19,8 @@
     <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
     <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="comment" property="comment" jdbcType="VARCHAR" />
@@ -40,7 +42,7 @@
 
   <sql id="Base_Column_List" >
     pageid, uuid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
-    homeflag, homepageid, homeidletime, status, description, reviewflag, comment, exportflag, exportsize, createtime, 
+    homeflag, homepageid, homeidletime, status, size, md5, description, reviewflag, comment, exportflag, exportsize, createtime, 
     updatetime, createstaffid
   </sql>
   <sql id="Blob_Column_List" >
@@ -237,7 +239,8 @@
       height, width, limitflag, 
       privilegeflag, touchflag, 
       homeflag, homepageid, homeidletime, 
-      status, description, reviewflag, 
+      status, size, md5, 
+      description, reviewflag, 
       comment, exportflag, exportsize, 
       createtime, updatetime, 
       createstaffid, json
@@ -247,7 +250,8 @@
       #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
       #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
       #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
       #{comment,jdbcType=VARCHAR}, #{exportflag,jdbcType=CHAR}, #{exportsize,jdbcType=BIGINT}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
       #{createstaffid,jdbcType=INTEGER}, #{json,jdbcType=LONGVARCHAR}
@@ -306,6 +310,12 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="md5 != null" >
+        md5,
       </if>
       <if test="description != null" >
         description,
@@ -383,6 +393,12 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -464,6 +480,12 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -512,6 +534,8 @@
       homepageid = #{homepageid,jdbcType=INTEGER},
       homeidletime = #{homeidletime,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
+      size = #{size,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       comment = #{comment,jdbcType=VARCHAR},

@@ -151,6 +151,8 @@ public class Device {
 
 	private List<Schedule> schedules;
 
+	private Bundle defaultbundle;
+
 	private Page defaultpage;
 
 	public Integer getDeviceid() {
@@ -729,6 +731,14 @@ public class Device {
 
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+
+	public Bundle getDefaultbundle() {
+		return defaultbundle;
+	}
+
+	public void setDefaultbundle(Bundle defaultbundle) {
+		this.defaultbundle = defaultbundle;
 	}
 
 	public Page getDefaultpage() {

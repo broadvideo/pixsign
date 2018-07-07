@@ -20,10 +20,8 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.service.BundleService;
-import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
-import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -40,10 +38,6 @@ public class BundleAction extends BaseDatatableAction {
 
 	@Autowired
 	private BundleService bundleService;
-	@Autowired
-	private VideoService videoService;
-	@Autowired
-	private ImageService imageService;
 	@Autowired
 	private ScheduleService scheduleService;
 	@Autowired
@@ -121,6 +115,13 @@ public class BundleAction extends BaseDatatableAction {
 			} else {
 				bundleService.addBundle(bundle);
 			}
+
+			if (bundle.getHomeflag().equals("1")) {
+				bundleService.makeJsonFile("" + bundle.getBundleid());
+			} else {
+				bundleService.makeJsonFile("" + bundle.getHomebundleid());
+			}
+
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doAdd exception, ", ex);
@@ -133,6 +134,11 @@ public class BundleAction extends BaseDatatableAction {
 	public String doUpdate() {
 		try {
 			bundleService.updateBundle(bundle);
+			if (bundle.getHomeflag().equals("1")) {
+				bundleService.makeJsonFile("" + bundle.getBundleid());
+			} else {
+				bundleService.makeJsonFile("" + bundle.getHomebundleid());
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doUpdate exception, ", ex);
@@ -158,7 +164,7 @@ public class BundleAction extends BaseDatatableAction {
 		try {
 			String bundleid = getParameter("bundleid");
 			scheduleService.syncScheduleByBundle(bundleid);
-			planService.syncPlanByBundle(bundleid);
+			planService.syncPlanByBundle("" + getLoginStaff().getOrgid(), bundleid);
 			logger.info("Bundle sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -191,6 +197,13 @@ public class BundleAction extends BaseDatatableAction {
 			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.design(bundle);
+			if (!getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				if (bundle.getHomeflag().equals("1")) {
+					bundleService.makeJsonFile("" + bundle.getBundleid());
+				} else {
+					bundleService.makeJsonFile("" + bundle.getHomebundleid());
+				}
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doDesign exception, ", ex);

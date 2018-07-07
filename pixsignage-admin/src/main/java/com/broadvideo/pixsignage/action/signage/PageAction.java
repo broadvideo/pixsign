@@ -215,7 +215,7 @@ public class PageAction extends BaseDatatableAction {
 				page.setJson(null);
 			}
 			pageService.updatePage(page);
-			if (page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+			if (!getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
 				if (page.getHomeflag().equals("1")) {
 					pageService.makeHtmlZip("" + page.getPageid());
 				} else {

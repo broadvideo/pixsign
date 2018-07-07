@@ -316,6 +316,7 @@ var common = {
 		date_error: '非法的开始日期与结束日期',
 		plandtl_zero: '请选择节目',
 		planbind_zero: '请选择终端',
+		bundle_zero: '请选择节目',
 		page_zero: '请选择节目',
 		bind_zero: '请选择终端',
 		

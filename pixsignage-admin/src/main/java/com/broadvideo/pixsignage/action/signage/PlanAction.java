@@ -134,18 +134,6 @@ public class PlanAction extends BaseDatatableAction {
 		}
 	}
 
-	public String doBatch() {
-		try {
-			planService.handleBatch(page, binds);
-			return SUCCESS;
-		} catch (Exception ex) {
-			logger.error("PlanAction doBatch exception, ", ex);
-			setErrorcode(-1);
-			setErrormsg(ex.getMessage());
-			return ERROR;
-		}
-	}
-
 	public Plan getPlan() {
 		return plan;
 	}

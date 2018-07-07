@@ -248,6 +248,7 @@ public class PixsignageService2 {
 			try {
 				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
 				String location = ipseeker.getCountry(ip);
+				ipseeker.close();
 				logger.info("Get the location from {}: {}", ip, location);
 				int index1 = location.indexOf("省");
 				int index2 = location.indexOf("市");

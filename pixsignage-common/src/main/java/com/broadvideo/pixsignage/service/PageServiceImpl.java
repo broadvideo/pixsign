@@ -641,6 +641,11 @@ public class PageServiceImpl implements PageService {
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "module"), "module");
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "plugin"), "plugin");
 		out.close();
+
+		page.setSize(FileUtils.sizeOf(zipFile));
+		FileInputStream fis = new FileInputStream(zipFile);
+		page.setMd5(DigestUtils.md5Hex(fis));
+		pageMapper.updateByPrimaryKeySelective(page);
 	}
 
 	public void exportZip(String pageid, File zipFile) throws Exception {

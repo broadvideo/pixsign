@@ -374,9 +374,9 @@ var ReviewModule = function () {
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
 					if (zone.width > zone.height) {
-						$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-navigate-h.jpg');
+						$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-h.jpg');
 					} else {
-						$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-navigate-v.jpg');
+						$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-v.jpg');
 					}
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
@@ -384,28 +384,35 @@ var ReviewModule = function () {
 					//Control Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
-					$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-qrcode.jpg');
+					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-qrcode.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
 				} else if (zone.type == 14) {
 					//Stream Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
-					$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-stream.jpg');
+					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-stream.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
 				} else if (zone.type == 15) {
 					//VideoIn Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
-					$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-videoin.jpg');
+					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-videoin.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
 				} else if (zone.type == 16) {
 					//DVB Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
-					$(inner_div).find('img').attr('src', '/pixsignage/img/region/region-dvb.jpg');
+					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
+					$(inner_div).find('img').attr('width', '100%');
+					$(inner_div).find('img').attr('height', '100%');
+				} else if (zone.type == 101 || zone.type == 102) {
+					//Massage Zone
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
+					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-' + zone.type + '.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
 				} else {

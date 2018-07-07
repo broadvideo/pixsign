@@ -1,6 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -498,6 +499,124 @@ public class BundleServiceImpl implements BundleService {
 				}
 			}
 		}
+		for (int bundleid : bundleidVector) {
+			makeJsonFile("" + bundleid);
+		}
+	}
+
+	public void makeJsonFile(String bundleid) throws Exception {
+		logger.info("Making json file bundleid={}", bundleid);
+		ArrayList<Bundle> bundleList = new ArrayList<Bundle>();
+
+		Bundle mainbundle = bundleMapper.selectByPrimaryKey(bundleid);
+		bundleList.add(mainbundle);
+		for (Bundle subbundle : mainbundle.getSubbundles()) {
+			bundleList.add(bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid()));
+		}
+
+		JSONArray bundleJsonArray = new JSONArray();
+		for (Bundle bundle : bundleList) {
+			JSONObject bundleJson = new JSONObject();
+			bundleJson.put("bundle_id", bundle.getBundleid());
+			bundleJson.put("name", bundle.getName());
+			bundleJson.put("touch_flag", bundle.getTouchflag());
+			bundleJson.put("home_flag", bundle.getHomeflag());
+			bundleJson.put("home_bundle_id", bundle.getHomebundleid());
+			bundleJson.put("home_idle", bundle.getHomeidletime());
+
+			bundleJson.put("width", bundle.getWidth());
+			bundleJson.put("height", bundle.getHeight());
+			bundleJson.put("bg_color", "#000000");
+
+			JSONArray zoneJsonArray = new JSONArray();
+			for (Bundlezone bundlezone : bundle.getBundlezones()) {
+				JSONObject zoneJson = new JSONObject();
+				zoneJson.put("main_flag", bundlezone.getMainflag());
+				zoneJson.put("width", bundlezone.getWidth());
+				zoneJson.put("height", bundlezone.getHeight());
+				zoneJson.put("top", bundlezone.getTopoffset());
+				zoneJson.put("left", bundlezone.getLeftoffset());
+				zoneJson.put("zindex", bundlezone.getZindex());
+				zoneJson.put("type", bundlezone.getType());
+				zoneJson.put("sleep", bundlezone.getSleeptime());
+				zoneJson.put("interval", bundlezone.getIntervaltime());
+				zoneJson.put("speed", Integer.parseInt(bundlezone.getSpeed()));
+				zoneJson.put("color", "" + bundlezone.getColor());
+				zoneJson.put("size", bundlezone.getSize());
+				if (bundlezone.getDateformat() == null) {
+					zoneJson.put("date_format", "yyyy-MM-dd");
+				} else {
+					zoneJson.put("date_format", bundlezone.getDateformat());
+				}
+				zoneJson.put("fit_flag", Integer.parseInt(bundlezone.getFitflag()));
+				String opacity = Integer.toHexString(bundlezone.getBgopacity());
+				if (opacity.length() == 1) {
+					opacity = "0" + opacity;
+				}
+				zoneJson.put("bgcolor", "#" + opacity + bundlezone.getBgcolor().trim().substring(1));
+				zoneJson.put("volume", bundlezone.getVolume());
+				zoneJson.put("animation", bundlezone.getAnimation());
+
+				if (bundlezone.getType().equals(Bundlezone.Type_TOUCH)) {
+					zoneJson.put("touch_label", bundlezone.getTouchlabel());
+					if (bundlezone.getTouchtype().equals("2")) {
+						zoneJson.put("touch_type", "2");
+						zoneJson.put("touch_bundle_id", bundlezone.getTouchobjid());
+						zoneJson.put("touch_apk", "");
+					} else if (bundlezone.getTouchtype().equals("3") || bundlezone.getTouchtype().equals("4")
+							|| bundlezone.getTouchtype().equals("5")) {
+						zoneJson.put("touch_type", "3");
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", "");
+					} else if (bundlezone.getTouchtype().equals("6")) {
+						zoneJson.put("touch_type", "4");
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", bundlezone.getContent());
+					} else {
+						zoneJson.put("touch_type", bundlezone.getTouchtype());
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", "");
+					}
+				}
+				zoneJson.put("content", bundlezone.getContent());
+
+				JSONArray zonedtlJsonArray = new JSONArray();
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					JSONObject zonedtlJson = new JSONObject();
+					if (bundlezonedtl.getObjtype().equals("1")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "video");
+						zonedtlJsonArray.add(zonedtlJson);
+					} else if (bundlezonedtl.getObjtype().equals("2")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "image");
+						zonedtlJsonArray.add(zonedtlJson);
+					} else if (bundlezonedtl.getObjtype().equals("6")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "audio");
+						zonedtlJsonArray.add(zonedtlJson);
+					}
+				}
+				zoneJson.put("zonedtls", zonedtlJsonArray);
+				zoneJsonArray.add(zoneJson);
+			}
+			bundleJson.put("zones", zoneJsonArray);
+			bundleJsonArray.add(bundleJson);
+		}
+
+		String saveDir = CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + bundleid;
+		String jsonname = "bundle-" + bundleid + ".json";
+		FileUtils.forceMkdir(new File(saveDir));
+		File jsonFile = new File(saveDir, jsonname);
+		if (jsonFile.exists()) {
+			jsonFile.delete();
+		}
+		FileUtils.writeStringToFile(jsonFile, bundleJsonArray.toString(2), "UTF-8", false);
+
+		mainbundle.setSize(FileUtils.sizeOf(jsonFile));
+		FileInputStream fis = new FileInputStream(jsonFile);
+		mainbundle.setMd5(DigestUtils.md5Hex(fis));
+		bundleMapper.updateByPrimaryKeySelective(mainbundle);
 	}
 
 	@Transactional
@@ -600,7 +719,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 	}
 
-	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) {
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) throws Exception {
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
 		if (bundle != null && bundle.getHomebundleid() > 0) {
 			bundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
@@ -616,6 +735,10 @@ public class BundleServiceImpl implements BundleService {
 					b.setComment(comment);
 					bundleMapper.updateByPrimaryKeySelective(b);
 				}
+			}
+
+			if (reviewflag.equals(Bundle.REVIEW_PASSED)) {
+				makeJsonFile("" + bundle.getBundleid());
 			}
 		}
 	}

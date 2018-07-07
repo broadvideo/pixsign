@@ -62,10 +62,10 @@
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 																<ul class="nav nav-tabs">
 																	<li id="nav_tab2" class="touch-ctrl" style="display:none">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchpage"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchbundle"/></a>
 																	</li>
 																	<li id="nav_tab1" class="active">
-																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.page"/></a>
+																		<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.bundle"/></a>
 																	</li>
 																</ul>
 															</div>
@@ -74,26 +74,26 @@
 																	<div class="tab-pane active" id="portlet_tab">
 																		<div class="row">
 																			<div class="col-md-12">
-																				<div id="PageDiv">
+																				<div id="BundleDiv">
 																					<div class="row">
 																						<div class="col-md-3">
 																							<div class="row"><div class="col-md-12 branchtree"></div></div>
 																						</div>
 																						<div class="col-md-9">
-																							<table class="table table-condensed table-hover pagetable">
+																							<table class="table table-condensed table-hover bundletable">
 																								<thead></thead>
 																								<tbody></tbody>
 																							</table>
 																						</div>
 																					</div>
 																				</div>
-																				<div id="TouchpageDiv" style="display:none">
+																				<div id="TouchbundleDiv" style="display:none">
 																					<div class="row">
 																						<div class="col-md-3">
 																							<div class="row"><div class="col-md-12 branchtree"></div></div>
 																						</div>
 																						<div class="col-md-9">
-																							<table class="table table-condensed table-hover touchpagetable">
+																							<table class="table table-condensed table-hover touchbundletable">
 																								<thead></thead>
 																								<tbody></tbody>
 																							</table>
@@ -109,8 +109,8 @@
 													</div>
 														
 													<div class="col-md-3 col-sm-12">
-														<h3 class="page-title">选择页面</h3>
-														<div id="PageSnapshot">
+														<h3 class="page-title">选择节目</h3>
+														<div id="BundleSnapshot">
 														</div>
 													</div>
 														
@@ -192,7 +192,7 @@
 		</div>
 	</div>
 
-	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+	<div id="BundleModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -207,10 +207,10 @@
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.warehouse"/></div>
 									<ul class="nav nav-tabs">
 										<li id="nav_tab2" class="touch-ctrl" style="display:none">
-											<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchpage"/></a>
+											<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.touchbundle"/></a>
 										</li>
 										<li id="nav_tab1" class="active">
-											<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.page"/></a>
+											<a href="#portlet_tab" data-toggle="tab"><spring:message code="pixsign.bundle"/></a>
 										</li>
 									</ul>
 								</div>
@@ -219,26 +219,26 @@
 										<div class="tab-pane active" id="portlet_tab">
 											<div class="row">
 												<div class="col-md-12">
-													<div id="PageDiv">
+													<div id="BundleDiv">
 														<div class="row">
 															<div class="col-md-3">
 																<div class="row"><div class="col-md-12 branchtree"></div></div>
 															</div>
 															<div class="col-md-9">
-																<table class="table table-condensed table-hover pagetable">
+																<table class="table table-condensed table-hover bundletable">
 																	<thead></thead>
 																	<tbody></tbody>
 																</table>
 															</div>
 														</div>
 													</div>
-													<div id="TouchpageDiv" style="display:none">
+													<div id="TouchbundleDiv" style="display:none">
 														<div class="row">
 															<div class="col-md-3">
 																<div class="row"><div class="col-md-12 branchtree"></div></div>
 															</div>
 															<div class="col-md-9">
-																<table class="table table-condensed table-hover touchpagetable">
+																<table class="table table-condensed table-hover touchbundletable">
 																	<thead></thead>
 																	<tbody></tbody>
 																</table>
@@ -253,8 +253,8 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							<h3 class="page-title">选择页面</h3>
-							<div id="PageSnapshot">
+							<h3 class="page-title">选择节目</h3>
+							<div id="BundleSnapshot">
 							</div>
 						</div>
 					</div>
@@ -269,7 +269,7 @@
 
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.pageplan"/></h3>
+			<h3 class="page-title"><spring:message code="menu.bundleplan"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
@@ -277,7 +277,7 @@
 					</li>
 					<li><a href="#"><spring:message code="menu.schedulemanage"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.pageplan"/></a>
+					<li><a href="#"><spring:message code="menu.bundleplan"/></a>
 					</li>
 				</ul>
 			</div>
@@ -300,7 +300,7 @@
 									<div class="table-toolbar">
 										<div class="btn-group">
 											<button class="btn green pix-batch">
-												<spring:message code="pixsign.plan"/> <i class="fa fa-cubes"></i>
+												<spring:message code="menu.bundleplan"/> <i class="fa fa-cubes"></i>
 											</button>
 										</div>
 									</div>
@@ -339,10 +339,10 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/common/page-select.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/bundle-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/device-select.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/plan/device-page.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/plan/device-bundle.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
 

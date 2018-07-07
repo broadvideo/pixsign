@@ -46,6 +46,10 @@ public class Bundle {
 
 	private String status;
 
+	private Long size;
+
+	private String md5;
+
 	private String reviewflag;
 
 	private String comment;
@@ -212,6 +216,22 @@ public class Bundle {
 
 	public void setStatus(String status) {
 		this.status = status == null ? null : status.trim();
+	}
+
+	public Long getSize() {
+		return size;
+	}
+
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
+	public String getMd5() {
+		return md5;
+	}
+
+	public void setMd5(String md5) {
+		this.md5 = md5;
 	}
 
 	public String getReviewflag() {

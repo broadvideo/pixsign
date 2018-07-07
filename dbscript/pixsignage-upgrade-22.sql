@@ -23,6 +23,12 @@ update video set relateid = 0;
 alter table org add boardtype varchar(512) default 'Common';
 alter table device add boardtype varchar(32) default '';
 
+alter table page add size bigint default 0;
+alter table page add md5 varchar(64) default '';
+alter table bundle add size bigint default 0;
+alter table bundle add md5 varchar(64) default '';
+
+
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 
 	ADD COLUMN `periodendtime` datetime   NULL COMMENT '周期结束日期 e.g. yyyy-MM-dd' after `endtime`, 

@@ -123,7 +123,7 @@ public class PixsignageService21 {
 	@Path("init")
 	public String init(String request, @Context HttpServletRequest req) {
 		try {
-			logger.info("Pixsignage Service init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
+			logger.info("Pixsignage21 init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -248,6 +248,7 @@ public class PixsignageService21 {
 			try {
 				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
 				String location = ipseeker.getCountry(ip);
+				ipseeker.close();
 				logger.info("Get the location from {}: {}", ip, location);
 				int index1 = location.indexOf("省");
 				int index2 = location.indexOf("市");
@@ -264,7 +265,7 @@ public class PixsignageService21 {
 					device.setCity(city);
 				}
 			} catch (Exception e) {
-				logger.error("Pixsignage Service ip seek exception", e);
+				logger.error("Pixsignage21 ip seek exception", e);
 			}
 
 			if (!device.getStatus().equals("1")) {
@@ -417,10 +418,10 @@ public class PixsignageService21 {
 			}
 			responseJson.put("devicegrid_dtls", griddtlArray);
 
-			logger.info("Pixsignage Service {} init response: {}", terminalid, responseJson.toString());
+			logger.info("Pixsignage21 {} init response: {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service init exception", e);
+			logger.error("Pixsignage21 init exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -429,7 +430,7 @@ public class PixsignageService21 {
 	@Path("get_bundle")
 	public String getbundle(String request) {
 		try {
-			logger.info("Pixsignage Service get_bundle: {}", request);
+			logger.info("Pixsignage21 get_bundle: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -450,10 +451,10 @@ public class PixsignageService21 {
 					"" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());
+			logger.info("Pixsignage21 get_bundle response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_bundle exception", e);
+			logger.error("Pixsignage21 get_bundle exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -462,7 +463,7 @@ public class PixsignageService21 {
 	@Path("get_schedule")
 	public String getschedule(String request) {
 		try {
-			logger.info("Pixsignage Service get_schedule: {}", request);
+			logger.info("Pixsignage21 get_schedule: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -483,10 +484,10 @@ public class PixsignageService21 {
 			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service get_schedule response: {}", responseJson.toString());
+			logger.info("Pixsignage21 get_schedule response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_schedule exception", e);
+			logger.error("Pixsignage21 get_schedule exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -495,7 +496,7 @@ public class PixsignageService21 {
 	@Path("get_plan")
 	public String getplan(String request) {
 		try {
-			logger.info("Pixsignage Service get_plan: {}", request);
+			logger.info("Pixsignage21 get_plan: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -516,10 +517,10 @@ public class PixsignageService21 {
 			responseJson = planService.generatePlanJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service get_plan response: {}", responseJson.toString());
+			logger.info("Pixsignage21 get_plan response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_plan exception", e);
+			logger.error("Pixsignage21 get_plan exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -528,7 +529,7 @@ public class PixsignageService21 {
 	@Path("report_status")
 	public String reportstatus(String request) {
 		try {
-			logger.info("Pixsignage Service report_status: {}", request);
+			logger.info("Pixsignage21 report_status: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -594,7 +595,7 @@ public class PixsignageService21 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_status exception", e);
+			logger.error("Pixsignage21 report_status exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -603,7 +604,7 @@ public class PixsignageService21 {
 	@Path("refresh")
 	public String refresh(String request) {
 		try {
-			logger.info("Pixsignage Service refresh: {}", request);
+			logger.info("Pixsignage21 refresh: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -808,11 +809,11 @@ public class PixsignageService21 {
 			responseJson.put("events", eventJsonArray);
 
 			if (responseJson.optString("url").length() > 0 || responseJson.getJSONArray("events").size() > 0) {
-				logger.info("Pixsignage Service {} refresh response: {}", terminalid, responseJson.toString());
+				logger.info("Pixsignage21 {} refresh response: {}", terminalid, responseJson.toString());
 			}
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service refresh exception", e);
+			logger.error("Pixsignage21 refresh exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -821,7 +822,7 @@ public class PixsignageService21 {
 	@Path("report_file")
 	public String reportfile(String request) {
 		try {
-			logger.info("Pixsignage Service report_file: {}", request);
+			logger.info("Pixsignage21 report_file: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -905,7 +906,7 @@ public class PixsignageService21 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_file exception", e);
+			logger.error("Pixsignage21 report_file exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -914,7 +915,7 @@ public class PixsignageService21 {
 	@Path("report_dvb")
 	public String reportdvb(String request) {
 		try {
-			logger.info("Pixsignage Service report_dvb: {}", request);
+			logger.info("Pixsignage21 report_dvb: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -978,7 +979,7 @@ public class PixsignageService21 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_dvb exception", e);
+			logger.error("Pixsignage21 report_dvb exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -987,7 +988,7 @@ public class PixsignageService21 {
 	@Path("report_crash")
 	public String reportcrash(String request) {
 		try {
-			logger.info("Pixsignage Service report_crash: {}", request);
+			logger.info("Pixsignage21 report_crash: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1020,7 +1021,7 @@ public class PixsignageService21 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_crash exception", e);
+			logger.error("Pixsignage21 report_crash exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1031,7 +1032,7 @@ public class PixsignageService21 {
 	public String getweather(@QueryParam("hardkey") String hardkey, @QueryParam("terminal_id") String terminalid,
 			@QueryParam("city") String city) {
 		try {
-			logger.info("Pixsignage Service get_weather: hardkey={},terminal_id={},city={}", hardkey, terminalid, city);
+			logger.info("Pixsignage21 get_weather: hardkey={},terminal_id={},city={}", hardkey, terminalid, city);
 
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null || !device.getStatus().equals("1")) {
@@ -1056,7 +1057,7 @@ public class PixsignageService21 {
 			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_weather exception", e);
+			logger.error("Pixsignage21 get_weather exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1066,7 +1067,7 @@ public class PixsignageService21 {
 	@Produces("application/json;charset=UTF-8")
 	public String get_yahoo_weather(@QueryParam("terminal_id") String terminalid, @QueryParam("city") String city) {
 		try {
-			logger.info("Pixsignage Service get_yahoo_weather: terminal_id={},city={}", terminalid, city);
+			logger.info("Pixsignage21 get_yahoo_weather: terminal_id={},city={}", terminalid, city);
 
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null || !device.getStatus().equals("1")) {
@@ -1095,7 +1096,7 @@ public class PixsignageService21 {
 				return handleResult(1009, "天气无法获得");
 			}
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_yahoo_weather exception", e);
+			logger.error("Pixsignage21 get_yahoo_weather exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1105,7 +1106,7 @@ public class PixsignageService21 {
 	@Produces("application/json;charset=UTF-8")
 	public String getcalendar(String request) {
 		try {
-			logger.info("Pixsignage Service get_calendar: {}", request);
+			logger.info("Pixsignage21 get_calendar: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1197,10 +1198,10 @@ public class PixsignageService21 {
 			}
 			responseJson.put("schedules", scheduleJsonArray);
 
-			logger.info("Pixsignage Service get_calendar response: {}", responseJson.toString());
+			logger.info("Pixsignage21 get_calendar response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_calendar exception", e);
+			logger.error("Pixsignage21 get_calendar exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1212,7 +1213,7 @@ public class PixsignageService21 {
 			@FormDataParam("screen") FormDataContentDisposition screenHeader,
 			@FormDataParam("screen") InputStream screenFile) {
 		try {
-			logger.info("Pixsignage Service report_screen: {}, screenHeader: {}", request, screenHeader);
+			logger.info("Pixsignage21 report_screen: {}, screenHeader: {}", request, screenHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1239,10 +1240,10 @@ public class PixsignageService21 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service report_screen response: {}", responseJson.toString());
+			logger.info("Pixsignage21 report_screen response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_screen exception", e);
+			logger.error("Pixsignage21 report_screen exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1254,7 +1255,7 @@ public class PixsignageService21 {
 			@FormDataParam("playlog") FormDataContentDisposition playlogHeader,
 			@FormDataParam("playlog") InputStream playlogFile) {
 		try {
-			logger.info("Pixsignage Service report_playlog: {}, playlogHeader: {}", request, playlogHeader);
+			logger.info("Pixsignage21 report_playlog: {}, playlogHeader: {}", request, playlogHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1287,10 +1288,10 @@ public class PixsignageService21 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service report_playlog response: {}", responseJson.toString());
+			logger.info("Pixsignage21 report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_playlog exception", e);
+			logger.error("Pixsignage21 report_playlog exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1302,7 +1303,7 @@ public class PixsignageService21 {
 			@FormDataParam("pflow") FormDataContentDisposition pflowHeader,
 			@FormDataParam("pflow") InputStream pflowFile) {
 		try {
-			logger.info("Pixsignage Service report_pflow: {}, pflowHeader: {}", request, pflowHeader);
+			logger.info("Pixsignage21 report_pflow: {}, pflowHeader: {}", request, pflowHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1331,10 +1332,10 @@ public class PixsignageService21 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service report_pflow response: {}", responseJson.toString());
+			logger.info("Pixsignage21 report_pflow response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_pflow exception", e);
+			logger.error("Pixsignage21 report_pflow exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1343,7 +1344,7 @@ public class PixsignageService21 {
 	@Path("report_flowrate")
 	public String reportflowrate(String request) {
 		try {
-			logger.info("Pixsignage Service report_flowrate: {}", request);
+			logger.info("Pixsignage21 report_flowrate: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1411,7 +1412,7 @@ public class PixsignageService21 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_flowrate exception", e);
+			logger.error("Pixsignage21 report_flowrate exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1422,7 +1423,7 @@ public class PixsignageService21 {
 	public String reportfile(@FormDataParam("meta") String request,
 			@FormDataParam("file") FormDataContentDisposition fileHeader, @FormDataParam("file") InputStream fileFile) {
 		try {
-			logger.info("Pixsignage Service upload_file: {}, fileHeader: {}", request, fileHeader);
+			logger.info("Pixsignage21 upload_file: {}, fileHeader: {}", request, fileHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1457,10 +1458,10 @@ public class PixsignageService21 {
 			responseJson.put("url", "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + filename);
 			responseJson.put("path", "/pixsigdata" + filename);
-			logger.info("Pixsignage Service upload_file response: {}", responseJson.toString());
+			logger.info("Pixsignage21 upload_file response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service upload_file exception", e);
+			logger.error("Pixsignage21 upload_file exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1472,7 +1473,7 @@ public class PixsignageService21 {
 			@FormDataParam("debug") FormDataContentDisposition debugHeader,
 			@FormDataParam("debug") InputStream debugFile) {
 		try {
-			logger.info("Pixsignage Service report_debug: {}, debugHeader: {}", request, debugHeader);
+			logger.info("Pixsignage21 report_debug: {}, debugHeader: {}", request, debugHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -1505,10 +1506,10 @@ public class PixsignageService21 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage Service report_debug response: {}", responseJson.toString());
+			logger.info("Pixsignage21 report_debug response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service report_debug exception", e);
+			logger.error("Pixsignage21 report_debug exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1518,7 +1519,7 @@ public class PixsignageService21 {
 	@Produces("application/json;charset=UTF-8")
 	public String gettext(String request) {
 		try {
-			logger.info("Pixsignage Service get_text: {}", request);
+			logger.info("Pixsignage21 get_text: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String terminalid = requestJson.optString("terminal_id");
 
@@ -1562,10 +1563,10 @@ public class PixsignageService21 {
 			responseJson.put("texts", textJsonArray);
 			responseJson.put("checksum", DigestUtils.md5Hex(s));
 
-			logger.info("Pixsignage Service get_text response: {}", responseJson.toString());
+			logger.info("Pixsignage21 get_text response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage Service get_text exception", e);
+			logger.error("Pixsignage21 get_text exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -1574,7 +1575,7 @@ public class PixsignageService21 {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("code", code);
 		responseJson.put("message", message);
-		logger.info("Pixsignage Service response: {}", responseJson.toString());
+		logger.info("Pixsignage21 response: {}", responseJson.toString());
 		return responseJson.toString();
 	}
 

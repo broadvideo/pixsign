@@ -92,6 +92,13 @@ public class IPSeeker {
 		}
 	}
 
+	public void close() {
+		try {
+			ipFile.close();
+		} catch (Exception e) {
+		}
+	}
+
 	/**
 	 * 给定一个地点的不完全名字，得到一系列包含s子串的IP范围记录
 	 * 

@@ -31,6 +31,8 @@ public interface DeviceMapper {
 
 	Device selectByTerminalid(@Param(value = "terminalid") String terminalid);
 
+	List<Device> selectByDefaultbundle(@Param(value = "defaultbundleid") String defaultbundleid);
+
 	List<Device> selectByDefaultpage(@Param(value = "defaultpageid") String defaultpageid);
 
 	int selectMaxCount1(@Param(value = "orgid") String orgid);
@@ -51,6 +53,11 @@ public interface DeviceMapper {
 
 	int updateUpgradeflag(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "upgradeflag") String upgradeflag);
+
+	int updateBundle(@Param(value = "deviceid") String deviceid,
+			@Param(value = "defaultbundleid") String defaultbundleid);
+
+	int updatePage(@Param(value = "deviceid") String deviceid, @Param(value = "defaultpageid") String defaultpageid);
 
 	// int insert(Device record);
 

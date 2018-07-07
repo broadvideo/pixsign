@@ -30,13 +30,15 @@ public interface BundleService {
 
 	public void design(Bundle bundle) throws Exception;
 
+	public void makeJsonFile(String bundleid) throws Exception;
+
 	public void push(Bundle bundle, HashMap<String, Object>[] binds) throws Exception;
 
 	public void handleWizard(Staff staff, Bundle bundle, HashMap<String, Object>[] binds) throws Exception;
 
 	public void setBundleReviewWait(String bundleid);
 
-	public void setBundleReviewResut(String bundleid, String reviewflag, String comment);
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) throws Exception;
 
 	public JSONObject generateBundleJson(String bundleid);
 

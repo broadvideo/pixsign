@@ -1,13 +1,13 @@
 var DeviceModule = function () {
 	var _submitflag = false;
 	var _device = {};
-	var _page = {};
+	var _bundle = {};
 	var timestamp = new Date().getTime();
 
 	var init = function () {
 		initDeviceTable();
 		initDeviceEvent();
-		initPageModal();
+		initBundleModal();
 		initBatchWizard();
 	};
 
@@ -54,22 +54,22 @@ var DeviceModule = function () {
 				$('td:eq(1)', nRow).html(aData.branch.name);
 
 				var planhtml = '';
-				if (aData.defaultpage != null) {
-					planhtml += '<a href="javascript:;" pageid="' + aData.defaultpageid + '" class="fancybox">';
+				if (aData.defaultbundle != null) {
+					planhtml += '<a href="javascript:;" bundleid="' + aData.defaultbundleid + '" class="fancybox">';
 					planhtml += '<div class="thumbs" style="width: 100px; height: 100px;">';
-					if (aData.defaultpage.snapshot != '' && aData.defaultpage.snapshot != null) {
-						var thumbwidth = aData.defaultpage.width > aData.defaultpage.height? 100 : 100*aData.defaultpage.width/aData.defaultpage.height;
-						planhtml += '<img src="/pixsigdata' + aData.defaultpage.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" />';
+					if (aData.defaultbundle.snapshot != '' && aData.defaultbundle.snapshot != null) {
+						var thumbwidth = aData.defaultbundle.width > aData.defaultbundle.height? 100 : 100*aData.defaultbundle.width/aData.defaultbundle.height;
+						planhtml += '<img src="/pixsigdata' + aData.defaultbundle.snapshot + '" class="imgthumb" width="' + thumbwidth + '%" />';
 					}
 					planhtml += '</div>';
 					planhtml += '</a>';
-					planhtml += '<h6 class="pixtitle">' + aData.defaultpage.name + '</h6>';
+					planhtml += '<h6 class="pixtitle">' + aData.defaultbundle.name + '</h6>';
 				}
 				$('td:eq(2)', nRow).html(planhtml);
 
 				var buttonhtml = '';
 				buttonhtml += '<div class="util-btn-margin-bottom-5">';
-				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-page"><i class="fa fa-cog"></i> ' + common.view.config + ' </a>';
+				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-cog"></i> ' + common.view.config + ' </a>';
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + ' </a>';
 				buttonhtml += '</div>';
 				
@@ -93,12 +93,12 @@ var DeviceModule = function () {
 		function refreshFancybox() {
 			$('.fancybox').each(function(index,item) {
 				$(this).click(function() {
-					var pageid = $(this).attr('pageid');
+					var bundleid = $(this).attr('bundleid');
 
 					$.ajax({
 						type : 'GET',
-						url : 'page!get.action',
-						data : {pageid: pageid},
+						url : 'bundle!get.action',
+						data : {bundleid: bundleid},
 						success : function(data, status) {
 							if (data.errorcode == 0) {
 								$.fancybox({
@@ -106,9 +106,9 @@ var DeviceModule = function () {
 									closeEffect	: 'none',
 									closeBtn : false,
 							        padding : 0,
-							        content: '<div id="PagePreview"></div>',
+							        content: '<div id="BundlePreview"></div>',
 							    });
-								PagePreviewModule.preview($('#PagePreview'), data.page, 800);
+								BundlePreviewModule.preview($('#BundlePreview'), data.bundle, 800);
 							} else {
 								bootbox.alert(common.tips.error + data.errormsg);
 							}
@@ -164,33 +164,33 @@ var DeviceModule = function () {
 		});
 	};
 
-	var initPageModal = function () {
-		var pageselect = new PageSelect($('#PageModal'), TouchCtrl);
+	var initBundleModal = function () {
+		var bundleselect = new BundleSelect($('#BundleModal'), TouchCtrl);
 
-		$('body').on('click', '.pix-page', function(event) {
+		$('body').on('click', '.pix-bundle', function(event) {
 			var index = $(event.target).attr('data-id');
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
 			_device = $('#DeviceTable').dataTable().fnGetData(index);
-			_page = _device.defaultpage;
-			$('#PageModal').modal();
+			_bundle = _device.defaultbundle;
+			$('#BundleModal').modal();
 		});
-		$('#PageModal').on('shown.bs.modal', function (e) {
-			pageselect.refresh();
-			pageselect.setPage(_page);
+		$('#BundleModal').on('shown.bs.modal', function (e) {
+			bundleselect.refresh();
+			bundleselect.setBundle(_bundle);
 		})
-		$('[type=submit]', $('#PageModal')).on('click', function(event) {
+		$('[type=submit]', $('#BundleModal')).on('click', function(event) {
 			$.ajax({
 				type : 'POST',
 				url : 'device!update.action',
 				data : {
 					'device.deviceid': _device.deviceid,
-					'device.defaultpageid': pageselect.getPage().pageid,
+					'device.defaultbundleid': bundleselect.getBundle().bundleid,
 				},
 				success : function(data, status) {
 					if (data.errorcode == 0) {
-						$('#PageModal').modal('hide');
+						$('#BundleModal').modal('hide');
 						bootbox.alert(common.tips.success);
 						refresh();
 					} else {
@@ -205,7 +205,7 @@ var DeviceModule = function () {
 	};
 
 	var initBatchWizard = function () {
-		var pageselect = new PageSelect($('#BatchModal'), TouchCtrl);
+		var bundleselect = new BundleSelect($('#BatchModal'), TouchCtrl);
 		var deviceselect = new DeviceSelect($('#BatchModal'));
 		
 		$('body').on('click', '.pix-batch', function(event) {
@@ -215,7 +215,7 @@ var DeviceModule = function () {
 		});
 
 		$('#BatchModal').on('shown.bs.modal', function (e) {
-			pageselect.refresh();
+			bundleselect.refresh();
 		})
 
 		function initWizard() {
@@ -257,7 +257,7 @@ var DeviceModule = function () {
 						return false;
 					}
 					if (index == 0 && clickedIndex == 1) {
-						if (validSelectPage()) {
+						if (validSelectBundle()) {
 							initData2();
 						} else {
 							return false;
@@ -266,7 +266,7 @@ var DeviceModule = function () {
 				},
 				onNext: function (tab, navigation, index) {
 					if (index == 1) {
-						if (validSelectPage()) {
+						if (validSelectBundle()) {
 							initData2();
 						} else {
 							return false;
@@ -278,7 +278,7 @@ var DeviceModule = function () {
 				onTabShow: function (tab, navigation, index) {
 					handleTitle(tab, navigation, index);
 					if (index == 0) {
-						pageselect.refresh();
+						bundleselect.refresh();
 					}
 				}
 			});
@@ -297,7 +297,7 @@ var DeviceModule = function () {
 		}
 
 		function initData1() {
-			pageselect.refresh();
+			bundleselect.refresh();
 		}
 
 		function initTab2() {
@@ -317,7 +317,7 @@ var DeviceModule = function () {
 				animate: true
 			});
 			
-			var defaultpageid = pageselect.getPage() == null? 0 : pageselect.getPage().pageid;
+			var defaultbundleid = bundleselect.getBundle() == null? 0 : bundleselect.getBundle().bundleid;
 			var devices = deviceselect.getSelected();
 			var deviceids = [];
 			if (devices != null) {
@@ -328,9 +328,9 @@ var DeviceModule = function () {
 			
 			$.ajax({
 				type : 'POST',
-				url : 'device!updatepage.action',
+				url : 'device!updatebundle.action',
 				data : {
-					'defaultpageid': defaultpageid,
+					'defaultbundleid': defaultbundleid,
 					'deviceids': deviceids.join(','),
 				},
 				success : function(data, status) {
@@ -354,9 +354,9 @@ var DeviceModule = function () {
 
 		}
 
-		function validSelectPage() {
-			if (pageselect.getPage() == null) {
-				bootbox.alert(common.tips.page_zero);
+		function validSelectBundle() {
+			if (bundleselect.getBundle() == null) {
+				bootbox.alert(common.tips.bundle_zero);
 				return false;
 			}
 			return true;

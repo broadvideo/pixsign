@@ -24,6 +24,8 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['14'] = 4;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['16'] = 1;
+		ZoneLimits['101'] = 1;
+		ZoneLimits['102'] = 1;
 		
 		initEvent();
 	};
@@ -126,6 +128,10 @@ var BundleDesignModule = function (mode) {
 			$(inner_div).append(img_element);
 		} else if (bundlezone.type == 16) {
 			//DVB Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
+			//Massage Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
 		} else {
@@ -277,15 +283,15 @@ var BundleDesignModule = function (mode) {
 		} else if (bundlezone.type == 8) {
 			//Navigator Zone
 			if (bundlezone.width > bundlezone.height) {
-				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-navigate-h.jpg');
+				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-h.jpg');
 			} else {
-				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-navigate-v.jpg');
+				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-v.jpg');
 			}
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 9) {
 			//Control Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-qrcode.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-qrcode.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 12) {
@@ -298,17 +304,22 @@ var BundleDesignModule = function (mode) {
 			$(bundlezoneDiv).find('p').html(bundlezone.content);
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-stream.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-stream.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 15) {
 			//VideoIn Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-videoin.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-videoin.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 16) {
 			//DVB Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-dvb.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
+			$(bundlezoneDiv).find('img').attr('width', '100%');
+			$(bundlezoneDiv).find('img').attr('height', '100%');
+		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
+			//Massage Zone
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-' + bundlezone.type + '.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else {

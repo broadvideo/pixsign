@@ -74,6 +74,7 @@
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
     <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectBaseByPrimaryKey" />
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
+    <association property="defaultbundle" column="{bundleid=defaultbundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectMiniByPrimaryKey" />
     <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
@@ -210,6 +211,12 @@
     order by deviceid
   </select>
 
+  <select id="selectByDefaultbundle" resultMap="BaseResultMap">
+    select * from device
+    where defaultbundleid = #{defaultbundleid}
+    order by deviceid
+  </select>
+
   <select id="selectByDefaultpage" resultMap="BaseResultMap">
     select * from device
     where defaultpageid = #{defaultpageid}
@@ -291,6 +298,18 @@
     appfileid = 0
     where orgid = #{orgid}
     and branchid = #{branchid}
+  </update>
+
+  <update id="updateBundle" >
+    update device
+    set defaultbundleid = #{defaultbundleid}
+    where deviceid = #{deviceid}
+  </update>
+
+  <update id="updatePage" >
+    update device
+    set defaultpageid = #{defaultpageid}
+    where deviceid = #{deviceid}
   </update>
 
   <update id="updateDevicegroup" >

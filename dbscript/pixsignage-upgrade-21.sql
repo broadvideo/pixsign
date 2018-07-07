@@ -78,8 +78,9 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','plan/schedule-solo.jsp','',1,1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.pageplan','plan/plan-page.jsp','',1,2);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30503,2,305,'menu.pageplan','plan/device-page.jsp','',1,3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.bundleplan','plan/device-bundle.jsp','',1,2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30503,2,305,'menu.pageplan','plan/plan-page.jsp','',1,3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30504,2,305,'menu.pageplan','plan/device-page.jsp','',1,4);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mscreen/mediagrid.jsp','',1,2);

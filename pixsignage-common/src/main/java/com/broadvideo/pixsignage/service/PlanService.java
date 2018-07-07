@@ -1,9 +1,7 @@
 package com.broadvideo.pixsignage.service;
 
-import java.util.HashMap;
 import java.util.List;
 
-import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Plan;
 
 import net.sf.json.JSONObject;
@@ -28,7 +26,7 @@ public interface PlanService {
 
 	public void syncPlan2All(String orgid) throws Exception;
 
-	public void syncPlanByBundle(String bundleid) throws Exception;
+	public void syncPlanByBundle(String orgid, String bundleid) throws Exception;
 
 	public void syncPlanByPage(String orgid, String pageid) throws Exception;
 
@@ -37,8 +35,6 @@ public interface PlanService {
 	public JSONObject generateBundlePlanJson(String deviceid);
 
 	public JSONObject generatePlanJson(String deviceid) throws Exception;
-
-	public void handleBatch(Page page, HashMap<String, Object>[] binds);
 
 	public void upgrade2multiplan();
 }

@@ -215,6 +215,36 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doUpdateBundle() {
+		try {
+			String defaultbundleid = getParameter("defaultbundleid");
+			String deviceids = getParameter("deviceids");
+			logger.info("Device doUpdateBundle, deviceids={},defaultbundleid={}", deviceids, defaultbundleid);
+			deviceService.updateBundle(deviceids.split(","), defaultbundleid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdateBundle exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUpdatePage() {
+		try {
+			String defaultpageid = getParameter("defaultpageid");
+			String deviceids = getParameter("deviceids");
+			logger.info("Device doUpdatePage, deviceids={},defaultpageid={}", deviceids, defaultpageid);
+			deviceService.updatePage(deviceids.split(","), defaultpageid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdatePage exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");

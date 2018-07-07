@@ -102,10 +102,13 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
-					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30502
+					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30501
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
+					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30502
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
-					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30503
+					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30503
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504
+					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30504
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| !flowrateflag.equals("1") && p.getPrivilegeid().intValue() == 30821
