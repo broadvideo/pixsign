@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,31 +251,6 @@ public class BundleAction extends BaseDatatableAction {
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
-		}
-	}
-
-	private void zip(ZipOutputStream out, File f, String base) throws Exception {
-		if (f.isDirectory()) {
-			File[] fl = f.listFiles();
-			if (fl.length == 0) {
-				out.putNextEntry(new ZipEntry(base + "/")); // 创建zip压缩进入点base
-			}
-			for (int i = 0; i < fl.length; i++) {
-				if (base.equals("")) {
-					zip(out, fl[i], fl[i].getName()); // 递归遍历子文件夹
-				} else {
-					zip(out, fl[i], base + "/" + fl[i].getName()); // 递归遍历子文件夹
-				}
-			}
-		} else {
-			out.putNextEntry(new ZipEntry(base)); // 创建zip压缩进入点base
-			FileInputStream in = new FileInputStream(f);
-			byte[] b = new byte[1000];
-			int len = -1;
-			while ((len = in.read(b)) != -1) {
-				out.write(b, 0, len);
-			}
-			in.close();
 		}
 	}
 

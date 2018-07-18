@@ -1,18 +1,27 @@
 package com.broadvideo.pixsignage.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -531,6 +540,7 @@ public class BundleServiceImpl implements BundleService {
 			JSONArray zoneJsonArray = new JSONArray();
 			for (Bundlezone bundlezone : bundle.getBundlezones()) {
 				JSONObject zoneJson = new JSONObject();
+				zoneJson.put("zone_id", bundlezone.getBundlezoneid());
 				zoneJson.put("main_flag", bundlezone.getMainflag());
 				zoneJson.put("width", bundlezone.getWidth());
 				zoneJson.put("height", bundlezone.getHeight());
@@ -1243,6 +1253,331 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 		return bundleJSONArray;
+	}
+
+	@Transactional
+	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception {
+		String fileName = zipFile.getName();
+		logger.info("Begin to import bundle {}", fileName);
+		fileName = fileName.substring(0, fileName.lastIndexOf("."));
+		String unzipFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/import/" + fileName;
+		FileUtils.deleteQuietly(new File(unzipFilePath));
+		CommonUtil.unzip(zipFile, unzipFilePath, false);
+		FileUtils.forceDelete(zipFile);
+
+		HashMap<Integer, Bundle> bundleHash = new HashMap<Integer, Bundle>();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
+		List<Image> imageList = new ArrayList<Image>();
+		List<Video> videoList = new ArrayList<Video>();
+
+		Date now = Calendar.getInstance().getTime();
+		File indexJsf = new File(unzipFilePath, "index.jsf");
+		logger.info("parse {}", indexJsf.getAbsoluteFile());
+		JSONObject bundleJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subbundles", Bundle.class);
+		map.put("bundlezones", Bundlezone.class);
+		map.put("bundlezonedtls", Bundlezonedtl.class);
+		Bundle bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+		Integer fromBundleid = bundle.getBundleid();
+		bundle.setOrgid(orgid);
+		bundle.setBranchid(branchid);
+		bundle.setCreatetime(now);
+		Bundle oldBundle = bundleMapper.selectByUuid("" + orgid, bundle.getUuid());
+		if (oldBundle != null) {
+			bundleMapper.clearSubbundles("" + oldBundle.getBundleid());
+			bundleMapper.clearBundlezones("" + oldBundle.getBundleid());
+			bundle.setBundleid(oldBundle.getBundleid());
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+		} else {
+			bundleMapper.insertSelective(bundle);
+		}
+		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		if (fromSnapshotFile.exists()) {
+			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			bundle.setSnapshot(snapshotFilePath);
+			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+		}
+		bundleHash.put(fromBundleid, bundle);
+		logger.info("Add bundle oldid={}, newid={}", fromBundleid, bundle.getBundleid());
+
+		for (Bundle subbundle : bundle.getSubbundles()) {
+			File jsf = new File(unzipFilePath, "" + subbundle.getBundleid() + ".jsf");
+			logger.info("parse {}", jsf.getAbsoluteFile());
+			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
+			Bundle p = (Bundle) JSONObject.toBean(json, Bundle.class, map);
+			fromBundleid = p.getBundleid();
+			p.setOrgid(orgid);
+			p.setBranchid(branchid);
+			p.setHomebundleid(bundle.getBundleid());
+			p.setCreatetime(now);
+			bundleMapper.insertSelective(p);
+			fromSnapshotFile = new File(unzipFilePath, "" + fromBundleid + ".png");
+			if (fromSnapshotFile.exists()) {
+				String snapshotFilePath = "/bundle/" + p.getBundleid() + "/snapshot/" + p.getBundleid() + ".png";
+				p.setSnapshot(snapshotFilePath);
+				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+				bundleMapper.updateByPrimaryKeySelective(p);
+			}
+			bundleHash.put(fromBundleid, p);
+			logger.info("Add subbundle oldid={}, newid={}", fromBundleid, p.getBundleid());
+		}
+
+		Iterator<Entry<Integer, Bundle>> bundleIter = bundleHash.entrySet().iterator();
+		while (bundleIter.hasNext()) {
+			Entry<Integer, Bundle> entry = bundleIter.next();
+			Bundle t = entry.getValue();
+			for (Bundlezone bundlezone : t.getBundlezones()) {
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					Image image = bundlezonedtl.getImage();
+					Video video = bundlezonedtl.getVideo();
+					Image relateImage = null;
+					if (image != null && image.getRelateimage() != null) {
+						relateImage = image.getRelateimage();
+					}
+					if (video != null && video.getRelateimage() != null) {
+						relateImage = video.getRelateimage();
+					}
+
+					// Handle relate image
+					if (relateImage != null && imageHash.get(relateImage.getImageid()) == null) {
+						Integer fromImageid = relateImage.getImageid();
+						Image toImage = imageMapper.selectByUuid(relateImage.getUuid());
+						if (toImage == null) {
+							// Insert image
+							File fromFile = new File(unzipFilePath + "/image", relateImage.getFilename());
+							toImage = new Image();
+							toImage.setUuid(relateImage.getUuid());
+							toImage.setOrgid(1);
+							toImage.setBranchid(1);
+							toImage.setFolderid(1);
+							toImage.setName(relateImage.getName());
+							toImage.setFilename(relateImage.getFilename());
+							toImage.setStatus("9");
+							toImage.setObjtype("0");
+							toImage.setObjid(0);
+							toImage.setRelateid(0);
+							toImage.setCreatestaffid(1);
+							imageMapper.insertSelective(toImage);
+							String newFileName = "" + toImage.getImageid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String imageFilePath, thumbFilePath;
+							imageFilePath = "/image/upload/" + newFileName;
+							thumbFilePath = "/image/thumb/" + newFileName;
+							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (imageFile.exists()) {
+								imageFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.copyFile(fromFile, imageFile);
+							CommonUtil.resizeImage(imageFile, thumbFile, 640);
+
+							BufferedImage img = ImageIO.read(imageFile);
+							toImage.setWidth(img.getWidth());
+							toImage.setHeight(img.getHeight());
+							toImage.setFilepath(imageFilePath);
+							toImage.setThumbnail(thumbFilePath);
+							toImage.setFilename(newFileName);
+							toImage.setSize(FileUtils.sizeOf(imageFile));
+							FileInputStream fis = new FileInputStream(imageFile);
+							toImage.setMd5(DigestUtils.md5Hex(fis));
+							fis.close();
+							toImage.setStatus("1");
+							imageMapper.updateByPrimaryKeySelective(toImage);
+							imageList.add(toImage);
+							logger.info("Add image oldid={}, newid={}", fromImageid, toImage.getImageid());
+						}
+						imageHash.put(fromImageid, toImage);
+					}
+
+					if (image != null) {
+						Integer fromImageid = image.getImageid();
+						Image toImage = imageMapper.selectByUuid(image.getUuid());
+						if (toImage == null) {
+							// Insert image
+							File fromFile = new File(unzipFilePath + "/image", image.getFilename());
+							toImage = new Image();
+							toImage.setUuid(image.getUuid());
+							toImage.setOrgid(1);
+							toImage.setBranchid(1);
+							toImage.setFolderid(1);
+							toImage.setName(image.getName());
+							toImage.setFilename(image.getFilename());
+							toImage.setStatus("9");
+							toImage.setObjtype("0");
+							toImage.setObjid(0);
+							toImage.setRelateid(image.getRelateid());
+							toImage.setCreatestaffid(1);
+							imageMapper.insertSelective(toImage);
+							String newFileName = "" + toImage.getImageid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String imageFilePath, thumbFilePath;
+							imageFilePath = "/image/upload/" + newFileName;
+							thumbFilePath = "/image/thumb/" + newFileName;
+							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (imageFile.exists()) {
+								imageFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.copyFile(fromFile, imageFile);
+							CommonUtil.resizeImage(imageFile, thumbFile, 640);
+
+							BufferedImage img = ImageIO.read(imageFile);
+							toImage.setWidth(img.getWidth());
+							toImage.setHeight(img.getHeight());
+							toImage.setFilepath(imageFilePath);
+							toImage.setThumbnail(thumbFilePath);
+							toImage.setFilename(newFileName);
+							toImage.setSize(FileUtils.sizeOf(imageFile));
+							FileInputStream fis = new FileInputStream(imageFile);
+							toImage.setMd5(DigestUtils.md5Hex(fis));
+							fis.close();
+							toImage.setStatus("1");
+							imageMapper.updateByPrimaryKeySelective(toImage);
+							logger.info("Add image oldid={}, newid={}", fromImageid, toImage.getImageid());
+						} else {
+							toImage.setRelateid(image.getRelateid());
+						}
+						imageList.add(toImage);
+						imageHash.put(fromImageid, toImage);
+					}
+
+					if (video != null) {
+						Integer fromVideoid = video.getVideoid();
+						Video toVideo = videoMapper.selectByUuid(video.getUuid());
+						if (toVideo == null) {
+							// Insert video
+							File fromFile = new File(unzipFilePath + "/video", video.getFilename());
+							toVideo = new Video();
+							toVideo.setUuid(video.getUuid());
+							toVideo.setOrgid(1);
+							toVideo.setBranchid(1);
+							toVideo.setFolderid(1);
+							toVideo.setType(Video.TYPE_INTERNAL);
+							toVideo.setName(video.getName());
+							toVideo.setOname(video.getOname());
+							toVideo.setFilename(video.getFilename());
+							toVideo.setFormat(video.getFormat());
+							toVideo.setSize(video.getSize());
+							toVideo.setMd5(video.getMd5());
+							toVideo.setRelateid(video.getRelateid());
+							toVideo.setStatus("9");
+							toVideo.setCreatestaffid(1);
+							videoMapper.insertSelective(toVideo);
+							String newFileName = "" + toVideo.getVideoid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String videoFilePath, thumbFilePath;
+							videoFilePath = "/video/upload/" + newFileName;
+							thumbFilePath = "/video/snapshot/" + toVideo.getVideoid() + ".jpg";
+							File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (videoFile.exists()) {
+								videoFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.moveFile(fromFile, videoFile);
+
+							try {
+								// Generate preview gif
+								FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
+								String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i "
+										+ CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath
+										+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+										+ thumbFilePath;
+								logger.info("Begin to generate preview and thumbnail: " + command);
+								CommonUtil.execCommand(command);
+								if (!thumbFile.exists()) {
+									command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + CommonConfig.CONFIG_PIXDATA_HOME
+											+ videoFilePath + " -y -f image2 -ss 1 -vframes 1 "
+											+ CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath;
+									CommonUtil.execCommand(command);
+								}
+								if (thumbFile.exists()) {
+									BufferedImage img = ImageIO.read(thumbFile);
+									toVideo.setWidth(img.getWidth());
+									toVideo.setHeight(img.getHeight());
+									toVideo.setThumbnail("/video/snapshot/" + toVideo.getVideoid() + ".jpg");
+									logger.info("Finish thumbnail generating.");
+								} else {
+									logger.info("Failed to generate thumbnail.");
+								}
+
+							} catch (IOException ex) {
+								logger.info("Video parse error, file={}", videoFilePath, ex);
+							}
+
+							toVideo.setFilename(newFileName);
+							toVideo.setFilepath(videoFilePath);
+							toVideo.setThumbnail(thumbFilePath);
+							toVideo.setFilename(newFileName);
+							toVideo.setStatus("1");
+							videoMapper.updateByPrimaryKeySelective(toVideo);
+							logger.info("Add video oldid={}, newid={}", fromVideoid, toVideo.getVideoid());
+						} else {
+							toVideo.setRelateid(video.getRelateid());
+						}
+						videoList.add(toVideo);
+						videoHash.put(fromVideoid, toVideo);
+					}
+
+				}
+			}
+		}
+
+		for (Image image : imageList) {
+			if (image.getRelateid() > 0) {
+				image.setRelateid(imageHash.get(image.getRelateid()).getImageid());
+				imageMapper.updateByPrimaryKeySelective(image);
+			}
+		}
+		for (Video video : videoList) {
+			if (video.getRelateid() > 0) {
+				video.setRelateid(imageHash.get(video.getRelateid()).getImageid());
+				videoMapper.updateByPrimaryKeySelective(video);
+			}
+		}
+
+		bundleIter = bundleHash.entrySet().iterator();
+		while (bundleIter.hasNext()) {
+			Entry<Integer, Bundle> entry = bundleIter.next();
+			Bundle t = entry.getValue();
+			for (Bundlezone bundlezone : t.getBundlezones()) {
+				bundlezone.setBundleid(bundleHash.get(bundlezone.getBundleid()).getBundleid());
+				bundlezone.setHomebundleid(bundle.getBundleid());
+				Bundle touchBundle = bundleHash.get(bundlezone.getTouchobjid());
+				if (touchBundle != null) {
+					bundlezone.setTouchobjid(touchBundle.getBundleid());
+				} else {
+					bundlezone.setTouchobjid(0);
+				}
+				bundlezoneMapper.insertSelective(bundlezone);
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					if (bundlezonedtl.getObjtype().equals(Bundlezonedtl.ObjType_Video)) {
+						bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+						bundlezonedtl.setObjid(videoHash.get(bundlezonedtl.getObjid()).getVideoid());
+						bundlezonedtlMapper.insertSelective(bundlezonedtl);
+					} else if (bundlezonedtl.getObjtype().equals(Bundlezonedtl.ObjType_Image)) {
+						bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+						bundlezonedtl.setObjid(imageHash.get(bundlezonedtl.getObjid()).getImageid());
+						bundlezonedtlMapper.insertSelective(bundlezonedtl);
+					}
+				}
+			}
+		}
+
+		return bundle;
 	}
 
 }

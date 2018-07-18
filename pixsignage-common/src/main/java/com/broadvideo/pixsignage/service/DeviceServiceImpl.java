@@ -448,7 +448,7 @@ public class DeviceServiceImpl implements DeviceService {
 		List<Bundle> bundleList = new ArrayList<Bundle>();
 
 		Bundle defaultbundle = bundleMapper.selectByPrimaryKey("" + device.getDefaultbundleid());
-		if (defaultbundle != null && defaultbundle.getReviewflag() != Bundle.REVIEW_PASSED) {
+		if (defaultbundle != null && !defaultbundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 			JSONObject bundleJson = JSONObject.fromObject(defaultbundle.getJson());
 			defaultbundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
 		}
@@ -456,7 +456,7 @@ public class DeviceServiceImpl implements DeviceService {
 			bundleList.add(defaultbundle);
 			for (Bundle subbundle : defaultbundle.getSubbundles()) {
 				Bundle p = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
-				if (p != null && p.getReviewflag() != Bundle.REVIEW_PASSED) {
+				if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
 					JSONObject bundleJson = JSONObject.fromObject(p.getJson());
 					p = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
 				}
@@ -476,7 +476,7 @@ public class DeviceServiceImpl implements DeviceService {
 			bundleJson.put("size", defaultbundle.getSize());
 			bundleJson.put("checksum", defaultbundle.getMd5());
 
-			bundleJsonArray.add(device.getDefaultbundleid());
+			bundleidJsonArray.add(device.getDefaultbundleid());
 			bundleJsonArray.add(bundleJson);
 		} else {
 			return resultJson;
@@ -544,7 +544,7 @@ public class DeviceServiceImpl implements DeviceService {
 		List<Page> pageList = new ArrayList<Page>();
 
 		Page defaultpage = pageMapper.selectByPrimaryKey("" + device.getDefaultpageid());
-		if (defaultpage != null && defaultpage.getReviewflag() != Page.REVIEW_PASSED) {
+		if (defaultpage != null && !defaultpage.getReviewflag().equals(Page.REVIEW_PASSED)) {
 			JSONObject pageJson = JSONObject.fromObject(defaultpage.getJson());
 			defaultpage = (Page) JSONObject.toBean(pageJson, Page.class, map);
 		}
@@ -552,7 +552,7 @@ public class DeviceServiceImpl implements DeviceService {
 			pageList.add(defaultpage);
 			for (Page subpage : defaultpage.getSubpages()) {
 				Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
-				if (p != null && p.getReviewflag() != Page.REVIEW_PASSED) {
+				if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
 					JSONObject pageJson = JSONObject.fromObject(p.getJson());
 					p = (Page) JSONObject.toBean(pageJson, Page.class, map);
 				}

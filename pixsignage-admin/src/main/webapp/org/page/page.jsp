@@ -411,7 +411,7 @@
 												<div class="form-group">
 													<label class="col-md-3 control-label">子页</label>
 													<div class="col-md-9">
-														<input type="hidden" id="SubObjectSelect" class="form-control select2" name="touchpageid" />
+														<input type="hidden" id="SubObjectSelect" class="form-control select2" name="touchid" />
 													</div>
 												</div>
 												<div class="form-group">

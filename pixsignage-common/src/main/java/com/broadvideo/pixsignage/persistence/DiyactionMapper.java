@@ -11,6 +11,8 @@ public interface DiyactionMapper {
 
 	List<Diyaction> selectList(@Param(value = "diyid") String diyid);
 
+	Diyaction selectByCode(@Param(value = "diyid") String diyid, @Param(value = "code") String code);
+
 	int deleteByPrimaryKey(@Param(value = "diyactionid") String diyactionid);
 
 	// int insert(Diyaction record);

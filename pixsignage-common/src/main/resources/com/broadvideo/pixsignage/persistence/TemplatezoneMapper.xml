@@ -40,7 +40,7 @@
     <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
     <result column="diyid" property="diyid" jdbcType="INTEGER" />
     <result column="touchtype" property="touchtype" jdbcType="CHAR" />
-    <result column="touchtemplateid" property="touchtemplateid" jdbcType="INTEGER" />
+    <result column="touchid" property="touchid" jdbcType="INTEGER" />
     <result column="fixflag" property="fixflag" jdbcType="CHAR" />
     <result column="diyactionid" property="diyactionid" jdbcType="INTEGER" />
     <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
@@ -58,7 +58,7 @@
     templatezoneid, templateid, hometemplateid, type, height, width, topoffset, leftoffset, zindex, 
     transform, bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
     shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, 
-    align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchtemplateid, 
+    align, lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchid, 
     fixflag, diyactionid, animationinit, animationinitdelay, animationclick
   </sql>
   <sql id="Blob_Column_List" >
@@ -101,7 +101,7 @@
       lineheight, rows, cols, 
       rules, rulecolor, rulewidth, 
       dateformat, diyid, touchtype, 
-      touchtemplateid, fixflag, diyactionid, animationinit, 
+      touchid, fixflag, diyactionid, animationinit, 
       animationinitdelay, animationclick
       content)
     values (#{templateid,jdbcType=INTEGER}, #{hometemplateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
@@ -116,7 +116,7 @@
       #{lineheight,jdbcType=INTEGER}, #{rows,jdbcType=INTEGER}, #{cols,jdbcType=INTEGER}, 
       #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
       #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
-      #{touchtemplateid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, #{animationinit,jdbcType=VARCHAR}, 
+      #{touchid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, #{animationinit,jdbcType=VARCHAR}, 
       #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
@@ -237,8 +237,8 @@
       <if test="touchtype != null" >
         touchtype,
       </if>
-      <if test="touchtemplateid != null" >
-        touchtemplateid,
+      <if test="touchid != null" >
+        touchid,
       </if>
       <if test="fixflag != null" >
         fixflag,
@@ -371,8 +371,8 @@
       <if test="touchtype != null" >
         #{touchtype,jdbcType=CHAR},
       </if>
-      <if test="touchtemplateid != null" >
-        #{touchtemplateid,jdbcType=INTEGER},
+      <if test="touchid != null" >
+        #{touchid,jdbcType=INTEGER},
       </if>
       <if test="fixflag != null" >
         #{fixflag,jdbcType=CHAR},
@@ -508,8 +508,8 @@
       <if test="touchtype != null" >
         touchtype = #{touchtype,jdbcType=CHAR},
       </if>
-      <if test="touchtemplateid != null" >
-        touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      <if test="touchid != null" >
+        touchid = #{touchid,jdbcType=INTEGER},
       </if>
       <if test="fixflag != null" >
         fixflag = #{fixflag,jdbcType=CHAR},
@@ -571,7 +571,7 @@
       dateformat = #{dateformat,jdbcType=VARCHAR},
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
-      touchtemplateid = #{touchtemplateid,jdbcType=INTEGER},
+      touchid = #{touchid,jdbcType=INTEGER},
       fixflag = #{fixflag,jdbcType=CHAR},
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},
@@ -619,7 +619,7 @@
       dateformat = #{dateformat,jdbcType=VARCHAR},
       diyid = #{diyid,jdbcType=INTEGER},
       touchtype = #{touchtype,jdbcType=CHAR},
-      touchtemplateid = #{touchtemplateid,jdbcType=INTEGER}
+      touchid = #{touchid,jdbcType=INTEGER}
       fixflag = #{fixflag,jdbcType=CHAR}
       diyactionid = #{diyactionid,jdbcType=INTEGER},
       animationinit = #{animationinit,jdbcType=VARCHAR},

@@ -67,6 +67,14 @@
     where bundleid = #{bundleid}
   </select>
   
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundle
+    where orgid = #{orgid}
+    and uuid = #{uuid}
+  </select>
+
   <select id="selectCount" resultType="Integer">
     select count(1) from bundle
     where status = 1 

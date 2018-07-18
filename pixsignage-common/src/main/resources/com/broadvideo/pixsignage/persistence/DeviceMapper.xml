@@ -229,7 +229,7 @@
     and orgid = #{orgid}
     and appname like 'DigitalBox\_%'
     and appname != 'DigitalBox_LAUNCHER_UWIN'
-    and !appname like 'DigitalBox_LAUNCHER_TOUPING%'
+    and appname not like 'DigitalBox_LAUNCHER_TOUPING%'
   </select>
   <select id="selectMaxCount2" resultType="Integer">
     select count(1) from device 

@@ -110,6 +110,24 @@ public class ExportTask extends Thread {
 							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath());
 							CommonUtil.zip(out, imageFile, "image/" + image.getFilename());
 						}
+
+						String bundleDir = CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + bundle.getBundleid();
+						File jsfFile = new File(bundleDir, "" + bundle.getBundleid() + ".jsf");
+						Bundle fullbundle = bundleService.selectByPrimaryKey("" + bundle.getBundleid());
+						FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(fullbundle).toString(2), "UTF-8",
+								false);
+						String jsfname = "index.jsf";
+						String pngname = "index.png";
+						if (bundle.getHomeflag().equals("0")) {
+							jsfname = "" + bundle.getBundleid() + ".jsf";
+							pngname = "" + bundle.getBundleid() + ".png";
+						}
+						CommonUtil.zip(out, jsfFile, jsfname);
+						if (bundle.getSnapshot() != null) {
+							File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + bundle.getSnapshot());
+							CommonUtil.zip(out, snapshot, pngname);
+						}
+
 						out.close();
 					}
 
@@ -160,6 +178,23 @@ public class ExportTask extends Thread {
 						Video video = entry.getValue();
 						File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getFilepath());
 						CommonUtil.zip(out, videoFile, "video/" + video.getFilename());
+					}
+
+					for (Page p : pageList) {
+						String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
+						File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
+						FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
+						String jsfname = "index.jsf";
+						String pngname = "index.png";
+						if (p.getHomeflag().equals("0")) {
+							jsfname = "" + p.getPageid() + ".jsf";
+							pngname = "" + p.getPageid() + ".png";
+						}
+						CommonUtil.zip(out, jsfFile, jsfname);
+						if (p.getSnapshot() != null) {
+							File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + p.getSnapshot());
+							CommonUtil.zip(out, snapshot, pngname);
+						}
 					}
 
 					File pagezipFile = new File(exportdir, "page-" + page.getPageid() + ".zip");

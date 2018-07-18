@@ -201,7 +201,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setDateformat(fromtemplatezone.getDateformat());
 				templatezone.setDiyid(fromtemplatezone.getDiyid());
 				templatezone.setTouchtype(fromtemplatezone.getTouchtype());
-				templatezone.setTouchtemplateid(fromtemplatezone.getTouchtemplateid());
+				templatezone.setTouchid(fromtemplatezone.getTouchid());
 				templatezone.setFixflag(fromtemplatezone.getFixflag());
 				templatezone.setDiyactionid(fromtemplatezone.getDiyactionid());
 				templatezone.setAnimationinit(fromtemplatezone.getAnimationinit());
@@ -404,11 +404,11 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setDateformat(pagezone.getDateformat());
 				templatezone.setDiyid(pagezone.getDiyid());
 				templatezone.setTouchtype(pagezone.getTouchtype());
-				Integer touchtemplateid = templateidHash.get(pagezone.getTouchpageid());
-				if (touchtemplateid == null) {
-					touchtemplateid = 0;
+				Integer touchid = templateidHash.get(pagezone.getTouchid());
+				if (touchid == null) {
+					touchid = 0;
 				}
-				templatezone.setTouchtemplateid(touchtemplateid);
+				templatezone.setTouchid(touchid);
 				templatezone.setFixflag(pagezone.getFixflag());
 				templatezone.setDiyactionid(pagezone.getDiyactionid());
 				templatezone.setAnimationinit(pagezone.getAnimationinit());
@@ -620,11 +620,11 @@ public class TemplateServiceImpl implements TemplateService {
 			for (Templatezone templatezone : t.getTemplatezones()) {
 				templatezone.setTemplateid(templateHash.get(templatezone.getTemplateid()).getTemplateid());
 				templatezone.setHometemplateid(template.getTemplateid());
-				Template touchTemplate = templateHash.get(templatezone.getTouchtemplateid());
+				Template touchTemplate = templateHash.get(templatezone.getTouchid());
 				if (touchTemplate != null) {
-					templatezone.setTouchtemplateid(touchTemplate.getTemplateid());
+					templatezone.setTouchid(touchTemplate.getTemplateid());
 				} else {
-					templatezone.setTouchtemplateid(0);
+					templatezone.setTouchid(0);
 				}
 				templatezoneMapper.insertSelective(templatezone);
 				for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {

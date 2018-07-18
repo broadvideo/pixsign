@@ -89,7 +89,7 @@ public class Pagezone {
 
 	private String touchtype;
 
-	private Integer touchpageid;
+	private Integer touchid;
 
 	private String fixflag;
 
@@ -415,12 +415,12 @@ public class Pagezone {
 		this.touchtype = touchtype == null ? null : touchtype.trim();
 	}
 
-	public Integer getTouchpageid() {
-		return touchpageid;
+	public Integer getTouchid() {
+		return touchid;
 	}
 
-	public void setTouchpageid(Integer touchpageid) {
-		this.touchpageid = touchpageid;
+	public void setTouchid(Integer touchid) {
+		this.touchid = touchid;
 	}
 
 	public String getFixflag() {

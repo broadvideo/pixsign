@@ -400,8 +400,8 @@ var OrgModule = function () {
 			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
 			+ $('input[name="org.liftflag"]').val() + $('input[name="org.attendanceflag"]').val()
-			+ $('input[name="org.planflag"]').val()
-			+ '0000000000000000000';
+			+ $('input[name="org.planflag"]').val() + $('input[name="org.massageflag"]').val()
+			+ '000000000000000000';
 			formData.append('org.feature', feature);
 			
 			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()
@@ -471,6 +471,7 @@ var OrgModule = function () {
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
+			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
 			
 			currentApps = {};
 			refreshAppTreeData(currentAppTreeData);
@@ -528,6 +529,7 @@ var OrgModule = function () {
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
+			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
 			
 			currentApps = {};
 			if (_org.applist != null) {

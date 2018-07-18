@@ -981,7 +981,7 @@ var PageDesignModule = function (mode) {
 				escapeMarkup: function (m) { return m; } 
 			});
 			var touchpages = _self.Subobjects.filter(function (el) {
-				return el.pageid == _self.Zone.touchpageid;
+				return el.pageid == _self.Zone.touchid;
 			});
 			if (touchpages.length > 0) {
 				$('#SubObjectSelect').select2('data', {id: touchpages[0].pageid, name: touchpages[0].name, page: touchpages[0] });
@@ -1279,7 +1279,7 @@ var PageDesignModule = function (mode) {
 
 		$('#SubObjectSelect').on('change', function(e) {
 			if ($('#SubObjectSelect').select2('data') != null) {
-				_self.Zone.touchpageid = $('#SubObjectSelect').select2('data').id;
+				_self.Zone.touchid = $('#SubObjectSelect').select2('data').id;
 			}
 		});	
 
@@ -1539,7 +1539,7 @@ var PageDesignModule = function (mode) {
 			pagezone.align = 'center';
 			pagezone.lineheight = 80;
 			pagezone.touchtype = '9';
-			pagezone.touchpageid = 0;
+			pagezone.touchid = 0;
 			pagezone.fixflag = '1';
 			pagezone.content = '';
 			pagezone.pagezonedtls = [];

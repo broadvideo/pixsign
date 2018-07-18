@@ -65,11 +65,13 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		String estateflag = org.getEstateflag();
 		String attendanceflag = org.getAttendanceflag();
 		String planflag = org.getPlanflag();
+		String massageflag = org.getMassageflag();
 		while (it.hasNext()) {
 			Privilege p = it.next();
 			if (bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
 					|| reviewflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
+					|| massageflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 300
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30105
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && pageflag.equals(Org.FUNCTION_DISABLED)
 							&& p.getPrivilegeid().intValue() == 30106
@@ -93,6 +95,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
 					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
+					|| massageflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 30301
+					|| massageflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 30305
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 304
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30402
@@ -102,9 +106,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30501
+					|| planflag.equals("1") && !org.getCode().equals("nyyh") && !org.getCode().equals("icbc")
+							&& !org.getCode().equals("cp") && p.getPrivilegeid().intValue() == 30501
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
 					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30502
+					|| (org.getCode().equals("nyyh") || org.getCode().equals("icbc") || org.getCode().equals("cp"))
+							&& p.getPrivilegeid().intValue() == 30502
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
 					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30503
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504

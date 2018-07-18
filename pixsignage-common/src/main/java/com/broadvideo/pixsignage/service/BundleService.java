@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,4 +44,7 @@ public interface BundleService {
 	public JSONObject generateBundleJson(String bundleid);
 
 	public JSONArray generateBundleJsonArray(List<Integer> bundleids);
+
+	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
+
 }
