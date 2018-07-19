@@ -19,16 +19,27 @@ public interface HourflowlogMapper {
 			@Param(value = "branchid") String branchid, @Param(value = "search") String search,
 			@Param(value = "start") String start, @Param(value = "length") String length);
 
+	List<HashMap<String, Object>> selectDeviceListByDay(@Param(value = "orgid") String orgid,
+			@Param(value = "day") String day);
+
+	List<HashMap<String, Object>> selectDeviceListByMonth(@Param(value = "orgid") String orgid,
+			@Param(value = "month") String month);
+
 	List<HashMap<String, Object>> statPeriodByDay(@Param(value = "deviceid") String deviceid,
 			@Param(value = "day") String day);
 
 	List<HashMap<String, Object>> statPeriodByMonth(@Param(value = "deviceid") String deviceid,
 			@Param(value = "month") String month);
 
-	List<HashMap<String, Object>> statCatalogByDay(@Param(value = "deviceid") String deviceid,
+	HashMap<String, Object> statCatalogByDeviceDay(@Param(value = "deviceid") String deviceid,
 			@Param(value = "day") String day);
 
-	List<HashMap<String, Object>> statCatalogByMonth(@Param(value = "deviceid") String deviceid,
+	HashMap<String, Object> statCatalogByDeviceMonth(@Param(value = "deviceid") String deviceid,
+			@Param(value = "month") String month);
+
+	HashMap<String, Object> statCatalogByOrgDay(@Param(value = "orgid") String orgid, @Param(value = "day") String day);
+
+	HashMap<String, Object> statCatalogByOrgMonth(@Param(value = "orgid") String orgid,
 			@Param(value = "month") String month);
 
 	// int insert(Hourflowlog record);

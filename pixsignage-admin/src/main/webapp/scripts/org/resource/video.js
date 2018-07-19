@@ -336,7 +336,8 @@ var VideoModule = function () {
 			//disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 			disableImageResize: true,
 			maxFileSize: 2147483648,
-			acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv|avi|wmv|mpg|flv)$/i,
+			acceptFileTypes: /(\.|\/)(mp4)$/i,
+			//acceptFileTypes: /(\.|\/)(mp4|ts|mov|mkv|avi|wmv|mpg|flv)$/i,
 			// Uncomment the following to send cross-domain cookies:
 			//xhrFields: {withCredentials: true},				
 		});
