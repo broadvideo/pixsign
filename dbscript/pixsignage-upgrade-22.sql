@@ -44,14 +44,11 @@ ALTER TABLE `person`
 
 UPDATE person p SET branchid=(SELECT branchid FROM branch b WHERE b.orgid=p.orgid  AND parentid=0)  WHERE STATUS='1' AND TYPE='2';
 
-insert into privilege (privilegeid, subsystem, parentid, name, menuurl, icon, type, orgtype, sequence) values(31204,'2',312,'menu.personattendance','event/personattendance.jsp',NULL,'1','0','3');
-
 ALTER TABLE `attendancelog` 
 	ADD COLUMN `syncstatus` char(1)   NULL DEFAULT '0' COMMENT '同步标识，0:未同步 1：已同步 9：不需要同步' after `createtime`;
+
 insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('205','AttendanceServiceURL','AttendanceServiceURL','',NULL,'1');
 insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('206','CourseServiceURL','CourseServiceURL','',NULL,'1');
-
-	
 insert into `config` (`configid`, `code`, `name`, `value`, `refer`, `type`) values('207','SafeCampusServer','SafeCampusServer','',NULL,'1');
 
 CREATE TABLE `smartbox`(
@@ -192,9 +189,12 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31201,2,312,'menu.room2','room/room2.jsp','','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31202,2,312,'menu.staff2','person/person2.jsp','','1',1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31203,2,312,'menu.event2','event/event2.jsp','','1',2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31204,2,312,'menu.personattendance','event/personattendance.jsp','','1',3);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(313,2,0,'menu.smartboxmanage','','fa-group','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31301,2,313,'menu.smartbox','smartbox/smartbox.jsp','','1',1);
+
+
 
 ############################################################
 ## post script  ############################################
