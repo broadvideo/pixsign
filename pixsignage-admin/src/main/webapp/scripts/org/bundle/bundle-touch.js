@@ -419,7 +419,7 @@ var BundleModule = function () {
 				var ratio = $('select[name="bundle.ratio"]').val();
 				aoData.push({'name':'templetflag','value':templetflag });
 				aoData.push({'name':'touchflag','value':'1' });
-				aoData.push({'name':'homeflag','value':'0' });
+				aoData.push({'name':'homeflag','value':'1' });
 				aoData.push({'name':'ratio','value':ratio });
 			}
 		});

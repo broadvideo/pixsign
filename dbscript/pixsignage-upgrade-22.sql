@@ -29,6 +29,7 @@ alter table bundle add size bigint default 0;
 alter table bundle add md5 varchar(64) default '';
 
 alter table pagezone change touchpageid touchid int default 0;
+alter table templatezone change touchtemplateid touchid int default 0;
 
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 

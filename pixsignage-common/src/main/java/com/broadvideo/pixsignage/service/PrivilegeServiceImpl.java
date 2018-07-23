@@ -106,12 +106,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| planflag.equals("1") && !org.getCode().equals("nyyh") && !org.getCode().equals("icbc")
-							&& !org.getCode().equals("cp") && p.getPrivilegeid().intValue() == 30501
+					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30501
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
 					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30502
-					|| (org.getCode().equals("nyyh") || org.getCode().equals("icbc") || org.getCode().equals("cp"))
-							&& p.getPrivilegeid().intValue() == 30502
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
 					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30503
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504

@@ -11,12 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
+import com.broadvideo.pixsignage.util.CommonUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,6 +33,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private ScheduledtlMapper scheduledtlMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private OrgMapper orgMapper;
 
 	@Autowired
 	private BundleService bundleService;
@@ -61,7 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("msg_id", 1);
 			msgJson.put("msg_type", "BUNDLE");
-			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
+			JSONObject msgBodyJson = generateDeviceBundleScheduleJson(bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "device-" + bindid;
 			ActiveMQUtil.publish(topic, msgJson.toString());
@@ -69,7 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("msg_id", 1);
 			msgJson.put("msg_type", "BUNDLE");
-			JSONObject msgBodyJson = generateBundleScheduleJson(bindtype, bindid);
+			JSONObject msgBodyJson = generateDevicegroupBundleScheduleJson(bindid);
 			msgJson.put("msg_body", msgBodyJson);
 			String topic = "group-" + bindid;
 			ActiveMQUtil.publish(topic, msgJson.toString());
@@ -103,12 +108,35 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 	}
 
-	public JSONObject generateBundleScheduleJson(String bindtype, String bindid) {
-		if (bindtype.equals(Schedule.BindType_Device)) {
-			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getDevicegroupid() > 0) {
-				bindtype = "2";
-				bindid = "" + device.getDevicegroupid();
+	public JSONObject generateDeviceBundleScheduleJson(String deviceid) {
+		List<Schedule> scheduleList = new ArrayList<Schedule>();
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+
+		if (org.getPlanflag().equals("1") && device.getDefaultbundle() != null) {
+			Schedule schedule = new Schedule();
+			schedule.setScheduleid(0);
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			schedule.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduledtlid(0);
+			scheduledtl.setScheduleid(0);
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(device.getDefaultbundleid());
+			scheduledtl.setDuration(0);
+			List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
+			scheduledtls.add(scheduledtl);
+			schedule.setScheduledtls(scheduledtls);
+			scheduleList.add(schedule);
+		} else if (org.getPlanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
+						Schedule.PlayMode_Daily);
+			} else {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+						"" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
 			}
 		}
 
@@ -116,8 +144,36 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		JSONArray scheduleJsonArray = new JSONArray();
 		// generate final json
-		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, bindtype, bindid,
-				Schedule.PlayMode_Daily);
+		for (Schedule schedule : scheduleList) {
+			JSONObject scheduleJson = new JSONObject();
+			scheduleJson.put("playmode", "daily");
+			scheduleJson.put("start_time",
+					new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+			JSONArray bundleidJsonArray = new JSONArray();
+			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
+					bundleidJsonArray.add(scheduledtl.getObjid());
+					bundleids.add(scheduledtl.getObjid());
+				}
+			}
+			scheduleJson.put("bundles", bundleidJsonArray);
+			scheduleJsonArray.add(scheduleJson);
+		}
+
+		JSONObject responseJson = new JSONObject();
+		responseJson.put("bundle_schedules", scheduleJsonArray);
+		responseJson.put("bundles", bundleService.generateBundleJsonArray(bundleids));
+
+		return responseJson;
+	}
+
+	public JSONObject generateDevicegroupBundleScheduleJson(String devicegroupid) {
+		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo,
+				Schedule.BindType_Devicegroup, devicegroupid, Schedule.PlayMode_Daily);
+		List<Integer> bundleids = new ArrayList<Integer>();
+
+		JSONArray scheduleJsonArray = new JSONArray();
+		// generate final json
 		for (Schedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJson.put("playmode", "daily");
@@ -142,21 +198,41 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	public JSONObject generateScheduleJson(String deviceid) {
+		List<Schedule> scheduleList = new ArrayList<Schedule>();
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
-		// bindtype: 1-device 2-devicegroup
-		String bindtype = "1";
-		String bindid = deviceid;
-		if (device.getDevicegroupid() > 0) {
-			bindtype = "2";
-			bindid = "" + device.getDevicegroupid();
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+
+		if (org.getPlanflag().equals("1") && device.getDefaultbundle() != null) {
+			Schedule schedule = new Schedule();
+			schedule.setScheduleid(0);
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			schedule.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduledtlid(0);
+			scheduledtl.setScheduleid(0);
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(device.getDefaultbundleid());
+			scheduledtl.setDuration(0);
+			List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
+			scheduledtls.add(scheduledtl);
+			schedule.setScheduledtls(scheduledtls);
+			scheduleList.add(schedule);
+		} else if (org.getPlanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
+						Schedule.PlayMode_Daily);
+			} else {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+						"" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
+			}
 		}
 
 		List<Integer> bundleids = new ArrayList<Integer>();
 
 		JSONArray scheduleJsonArray = new JSONArray();
 		// generate final json
-		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, bindtype, bindid,
-				Schedule.PlayMode_Daily);
 		for (Schedule schedule : scheduleList) {
 			JSONObject scheduleJson = new JSONObject();
 			scheduleJson.put("schedule_id", schedule.getScheduleid());

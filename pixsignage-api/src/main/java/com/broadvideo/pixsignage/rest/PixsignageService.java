@@ -39,7 +39,6 @@ import com.broadvideo.pixsignage.domain.Dvb;
 import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
@@ -489,8 +488,7 @@ public class PixsignageService {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-					"" + device.getDeviceid());
+			JSONObject responseJson = scheduleService.generateDeviceBundleScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());

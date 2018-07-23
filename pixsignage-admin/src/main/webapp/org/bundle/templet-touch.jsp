@@ -168,6 +168,12 @@
 							<a href="javascript:;" class="icon-btn pix-addzone dvb-ctrl" zonetype="16">
 								<i class="fa fa-joomla"></i><div>DVB</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="101">
+								<i class="fa fa-qrcode"></i><div>按摩椅二维码</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="102">
+								<i class="fa fa-cog"></i><div>按摩椅控制</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -804,6 +810,7 @@ var RssCtrl = <%=(session_org != null && session_org.getRssflag().equals("1"))%>
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
+var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

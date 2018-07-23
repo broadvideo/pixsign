@@ -13,6 +13,8 @@ select last_insert_id() into @dbversionid;
 ############################################################
 
 alter table device add defaultbundleid int default 0;
+update device d, schedule s, scheduledtl sd set d.defaultbundleid=sd.objid where d.deviceid=s.bindid and s.bindtype=1 and s.scheduleid=sd.scheduleid and sd.objtype=1;
+
 alter table device add defaultpageid int default 0;
 alter table device add hotspotflag char(1) default '0';
 alter table device add hotspotssid varchar(32) default '';
