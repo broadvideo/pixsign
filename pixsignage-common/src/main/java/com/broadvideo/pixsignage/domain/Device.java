@@ -143,6 +143,10 @@ public class Device {
 
 	private String hotspotfrequency;
 
+	private String temperatureflag;
+
+	private Integer relateid;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -699,6 +703,22 @@ public class Device {
 
 	public void setHotspotfrequency(String hotspotfrequency) {
 		this.hotspotfrequency = hotspotfrequency;
+	}
+
+	public String getTemperatureflag() {
+		return temperatureflag;
+	}
+
+	public void setTemperatureflag(String temperatureflag) {
+		this.temperatureflag = temperatureflag;
+	}
+
+	public Integer getRelateid() {
+		return relateid;
+	}
+
+	public void setRelateid(Integer relateid) {
+		this.relateid = relateid;
 	}
 
 	public Branch getBranch() {

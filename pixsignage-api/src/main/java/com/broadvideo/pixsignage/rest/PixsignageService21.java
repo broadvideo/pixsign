@@ -449,7 +449,7 @@ public class PixsignageService21 {
 			JSONObject responseJson = scheduleService.generateDeviceBundleScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage21 get_bundle response: {}", responseJson.toString());
+			logger.info("Pixsignage21 {} get_bundle response: {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage21 get_bundle exception", e);
@@ -482,7 +482,7 @@ public class PixsignageService21 {
 			responseJson = scheduleService.generateScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage21 get_schedule response: {}", responseJson.toString());
+			logger.info("Pixsignage21 {} get_schedule response: {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage21 get_schedule exception", e);

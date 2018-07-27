@@ -329,6 +329,28 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Transactional
+	public void screenoff(String deviceid) throws Exception {
+		JSONObject msgJson = new JSONObject();
+		msgJson.put("msg_id", 1);
+		msgJson.put("msg_type", "SCREENOFF");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+	}
+
+	@Transactional
+	public void screenon(String deviceid) throws Exception {
+		JSONObject msgJson = new JSONObject();
+		msgJson.put("msg_id", 1);
+		msgJson.put("msg_type", "SCREENON");
+		JSONObject msgBodyJson = new JSONObject();
+		msgJson.put("msg_body", msgBodyJson);
+		String topic = "device-" + deviceid;
+		ActiveMQUtil.publish(topic, msgJson.toString());
+	}
+
+	@Transactional
 	public void screen(String deviceid) throws Exception {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
 		if (device.getOnlineflag().equals(Device.Online)) {

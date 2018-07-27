@@ -38,6 +38,8 @@
     <result column="mainpage" property="mainpage" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="boardtype" property="boardtype" jdbcType="VARCHAR" />
+    <result column="hightemperature" property="hightemperature" jdbcType="INTEGER" />
+    <result column="lowtemperature" property="lowtemperature" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
   </resultMap>
@@ -51,7 +53,8 @@
     orgid, vspid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
     currentdeviceidx, maxdetail, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
-    apps, logo, tags, defaultbundleid, defaultpageid, mainpage, city, boardtype, createtime, createstaffid
+    apps, logo, tags, defaultbundleid, defaultpageid, mainpage, city, boardtype, hightemperature, lowtemperature, 
+    createtime, createstaffid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -125,6 +128,7 @@
       timezone, apps, logo, 
       tags, defaultbundleid, defaultpageid, 
       mainpage, city, boardtype, 
+      hightemperature, lowtemperature, 
       createtime, createstaffid)
     values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{feature,jdbcType=VARCHAR}, 
@@ -138,6 +142,7 @@
       #{timezone,jdbcType=VARCHAR}, #{apps,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
       #{tags,jdbcType=VARCHAR}, #{defaultbundleid,jdbcType=INTEGER}, #{defaultpageid,jdbcType=INTEGER}, 
       #{mainpage,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{boardtype,jdbcType=VARCHAR}, 
+      #{hightemperature,jdbcType=INTEGER}, #{lowtemperature,jdbcType=INTEGER}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Org" >
@@ -251,6 +256,12 @@
       <if test="boardtype != null" >
         boardtype,
       </if>
+      <if test="hightemperature != null" >
+        hightemperature,
+      </if>
+      <if test="lowtemperature != null" >
+        lowtemperature,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -363,6 +374,12 @@
       </if>
       <if test="boardtype != null" >
         #{boardtype,jdbcType=VARCHAR},
+      </if>
+      <if test="hightemperature != null" >
+        #{hightemperature,jdbcType=INTEGER},
+      </if>
+      <if test="lowtemperature != null" >
+        #{lowtemperature,jdbcType=INTEGER},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -480,6 +497,12 @@
       <if test="boardtype != null" >
         boardtype = #{boardtype,jdbcType=VARCHAR},
       </if>
+      <if test="hightemperature != null" >
+        hightemperature = #{hightemperature,jdbcType=INTEGER},
+      </if>
+      <if test="lowtemperature != null" >
+        lowtemperature = #{lowtemperature,jdbcType=INTEGER},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -525,6 +548,8 @@
       mainpage = #{mainpage,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       boardtype = #{boardtype,jdbcType=VARCHAR},
+      hightemperature = #{hightemperature,jdbcType=INTEGER},
+      lowtemperature = #{lowtemperature,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where orgid = #{orgid,jdbcType=INTEGER}

@@ -81,6 +81,10 @@ public class Org {
 
 	private String boardtype;
 
+	private Integer hightemperature;
+
+	private Integer lowtemperature;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -383,6 +387,22 @@ public class Org {
 
 	public void setBoardtype(String boardtype) {
 		this.boardtype = boardtype;
+	}
+
+	public Integer getHightemperature() {
+		return hightemperature;
+	}
+
+	public void setHightemperature(Integer hightemperature) {
+		this.hightemperature = hightemperature;
+	}
+
+	public Integer getLowtemperature() {
+		return lowtemperature;
+	}
+
+	public void setLowtemperature(Integer lowtemperature) {
+		this.lowtemperature = lowtemperature;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

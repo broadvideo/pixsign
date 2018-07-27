@@ -44,6 +44,10 @@ public interface DeviceService {
 
 	public void poweroff(String deviceid) throws Exception;
 
+	public void screenoff(String deviceid) throws Exception;
+
+	public void screenon(String deviceid) throws Exception;
+
 	public void screen(String deviceid) throws Exception;
 
 	public void debug(String deviceid) throws Exception;

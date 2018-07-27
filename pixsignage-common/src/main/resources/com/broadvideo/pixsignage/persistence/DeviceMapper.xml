@@ -69,6 +69,8 @@
     <result column="hotspotssid" property="hotspotssid" jdbcType="VARCHAR" />
     <result column="hotspotpassword" property="hotspotpassword" jdbcType="VARCHAR" />
     <result column="hotspotfrequency" property="hotspotfrequency" jdbcType="VARCHAR" />
+    <result column="temperatureflag" property="temperatureflag" jdbcType="CHAR" />
+    <result column="relateid" property="relateid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -87,7 +89,8 @@
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
-    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, hotspotfrequency
+    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, 
+    hotspotfrequency, temperatureflag, relateid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -408,7 +411,8 @@
       networksignal, brightness, tags, 
       cataitemid1, cataitemid2, defaultbundleid, 
       defaultpageid, hotspotflag, hotspotssid, 
-      hotspotpassword, hotspotfrequency)
+      hotspotpassword, hotspotfrequency, 
+      temperatureflag, relateid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -430,7 +434,8 @@
       #{networksignal,jdbcType=INTEGER}, #{brightness,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR},
       #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
       #{defaultpageid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
-      #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR})
+      #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR}, 
+      #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -636,6 +641,12 @@
       <if test="hotspotfrequency != null" >
         hotspotfrequency,
       </if>
+      <if test="temperatureflag != null" >
+        temperatureflag,
+      </if>
+      <if test="relateid != null" >
+        relateid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -835,6 +846,12 @@
       </if>
       <if test="hotspotfrequency != null" >
         #{hotspotfrequency,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatureflag != null" >
+        #{temperatureflag,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        #{relateid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -1039,6 +1056,12 @@
       <if test="hotspotfrequency != null" >
         hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR},
       </if>
+      <if test="temperatureflag != null" >
+        temperatureflag = #{temperatureflag,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        relateid = #{relateid,jdbcType=INTEGER},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -1109,7 +1132,9 @@
       hotspotflag = #{hotspotflag,jdbcType=CHAR},
       hotspotssid = #{hotspotssid,jdbcType=VARCHAR},
       hotspotpassword = #{hotspotpassword,jdbcType=VARCHAR},
-      hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR}
+      hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR},
+      temperatureflag = #{temperatureflag,jdbcType=CHAR},
+      relateid = #{relateid,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">
