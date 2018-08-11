@@ -380,7 +380,6 @@ var BundleModule = function () {
 			},
 			'fnDrawCallback': function(oSettings, json) {
 				$('#TempletContainer .thumbs').each(function(i) {
-					console.log($(this).parent().closest('div').width());
 					$(this).width($(this).parent().closest('div').width());
 					$(this).height($(this).parent().closest('div').width());
 				});
@@ -401,7 +400,7 @@ var BundleModule = function () {
 										content: '<div id="TempletPreview"></div>',
 										title: templetid,
 									});
-									PagePreviewModule.preview($('#TempletPreview'), data.templet, 800);
+									BundlePreviewModule.preview($('#TempletPreview'), data.templet, 800);
 								} else {
 									bootbox.alert(common.tips.error + data.errormsg);
 								}

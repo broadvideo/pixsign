@@ -43,6 +43,8 @@ public class Image {
 
 	private Integer relateid;
 
+	private String relateurl;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -199,6 +201,14 @@ public class Image {
 
 	public void setRelateid(Integer relateid) {
 		this.relateid = relateid;
+	}
+
+	public String getRelateurl() {
+		return relateurl;
+	}
+
+	public void setRelateurl(String relateurl) {
+		this.relateurl = relateurl;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

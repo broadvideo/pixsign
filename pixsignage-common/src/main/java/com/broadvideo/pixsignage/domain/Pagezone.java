@@ -419,6 +419,14 @@ public class Pagezone {
 		return touchid;
 	}
 
+	public void setTouchpageid(Integer touchpageid) {
+		this.touchid = touchpageid;
+	}
+
+	public Integer getTouchpageid() {
+		return touchid;
+	}
+
 	public void setTouchid(Integer touchid) {
 		this.touchid = touchid;
 	}

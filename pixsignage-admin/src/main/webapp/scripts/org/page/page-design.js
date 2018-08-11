@@ -1280,6 +1280,7 @@ var PageDesignModule = function (mode) {
 		$('#SubObjectSelect').on('change', function(e) {
 			if ($('#SubObjectSelect').select2('data') != null) {
 				_self.Zone.touchid = $('#SubObjectSelect').select2('data').id;
+				_self.Zone.touchpageid = $('#SubObjectSelect').select2('data').id;
 			}
 		});	
 
@@ -1540,6 +1541,7 @@ var PageDesignModule = function (mode) {
 			pagezone.lineheight = 80;
 			pagezone.touchtype = '9';
 			pagezone.touchid = 0;
+			pagezone.touchpageid = 0;
 			pagezone.fixflag = '1';
 			pagezone.content = '';
 			pagezone.pagezonedtls = [];

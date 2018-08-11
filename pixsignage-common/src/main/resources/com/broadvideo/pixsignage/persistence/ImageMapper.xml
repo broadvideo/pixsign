@@ -21,6 +21,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
+    <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="relateimage" column="{imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
@@ -28,12 +29,12 @@
   
   <sql id="Base_Column_List" >
     imageid, orgid, branchid, folderid, name, oname, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
-    description, thumbnail, relateid, createtime, createstaffid
+    description, thumbnail, relateid, relateurl, createtime, createstaffid
   </sql>
   
   <select id="selectRelateImage" resultMap="BaseResultMap" >
     select imageid, orgid, branchid, folderid, name, oname, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
-    description, thumbnail, 0 as relateid, createtime, createstaffid
+    description, thumbnail, 0 as relateid, relateurl, createtime, createstaffid
     from image
     where imageid = #{imageid}
     and status != '9'
@@ -118,16 +119,16 @@
       width, height, 
       filepath, filename, size, 
       md5, status, objtype, objid, 
-      description, thumbnail, 
-      relateid, createtime, createstaffid
+      description, thumbnail, relateid, 
+      relateurl, createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, 
       #{md5,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, 
-      #{relateid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
+      #{relateurl,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Image" >
@@ -190,6 +191,9 @@
       <if test="relateid != null" >
         relateid,
       </if>
+      <if test="relateurl != null" >
+        relateurl,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -251,6 +255,9 @@
       </if>
       <if test="relateid != null" >
         #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="relateurl != null" >
+        #{relateurl,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -317,6 +324,9 @@
       <if test="relateid != null" >
         relateid = #{relateid,jdbcType=INTEGER},
       </if>
+      <if test="relateurl != null" >
+        relateurl = #{relateurl,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -346,6 +356,7 @@
       description = #{description,jdbcType=VARCHAR},
       thumbnail = #{thumbnail,jdbcType=VARCHAR},
       relateid = #{relateid,jdbcType=INTEGER},
+      relateurl = #{relateurl,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where imageid = #{imageid,jdbcType=INTEGER}

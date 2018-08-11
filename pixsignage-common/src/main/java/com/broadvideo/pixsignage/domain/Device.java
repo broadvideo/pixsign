@@ -147,6 +147,8 @@ public class Device {
 
 	private Integer relateid;
 
+	private String screenstatus;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -719,6 +721,14 @@ public class Device {
 
 	public void setRelateid(Integer relateid) {
 		this.relateid = relateid;
+	}
+
+	public String getScreenstatus() {
+		return screenstatus;
+	}
+
+	public void setScreenstatus(String screenstatus) {
+		this.screenstatus = screenstatus;
 	}
 
 	public Branch getBranch() {

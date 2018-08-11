@@ -39,10 +39,10 @@ var BundlePreviewModule = function () {
 
 			$(zone_div).css({
 				'position': 'absolute',
-				'width': 100*zone.width/bundle.width + '%',
-				'height': 100*zone.height/bundle.height + '%',
-				'top': 100*zone.topoffset/bundle.height + '%', 
-				'left': 100*zone.leftoffset/bundle.width + '%', 
+				'width': width*zone.width/bundle.width,
+				'height': height*zone.height/bundle.height,
+				'top': height*zone.topoffset/bundle.height, 
+				'left': width*zone.leftoffset/bundle.width, 
 				'z-index': zone.zindex,
 				'-moz-transform': 'matrix(1, 0, 0, 1, 0, 0)',
 				'-webkit-transform': 'matrix(1, 0, 0, 1, 0, 0)',
@@ -179,6 +179,51 @@ var BundlePreviewModule = function () {
 				$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-qrcode.jpg');
 				$(inner_div).find('img').attr('width', '100%');
 				$(inner_div).find('img').attr('height', '100%');
+			} else if (zone.type == 10) {
+				//Menu Zone
+				var menuscale = 1;
+				$(inner_div).css({
+					'box-sizing': 'border-box',
+					'color': zone.color, 
+					'overflow': 'hidden',
+				});
+				if (zone.width > zone.height) {
+					var menupercent = 100*menuscale*zone.height/zone.width;
+					for (var j=0; j<zone.bundlezonedtls.length; j++) {
+						var menu_div = document.createElement('div');
+						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.filepath;
+						$(menu_div).css({
+							'position': 'absolute',
+							'height': '100%', 
+							'width': menupercent + '%',
+							'top': '0%',
+							'left': j*menupercent + '%',
+							'background-image': 'url(' + bgurl + ')',
+							'background-size': 'contain',
+							'background-position': 'center',
+							'background-repeat': 'no-repeat',
+						});
+						$(inner_div).append(menu_div);
+					}
+				} else {
+					var menupercent = 100/menuscale*zone.width/zone.height;
+					for (var j=0; j<zone.bundlezonedtls.length; j++) {
+						var menu_div = document.createElement('div');
+						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.filepath;
+						$(menu_div).css({
+							'position': 'absolute',
+							'height': menupercent + '%',
+							'width': '100%',
+							'top': j*menupercent + '%',
+							'left': '0%',
+							'background-image': 'url(' + bgurl + ')',
+							'background-size': 'contain',
+							'background-position': 'center',
+							'background-repeat': 'no-repeat',
+						});
+						$(inner_div).append(menu_div);
+					}
+				}
 			} else if (zone.type == '12') {
 				//RSS Zone
 				var p_element = document.createElement('p');

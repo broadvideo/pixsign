@@ -617,8 +617,12 @@ public class PageServiceImpl implements PageService {
 			CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/diy/" + diy), diy);
 		}
 
+		String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + page.getPageid();
+		File jsonFile = new File(pageDir, "index.json");
+		FileUtils.writeStringToFile(jsonFile, JSONObject.fromObject(page).toString(2), "UTF-8", false);
+		CommonUtil.zip(out, jsonFile, "index.json");
 		for (Page p : pageList) {
-			String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
+			pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 			File dataFile = new File(pageDir, "" + p.getPageid() + ".js");
 			FileUtils.writeStringToFile(dataFile, "var Page=" + JSONObject.fromObject(p).toString(2), "UTF-8", false);
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");

@@ -50,6 +50,8 @@ public class Video {
 
 	private Integer relateid;
 
+	private String relateurl;
+
 	private String tags;
 
 	private Date createtime;
@@ -224,6 +226,14 @@ public class Video {
 
 	public void setRelateid(Integer relateid) {
 		this.relateid = relateid;
+	}
+
+	public String getRelateurl() {
+		return relateurl;
+	}
+
+	public void setRelateurl(String relateurl) {
+		this.relateurl = relateurl;
 	}
 
 	public String getTags() {

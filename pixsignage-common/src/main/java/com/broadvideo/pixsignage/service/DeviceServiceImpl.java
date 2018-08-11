@@ -521,6 +521,7 @@ public class DeviceServiceImpl implements DeviceService {
 							videoJson.put("checksum", video.getMd5());
 							videoJson.put("thumbnail", "http://" + serverip + ":" + serverport
 									+ CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+							videoJson.put("relateurl", video.getRelateurl());
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.add(videoJson);
 						}
@@ -537,6 +538,7 @@ public class DeviceServiceImpl implements DeviceService {
 						imageJson.put("checksum", image.getMd5());
 						imageJson.put("thumbnail", "http://" + serverip + ":" + serverport
 								+ CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
+						imageJson.put("relateurl", image.getRelateurl());
 						imageHash.put(image.getImageid(), imageJson);
 						imageJsonArray.add(imageJson);
 					}

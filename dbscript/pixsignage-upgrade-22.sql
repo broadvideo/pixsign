@@ -33,8 +33,12 @@ alter table templatezone change touchtemplateid touchid int default 0;
 
 alter table device add temperatureflag char(1) default '0';
 alter table device add relateid int default 0;
+alter table device add screenstatus char(1) default 1;
 alter table org add hightemperature int default 50;
 alter table org add lowtemperature int default 40;
+
+alter table image add relateurl varchar(512) default '';
+alter table video add relateurl varchar(512) default '';
 
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 

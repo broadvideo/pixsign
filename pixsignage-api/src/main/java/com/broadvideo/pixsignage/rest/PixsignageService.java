@@ -561,6 +561,7 @@ public class PixsignageService {
 			device.setNetworkmode(networkmode);
 			device.setNetworksignal(networksignal);
 			device.setBrightness(brightness);
+			device.setScreenstatus(screenstatus);
 			device.setOnlineflag("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKeySelective(device);
@@ -571,23 +572,35 @@ public class PixsignageService {
 				try {
 					int t = Math.round(Float.parseFloat(temperature));
 					Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-					if (t > org.getHightemperature() && screenstatus.equals("1")) {
+					if (t > org.getHightemperature()) {
 						// Screen Off
-						logger.error("Pixsignage screen off, temperature={}, deviceid={}", t, device.getDeviceid());
-						deviceService.screenoff("" + device.getDeviceid());
-						if (device.getRelateid() > 0
-								&& device.getRelateid().intValue() != device.getDeviceid().intValue()) {
-							logger.error("Pixsignage screen off, temperature={}, relateid={}", t, device.getRelateid());
-							deviceService.screenoff("" + device.getRelateid());
+						if (device.getScreenstatus().equals("1")) {
+							logger.error("Pixsignage screen off, temperature={}, deviceid={}", t, device.getDeviceid());
+							deviceService.screenoff("" + device.getDeviceid());
 						}
-					} else if (t > 0 && t < org.getLowtemperature() && screenstatus.equals("0")) {
-						// Screen On
-						logger.error("Pixsignage screen on, temperature={}, deviceid={}", t, device.getDeviceid());
-						deviceService.screenon("" + device.getDeviceid());
 						if (device.getRelateid() > 0
 								&& device.getRelateid().intValue() != device.getDeviceid().intValue()) {
-							logger.error("Pixsignage screen on, temperature={}, relateid={}", t, device.getRelateid());
-							deviceService.screenon("" + device.getRelateid());
+							Device relatedevice = deviceMapper.selectByPrimaryKey("" + device.getRelateid());
+							if (relatedevice.getScreenstatus().equals("1")) {
+								logger.error("Pixsignage screen off, temperature={}, relateid={}", t,
+										device.getRelateid());
+								deviceService.screenoff("" + device.getRelateid());
+							}
+						}
+					} else if (t > 0 && t < org.getLowtemperature()) {
+						// Screen On
+						if (device.getScreenstatus().equals("0")) {
+							logger.error("Pixsignage screen on, temperature={}, deviceid={}", t, device.getDeviceid());
+							deviceService.screenon("" + device.getDeviceid());
+						}
+						if (device.getRelateid() > 0
+								&& device.getRelateid().intValue() != device.getDeviceid().intValue()) {
+							Device relatedevice = deviceMapper.selectByPrimaryKey("" + device.getRelateid());
+							if (relatedevice.getScreenstatus().equals("0")) {
+								logger.error("Pixsignage screen on, temperature={}, relateid={}", t,
+										device.getRelateid());
+								deviceService.screenon("" + device.getRelateid());
+							}
 						}
 					}
 				} catch (Exception e) {

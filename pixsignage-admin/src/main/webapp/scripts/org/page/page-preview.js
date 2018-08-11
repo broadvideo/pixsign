@@ -39,10 +39,10 @@ var PagePreviewModule = function () {
 
 			$(zone_div).css({
 				'position': 'absolute',
-				'width': 100*zone.width/page.width + '%',
-				'height': 100*zone.height/page.height + '%',
-				'top': 100*zone.topoffset/page.height + '%', 
-				'left': 100*zone.leftoffset/page.width + '%', 
+				'width': width*zone.width/page.width,
+				'height': height*zone.height/page.height,
+				'top': height*zone.topoffset/page.height, 
+				'left': width*zone.leftoffset/page.width, 
 				'z-index': zone.zindex,
 				'-moz-transform': zone.transform,
 				'-webkit-transform': zone.transform,

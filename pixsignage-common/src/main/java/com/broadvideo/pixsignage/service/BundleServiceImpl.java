@@ -48,6 +48,7 @@ import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundlezoneMapper;
 import com.broadvideo.pixsignage.persistence.BundlezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
@@ -80,9 +81,9 @@ public class BundleServiceImpl implements BundleService {
 	private VideoMapper videoMapper;
 	@Autowired
 	private ImageMapper imageMapper;
-
 	@Autowired
-	private DevicefileService devicefileService;
+	private DeviceMapper deviceMapper;
+
 	@Autowired
 	private ScheduleService scheduleService;
 
@@ -653,7 +654,14 @@ public class BundleServiceImpl implements BundleService {
 			scheduledtl.setSequence(1);
 			scheduledtlMapper.insertSelective(scheduledtl);
 
-			devicefileService.refreshDevicefiles("" + bind.get("bindtype"), "" + bind.get("bindid"));
+			String bindtype = "" + bind.get("bindtype");
+			if (bindtype.equals(Schedule.BindType_Device)) {
+				deviceMapper.updateBundle("" + bind.get("bindid"), "" + bundle.getBundleid());
+			} else if (bind.get("bindtype").equals(Schedule.BindType_Devicegroup)) {
+
+			}
+			// devicefileService.refreshDevicefiles("" + bind.get("bindtype"),
+			// "" + bind.get("bindid"));
 		}
 
 		// Handle sync
