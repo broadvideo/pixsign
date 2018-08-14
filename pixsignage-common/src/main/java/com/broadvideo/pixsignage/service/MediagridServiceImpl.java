@@ -197,11 +197,11 @@ public class MediagridServiceImpl implements MediagridService {
 		}
 
 		String snapshotdtl = mediagrid.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
 		String snapshotFilePath = "/mediagrid/" + mediagrid.getMediagridid() + "/snapshot/" + mediagrid.getMediagridid()
-				+ ".png";
+				+ ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		mediagrid.setSnapshot(snapshotFilePath);

@@ -327,7 +327,8 @@ var common = {
 		register_failed: 'Input error, register failed',
 		getvcode_failed: 'SMS failed',
 
-		region_remove_failed: 'Cannot remove this region',
+		mainzone_missed: 'Please set one main zone',
+		region_remove_failed: 'Cannot remove this zone',
 
 		folder_remove_failed: 'Cannot remove this folder',
 

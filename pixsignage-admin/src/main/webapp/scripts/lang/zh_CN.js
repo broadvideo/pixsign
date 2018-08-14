@@ -327,6 +327,7 @@ var common = {
 		register_failed: '信息输入有误，注册失败',
 		getvcode_failed: '短信发送失败',
 
+		mainzone_missed: '请把一个区域设置为主区域',
 		region_remove_failed: '无法删除这个区域',
 
 		folder_remove_failed: '无法删除这个文件夹',

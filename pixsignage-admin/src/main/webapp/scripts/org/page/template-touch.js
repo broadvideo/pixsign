@@ -438,11 +438,11 @@ var TemplateModule = function () {
 				animate: true
 			});
 			$('#snapshot_div').show();
-			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 1024);
+			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL());
-					_design.Object.snapshotdtl = canvas.toDataURL();
+					//console.log(canvas.toDataURL('image/jpeg'));
+					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
 					$('#snapshot_div').hide();
 
 					_design.Object.templateid = _design.Object.pageid;

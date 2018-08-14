@@ -64,6 +64,10 @@ public class Bundle {
 
 	private Integer createstaffid;
 
+	private Date startdate;
+
+	private Date enddate;
+
 	private String json;
 
 	private String snapshotdtl;
@@ -292,6 +296,26 @@ public class Bundle {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public Date getStartdate() {
+		return startdate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public void setStartdate(Date startdate) {
+		this.startdate = startdate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public Date getEnddate() {
+		return enddate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
 	}
 
 	public String getJson() {

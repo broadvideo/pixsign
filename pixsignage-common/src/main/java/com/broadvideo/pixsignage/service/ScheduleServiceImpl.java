@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Schedule;
@@ -20,6 +21,8 @@ import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
+import com.broadvideo.pixsignage.util.DateUtil;
+import com.ibm.icu.util.Calendar;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -152,12 +155,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 			JSONArray bundleidJsonArray = new JSONArray();
 			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
 				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
-					bundleidJsonArray.add(scheduledtl.getObjid());
-					bundleids.add(scheduledtl.getObjid());
+					Bundle bundle = bundleService.selectMiniByPrimaryKey("" + scheduledtl.getObjid());
+					int d1 = Integer.parseInt(DateUtil.getDateStr(bundle.getStartdate(), "yyyyMMdd"));
+					int d2 = Integer.parseInt(DateUtil.getDateStr(bundle.getEnddate(), "yyyyMMdd"));
+					int now = Integer.parseInt(DateUtil.getDateStr(Calendar.getInstance().getTime(), "yyyyMMdd"));
+					if (now >= d1 && now <= d2) {
+						bundleidJsonArray.add(scheduledtl.getObjid());
+						bundleids.add(scheduledtl.getObjid());
+					}
 				}
 			}
-			scheduleJson.put("bundles", bundleidJsonArray);
-			scheduleJsonArray.add(scheduleJson);
+			if (bundleidJsonArray.size() > 0) {
+				scheduleJson.put("bundles", bundleidJsonArray);
+				scheduleJsonArray.add(scheduleJson);
+			}
 		}
 
 		JSONObject responseJson = new JSONObject();

@@ -40,6 +40,9 @@ alter table org add lowtemperature int default 40;
 alter table image add relateurl varchar(512) default '';
 alter table video add relateurl varchar(512) default '';
 
+alter table bundle add startdate date default '1970-01-01';
+alter table bundle add enddate date default '2037-01-01';
+
 ALTER TABLE `meeting` 
 	ADD COLUMN `periodmeetingid` int(11)   NOT NULL COMMENT '0:不存在   >0  关联周期会议id' after `uuid`, 
 	ADD COLUMN `periodendtime` datetime   NULL COMMENT '周期结束日期 e.g. yyyy-MM-dd' after `endtime`, 

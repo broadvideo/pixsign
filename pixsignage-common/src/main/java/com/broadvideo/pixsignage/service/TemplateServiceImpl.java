@@ -149,7 +149,7 @@ public class TemplateServiceImpl implements TemplateService {
 			}
 			if (fromtemplate.getSnapshot() != null) {
 				String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/"
-						+ template.getTemplateid() + ".png";
+						+ template.getTemplateid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + fromtemplate.getSnapshot()),
 						snapshotFile);
@@ -282,10 +282,10 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 
 		String snapshotdtl = template.getSnapshotdtl();
-		if (snapshotdtl != null && snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl != null && snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 			String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
-					+ ".png";
+					+ ".jpg";
 			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 			template.setSnapshot(snapshotFilePath);
@@ -321,7 +321,7 @@ public class TemplateServiceImpl implements TemplateService {
 		templateMapper.insertSelective(template);
 		if (page.getSnapshot() != null) {
 			String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
-					+ ".png";
+					+ ".jpg";
 			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + page.getSnapshot()), snapshotFile);
 			template.setSnapshot(snapshotFilePath);
@@ -351,7 +351,7 @@ public class TemplateServiceImpl implements TemplateService {
 			pageList.add(subpage);
 			if (subpage.getSnapshot() != null) {
 				String snapshotFilePath = "/template/" + subtemplate.getTemplateid() + "/snapshot/"
-						+ subtemplate.getTemplateid() + ".png";
+						+ subtemplate.getTemplateid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subpage.getSnapshot()), snapshotFile);
 				subtemplate.setSnapshot(snapshotFilePath);
@@ -474,15 +474,15 @@ public class TemplateServiceImpl implements TemplateService {
 			File jsfFile = new File(templateDir, "" + t.getTemplateid() + ".jsf");
 			FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(t).toString(2), "UTF-8", false);
 			String jsfname = "index.jsf";
-			String pngname = "index.png";
+			String jpgname = "index.jpg";
 			if (t.getHomeflag().equals("0")) {
 				jsfname = "" + t.getTemplateid() + ".jsf";
-				pngname = "" + t.getTemplateid() + ".png";
+				jpgname = "" + t.getTemplateid() + ".jpg";
 			}
 			CommonUtil.zip(out, jsfFile, jsfname);
 			if (t.getSnapshot() != null) {
 				File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + t.getSnapshot());
-				CommonUtil.zip(out, snapshot, pngname);
+				CommonUtil.zip(out, snapshot, jpgname);
 			}
 		}
 		out.close();
@@ -519,9 +519,9 @@ public class TemplateServiceImpl implements TemplateService {
 		template.setCreatetime(now);
 		templateMapper.insertSelective(template);
 		String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
-				+ ".png";
+				+ ".jpg";
 		template.setSnapshot(snapshotFilePath);
-		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		File fromSnapshotFile = new File(unzipFilePath, "index.jpg");
 		File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		if (fromSnapshotFile.exists()) {
 			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -540,9 +540,9 @@ public class TemplateServiceImpl implements TemplateService {
 			t.setHometemplateid(template.getTemplateid());
 			t.setCreatetime(now);
 			templateMapper.insertSelective(t);
-			snapshotFilePath = "/template/" + t.getTemplateid() + "/snapshot/" + t.getTemplateid() + ".png";
+			snapshotFilePath = "/template/" + t.getTemplateid() + "/snapshot/" + t.getTemplateid() + ".jpg";
 			t.setSnapshot(snapshotFilePath);
-			fromSnapshotFile = new File(unzipFilePath, "" + fromTemplateid + ".png");
+			fromSnapshotFile = new File(unzipFilePath, "" + fromTemplateid + ".jpg");
 			toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			if (fromSnapshotFile.exists()) {
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -847,7 +847,7 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 
 		String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
-				+ ".png";
+				+ ".jpg";
 		int statusCode = download2File("http://signagecreator.com/assets/template/admin/" + sourceid + ".jpg",
 				CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		if (statusCode == 200) {

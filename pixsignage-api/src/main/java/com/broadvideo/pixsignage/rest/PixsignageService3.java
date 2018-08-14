@@ -586,9 +586,9 @@ public class PixsignageService3 {
 				int status = fileJson.optInt("status");
 				String desc = fileJson.optString("desc");
 				String objtype = "0";
-				if (type.equals("video")) {
+				if (type.equalsIgnoreCase("video")) {
 					objtype = Devicefile.ObjType_Video;
-				} else if (type.equals("page")) {
+				} else if (type.equalsIgnoreCase("page")) {
 					objtype = Devicefile.ObjType_Page;
 				} else {
 					continue;

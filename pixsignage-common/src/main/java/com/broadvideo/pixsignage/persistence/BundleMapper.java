@@ -7,6 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import com.broadvideo.pixsignage.domain.Bundle;
 
 public interface BundleMapper {
+	Bundle selectMiniByPrimaryKey(@Param(value = "bundleid") String bundleid);
+
+	Bundle selectBaseByPrimaryKey(@Param(value = "bundleid") String bundleid);
+
 	Bundle selectByPrimaryKey(@Param(value = "bundleid") String bundleid);
 
 	Bundle selectByUuid(@Param(value = "orgid") String orgid, @Param(value = "uuid") String uuid);

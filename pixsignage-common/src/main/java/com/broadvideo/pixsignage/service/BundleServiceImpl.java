@@ -87,6 +87,14 @@ public class BundleServiceImpl implements BundleService {
 	@Autowired
 	private ScheduleService scheduleService;
 
+	public Bundle selectMiniByPrimaryKey(String bundleid) {
+		return bundleMapper.selectMiniByPrimaryKey(bundleid);
+	}
+
+	public Bundle selectBaseByPrimaryKey(String bundleid) {
+		return bundleMapper.selectBaseByPrimaryKey(bundleid);
+	}
+
 	public Bundle selectByPrimaryKey(String bundleid) {
 		return bundleMapper.selectByPrimaryKey(bundleid);
 	}
@@ -174,7 +182,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 			if (templet.getSnapshot() != null) {
 				String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid()
-						+ ".png";
+						+ ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + templet.getSnapshot()), snapshotFile);
 				bundle.setSnapshot(snapshotFilePath);
@@ -206,7 +214,7 @@ public class BundleServiceImpl implements BundleService {
 				templetList.add(subtemplet);
 				if (subtemplet.getSnapshot() != null) {
 					String snapshotFilePath = "/bundle/" + subbundle.getBundleid() + "/snapshot/"
-							+ subbundle.getBundleid() + ".png";
+							+ subbundle.getBundleid() + ".jpg";
 					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subtemplet.getSnapshot()),
 							snapshotFile);
@@ -337,7 +345,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 			if (frombundle.getSnapshot() != null) {
 				String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid()
-						+ ".png";
+						+ ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + frombundle.getSnapshot()), snapshotFile);
 				bundle.setSnapshot(snapshotFilePath);
@@ -443,10 +451,10 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
@@ -472,10 +480,10 @@ public class BundleServiceImpl implements BundleService {
 			bundleMapper.clearBundlezones(destbundleidList[i]);
 			destbundle.setHomeidletime(sourcebundle.getHomeidletime());
 			File fromSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + sourcebundleid
-					+ "/snapshot/" + sourcebundleid + ".png");
+					+ "/snapshot/" + sourcebundleid + ".jpg");
 			if (fromSnapshotFile.exists()) {
 				String snapshotFilePath = "/bundle/" + destbundleidList[i] + "/snapshot/" + destbundleidList[i]
-						+ ".png";
+						+ ".jpg";
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				destbundle.setSnapshot(snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -699,10 +707,10 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
@@ -1301,9 +1309,9 @@ public class BundleServiceImpl implements BundleService {
 		} else {
 			bundleMapper.insertSelective(bundle);
 		}
-		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		File fromSnapshotFile = new File(unzipFilePath, "index.jpg");
 		if (fromSnapshotFile.exists()) {
-			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
 			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			bundle.setSnapshot(snapshotFilePath);
 			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -1323,9 +1331,9 @@ public class BundleServiceImpl implements BundleService {
 			p.setHomebundleid(bundle.getBundleid());
 			p.setCreatetime(now);
 			bundleMapper.insertSelective(p);
-			fromSnapshotFile = new File(unzipFilePath, "" + fromBundleid + ".png");
+			fromSnapshotFile = new File(unzipFilePath, "" + fromBundleid + ".jpg");
 			if (fromSnapshotFile.exists()) {
-				String snapshotFilePath = "/bundle/" + p.getBundleid() + "/snapshot/" + p.getBundleid() + ".png";
+				String snapshotFilePath = "/bundle/" + p.getBundleid() + "/snapshot/" + p.getBundleid() + ".jpg";
 				p.setSnapshot(snapshotFilePath);
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);

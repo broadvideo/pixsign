@@ -21,7 +21,7 @@ import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.common.WxmpMessageTips;
 import com.broadvideo.pixsignage.domain.Smartbox;
 import com.broadvideo.pixsignage.persistence.SmartboxMapper;
-import com.broadvideo.pixsignage.util.CommonUtils;
+import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.vo.TerminalBinding;
 
 public class SmartdoorkeeperService implements InitializingBean {
@@ -51,7 +51,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 	 * @param orgid
 	 * @return
 	 */
-	public boolean bind(String terminalid, String wxuserid, String wxmpid, String event, Long eventtime, Integer orgid) {
+	public boolean bind(String terminalid, String wxuserid, String wxmpid, String event, Long eventtime,
+			Integer orgid) {
 		synchronized (lock) {
 			// 检查微信用户是否已经发送授权开门中
 			if (userBindingsMap.containsKey(wxuserid)) {
@@ -191,8 +192,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 
 				if (StringUtils.isNotBlank(wxuserid)) {
 					authorizedVal = DoorConst.DoorAuthorizeState.OPEN.getVal();
-					logger.info("terminalid({}) door({}) authorized by wxuserid({})", new Object[] { terminalid,
-							doorType, wxuserid });
+					logger.info("terminalid({}) door({}) authorized by wxuserid({})",
+							new Object[] { terminalid, doorType, wxuserid });
 				} else {
 					authorizedVal = DoorConst.DoorAuthorizeState.INIT.getVal();
 
@@ -230,14 +231,14 @@ public class SmartdoorkeeperService implements InitializingBean {
 			logger.error("wxuserid({})与terminalid({})不存在绑定关系.", wxuserid, terminalid);
 			throw new ServiceException(ApiRetCodeEnum.TERMINAL_NOBINDING_USER, "终端未授权开门");
 		}
-		logger.info("terminalid({}) doorType({}) with actionType({}) and state({})", new Object[] { terminalid,
-				doorType, actionType, state });
+		logger.info("terminalid({}) doorType({}) with actionType({}) and state({})",
+				new Object[] { terminalid, doorType, actionType, state });
 		// 上报开门状态
 		if (DoorConst.ActionType.ACTION_OPEN.getVal().equals(actionType)) {
 
 			if (DoorConst.DoorState.SUCCESS.getVal().equals(binding.getOpenstate())) {
-				logger.info("terminalid({}) doorType({}) openstate({}) has already success.", new Object[] {
-						terminalid, doorType, binding.getOpenstate() });
+				logger.info("terminalid({}) doorType({}) openstate({}) has already success.",
+						new Object[] { terminalid, doorType, binding.getOpenstate() });
 				return;
 			}
 			if (state.equals(binding.getOpenstate())) {
@@ -264,8 +265,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 
 	}
 
-	public void doorStateCallback(String terminalid, String doorType, String actionType, String state,
-			Integer stocknum, String extra) {
+	public void doorStateCallback(String terminalid, String doorType, String actionType, String state, Integer stocknum,
+			String extra) {
 
 		TerminalBinding binding = getBindingByTermminalid(terminalid);
 		if (binding == null) {
@@ -281,8 +282,8 @@ public class SmartdoorkeeperService implements InitializingBean {
 				new Object[] { terminalid, state, extra });
 		// 上报开门状态
 		if (DoorConst.DoorState.SUCCESS.getVal().equals(binding.getOpenstate())) {
-			logger.info("terminalid({}) doorType({}) openstate({}) has already success.", new Object[] { terminalid,
-					doorType, binding.getOpenstate() });
+			logger.info("terminalid({}) doorType({}) openstate({}) has already success.",
+					new Object[] { terminalid, doorType, binding.getOpenstate() });
 			return;
 		}
 		if (state.equals(binding.getOpenstate())) {
@@ -350,7 +351,7 @@ public class SmartdoorkeeperService implements InitializingBean {
 				try {
 					if (userBindingsMap == null || userBindingsMap.size() == 0) {
 
-						CommonUtils.sleep(5 * 1000L);
+						CommonUtil.sleep(5 * 1000L);
 						logger.info("no binding records");
 						continue;
 					}
@@ -370,9 +371,9 @@ public class SmartdoorkeeperService implements InitializingBean {
 						}
 					}
 					logger.info("check binding  end......,sleep 5s");
-					CommonUtils.sleep(5 * 1000L);
+					CommonUtil.sleep(5 * 1000L);
 				} catch (Exception ex) {
-					CommonUtils.sleep(5 * 1000L);
+					CommonUtil.sleep(5 * 1000L);
 					logger.error("thread unbinding  exception.", ex);
 					continue;
 				}

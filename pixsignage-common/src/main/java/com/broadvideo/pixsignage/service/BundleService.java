@@ -11,6 +11,10 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public interface BundleService {
+	public Bundle selectMiniByPrimaryKey(String bundleid);
+
+	public Bundle selectBaseByPrimaryKey(String bundleid);
+
 	public Bundle selectByPrimaryKey(String bundleid);
 
 	public int selectCount(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,

@@ -7,6 +7,7 @@
 <link href="${static_ctx}/global/plugins/data-tables/DT_bootstrap.css" rel="stylesheet"/>
 
 <link href="${static_ctx}/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"/>
+<link href="${static_ctx}/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
 <link href="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
 <link href="${static_ctx}/global/plugins/ion.rangeslider/css/ion.rangeSlider.Metronic.css" rel="stylesheet" type="text/css"/>
@@ -41,6 +42,38 @@
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="bundle.name" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.startdate"/><span class="required">*</span></label>
+								<div class="col-md-3 checkbox-list">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="bundle.startdate.unlimited" value="1"><spring:message code="pixsign.prop.unlimited"/>
+									</label>
+								</div>
+								<div class="col-md-6">
+									<div class="input-group date form_date">                                       
+										<input type="text" size="16" readonly class="form-control" name="bundle.startdate">
+										<span class="input-group-btn">
+										<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.enddate"/><span class="required">*</span></label>
+								<div class="col-md-3 checkbox-list">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="bundle.enddate.unlimited" value="1"><spring:message code="pixsign.prop.unlimited"/>
+									</label>
+								</div>
+								<div class="col-md-6">
+									<div class="input-group date form_date">                                       
+										<input type="text" size="16" readonly class="form-control" name="bundle.enddate">
+										<span class="input-group-btn">
+										<button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+										</span>
 									</div>
 								</div>
 							</div>
@@ -856,6 +889,8 @@
 <script src="${static_ctx}/global/plugins/jquery-loadJSON/jquery.loadJSON.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jquery-json/jquery.json-2.4.js" type="text/javascript"></script>
 
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/wColorPicker/wColorPicker.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/ion.rangeslider/js/ion-rangeSlider/ion.rangeSlider.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/fuelux/js/spinner.js" type="text/javascript"></script>

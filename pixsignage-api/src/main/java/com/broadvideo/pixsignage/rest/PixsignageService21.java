@@ -846,13 +846,15 @@ public class PixsignageService21 {
 				String status = fileJson.optString("status");
 				String desc = fileJson.optString("desc");
 				String objtype = "";
-				if (type.equals("video")) {
+				if (type.equalsIgnoreCase("video")) {
 					objtype = Devicefile.ObjType_Video;
-				} else if (type.equals("image")) {
+				} else if (type.equalsIgnoreCase("image")) {
 					objtype = Devicefile.ObjType_Image;
-				} else if (type.equals("cropvideo")) {
+				} else if (type.equalsIgnoreCase("page")) {
+					objtype = Devicefile.ObjType_Page;
+				} else if (type.equalsIgnoreCase("cropvideo")) {
 					objtype = Devicefile.ObjType_CropVideo;
-				} else if (type.equals("cropimage")) {
+				} else if (type.equalsIgnoreCase("cropimage")) {
 					objtype = Devicefile.ObjType_CropImage;
 				} else {
 					continue;

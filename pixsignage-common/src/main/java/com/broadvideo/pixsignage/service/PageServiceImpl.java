@@ -184,7 +184,7 @@ public class PageServiceImpl implements PageService {
 				page.setName("PAGE-" + template.getTemplateid());
 			}
 			if (template.getSnapshot() != null) {
-				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + template.getSnapshot()), snapshotFile);
 				page.setSnapshot(snapshotFilePath);
@@ -216,7 +216,7 @@ public class PageServiceImpl implements PageService {
 				templateList.add(subtemplate);
 				if (subtemplate.getSnapshot() != null) {
 					String snapshotFilePath = "/page/" + subpage.getPageid() + "/snapshot/" + subpage.getPageid()
-							+ ".png";
+							+ ".jpg";
 					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subtemplate.getSnapshot()),
 							snapshotFile);
@@ -336,7 +336,7 @@ public class PageServiceImpl implements PageService {
 				page.setName("PAGE-" + page.getPageid());
 			}
 			if (frompage.getSnapshot() != null) {
-				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + frompage.getSnapshot()), snapshotFile);
 				page.setSnapshot(snapshotFilePath);
@@ -461,10 +461,10 @@ public class PageServiceImpl implements PageService {
 		}
 
 		String snapshotdtl = page.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+		String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		page.setSnapshot(snapshotFilePath);
@@ -491,9 +491,9 @@ public class PageServiceImpl implements PageService {
 			pageMapper.clearPagezones(destpageidList[i]);
 			destpage.setHomeidletime(sourcepage.getHomeidletime());
 			File fromSnapshotFile = new File(
-					CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + sourcepageid + "/snapshot/" + sourcepageid + ".png");
+					CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + sourcepageid + "/snapshot/" + sourcepageid + ".jpg");
 			if (fromSnapshotFile.exists()) {
-				String snapshotFilePath = "/page/" + destpageidList[i] + "/snapshot/" + destpageidList[i] + ".png";
+				String snapshotFilePath = "/page/" + destpageidList[i] + "/snapshot/" + destpageidList[i] + ".jpg";
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				destpage.setSnapshot(snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -697,15 +697,15 @@ public class PageServiceImpl implements PageService {
 			File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
 			FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
 			String jsfname = "index.jsf";
-			String pngname = "index.png";
+			String jpgname = "index.jpg";
 			if (p.getHomeflag().equals("0")) {
 				jsfname = "" + p.getPageid() + ".jsf";
-				pngname = "" + p.getPageid() + ".png";
+				jpgname = "" + p.getPageid() + ".jpg";
 			}
 			CommonUtil.zip(out, jsfFile, jsfname);
 			if (p.getSnapshot() != null) {
 				File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + p.getSnapshot());
-				CommonUtil.zip(out, snapshot, pngname);
+				CommonUtil.zip(out, snapshot, jpgname);
 			}
 		}
 		out.close();
@@ -759,9 +759,9 @@ public class PageServiceImpl implements PageService {
 		} else {
 			pageMapper.insertSelective(page);
 		}
-		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		File fromSnapshotFile = new File(unzipFilePath, "index.jpg");
 		if (fromSnapshotFile.exists()) {
-			String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+			String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			page.setSnapshot(snapshotFilePath);
 			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -781,9 +781,9 @@ public class PageServiceImpl implements PageService {
 			p.setHomepageid(page.getPageid());
 			p.setCreatetime(now);
 			pageMapper.insertSelective(p);
-			fromSnapshotFile = new File(unzipFilePath, "" + fromPageid + ".png");
+			fromSnapshotFile = new File(unzipFilePath, "" + fromPageid + ".jpg");
 			if (fromSnapshotFile.exists()) {
-				String snapshotFilePath = "/page/" + p.getPageid() + "/snapshot/" + p.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + p.getPageid() + "/snapshot/" + p.getPageid() + ".jpg";
 				p.setSnapshot(snapshotFilePath);
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
