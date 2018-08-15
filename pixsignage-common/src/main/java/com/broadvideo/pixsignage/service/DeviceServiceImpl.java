@@ -504,6 +504,8 @@ public class DeviceServiceImpl implements DeviceService {
 			return resultJson;
 		}
 
+		List<Video> videoList = new ArrayList<Video>();
+		List<Image> imageList = new ArrayList<Image>();
 		for (Bundle p : bundleList) {
 			for (Bundlezone bundlezone : p.getBundlezones()) {
 				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
@@ -521,9 +523,15 @@ public class DeviceServiceImpl implements DeviceService {
 							videoJson.put("checksum", video.getMd5());
 							videoJson.put("thumbnail", "http://" + serverip + ":" + serverport
 									+ CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
-							videoJson.put("relateurl", video.getRelateurl());
+							if (video.getRelateurl() != null && video.getRelateurl().length() > 0) {
+								videoJson.put("relate_url", video.getRelateurl());
+							} else {
+								videoJson.put("relate_type", "image");
+								videoJson.put("relate_id", video.getRelateid());
+							}
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.add(videoJson);
+							videoList.add(video);
 						}
 					} else if (imageHash.get(bundlezonedtl.getObjid()) == null) {
 						Image image = bundlezonedtl.getImage();
@@ -538,13 +546,56 @@ public class DeviceServiceImpl implements DeviceService {
 						imageJson.put("checksum", image.getMd5());
 						imageJson.put("thumbnail", "http://" + serverip + ":" + serverport
 								+ CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
-						imageJson.put("relateurl", image.getRelateurl());
+						if (image.getRelateurl() != null && image.getRelateurl().length() > 0) {
+							imageJson.put("relate_url", image.getRelateurl());
+						} else {
+							imageJson.put("relate_type", "image");
+							imageJson.put("relate_id", image.getRelateid());
+						}
 						imageHash.put(image.getImageid(), imageJson);
 						imageJsonArray.add(imageJson);
+						imageList.add(image);
 					}
 				}
 			}
 		}
+		for (Video video : videoList) {
+			if (video.getRelateimage() != null && imageHash.get(video.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", video.getRelateid());
+				imageJson.put("name", video.getRelateimage().getName());
+				imageJson.put("oname", video.getRelateimage().getOname());
+				imageJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("file", video.getRelateimage().getFilename());
+				imageJson.put("size", video.getRelateimage().getSize());
+				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ video.getRelateimage().getThumbnail());
+				imageJson.put("relate_url", "");
+				imageHash.put(video.getRelateid(), imageJson);
+				imageJsonArray.add(imageJson);
+			}
+		}
+		for (Image image : imageList) {
+			if (image.getRelateimage() != null && imageHash.get(image.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", image.getRelateid());
+				imageJson.put("name", image.getRelateimage().getName());
+				imageJson.put("oname", image.getRelateimage().getOname());
+				imageJson.put("url",
+						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("file", image.getRelateimage().getFilename());
+				imageJson.put("size", image.getRelateimage().getSize());
+				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
+						+ image.getRelateimage().getThumbnail());
+				imageJson.put("relate_url", "");
+				imageHash.put(image.getRelateid(), imageJson);
+				imageJsonArray.add(imageJson);
+			}
+		}
+
 		resultJson.put("bundle_ids", bundleidJsonArray);
 		resultJson.put("bundles", bundleJsonArray);
 		resultJson.put("videos", videoJsonArray);

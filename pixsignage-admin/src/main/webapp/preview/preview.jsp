@@ -72,7 +72,7 @@
 
 	<script type="text/javascript">
 		var Page = <%=content%>;
-		PixPage.init('preview');
+		PixPage.init('pixsign', 'preview');
 
 		$(window).resize(function(e) {
 			PixPage.resize();

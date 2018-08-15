@@ -628,8 +628,8 @@ public class PageServiceImpl implements PageService {
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
 
 			File htmlFile = new File(pageDir, "index.html");
-			String htmlContent = FileUtils.readFileToString(new File(CommonConfig.CONFIG_PAGE_HOME, "index.html"),
-					"UTF-8");
+			String htmlContent = FileUtils
+					.readFileToString(new File(CommonConfig.CONFIG_PAGE_HOME, "index-pixsign.html"), "UTF-8");
 			htmlContent = htmlContent.replaceFirst("data.js", "" + p.getPageid() + ".js");
 			String diyContent = "";
 			for (Pagezone pz : p.getPagezones()) {
