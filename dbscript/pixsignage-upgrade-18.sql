@@ -13,8 +13,7 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 	
-ALTER TABLE `meeting` 
-	ADD COLUMN `auditresult` VARCHAR(1024)   utf8_general_ci NULL COMMENT '审核意见' AFTER `auditstatus`; 
+
 
 CREATE TABLE `attendancelog`(
 	`attendancelogid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 

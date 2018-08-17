@@ -140,38 +140,38 @@ CREATE TABLE `attendee`(
 
 CREATE TABLE `equipment`(
 	`equipmentid` int(11) NOT NULL  auto_increment COMMENT 'id，自增主键' , 
-	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局唯一标识' , 
+	`uuid` varchar(32) NOT NULL  COMMENT '全局唯一标识' , 
 	`meetingroomid` int(11) NULL  DEFAULT '-1' COMMENT '所属会议室' , 
 	`type` int(11) NOT NULL  COMMENT '类型：投影仪 屏幕 pad' , 
-	`code` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '编码' , 
-	`name` varchar(256) COLLATE utf8_general_ci NOT NULL  COMMENT '名称' , 
-	`ipaddr` varchar(32) COLLATE utf8_general_ci NULL  COMMENT 'ip' , 
+	`code` varchar(256) NULL  COMMENT '编码' , 
+	`name` varchar(256) NOT NULL  COMMENT '名称' , 
+	`ipaddr` varchar(32) NULL  COMMENT 'ip' , 
 	`orgid` int(11) NOT NULL  COMMENT '所属org' , 
 	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
 	`createstaffid` int(11) NOT NULL  COMMENT '创建人' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatestaffid` int(11) NULL  COMMENT '修改人' , 
-	`status` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
+	`status` char(1) NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
 	PRIMARY KEY (`equipmentid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
 CREATE TABLE `location`(
 	`locationid` int(11) NOT NULL  auto_increment COMMENT '位置id，自增主键' , 
-	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局唯一标识' , 
+	`uuid` varchar(32) NOT NULL  COMMENT '全局唯一标识' , 
 	`parentid` int(11) NOT NULL  COMMENT '父节点:-1:根节点 ' , 
 	`seqno` int(11) NULL  COMMENT '排序ASC' , 
 	`level` int(11) NOT NULL  COMMENT '层级：1-n' , 
-	`name` varchar(256) COLLATE utf8_general_ci NOT NULL  COMMENT '位置名称' , 
-	`code` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '内部编码' , 
-	`description` varchar(1024) COLLATE utf8_general_ci NULL  COMMENT '描述信息' , 
-	`layout` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '示意图' , 
+	`name` varchar(256) NOT NULL  COMMENT '位置名称' , 
+	`code` varchar(256) NULL  COMMENT '内部编码' , 
+	`description` varchar(1024) NULL  COMMENT '描述信息' , 
+	`layout` varchar(256) NULL  COMMENT '示意图' , 
 	`orgid` int(11) NOT NULL  COMMENT '所属org' , 
 	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
 	`createstaffid` int(11) NOT NULL  COMMENT '创建人' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatestaffid` int(11) NULL  COMMENT '修改记录的人员id' , 
-	`status` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
+	`status` char(1) NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
 	PRIMARY KEY (`locationid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
@@ -179,44 +179,44 @@ insert into `location`(`locationid`, `uuid`, `parentid`, `seqno`, `level`, `name
  values ('1', 'f0e81463d4c111e78ff600ac81cbcda7', '-1', '0', '0', '位置', NULL, '位置信息', NULL, '1', '2017-11-29 12:59:04', '-1', NULL, NULL, '1'); 
 CREATE TABLE `meeting`(
 	`meetingid` int(11) NOT NULL  auto_increment COMMENT '会议id，自增主键' , 
-	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局唯一标识' , 
+	`uuid` varchar(32) NOT NULL  COMMENT '全局唯一标识' , 
 	`meetingroomid` int(11) NOT NULL  COMMENT '所属会议室id' , 
-	`subject` varchar(256) COLLATE utf8_general_ci NOT NULL  COMMENT '会议主题' , 
+	`subject` varchar(256) NOT NULL  COMMENT '会议主题' , 
 	`starttime` datetime NOT NULL  COMMENT '会议开始时间' , 
 	`endtime` datetime NOT NULL  COMMENT '会议结束时间' , 
 	`duration` int(11) NOT NULL  COMMENT '时长，单位秒' , 
 	`amount` int(11) NOT NULL  COMMENT '与会人数' , 
 	`bookstaffid` int(11) NOT NULL  COMMENT '预定人id' , 
 	`bookbranchid` int(11) NULL  COMMENT '预订人所属部门' , 
-	`qrcode` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '会议二维码' , 
+	`qrcode` varchar(256) NULL  COMMENT '会议二维码' , 
 	`orgid` int(11) NOT NULL  COMMENT '所属org' , 
 	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
 	`createstaffid` int(11) NOT NULL  COMMENT '创建人' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatestaffid` int(11) NULL  COMMENT '修改人' , 
-	`status` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
+	`status` char(1) NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
 	PRIMARY KEY (`meetingid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
 
 CREATE TABLE `meetingroom`(
 	`meetingroomid` int(11) NOT NULL  auto_increment COMMENT '会议室id，自增主键' , 
-	`uuid` varchar(32) COLLATE utf8_general_ci NOT NULL  COMMENT '全局唯一标识' , 
-	`terminalid` varchar(64) COLLATE utf8_general_ci NULL  COMMENT '绑定终端id' , 
-	`code` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '会议室内部编码' , 
-	`name` varchar(256) COLLATE utf8_general_ci NOT NULL  COMMENT '名称' , 
-	`description` varchar(1024) COLLATE utf8_general_ci NULL  COMMENT '描述信息' , 
+	`uuid` varchar(32) NOT NULL  COMMENT '全局唯一标识' , 
+	`terminalid` varchar(64) NULL  COMMENT '绑定终端id' , 
+	`code` varchar(256) NULL  COMMENT '会议室内部编码' , 
+	`name` varchar(256) NOT NULL  COMMENT '名称' , 
+	`description` varchar(1024) NULL  COMMENT '描述信息' , 
 	`locationid` int(11) NULL  COMMENT '位置id' , 
-	`layout` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '房间示意图' , 
+	`layout` varchar(256) NULL  COMMENT '房间示意图' , 
 	`peoples` int(11) NOT NULL  COMMENT '允许容纳人数' , 
-	`openflag` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '是否接受预定：0-否 1-是' , 
-	`qrcode` varchar(256) COLLATE utf8_general_ci NULL  COMMENT '会议二维码' , 
+	`openflag` char(1) NOT NULL  COMMENT '是否接受预定：0-否 1-是' , 
+	`qrcode` varchar(256) NULL  COMMENT '会议二维码' , 
 	`orgid` int(11) NOT NULL  , 
 	`createtime` datetime NOT NULL  COMMENT '创建时间' , 
 	`createstaffid` int(11) NOT NULL  COMMENT '创建人' , 
 	`updatetime` datetime NULL  COMMENT '修改时间' , 
 	`updatestaffid` int(11) NULL  COMMENT '修改人' , 
-	`status` char(1) COLLATE utf8_general_ci NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
+	`status` char(1) NOT NULL  COMMENT '状态：0：无效 1：有效 9：删除' , 
 	PRIMARY KEY (`meetingroomid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET='utf8';
 
@@ -230,29 +230,27 @@ INSERT INTO `privilege` VALUES ('310', '2', '0', 'menu.mrbm', NULL, 'fa-cogs', '
 
 
 ALTER TABLE `meeting` 
-	ADD COLUMN `description` VARCHAR(2048)  COLLATE utf8_general_ci NULL COMMENT '会议描述信息' AFTER `subject`, 
+	ADD COLUMN `description` VARCHAR(2048)  NULL COMMENT '会议描述信息' AFTER `subject`, 
     ADD COLUMN `fee` DECIMAL(8,2)   NULL COMMENT '会议费用' AFTER `duration`, 
-	ADD COLUMN `auditstatus` CHAR(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态： 0：待审核  1：通过 2：拒绝' AFTER `updatestaffid`,
-	ADD COLUMN `auditresult` VARCHAR(1024)  COLLATE utf8_general_ci NULL COMMENT '审核意见' AFTER `auditstatus`; 
+	ADD COLUMN `auditstatus` CHAR(1)  NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' AFTER `updatestaffid`,
+	ADD COLUMN `auditresult` VARCHAR(1024)  NULL COMMENT '审核意见' AFTER `auditstatus`; 
 	
-ALTER TABLE `meeting` 
-	CHANGE `auditstatus` `auditstatus` CHAR(1)  COLLATE utf8_general_ci NULL COMMENT '审核状态：   0：待审核  1：通过  2：拒绝  9：不需要审核' AFTER `updatestaffid`;
 
 ALTER TABLE `meetingroom` 
-	ADD COLUMN `auditflag` char(1)  COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '预定是否需要审核: 0:否 1:是' after `openflag`;
+	ADD COLUMN `auditflag` char(1)  NOT NULL DEFAULT '0' COMMENT '预定是否需要审核: 0:否 1:是' after `openflag`;
 
 ALTER TABLE `branch` 
-	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `branchid`; 
+	ADD COLUMN `uuid` varchar(32)  NULL COMMENT '全局唯一标识' after `branchid`; 
 
 ALTER TABLE `staff` 
-	ADD COLUMN `uuid` varchar(32)  COLLATE utf8_general_ci NULL COMMENT '全局唯一标识' after `staffid`, 
-	ADD COLUMN `email` varchar(128)  COLLATE utf8_general_ci NULL COMMENT '邮箱' after `name`;
+	ADD COLUMN `uuid` varchar(32)  NULL COMMENT '全局唯一标识' after `staffid`, 
+	ADD COLUMN `email` varchar(128)  NULL COMMENT '邮箱' after `name`;
 	
 ALTER TABLE `meetingroom` 
-	ADD COLUMN `terminalid2` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid`, 
-	ADD COLUMN `terminalid3` varchar(64)  COLLATE utf8_general_ci NULL COMMENT '绑定终端id' after `terminalid2`, 
+	ADD COLUMN `terminalid2` varchar(64)  NULL COMMENT '绑定终端id' after `terminalid`, 
+	ADD COLUMN `terminalid3` varchar(64)  NULL COMMENT '绑定终端id' after `terminalid2`, 
 	ADD COLUMN `feeperhour` decimal(8,2)   NULL COMMENT '每小时收费(元)' after `peoples`, 
-	ADD COLUMN `equipmentflag` varchar(10)  COLLATE utf8_general_ci NULL COMMENT '设备标志位,0000000000    ' after `feeperhour`;
+	ADD COLUMN `equipmentflag` varchar(10)  NULL COMMENT '设备标志位,0000000000    ' after `feeperhour`;
 
 
 INSERT INTO location(UUID,parentid,seqno,LEVEL,NAME,orgid,createtime,createstaffid,STATUS)
