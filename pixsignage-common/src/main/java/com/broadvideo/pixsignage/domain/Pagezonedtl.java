@@ -1,6 +1,9 @@
 package com.broadvideo.pixsignage.domain;
 
 public class Pagezonedtl {
+	public final static String ObjType_Video = "1";
+	public final static String ObjType_Image = "2";
+
 	private Integer pagezonedtlid;
 
 	private Integer pagezoneid;

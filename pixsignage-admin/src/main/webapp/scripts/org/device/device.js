@@ -486,6 +486,44 @@ var DeviceModule = function () {
 			}
 		});
 
+		$('#RelateSelect').select2({
+			placeholder: common.tips.detail_select,
+			minimumInputLength: 0,
+			ajax: { 
+				url: 'device!list.action',
+				type: 'GET',
+				dataType: 'json',
+				data: function (term, page) {
+					return {
+						sSearch: term, 
+						iDisplayStart: (page-1)*10,
+						iDisplayLength: 10,
+					};
+				},
+				results: function (data, page) {
+					var more = (page * 10) < data.iTotalRecords; 
+					return {
+						results : $.map(data.aaData, function (item) { 
+							return { 
+								text:item.terminalid, 
+								id:item.deviceid,
+								device:item, 
+							};
+						}),
+						more: more
+					};
+				}
+			},
+			formatResult: function(data) {
+				return '<span>' + data.device.name + '(' + data.device.terminalid + ')' + '</span>';
+			},
+			formatSelection: function(data) {
+				return '<span>' + data.device.name + '(' + data.device.terminalid + ')' + '</span>';
+			},
+			dropdownCssClass: 'bigdrop', 
+			escapeMarkup: function (m) { return m; } 
+		});
+
 		var formHandler = new FormHandler($('#DeviceEditForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['device.name'] = {};
@@ -493,6 +531,9 @@ var DeviceModule = function () {
 		formHandler.validateOption.submitHandler = function(form) {
 			if ($('#DeviceEditForm #BranchTree').jstree('get_selected', false).length > 0) {
 				$('#DeviceEditForm input[name="device.branchid"]').attr('value', $('#DeviceEditForm #BranchTree').jstree('get_selected', false)[0]);
+			}
+			if ($('#RelateSelect').select2('data') != null) {
+				$('#DeviceEditForm input[name="device.relateid"]').attr('value', $('#RelateSelect').select2('data').id);
 			}
 			if ($('#ExternalSelect').select2('data') != null) {
 				$('#DeviceEditForm input[name="device.externalid"]').attr('value', $('#ExternalSelect').select2('data').id);
@@ -533,10 +574,32 @@ var DeviceModule = function () {
 			formHandler.setdata('device', _device);
 			$('#DeviceEditForm #BranchTree').jstree('deselect_all', true);
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
+			$('#RelateSelect').select2('data', null);
 			$('#ExternalSelect').select2('val', _device.externalid);
 			$('#BoardtypeSelect').select2('val', _device.boardtype);
 			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#DeviceEditForm').attr('action', 'device!update.action');
+			$.ajax({
+				type : 'GET',
+				url : 'device!get.action',
+				data : {
+					deviceid: _device.relateid,
+				},
+				success : function(data, status) {
+					if (data.errorcode == 0) {
+						$('#RelateSelect').select2('data', { 
+							text:data.device.terminalid, 
+							id:data.device.deviceid,
+							device:data.device, 
+						});
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
 			$('#DeviceEditModal').modal();
 		});
 

@@ -1328,12 +1328,12 @@ $('.form_time').datetimepicker({
 	maxView: 1,
 	formatViewType: 'time'
 });
-$(".form_date").datetimepicker({
+$('.form_date').datetimepicker({
 	autoclose: true,
 	isRTL: Metronic.isRTL(),
-	format: "yyyy-mm-dd",
-	pickerPosition: (Metronic.isRTL() ? "top-right" : "top-left"),
-	language: "zh-CN",
+	format: 'yyyy-mm-dd',
+	pickerPosition: (Metronic.isRTL() ? 'top-right' : 'top-left'),
+	language: 'zh-CN',
 	minView: 'month',
 	todayBtn: true
 });

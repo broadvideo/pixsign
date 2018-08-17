@@ -14,6 +14,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.TemplateService;
 
@@ -24,6 +25,8 @@ public class ImportTask {
 
 	private static boolean workflag = false;
 
+	@Autowired
+	private BundleService bundleService;
 	@Autowired
 	private PageService pageService;
 	@Autowired
@@ -39,14 +42,21 @@ public class ImportTask {
 			File[] zips = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/import").listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File file, String name) {
-					return (name.startsWith("page-") || name.startsWith("template-")) && name.endsWith(".zip");
+					return (name.startsWith("bundle") || name.startsWith("page-") || name.startsWith("template-"))
+							&& name.endsWith(".zip");
 				}
 			});
+			if (zips == null) {
+				zips = new File[0];
+			}
 			for (int i = 0; i < zips.length; i++) {
-				if (zips[i].getName().startsWith("page-")) {
+				if (zips[i].getName().startsWith("bundle")) {
+					logger.info("Begin to import bundle {}", zips[i].getAbsolutePath());
+					bundleService.importZip(1, 1, zips[i]);
+				} else if (zips[i].getName().startsWith("page-")) {
 					logger.info("Begin to import page {}", zips[i].getAbsolutePath());
 					pageService.importZip(1, 1, zips[i]);
-				} else {
+				} else if (zips[i].getName().startsWith("template-")) {
 					logger.info("Begin to import template {}", zips[i].getAbsolutePath());
 					templateService.importZip(zips[i]);
 				}

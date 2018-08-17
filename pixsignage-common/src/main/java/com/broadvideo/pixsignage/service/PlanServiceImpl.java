@@ -218,10 +218,18 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Transactional
-	public void syncPlanByBundle(String bundleid) throws Exception {
-		List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Bundle, bundleid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+	public void syncPlanByBundle(String orgid, String bundleid) throws Exception {
+		Org org = orgMapper.selectByPrimaryKey(orgid);
+		if (org.getPlanflag().equals("1")) {
+			List<Device> deviceList = deviceMapper.selectByDefaultbundle(bundleid);
+			for (Device device : deviceList) {
+				syncPlan("1", "" + device.getDeviceid());
+			}
+		} else {
+			List<HashMap<String, Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Bundle, bundleid);
+			for (HashMap<String, Object> bindObj : bindList) {
+				syncPlan(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
+			}
 		}
 	}
 
@@ -651,25 +659,6 @@ public class PlanServiceImpl implements PlanService {
 		responseJson.put("plans", generatePagePlanJson(deviceid));
 		responseJson.put("multi_plans", generateMultiPlanJson(deviceid));
 		return responseJson;
-	}
-
-	@Transactional
-	public void handleBatch(Page page, HashMap<String, Object>[] binds) {
-		for (int i = 0; i < binds.length; i++) {
-			HashMap<String, Object> bind = binds[i];
-			String bindtype = "" + bind.get("bindtype");
-			if (bindtype.equals("1")) {
-				Device device = deviceMapper.selectByPrimaryKey("" + bind.get("bindid"));
-				device.setDefaultpageid(page.getPageid());
-				deviceMapper.updateByPrimaryKeySelective(device);
-			} else {
-				List<Device> devices = deviceMapper.selectByDevicegroup("" + bind.get("bindid"));
-				for (Device device : devices) {
-					device.setDefaultpageid(page.getPageid());
-					deviceMapper.updateByPrimaryKeySelective(device);
-				}
-			}
-		}
 	}
 
 	@Transactional

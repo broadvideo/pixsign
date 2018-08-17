@@ -36,6 +36,10 @@ public class DiyServiceImpl implements DiyService {
 		return diyMapper.selectByCode(code);
 	}
 
+	public Diyaction selectByActionCode(String diyid, String actioncode) {
+		return diyactionMapper.selectByCode(diyid, actioncode);
+	}
+
 	@Transactional
 	public void uploadDiy(Diy diy) {
 		String code = diy.getCode();

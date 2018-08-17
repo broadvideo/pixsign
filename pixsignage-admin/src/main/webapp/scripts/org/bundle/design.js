@@ -20,10 +20,13 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['7'] = 100;
 		ZoneLimits['8'] = 1;
 		ZoneLimits['9'] = 1;
+		ZoneLimits['10'] = 1;
 		ZoneLimits['12'] = 1;
 		ZoneLimits['14'] = 4;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['16'] = 1;
+		ZoneLimits['101'] = 1;
+		ZoneLimits['102'] = 1;
 		
 		initEvent();
 	};
@@ -112,6 +115,8 @@ var BundleDesignModule = function (mode) {
 			//Control Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
+		} else if (bundlezone.type == 10) {
+			//Menu Zone
 		} else if (bundlezone.type == 12) {
 			//RSS Zone
 			var p_element = document.createElement('p');
@@ -126,6 +131,10 @@ var BundleDesignModule = function (mode) {
 			$(inner_div).append(img_element);
 		} else if (bundlezone.type == 16) {
 			//DVB Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
+			//Massage Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
 		} else {
@@ -277,17 +286,63 @@ var BundleDesignModule = function (mode) {
 		} else if (bundlezone.type == 8) {
 			//Navigator Zone
 			if (bundlezone.width > bundlezone.height) {
-				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-navigate-h.jpg');
+				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-h.jpg');
 			} else {
-				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-navigate-v.jpg');
+				$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-navigate-v.jpg');
 			}
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 9) {
 			//Control Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-qrcode.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-qrcode.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
+		} else if (bundlezone.type == 10) {
+			//Menu Zone
+			var menuscale = 1;
+			$(bundlezoneDiv).find('#rotatable').empty();
+			$(bundlezoneDiv).find('#rotatable').css({
+				'box-sizing': 'border-box',
+				'color': bundlezone.color, 
+				'overflow': 'hidden',
+			});
+			if (bundlezone.width > bundlezone.height) {
+				var menupercent = 100*menuscale*bundlezone.height/bundlezone.width;
+				for (var i=0; i<bundlezone.bundlezonedtls.length; i++) {
+					var menu_div = document.createElement('div');
+					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.filepath;
+					$(menu_div).css({
+						'position': 'absolute',
+						'height': '100%', 
+						'width': menupercent + '%',
+						'top': '0%',
+						'left': i*menupercent + '%',
+						'background-image': 'url(' + bgurl + ')',
+						'background-size': 'contain',
+						'background-position': 'center',
+						'background-repeat': 'no-repeat',
+					});
+					$(bundlezoneDiv).find('#rotatable').append(menu_div);
+				}
+			} else {
+				var menupercent = 100/menuscale*bundlezone.width/bundlezone.height;
+				for (var i=0; i<bundlezone.bundlezonedtls.length; i++) {
+					var menu_div = document.createElement('div');
+					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.filepath;
+					$(menu_div).css({
+						'position': 'absolute',
+						'height': menupercent + '%',
+						'width': '100%',
+						'top': i*menupercent + '%',
+						'left': '0%',
+						'background-image': 'url(' + bgurl + ')',
+						'background-size': 'contain',
+						'background-position': 'center',
+						'background-repeat': 'no-repeat',
+					});
+					$(bundlezoneDiv).find('#rotatable').append(menu_div);
+				}
+			}
 		} else if (bundlezone.type == 12) {
 			//RSS Zone
 			$(bundlezoneDiv).find('#rotatable').css({
@@ -298,17 +353,22 @@ var BundleDesignModule = function (mode) {
 			$(bundlezoneDiv).find('p').html(bundlezone.content);
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-stream.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-stream.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 15) {
 			//VideoIn Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-videoin.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-videoin.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else if (bundlezone.type == 16) {
 			//DVB Zone
-			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/region/region-dvb.jpg');
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
+			$(bundlezoneDiv).find('img').attr('width', '100%');
+			$(bundlezoneDiv).find('img').attr('height', '100%');
+		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
+			//Massage Zone
+			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-' + bundlezone.type + '.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
 		} else {
@@ -453,6 +513,19 @@ var BundleDesignModule = function (mode) {
 							$('#TouchForm').loadJSON(_self.Zone);
 							refreshTouchtypeSelect();
 							$('#TouchModal').modal();
+						} else if (bundlezones[0].type == 10) {
+							//Menu Zone
+							_self.Zone = bundlezones[0];
+							$('#LibraryModal #VideoLiTab').css('display', 'none');
+							$('#LibraryModal #VideoLiTab').removeClass('active');
+							$('#LibraryModal #VideoLibraryTab').removeClass('active');
+							$('#LibraryModal #ImageLiTab').css('display', '');
+							$('#LibraryModal #ImageLiTab').addClass('active');
+							$('#LibraryModal #ImageLibraryTab').addClass('active');
+							$('#LibraryModal #StreamLiTab').css('display', 'none');
+							$('#LibraryModal #StreamLiTab').removeClass('active');
+							$('#LibraryModal #StreamLibraryTab').removeClass('active');
+							$('#LibraryModal').modal();
 						} else if (bundlezones[0].type == 12) {
 							//RSS Zone
 							_self.Zone = bundlezones[0];

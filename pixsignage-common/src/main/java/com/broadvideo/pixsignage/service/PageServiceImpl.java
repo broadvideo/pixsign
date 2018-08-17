@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +35,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.Diy;
+import com.broadvideo.pixsignage.domain.Diyaction;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
@@ -41,11 +45,13 @@ import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Template;
 import com.broadvideo.pixsignage.domain.Templatezone;
 import com.broadvideo.pixsignage.domain.Templatezonedtl;
+import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.PagezoneMapper;
 import com.broadvideo.pixsignage.persistence.PagezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
+import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
 
 import net.sf.json.JSONObject;
@@ -66,6 +72,11 @@ public class PageServiceImpl implements PageService {
 	private TemplateMapper templateMapper;
 	@Autowired
 	private ImageMapper imageMapper;
+	@Autowired
+	private VideoMapper videoMapper;
+
+	@Autowired
+	private DiyService diyService;
 
 	public Page selectByPrimaryKey(String pageid) {
 		return pageMapper.selectByPrimaryKey(pageid);
@@ -173,7 +184,7 @@ public class PageServiceImpl implements PageService {
 				page.setName("PAGE-" + template.getTemplateid());
 			}
 			if (template.getSnapshot() != null) {
-				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + template.getSnapshot()), snapshotFile);
 				page.setSnapshot(snapshotFilePath);
@@ -205,7 +216,7 @@ public class PageServiceImpl implements PageService {
 				templateList.add(subtemplate);
 				if (subtemplate.getSnapshot() != null) {
 					String snapshotFilePath = "/page/" + subpage.getPageid() + "/snapshot/" + subpage.getPageid()
-							+ ".png";
+							+ ".jpg";
 					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subtemplate.getSnapshot()),
 							snapshotFile);
@@ -259,11 +270,11 @@ public class PageServiceImpl implements PageService {
 					pagezone.setDateformat(templatezone.getDateformat());
 					pagezone.setDiyid(templatezone.getDiyid());
 					pagezone.setTouchtype(templatezone.getTouchtype());
-					Integer touchpageid = pageidHash.get(templatezone.getTouchtemplateid());
-					if (touchpageid == null) {
-						touchpageid = 0;
+					Integer touchid = pageidHash.get(templatezone.getTouchid());
+					if (touchid == null) {
+						touchid = 0;
 					}
-					pagezone.setTouchpageid(touchpageid);
+					pagezone.setTouchid(touchid);
 					pagezone.setFixflag(templatezone.getFixflag());
 					pagezone.setDiyactionid(templatezone.getDiyactionid());
 					pagezone.setAnimationinit(templatezone.getAnimationinit());
@@ -325,7 +336,7 @@ public class PageServiceImpl implements PageService {
 				page.setName("PAGE-" + page.getPageid());
 			}
 			if (frompage.getSnapshot() != null) {
-				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + frompage.getSnapshot()), snapshotFile);
 				page.setSnapshot(snapshotFilePath);
@@ -376,7 +387,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setDateformat(frompagezone.getDateformat());
 				pagezone.setDiyid(frompagezone.getDiyid());
 				pagezone.setTouchtype(frompagezone.getTouchtype());
-				pagezone.setTouchpageid(frompagezone.getTouchpageid());
+				pagezone.setTouchid(frompagezone.getTouchid());
 				pagezone.setFixflag(frompagezone.getFixflag());
 				pagezone.setDiyactionid(frompagezone.getDiyactionid());
 				pagezone.setAnimationinit(frompagezone.getAnimationinit());
@@ -450,10 +461,10 @@ public class PageServiceImpl implements PageService {
 		}
 
 		String snapshotdtl = page.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+		String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		page.setSnapshot(snapshotFilePath);
@@ -480,9 +491,9 @@ public class PageServiceImpl implements PageService {
 			pageMapper.clearPagezones(destpageidList[i]);
 			destpage.setHomeidletime(sourcepage.getHomeidletime());
 			File fromSnapshotFile = new File(
-					CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + sourcepageid + "/snapshot/" + sourcepageid + ".png");
+					CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + sourcepageid + "/snapshot/" + sourcepageid + ".jpg");
 			if (fromSnapshotFile.exists()) {
-				String snapshotFilePath = "/page/" + destpageidList[i] + "/snapshot/" + destpageidList[i] + ".png";
+				String snapshotFilePath = "/page/" + destpageidList[i] + "/snapshot/" + destpageidList[i] + ".jpg";
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				destpage.setSnapshot(snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -502,10 +513,10 @@ public class PageServiceImpl implements PageService {
 				pagezone.setPageid(destpage.getPageid());
 				pagezone.setHomepageid(destpage.getHomepageid());
 				if (pagezone.getTouchtype().equals("2")) {
-					Page touchPage = pageMapper.selectByPrimaryKey("" + pagezone.getTouchpageid());
+					Page touchPage = pageMapper.selectByPrimaryKey("" + pagezone.getTouchid());
 					if (touchPage == null || touchPage.getHomepageid().intValue() != destpage.getHomepageid()) {
 						pagezone.setTouchtype("9");
-						pagezone.setTouchpageid(0);
+						pagezone.setTouchid(0);
 					}
 				}
 				pagezoneMapper.insertSelective(pagezone);
@@ -617,8 +628,8 @@ public class PageServiceImpl implements PageService {
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
 
 			File htmlFile = new File(pageDir, "index.html");
-			String htmlContent = FileUtils.readFileToString(new File(CommonConfig.CONFIG_PAGE_HOME, "index.html"),
-					"UTF-8");
+			String htmlContent = FileUtils
+					.readFileToString(new File(CommonConfig.CONFIG_PAGE_HOME, "index-pixsign.html"), "UTF-8");
 			htmlContent = htmlContent.replaceFirst("data.js", "" + p.getPageid() + ".js");
 			String diyContent = "";
 			for (Pagezone pz : p.getPagezones()) {
@@ -641,6 +652,11 @@ public class PageServiceImpl implements PageService {
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "module"), "module");
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PAGE_HOME, "plugin"), "plugin");
 		out.close();
+
+		page.setSize(FileUtils.sizeOf(zipFile));
+		FileInputStream fis = new FileInputStream(zipFile);
+		page.setMd5(DigestUtils.md5Hex(fis));
+		pageMapper.updateByPrimaryKeySelective(page);
 	}
 
 	public void exportZip(String pageid, File zipFile) throws Exception {
@@ -681,15 +697,15 @@ public class PageServiceImpl implements PageService {
 			File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
 			FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
 			String jsfname = "index.jsf";
-			String pngname = "index.png";
+			String jpgname = "index.jpg";
 			if (p.getHomeflag().equals("0")) {
 				jsfname = "" + p.getPageid() + ".jsf";
-				pngname = "" + p.getPageid() + ".png";
+				jpgname = "" + p.getPageid() + ".jpg";
 			}
 			CommonUtil.zip(out, jsfFile, jsfname);
 			if (p.getSnapshot() != null) {
 				File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + p.getSnapshot());
-				CommonUtil.zip(out, snapshot, pngname);
+				CommonUtil.zip(out, snapshot, jpgname);
 			}
 		}
 		out.close();
@@ -705,8 +721,20 @@ public class PageServiceImpl implements PageService {
 		CommonUtil.unzip(zipFile, unzipFilePath, false);
 		FileUtils.forceDelete(zipFile);
 
+		File[] zips = new File(unzipFilePath).listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File file, String name) {
+				return name.startsWith("page") && name.endsWith(".zip");
+			}
+		});
+		if (zips != null && zips.length > 0) {
+			CommonUtil.unzip(zips[0], unzipFilePath, false);
+		}
+
 		HashMap<Integer, Page> pageHash = new HashMap<Integer, Page>();
 		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+		HashMap<Integer, Diy> diyHash = new HashMap<Integer, Diy>();
 
 		Date now = Calendar.getInstance().getTime();
 		File indexJsf = new File(unzipFilePath, "index.jsf");
@@ -716,6 +744,7 @@ public class PageServiceImpl implements PageService {
 		map.put("subpages", Page.class);
 		map.put("pagezones", Pagezone.class);
 		map.put("pagezonedtls", Pagezonedtl.class);
+		map.put("diyactions", Diyaction.class);
 		Page page = (Page) JSONObject.toBean(pageJson, Page.class, map);
 		Integer fromPageid = page.getPageid();
 		page.setOrgid(orgid);
@@ -730,9 +759,9 @@ public class PageServiceImpl implements PageService {
 		} else {
 			pageMapper.insertSelective(page);
 		}
-		File fromSnapshotFile = new File(unzipFilePath, "index.png");
+		File fromSnapshotFile = new File(unzipFilePath, "index.jpg");
 		if (fromSnapshotFile.exists()) {
-			String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".png";
+			String snapshotFilePath = "/page/" + page.getPageid() + "/snapshot/" + page.getPageid() + ".jpg";
 			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			page.setSnapshot(snapshotFilePath);
 			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -752,9 +781,9 @@ public class PageServiceImpl implements PageService {
 			p.setHomepageid(page.getPageid());
 			p.setCreatetime(now);
 			pageMapper.insertSelective(p);
-			fromSnapshotFile = new File(unzipFilePath, "" + fromPageid + ".png");
+			fromSnapshotFile = new File(unzipFilePath, "" + fromPageid + ".jpg");
 			if (fromSnapshotFile.exists()) {
-				String snapshotFilePath = "/page/" + p.getPageid() + "/snapshot/" + p.getPageid() + ".png";
+				String snapshotFilePath = "/page/" + p.getPageid() + "/snapshot/" + p.getPageid() + ".jpg";
 				p.setSnapshot(snapshotFilePath);
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -821,8 +850,111 @@ public class PageServiceImpl implements PageService {
 						}
 						imageHash.put(fromImageid, toImage);
 					}
+
+					Video video = pagezonedtl.getVideo();
+					if (video != null && videoHash.get(video.getVideoid()) == null) {
+						Integer fromVideoid = video.getVideoid();
+						Video toVideo = videoMapper.selectByUuid(video.getUuid());
+						if (toVideo == null) {
+							// Insert video
+							File fromFile = new File(unzipFilePath + "/video", video.getFilename());
+							if (!fromFile.exists()) {
+								continue;
+							}
+							toVideo = new Video();
+							toVideo.setUuid(video.getUuid());
+							toVideo.setOrgid(1);
+							toVideo.setBranchid(1);
+							toVideo.setFolderid(1);
+							toVideo.setType(Video.TYPE_INTERNAL);
+							toVideo.setName(video.getName());
+							toVideo.setOname(video.getOname());
+							toVideo.setFilename(video.getFilename());
+							toVideo.setFormat(video.getFormat());
+							toVideo.setSize(video.getSize());
+							toVideo.setMd5(video.getMd5());
+							toVideo.setStatus("9");
+							toVideo.setCreatestaffid(1);
+							videoMapper.insertSelective(toVideo);
+							String newFileName = "" + toVideo.getVideoid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String videoFilePath, thumbFilePath;
+							videoFilePath = "/video/upload/" + newFileName;
+							thumbFilePath = "/video/snapshot/" + toVideo.getVideoid() + ".jpg";
+							File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (videoFile.exists()) {
+								videoFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.moveFile(fromFile, videoFile);
+
+							try {
+								// Generate preview gif
+								FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
+								String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i "
+										+ CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath
+										+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+										+ thumbFilePath;
+								logger.info("Begin to generate preview and thumbnail: " + command);
+								CommonUtil.execCommand(command);
+								if (!thumbFile.exists()) {
+									command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + CommonConfig.CONFIG_PIXDATA_HOME
+											+ videoFilePath + " -y -f image2 -ss 1 -vframes 1 "
+											+ CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath;
+									CommonUtil.execCommand(command);
+								}
+								if (thumbFile.exists()) {
+									BufferedImage img = ImageIO.read(thumbFile);
+									toVideo.setWidth(img.getWidth());
+									toVideo.setHeight(img.getHeight());
+									toVideo.setThumbnail("/video/snapshot/" + toVideo.getVideoid() + ".jpg");
+									logger.info("Finish thumbnail generating.");
+								} else {
+									logger.info("Failed to generate thumbnail.");
+								}
+
+							} catch (IOException ex) {
+								logger.info("Video parse error, file={}", videoFilePath, ex);
+							}
+
+							toVideo.setFilename(newFileName);
+							toVideo.setFilepath(videoFilePath);
+							toVideo.setThumbnail(thumbFilePath);
+							toVideo.setFilename(newFileName);
+							toVideo.setStatus("1");
+							videoMapper.updateByPrimaryKeySelective(toVideo);
+							logger.info("Add video oldid={}, newid={}", fromVideoid, toVideo.getVideoid());
+						}
+						videoHash.put(fromVideoid, toVideo);
+					}
+				}
+
+				// Handle DIY
+				if (pagezone.getDiy() != null) {
+					Diy diy = pagezone.getDiy();
+					diy.setOrgid(1);
+					diy.setBranchid(1);
+					int fromdiyid = diy.getDiyid();
+					diyService.uploadDiy(diy);
+					String thumbnailPath = "/diy/snapshot/" + diy.getDiyid() + "."
+							+ FilenameUtils.getExtension(diy.getSnapshot());
+					File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbnailPath);
+					File snapshotFile = new File(unzipFilePath + diy.getSnapshot().substring(4));
+					CommonUtil.resizeImage(snapshotFile, thumbFile, 640);
+					diy.setThumbnail(thumbnailPath);
+					diyService.updateDiy(diy);
+					String diyFilePath = "/diy/" + diy.getCode();
+					File diyFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + diyFilePath);
+					FileUtils.deleteQuietly(diyFile);
+					FileUtils.moveDirectory(new File(unzipFilePath + "/" + diy.getCode()), diyFile);
+					pagezone.setDiyid(diy.getDiyid());
+					diyHash.put(fromdiyid, diy);
 				}
 			}
+
 		}
 
 		iter = pageHash.entrySet().iterator();
@@ -830,20 +962,38 @@ public class PageServiceImpl implements PageService {
 			Entry<Integer, Page> entry = iter.next();
 			Page t = entry.getValue();
 			for (Pagezone pagezone : t.getPagezones()) {
+				// Handle DiyAction
+				if (pagezone.getDiyaction() != null) {
+					Diy diy = diyHash.get(pagezone.getDiyaction().getDiyid());
+					Diyaction diyaction = diyService.selectByActionCode("" + diy.getDiyid(),
+							pagezone.getDiyaction().getCode());
+					if (diyaction != null) {
+						pagezone.setDiyactionid(diyaction.getDiyactionid());
+					}
+				}
+
 				pagezone.setPageid(pageHash.get(pagezone.getPageid()).getPageid());
 				pagezone.setHomepageid(page.getPageid());
-				Page touchPage = pageHash.get(pagezone.getTouchpageid());
+				Page touchPage = pageHash.get(pagezone.getTouchid());
 				if (touchPage != null) {
-					pagezone.setTouchpageid(touchPage.getPageid());
+					pagezone.setTouchid(touchPage.getPageid());
 				} else {
-					pagezone.setTouchpageid(0);
+					pagezone.setTouchid(0);
 				}
 				pagezoneMapper.insertSelective(pagezone);
 				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
-					if (pagezonedtl.getObjtype().equals("2")) {
-						pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
-						pagezonedtl.setObjid(imageHash.get(pagezonedtl.getObjid()).getImageid());
-						pagezonedtlMapper.insertSelective(pagezonedtl);
+					if (pagezonedtl.getObjtype().equals(Pagezonedtl.ObjType_Video)) {
+						if (videoHash.get(pagezonedtl.getObjid()).getVideoid() != null) {
+							pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+							pagezonedtl.setObjid(videoHash.get(pagezonedtl.getObjid()).getVideoid());
+							pagezonedtlMapper.insertSelective(pagezonedtl);
+						}
+					} else if (pagezonedtl.getObjtype().equals(Pagezonedtl.ObjType_Image)) {
+						if (imageHash.get(pagezonedtl.getObjid()).getImageid() != null) {
+							pagezonedtl.setPagezoneid(pagezone.getPagezoneid());
+							pagezonedtl.setObjid(imageHash.get(pagezonedtl.getObjid()).getImageid());
+							pagezonedtlMapper.insertSelective(pagezonedtl);
+						}
 					}
 				}
 			}

@@ -110,6 +110,9 @@
 									<label class="checkbox-inline attendance-ctrl">
 										<input type="checkbox" name="org.attendanceflag" value="0">考勤
 									</label>
+									<label class="checkbox-inline massage-ctrl">
+										<input type="checkbox" name="org.massageflag" value="0">按摩椅
+									</label>
 								</div>
 							</div>
 							<div class="form-group">
@@ -397,6 +400,7 @@ var VipCtrl = <%=(session_vsp != null && session_vsp.getVipflag().equals("1"))%>
 var EstateCtrl = <%=(session_vsp != null && session_vsp.getEstateflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
 var AttendanceCtrl = <%=(session_vsp != null && session_vsp.getAttendanceflag().equals("1"))%>;
+var MassageCtrl = <%=(session_vsp != null && session_vsp.getMassageflag().equals("1"))%>;
 
 var MaxDevices = <%=session_vsp.getMaxdevices()%>;
 var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;

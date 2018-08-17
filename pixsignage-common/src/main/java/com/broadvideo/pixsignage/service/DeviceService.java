@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Device;
 
+import net.sf.json.JSONObject;
+
 public interface DeviceService {
 	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
 			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search);
@@ -28,6 +30,10 @@ public interface DeviceService {
 
 	public void updateUpgradeflag(String orgid, String branchid, String upgradeflag);
 
+	public void updateBundle(String[] deviceids, String defaultbundleid);
+
+	public void updatePage(String[] deviceids, String defaultpageid);
+
 	public void updateOnlineflag();
 
 	public void configall(String orgid) throws Exception;
@@ -37,6 +43,10 @@ public interface DeviceService {
 	public void reboot(String deviceid) throws Exception;
 
 	public void poweroff(String deviceid) throws Exception;
+
+	public void screenoff(String deviceid) throws Exception;
+
+	public void screenon(String deviceid) throws Exception;
 
 	public void screen(String deviceid) throws Exception;
 
@@ -48,4 +58,8 @@ public interface DeviceService {
 	public void ucancel(String orgid) throws Exception;
 
 	public void resetExternalid(String externalid);
+
+	public JSONObject generateBundleJson(Device device) throws Exception;
+
+	public JSONObject generatePageJson(Device device) throws Exception;
 }

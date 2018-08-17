@@ -62,6 +62,17 @@ var BundleModule = function () {
 				}
 				bundlehtml += '</div></a>';
 				
+				if (aData.startdate == '1970-01-01') {
+					bundlehtml += common.view.unlimited;
+				} else {
+					bundlehtml += aData.startdate;
+				}
+				bundlehtml += ' ~ ';
+				if (aData.enddate == '2037-01-01') {
+					bundlehtml += common.view.unlimited;
+				} else {
+					bundlehtml += aData.enddate;
+				}
 				bundlehtml += '<div class="util-btn-margin-bottom-5">';
 				bundlehtml += '<a href="javascript:;" bundleid="' + aData.bundleid + '" class="btn default btn-xs blue pix-bundle"><i class="fa fa-stack-overflow"></i> ' + common.view.design + '</a>';
 				bundlehtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
@@ -207,11 +218,38 @@ var BundleModule = function () {
 	};
 
 	var initBundleEditModal = function () {
+		$('input[name="bundle.startdate.unlimited"]').click(function(e) {
+			if ($('input[name="bundle.startdate.unlimited"]').attr('checked')) {
+				$('input[name="bundle.startdate"]').parent().css('display', 'none');
+			} else {
+				$('input[name="bundle.startdate"]').parent().css('display', '');
+				$('input[name="bundle.startdate"]').val(new Date().format('yyyy') + '-' + new Date().format('MM') + '-' + new Date().format('dd'));
+			}
+		});  
+		$('input[name="bundle.enddate.unlimited"]').click(function(e) {
+			if ($('input[name="bundle.enddate.unlimited"]').attr('checked')) {
+				$('input[name="bundle.enddate"]').parent().css('display', 'none');
+			} else {
+				$('input[name="bundle.enddate"]').parent().css('display', '');
+				$('input[name="bundle.enddate"]').val(new Date().format('yyyy') + '-' + new Date().format('MM') + '-' + new Date().format('dd'));
+			}
+		});  
+
 		var formHandler = new FormHandler($('#BundleEditForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['bundle.name'] = {};
 		formHandler.validateOption.rules['bundle.name']['required'] = true;
 		formHandler.validateOption.submitHandler = function(form) {
+			if ($('input[name="bundle.startdate.unlimited"]').attr('checked')) {
+				$('input[name="bundle.startdate"]').val('1970-01-01');
+			}
+			if ($('input[name="bundle.enddate.unlimited"]').attr('checked')) {
+				$('input[name="bundle.enddate"]').val('2037-01-01');
+			}
+			if (parseInt($('input[name="bundle.startdate"]').val().replace(/\-/g,'')) > parseInt($('input[name="bundle.enddate"]').val().replace(/\-/g,''))) {
+				bootbox.alert(common.tips.date_error);
+				return false;
+			}
 			$.ajax({
 				type : 'POST',
 				url : $('#BundleEditForm').attr('action'),
@@ -356,6 +394,12 @@ var BundleModule = function () {
 
 		$('body').on('click', '.pix-add', function(event) {
 			formHandler.reset();
+			$('input[name="bundle.startdate.unlimited"]').attr('checked', 'checked');
+			$('input[name="bundle.startdate.unlimited"]').parent().addClass('checked');
+			$('input[name="bundle.startdate"]').parent().css('display', 'none');
+			$('input[name="bundle.enddate.unlimited"]').attr('checked', 'checked');
+			$('input[name="bundle.enddate.unlimited"]').parent().addClass('checked');
+			$('input[name="bundle.enddate"]').parent().css('display', 'none');
 			$('#BundleEditForm input[name="bundle.branchid"').val(BundleTree.branchid);
 			$('#BundleEditForm').attr('action', 'bundle!add.action');
 			$('.hide-update').css('display', 'block');
@@ -367,10 +411,41 @@ var BundleModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			formHandler.setdata('bundle', $('#BundleTable').dataTable().fnGetData(index));
+			_bundle = $('#BundleTable').dataTable().fnGetData(index);
+			formHandler.setdata('bundle', _bundle);
+			if (_bundle.startdate == '1970-01-01') {
+				$('input[name="bundle.startdate.unlimited"]').attr('checked', 'checked');
+				$('input[name="bundle.startdate.unlimited"]').parent().addClass('checked');
+				$('input[name="bundle.startdate"]').parent().css('display', 'none');
+			} else {
+				$('input[name="bundle.startdate.unlimited"]').removeAttr('checked');
+				$('input[name="bundle.startdate.unlimited"]').parent().removeClass('checked');
+				$('input[name="bundle.startdate"]').parent().css('display', '');
+				$('input[name="bundle.startdate"]').val(_bundle.startdate);
+			}
+			if (_bundle.enddate == '2037-01-01') {
+				$('input[name="bundle.enddate.unlimited"]').attr('checked', 'checked');
+				$('input[name="bundle.enddate.unlimited"]').parent().addClass('checked');
+				$('input[name="bundle.enddate"]').parent().css('display', 'none');
+			} else {
+				$('input[name="bundle.enddate.unlimited"]').removeAttr('checked');
+				$('input[name="bundle.enddate.unlimited"]').parent().removeClass('checked');
+				$('input[name="bundle.enddate"]').parent().css('display', '');
+				$('input[name="bundle.enddate"]').val(_bundle.enddate);
+			}
 			$('#BundleEditForm').attr('action', 'bundle!update.action');
 			$('.hide-update').css('display', 'none');
 			$('#BundleEditModal').modal();
+		});
+
+		$('.form_date').datetimepicker({
+			autoclose: true,
+			isRTL: Metronic.isRTL(),
+			format: 'yyyy-mm-dd',
+			pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
+			language: 'zh-CN',
+			minView: 'month',
+			todayBtn: true
 		});
 	};
 	
@@ -398,6 +473,7 @@ var BundleModule = function () {
 						$('.stream-ctrl').css('display', StreamCtrl? '':'none');
 						$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
+						$('.massage-ctrl').css('display', MassageCtrl? '':'none');
 						$('#BundleModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
@@ -413,17 +489,28 @@ var BundleModule = function () {
 			if (_submitflag) {
 				return;
 			}
+			var mainzone = false;
+			for (var i=0; i<_design.Object.bundlezones.length; i++) {
+				if (_design.Object.bundlezones[i].mainflag == 1) {
+					mainzone = true;
+					break;
+				}
+			}			
+			if (mainzone == false) {
+				bootbox.alert(common.tips.mainzone_missed);
+				return;
+			}
 			_submitflag = true;
 			Metronic.blockUI({
 				zIndex: 20000,
 				animate: true
 			});
 			$('#snapshot_div').show();
-			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 1024);
+			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL());
-					_design.Object.snapshotdtl = canvas.toDataURL();
+					//console.log(canvas.toDataURL('image/jpeg'));
+					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
 					$('#snapshot_div').hide();
 
 					for (var i=0; i<_design.Object.bundlezones.length; i++) {

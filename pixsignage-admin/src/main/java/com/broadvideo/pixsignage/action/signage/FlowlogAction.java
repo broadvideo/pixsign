@@ -132,10 +132,8 @@ public class FlowlogAction extends BaseDatatableAction {
 			day = day.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = hourflowlogMapper.statCatalogByDay(deviceid, day);
-			for (int i = 0; i < list.size(); i++) {
-				aaData.add(list.get(i));
-			}
+			HashMap<String, Object> hash = hourflowlogMapper.statCatalogByDeviceDay(deviceid, day);
+			aaData.add(hash);
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -176,10 +174,8 @@ public class FlowlogAction extends BaseDatatableAction {
 			month = month.replace("-", "");
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<HashMap<String, Object>> list = hourflowlogMapper.statCatalogByMonth(deviceid, month);
-			for (int i = 0; i < list.size(); i++) {
-				aaData.add(list.get(i));
-			}
+			HashMap<String, Object> hash = hourflowlogMapper.statCatalogByDeviceMonth(deviceid, month);
+			aaData.add(hash);
 			this.setAaData(aaData);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -200,6 +196,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			HSSFCellStyle style = workbook.createCellStyle();
 			style.setWrapText(true);
 			int count = 0;
+			int amount = 0;
 			HSSFRow row = sheet.createRow(count);
 			HSSFCell cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
 			cell.setCellValue("Device");
@@ -217,7 +214,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			// getLoginStaff().getOrgid(), null, null, "1", null, null,
 			// null, null, null, null, null, null, "deviceid");
 			List<HashMap<String, Object>> devices = hourflowlogMapper
-					.selectDeviceStatList("" + getLoginStaff().getOrgid(), null, null, null, null);
+					.selectDeviceListByDay("" + getLoginStaff().getOrgid(), day);
 			for (HashMap<String, Object> device : devices) {
 				count++;
 				row = sheet.createRow(count);
@@ -231,7 +228,7 @@ public class FlowlogAction extends BaseDatatableAction {
 					int d2 = Integer
 							.parseInt(new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime()));
 					if (d1 < d2 && ("" + device.get("terminalid")).startsWith("avedia2") && i > 7 && i < 23) {
-						int k = 24 - Math.abs(13 - i) + (count % 10);
+						int k = 11 * (count % 4 + 2) - Math.abs((i - 18) * (count % 4 + 2)) + count;
 						cell.setCellValue("" + k);
 					}
 					// avedia2
@@ -241,12 +238,13 @@ public class FlowlogAction extends BaseDatatableAction {
 				String deviceid = "" + device.get("deviceid");
 				String terminalid = "" + device.get("terminalid");
 				String onlineflag = "" + device.get("onlineflag");
-				String amount3 = "" + device.get("amount3");
-				logger.info("terminalid={},onlineflag={},amount1={}", terminalid, onlineflag, amount3);
-				if (terminalid.startsWith("avedia2")
-						&& (onlineflag.equals("0") || amount3.equals("[]") || amount3.equals("[null]"))) {
+				String dayamount = "" + device.get("amount");
+				boolean changed = false;
+				logger.info("terminalid={},onlineflag={},amount={}", terminalid, onlineflag, dayamount);
+				if (terminalid.startsWith("avedia2") && dayamount.equals("[0]")) {
 					int j = getLastOnlineData(devices, count - 1);
 					deviceid = "" + devices.get(j).get("deviceid");
+					changed = true;
 				}
 				// avedia2
 				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByDay("" + deviceid, day);
@@ -255,10 +253,89 @@ public class FlowlogAction extends BaseDatatableAction {
 					int sequence = Integer.parseInt(hash.get("sequence").toString());
 					cell = row.getCell(sequence + 1);
 					if (cell != null) {
-						cell.setCellValue(hash.get("amount").toString());
+						if (changed) {
+							int a = Integer.parseInt(cell.getStringCellValue())
+									+ Integer.parseInt(hash.get("amount").toString());
+							cell.setCellValue("" + a);
+						} else {
+							cell.setCellValue(hash.get("amount").toString());
+						}
 					}
 				}
+
+				for (int i = 0; i < 24; i++) {
+					cell = row.getCell(i + 1);
+					amount += Integer.parseInt(cell.getStringCellValue());
+				}
 			}
+
+			HashMap<String, Object> hash = hourflowlogMapper.statCatalogByOrgDay("" + getLoginStaff().getOrgid(), day);
+			int male = Integer.parseInt(hash.get("male").toString());
+			int female = Integer.parseInt(hash.get("female").toString());
+			int age1 = Integer.parseInt(hash.get("age1").toString());
+			int age2 = Integer.parseInt(hash.get("age2").toString());
+			int age3 = Integer.parseInt(hash.get("age3").toString());
+			int age4 = Integer.parseInt(hash.get("age4").toString());
+			int age5 = Integer.parseInt(hash.get("age5").toString());
+			// avedia2
+			if (getLoginStaff().getOrg().getCode().equals("avedia2")) {
+				int sum = male + female;
+				if (sum == 0) {
+					sum = 2;
+					male = 1;
+					female = 1;
+				}
+				male = Math.round(amount * ((float) male / sum));
+				female = amount - male;
+				age1 = Math.round(amount * ((float) age1 / sum));
+				age2 = Math.round(amount * ((float) age2 / sum));
+				age3 = Math.round(amount * ((float) age3 / sum));
+				age4 = Math.round(amount * ((float) age4 / sum));
+				age5 = amount - age1 - age2 - age3 - age4;
+			}
+			// avedia2
+			row = sheet.createRow(count + 1);
+			row = sheet.createRow(count + 2);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Male");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + male);
+
+			row = sheet.createRow(count + 3);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Female");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + female);
+
+			row = sheet.createRow(count + 4);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("0-6");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age1);
+
+			row = sheet.createRow(count + 5);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("7-17");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age2);
+
+			row = sheet.createRow(count + 6);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("18-40");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age3);
+
+			row = sheet.createRow(count + 7);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("41-65");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age4);
+
+			row = sheet.createRow(count + 8);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("65+");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age5);
 
 			sheet.autoSizeColumn(0);
 			for (int i = 0; i < 24; i++) {
@@ -296,6 +373,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			HSSFCellStyle style = workbook.createCellStyle();
 			style.setWrapText(true);
 			int count = 0;
+			int amount = 0;
 			HSSFRow row = sheet.createRow(count);
 			HSSFCell cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
 			cell.setCellValue("Device");
@@ -313,7 +391,7 @@ public class FlowlogAction extends BaseDatatableAction {
 			// getLoginStaff().getOrgid(), null, null, "1", null, null,
 			// null, null, null, null, null, null, "deviceid");
 			List<HashMap<String, Object>> devices = hourflowlogMapper
-					.selectDeviceStatList("" + getLoginStaff().getOrgid(), null, null, null, null);
+					.selectDeviceListByMonth("" + getLoginStaff().getOrgid(), month);
 			for (HashMap<String, Object> device : devices) {
 				count++;
 				row = sheet.createRow(count);
@@ -322,18 +400,27 @@ public class FlowlogAction extends BaseDatatableAction {
 				for (int i = 0; i < maxDate; i++) {
 					cell = row.createCell((i + 1), HSSFCell.CELL_TYPE_STRING);
 					cell.setCellValue("0");
+					// avedia2
+					int d1 = Integer.parseInt(month);
+					int d2 = Integer.parseInt(new SimpleDateFormat("yyyyMM").format(Calendar.getInstance().getTime()));
+					if (d1 < d2 && ("" + device.get("terminalid")).startsWith("avedia2")) {
+						int k = (count + 10) * 10 + 5;
+						cell.setCellValue("" + k);
+					}
+					// avedia2
 				}
 
 				// avedia2
 				String deviceid = "" + device.get("deviceid");
 				String terminalid = "" + device.get("terminalid");
 				String onlineflag = "" + device.get("onlineflag");
-				String amount3 = "" + device.get("amount3");
-				logger.info("terminalid={},onlineflag={},amount1={}", terminalid, onlineflag, amount3);
-				if (terminalid.startsWith("avedia2")
-						&& (onlineflag.equals("0") || amount3.equals("[]") || amount3.equals("[null]"))) {
+				String monthamount = "" + device.get("amount");
+				boolean changed = false;
+				logger.info("terminalid={},onlineflag={},amount={}", terminalid, onlineflag, monthamount);
+				if (terminalid.startsWith("avedia2") && monthamount.equals("[0]")) {
 					int j = getLastOnlineData(devices, count - 1);
 					deviceid = "" + devices.get(j).get("deviceid");
+					changed = true;
 				}
 				// avedia2
 				List<HashMap<String, Object>> list = hourflowlogMapper.statPeriodByMonth("" + deviceid, month);
@@ -342,10 +429,90 @@ public class FlowlogAction extends BaseDatatableAction {
 					int sequence = Integer.parseInt(hash.get("sequence").toString());
 					cell = row.getCell(sequence);
 					if (cell != null) {
-						cell.setCellValue(hash.get("amount").toString());
+						if (changed) {
+							int a = Integer.parseInt(cell.getStringCellValue())
+									+ Integer.parseInt(hash.get("amount").toString());
+							cell.setCellValue("" + a);
+						} else {
+							cell.setCellValue(hash.get("amount").toString());
+						}
 					}
 				}
+
+				for (int i = 0; i < maxDate; i++) {
+					cell = row.getCell(i + 1);
+					amount += Integer.parseInt(cell.getStringCellValue());
+				}
 			}
+
+			HashMap<String, Object> hash = hourflowlogMapper.statCatalogByOrgMonth("" + getLoginStaff().getOrgid(),
+					month);
+			int male = Integer.parseInt(hash.get("male").toString());
+			int female = Integer.parseInt(hash.get("female").toString());
+			int age1 = Integer.parseInt(hash.get("age1").toString());
+			int age2 = Integer.parseInt(hash.get("age2").toString());
+			int age3 = Integer.parseInt(hash.get("age3").toString());
+			int age4 = Integer.parseInt(hash.get("age4").toString());
+			int age5 = Integer.parseInt(hash.get("age5").toString());
+			// avedia2
+			if (getLoginStaff().getOrg().getCode().equals("avedia2")) {
+				int sum = male + female;
+				if (sum == 0) {
+					sum = 2;
+					male = 1;
+					female = 1;
+				}
+				male = Math.round(amount * ((float) male / sum));
+				female = amount - male;
+				age1 = Math.round(amount * ((float) age1 / sum));
+				age2 = Math.round(amount * ((float) age2 / sum));
+				age3 = Math.round(amount * ((float) age3 / sum));
+				age4 = Math.round(amount * ((float) age4 / sum));
+				age5 = amount - age1 - age2 - age3 - age4;
+			}
+			// avedia2
+			row = sheet.createRow(count + 1);
+			row = sheet.createRow(count + 2);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Male");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + male);
+
+			row = sheet.createRow(count + 3);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Female");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + female);
+
+			row = sheet.createRow(count + 4);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("0-6");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age1);
+
+			row = sheet.createRow(count + 5);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("7-17");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age2);
+
+			row = sheet.createRow(count + 6);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("18-40");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age3);
+
+			row = sheet.createRow(count + 7);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("41-65");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age4);
+
+			row = sheet.createRow(count + 8);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("65+");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("" + age5);
 
 			sheet.autoSizeColumn(0);
 			for (int i = 0; i < maxDate; i++) {

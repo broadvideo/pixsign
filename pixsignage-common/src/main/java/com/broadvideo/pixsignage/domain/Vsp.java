@@ -360,6 +360,16 @@ public class Vsp {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
+	public String getMassageflag() {
+		int i = 22;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setMassageflag(String flag) {
+		int i = 22;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
 	public List<App> getApplist() {
 		return applist;
 	}

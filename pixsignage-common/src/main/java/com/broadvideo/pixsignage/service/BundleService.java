@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,10 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public interface BundleService {
+	public Bundle selectMiniByPrimaryKey(String bundleid);
+
+	public Bundle selectBaseByPrimaryKey(String bundleid);
+
 	public Bundle selectByPrimaryKey(String bundleid);
 
 	public int selectCount(String orgid, String branchid, String reviewflag, String touchflag, String homeflag,
@@ -30,15 +35,20 @@ public interface BundleService {
 
 	public void design(Bundle bundle) throws Exception;
 
+	public void makeJsonFile(String bundleid) throws Exception;
+
 	public void push(Bundle bundle, HashMap<String, Object>[] binds) throws Exception;
 
 	public void handleWizard(Staff staff, Bundle bundle, HashMap<String, Object>[] binds) throws Exception;
 
 	public void setBundleReviewWait(String bundleid);
 
-	public void setBundleReviewResut(String bundleid, String reviewflag, String comment);
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) throws Exception;
 
 	public JSONObject generateBundleJson(String bundleid);
 
 	public JSONArray generateBundleJsonArray(List<Integer> bundleids);
+
+	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
+
 }

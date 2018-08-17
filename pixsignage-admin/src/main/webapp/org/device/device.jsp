@@ -243,6 +243,17 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.temperatureflag"/></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="device.temperatureflag" value="0"> <spring:message code="pixsign.prop.temperatureflag_0"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="device.temperatureflag" value="1"> <spring:message code="pixsign.prop.temperatureflag_1"/>
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -325,6 +336,12 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.boardtype"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="BoardtypeSelect" class="form-control select2" name="device.boardtype">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.relatedevice"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="RelateSelect" class="form-control select2" name="device.relateid">
 								</div>
 							</div>
 							<div class="form-group school-ctrl">

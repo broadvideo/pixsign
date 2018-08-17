@@ -81,6 +81,10 @@ public class Org {
 
 	private String boardtype;
 
+	private Integer hightemperature;
+
+	private Integer lowtemperature;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -385,6 +389,22 @@ public class Org {
 		this.boardtype = boardtype;
 	}
 
+	public Integer getHightemperature() {
+		return hightemperature;
+	}
+
+	public void setHightemperature(Integer hightemperature) {
+		this.hightemperature = hightemperature;
+	}
+
+	public Integer getLowtemperature() {
+		return lowtemperature;
+	}
+
+	public void setLowtemperature(Integer lowtemperature) {
+		this.lowtemperature = lowtemperature;
+	}
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreatetime() {
 		return createtime;
@@ -610,6 +630,16 @@ public class Org {
 
 	public void setPlanflag(String flag) {
 		int i = 21;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
+	public String getMassageflag() {
+		int i = 22;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setMassageflag(String flag) {
+		int i = 22;
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 

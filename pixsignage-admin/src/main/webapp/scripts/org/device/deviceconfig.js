@@ -145,6 +145,16 @@ var DeviceConfigModule = function () {
 		formHandler.validateOption.rules['org.devicepass']['required'] = true;
 		formHandler.validateOption.rules['org.devicepass']['number'] = true;
 		formHandler.validateOption.rules['org.devicepass']['minlength'] = 6;
+		formHandler.validateOption.rules['org.hightemperature'] = {};
+		formHandler.validateOption.rules['org.hightemperature']['required'] = true;
+		formHandler.validateOption.rules['org.hightemperature']['number'] = true;
+		formHandler.validateOption.rules['org.hightemperature']['min'] = 40;
+		formHandler.validateOption.rules['org.hightemperature']['max'] = 80;
+		formHandler.validateOption.rules['org.lowtemperature'] = {};
+		formHandler.validateOption.rules['org.lowtemperature']['required'] = true;
+		formHandler.validateOption.rules['org.lowtemperature']['number'] = true;
+		formHandler.validateOption.rules['org.lowtemperature']['min'] = 30;
+		formHandler.validateOption.rules['org.lowtemperature']['max'] = 70;
 		formHandler.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',

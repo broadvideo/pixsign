@@ -45,7 +45,6 @@ import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
-import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Text;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
@@ -248,6 +247,7 @@ public class PixsignageService2 {
 			try {
 				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
 				String location = ipseeker.getCountry(ip);
+				ipseeker.close();
 				logger.info("Get the location from {}: {}", ip, location);
 				int index1 = location.indexOf("省");
 				int index2 = location.indexOf("市");
@@ -446,8 +446,7 @@ public class PixsignageService2 {
 				return handleResult(1006, "硬件码和终端号不匹配");
 			}
 
-			JSONObject responseJson = scheduleService.generateBundleScheduleJson(Schedule.BindType_Device,
-					"" + device.getDeviceid());
+			JSONObject responseJson = scheduleService.generateDeviceBundleScheduleJson("" + device.getDeviceid());
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
 			logger.info("Pixsignage Service get_bundle response: {}", responseJson.toString());

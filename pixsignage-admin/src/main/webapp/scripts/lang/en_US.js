@@ -121,8 +121,7 @@ var common = {
 		region_type_7: 'Interactive Button',
 		region_type_8: 'Navigate Bar',
 		region_type_9: 'QR Code',
-		region_type_10: 'Calendar List',
-		region_type_11: 'Calendar Table',
+		region_type_10: 'Menu Bar',
 		region_type_12: 'RSS',
 		region_type_13: 'Audio',
 		region_type_14: 'Stream Zone',
@@ -316,6 +315,7 @@ var common = {
 		date_error: 'Invalid date period',
 		plandtl_zero: 'Please select program',
 		planbind_zero: 'Please select device',
+		bundle_zero: 'Please select program',
 		page_zero: 'Please select program',
 		bind_zero: 'Please select device',
 
@@ -327,7 +327,8 @@ var common = {
 		register_failed: 'Input error, register failed',
 		getvcode_failed: 'SMS failed',
 
-		region_remove_failed: 'Cannot remove this region',
+		mainzone_missed: 'Please set one main zone',
+		region_remove_failed: 'Cannot remove this zone',
 
 		folder_remove_failed: 'Cannot remove this folder',
 

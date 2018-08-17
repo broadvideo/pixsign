@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +18,8 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.service.BundleService;
-import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PlanService;
 import com.broadvideo.pixsignage.service.ScheduleService;
-import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -40,10 +36,6 @@ public class BundleAction extends BaseDatatableAction {
 
 	@Autowired
 	private BundleService bundleService;
-	@Autowired
-	private VideoService videoService;
-	@Autowired
-	private ImageService imageService;
 	@Autowired
 	private ScheduleService scheduleService;
 	@Autowired
@@ -121,6 +113,13 @@ public class BundleAction extends BaseDatatableAction {
 			} else {
 				bundleService.addBundle(bundle);
 			}
+
+			if (bundle.getHomeflag().equals("1")) {
+				bundleService.makeJsonFile("" + bundle.getBundleid());
+			} else {
+				bundleService.makeJsonFile("" + bundle.getHomebundleid());
+			}
+
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doAdd exception, ", ex);
@@ -133,6 +132,11 @@ public class BundleAction extends BaseDatatableAction {
 	public String doUpdate() {
 		try {
 			bundleService.updateBundle(bundle);
+			if (bundle.getHomeflag().equals("1")) {
+				bundleService.makeJsonFile("" + bundle.getBundleid());
+			} else {
+				bundleService.makeJsonFile("" + bundle.getHomebundleid());
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doUpdate exception, ", ex);
@@ -158,7 +162,7 @@ public class BundleAction extends BaseDatatableAction {
 		try {
 			String bundleid = getParameter("bundleid");
 			scheduleService.syncScheduleByBundle(bundleid);
-			planService.syncPlanByBundle(bundleid);
+			planService.syncPlanByBundle("" + getLoginStaff().getOrgid(), bundleid);
 			logger.info("Bundle sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -191,6 +195,13 @@ public class BundleAction extends BaseDatatableAction {
 			}
 			bundle.setCreatestaffid(getLoginStaff().getStaffid());
 			bundleService.design(bundle);
+			if (!getLoginStaff().getOrg().getReviewflag().equals(Org.FUNCTION_ENABLED)) {
+				if (bundle.getHomeflag().equals("1")) {
+					bundleService.makeJsonFile("" + bundle.getBundleid());
+				} else {
+					bundleService.makeJsonFile("" + bundle.getHomebundleid());
+				}
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doDesign exception, ", ex);
@@ -240,31 +251,6 @@ public class BundleAction extends BaseDatatableAction {
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;
-		}
-	}
-
-	private void zip(ZipOutputStream out, File f, String base) throws Exception {
-		if (f.isDirectory()) {
-			File[] fl = f.listFiles();
-			if (fl.length == 0) {
-				out.putNextEntry(new ZipEntry(base + "/")); // 创建zip压缩进入点base
-			}
-			for (int i = 0; i < fl.length; i++) {
-				if (base.equals("")) {
-					zip(out, fl[i], fl[i].getName()); // 递归遍历子文件夹
-				} else {
-					zip(out, fl[i], base + "/" + fl[i].getName()); // 递归遍历子文件夹
-				}
-			}
-		} else {
-			out.putNextEntry(new ZipEntry(base)); // 创建zip压缩进入点base
-			FileInputStream in = new FileInputStream(f);
-			byte[] b = new byte[1000];
-			int len = -1;
-			while ((len = in.read(b)) != -1) {
-				out.write(b, 0, len);
-			}
-			in.close();
 		}
 	}
 

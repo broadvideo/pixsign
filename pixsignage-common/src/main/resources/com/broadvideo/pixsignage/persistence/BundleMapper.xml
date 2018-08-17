@@ -6,6 +6,8 @@
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="startdate" property="startdate" jdbcType="DATE" />
+    <result column="enddate" property="enddate" jdbcType="DATE" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Bundle" >
     <id column="bundleid" property="bundleid" jdbcType="INTEGER" />
@@ -26,6 +28,8 @@
     <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
     <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
     <result column="comment" property="comment" jdbcType="VARCHAR" />
     <result column="exportflag" property="exportflag" jdbcType="CHAR" />
@@ -33,6 +37,8 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="startdate" property="startdate" jdbcType="DATE" />
+    <result column="enddate" property="enddate" jdbcType="DATE" />
     <collection property="subbundles" ofType="com.broadvideo.pixsignage.domain.Bundle" column="{homebundleid=bundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectSubList" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Bundle" extends="BaseResultMap" >
@@ -43,8 +49,8 @@
   
   <sql id="Base_Column_List" >
     bundleid, uuid, orgid, branchid, templetid, name, snapshot, ratio, height, width, bgcolor, 
-    bgimageid, touchflag, homeflag, homebundleid, homeidletime, description, status, 
-    reviewflag, comment, exportflag, exportsize, createtime, updatetime, createstaffid
+    bgimageid, touchflag, homeflag, homebundleid, homeidletime, description, status, size, md5, 
+    reviewflag, comment, exportflag, exportsize, createtime, updatetime, createstaffid, startdate, enddate
   </sql>
   <sql id="Blob_Column_List" >
     json
@@ -65,6 +71,14 @@
     where bundleid = #{bundleid}
   </select>
   
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from bundle
+    where orgid = #{orgid}
+    and uuid = #{uuid}
+  </select>
+
   <select id="selectCount" resultType="Integer">
     select count(1) from bundle
     where status = 1 
@@ -152,20 +166,22 @@
       height, width, bgcolor, 
       bgimageid, touchflag, homeflag, 
       homebundleid, homeidletime, description, 
-      status, reviewflag, comment, 
+      status, size, md5, 
+      reviewflag, comment, 
       exportflag, exportsize, 
       createtime, updatetime, createstaffid, 
-      json
+      startdate, enddate, json
       )
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templetid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
       #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{bgcolor,jdbcType=VARCHAR}, 
       #{bgimageid,jdbcType=INTEGER}, #{touchflag,jdbcType=CHAR}, #{homeflag,jdbcType=CHAR}, 
       #{homebundleid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{reviewflag,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{reviewflag,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR}, 
       #{exportflag,jdbcType=CHAR}, #{exportsize,jdbcType=BIGINT}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, 
-      #{json,jdbcType=LONGVARCHAR}
+      #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{json,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Bundle" >
@@ -225,6 +241,12 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
       <if test="reviewflag != null" >
         reviewflag,
       </if>
@@ -245,6 +267,12 @@
       </if>
       <if test="createstaffid != null" >
         createstaffid,
+      </if>
+      <if test="startdate != null" >
+        startdate,
+      </if>
+      <if test="enddate != null" >
+        enddate,
       </if>
       <if test="json != null" >
         json,
@@ -302,6 +330,12 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
       <if test="reviewflag != null" >
         #{reviewflag,jdbcType=CHAR},
       </if>
@@ -322,6 +356,12 @@
       </if>
       <if test="createstaffid != null" >
         #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="startdate != null" >
+        #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        #{enddate,jdbcType=DATE},
       </if>
       <if test="json != null" >
         #{json,jdbcType=LONGVARCHAR},
@@ -382,6 +422,12 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
       <if test="reviewflag != null" >
         reviewflag = #{reviewflag,jdbcType=CHAR},
       </if>
@@ -402,6 +448,12 @@
       </if>
       <if test="createstaffid != null" >
         createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="startdate != null" >
+        startdate = #{startdate,jdbcType=DATE},
+      </if>
+      <if test="enddate != null" >
+        enddate = #{enddate,jdbcType=DATE},
       </if>
       <if test="json != null" >
         json = #{json,jdbcType=LONGVARCHAR},
@@ -428,6 +480,8 @@
       homeidletime = #{homeidletime,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
+      size = #{size,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
       reviewflag = #{reviewflag,jdbcType=CHAR},
       comment = #{comment,jdbcType=VARCHAR},
       exportflag = #{exportflag,jdbcType=CHAR},
@@ -435,6 +489,8 @@
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
+      startdate = #{startdate,jdbcType=DATE},
+      enddate = #{enddate,jdbcType=DATE},
       json = #{json,jdbcType=LONGVARCHAR}
     where bundleid = #{bundleid,jdbcType=INTEGER}
   </update>

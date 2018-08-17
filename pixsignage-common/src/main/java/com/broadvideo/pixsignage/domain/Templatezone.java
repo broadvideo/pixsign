@@ -88,7 +88,7 @@ public class Templatezone {
 
 	private String touchtype;
 
-	private Integer touchtemplateid;
+	private Integer touchid;
 
 	private String fixflag;
 
@@ -412,12 +412,12 @@ public class Templatezone {
 		this.touchtype = touchtype == null ? null : touchtype.trim();
 	}
 
-	public Integer getTouchtemplateid() {
-		return touchtemplateid;
+	public Integer getTouchid() {
+		return touchid;
 	}
 
-	public void setTouchtemplateid(Integer touchtemplateid) {
-		this.touchtemplateid = touchtemplateid;
+	public void setTouchid(Integer touchid) {
+		this.touchid = touchid;
 	}
 
 	public String getFixflag() {

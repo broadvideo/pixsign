@@ -16,7 +16,7 @@ import com.broadvideo.pixsignage.common.ApiRetCodeEnum;
 import com.broadvideo.pixsignage.common.ServiceException;
 import com.broadvideo.pixsignage.domain.Wxappinfo;
 import com.broadvideo.pixsignage.persistence.WxappinfoMapper;
-import com.broadvideo.pixsignage.util.CommonUtils;
+import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.EncryptUtils;
 import com.broadvideo.pixsignage.util.HttpClientUtils;
 import com.broadvideo.pixsignage.util.HttpClientUtils.SimpleHttpResponse;
@@ -253,21 +253,20 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 			logger.info("tokenRefreshThread({}) had inited.", tokenRefreshThread.getName());
 			return;
 		}
-				tokenRefreshThread = new TokenRefreshThread();
-				tokenRefreshThread.start();
-				logger.info("Init wx mpaccesstoken....");
-				List<Wxappinfo> wxappinfos = this.wxappinfoMapper.selectAllWxappinfo(Wxappinfo.WX_MP_TYPE);
-				if (wxappinfos != null && wxappinfos.size() > 0) {
-					for (Wxappinfo wxappinfo : wxappinfos) {
-						try {
-							this.refreshAccessToken(wxappinfo.getOrgid());
-						} catch (Exception ex) {
-							logger.error("Refresh accessToken exception.", ex);
-						}
-					}
+		tokenRefreshThread = new TokenRefreshThread();
+		tokenRefreshThread.start();
+		logger.info("Init wx mpaccesstoken....");
+		List<Wxappinfo> wxappinfos = this.wxappinfoMapper.selectAllWxappinfo(Wxappinfo.WX_MP_TYPE);
+		if (wxappinfos != null && wxappinfos.size() > 0) {
+			for (Wxappinfo wxappinfo : wxappinfos) {
+				try {
+					this.refreshAccessToken(wxappinfo.getOrgid());
+				} catch (Exception ex) {
+					logger.error("Refresh accessToken exception.", ex);
 				}
-				logger.info("Start token refresh thread...");
-
+			}
+		}
+		logger.info("Start token refresh thread...");
 
 	}
 
@@ -288,8 +287,8 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 						if (mpAccessToken == null
 								|| System.currentTimeMillis() - mpAccessToken.getCreatets() > 60 * 60 * 1000L) {
 
-							logger.info("orgId={},MpAccessToken({}) is expired(cur={}),do refresh......", new Object[] {
-									orgIdKey, mpAccessToken, System.currentTimeMillis() });
+							logger.info("orgId={},MpAccessToken({}) is expired(cur={}),do refresh......",
+									new Object[] { orgIdKey, mpAccessToken, System.currentTimeMillis() });
 							refreshAccessToken(orgIdKey);
 							continue;
 						} else {
@@ -298,7 +297,7 @@ public class WxMpServiceImpl implements WxMpService, InitializingBean {
 						}
 
 					}
-					CommonUtils.sleep(10 * 1000L);
+					CommonUtil.sleep(10 * 1000L);
 
 				} catch (Exception ex) {
 

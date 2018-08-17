@@ -8,6 +8,8 @@ public class Devicefile {
 	public final static String ObjType_Video = "1";
 	public final static String ObjType_Image = "2";
 	public final static String ObjType_Audio = "3";
+	public final static String ObjType_Page = "4";
+	public final static String ObjType_Bundle = "5";
 	public final static String ObjType_CropVideo = "8";
 	public final static String ObjType_CropImage = "9";
 

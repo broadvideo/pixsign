@@ -46,6 +46,10 @@ public class Bundle {
 
 	private String status;
 
+	private Long size;
+
+	private String md5;
+
 	private String reviewflag;
 
 	private String comment;
@@ -59,6 +63,10 @@ public class Bundle {
 	private Date updatetime;
 
 	private Integer createstaffid;
+
+	private Date startdate;
+
+	private Date enddate;
 
 	private String json;
 
@@ -214,6 +222,22 @@ public class Bundle {
 		this.status = status == null ? null : status.trim();
 	}
 
+	public Long getSize() {
+		return size;
+	}
+
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
+	public String getMd5() {
+		return md5;
+	}
+
+	public void setMd5(String md5) {
+		this.md5 = md5;
+	}
+
 	public String getReviewflag() {
 		return reviewflag;
 	}
@@ -272,6 +296,26 @@ public class Bundle {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public Date getStartdate() {
+		return startdate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public void setStartdate(Date startdate) {
+		this.startdate = startdate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public Date getEnddate() {
+		return enddate;
+	}
+
+	@JSON(format = "yyyy-MM-dd")
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
 	}
 
 	public String getJson() {

@@ -150,7 +150,7 @@ public class TempletServiceImpl implements TempletService {
 			}
 			if (fromtemplet.getSnapshot() != null) {
 				String snapshotFilePath = "/templet/" + templet.getTempletid() + "/snapshot/" + templet.getTempletid()
-						+ ".png";
+						+ ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + fromtemplet.getSnapshot()),
 						snapshotFile);
@@ -265,10 +265,10 @@ public class TempletServiceImpl implements TempletService {
 		}
 
 		String snapshotdtl = templet.getSnapshotdtl();
-		if (snapshotdtl != null && snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl != null && snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 			String snapshotFilePath = "/templet/" + templet.getTempletid() + "/snapshot/" + templet.getTempletid()
-					+ ".png";
+					+ ".jpg";
 			File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 			FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 			templet.setSnapshot(snapshotFilePath);

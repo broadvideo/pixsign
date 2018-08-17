@@ -19,7 +19,9 @@ public interface ScheduleService {
 
 	public void syncScheduleByMediagrid(String mediagridid) throws Exception;
 
-	public JSONObject generateBundleScheduleJson(String bindtype, String bindid);
+	public JSONObject generateDeviceBundleScheduleJson(String deviceid);
+
+	public JSONObject generateDevicegroupBundleScheduleJson(String devicegroupid);
 
 	public JSONObject generateScheduleJson(String deviceid);
 

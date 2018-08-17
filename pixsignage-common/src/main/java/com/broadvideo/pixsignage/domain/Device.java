@@ -143,6 +143,12 @@ public class Device {
 
 	private String hotspotfrequency;
 
+	private String temperatureflag;
+
+	private Integer relateid;
+
+	private String screenstatus;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -150,6 +156,8 @@ public class Device {
 	private Appfile appfile;
 
 	private List<Schedule> schedules;
+
+	private Bundle defaultbundle;
 
 	private Page defaultpage;
 
@@ -699,6 +707,30 @@ public class Device {
 		this.hotspotfrequency = hotspotfrequency;
 	}
 
+	public String getTemperatureflag() {
+		return temperatureflag;
+	}
+
+	public void setTemperatureflag(String temperatureflag) {
+		this.temperatureflag = temperatureflag;
+	}
+
+	public Integer getRelateid() {
+		return relateid;
+	}
+
+	public void setRelateid(Integer relateid) {
+		this.relateid = relateid;
+	}
+
+	public String getScreenstatus() {
+		return screenstatus;
+	}
+
+	public void setScreenstatus(String screenstatus) {
+		this.screenstatus = screenstatus;
+	}
+
 	public Branch getBranch() {
 		return branch;
 	}
@@ -729,6 +761,14 @@ public class Device {
 
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+
+	public Bundle getDefaultbundle() {
+		return defaultbundle;
+	}
+
+	public void setDefaultbundle(Bundle defaultbundle) {
+		this.defaultbundle = defaultbundle;
 	}
 
 	public Page getDefaultpage() {

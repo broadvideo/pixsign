@@ -232,6 +232,7 @@ var TempletModule = function () {
 						$('.stream-ctrl').css('display', StreamCtrl? '':'none');
 						$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
+						$('.massage-ctrl').css('display', MassageCtrl? '':'none');
 						$('#TempletModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
@@ -253,11 +254,11 @@ var TempletModule = function () {
 				animate: true
 			});
 			$('#snapshot_div').show();
-			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 1024);
+			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL());
-					_design.Object.snapshotdtl = canvas.toDataURL();
+					//console.log(canvas.toDataURL('image/jpeg'));
+					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
 					$('#snapshot_div').hide();
 
 					_design.Object.templetid = _design.Object.bundleid;

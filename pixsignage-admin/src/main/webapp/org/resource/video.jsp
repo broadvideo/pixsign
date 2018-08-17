@@ -87,6 +87,14 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.relateurl"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="video.relateurl" />
+									</div>
+								</div>
+							</div>
 							<div class="form-group tag-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
 								<div class="col-md-9">

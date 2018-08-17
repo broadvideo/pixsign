@@ -363,8 +363,8 @@ FormValidateOption.submitHandler = function(form) {
 	
 	html2canvas($('#snapshot_div'), {
 		onrendered: function(canvas) {
-			console.log(canvas.toDataURL());
-			$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL());
+			//console.log(canvas.toDataURL('image/jpeg'));
+			$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL('image/jpeg'));
 			$('#snapshot_div').hide();
 
 			$.ajax({
@@ -674,8 +674,8 @@ $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 		redrawDevicegridPreview($('#snapshot_div'), CurrentDevicegrid, 512, false);
 		html2canvas($('#snapshot_div'), {
 			onrendered: function(canvas) {
-				console.log(canvas.toDataURL());
-				CurrentDevicegrid.snapshotdtl = canvas.toDataURL();
+				//console.log(canvas.toDataURL('image/jpeg'));
+				CurrentDevicegrid.snapshotdtl = canvas.toDataURL('image/jpeg');
 				$('#snapshot_div').hide();
 
 				$.ajax({

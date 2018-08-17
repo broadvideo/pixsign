@@ -7,7 +7,13 @@ import org.apache.ibatis.annotations.Param;
 import com.broadvideo.pixsignage.domain.Bundle;
 
 public interface BundleMapper {
+	Bundle selectMiniByPrimaryKey(@Param(value = "bundleid") String bundleid);
+
+	Bundle selectBaseByPrimaryKey(@Param(value = "bundleid") String bundleid);
+
 	Bundle selectByPrimaryKey(@Param(value = "bundleid") String bundleid);
+
+	Bundle selectByUuid(@Param(value = "orgid") String orgid, @Param(value = "uuid") String uuid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "reviewflag") String reviewflag, @Param(value = "touchflag") String touchflag,

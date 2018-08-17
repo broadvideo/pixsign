@@ -1,17 +1,27 @@
 package com.broadvideo.pixsignage.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +48,7 @@ import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.BundlezoneMapper;
 import com.broadvideo.pixsignage.persistence.BundlezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.ImageMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
@@ -70,11 +81,19 @@ public class BundleServiceImpl implements BundleService {
 	private VideoMapper videoMapper;
 	@Autowired
 	private ImageMapper imageMapper;
+	@Autowired
+	private DeviceMapper deviceMapper;
 
 	@Autowired
-	private DevicefileService devicefileService;
-	@Autowired
 	private ScheduleService scheduleService;
+
+	public Bundle selectMiniByPrimaryKey(String bundleid) {
+		return bundleMapper.selectMiniByPrimaryKey(bundleid);
+	}
+
+	public Bundle selectBaseByPrimaryKey(String bundleid) {
+		return bundleMapper.selectBaseByPrimaryKey(bundleid);
+	}
 
 	public Bundle selectByPrimaryKey(String bundleid) {
 		return bundleMapper.selectByPrimaryKey(bundleid);
@@ -163,7 +182,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 			if (templet.getSnapshot() != null) {
 				String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid()
-						+ ".png";
+						+ ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + templet.getSnapshot()), snapshotFile);
 				bundle.setSnapshot(snapshotFilePath);
@@ -195,7 +214,7 @@ public class BundleServiceImpl implements BundleService {
 				templetList.add(subtemplet);
 				if (subtemplet.getSnapshot() != null) {
 					String snapshotFilePath = "/bundle/" + subbundle.getBundleid() + "/snapshot/"
-							+ subbundle.getBundleid() + ".png";
+							+ subbundle.getBundleid() + ".jpg";
 					File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 					FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + subtemplet.getSnapshot()),
 							snapshotFile);
@@ -326,7 +345,7 @@ public class BundleServiceImpl implements BundleService {
 			}
 			if (frombundle.getSnapshot() != null) {
 				String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid()
-						+ ".png";
+						+ ".jpg";
 				File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				FileUtils.copyFile(new File(CommonConfig.CONFIG_PIXDATA_HOME + frombundle.getSnapshot()), snapshotFile);
 				bundle.setSnapshot(snapshotFilePath);
@@ -432,10 +451,10 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
@@ -461,10 +480,10 @@ public class BundleServiceImpl implements BundleService {
 			bundleMapper.clearBundlezones(destbundleidList[i]);
 			destbundle.setHomeidletime(sourcebundle.getHomeidletime());
 			File fromSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + sourcebundleid
-					+ "/snapshot/" + sourcebundleid + ".png");
+					+ "/snapshot/" + sourcebundleid + ".jpg");
 			if (fromSnapshotFile.exists()) {
 				String snapshotFilePath = "/bundle/" + destbundleidList[i] + "/snapshot/" + destbundleidList[i]
-						+ ".png";
+						+ ".jpg";
 				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 				destbundle.setSnapshot(snapshotFilePath);
 				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
@@ -498,6 +517,125 @@ public class BundleServiceImpl implements BundleService {
 				}
 			}
 		}
+		for (int bundleid : bundleidVector) {
+			makeJsonFile("" + bundleid);
+		}
+	}
+
+	public void makeJsonFile(String bundleid) throws Exception {
+		logger.info("Making json file bundleid={}", bundleid);
+		ArrayList<Bundle> bundleList = new ArrayList<Bundle>();
+
+		Bundle mainbundle = bundleMapper.selectByPrimaryKey(bundleid);
+		bundleList.add(mainbundle);
+		for (Bundle subbundle : mainbundle.getSubbundles()) {
+			bundleList.add(bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid()));
+		}
+
+		JSONArray bundleJsonArray = new JSONArray();
+		for (Bundle bundle : bundleList) {
+			JSONObject bundleJson = new JSONObject();
+			bundleJson.put("bundle_id", bundle.getBundleid());
+			bundleJson.put("name", bundle.getName());
+			bundleJson.put("touch_flag", bundle.getTouchflag());
+			bundleJson.put("home_flag", bundle.getHomeflag());
+			bundleJson.put("home_bundle_id", bundle.getHomebundleid());
+			bundleJson.put("home_idle", bundle.getHomeidletime());
+
+			bundleJson.put("width", bundle.getWidth());
+			bundleJson.put("height", bundle.getHeight());
+			bundleJson.put("bg_color", "#000000");
+
+			JSONArray zoneJsonArray = new JSONArray();
+			for (Bundlezone bundlezone : bundle.getBundlezones()) {
+				JSONObject zoneJson = new JSONObject();
+				zoneJson.put("zone_id", bundlezone.getBundlezoneid());
+				zoneJson.put("main_flag", bundlezone.getMainflag());
+				zoneJson.put("width", bundlezone.getWidth());
+				zoneJson.put("height", bundlezone.getHeight());
+				zoneJson.put("top", bundlezone.getTopoffset());
+				zoneJson.put("left", bundlezone.getLeftoffset());
+				zoneJson.put("zindex", bundlezone.getZindex());
+				zoneJson.put("type", bundlezone.getType());
+				zoneJson.put("sleep", bundlezone.getSleeptime());
+				zoneJson.put("interval", bundlezone.getIntervaltime());
+				zoneJson.put("speed", Integer.parseInt(bundlezone.getSpeed()));
+				zoneJson.put("color", "" + bundlezone.getColor());
+				zoneJson.put("size", bundlezone.getSize());
+				if (bundlezone.getDateformat() == null) {
+					zoneJson.put("date_format", "yyyy-MM-dd");
+				} else {
+					zoneJson.put("date_format", bundlezone.getDateformat());
+				}
+				zoneJson.put("fit_flag", Integer.parseInt(bundlezone.getFitflag()));
+				String opacity = Integer.toHexString(bundlezone.getBgopacity());
+				if (opacity.length() == 1) {
+					opacity = "0" + opacity;
+				}
+				zoneJson.put("bgcolor", "#" + opacity + bundlezone.getBgcolor().trim().substring(1));
+				zoneJson.put("volume", bundlezone.getVolume());
+				zoneJson.put("animation", bundlezone.getAnimation());
+
+				if (bundlezone.getType().equals(Bundlezone.Type_TOUCH)) {
+					zoneJson.put("touch_label", bundlezone.getTouchlabel());
+					if (bundlezone.getTouchtype().equals("2")) {
+						zoneJson.put("touch_type", "2");
+						zoneJson.put("touch_bundle_id", bundlezone.getTouchobjid());
+						zoneJson.put("touch_apk", "");
+					} else if (bundlezone.getTouchtype().equals("3") || bundlezone.getTouchtype().equals("4")
+							|| bundlezone.getTouchtype().equals("5")) {
+						zoneJson.put("touch_type", "3");
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", "");
+					} else if (bundlezone.getTouchtype().equals("6")) {
+						zoneJson.put("touch_type", "4");
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", bundlezone.getContent());
+					} else {
+						zoneJson.put("touch_type", bundlezone.getTouchtype());
+						zoneJson.put("touch_bundle_id", 0);
+						zoneJson.put("touch_apk", "");
+					}
+				}
+				zoneJson.put("content", bundlezone.getContent());
+
+				JSONArray zonedtlJsonArray = new JSONArray();
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					JSONObject zonedtlJson = new JSONObject();
+					if (bundlezonedtl.getObjtype().equals("1")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "video");
+						zonedtlJsonArray.add(zonedtlJson);
+					} else if (bundlezonedtl.getObjtype().equals("2")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "image");
+						zonedtlJsonArray.add(zonedtlJson);
+					} else if (bundlezonedtl.getObjtype().equals("6")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "audio");
+						zonedtlJsonArray.add(zonedtlJson);
+					}
+				}
+				zoneJson.put("zonedtls", zonedtlJsonArray);
+				zoneJsonArray.add(zoneJson);
+			}
+			bundleJson.put("zones", zoneJsonArray);
+			bundleJsonArray.add(bundleJson);
+		}
+
+		String saveDir = CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + bundleid;
+		String jsonname = "bundle-" + bundleid + ".json";
+		FileUtils.forceMkdir(new File(saveDir));
+		File jsonFile = new File(saveDir, jsonname);
+		if (jsonFile.exists()) {
+			jsonFile.delete();
+		}
+		FileUtils.writeStringToFile(jsonFile, bundleJsonArray.toString(2), "UTF-8", false);
+
+		mainbundle.setSize(FileUtils.sizeOf(jsonFile));
+		FileInputStream fis = new FileInputStream(jsonFile);
+		mainbundle.setMd5(DigestUtils.md5Hex(fis));
+		bundleMapper.updateByPrimaryKeySelective(mainbundle);
 	}
 
 	@Transactional
@@ -524,7 +662,14 @@ public class BundleServiceImpl implements BundleService {
 			scheduledtl.setSequence(1);
 			scheduledtlMapper.insertSelective(scheduledtl);
 
-			devicefileService.refreshDevicefiles("" + bind.get("bindtype"), "" + bind.get("bindid"));
+			String bindtype = "" + bind.get("bindtype");
+			if (bindtype.equals(Schedule.BindType_Device)) {
+				deviceMapper.updateBundle("" + bind.get("bindid"), "" + bundle.getBundleid());
+			} else if (bind.get("bindtype").equals(Schedule.BindType_Devicegroup)) {
+
+			}
+			// devicefileService.refreshDevicefiles("" + bind.get("bindtype"),
+			// "" + bind.get("bindid"));
 		}
 
 		// Handle sync
@@ -562,10 +707,10 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		String snapshotdtl = bundle.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
-		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".png";
+		String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		bundle.setSnapshot(snapshotFilePath);
@@ -600,7 +745,7 @@ public class BundleServiceImpl implements BundleService {
 		}
 	}
 
-	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) {
+	public void setBundleReviewResut(String bundleid, String reviewflag, String comment) throws Exception {
 		Bundle bundle = bundleMapper.selectByPrimaryKey(bundleid);
 		if (bundle != null && bundle.getHomebundleid() > 0) {
 			bundle = bundleMapper.selectByPrimaryKey("" + bundle.getHomebundleid());
@@ -616,6 +761,10 @@ public class BundleServiceImpl implements BundleService {
 					b.setComment(comment);
 					bundleMapper.updateByPrimaryKeySelective(b);
 				}
+			}
+
+			if (reviewflag.equals(Bundle.REVIEW_PASSED)) {
+				makeJsonFile("" + bundle.getBundleid());
 			}
 		}
 	}
@@ -1120,6 +1269,331 @@ public class BundleServiceImpl implements BundleService {
 			}
 		}
 		return bundleJSONArray;
+	}
+
+	@Transactional
+	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception {
+		String fileName = zipFile.getName();
+		logger.info("Begin to import bundle {}", fileName);
+		fileName = fileName.substring(0, fileName.lastIndexOf("."));
+		String unzipFilePath = CommonConfig.CONFIG_PIXDATA_HOME + "/import/" + fileName;
+		FileUtils.deleteQuietly(new File(unzipFilePath));
+		CommonUtil.unzip(zipFile, unzipFilePath, false);
+		FileUtils.forceDelete(zipFile);
+
+		HashMap<Integer, Bundle> bundleHash = new HashMap<Integer, Bundle>();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+		HashMap<Integer, Image> imageHash = new HashMap<Integer, Image>();
+		List<Image> imageList = new ArrayList<Image>();
+		List<Video> videoList = new ArrayList<Video>();
+
+		Date now = Calendar.getInstance().getTime();
+		File indexJsf = new File(unzipFilePath, "index.jsf");
+		logger.info("parse {}", indexJsf.getAbsoluteFile());
+		JSONObject bundleJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subbundles", Bundle.class);
+		map.put("bundlezones", Bundlezone.class);
+		map.put("bundlezonedtls", Bundlezonedtl.class);
+		Bundle bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+		Integer fromBundleid = bundle.getBundleid();
+		bundle.setOrgid(orgid);
+		bundle.setBranchid(branchid);
+		bundle.setCreatetime(now);
+		Bundle oldBundle = bundleMapper.selectByUuid("" + orgid, bundle.getUuid());
+		if (oldBundle != null) {
+			bundleMapper.clearSubbundles("" + oldBundle.getBundleid());
+			bundleMapper.clearBundlezones("" + oldBundle.getBundleid());
+			bundle.setBundleid(oldBundle.getBundleid());
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+		} else {
+			bundleMapper.insertSelective(bundle);
+		}
+		File fromSnapshotFile = new File(unzipFilePath, "index.jpg");
+		if (fromSnapshotFile.exists()) {
+			String snapshotFilePath = "/bundle/" + bundle.getBundleid() + "/snapshot/" + bundle.getBundleid() + ".jpg";
+			File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+			bundle.setSnapshot(snapshotFilePath);
+			FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+			bundleMapper.updateByPrimaryKeySelective(bundle);
+		}
+		bundleHash.put(fromBundleid, bundle);
+		logger.info("Add bundle oldid={}, newid={}", fromBundleid, bundle.getBundleid());
+
+		for (Bundle subbundle : bundle.getSubbundles()) {
+			File jsf = new File(unzipFilePath, "" + subbundle.getBundleid() + ".jsf");
+			logger.info("parse {}", jsf.getAbsoluteFile());
+			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
+			Bundle p = (Bundle) JSONObject.toBean(json, Bundle.class, map);
+			fromBundleid = p.getBundleid();
+			p.setOrgid(orgid);
+			p.setBranchid(branchid);
+			p.setHomebundleid(bundle.getBundleid());
+			p.setCreatetime(now);
+			bundleMapper.insertSelective(p);
+			fromSnapshotFile = new File(unzipFilePath, "" + fromBundleid + ".jpg");
+			if (fromSnapshotFile.exists()) {
+				String snapshotFilePath = "/bundle/" + p.getBundleid() + "/snapshot/" + p.getBundleid() + ".jpg";
+				p.setSnapshot(snapshotFilePath);
+				File toSnapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
+				FileUtils.copyFile(fromSnapshotFile, toSnapshotFile);
+				bundleMapper.updateByPrimaryKeySelective(p);
+			}
+			bundleHash.put(fromBundleid, p);
+			logger.info("Add subbundle oldid={}, newid={}", fromBundleid, p.getBundleid());
+		}
+
+		Iterator<Entry<Integer, Bundle>> bundleIter = bundleHash.entrySet().iterator();
+		while (bundleIter.hasNext()) {
+			Entry<Integer, Bundle> entry = bundleIter.next();
+			Bundle t = entry.getValue();
+			for (Bundlezone bundlezone : t.getBundlezones()) {
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					Image image = bundlezonedtl.getImage();
+					Video video = bundlezonedtl.getVideo();
+					Image relateImage = null;
+					if (image != null && image.getRelateimage() != null) {
+						relateImage = image.getRelateimage();
+					}
+					if (video != null && video.getRelateimage() != null) {
+						relateImage = video.getRelateimage();
+					}
+
+					// Handle relate image
+					if (relateImage != null && imageHash.get(relateImage.getImageid()) == null) {
+						Integer fromImageid = relateImage.getImageid();
+						Image toImage = imageMapper.selectByUuid(relateImage.getUuid());
+						if (toImage == null) {
+							// Insert image
+							File fromFile = new File(unzipFilePath + "/image", relateImage.getFilename());
+							toImage = new Image();
+							toImage.setUuid(relateImage.getUuid());
+							toImage.setOrgid(1);
+							toImage.setBranchid(1);
+							toImage.setFolderid(1);
+							toImage.setName(relateImage.getName());
+							toImage.setFilename(relateImage.getFilename());
+							toImage.setStatus("9");
+							toImage.setObjtype("0");
+							toImage.setObjid(0);
+							toImage.setRelateid(0);
+							toImage.setCreatestaffid(1);
+							imageMapper.insertSelective(toImage);
+							String newFileName = "" + toImage.getImageid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String imageFilePath, thumbFilePath;
+							imageFilePath = "/image/upload/" + newFileName;
+							thumbFilePath = "/image/thumb/" + newFileName;
+							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (imageFile.exists()) {
+								imageFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.copyFile(fromFile, imageFile);
+							CommonUtil.resizeImage(imageFile, thumbFile, 640);
+
+							BufferedImage img = ImageIO.read(imageFile);
+							toImage.setWidth(img.getWidth());
+							toImage.setHeight(img.getHeight());
+							toImage.setFilepath(imageFilePath);
+							toImage.setThumbnail(thumbFilePath);
+							toImage.setFilename(newFileName);
+							toImage.setSize(FileUtils.sizeOf(imageFile));
+							FileInputStream fis = new FileInputStream(imageFile);
+							toImage.setMd5(DigestUtils.md5Hex(fis));
+							fis.close();
+							toImage.setStatus("1");
+							imageMapper.updateByPrimaryKeySelective(toImage);
+							imageList.add(toImage);
+							logger.info("Add image oldid={}, newid={}", fromImageid, toImage.getImageid());
+						}
+						imageHash.put(fromImageid, toImage);
+					}
+
+					if (image != null) {
+						Integer fromImageid = image.getImageid();
+						Image toImage = imageMapper.selectByUuid(image.getUuid());
+						if (toImage == null) {
+							// Insert image
+							File fromFile = new File(unzipFilePath + "/image", image.getFilename());
+							toImage = new Image();
+							toImage.setUuid(image.getUuid());
+							toImage.setOrgid(1);
+							toImage.setBranchid(1);
+							toImage.setFolderid(1);
+							toImage.setName(image.getName());
+							toImage.setFilename(image.getFilename());
+							toImage.setStatus("9");
+							toImage.setObjtype("0");
+							toImage.setObjid(0);
+							toImage.setRelateid(image.getRelateid());
+							toImage.setCreatestaffid(1);
+							imageMapper.insertSelective(toImage);
+							String newFileName = "" + toImage.getImageid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String imageFilePath, thumbFilePath;
+							imageFilePath = "/image/upload/" + newFileName;
+							thumbFilePath = "/image/thumb/" + newFileName;
+							File imageFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + imageFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (imageFile.exists()) {
+								imageFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.copyFile(fromFile, imageFile);
+							CommonUtil.resizeImage(imageFile, thumbFile, 640);
+
+							BufferedImage img = ImageIO.read(imageFile);
+							toImage.setWidth(img.getWidth());
+							toImage.setHeight(img.getHeight());
+							toImage.setFilepath(imageFilePath);
+							toImage.setThumbnail(thumbFilePath);
+							toImage.setFilename(newFileName);
+							toImage.setSize(FileUtils.sizeOf(imageFile));
+							FileInputStream fis = new FileInputStream(imageFile);
+							toImage.setMd5(DigestUtils.md5Hex(fis));
+							fis.close();
+							toImage.setStatus("1");
+							imageMapper.updateByPrimaryKeySelective(toImage);
+							logger.info("Add image oldid={}, newid={}", fromImageid, toImage.getImageid());
+						} else {
+							toImage.setRelateid(image.getRelateid());
+						}
+						imageList.add(toImage);
+						imageHash.put(fromImageid, toImage);
+					}
+
+					if (video != null) {
+						Integer fromVideoid = video.getVideoid();
+						Video toVideo = videoMapper.selectByUuid(video.getUuid());
+						if (toVideo == null) {
+							// Insert video
+							File fromFile = new File(unzipFilePath + "/video", video.getFilename());
+							toVideo = new Video();
+							toVideo.setUuid(video.getUuid());
+							toVideo.setOrgid(1);
+							toVideo.setBranchid(1);
+							toVideo.setFolderid(1);
+							toVideo.setType(Video.TYPE_INTERNAL);
+							toVideo.setName(video.getName());
+							toVideo.setOname(video.getOname());
+							toVideo.setFilename(video.getFilename());
+							toVideo.setFormat(video.getFormat());
+							toVideo.setSize(video.getSize());
+							toVideo.setMd5(video.getMd5());
+							toVideo.setRelateid(video.getRelateid());
+							toVideo.setStatus("9");
+							toVideo.setCreatestaffid(1);
+							videoMapper.insertSelective(toVideo);
+							String newFileName = "" + toVideo.getVideoid() + "."
+									+ FilenameUtils.getExtension(fromFile.getName());
+							String videoFilePath, thumbFilePath;
+							videoFilePath = "/video/upload/" + newFileName;
+							thumbFilePath = "/video/snapshot/" + toVideo.getVideoid() + ".jpg";
+							File videoFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath);
+							File thumbFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath);
+							if (videoFile.exists()) {
+								videoFile.delete();
+							}
+							if (thumbFile.exists()) {
+								thumbFile.delete();
+							}
+							FileUtils.moveFile(fromFile, videoFile);
+
+							try {
+								// Generate preview gif
+								FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
+								String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i "
+										+ CommonConfig.CONFIG_PIXDATA_HOME + videoFilePath
+										+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
+										+ thumbFilePath;
+								logger.info("Begin to generate preview and thumbnail: " + command);
+								CommonUtil.execCommand(command);
+								if (!thumbFile.exists()) {
+									command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + CommonConfig.CONFIG_PIXDATA_HOME
+											+ videoFilePath + " -y -f image2 -ss 1 -vframes 1 "
+											+ CommonConfig.CONFIG_PIXDATA_HOME + thumbFilePath;
+									CommonUtil.execCommand(command);
+								}
+								if (thumbFile.exists()) {
+									BufferedImage img = ImageIO.read(thumbFile);
+									toVideo.setWidth(img.getWidth());
+									toVideo.setHeight(img.getHeight());
+									toVideo.setThumbnail("/video/snapshot/" + toVideo.getVideoid() + ".jpg");
+									logger.info("Finish thumbnail generating.");
+								} else {
+									logger.info("Failed to generate thumbnail.");
+								}
+
+							} catch (IOException ex) {
+								logger.info("Video parse error, file={}", videoFilePath, ex);
+							}
+
+							toVideo.setFilename(newFileName);
+							toVideo.setFilepath(videoFilePath);
+							toVideo.setThumbnail(thumbFilePath);
+							toVideo.setFilename(newFileName);
+							toVideo.setStatus("1");
+							videoMapper.updateByPrimaryKeySelective(toVideo);
+							logger.info("Add video oldid={}, newid={}", fromVideoid, toVideo.getVideoid());
+						} else {
+							toVideo.setRelateid(video.getRelateid());
+						}
+						videoList.add(toVideo);
+						videoHash.put(fromVideoid, toVideo);
+					}
+
+				}
+			}
+		}
+
+		for (Image image : imageList) {
+			if (image.getRelateid() > 0) {
+				image.setRelateid(imageHash.get(image.getRelateid()).getImageid());
+				imageMapper.updateByPrimaryKeySelective(image);
+			}
+		}
+		for (Video video : videoList) {
+			if (video.getRelateid() > 0) {
+				video.setRelateid(imageHash.get(video.getRelateid()).getImageid());
+				videoMapper.updateByPrimaryKeySelective(video);
+			}
+		}
+
+		bundleIter = bundleHash.entrySet().iterator();
+		while (bundleIter.hasNext()) {
+			Entry<Integer, Bundle> entry = bundleIter.next();
+			Bundle t = entry.getValue();
+			for (Bundlezone bundlezone : t.getBundlezones()) {
+				bundlezone.setBundleid(bundleHash.get(bundlezone.getBundleid()).getBundleid());
+				bundlezone.setHomebundleid(bundle.getBundleid());
+				Bundle touchBundle = bundleHash.get(bundlezone.getTouchobjid());
+				if (touchBundle != null) {
+					bundlezone.setTouchobjid(touchBundle.getBundleid());
+				} else {
+					bundlezone.setTouchobjid(0);
+				}
+				bundlezoneMapper.insertSelective(bundlezone);
+				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
+					if (bundlezonedtl.getObjtype().equals(Bundlezonedtl.ObjType_Video)) {
+						bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+						bundlezonedtl.setObjid(videoHash.get(bundlezonedtl.getObjid()).getVideoid());
+						bundlezonedtlMapper.insertSelective(bundlezonedtl);
+					} else if (bundlezonedtl.getObjtype().equals(Bundlezonedtl.ObjType_Image)) {
+						bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+						bundlezonedtl.setObjid(imageHash.get(bundlezonedtl.getObjid()).getImageid());
+						bundlezonedtlMapper.insertSelective(bundlezonedtl);
+					}
+				}
+			}
+		}
+
+		return bundle;
 	}
 
 }

@@ -223,6 +223,7 @@ var PageSelect = function (container, touchctrl) {
 	};
 	
 	this.refresh = function() {
+		_container.find('#PageSnapshot').height(_container.find('#PageSnapshot').width());
 		PageTable.dataTable()._fnAjaxUpdate();
 		TouchpageTable.dataTable()._fnAjaxUpdate();
 	}

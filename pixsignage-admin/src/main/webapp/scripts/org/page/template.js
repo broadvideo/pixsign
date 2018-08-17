@@ -229,7 +229,6 @@ var TemplateModule = function () {
 						for (var i=0; i<_design.Object.pagezones.length; i++) {
 							_design.Object.pagezones[i].pagezoneid = _design.Object.pagezones[i].templatezoneid;
 							_design.Object.pagezones[i].pageid = _design.Object.pagezones[i].templateid;
-							_design.Object.pagezones[i].touchpageid = _design.Object.pagezones[i].touchtemplateid;
 							_design.Object.pagezones[i].pagezonedtls = _design.Object.pagezones[i].templatezonedtls;
 							for (var j=0; j<_design.Object.pagezones[i].pagezonedtls.length; j++) {
 								_design.Object.pagezones[i].pagezonedtls[j].pagezonedtlid = _design.Object.pagezones[i].pagezonedtls[j].templatezonedtlid;
@@ -270,11 +269,11 @@ var TemplateModule = function () {
 				animate: true
 			});
 			$('#snapshot_div').show();
-			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 1024);
+			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL());
-					_design.Object.snapshotdtl = canvas.toDataURL();
+					//console.log(canvas.toDataURL('image/jpeg'));
+					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
 					$('#snapshot_div').hide();
 
 					_design.Object.templateid = _design.Object.pageid;
@@ -286,8 +285,6 @@ var TemplateModule = function () {
 						_design.Object.templatezones[i].pagezoneid = undefined;
 						_design.Object.templatezones[i].templateid = _design.Object.templatezones[i].pageid;
 						_design.Object.templatezones[i].pageid = undefined;
-						_design.Object.templatezones[i].touchtemplateid = _design.Object.templatezones[i].touchpageid;
-						_design.Object.templatezones[i].touchpageid = undefined;
 						_design.Object.templatezones[i].templatezonedtls = _design.Object.templatezones[i].pagezonedtls;
 						_design.Object.templatezones[i].pagezonedtls = undefined;
 						for (var j=0; j<_design.Object.templatezones[i].templatezonedtls.length; j++) {

@@ -968,7 +968,7 @@ $('[type=submit]', $('#MediagridModal')).on('click', function(event) {
 		redrawMediagridPreview($('#snapshot_div'), CurrentMediagrid, 512, 0);
 		html2canvas($('#snapshot_div'), {
 			onrendered: function(canvas) {
-				CurrentMediagrid.snapshotdtl = canvas.toDataURL();
+				CurrentMediagrid.snapshotdtl = canvas.toDataURL('image/jpeg');
 				$('#snapshot_div').hide();
 
 				$.ajax({

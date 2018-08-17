@@ -215,12 +215,42 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doUpdateBundle() {
+		try {
+			String defaultbundleid = getParameter("defaultbundleid");
+			String deviceids = getParameter("deviceids");
+			logger.info("Device doUpdateBundle, deviceids={},defaultbundleid={}", deviceids, defaultbundleid);
+			deviceService.updateBundle(deviceids.split(","), defaultbundleid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdateBundle exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUpdatePage() {
+		try {
+			String defaultpageid = getParameter("defaultpageid");
+			String deviceids = getParameter("deviceids");
+			logger.info("Device doUpdatePage, deviceids={},defaultpageid={}", deviceids, defaultpageid);
+			deviceService.updatePage(deviceids.split(","), defaultpageid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdatePage exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device doSync, deviceid={}", deviceid);
 			planService.syncPlan(Planbind.BindType_Device, deviceid);
 			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
-			logger.info("Device schedule sync success");
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction schedule sync error", ex);
@@ -233,6 +263,7 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doConfig() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device doConfig, deviceid={}", deviceid);
 			if (deviceid != null && deviceid.length() > 0) {
 				deviceService.config(deviceid);
 				logger.info("Device config success, deviceid={}", deviceid);
@@ -252,8 +283,8 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doReboot() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device doReboot, deviceid={}", deviceid);
 			deviceService.reboot(deviceid);
-			logger.info("Device reboot success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction reboot error ", ex);
@@ -266,8 +297,8 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doPoweroff() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device doPoweroff, deviceid={}", deviceid);
 			deviceService.poweroff(deviceid);
-			logger.info("Device poweroff success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction poweroff error ", ex);
@@ -280,8 +311,8 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doScreen() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device doScreen, deviceid={}", deviceid);
 			deviceService.screen(deviceid);
-			logger.info("DeviceAction screen success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("Device screen error ", ex);

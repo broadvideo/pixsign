@@ -150,11 +150,16 @@
 							<a href="javascript:;" class="icon-btn pix-addzone touch-ctrl" zonetype="7">
 								<i class="fa fa-hand-o-up"></i><div><spring:message code="pixsign.bundlezone.type.button"/></div>
 							</a>
+							<!-- 
 							<a href="javascript:;" class="icon-btn pix-addzone touch-ctrl" zonetype="8">
 								<i class="fa fa-road"></i><div><spring:message code="pixsign.bundlezone.type.navigate"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
 								<i class="fa fa-cog"></i><div><spring:message code="pixsign.bundlezone.type.control"/></div>
+							</a>
+							 -->
+							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="10">
+								<i class="fa fa-road"></i><div>菜单条</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone rss-ctrl" zonetype="12">
 								<i class="fa fa-rss"></i><div>RSS</div>
@@ -167,6 +172,12 @@
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone dvb-ctrl" zonetype="16">
 								<i class="fa fa-joomla"></i><div>DVB</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="101">
+								<i class="fa fa-qrcode"></i><div>按摩椅二维码</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="102">
+								<i class="fa fa-cog"></i><div>按摩椅控制</div>
 							</a>
 						</div>
 					</div>
@@ -804,6 +815,7 @@ var RssCtrl = <%=(session_org != null && session_org.getRssflag().equals("1"))%>
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
+var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

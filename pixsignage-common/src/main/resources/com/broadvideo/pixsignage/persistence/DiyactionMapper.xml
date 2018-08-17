@@ -24,6 +24,12 @@
     order by diyactionid
   </select>
 
+  <select id="selectByCode" resultMap="BaseResultMap">
+    select * from diyaction
+    where diyid = #{diyid}
+    and code = #{code}
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     delete from diyaction
     where diyactionid = #{diyactionid}

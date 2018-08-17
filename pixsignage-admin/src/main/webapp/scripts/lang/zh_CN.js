@@ -121,8 +121,7 @@ var common = {
 		region_type_7: '按键',
 		region_type_8: '导航条',
 		region_type_9: '控制',
-		region_type_10: '日程列表',
-		region_type_11: '日程表格',
+		region_type_10: '菜单条',
 		region_type_12: 'RSS',
 		region_type_13: '音频',
 		region_type_14: '视频流',
@@ -316,6 +315,7 @@ var common = {
 		date_error: '非法的开始日期与结束日期',
 		plandtl_zero: '请选择节目',
 		planbind_zero: '请选择终端',
+		bundle_zero: '请选择节目',
 		page_zero: '请选择节目',
 		bind_zero: '请选择终端',
 		
@@ -327,6 +327,7 @@ var common = {
 		register_failed: '信息输入有误，注册失败',
 		getvcode_failed: '短信发送失败',
 
+		mainzone_missed: '请把一个区域设置为主区域',
 		region_remove_failed: '无法删除这个区域',
 
 		folder_remove_failed: '无法删除这个文件夹',

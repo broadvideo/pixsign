@@ -116,11 +116,11 @@ var WizardModule = function () {
 				animate: true
 			});
 			$('#snapshot_div').show();
-			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 1024);
+			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL());
-					_design.Object.snapshotdtl = canvas.toDataURL();
+					//console.log(canvas.toDataURL('image/jpeg'));
+					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
 					$('#snapshot_div').hide();
 
 					for (var i=0; i<_design.Object.bundlezones.length; i++) {

@@ -49,11 +49,11 @@ public class DevicegridServiceImpl implements DevicegridService {
 		}
 
 		String snapshotdtl = devicegrid.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
 		String snapshotFilePath = "/devicegrid/" + devicegrid.getDevicegridid() + "/snapshot/"
-				+ devicegrid.getDevicegridid() + ".png";
+				+ devicegrid.getDevicegridid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		devicegrid.setSnapshot(snapshotFilePath);
@@ -71,11 +71,11 @@ public class DevicegridServiceImpl implements DevicegridService {
 		devicegridMapper.insertSelective(devicegrid);
 
 		String snapshotdtl = devicegrid.getSnapshotdtl();
-		if (snapshotdtl.startsWith("data:image/png;base64,")) {
-			snapshotdtl = snapshotdtl.substring(22);
+		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
+			snapshotdtl = snapshotdtl.substring(23);
 		}
 		String snapshotFilePath = "/devicegrid/" + devicegrid.getDevicegridid() + "/snapshot/"
-				+ devicegrid.getDevicegridid() + ".png";
+				+ devicegrid.getDevicegridid() + ".jpg";
 		File snapshotFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + snapshotFilePath);
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		devicegrid.setSnapshot(snapshotFilePath);
