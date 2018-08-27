@@ -535,6 +535,7 @@ public class PlanServiceImpl implements PlanService {
 					plandtlJsonArray.add(plandtlJson);
 				} else if (plandtl.getObjtype().equals(Plandtl.ObjType_Mediagrid)) {
 					Mediagrid mediagrid = plandtl.getMediagrid();
+					String snapshot = "http://" + serverip + ":" + serverport + "/pixsigdata" + mediagrid.getSnapshot();
 					if (!mediagrid.getStatus().equals(Mediagrid.Status_Active)) {
 						continue;
 					}
@@ -584,6 +585,7 @@ public class PlanServiceImpl implements PlanService {
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
+									plandtlJson.put("snapshot", snapshot);
 									plandtlJsonArray.add(plandtlJson);
 								}
 							} else {
@@ -610,6 +612,7 @@ public class PlanServiceImpl implements PlanService {
 									plandtlJson.put("duration", plandtl.getDuration());
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
+									plandtlJson.put("snapshot", snapshot);
 									plandtlJsonArray.add(plandtlJson);
 								} else if (mmediadtl != null
 										&& mediagriddtl.getObjtype().equals(Mediagriddtl.ObjType_Image)) {
@@ -639,6 +642,7 @@ public class PlanServiceImpl implements PlanService {
 									}
 									plandtlJson.put("max_times", plandtl.getMaxtimes());
 									plandtlJson.put("tags", mediagrid.getTags());
+									plandtlJson.put("snapshot", snapshot);
 									plandtlJsonArray.add(plandtlJson);
 								}
 							}

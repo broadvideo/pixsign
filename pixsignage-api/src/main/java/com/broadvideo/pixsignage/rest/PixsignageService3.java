@@ -47,7 +47,6 @@ import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.DevicefileService;
-import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
@@ -83,8 +82,6 @@ public class PixsignageService3 {
 
 	@Autowired
 	private DeviceService deviceService;
-	@Autowired
-	private PageService pageService;
 	@Autowired
 	private DevicefileService devicefileService;
 	@Autowired
@@ -173,6 +170,15 @@ public class PixsignageService3 {
 				logger.error("Pixsignage3 Service ip seek exception: {}", e.getMessage());
 			}
 
+			if (appname.equals("")) {
+				appname = "PIXCHAIR";
+				vname = "1.0.0";
+				vcode = 1;
+				mtype = "mtk";
+				sign = "a578e792aa10c81537f6b1e4418dd434";
+				device.setUpgradeflag("1");
+			}
+
 			device.setHardkey(hardkey);
 			device.setIp(ip);
 			device.setIip(iip);
@@ -253,7 +259,7 @@ public class PixsignageService3 {
 			responseJson.put("password", org.getDevicepass());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
-			logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
+			logger.info("Pixsignage3 Service init response({}): {}", device.getTerminalid(), responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service init exception", e);
@@ -284,6 +290,13 @@ public class PixsignageService3 {
 				deviceMapper.unbind("" + device2.getDeviceid());
 			}
 
+			device1.setAppname("PIXCHAIR");
+			device1.setVname("1.0.0");
+			device1.setVcode(2);
+			device1.setMtype("mtk");
+			device1.setSign("a578e792aa10c81537f6b1e4418dd434");
+			device1.setUpgradeflag("1");
+
 			device1.setActivetime(Calendar.getInstance().getTime());
 			device1.setHardkey(hardkey);
 			device1.setStatus("1");
@@ -292,7 +305,7 @@ public class PixsignageService3 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage3 bind response: {}", responseJson.toString());
+			logger.info("Pixsignage3 bind response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 bind exception, ", e);
@@ -324,7 +337,7 @@ public class PixsignageService3 {
 			JSONObject responseJson = deviceService.generatePageJson(device);
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage3 Service get_page response: {}", responseJson.toString());
+			logger.info("Pixsignage3 Service get_page response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_page exception", e);
@@ -356,7 +369,7 @@ public class PixsignageService3 {
 			JSONObject responseJson = deviceService.generateBundleJson(device);
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage3 Service get_bundle response: {}", responseJson.toString());
+			logger.info("Pixsignage3 Service get_bundle response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_bundle exception", e);
@@ -469,8 +482,14 @@ public class PixsignageService3 {
 					responseJson.put("path", "");
 					logger.info("Appfile not found, disabled upgrade: {}", device.getTerminalid());
 				} else {
-					String url = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
-							+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata" + appfile.getFilepath();
+					String serverip = configMapper.selectValueByCode("ServerIP");
+					String serverport = configMapper.selectValueByCode("ServerPort");
+					String cdnserver = configMapper.selectValueByCode("CDNServer");
+					String downloadurl = "http://" + serverip + ":" + serverport;
+					if (cdnserver != null && cdnserver.trim().length() > 0) {
+						downloadurl = "http://" + cdnserver;
+					}
+					String url = downloadurl + "/pixsigdata" + appfile.getFilepath();
 					String path = "/pixsigdata" + appfile.getFilepath();
 					responseJson.put("version_name", appfile.getVname());
 					responseJson.put("version_code", "" + appfile.getVcode());
@@ -547,7 +566,7 @@ public class PixsignageService3 {
 			responseJson.put("events", eventJsonArray);
 
 			if (responseJson.optString("url").length() > 0 || responseJson.getJSONArray("events").size() > 0) {
-				logger.info("Pixsignage3 Service refresh response: {}", responseJson.toString());
+				logger.info("Pixsignage3 Service refresh response({}): {}", terminalid, responseJson.toString());
 			}
 			return responseJson.toString();
 		} catch (Exception e) {

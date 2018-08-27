@@ -12,6 +12,10 @@ public interface DevicegroupService {
 	public List<Devicegroup> selectList(String orgid, String branchid, String type, String gridlayoutcode,
 			String search, String start, String length);
 
+	public void updateBundle(String[] devicegroupids, String defaultbundleid);
+
+	public void updatePage(String[] devicegroupids, String defaultpageid);
+
 	public void addDevices(Devicegroup devicegroup, String[] deviceids);
 
 	public void deleteDevices(Devicegroup devicegroup, String[] deviceids);

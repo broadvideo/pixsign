@@ -18,6 +18,16 @@ public interface DevicegroupMapper {
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
 
+	List<Devicegroup> selectByDefaultbundle(@Param(value = "defaultbundleid") String defaultbundleid);
+
+	List<Devicegroup> selectByDefaultpage(@Param(value = "defaultpageid") String defaultpageid);
+
+	int updateBundle(@Param(value = "devicegroupid") String devicegroupid,
+			@Param(value = "defaultbundleid") String defaultbundleid);
+
+	int updatePage(@Param(value = "devicegroupid") String devicegroupid,
+			@Param(value = "defaultpageid") String defaultpageid);
+
 	int deleteByPrimaryKey(@Param(value = "devicegroupid") String devicegroupid);
 
 	// int insert(Devicegroup record);

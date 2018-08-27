@@ -45,11 +45,13 @@ public class ConfigAction extends BaseDatatableAction {
 		try {
 			String serverip = getParameter("serverip");
 			String serverport = getParameter("serverport");
+			String cdnserver = getParameter("cdnserver");
 			String pixedxip = getParameter("pixedxip");
 			String pixedxport = getParameter("pixedxport");
 
 			configService.updateValue("ServerIP", serverip);
 			configService.updateValue("ServerPort", serverport);
+			configService.updateValue("CDNServer", cdnserver);
 			configService.updateValue("PixedxIP", pixedxip);
 			configService.updateValue("PixedxPort", pixedxport);
 			return SUCCESS;

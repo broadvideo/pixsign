@@ -44,6 +44,7 @@ var DeviceSelect = function (container) {
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
 				aoData.push({'name':'subbranchflag','value':0 });
+				aoData.push({'name':'devicegroupid','value':0 });
 			} 
 		});
 		$(container).find('#LeftDeviceTable_wrapper').addClass('form-inline');

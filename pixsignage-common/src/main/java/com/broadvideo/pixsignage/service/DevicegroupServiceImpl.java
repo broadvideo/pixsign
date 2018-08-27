@@ -39,6 +39,20 @@ public class DevicegroupServiceImpl implements DevicegroupService {
 	}
 
 	@Transactional
+	public void updateBundle(String[] devicegroupids, String defaultbundleid) {
+		for (int i = 0; i < devicegroupids.length; i++) {
+			devicegroupMapper.updateBundle(devicegroupids[i], defaultbundleid);
+		}
+	}
+
+	@Transactional
+	public void updatePage(String[] devicegroupids, String defaultpageid) {
+		for (int i = 0; i < devicegroupids.length; i++) {
+			devicegroupMapper.updatePage(devicegroupids[i], defaultpageid);
+		}
+	}
+
+	@Transactional
 	public void addDevices(Devicegroup devicegroup, String[] deviceids) {
 		for (int i = 0; i < deviceids.length; i++) {
 			deviceMapper.updateDevicegroup(deviceids[i], "" + devicegroup.getDevicegroupid());

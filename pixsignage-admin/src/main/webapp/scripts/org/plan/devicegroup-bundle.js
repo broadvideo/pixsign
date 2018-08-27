@@ -1,57 +1,48 @@
-var DeviceModule = function () {
+var DevicegroupModule = function () {
 	var _submitflag = false;
-	var _device = {};
+	var _devicegroup = {};
 	var _bundle = {};
 	var timestamp = new Date().getTime();
 
 	var init = function () {
-		initDeviceTable();
-		initDeviceEvent();
+		initDevicegroupTable();
+		initDevicegroupEvent();
 		initBundleModal();
 		initBatchWizard();
 	};
 
 	var refresh = function () {
-		$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
 	};
 	
-	var initDeviceTable = function () {
-		var DeviceTree = new BranchTree($('#DevicePortlet'));
+	var initDevicegroupTable = function () {
+		var DevicegroupTree = new BranchTree($('#DevicegroupPortlet'));
 
-		var oTable = $('#DeviceTable').dataTable({
+		var oTable = $('#DevicegroupTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
 							[ 10, 25, 50, 100 ] 
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
-			'sAjaxSource' : 'device!list.action',
-			'aoColumns' : [ {'sTitle' : common.view.device, 'mData' : 'terminalid', 'bSortable' : false, 'sWidth' : '15%' }, 
-							{'sTitle' : common.view.branch, 'mData' : 'branchid', 'bSortable' : false, 'sWidth' : '15%' }, 
-							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }, 
-							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '20%' }],
+			'sAjaxSource' : 'devicegroup!list.action',
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' },
+							{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '50%' },
+							{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '20%' }, 
+							{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '20%' }],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				var devicehtml = '';
-				if (aData.status == 0) {
-					devicehtml += '<span class="label label-sm label-default">' + common.view.unregister + '</span> ';
-				} else if (aData.onlineflag == 1) {
-					devicehtml += '<span class="label label-sm label-success">' + common.view.online + '</span> ';
-				} else if (aData.onlineflag == 0) {
-					devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
-				} else if (aData.onlineflag == 9) {
-					devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
+				var listhtml = '';
+				for (var i=0; i<aData.devices.length; i++) {
+					listhtml += aData.devices[i].name + ' ';
+					if (i > 6 && i<aData.devices.length-1) {
+						listhtml += '...';
+						break;
+					}
 				}
-				if (aData.name != aData.terminalid) {
-					devicehtml += aData.terminalid + '/' + aData.name;
-				} else {
-					devicehtml += aData.terminalid + '';
-				}
-				$('td:eq(0)', nRow).html(devicehtml);
-				
-				$('td:eq(1)', nRow).html(aData.branch.name);
+				$('td:eq(1)', nRow).html(listhtml);
 
 				var planhtml = '';
 				if (aData.defaultbundle != null) {
@@ -81,15 +72,15 @@ var DeviceModule = function () {
 				refreshFancybox();
 			},
 			'fnServerParams': function(aoData) { 
-				aoData.push({'name':'branchid','value':DeviceTree.branchid });
-				aoData.push({'name':'devicegroupid','value':0 });
+				aoData.push({'name':'branchid','value':DevicegroupTree.branchid });
+				aoData.push({'name':'type','value':'1' });
 			}
 		});
-		$('#DeviceTable_wrapper').addClass('form-inline');
-		$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
-		$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
-		$('#DeviceTable_wrapper .dataTables_length select').select2();
-		$('#DeviceTable').css('width', '100%');
+		$('#DevicegroupTable_wrapper').addClass('form-inline');
+		$('#DevicegroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#DevicegroupTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#DevicegroupTable_wrapper .dataTables_length select').select2();
+		$('#DevicegroupTable').css('width', '100%');
 
 		function refreshFancybox() {
 			$('.fancybox').each(function(index,item) {
@@ -124,7 +115,7 @@ var DeviceModule = function () {
 		}
 	};
 	
-	var initDeviceEvent = function () {
+	var initDevicegroupEvent = function () {
 		$('body').on('click', '.pix-sync', function(event) {
 			var target = $(event.target);
 			var index = $(event.target).attr('data-id');
@@ -132,15 +123,15 @@ var DeviceModule = function () {
 				target = $(event.target).parent();
 				index = $(event.target).parent().attr('data-id');
 			}
-			_device = $('#DeviceTable').dataTable().fnGetData(index);
-			bootbox.confirm(common.tips.sync + _device.name, function(result) {
+			_devicegroup = $('#DevicegroupTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.sync + _devicegroup.name, function(result) {
 				if (result == true) {
 					$.ajax({
 						type : 'GET',
-						url : 'device!sync.action',
+						url : 'devicegroup!sync.action',
 						cache: false,
 						data : {
-							deviceid: _device.deviceid,
+							devicegroupid: _devicegroup.devicegroupid,
 						},
 						dataType : 'json',
 						contentType : 'application/json;charset=utf-8',
@@ -173,8 +164,8 @@ var DeviceModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			_device = $('#DeviceTable').dataTable().fnGetData(index);
-			_bundle = _device.defaultbundle;
+			_devicegroup = $('#DevicegroupTable').dataTable().fnGetData(index);
+			_bundle = _devicegroup.defaultbundle;
 			$('#BundleModal').modal();
 		});
 		$('#BundleModal').on('shown.bs.modal', function (e) {
@@ -184,10 +175,10 @@ var DeviceModule = function () {
 		$('[type=submit]', $('#BundleModal')).on('click', function(event) {
 			$.ajax({
 				type : 'POST',
-				url : 'device!update.action',
+				url : 'devicegroup!update.action',
 				data : {
-					'device.deviceid': _device.deviceid,
-					'device.defaultbundleid': bundleselect.getBundle().bundleid,
+					'devicegroup.devicegroupid': _devicegroup.devicegroupid,
+					'devicegroup.defaultbundleid': bundleselect.getBundle().bundleid,
 				},
 				success : function(data, status) {
 					if (data.errorcode == 0) {
@@ -207,10 +198,10 @@ var DeviceModule = function () {
 
 	var initBatchWizard = function () {
 		var bundleselect = new BundleSelect($('#BatchModal'), TouchCtrl);
-		var deviceselect = new DeviceSelect($('#BatchModal'));
+		var devicegroupselect = new DevicegroupSelect($('#BatchModal'));
 		
 		$('body').on('click', '.pix-batch', function(event) {
-			deviceselect.clear();
+			devicegroupselect.clear();
 			initWizard();
 			$('#BatchModal').modal();
 		});
@@ -286,7 +277,7 @@ var DeviceModule = function () {
 
 			$('#MyWizard').find('.button-previous').hide();
 			$('#MyWizard .button-submit').click(function () {
-				if (validSelectDevices()) {
+				if (validSelectDevicegroups()) {
 					submitData();
 				}
 			}).hide();
@@ -305,7 +296,7 @@ var DeviceModule = function () {
 		}
 
 		function initData2() {
-			deviceselect.refresh();
+			devicegroupselect.refresh();
 		}
 
 		function submitData() {
@@ -319,20 +310,20 @@ var DeviceModule = function () {
 			});
 			
 			var defaultbundleid = bundleselect.getBundle() == null? 0 : bundleselect.getBundle().bundleid;
-			var devices = deviceselect.getSelected();
-			var deviceids = [];
-			if (devices != null) {
-				for (var i=0; i<devices.length; i++) {
-					deviceids.push(devices[i].deviceid);
+			var devicegroups = devicegroupselect.getSelected();
+			var devicegroupids = [];
+			if (devicegroups != null) {
+				for (var i=0; i<devicegroups.length; i++) {
+					devicegroupids.push(devicegroups[i].devicegroupid);
 				}
 			}
 			
 			$.ajax({
 				type : 'POST',
-				url : 'device!updatebundle.action',
+				url : 'devicegroup!updatebundle.action',
 				data : {
 					'defaultbundleid': defaultbundleid,
-					'deviceids': deviceids.join(','),
+					'devicegroupids': devicegroupids.join(','),
 				},
 				success : function(data, status) {
 					_submitflag = false;
@@ -340,7 +331,7 @@ var DeviceModule = function () {
 					$('#BatchModal').modal('hide');
 					if (data.errorcode == 0) {
 						bootbox.alert(common.tips.success);
-						$('#DeviceTable').dataTable()._fnAjaxUpdate();
+						$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
 					}
@@ -363,8 +354,8 @@ var DeviceModule = function () {
 			return true;
 		}
 
-		function validSelectDevices() {
-			if (deviceselect.getSelected().length == 0) {
+		function validSelectDevicegroups() {
+			if (devicegroupselect.getSelected().length == 0) {
 				bootbox.alert(common.tips.bind_zero);
 				return false;
 			}

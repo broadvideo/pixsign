@@ -249,6 +249,7 @@ var common = {
 
 		config_serverip: 'Server IP',
 		config_serverport: 'Server Port',
+		config_cdnserver: 'CDN Server',
 		config_pixedxip: 'PixedX IP',
 		config_pixedxport: 'PixedX Port',
 		

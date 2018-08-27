@@ -249,6 +249,7 @@ var common = {
 
 		config_serverip: '本服务器地址',
 		config_serverport: '本服务器端口',
+		config_cdnserver: 'CDN服务器',
 		config_pixedxip: 'PixedX服务器地址',
 		config_pixedxport: 'PixedX服务器端口',
 		

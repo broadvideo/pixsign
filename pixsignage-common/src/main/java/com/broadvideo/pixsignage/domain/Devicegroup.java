@@ -39,11 +39,19 @@ public class Devicegroup {
 
 	private Integer createstaffid;
 
+	private Integer defaultbundleid;
+
+	private Integer defaultpageid;
+
 	private List<Device> devices;
 
 	private List<Devicegrid> devicegrids;
 
 	private List<Schedule> schedules;
+
+	private Bundle defaultbundle;
+
+	private Page defaultpage;
 
 	public Integer getDevicegroupid() {
 		return devicegroupid;
@@ -167,6 +175,22 @@ public class Devicegroup {
 		this.createstaffid = createstaffid;
 	}
 
+	public Integer getDefaultbundleid() {
+		return defaultbundleid;
+	}
+
+	public void setDefaultbundleid(Integer defaultbundleid) {
+		this.defaultbundleid = defaultbundleid;
+	}
+
+	public Integer getDefaultpageid() {
+		return defaultpageid;
+	}
+
+	public void setDefaultpageid(Integer defaultpageid) {
+		this.defaultpageid = defaultpageid;
+	}
+
 	public List<Device> getDevices() {
 		return devices;
 	}
@@ -189,5 +213,21 @@ public class Devicegroup {
 
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+
+	public Bundle getDefaultbundle() {
+		return defaultbundle;
+	}
+
+	public void setDefaultbundle(Bundle defaultbundle) {
+		this.defaultbundle = defaultbundle;
+	}
+
+	public Page getDefaultpage() {
+		return defaultpage;
+	}
+
+	public void setDefaultpage(Page defaultpage) {
+		this.defaultpage = defaultpage;
 	}
 }

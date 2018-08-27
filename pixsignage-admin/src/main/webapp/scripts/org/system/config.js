@@ -23,6 +23,9 @@ var ConfigModule = function () {
 						} else if (config.code == 'ServerPort') {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_serverport, config.value]);
 							$('#ConfigEditForm input[name=serverport]').val(config.value);
+						} else if (config.code == 'CDNServer') {
+							$('#ConfigTable').dataTable().fnAddData([common.view.config_cdnserver, config.value]);
+							$('#ConfigEditForm input[name=cdnserver]').val(config.value);
 						} else if (config.code == 'PixedxIP' && SchoolCtrl) {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_pixedxip, config.value]);
 							$('#ConfigEditForm input[name=pixedxip]').val(config.value);

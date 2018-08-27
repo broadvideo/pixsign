@@ -943,6 +943,18 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="devicegroup!updatebundle" method="doUpdateBundle" class="devicegroupAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="devicegroup!updatepage" method="doUpdatePage" class="devicegroupAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="devicegroup!sync" method="doSync" class="devicegroupAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
