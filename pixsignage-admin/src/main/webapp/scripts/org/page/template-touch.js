@@ -439,6 +439,57 @@ var TemplateModule = function () {
 			});
 			$('#snapshot_div').show();
 			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+				_design.Object.snapshotdtl = dataUrl;
+				$('#snapshot_div').hide();
+
+				_design.Object.templateid = _design.Object.pageid;
+				_design.Object.pageid = undefined;
+				_design.Object.templatezones = _design.Object.pagezones;
+				_design.Object.pagezones = undefined;
+				for (var i=0; i<_design.Object.templatezones.length; i++) {
+					_design.Object.templatezones[i].templatezoneid = _design.Object.templatezones[i].pagezoneid;
+					_design.Object.templatezones[i].pagezoneid = undefined;
+					_design.Object.templatezones[i].templateid = _design.Object.templatezones[i].pageid;
+					_design.Object.templatezones[i].pageid = undefined;
+					_design.Object.templatezones[i].templatezonedtls = _design.Object.templatezones[i].pagezonedtls;
+					_design.Object.templatezones[i].pagezonedtls = undefined;
+					for (var j=0; j<_design.Object.templatezones[i].templatezonedtls.length; j++) {
+						_design.Object.templatezones[i].templatezonedtls[j].templatezonedtlid = _design.Object.templatezones[i].templatezonedtls[j].pagezonedtlid;
+						_design.Object.templatezones[i].templatezonedtls[j].pagezonedtlid = undefined;
+						_design.Object.templatezones[i].templatezonedtls[j].templatezoneid = _design.Object.templatezones[i].templatezonedtls[j].pagezoneid;
+						_design.Object.templatezones[i].templatezonedtls[j].pagezoneid = undefined;
+						_design.Object.templatezones[i].templatezonedtls[j].image = undefined;
+						_design.Object.templatezones[i].templatezonedtls[j].video = undefined;
+					}
+				}			
+				$.ajax({
+					type : 'POST',
+					url : 'template!design.action',
+					data : '{"template":' + $.toJSON(_design.Object) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#TemplateTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						console.log('failue');
+					}
+				});
+			}
+			});
+			/*
 			html2canvas($('#snapshot_div'), {
 				onrendered: function(canvas) {
 					//console.log(canvas.toDataURL('image/jpeg'));
@@ -491,6 +542,7 @@ var TemplateModule = function () {
 					});
 				}
 			});
+			*/
 		});
 	}
 	

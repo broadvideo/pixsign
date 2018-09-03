@@ -966,36 +966,34 @@ $('[type=submit]', $('#MediagridModal')).on('click', function(event) {
 	if (CurrentMediagriddtl == null && validMediagrid(CurrentMediagrid) || CurrentMediagriddtl != null && validMediagriddtl(CurrentMediagriddtl)) {
 		$('#snapshot_div').show();
 		redrawMediagridPreview($('#snapshot_div'), CurrentMediagrid, 512, 0);
-		html2canvas($('#snapshot_div'), {
-			onrendered: function(canvas) {
-				CurrentMediagrid.snapshotdtl = canvas.toDataURL('image/jpeg');
-				$('#snapshot_div').hide();
+		html2canvas($('#snapshot_div')[0]).then(function(canvas) {
+			CurrentMediagrid.snapshotdtl = canvas.toDataURL('image/jpeg');
+			$('#snapshot_div').hide();
 
-				$.ajax({
-					type : 'POST',
-					url : myurls['mediagrid.design'],
-					data : '{"mediagrid":' + $.toJSON(CurrentMediagrid) + '}',
-					dataType : 'json',
-					contentType : 'application/json;charset=utf-8',
-					beforeSend: function ( xhr ) {
-						Metronic.startPageLoading({animate: true});
-					},
-					success : function(data, status) {
-						Metronic.stopPageLoading();
-						$('#MediagridModal').modal('hide');
-						if (data.errorcode == 0) {
-							bootbox.alert(common.tips.success);
-							$('#MyTable').dataTable()._fnAjaxUpdate();
-						} else {
-							bootbox.alert(common.tips.error + data.errormsg);
-						}
-					},
-					error : function() {
-						$('#MediagridModal').modal('hide');
-						console.log('failue');
+			$.ajax({
+				type : 'POST',
+				url : myurls['mediagrid.design'],
+				data : '{"mediagrid":' + $.toJSON(CurrentMediagrid) + '}',
+				dataType : 'json',
+				contentType : 'application/json;charset=utf-8',
+				beforeSend: function ( xhr ) {
+					Metronic.startPageLoading({animate: true});
+				},
+				success : function(data, status) {
+					Metronic.stopPageLoading();
+					$('#MediagridModal').modal('hide');
+					if (data.errorcode == 0) {
+						bootbox.alert(common.tips.success);
+						$('#MyTable').dataTable()._fnAjaxUpdate();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
 					}
-				});
-			}
+				},
+				error : function() {
+					$('#MediagridModal').modal('hide');
+					console.log('failue');
+				}
+			});
 		});
 		event.preventDefault();
 	}

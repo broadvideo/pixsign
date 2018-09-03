@@ -17,8 +17,12 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
+    <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Devicegroup" extends="BaseResultMap" >
+    <association property="defaultbundle" column="{bundleid=defaultbundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectMiniByPrimaryKey" />
+    <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="devices" ofType="com.broadvideo.pixsignage.domain.Device"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DeviceMapper.selectByDevicegroup" />
 	<collection property="devicegrids" ofType="com.broadvideo.pixsignage.domain.Devicegrid"
@@ -29,7 +33,7 @@
   
   <sql id="Base_Column_List" >
     devicegroupid, orgid, branchid, name, type, gridlayoutcode, xcount, ycount, ratio, width, height, 
-    status, description, createtime, createstaffid
+    status, description, createtime, createstaffid, defaultbundleid, defaultpageid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -86,6 +90,18 @@
     </if>
   </select>
 
+  <select id="selectByDefaultbundle" resultMap="BaseResultMap">
+    select * from devicegroup
+    where defaultbundleid = #{defaultbundleid}
+    order by devicegroupid
+  </select>
+
+  <select id="selectByDefaultpage" resultMap="BaseResultMap">
+    select * from devicegroup
+    where defaultpageid = #{defaultpageid}
+    order by devicegroupid
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     update devicegroup set status='9'
     where devicegroupid = '${devicegroupid}'
@@ -103,22 +119,34 @@
     where devicegroupid = #{devicegroupid}
   </update>
 
+  <update id="updateBundle" >
+    update devicegroup
+    set defaultbundleid = #{defaultbundleid}
+    where devicegroupid = #{devicegroupid}
+  </update>
+
+  <update id="updatePage" >
+    update devicegroup
+    set defaultpageid = #{defaultpageid}
+    where devicegroupid = #{devicegroupid}
+  </update>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Devicegroup" >
     <selectKey resultType="java.lang.Integer" keyProperty="devicegroupid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into devicegroup (orgid, branchid, name, 
-      type, 
-      gridlayoutcode, xcount, ycount, 
-      ratio, width, height, 
-      status, description, 
-      createtime, createstaffid)
+      type, gridlayoutcode, xcount, 
+      ycount, ratio, width, 
+      height, status, description, 
+      createtime, createstaffid, defaultbundleid, 
+      defaultpageid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, 
-      #{gridlayoutcode,jdbcType=VARCHAR}, #{xcount,jdbcType=INTEGER}, #{ycount,jdbcType=INTEGER}, 
-      #{ratio,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
-      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER})
+      #{type,jdbcType=CHAR}, #{gridlayoutcode,jdbcType=VARCHAR}, #{xcount,jdbcType=INTEGER}, 
+      #{ycount,jdbcType=INTEGER}, #{ratio,jdbcType=CHAR}, #{width,jdbcType=INTEGER}, 
+      #{height,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
+      #{defaultpageid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Devicegroup" >
     <selectKey resultType="java.lang.Integer" keyProperty="devicegroupid" order="AFTER" >
@@ -168,6 +196,12 @@
       <if test="createstaffid != null" >
         createstaffid,
       </if>
+      <if test="defaultbundleid != null" >
+        defaultbundleid,
+      </if>
+      <if test="defaultpageid != null" >
+        defaultpageid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -211,6 +245,12 @@
       </if>
       <if test="createstaffid != null" >
         #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="defaultbundleid != null" >
+        #{defaultbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpageid != null" >
+        #{defaultpageid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -259,6 +299,12 @@
       <if test="createstaffid != null" >
         createstaffid = #{createstaffid,jdbcType=INTEGER},
       </if>
+      <if test="defaultbundleid != null" >
+        defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="defaultpageid != null" >
+        defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      </if>
     </set>
     where devicegroupid = #{devicegroupid,jdbcType=INTEGER}
   </update>
@@ -277,7 +323,9 @@
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
-      createstaffid = #{createstaffid,jdbcType=INTEGER}
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
+      defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
+      defaultpageid = #{defaultpageid,jdbcType=INTEGER}
     where devicegroupid = #{devicegroupid,jdbcType=INTEGER}
   </update>
 </mapper>

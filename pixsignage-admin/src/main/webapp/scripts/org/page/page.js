@@ -425,6 +425,10 @@ var PageModule = function () {
 			if (pageid == undefined) {
 				pageid = $(event.target).parent().attr('pageid');
 			}
+			Metronic.blockUI({
+				zIndex: 20000,
+				animate: true
+			});
 			$.ajax({
 				type : 'GET',
 				url : 'page!get.action',
@@ -451,12 +455,15 @@ var PageModule = function () {
 						if (_design.Object.limitflag == 1) {
 							$('.limit-1').css('display', 'none');
 						}
+						Metronic.unblockUI();
 						$('#PageModal').modal();
 					} else {
+						Metronic.unblockUI();
 						bootbox.alert(common.tips.error + data.errormsg);
 					}
 				},
 				error : function() {
+					Metronic.unblockUI();
 					console.log('failue');
 				}
 			});
@@ -473,44 +480,81 @@ var PageModule = function () {
 			});
 			$('#snapshot_div').show();
 			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			html2canvas($('#snapshot_div'), {
-				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL('image/jpeg'));
-					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
-					$('#snapshot_div').hide();
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+				_design.Object.snapshotdtl = dataUrl;
+				$('#snapshot_div').hide();
 
-					for (var i=0; i<_design.Object.pagezones.length; i++) {
-						for (var j=0; j<_design.Object.pagezones[i].pagezonedtls.length; j++) {
-							_design.Object.pagezones[i].pagezonedtls[j].image = undefined;
-							_design.Object.pagezones[i].pagezonedtls[j].video = undefined;
+				for (var i=0; i<_design.Object.pagezones.length; i++) {
+					for (var j=0; j<_design.Object.pagezones[i].pagezonedtls.length; j++) {
+						_design.Object.pagezones[i].pagezonedtls[j].image = undefined;
+						_design.Object.pagezones[i].pagezonedtls[j].video = undefined;
+					}
+				}			
+				$.ajax({
+					type : 'POST',
+					url : 'page!design.action',
+					data : '{"page":' + $.toJSON(_design.Object) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#PageTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
-					}			
-					$.ajax({
-						type : 'POST',
-						url : 'page!design.action',
-						data : '{"page":' + $.toJSON(_design.Object) + '}',
-						dataType : 'json',
-						contentType : 'application/json;charset=utf-8',
-						success : function(data, status) {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#PageModal').modal('hide');
-							if (data.errorcode == 0) {
-								bootbox.alert(common.tips.success);
-								$('#PageTable').dataTable()._fnAjaxUpdate();
-							} else {
-								bootbox.alert(common.tips.error + data.errormsg);
-							}
-						},
-						error : function() {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#PageModal').modal('hide');
-							console.log('failue');
-						}
-					});
-				}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						console.log('failue');
+					}
+				});
 			});
+			/*
+			html2canvas($('#snapshot_div')[0]).then(function(canvas) {
+				var snapshotdtl = canvas.toDataURL('image/jpeg');
+				console.log(snapshotdtl);
+				_design.Object.snapshotdtl = snapshotdtl;
+				$('#snapshot_div').hide();
+
+				for (var i=0; i<_design.Object.pagezones.length; i++) {
+					for (var j=0; j<_design.Object.pagezones[i].pagezonedtls.length; j++) {
+						_design.Object.pagezones[i].pagezonedtls[j].image = undefined;
+						_design.Object.pagezones[i].pagezonedtls[j].video = undefined;
+					}
+				}			
+				console.log(7);
+				$.ajax({
+					type : 'POST',
+					url : 'page!design.action',
+					data : '{"page":' + $.toJSON(_design.Object) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#PageTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+						}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#PageModal').modal('hide');
+						console.log('failue');
+					}
+				});
+			});
+			*/
 		});
 	}
 	

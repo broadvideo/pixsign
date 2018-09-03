@@ -251,6 +251,7 @@ public class DeviceAction extends BaseDatatableAction {
 			logger.info("Device doSync, deviceid={}", deviceid);
 			planService.syncPlan(Planbind.BindType_Device, deviceid);
 			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
+			logger.info("Device doSync success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction schedule sync error", ex);

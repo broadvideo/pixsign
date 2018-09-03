@@ -191,7 +191,7 @@ var BundlePreviewModule = function () {
 					var menupercent = 100*menuscale*zone.height/zone.width;
 					for (var j=0; j<zone.bundlezonedtls.length; j++) {
 						var menu_div = document.createElement('div');
-						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.filepath;
+						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.thumbnail;
 						$(menu_div).css({
 							'position': 'absolute',
 							'height': '100%', 
@@ -209,7 +209,7 @@ var BundlePreviewModule = function () {
 					var menupercent = 100/menuscale*zone.width/zone.height;
 					for (var j=0; j<zone.bundlezonedtls.length; j++) {
 						var menu_div = document.createElement('div');
-						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.filepath;
+						var bgurl = '/pixsigdata' + zone.bundlezonedtls[j].image.thumbnail;
 						$(menu_div).css({
 							'position': 'absolute',
 							'height': menupercent + '%',

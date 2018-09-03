@@ -558,6 +558,7 @@
 																							<input class="volumeRange" type="text" name="volume" value="50"/>
 																						</div>
 																					</div>
+																					<!-- 
 																					<div class="form-group">
 																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgimage"/></label>
 																						<div class="col-md-9">
@@ -575,6 +576,7 @@
 																							</div>
 																						</div>
 																					</div>
+																					 -->
 																					<div class="form-group">
 																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgcolor"/></label>
 																						<div class="col-md-9">
@@ -774,7 +776,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="snapshot_div" style="position:relative; top:65px; display:none;"></div>
+			<div id="snapshot_div" style="position:relative; display:none;"></div>
 		</div>
 	</div>
 </body>
@@ -798,7 +800,7 @@
 <script src="${static_ctx}/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
-<script src="${static_ctx}/global/plugins/html2canvas.js" type="text/javascript"></script>
+<script src="${static_ctx}/global/plugins/dom-to-image/dom-to-image.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${static_ctx}/global/scripts/metronic.js" type="text/javascript"></script>

@@ -170,13 +170,44 @@ public class DevicegroupAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doUpdateBundle() {
+		try {
+			String defaultbundleid = getParameter("defaultbundleid");
+			String devicegroupids = getParameter("devicegroupids");
+			logger.info("Devicegroup doUpdateBundle, devicegroupids={},defaultbundleid={}", devicegroupids,
+					defaultbundleid);
+			devicegroupService.updateBundle(devicegroupids.split(","), defaultbundleid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegroupAction doUpdateBundle exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doUpdatePage() {
+		try {
+			String defaultpageid = getParameter("defaultpageid");
+			String devicegroupids = getParameter("devicegroupids");
+			logger.info("Devicegroup doUpdatePage, devicegroupids={},defaultpageid={}", devicegroupids, defaultpageid);
+			devicegroupService.updatePage(devicegroupids.split(","), defaultpageid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DevicegroupAction doUpdatePage exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doSync() {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
-			logger.info("Begin to sync devicegroup: {}", devicegroupid);
+			logger.info("Devicegroup doSync, devicegroupid={}", devicegroupid);
 			planService.syncPlan(Planbind.BindType_Devicegroup, devicegroupid);
 			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
-			logger.info("Devicegroup schedule sync success");
+			logger.info("Devicegroup doSync success, devicegroupid={}", devicegroupid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DevicegroupAction doSync exception" + ex.getMessage());

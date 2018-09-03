@@ -28,7 +28,6 @@ alter table page add reviewflag char(1) default '1';
 alter table page add comment varchar(1024) default '';
 alter table page add json longtext;
 
-drop index city on weather;
 alter table weather add unique key weather_unique_index1(city, type);
 
 ############################################################

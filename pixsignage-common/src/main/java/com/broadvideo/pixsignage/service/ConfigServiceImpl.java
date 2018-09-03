@@ -30,7 +30,7 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Transactional
 	public void updateValue(String code, String value) {
-		if (value != null && value.length() > 0) {
+		if (value != null) {
 			configMapper.updateValue(code, value);
 		}
 	}

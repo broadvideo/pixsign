@@ -2,8 +2,6 @@ package com.broadvideo.pixsignage.task;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -12,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Template;
-import com.broadvideo.pixsignage.domain.Templatezone;
-import com.broadvideo.pixsignage.domain.Templatezonedtl;
 import com.broadvideo.pixsignage.service.BundleService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.TemplateService;
-
-import net.sf.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ImportTask {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -69,12 +65,9 @@ public class ImportTask {
 
 	public static void main(String args[]) {
 		try {
-			JSONObject templateJson = JSONObject
-					.fromObject(FileUtils.readFileToString(new File("D:/pixdata/pixsignage/template/8/8.jsf")));
-			Map<String, Class> map = new HashMap<String, Class>();
-			map.put("templatezones", Templatezone.class);
-			map.put("templatezonedtls", Templatezonedtl.class);
-			Template template = (Template) JSONObject.toBean(templateJson, Template.class, map);
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
+			Template template = gson.fromJson(
+					FileUtils.readFileToString(new File("D:/pixdata/pixsignage/template/8/8.jsf")), Template.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

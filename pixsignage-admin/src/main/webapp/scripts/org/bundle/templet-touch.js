@@ -437,59 +437,56 @@ var TempletModule = function () {
 			});
 			$('#snapshot_div').show();
 			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			html2canvas($('#snapshot_div'), {
-				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL('image/jpeg'));
-					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
-					$('#snapshot_div').hide();
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+				_design.Object.snapshotdtl = dataUrl;
+				$('#snapshot_div').hide();
 
-					_design.Object.templetid = _design.Object.bundleid;
-					_design.Object.bundleid = undefined;
-					_design.Object.templetzones = _design.Object.bundlezones;
-					_design.Object.bundlezones = undefined;
-					for (var i=0; i<_design.Object.templetzones.length; i++) {
-						_design.Object.templetzones[i].templetzoneid = _design.Object.templetzones[i].bundlezoneid;
-						_design.Object.templetzones[i].bundlezoneid = undefined;
-						_design.Object.templetzones[i].templetid = _design.Object.templetzones[i].bundleid;
-						_design.Object.templetzones[i].bundleid = undefined;
-						_design.Object.templetzones[i].templetzonedtls = _design.Object.templetzones[i].bundlezonedtls;
-						_design.Object.templetzones[i].bundlezonedtls = undefined;
-						for (var j=0; j<_design.Object.templetzones[i].templetzonedtls.length; j++) {
-							_design.Object.templetzones[i].templetzonedtls[j].templetzonedtlid = _design.Object.templetzones[i].templetzonedtls[j].bundlezonedtlid;
-							_design.Object.templetzones[i].templetzonedtls[j].bundlezonedtlid = undefined;
-							_design.Object.templetzones[i].templetzonedtls[j].templetzoneid = _design.Object.templetzones[i].templetzonedtls[j].bundlezoneid;
-							_design.Object.templetzones[i].templetzonedtls[j].bundlezoneid = undefined;
-							_design.Object.templetzones[i].templetzonedtls[j].image = undefined;
-							_design.Object.templetzones[i].templetzonedtls[j].video = undefined;
-							_design.Object.templetzones[i].templetzonedtls[j].stream = undefined;
-							_design.Object.templetzones[i].templetzonedtls[j].dvb = undefined;
+				_design.Object.templetid = _design.Object.bundleid;
+				_design.Object.bundleid = undefined;
+				_design.Object.templetzones = _design.Object.bundlezones;
+				_design.Object.bundlezones = undefined;
+				for (var i=0; i<_design.Object.templetzones.length; i++) {
+					_design.Object.templetzones[i].templetzoneid = _design.Object.templetzones[i].bundlezoneid;
+					_design.Object.templetzones[i].bundlezoneid = undefined;
+					_design.Object.templetzones[i].templetid = _design.Object.templetzones[i].bundleid;
+					_design.Object.templetzones[i].bundleid = undefined;
+					_design.Object.templetzones[i].templetzonedtls = _design.Object.templetzones[i].bundlezonedtls;
+					_design.Object.templetzones[i].bundlezonedtls = undefined;
+					for (var j=0; j<_design.Object.templetzones[i].templetzonedtls.length; j++) {
+						_design.Object.templetzones[i].templetzonedtls[j].templetzonedtlid = _design.Object.templetzones[i].templetzonedtls[j].bundlezonedtlid;
+						_design.Object.templetzones[i].templetzonedtls[j].bundlezonedtlid = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].templetzoneid = _design.Object.templetzones[i].templetzonedtls[j].bundlezoneid;
+						_design.Object.templetzones[i].templetzonedtls[j].bundlezoneid = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].image = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].video = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].stream = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].dvb = undefined;
+					}
+				}			
+				$.ajax({
+					type : 'POST',
+					url : 'templet!design.action',
+					data : '{"templet":' + $.toJSON(_design.Object) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#TempletModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#TempletTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
-					}			
-					$.ajax({
-						type : 'POST',
-						url : 'templet!design.action',
-						data : '{"templet":' + $.toJSON(_design.Object) + '}',
-						dataType : 'json',
-						contentType : 'application/json;charset=utf-8',
-						success : function(data, status) {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#TempletModal').modal('hide');
-							if (data.errorcode == 0) {
-								bootbox.alert(common.tips.success);
-								$('#TempletTable').dataTable()._fnAjaxUpdate();
-							} else {
-								bootbox.alert(common.tips.error + data.errormsg);
-							}
-						},
-						error : function() {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#TempletModal').modal('hide');
-							console.log('failue');
-						}
-					});
-				}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#TempletModal').modal('hide');
+						console.log('failue');
+					}
+				});
 			});
 		});
 	}

@@ -117,49 +117,46 @@ var WizardModule = function () {
 			});
 			$('#snapshot_div').show();
 			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			html2canvas($('#snapshot_div'), {
-				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL('image/jpeg'));
-					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
-					$('#snapshot_div').hide();
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+				_design.Object.snapshotdtl = dataUrl;
+				$('#snapshot_div').hide();
 
-					for (var i=0; i<_design.Object.bundlezones.length; i++) {
-						for (var j=0; j<_design.Object.bundlezones[i].bundlezonedtls.length; j++) {
-							_design.Object.bundlezones[i].bundlezonedtls[j].image = undefined;
-							_design.Object.bundlezones[i].bundlezonedtls[j].video = undefined;
-						}
+				for (var i=0; i<_design.Object.bundlezones.length; i++) {
+					for (var j=0; j<_design.Object.bundlezones[i].bundlezonedtls.length; j++) {
+						_design.Object.bundlezones[i].bundlezonedtls[j].image = undefined;
+						_design.Object.bundlezones[i].bundlezonedtls[j].video = undefined;
 					}
-					for (var i=0; i<_bindlist.length; i++) {
-						_bindlist[i].device = undefined;
-						_bindlist[i].devicegroup = undefined;
-					}
-					$.ajax({
-						type : 'POST',
-						url : 'bundle!wizard.action',
-						data : '{"bundle":' + $.toJSON(_design.Object) + ', "binds":' + $.toJSON(_bindlist) + '}',
-						dataType : 'json',
-						contentType : 'application/json;charset=utf-8',
-						success : function(data, status) {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#BundleModal').modal('hide');
-							if (data.errorcode == 0) {
-								bootbox.alert(common.tips.success);
-								initData1();
-								$('#MyWizard').bootstrapWizard('first');
-							} else {
-								bootbox.alert(common.tips.error + data.errormsg);
-								initData1();
-								$('#MyWizard').bootstrapWizard('first');
-							}
-						},
-						error : function() {
-							_submitflag = false;
-							Metronic.unblockUI();
-							console.log('failue');
-						}
-					});
 				}
+				for (var i=0; i<_bindlist.length; i++) {
+					_bindlist[i].device = undefined;
+					_bindlist[i].devicegroup = undefined;
+				}
+				$.ajax({
+					type : 'POST',
+					url : 'bundle!wizard.action',
+					data : '{"bundle":' + $.toJSON(_design.Object) + ', "binds":' + $.toJSON(_bindlist) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#BundleModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							initData1();
+							$('#MyWizard').bootstrapWizard('first');
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
+							initData1();
+							$('#MyWizard').bootstrapWizard('first');
+						}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						console.log('failue');
+					}
+				});
 			});
 		}).hide();
 	};

@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
@@ -53,14 +52,15 @@ import com.broadvideo.pixsignage.persistence.PagezonedtlMapper;
 import com.broadvideo.pixsignage.persistence.TemplateMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.CommonUtil;
-
-import net.sf.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Service("pageService")
 public class PageServiceImpl implements PageService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static Hashtable<String, String> CONFIG_FONTS = new Hashtable<String, String>();
+	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
 
 	@Autowired
 	private PageMapper pageMapper;
@@ -420,6 +420,7 @@ public class PageServiceImpl implements PageService {
 
 	@Transactional
 	public void design(Page page) throws Exception {
+		logger.info("Begin to degin page, pageid={}", page.getPageid());
 		if (page.getName() == null || page.getName().equals("")) {
 			page.setName("UNKNOWN");
 		}
@@ -460,6 +461,7 @@ public class PageServiceImpl implements PageService {
 			}
 		}
 
+		logger.info("Begin to update page snapshot, pageid={}", page.getPageid());
 		String snapshotdtl = page.getSnapshotdtl();
 		if (snapshotdtl.startsWith("data:image/jpeg;base64,")) {
 			snapshotdtl = snapshotdtl.substring(23);
@@ -546,7 +548,7 @@ public class PageServiceImpl implements PageService {
 			is.close();
 		}
 
-		logger.info("Making page zip pageid={}", pageid);
+		logger.info("Making page zip, pageid={}", pageid);
 		ArrayList<Page> pageList = new ArrayList<Page>();
 		ArrayList<String> fontList = new ArrayList<String>();
 		ArrayList<String> diyList = new ArrayList<String>();
@@ -619,12 +621,12 @@ public class PageServiceImpl implements PageService {
 
 		String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + page.getPageid();
 		File jsonFile = new File(pageDir, "index.json");
-		FileUtils.writeStringToFile(jsonFile, JSONObject.fromObject(page).toString(2), "UTF-8", false);
+		FileUtils.writeStringToFile(jsonFile, gson.toJson(page), "UTF-8", false);
 		CommonUtil.zip(out, jsonFile, "index.json");
 		for (Page p : pageList) {
 			pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 			File dataFile = new File(pageDir, "" + p.getPageid() + ".js");
-			FileUtils.writeStringToFile(dataFile, "var Page=" + JSONObject.fromObject(p).toString(2), "UTF-8", false);
+			FileUtils.writeStringToFile(dataFile, "var Page=" + gson.toJson(p), "UTF-8", false);
 			CommonUtil.zip(out, dataFile, "" + p.getPageid() + ".js");
 
 			File htmlFile = new File(pageDir, "index.html");
@@ -657,6 +659,7 @@ public class PageServiceImpl implements PageService {
 		FileInputStream fis = new FileInputStream(zipFile);
 		page.setMd5(DigestUtils.md5Hex(fis));
 		pageMapper.updateByPrimaryKeySelective(page);
+		logger.info("Making page zip done, pageid={}", pageid);
 	}
 
 	public void exportZip(String pageid, File zipFile) throws Exception {
@@ -695,7 +698,7 @@ public class PageServiceImpl implements PageService {
 		for (Page p : pageList) {
 			String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 			File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
-			FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
+			FileUtils.writeStringToFile(jsfFile, gson.toJson(p), "UTF-8", false);
 			String jsfname = "index.jsf";
 			String jpgname = "index.jpg";
 			if (p.getHomeflag().equals("0")) {
@@ -739,13 +742,16 @@ public class PageServiceImpl implements PageService {
 		Date now = Calendar.getInstance().getTime();
 		File indexJsf = new File(unzipFilePath, "index.jsf");
 		logger.info("parse {}", indexJsf.getAbsoluteFile());
-		JSONObject pageJson = JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
-		Map<String, Class> map = new HashMap<String, Class>();
-		map.put("subpages", Page.class);
-		map.put("pagezones", Pagezone.class);
-		map.put("pagezonedtls", Pagezonedtl.class);
-		map.put("diyactions", Diyaction.class);
-		Page page = (Page) JSONObject.toBean(pageJson, Page.class, map);
+		Page page = gson.fromJson(FileUtils.readFileToString(indexJsf, "UTF-8"), Page.class);
+
+		// JSONObject pageJson =
+		// JSONObject.fromObject(FileUtils.readFileToString(indexJsf, "UTF-8"));
+		// Map<String, Class> map = new HashMap<String, Class>();
+		// map.put("subpages", Page.class);
+		// map.put("pagezones", Pagezone.class);
+		// map.put("pagezonedtls", Pagezonedtl.class);
+		// map.put("diyactions", Diyaction.class);
+		// Page page = (Page) JSONObject.toBean(pageJson, Page.class, map);
 		Integer fromPageid = page.getPageid();
 		page.setOrgid(orgid);
 		page.setBranchid(branchid);
@@ -773,8 +779,10 @@ public class PageServiceImpl implements PageService {
 		for (Page subpage : page.getSubpages()) {
 			File jsf = new File(unzipFilePath, "" + subpage.getPageid() + ".jsf");
 			logger.info("parse {}", jsf.getAbsoluteFile());
-			JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
-			Page p = (Page) JSONObject.toBean(json, Page.class, map);
+			Page p = gson.fromJson(FileUtils.readFileToString(jsf, "UTF-8"), Page.class);
+			// JSONObject json =
+			// JSONObject.fromObject(FileUtils.readFileToString(jsf, "UTF-8"));
+			// Page p = (Page) JSONObject.toBean(json, Page.class, map);
 			fromPageid = p.getPageid();
 			p.setOrgid(orgid);
 			p.setBranchid(branchid);
@@ -1022,8 +1030,7 @@ public class PageServiceImpl implements PageService {
 		}
 		if (page != null) {
 			if (page.getReviewflag().equals(Page.REVIEW_PASSED)) {
-				JSONObject pageJson = JSONObject.fromObject(page);
-				page.setJson(pageJson.toString());
+				page.setJson(gson.toJson(page));
 			}
 			page.setReviewflag(Page.REVIEW_WAIT);
 			pageMapper.updateByPrimaryKeySelective(page);
@@ -1031,8 +1038,7 @@ public class PageServiceImpl implements PageService {
 			if (subpages != null) {
 				for (Page b : subpages) {
 					if (b.getReviewflag().equals(Page.REVIEW_PASSED)) {
-						JSONObject pageJson = JSONObject.fromObject(b);
-						b.setJson(pageJson.toString());
+						b.setJson(gson.toJson(b));
 					}
 					b.setReviewflag(Page.REVIEW_WAIT);
 					pageMapper.updateByPrimaryKeySelective(b);

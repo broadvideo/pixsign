@@ -17,6 +17,7 @@ import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Bundlezone;
 import com.broadvideo.pixsignage.domain.Bundlezonedtl;
 import com.broadvideo.pixsignage.domain.Device;
+import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Org;
@@ -27,6 +28,7 @@ import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
@@ -40,6 +42,8 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private DevicegroupMapper devicegroupMapper;
 	@Autowired
 	private MsgeventMapper msgeventMapper;
 	@Autowired
@@ -456,6 +460,11 @@ public class DeviceServiceImpl implements DeviceService {
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
 		Map<String, Class> map = new HashMap<String, Class>();
 		map.put("subbundles", Bundle.class);
 		map.put("bundlezones", Bundlezone.class);
@@ -469,7 +478,14 @@ public class DeviceServiceImpl implements DeviceService {
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
 		List<Bundle> bundleList = new ArrayList<Bundle>();
 
-		Bundle defaultbundle = bundleMapper.selectByPrimaryKey("" + device.getDefaultbundleid());
+		int defaultbundleid = 0;
+		if (device.getDevicegroupid() > 0) {
+			Devicegroup devicegroup = devicegroupMapper.selectByPrimaryKey("" + device.getDevicegroupid());
+			defaultbundleid = devicegroup.getDefaultbundleid();
+		} else {
+			defaultbundleid = device.getDefaultbundleid();
+		}
+		Bundle defaultbundle = bundleMapper.selectByPrimaryKey("" + defaultbundleid);
 		if (defaultbundle != null && !defaultbundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 			JSONObject bundleJson = JSONObject.fromObject(defaultbundle.getJson());
 			defaultbundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
@@ -487,18 +503,18 @@ public class DeviceServiceImpl implements DeviceService {
 		} else {
 			return resultJson;
 		}
-		String jsonPath = "/bundle/" + device.getDefaultbundleid() + "/bundle-" + device.getDefaultbundleid() + ".json";
+		String jsonPath = "/bundle/" + defaultbundleid + "/bundle-" + defaultbundleid + ".json";
 		File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
 		if (jsonFile.exists()) {
 			JSONObject bundleJson = new JSONObject();
-			bundleJson.put("bundle_id", device.getDefaultbundleid());
-			bundleJson.put("url", "http://" + serverip + ":" + serverport + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+			bundleJson.put("bundle_id", defaultbundleid);
+			bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
 			bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
 			bundleJson.put("file", jsonFile.getName());
 			bundleJson.put("size", defaultbundle.getSize());
 			bundleJson.put("checksum", defaultbundle.getMd5());
 
-			bundleidJsonArray.add(device.getDefaultbundleid());
+			bundleidJsonArray.add(defaultbundleid);
 			bundleJsonArray.add(bundleJson);
 		} else {
 			return resultJson;
@@ -515,14 +531,13 @@ public class DeviceServiceImpl implements DeviceService {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("name", video.getName());
-							videoJson.put("url", "http://" + serverip + ":" + serverport
-									+ CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+							videoJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
 							videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
 							videoJson.put("checksum", video.getMd5());
-							videoJson.put("thumbnail", "http://" + serverip + ":" + serverport
-									+ CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+							videoJson.put("thumbnail",
+									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
 							if (video.getRelateurl() != null && video.getRelateurl().length() > 0) {
 								videoJson.put("relate_url", video.getRelateurl());
 							} else {
@@ -538,14 +553,13 @@ public class DeviceServiceImpl implements DeviceService {
 						JSONObject imageJson = new JSONObject();
 						imageJson.put("id", image.getImageid());
 						imageJson.put("name", image.getName());
-						imageJson.put("url", "http://" + serverip + ":" + serverport + CommonConfig.CONFIG_PIXDATA_URL
-								+ image.getFilepath());
+						imageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
 						imageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
 						imageJson.put("file", image.getFilename());
 						imageJson.put("size", image.getSize());
 						imageJson.put("checksum", image.getMd5());
-						imageJson.put("thumbnail", "http://" + serverip + ":" + serverport
-								+ CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
+						imageJson.put("thumbnail",
+								downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
 						if (image.getRelateurl() != null && image.getRelateurl().length() > 0) {
 							imageJson.put("relate_url", image.getRelateurl());
 						} else {
@@ -565,13 +579,12 @@ public class DeviceServiceImpl implements DeviceService {
 				imageJson.put("id", video.getRelateid());
 				imageJson.put("name", video.getRelateimage().getName());
 				imageJson.put("oname", video.getRelateimage().getOname());
-				imageJson.put("url",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("url", downloadurl + "/pixsigdata" + video.getRelateimage().getFilepath());
 				imageJson.put("path", "/pixsigdata" + video.getRelateimage().getFilepath());
 				imageJson.put("file", video.getRelateimage().getFilename());
 				imageJson.put("size", video.getRelateimage().getSize());
-				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
-						+ video.getRelateimage().getThumbnail());
+				imageJson.put("checksum", video.getRelateimage().getMd5());
+				imageJson.put("thumbnail", downloadurl + "/pixsigdata" + video.getRelateimage().getThumbnail());
 				imageJson.put("relate_url", "");
 				imageHash.put(video.getRelateid(), imageJson);
 				imageJsonArray.add(imageJson);
@@ -583,13 +596,12 @@ public class DeviceServiceImpl implements DeviceService {
 				imageJson.put("id", image.getRelateid());
 				imageJson.put("name", image.getRelateimage().getName());
 				imageJson.put("oname", image.getRelateimage().getOname());
-				imageJson.put("url",
-						"http://" + serverip + ":" + serverport + "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("url", downloadurl + "/pixsigdata" + image.getRelateimage().getFilepath());
 				imageJson.put("path", "/pixsigdata" + image.getRelateimage().getFilepath());
 				imageJson.put("file", image.getRelateimage().getFilename());
 				imageJson.put("size", image.getRelateimage().getSize());
-				imageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
-						+ image.getRelateimage().getThumbnail());
+				imageJson.put("checksum", image.getRelateimage().getMd5());
+				imageJson.put("thumbnail", downloadurl + "/pixsigdata" + image.getRelateimage().getThumbnail());
 				imageJson.put("relate_url", "");
 				imageHash.put(image.getRelateid(), imageJson);
 				imageJsonArray.add(imageJson);
@@ -608,6 +620,11 @@ public class DeviceServiceImpl implements DeviceService {
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
 		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
 		Map<String, Class> map = new HashMap<String, Class>();
 		map.put("subpages", Page.class);
 		map.put("pagezones", Pagezone.class);
@@ -641,7 +658,7 @@ public class DeviceServiceImpl implements DeviceService {
 		if (zipFile.exists()) {
 			JSONObject pageJson = new JSONObject();
 			pageJson.put("page_id", device.getDefaultpageid());
-			pageJson.put("url", "http://" + serverip + ":" + serverport + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+			pageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
 			pageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + zipPath);
 			pageJson.put("file", zipFile.getName());
 			pageJson.put("size", defaultpage.getSize());
@@ -661,14 +678,13 @@ public class DeviceServiceImpl implements DeviceService {
 							JSONObject videoJson = new JSONObject();
 							videoJson.put("id", video.getVideoid());
 							videoJson.put("name", video.getName());
-							videoJson.put("url", "http://" + serverip + ":" + serverport
-									+ CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+							videoJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
 							videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
 							videoJson.put("file", video.getFilename());
 							videoJson.put("size", video.getSize());
 							videoJson.put("checksum", video.getMd5());
-							videoJson.put("thumbnail", "http://" + serverip + ":" + serverport
-									+ CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+							videoJson.put("thumbnail",
+									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.add(videoJson);
 						}

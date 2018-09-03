@@ -361,35 +361,33 @@ FormValidateOption.submitHandler = function(form) {
 	$('#snapshot_div').show();
 	redrawGridlayout($('#snapshot_div'), gridlayout, 512);	
 	
-	html2canvas($('#snapshot_div'), {
-		onrendered: function(canvas) {
-			//console.log(canvas.toDataURL('image/jpeg'));
-			$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL('image/jpeg'));
-			$('#snapshot_div').hide();
+	html2canvas($('#snapshot_div')[0]).then(function(canvas) {
+		//console.log(canvas.toDataURL('image/jpeg'));
+		$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL('image/jpeg'));
+		$('#snapshot_div').hide();
 
-			$.ajax({
-				type : 'POST',
-				url : $('#MyEditForm').attr('action'),
-				data : $('#MyEditForm').serialize(),
-				success : function(data, status) {
-					if (data.errorcode == 0) {
-						submitflag = false;
-						Metronic.unblockUI();
-						$('#MyEditModal').modal('hide');
-						bootbox.alert(common.tips.success);
-						$('#MyTable').dataTable()._fnAjaxUpdate();
-					} else {
-						bootbox.alert(common.tips.error + data.errormsg);
-					}
-				},
-				error : function() {
+		$.ajax({
+			type : 'POST',
+			url : $('#MyEditForm').attr('action'),
+			data : $('#MyEditForm').serialize(),
+			success : function(data, status) {
+				if (data.errorcode == 0) {
 					submitflag = false;
 					Metronic.unblockUI();
 					$('#MyEditModal').modal('hide');
-					console.log('failue');
+					bootbox.alert(common.tips.success);
+					$('#MyTable').dataTable()._fnAjaxUpdate();
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
 				}
-			});
-		}
+			},
+			error : function() {
+				submitflag = false;
+				Metronic.unblockUI();
+				$('#MyEditModal').modal('hide');
+				console.log('failue');
+			}
+		});
 	});
 
 };

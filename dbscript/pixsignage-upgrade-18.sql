@@ -13,8 +13,6 @@ select last_insert_id() into @dbversionid;
 ## upgrade script ##########################################
 ############################################################
 	
-
-
 CREATE TABLE `attendancelog`(
 	`attendancelogid` int(11) NOT NULL  auto_increment COMMENT '自增主键' , 
 	`eventid` int(11) NOT NULL  COMMENT '事件id' , 
