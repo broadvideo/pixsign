@@ -507,45 +507,42 @@ var BundleModule = function () {
 			});
 			$('#snapshot_div').show();
 			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			html2canvas($('#snapshot_div'), {
-				onrendered: function(canvas) {
-					//console.log(canvas.toDataURL('image/jpeg'));
-					_design.Object.snapshotdtl = canvas.toDataURL('image/jpeg');
-					$('#snapshot_div').hide();
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+				_design.Object.snapshotdtl = dataUrl;
+				$('#snapshot_div').hide();
 
-					for (var i=0; i<_design.Object.bundlezones.length; i++) {
-						for (var j=0; j<_design.Object.bundlezones[i].bundlezonedtls.length; j++) {
-							_design.Object.bundlezones[i].bundlezonedtls[j].image = undefined;
-							_design.Object.bundlezones[i].bundlezonedtls[j].video = undefined;
-							_design.Object.bundlezones[i].bundlezonedtls[j].stream = undefined;
-							_design.Object.bundlezones[i].bundlezonedtls[j].dvb = undefined;
+				for (var i=0; i<_design.Object.bundlezones.length; i++) {
+					for (var j=0; j<_design.Object.bundlezones[i].bundlezonedtls.length; j++) {
+						_design.Object.bundlezones[i].bundlezonedtls[j].image = undefined;
+						_design.Object.bundlezones[i].bundlezonedtls[j].video = undefined;
+						_design.Object.bundlezones[i].bundlezonedtls[j].stream = undefined;
+						_design.Object.bundlezones[i].bundlezonedtls[j].dvb = undefined;
+					}
+				}			
+				$.ajax({
+					type : 'POST',
+					url : 'bundle!design.action',
+					data : '{"bundle":' + $.toJSON(_design.Object) + '}',
+					dataType : 'json',
+					contentType : 'application/json;charset=utf-8',
+					success : function(data, status) {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#BundleModal').modal('hide');
+						if (data.errorcode == 0) {
+							bootbox.alert(common.tips.success);
+							$('#BundleTable').dataTable()._fnAjaxUpdate();
+						} else {
+							bootbox.alert(common.tips.error + data.errormsg);
 						}
-					}			
-					$.ajax({
-						type : 'POST',
-						url : 'bundle!design.action',
-						data : '{"bundle":' + $.toJSON(_design.Object) + '}',
-						dataType : 'json',
-						contentType : 'application/json;charset=utf-8',
-						success : function(data, status) {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#BundleModal').modal('hide');
-							if (data.errorcode == 0) {
-								bootbox.alert(common.tips.success);
-								$('#BundleTable').dataTable()._fnAjaxUpdate();
-							} else {
-								bootbox.alert(common.tips.error + data.errormsg);
-							}
-						},
-						error : function() {
-							_submitflag = false;
-							Metronic.unblockUI();
-							$('#BundleModal').modal('hide');
-							console.log('failue');
-						}
-					});
-				}
+					},
+					error : function() {
+						_submitflag = false;
+						Metronic.unblockUI();
+						$('#BundleModal').modal('hide');
+						console.log('failue');
+					}
+				});
 			});
 		});
 	}

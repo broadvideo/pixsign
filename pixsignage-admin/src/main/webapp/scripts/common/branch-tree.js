@@ -1,8 +1,8 @@
 var BranchTree = function (container, refresh) {
 	var _self = this;
 	this.container = container;
-	this.branchid = null;
-	this.folderid = null;
+	this.branchid = 0;
+	this.folderid = 0;
 	var _refresh = refresh;
 	var BranchTree = $(container).find('.branchtree');
 	var FolderTree = $(container).find('.foldertree');

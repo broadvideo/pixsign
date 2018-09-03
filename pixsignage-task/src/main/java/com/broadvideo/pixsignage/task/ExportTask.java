@@ -28,6 +28,8 @@ import com.broadvideo.pixsignage.service.ImageService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.VideoService;
 import com.broadvideo.pixsignage.util.CommonUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -35,6 +37,8 @@ import net.sf.json.JSONObject;
 @Service("exportTask")
 public class ExportTask extends Thread {
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
 
 	@Autowired
 	private BundleService bundleService;
@@ -114,18 +118,17 @@ public class ExportTask extends Thread {
 						String bundleDir = CommonConfig.CONFIG_PIXDATA_HOME + "/bundle/" + bundle.getBundleid();
 						File jsfFile = new File(bundleDir, "" + bundle.getBundleid() + ".jsf");
 						Bundle fullbundle = bundleService.selectByPrimaryKey("" + bundle.getBundleid());
-						FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(fullbundle).toString(2), "UTF-8",
-								false);
+						FileUtils.writeStringToFile(jsfFile, gson.toJson(fullbundle), "UTF-8", false);
 						String jsfname = "index.jsf";
-						String pngname = "index.png";
+						String jpgname = "index.jpg";
 						if (bundle.getHomeflag().equals("0")) {
 							jsfname = "" + bundle.getBundleid() + ".jsf";
-							pngname = "" + bundle.getBundleid() + ".png";
+							jpgname = "" + bundle.getBundleid() + ".jpg";
 						}
 						CommonUtil.zip(out, jsfFile, jsfname);
 						if (bundle.getSnapshot() != null) {
 							File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + bundle.getSnapshot());
-							CommonUtil.zip(out, snapshot, pngname);
+							CommonUtil.zip(out, snapshot, jpgname);
 						}
 
 						out.close();
@@ -183,17 +186,17 @@ public class ExportTask extends Thread {
 					for (Page p : pageList) {
 						String pageDir = CommonConfig.CONFIG_PIXDATA_HOME + "/page/" + p.getPageid();
 						File jsfFile = new File(pageDir, "" + p.getPageid() + ".jsf");
-						FileUtils.writeStringToFile(jsfFile, JSONObject.fromObject(p).toString(2), "UTF-8", false);
+						FileUtils.writeStringToFile(jsfFile, gson.toJson(p), "UTF-8", false);
 						String jsfname = "index.jsf";
-						String pngname = "index.png";
+						String jpgname = "index.jpg";
 						if (p.getHomeflag().equals("0")) {
 							jsfname = "" + p.getPageid() + ".jsf";
-							pngname = "" + p.getPageid() + ".png";
+							jpgname = "" + p.getPageid() + ".jpg";
 						}
 						CommonUtil.zip(out, jsfFile, jsfname);
 						if (p.getSnapshot() != null) {
 							File snapshot = new File(CommonConfig.CONFIG_PIXDATA_HOME + p.getSnapshot());
-							CommonUtil.zip(out, snapshot, pngname);
+							CommonUtil.zip(out, snapshot, jpgname);
 						}
 					}
 

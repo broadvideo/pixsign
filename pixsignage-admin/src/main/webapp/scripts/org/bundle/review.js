@@ -1,6 +1,7 @@
 var ReviewModule = function () {
 	var _bundle;
 	var _bundlezone;
+	var _submitflag = false;
 
 	var init = function () {
 		initBundleTable();
@@ -115,13 +116,23 @@ var ReviewModule = function () {
 		var formHandler = new FormHandler($('#ReviewForm'));
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.submitHandler = function(form) {
+			if (_submitflag) {
+				return;
+			}
+			_submitflag = true;
+			Metronic.blockUI({
+				zIndex: 20000,
+				animate: true
+			});
 			$.ajax({
 				type : 'POST',
 				url : 'bundle!review.action',
 				data : $('#ReviewForm').serialize(),
 				success : function(data, status) {
+					_submitflag = false;
+					Metronic.unblockUI();
+					$('#ReviewModal').modal('hide');
 					if (data.errorcode == 0) {
-						$('#ReviewModal').modal('hide');
 						bootbox.alert(common.tips.success);
 						$('#BundleTable').dataTable()._fnAjaxUpdate();
 					} else {
@@ -129,6 +140,9 @@ var ReviewModule = function () {
 					}
 				},
 				error : function() {
+					_submitflag = false;
+					Metronic.unblockUI();
+					$('#ReviewModal').modal('hide');
 					console.log('failue');
 				}
 			});

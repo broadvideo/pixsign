@@ -201,7 +201,7 @@ var BundleDesignModule = function (mode) {
 				$(bundlezoneDiv).find('img').attr('width', '100%');
 				$(bundlezoneDiv).find('img').attr('height', '100%');
 			} else if (bundlezone.bundlezonedtls.length > 0 && bundlezone.bundlezonedtls[0].image != null) {
-				$(bundlezoneDiv).find('img').attr('src', '/pixsigdata' + bundlezone.bundlezonedtls[0].image.filepath);
+				$(bundlezoneDiv).find('img').attr('src', '/pixsigdata' + bundlezone.bundlezonedtls[0].image.thumbnail);
 				$(bundlezoneDiv).find('img').attr('width', '100%');
 				$(bundlezoneDiv).find('img').attr('height', '100%');
 			}
@@ -310,7 +310,7 @@ var BundleDesignModule = function (mode) {
 				var menupercent = 100*menuscale*bundlezone.height/bundlezone.width;
 				for (var i=0; i<bundlezone.bundlezonedtls.length; i++) {
 					var menu_div = document.createElement('div');
-					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.filepath;
+					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.thumbnail;
 					$(menu_div).css({
 						'position': 'absolute',
 						'height': '100%', 
@@ -328,7 +328,7 @@ var BundleDesignModule = function (mode) {
 				var menupercent = 100/menuscale*bundlezone.width/bundlezone.height;
 				for (var i=0; i<bundlezone.bundlezonedtls.length; i++) {
 					var menu_div = document.createElement('div');
-					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.filepath;
+					var bgurl = '/pixsigdata' + bundlezone.bundlezonedtls[i].image.thumbnail;
 					$(menu_div).css({
 						'position': 'absolute',
 						'height': menupercent + '%',

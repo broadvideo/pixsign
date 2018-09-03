@@ -275,7 +275,7 @@ var PageDesignModule = function (mode) {
 					'border-radius': Math.ceil(pagezone.bdradius / PageScale) + 'px', 
 				});
 				if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].image != null) {
-					$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].image.filepath);
+					$(pagezoneDiv).find('img').attr('src', '/pixsigdata' + pagezone.pagezonedtls[0].image.thumbnail);
 					$(pagezoneDiv).find('img').attr('width', '100%');
 					$(pagezoneDiv).find('img').attr('height', '100%');
 				}
@@ -396,7 +396,7 @@ var PageDesignModule = function (mode) {
 					'word-wrap': 'break-word',
 				});
 				if (pagezone.pagezonedtls.length > 0 && pagezone.pagezonedtls[0].image != null) {
-					$(pagezoneDiv).find('#rotatable').css('background-image', 'url(/pixsigdata' + pagezone.pagezonedtls[0].image.filepath + ')');
+					$(pagezoneDiv).find('#rotatable').css('background-image', 'url(/pixsigdata' + pagezone.pagezonedtls[0].image.thumbnail + ')');
 					$(pagezoneDiv).find('#rotatable').css('background-size', '100% 100%');
 					$(pagezoneDiv).find('#rotatable').css('background-position', 'center');
 					$(pagezoneDiv).find('#rotatable').css('background-repeat', 'no-repeat');
@@ -2064,7 +2064,7 @@ var PageDesignModule = function (mode) {
 			if (_self.Zone.pagezonedtls.length > 0) {
 				var backgroundimage = _self.Zone.pagezonedtls[0].image;
 				if (backgroundimage != '') {
-					$('#BGImagePreview').css('background-image', 'url(/pixsigdata' + backgroundimage.filepath + ')');
+					$('#BGImagePreview').css('background-image', 'url(/pixsigdata' + backgroundimage.thumbnail + ')');
 					var owidth = backgroundimage.width;
 					var oheight = backgroundimage.height;
 					var background_size = 'auto auto';
