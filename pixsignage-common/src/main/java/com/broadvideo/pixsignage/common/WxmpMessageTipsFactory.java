@@ -21,4 +21,10 @@ public class WxmpMessageTipsFactory {
 		return orgWxmpMessageTipsMap.get("default");
 	}
 
+	public static void main(String[] args) {
+
+		System.out.println(getWxmpMessageTips("sdfds").DOOR_INVLIAD_INPUT_TIP);
+
+	}
+
 }
