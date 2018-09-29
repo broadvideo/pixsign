@@ -36,8 +36,10 @@ import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Person;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.PersonMapper;
+import com.broadvideo.pixsignage.util.DateUtil;
 import com.broadvideo.pixsignage.util.UUIDUtils;
 import com.broadvideo.pixsignage.util.ZipUtil;
+import com.ibm.icu.util.Calendar;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -436,6 +438,18 @@ public class PersonServiceImpl implements PersonService {
 				continue;
 			}
 		}
+
+	}
+
+	public static void main(String[] args) {
+
+		Date newDate = new Date(1535791822307L);
+		System.out.println("newDate:" + DateUtil.getDateStr(newDate, "yyyy-MM-dd HH:mm:ss SSS"));
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(newDate);
+		calendar.set(Calendar.MILLISECOND, 0);
+		System.out.println("newDate:" + DateUtil.getDateStr(calendar.getTime(), "yyyy-MM-dd HH:mm:ss SSS"));
+		System.out.println("newDate:" + calendar.getTimeInMillis());
 
 	}
 }
