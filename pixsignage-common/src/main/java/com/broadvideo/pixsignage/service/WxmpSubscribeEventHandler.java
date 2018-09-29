@@ -6,7 +6,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.common.WxmpMessageTipsFactory;
+import com.broadvideo.pixsignage.domain.Org;
 
 /**
  * msgtype:event event:subscribe订阅类型
@@ -35,24 +36,26 @@ public class WxmpSubscribeEventHandler extends WxmpEventMsgTypeHandler {
 		final Integer createTime = NumberUtils.toInt(root.selectSingleNode("/xml/CreateTime").getText());
 		final String event = root.selectSingleNode("/xml/Event").getText();
 		final String eventKey = root.selectSingleNode("/xml/EventKey").getText();
+		Org org = ServiceFactory.getBean(OrgService.class).selectByPrimaryKey(orgid + "");
 		if (StringUtils.isBlank(eventKey)) {
 			logger.info("关注二维码，没有传递场景值，返回欢迎提示");
-			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_TIP);
+			return buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_SUBSCRIBE_TIP);
 		}
 		String[] eventKeySplits = eventKey.split("_");
 		if (eventKeySplits.length < 2 || StringUtils.isBlank(eventKeySplits[1])) {
 			logger.info("关注二维码，场景值为空，返回欢迎提示");
-			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_TIP);
+			return buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_SUBSCRIBE_TIP);
 		}
 		String terminalid = eventKeySplits[1];
 		ServiceFactory.getBean(SmartdoorkeeperService.class).bind(terminalid, fromUserName, toUserName, event,
 				createTime * 1000L, orgid);
 		logger.info("用户({})关注了公众号({}) eventkey({})", new Object[] { fromUserName, toUserName, eventKey });
-		String replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP);
+		String replyMsg = buildReplyMsg(toUserName, fromUserName,
+				WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_SUBSCRIBE_SCENE_TIP);
 		logger.info("订阅成功，发送回复信息给用户({})", fromUserName);
 		return replyMsg;
 	}
-
-
 
 }

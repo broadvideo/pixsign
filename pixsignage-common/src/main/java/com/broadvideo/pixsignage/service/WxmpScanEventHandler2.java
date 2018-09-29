@@ -6,7 +6,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.common.WxmpMessageTipsFactory;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Smartbox;
 import com.broadvideo.pixsignage.persistence.SmartboxMapper;
 
@@ -53,18 +54,23 @@ public class WxmpScanEventHandler2 extends WxmpEventMsgTypeHandler {
 			return this.buildEmptyReplyMsg();
 
 		}
+		Org org = ServiceFactory.getBean(OrgService.class).selectByPrimaryKey(orgid + "");
+
 		if (StringUtils.isBlank(qrcodeid) || !qrcodeid.equals(smartbox.getQrcodeid())) {
 			logger.error(
 					"WxmpScanEventHandler2.handle: qrcodeid({}) extract from qrcode not equal to smartbox.qrcodeid({})",
 					qrcodeid, smartbox.getQrcodeid());
-			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_OUT_OF_DATE);
+
+			return buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_OUT_OF_DATE);
 		}
 
 		boolean isBind = ServiceFactory.getBean(SmartdoorkeeperService.class).bind(terminalid, fromUserName,
 				toUserName, event, createTime * 1000L, orgid);
 		String replyMsg = null;
 		if (isBind) {
-			replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP2);
+			replyMsg = buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_SUBSCRIBE_SCENE_TIP2);
 			logger.info("WxmpScanEventHandler2.handle:({}) Subscribe success.", fromUserName);
 		} else {
 			replyMsg = this.buildEmptyReplyMsg();

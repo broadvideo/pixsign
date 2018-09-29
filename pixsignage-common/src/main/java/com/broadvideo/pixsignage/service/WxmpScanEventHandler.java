@@ -6,7 +6,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.common.WxmpMessageTipsFactory;
+import com.broadvideo.pixsignage.domain.Org;
 
 /**
  * 已经关注公众号的，扫码事件 msgtype:event event:scan订阅类型
@@ -41,12 +42,13 @@ public class WxmpScanEventHandler extends WxmpEventMsgTypeHandler {
 											// fromUserName, "");
 		}
 		boolean isBind = ServiceFactory.getBean(SmartdoorkeeperService.class).bind(eventKey, fromUserName, toUserName,
-				event,
-				createTime * 1000L, orgid);
+				event, createTime * 1000L, orgid);
 		String replyMsg = null;
 		if (isBind) {
-			replyMsg = buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.QRCODE_SUBSCRIBE_SCENE_TIP);
-		logger.info("订阅成功，发送回复信息给用户({})", fromUserName);
+			Org org = ServiceFactory.getBean(OrgService.class).selectByPrimaryKey(orgid + "");
+			replyMsg = buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).QRCODE_SUBSCRIBE_SCENE_TIP);
+			logger.info("订阅成功，发送回复信息给用户({})", fromUserName);
 		} else {
 			replyMsg = this.buildEmptyReplyMsg();
 			logger.info("绑定失败!");
@@ -54,6 +56,5 @@ public class WxmpScanEventHandler extends WxmpEventMsgTypeHandler {
 		return replyMsg;
 
 	}
-
 
 }
