@@ -485,6 +485,10 @@ public class DeviceServiceImpl implements DeviceService {
 		} else {
 			defaultbundleid = device.getDefaultbundleid();
 		}
+		if (defaultbundleid == 0) {
+			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+			defaultbundleid = org.getDefaultbundleid();
+		}
 		Bundle defaultbundle = bundleMapper.selectByPrimaryKey("" + defaultbundleid);
 		if (defaultbundle != null && !defaultbundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
 			JSONObject bundleJson = JSONObject.fromObject(defaultbundle.getJson());
@@ -560,11 +564,15 @@ public class DeviceServiceImpl implements DeviceService {
 						imageJson.put("checksum", image.getMd5());
 						imageJson.put("thumbnail",
 								downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
-						if (image.getRelateurl() != null && image.getRelateurl().length() > 0) {
-							imageJson.put("relate_url", image.getRelateurl());
-						} else {
+						if (image.getRelatetype().equals("2")) {
 							imageJson.put("relate_type", "image");
 							imageJson.put("relate_id", image.getRelateid());
+						} else if (image.getRelatetype().equals("3")) {
+							imageJson.put("relate_type", "link");
+							imageJson.put("relate_url", image.getRelateurl());
+						} else if (image.getRelatetype().equals("4")) {
+							imageJson.put("relate_type", "apk");
+							imageJson.put("relate_url", image.getRelateurl());
 						}
 						imageHash.put(image.getImageid(), imageJson);
 						imageJsonArray.add(imageJson);

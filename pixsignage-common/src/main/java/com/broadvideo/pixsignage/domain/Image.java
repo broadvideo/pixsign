@@ -41,9 +41,13 @@ public class Image {
 
 	private String thumbnail;
 
+	private String relatetype;
+
 	private Integer relateid;
 
 	private String relateurl;
+
+	private String adflag;
 
 	private Date createtime;
 
@@ -195,6 +199,14 @@ public class Image {
 		this.thumbnail = thumbnail == null ? null : thumbnail.trim();
 	}
 
+	public String getRelatetype() {
+		return relatetype;
+	}
+
+	public void setRelatetype(String relatetype) {
+		this.relatetype = relatetype;
+	}
+
 	public Integer getRelateid() {
 		return relateid;
 	}
@@ -209,6 +221,14 @@ public class Image {
 
 	public void setRelateurl(String relateurl) {
 		this.relateurl = relateurl;
+	}
+
+	public String getAdflag() {
+		return adflag;
+	}
+
+	public void setAdflag(String adflag) {
+		this.adflag = adflag;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

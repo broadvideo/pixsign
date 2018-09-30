@@ -210,6 +210,7 @@
 				<input type="text" class="form-control" name="names" placeholder="${global_name}" />
 				<input type="hidden" name="branchids" value="{%=VideoTree.branchid%}" />
 				<input type="hidden" name="folderids" value="{%=VideoTree.folderid%}" />
+				<input type="hidden" name="adflags" value="0" />
 			</div>
 		</td>
 		<td>

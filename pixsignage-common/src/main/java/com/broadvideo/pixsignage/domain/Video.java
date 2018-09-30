@@ -54,6 +54,8 @@ public class Video {
 
 	private String tags;
 
+	private String adflag;
+
 	private Date createtime;
 
 	private Integer createstaffid;
@@ -242,6 +244,14 @@ public class Video {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public String getAdflag() {
+		return adflag;
+	}
+
+	public void setAdflag(String adflag) {
+		this.adflag = adflag;
 	}
 
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")

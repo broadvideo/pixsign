@@ -218,7 +218,7 @@
 				<input type="text" class="form-control" name="names" placeholder="${global_name}" />
 				<input type="hidden" name="branchids" value="{%=ImageTree.branchid%}" />
 				<input type="hidden" name="folderids" value="{%=ImageTree.folderid%}" />
-				<input type="hidden" name="adflags" value="0" />
+				<input type="hidden" name="adflags" value="1" />
 			</div>
 		</td>
 		<td>
@@ -345,7 +345,7 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/resource/image.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/advert/adimage.js?t=${timestamp}"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

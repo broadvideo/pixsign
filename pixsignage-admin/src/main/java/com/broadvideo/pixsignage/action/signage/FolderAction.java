@@ -80,9 +80,9 @@ public class FolderAction extends BaseDatatableAction {
 	public String doDelete() {
 		try {
 			int count1 = videoService.selectCount("" + getLoginStaff().getOrgid(), null, "" + folder.getFolderid(),
-					null, null, null, null);
+					null, null, null, null, null);
 			int count2 = imageService.selectCount("" + getLoginStaff().getOrgid(), null, "" + folder.getFolderid(),
-					null, null, null);
+					null, null);
 			Folder oldFolder = folderService.selectByPrimaryKey("" + folder.getFolderid());
 			if (count1 > 0 || count2 > 0) {
 				setErrorcode(-1);

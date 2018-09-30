@@ -82,7 +82,7 @@ public class SystemTask extends Thread {
 						}
 
 					}
-					Thread.sleep(600000);
+					Thread.sleep(300000);
 				}
 			} catch (Exception ex) {
 				logger.error("System Task error: {}", ex);

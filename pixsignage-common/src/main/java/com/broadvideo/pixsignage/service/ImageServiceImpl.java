@@ -24,14 +24,13 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired
 	private DevicefileMapper devicefileMapper;
 
-	public int selectCount(String orgid, String branchid, String folderid, String objtype, String objid,
-			String search) {
-		return imageMapper.selectCount(orgid, branchid, folderid, objtype, objid, search);
+	public int selectCount(String orgid, String branchid, String folderid, String adflag, String search) {
+		return imageMapper.selectCount(orgid, branchid, folderid, adflag, search);
 	}
 
-	public List<Image> selectList(String orgid, String branchid, String folderid, String objtype, String objid,
-			String search, String start, String length) {
-		return imageMapper.selectList(orgid, branchid, folderid, objtype, objid, search, start, length);
+	public List<Image> selectList(String orgid, String branchid, String folderid, String adflag, String search,
+			String start, String length) {
+		return imageMapper.selectList(orgid, branchid, folderid, adflag, search, start, length);
 	}
 
 	public Image selectByPrimaryKey(String imageid) {

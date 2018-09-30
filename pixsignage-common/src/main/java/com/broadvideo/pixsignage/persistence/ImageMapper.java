@@ -12,13 +12,13 @@ public interface ImageMapper {
 	Image selectByUuid(@Param(value = "uuid") String uuid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "folderid") String folderid, @Param(value = "objtype") String objtype,
-			@Param(value = "objid") String objid, @Param(value = "search") String search);
+			@Param(value = "folderid") String folderid, @Param(value = "adflag") String adflag,
+			@Param(value = "search") String search);
 
 	List<Image> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "folderid") String folderid, @Param(value = "objtype") String objtype,
-			@Param(value = "objid") String objid, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length);
+			@Param(value = "folderid") String folderid, @Param(value = "adflag") String adflag,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	int deleteByPrimaryKey(@Param(value = "imageid") String imageid);
 

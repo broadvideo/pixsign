@@ -795,7 +795,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-2 zonetype-7">
+								<div class="panel panel-default zone-ctl zonetype-2 zonetype-3 zonetype-7">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse11">动画效果</a>

@@ -43,6 +43,7 @@ public class ImageAction extends BaseDatatableAction {
 	private String[] names;
 	private String[] branchids;
 	private String[] folderids;
+	private String[] adflags;
 
 	@Autowired
 	private FolderMapper folderMapper;
@@ -82,6 +83,7 @@ public class ImageAction extends BaseDatatableAction {
 						image.setBranchid(Integer.parseInt(branchids[i]));
 						image.setFolderid(Integer.parseInt(folderids[i]));
 					}
+					image.setAdflag(adflags[i]);
 					image.setName(names[i]);
 					image.setOname(mymediaFileName[i]);
 					image.setFilename(mymediaFileName[i]);
@@ -156,17 +158,18 @@ public class ImageAction extends BaseDatatableAction {
 			if (folderid == null || folderid.equals("")) {
 				folderid = "" + getLoginStaff().getBranch().getTopfolderid();
 			}
-			String objtype = getParameter("objtype");
-			String objid = getParameter("objid");
+			String adflag = getParameter("adflag");
+			if (adflag == null || adflag.equals("")) {
+				adflag = "0";
+			}
 
-			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, objtype, objid,
-					search);
+			int count = imageService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, adflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid,
-					objtype, objid, search, start, length);
+			List<Image> imageList = imageService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid, adflag,
+					search, start, length);
 			for (Image image : imageList) {
 				if (image.getWidth().intValue() == 0 || image.getHeight().intValue() == 0) {
 					BufferedImage img = ImageIO.read(new File(CommonConfig.CONFIG_PIXDATA_HOME + image.getFilepath()));
@@ -279,6 +282,14 @@ public class ImageAction extends BaseDatatableAction {
 
 	public void setFolderids(String[] folderids) {
 		this.folderids = folderids;
+	}
+
+	public String[] getAdflags() {
+		return adflags;
+	}
+
+	public void setAdflags(String[] adflags) {
+		this.adflags = adflags;
 	}
 
 }

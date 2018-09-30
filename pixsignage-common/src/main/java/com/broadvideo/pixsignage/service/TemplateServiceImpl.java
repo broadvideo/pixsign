@@ -707,6 +707,11 @@ public class TemplateServiceImpl implements TemplateService {
 			}
 			if (templatezone.getType() == Templatezone.Type_Image) {
 				logger.info("add template zone: {}", zoneStrucJson.getString("zone_name"));
+				if (zoneContent.equals("no") || zoneContent.equals("non")) {
+					zoneContent = "";
+					logger.info("Ignore to import this image.");
+					continue;
+				}
 				templatezone.setHeight(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_height"))));
 				templatezone.setWidth(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_width"))));
 				templatezone.setTopoffset(Math.round(1.875f * Integer.parseInt(zoneStrucJson.getString("img_top"))));
@@ -732,9 +737,6 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setShadowv(0);
 				templatezone.setShadowblur(0);
 				templatezone.setShadowcolor("#000000");
-				if (zoneContent.equals("no")) {
-					zoneContent = "";
-				}
 				templatezone.setContent(zoneContent);
 				if (zoneContent.length() > 0) {
 					int statusCode = download2File(
@@ -842,9 +844,9 @@ public class TemplateServiceImpl implements TemplateService {
 				logger.error("unknown template zone type");
 			}
 			templatezones.add(templatezone);
-			template.setTemplatezones(templatezones);
-			design(template);
 		}
+		template.setTemplatezones(templatezones);
+		design(template);
 
 		String snapshotFilePath = "/template/" + template.getTemplateid() + "/snapshot/" + template.getTemplateid()
 				+ ".jpg";

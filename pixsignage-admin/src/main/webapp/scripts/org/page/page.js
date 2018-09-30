@@ -480,7 +480,8 @@ var PageModule = function () {
 			});
 			$('#snapshot_div').show();
 			PagePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 })
+			.then(function (dataUrl) {
 				_design.Object.snapshotdtl = dataUrl;
 				$('#snapshot_div').hide();
 
@@ -514,7 +515,15 @@ var PageModule = function () {
 						console.log('failue');
 					}
 				});
-			});
+			})
+			.catch(function (error) {
+				_submitflag = false;
+				$('#snapshot_div').hide();
+				Metronic.unblockUI();
+				$('#PageModal').modal('hide');
+				bootbox.alert(common.tips.error + error);
+				console.error('oops, something went wrong!', error);
+		    });
 			/*
 			html2canvas($('#snapshot_div')[0]).then(function(canvas) {
 				var snapshotdtl = canvas.toDataURL('image/jpeg');

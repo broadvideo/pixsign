@@ -20,8 +20,10 @@
     <result column="objid" property="objid" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+    <result column="relatetype" property="relatetype" jdbcType="CHAR" />
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
     <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
+    <result column="adflag" property="adflag" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="relateimage" column="{imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
@@ -29,12 +31,12 @@
   
   <sql id="Base_Column_List" >
     imageid, orgid, branchid, folderid, name, oname, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
-    description, thumbnail, relateid, relateurl, createtime, createstaffid
+    description, thumbnail, relatetype, relateid, relateurl, adflag, createtime, createstaffid
   </sql>
   
   <select id="selectRelateImage" resultMap="BaseResultMap" >
     select imageid, orgid, branchid, folderid, name, oname, uuid, width, height, filepath, filename, size, md5, status, objtype, objid, 
-    description, thumbnail, 0 as relateid, relateurl, createtime, createstaffid
+    description, thumbnail, relatetype, 0 as relateid, relateurl, adflag, createtime, createstaffid
     from image
     where imageid = #{imageid}
     and status != '9'
@@ -66,11 +68,8 @@
     <if test="folderid != null">
       and folderid=#{folderid}
     </if>
-    <if test="objtype != null">
-      and objtype = #{objtype}
-    </if>
-    <if test="objid != null">
-      and objid = #{objid}
+    <if test="adflag != null">
+      and adflag = #{adflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -89,11 +88,8 @@
     <if test="folderid != null">
       and folderid=#{folderid}
     </if>
-    <if test="objtype != null">
-      and objtype = #{objtype}
-    </if>
-    <if test="objid != null">
-      and objid = #{objid}
+    <if test="adflag != null">
+      and adflag = #{adflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -119,16 +115,18 @@
       width, height, 
       filepath, filename, size, 
       md5, status, objtype, objid, 
-      description, thumbnail, relateid, 
-      relateurl, createtime, createstaffid
+      description, thumbnail, relatetype, 
+      relateid, relateurl, adflag, 
+      createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, 
       #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, 
       #{md5,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{objtype,jdbcType=CHAR}, #{objid,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
-      #{relateurl,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relatetype,jdbcType=CHAR}, 
+      #{relateid,jdbcType=INTEGER}, #{relateurl,jdbcType=VARCHAR}, #{adflag,jdbcType=CHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Image" >
@@ -188,11 +186,17 @@
       <if test="thumbnail != null" >
         thumbnail,
       </if>
+      <if test="relatetype != null" >
+        relatetype,
+      </if>
       <if test="relateid != null" >
         relateid,
       </if>
       <if test="relateurl != null" >
         relateurl,
+      </if>
+      <if test="adflag != null" >
+        adflag,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -253,11 +257,17 @@
       <if test="thumbnail != null" >
         #{thumbnail,jdbcType=VARCHAR},
       </if>
+      <if test="relatetype != null" >
+        #{relatetype,jdbcType=CHAR},
+      </if>
       <if test="relateid != null" >
         #{relateid,jdbcType=INTEGER},
       </if>
       <if test="relateurl != null" >
         #{relateurl,jdbcType=VARCHAR},
+      </if>
+      <if test="adflag != null" >
+        #{adflag,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -321,11 +331,17 @@
       <if test="thumbnail != null" >
         thumbnail = #{thumbnail,jdbcType=VARCHAR},
       </if>
+      <if test="relatetype != null" >
+        relatetype = #{relatetype,jdbcType=CHAR},
+      </if>
       <if test="relateid != null" >
         relateid = #{relateid,jdbcType=INTEGER},
       </if>
       <if test="relateurl != null" >
         relateurl = #{relateurl,jdbcType=VARCHAR},
+      </if>
+      <if test="adflag != null" >
+        adflag = #{adflag,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
@@ -355,8 +371,10 @@
       objid = #{objid,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      relatetype = #{relatetype,jdbcType=CHAR},
       relateid = #{relateid,jdbcType=INTEGER},
       relateurl = #{relateurl,jdbcType=VARCHAR},
+      adflag = #{adflag,jdbcType=CHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where imageid = #{imageid,jdbcType=INTEGER}

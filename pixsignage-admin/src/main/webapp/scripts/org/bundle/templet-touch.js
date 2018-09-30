@@ -437,7 +437,8 @@ var TempletModule = function () {
 			});
 			$('#snapshot_div').show();
 			BundlePreviewModule.preview($('#snapshot_div'), _design.Object, 800);
-			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 }).then(function (dataUrl) {
+			domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 })
+			.then(function (dataUrl) {
 				_design.Object.snapshotdtl = dataUrl;
 				$('#snapshot_div').hide();
 
@@ -487,7 +488,15 @@ var TempletModule = function () {
 						console.log('failue');
 					}
 				});
-			});
+			})
+			.catch(function (error) {
+				_submitflag = false;
+				$('#snapshot_div').hide();
+				Metronic.unblockUI();
+				$('#TempletModal').modal('hide');
+				bootbox.alert(common.tips.error + error);
+				console.error('oops, something went wrong!', error);
+		    });
 		});
 	}
 	

@@ -44,6 +44,7 @@ public class VideoAction extends BaseDatatableAction {
 	private String[] names;
 	private String[] branchids;
 	private String[] folderids;
+	private String[] adflags;
 
 	@Autowired
 	private FolderMapper folderMapper;
@@ -85,6 +86,7 @@ public class VideoAction extends BaseDatatableAction {
 						video.setBranchid(Integer.parseInt(branchids[i]));
 						video.setFolderid(Integer.parseInt(folderids[i]));
 					}
+					video.setAdflag(adflags[i]);
 					video.setName(names[i]);
 					video.setOname(mymediaFileName[i]);
 					video.setFilename(mymediaFileName[i]);
@@ -180,15 +182,19 @@ public class VideoAction extends BaseDatatableAction {
 			if (folderid == null || folderid.equals("")) {
 				folderid = "" + getLoginStaff().getBranch().getTopfolderid();
 			}
+			String adflag = getParameter("adflag");
+			if (adflag == null || adflag.equals("")) {
+				adflag = "0";
+			}
 
 			int count = videoService.selectCount("" + getLoginStaff().getOrgid(), branchid, folderid, type, null,
-					format, search);
+					format, adflag, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
 			List<Video> videoList = videoService.selectList("" + getLoginStaff().getOrgid(), branchid, folderid, type,
-					null, format, search, start, length);
+					null, format, adflag, search, start, length);
 			for (Video video : videoList) {
 				if (video.getWidth().intValue() == 0 || video.getHeight().intValue() == 0) {
 					File f = new File(CommonConfig.CONFIG_PIXDATA_HOME + video.getThumbnail());
@@ -305,6 +311,14 @@ public class VideoAction extends BaseDatatableAction {
 
 	public void setFolderids(String[] folderids) {
 		this.folderids = folderids;
+	}
+
+	public String[] getAdflags() {
+		return adflags;
+	}
+
+	public void setAdflags(String[] adflags) {
+		this.adflags = adflags;
 	}
 
 }

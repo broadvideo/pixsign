@@ -236,7 +236,7 @@ var DevicegroupModule = function () {
 		
 		//待选择终端table初始化
 		$('#DeviceTable').dataTable({
-			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
 							[ 20, 40, 60, 100 ] 
 							],
@@ -276,10 +276,15 @@ var DevicegroupModule = function () {
 				aoData.push({'name':'devicegroupid','value':'0' });
 			} 
 		});
+		$('#DeviceTable_wrapper').addClass('form-inline');
+		$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#DeviceTable_wrapper .dataTables_length select').select2();
+		$('#DeviceTable').css('width', '100%');
 
 		//已加入终端table初始化
 		$('#DevicegpDtlTable').dataTable({
-			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
 							[ 20, 40, 60, 100 ] 
 							],
@@ -319,6 +324,11 @@ var DevicegroupModule = function () {
 				aoData.push({'name':'devicegroupid','value':_devicegroup.devicegroupid });
 			} 
 		});
+		$('#DevicegpDtlTable_wrapper').addClass('form-inline');
+		$('#DevicegpDtlTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#DevicegpDtlTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#DevicegpDtlTable_wrapper .dataTables_length select').select2();
+		$('#DevicegpDtlTable').css('width', '100%');
 
 		$('#DeviceTable').on('click', 'tr', function () {
 			var row = $('#DeviceTable').dataTable().fnGetData(this);

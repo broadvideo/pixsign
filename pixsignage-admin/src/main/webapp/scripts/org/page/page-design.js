@@ -297,7 +297,7 @@ var PageDesignModule = function (mode) {
 					'line-height': Math.ceil(pagezone.lineheight / PageScale) + 'px', 
 					'text-shadow': shadow,  
 					'word-wrap': 'break-word',
-					'overflow': 'auto',
+					//'overflow': 'auto',
 				});
 				$(pagezoneDiv).find('p').css({
 					'word-wrap': 'break-word',

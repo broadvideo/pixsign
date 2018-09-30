@@ -422,7 +422,7 @@ public class Admin2cService {
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata";
 			Folder folder = folderMapper.selectRoot("" + staff.getOrgid(), "" + staff.getBranchid());
 			List<Video> videos = videoMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(),
-					"" + folder.getFolderid(), Video.TYPE_INTERNAL, null, null, null, start, length);
+					"" + folder.getFolderid(), Video.TYPE_INTERNAL, null, null, null, null, start, length);
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
@@ -463,7 +463,7 @@ public class Admin2cService {
 					+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata";
 			Folder folder = folderMapper.selectRoot("" + staff.getOrgid(), "" + staff.getBranchid());
 			List<Image> images = imageMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(),
-					"" + folder.getFolderid(), "0", null, null, start, length);
+					"" + folder.getFolderid(), null, null, start, length);
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

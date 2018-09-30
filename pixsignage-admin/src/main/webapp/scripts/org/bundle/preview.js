@@ -68,13 +68,15 @@ var BundlePreviewModule = function () {
 			});
 			if (zone.type == 1) {
 				//Play Zone
-				var img_element = document.createElement('img');
-				$(inner_div).append(img_element);
 				if (zonedtls.length > 0 && zonedtls[0].video != null) {
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
 					$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].video.thumbnail);
 					$(zone_div).find('img').attr('width', '100%');
 					$(zone_div).find('img').attr('height', '100%');
 				} else if (zonedtls.length > 0 && zonedtls[0].image != null) {
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
 					$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].image.thumbnail);
 					$(zone_div).find('img').attr('width', '100%');
 					$(zone_div).find('img').attr('height', '100%');
@@ -101,6 +103,7 @@ var BundlePreviewModule = function () {
 					'font-size': Math.ceil(zone.size * zone.height / 100 / scale) + 'px', 
 					'line-height': Math.ceil(zone.height / scale) + 'px', 
 					'word-wrap': 'break-word',
+					'overflow': 'hidden',
 				});
 				$(p_element).css({
 					'text-align': 'center', 
@@ -138,7 +141,7 @@ var BundlePreviewModule = function () {
 					'font-size': Math.ceil(zone.size * zone.height / 100 / scale) + 'px', 
 					'line-height': Math.ceil(zone.height / scale) + 'px', 
 				});
-				$(inner_div).find('span').html('深圳 20 ~ 17℃ 多云转小雨 <img src="http://api.map.baidu.com/images/weather/day/duoyun.png" /><img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />');
+				$(inner_div).find('span').html('深圳 20 ~ 17℃ 多云转小雨 <img src="/pixsignage/img/duoyun.png"/><img src="/pixsignage/img/xiaoyu.png"/>');
 				$(inner_div).find('img').each(function() {
 					$(this).css('height', Math.ceil(zone.size * zone.height / 100 / scale) + 'px');
 					$(this).css('display', 'inline');

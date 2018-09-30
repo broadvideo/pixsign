@@ -25,6 +25,7 @@
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
     <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="adflag" property="adflag" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
     <association property="relateimage" column="{imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
@@ -33,13 +34,13 @@
   <sql id="Base_Column_List" >
     videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, relateid, relateurl, tags, createtime, createstaffid
+    thumbnail, relateid, relateurl, tags, adflag, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
     select videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, 0 as relateid, relateurl, tags, createtime, createstaffid
+    thumbnail, 0 as relateid, relateurl, tags, adflag, createtime, createstaffid
     from video
     where videoid = #{videoid}
     and status != '9'
@@ -73,6 +74,9 @@
     <if test="format != null">
       and format=#{format}
     </if>
+    <if test="adflag != null">
+      and adflag = #{adflag}
+    </if>
     <if test="search != null">
       and name like #{search}
     </if>
@@ -98,6 +102,9 @@
     </if>
     <if test="format != null">
       and format=#{format}
+    </if>
+    <if test="adflag != null">
+      and adflag = #{adflag}
     </if>
     <if test="search != null">
       and name like #{search}
@@ -129,8 +136,8 @@
       filename, size, md5, 
       previewflag, status, progress, 
       description, thumbnail, relateid, 
-      relateurl, tags, createtime, 
-      createstaffid
+      relateurl, tags, adflag, 
+      createtime, createstaffid
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{folderid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{oname,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
@@ -138,8 +145,8 @@
       #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
       #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
-      #{relateurl,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{createstaffid,jdbcType=INTEGER}
+      #{relateurl,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, #{adflag,jdbcType=CHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Video" >
@@ -214,6 +221,9 @@
       <if test="tags != null" >
         tags,
       </if>
+      <if test="adflag != null" >
+        adflag,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -287,6 +297,9 @@
       </if>
       <if test="tags != null" >
         #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="adflag != null" >
+        #{adflag,jdbcType=CHAR},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -365,6 +378,9 @@
       <if test="tags != null" >
         tags = #{tags,jdbcType=VARCHAR},
       </if>
+      <if test="adflag != null" >
+        adflag = #{adflag,jdbcType=CHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -398,6 +414,7 @@
       relateid = #{relateid,jdbcType=INTEGER},
       relateurl = #{relateurl,jdbcType=VARCHAR},
       tags = #{tags,jdbcType=VARCHAR},
+      adflag = #{adflag,jdbcType=CHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       createstaffid = #{createstaffid,jdbcType=INTEGER}
     where videoid = #{videoid,jdbcType=INTEGER}
