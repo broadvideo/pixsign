@@ -12,7 +12,8 @@ import org.dom4j.Node;
 
 import com.broadvideo.pixsignage.common.DoorConst;
 import com.broadvideo.pixsignage.common.ServiceException;
-import com.broadvideo.pixsignage.common.WxmpMessageTips;
+import com.broadvideo.pixsignage.common.WxmpMessageTipsFactory;
+import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.vo.TerminalBinding;
 
 public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
@@ -78,7 +79,10 @@ public class WxmpTextMsgTypeHandler extends WxmpMsgTypeHandler {
 
 		} else {
 			logger.error("Receive invliad content({})", content);
-			return buildReplyMsg(toUserName, fromUserName, WxmpMessageTips.DOOR_INVLIAD_INPUT_TIP);
+			Org org = ServiceFactory.getBean(OrgService.class).selectByPrimaryKey(orgid + "");
+
+			return buildReplyMsg(toUserName, fromUserName,
+					WxmpMessageTipsFactory.getWxmpMessageTips(org.getCode()).DOOR_INVLIAD_INPUT_TIP);
 
 		}
 	}

@@ -29,6 +29,7 @@ import com.broadvideo.pixsignage.domain.Person;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.PersonMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
+import com.ibm.icu.util.Calendar;
 
 @Component
 @Path("/persons")
@@ -52,28 +53,32 @@ public class ResPersons extends ResBase {
 		}
 		try {
 			logger.info("getPersonList for terminalid:{},ts:{}", terminalid, ts);
-			Date lastupdatetime=null;
+			Date lastupdatetime = null;
 			if (ts != null && ts > 0) {
-				lastupdatetime=new Date(ts);
+
+				lastupdatetime = new Date(ts);
 			}
-			Device device=deviceService.selectByTerminalid(terminalid);
-			if(device==null){
+			Device device = deviceService.selectByTerminalid(terminalid);
+			if (device == null) {
 				logger.error("Device(terminalid:{})不存在.", terminalid);
 				throw new ServiceException("Device(terminalid:" + terminalid + ")不存在.");
 			}
 			Config config = configMapper.selectByCode("ServerIP");
 			List<Person> personlist = this.personMapper.selectChangePersons(device.getOrgid(), lastupdatetime);
-			long returnts = System.currentTimeMillis();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			calendar.set(Calendar.MILLISECOND, 0);
+			long returnts = calendar.getTimeInMillis();
 			JSONObject returnDataJson = new JSONObject();
 			returnDataJson.put("retcode", ApiRetCodeEnum.SUCCESS);
 			returnDataJson.put("message", "success");
 			returnDataJson.put("ts", returnts);
-			JSONArray updatedArr=new JSONArray();
-			JSONArray deletedArr=new JSONArray();
-			for(Person  person : personlist){
-				if(GlobalFlag.VALID.equals(person.getStatus())){
-					JSONObject updatedJson=new JSONObject();
-					updatedJson.put("person_id",person.getPersonid());
+			JSONArray updatedArr = new JSONArray();
+			JSONArray deletedArr = new JSONArray();
+			for (Person person : personlist) {
+				if (GlobalFlag.VALID.equals(person.getStatus())) {
+					JSONObject updatedJson = new JSONObject();
+					updatedJson.put("person_id", person.getPersonid());
 					updatedJson.put("person_no", person.getPersonno() != null ? person.getPersonno() : "");
 					updatedJson.put("sex", StringUtils.isBlank(person.getSex()) ? "2" : person.getSex());
 					updatedJson.put("name", person.getName());
@@ -98,7 +103,5 @@ public class ResPersons extends ResBase {
 		}
 
 	}
-
-
 
 }
