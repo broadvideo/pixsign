@@ -154,6 +154,9 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
+							<a href="javascript:;" class="icon-btn pix-addzone advert-ctrl" zonetype="0">
+								<i class="fa fa-video-camera"></i><div><spring:message code="pixsign.bundlezone.type.advert"/></div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="1">
 								<i class="fa fa-video-camera"></i><div><spring:message code="pixsign.bundlezone.type.play"/></div>
 							</a>
@@ -934,6 +937,7 @@ var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
 var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
+var AdvertCtrl = <%=(session_org != null && session_org.getAdvertflag().equals("1"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

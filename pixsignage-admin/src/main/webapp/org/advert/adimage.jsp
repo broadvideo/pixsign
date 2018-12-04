@@ -19,7 +19,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.adimage"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="UploadForm" class="form-horizontal" action="image!upload.action" method="POST" enctype="multipart/form-data">
@@ -29,7 +29,7 @@
 								<!-- The fileinput-button span is used to style the file input field as button -->
 								<span class="btn green fileinput-button">
 								<i class="fa fa-plus"></i>
-								<span><spring:message code="pixsign.image"/></span>
+								<span><spring:message code="pixsign.adimage"/></span>
 								<input type="file" name="mymedia" multiple>
 								</span>
 								<button type="submit" class="btn blue start">
@@ -72,7 +72,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.image"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.adimage"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="ImageEditForm" class="form-horizontal" method="POST">
@@ -146,15 +146,15 @@
 			
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="menu.image"/></h3>
+			<h3 class="page-title"><spring:message code="menu.adimage"/></h3>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<li><i class="fa fa-home"></i><a href="../../<%=mainpage%>">Home</a><i
 						class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.resource"/></a><i class="fa fa-angle-right"></i>
+					<li><a href="#"><spring:message code="menu.admanage"/></a><i class="fa fa-angle-right"></i>
 					</li>
-					<li><a href="#"><spring:message code="menu.image"/></a>
+					<li><a href="#"><spring:message code="menu.adimage"/></a>
 					</li>
 				</ul>
 			</div>
@@ -163,7 +163,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.image"/></div>
+							<div class="caption"><i class="fa fa-video-camera"></i><spring:message code="pixsign.adimage"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="ImageModule.refresh();" class="reload"></a>
 							</div>

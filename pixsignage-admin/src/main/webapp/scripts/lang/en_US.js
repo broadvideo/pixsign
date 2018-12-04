@@ -112,6 +112,7 @@ var common = {
 
 		region_mainflag_0: '',
 		region_mainflag_1: 'Main ',
+		region_type_0: 'Advert Zone',
 		region_type_1: 'Play Zone',
 		region_type_2: 'Widget Zone',
 		region_type_3: 'Text Zone',
@@ -323,6 +324,7 @@ var common = {
 		username_required: 'Username required',
 		password_required: 'Password required',
 		code_required: 'ORG code required',
+		browser_check: 'Please use Chrome/Firefox/Safari browser',
 		input_check: 'Please check the input items',
 		login_failed: 'Input error, login failed',
 		register_failed: 'Input error, register failed',

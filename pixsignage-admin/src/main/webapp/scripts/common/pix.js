@@ -204,6 +204,7 @@ var PixData = function() {
 		});
 		
 		startPingTimer();
+		refreshPrivilege();
 	};
 	
 	var startPingTimer = function () {
@@ -226,6 +227,20 @@ var PixData = function() {
 			}
 		});
 	};
+	
+	var refreshPrivilege = function () {
+		for (var i=0; i<AllPrivilegeList.length; i++) {
+			var d = MyPrivilegeList.filter(function (el) {
+				return el == AllPrivilegeList[i];
+			});
+			if (d.length > 0 || MyPrivilegeList.indexOf(0) >= 0) {
+				$('[privilegeid=' + AllPrivilegeList[i] + ']').css('display', 'block');
+			} else {
+				$('[privilegeid=' + AllPrivilegeList[i] + ']').css('display', 'none');
+			}
+		}
+	};
+
 
 	return {
 		init: init, 
@@ -233,6 +248,7 @@ var PixData = function() {
 		transferIntToComma: transferIntToComma,
 		transferIntToTime: transferIntToTime,
 		transferIntToByte: transferIntToByte,
+		refreshPrivilege: refreshPrivilege,
 	}
 	
 }();

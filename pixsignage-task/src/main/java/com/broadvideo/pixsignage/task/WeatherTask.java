@@ -29,6 +29,11 @@ public class WeatherTask {
 			for (Weather weather : weatherList) {
 				weatherService.refreshWeather(weather);
 			}
+
+			weatherList = weatherService.selectList(Weather.Type_Yahoo);
+			for (Weather weather : weatherList) {
+				weatherService.refreshWeather(weather);
+			}
 		} catch (Exception e) {
 			logger.error("WeatherTask Quartz Task error: {}", e.getMessage());
 		}

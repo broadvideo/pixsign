@@ -207,6 +207,9 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setAnimationinit(fromtemplatezone.getAnimationinit());
 				templatezone.setAnimationinitdelay(fromtemplatezone.getAnimationinitdelay());
 				templatezone.setAnimationclick(fromtemplatezone.getAnimationclick());
+				templatezone.setVolume(fromtemplatezone.getVolume());
+				templatezone.setSpeed(fromtemplatezone.getSpeed());
+				templatezone.setIntervaltime(fromtemplatezone.getIntervaltime());
 				templatezone.setContent(fromtemplatezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Templatezonedtl fromtemplatezonedtl : fromtemplatezone.getTemplatezonedtls()) {
@@ -414,6 +417,9 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setAnimationinit(pagezone.getAnimationinit());
 				templatezone.setAnimationinitdelay(pagezone.getAnimationinitdelay());
 				templatezone.setAnimationclick(pagezone.getAnimationclick());
+				templatezone.setVolume(pagezone.getVolume());
+				templatezone.setSpeed(pagezone.getSpeed());
+				templatezone.setIntervaltime(pagezone.getIntervaltime());
 				templatezone.setContent(pagezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {

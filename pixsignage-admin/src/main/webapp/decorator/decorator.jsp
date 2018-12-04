@@ -118,6 +118,19 @@ function hasPrivilege(privilegeid) {
 	}
 	return false;
 }
+
+var MyPrivilegeList = [];
+var AllPrivilegeList = [];
+<%for (int i=0; i<myPrivilegeList.size(); i++) {%>
+	<%if (myPrivilegeList.get(i).getType().equals("2")) {%>
+		MyPrivilegeList.push(<%=myPrivilegeList.get(i).getPrivilegeid()%>);
+	<%}%>
+<%}%>
+<%for (int i=0; i<pList.size(); i++) {%>
+	<%if (pList.get(i).getType().equals("2")) {%>
+		AllPrivilegeList.push(<%=pList.get(i).getPrivilegeid()%>);
+	<%}%>
+<%}%>
 </script>
 
 </head>

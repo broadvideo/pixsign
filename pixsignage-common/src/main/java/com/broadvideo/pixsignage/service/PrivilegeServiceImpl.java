@@ -60,11 +60,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		String diyflag = org.getDiyflag();
 		String flowrateflag = org.getFlowrateflag();
 		String schoolflag = org.getSchoolflag();
-		String meetingflag = org.getMeetingflag();
+		String advertflag = org.getAdvertflag();
 		String vipflag = org.getVipflag();
 		String estateflag = org.getEstateflag();
-		String attendanceflag = org.getAttendanceflag();
-		String planflag = org.getPlanflag();
+		String bundleplanflag = org.getBundleplanflag();
+		String pageplanflag = org.getPageplanflag();
 		String massageflag = org.getMassageflag();
 		while (it.hasNext()) {
 			Privilege p = it.next();
@@ -95,8 +95,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30306
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
 					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30309
-					|| massageflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 30301
-					|| massageflag.equals(Org.FUNCTION_ENABLED) && p.getPrivilegeid().intValue() == 30305
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 304
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 304
 					|| touchflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30402
@@ -106,19 +104,16 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| planflag.equals("1") && p.getPrivilegeid().intValue() == 30501
+					|| bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30501
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
-					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30502
+					|| bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30502
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
-					|| planflag.equals("0") && p.getPrivilegeid().intValue() == 30503
-					// || pageflag.equals(Org.FUNCTION_DISABLED) &&
-					// p.getPrivilegeid().intValue() == 30504
-					// || planflag.equals("1") && p.getPrivilegeid().intValue()
-					// == 30504
+					|| bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30503
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504
+					|| pageplanflag.equals("1") && p.getPrivilegeid().intValue() == 30504
 					|| p.getPrivilegeid().intValue() == 30504
 					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30505
-					// || planflag.equals("0") && p.getPrivilegeid().intValue()
-					// == 30505
+					|| pageplanflag.equals("0") && p.getPrivilegeid().intValue() == 30505
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| !flowrateflag.equals("1") && p.getPrivilegeid().intValue() == 30821
@@ -126,12 +121,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| !flowrateflag.equals("2") && p.getPrivilegeid().intValue() == 30823
 					|| schoolflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 307
 					|| schoolflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 307
-					|| meetingflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 310
-					|| meetingflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 310
+					|| advertflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 320
+					|| advertflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 320
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 311
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 311
-					|| attendanceflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 312
-					|| attendanceflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 312
+					|| p.getPrivilegeid().intValue() == 312 || p.getParentid().intValue() == 312
 					|| !org.getCode().equals("jkcd") && !org.getCode().equals("zls")
 							&& p.getPrivilegeid().intValue() == 313) {
 				logger.info("remove privilege {}", p.getPrivilegeid());

@@ -103,6 +103,12 @@ public class Pagezone {
 
 	private String sourcetype;
 
+	private Integer volume;
+
+	private Integer speed;
+
+	private Integer intervaltime;
+
 	private String content;
 
 	private Diy diy;
@@ -477,6 +483,30 @@ public class Pagezone {
 
 	public void setSourcetype(String sourcetype) {
 		this.sourcetype = sourcetype;
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
+	}
+
+	public Integer getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(Integer speed) {
+		this.speed = speed;
+	}
+
+	public Integer getIntervaltime() {
+		return intervaltime;
+	}
+
+	public void setIntervaltime(Integer intervaltime) {
+		this.intervaltime = intervaltime;
 	}
 
 	public String getContent() {

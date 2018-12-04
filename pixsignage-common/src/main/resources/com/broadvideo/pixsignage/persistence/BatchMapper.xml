@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.BatchMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Batch" >
+    <id column="batchid" property="batchid" jdbcType="INTEGER" />
+    <result column="modelid" property="modelid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    batchid, modelid, name, amount, createtime
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from batch
+    where batchid = #{batchid}
+  </select>
+
+  <select id="selectCount" resultType="Integer">
+    select count(1) from batch
+    where 1 = 1 
+    <if test="search != null">
+      and name like #{search}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from batch
+    where 1 = 1 
+    <if test="search != null">
+      and name like #{search}
+    </if>
+    order by batchid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Batch" >
+    <selectKey resultType="java.lang.Integer" keyProperty="batchid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into batch (modelid, name, amount, 
+      createtime)
+    values (#{modelid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Batch" >
+    <selectKey resultType="java.lang.Integer" keyProperty="batchid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into batch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modelid != null" >
+        modelid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modelid != null" >
+        #{modelid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Batch" >
+    update batch
+    <set >
+      <if test="modelid != null" >
+        modelid = #{modelid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where batchid = #{batchid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Batch" >
+    update batch
+    set modelid = #{modelid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where batchid = #{batchid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -378,6 +378,38 @@ public class PixsignageService3 {
 	}
 
 	@POST
+	@Path("get_advert_plan")
+	public String getadvertplan(String request) {
+		try {
+			logger.info("Pixsignage3 Service get_advert_plan: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1007, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1008, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1009, "无效终端号" + terminalid);
+			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1010, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson = deviceService.generateAdplanJson(device);
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Pixsignage3 Service get_advert_plan response({}): {}", terminalid, responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage3 Service get_advert_plan exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
 	@Path("refresh")
 	public String refresh(String request) {
 		try {

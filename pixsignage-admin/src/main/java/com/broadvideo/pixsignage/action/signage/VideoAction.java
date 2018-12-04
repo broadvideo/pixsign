@@ -2,7 +2,6 @@ package com.broadvideo.pixsignage.action.signage;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
@@ -113,7 +111,7 @@ public class VideoAction extends BaseDatatableAction {
 					video.setFilename(newFileName);
 					video.setFormat(format);
 					try {
-						// Generate preview gif
+						// Generate thumbnail
 						FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/video/snapshot"));
 						String command = CommonConfig.CONFIG_FFMPEG_CMD + " -i " + fileToCreate
 								+ " -y -f image2 -ss 5 -vframes 1 " + CommonConfig.CONFIG_PIXDATA_HOME
@@ -142,10 +140,6 @@ public class VideoAction extends BaseDatatableAction {
 						logger.info("Video parse error, file={}", mymediaFileName[i], ex);
 					}
 
-					video.setSize(FileUtils.sizeOf(fileToCreate));
-					FileInputStream fis = new FileInputStream(fileToCreate);
-					video.setMd5(DigestUtils.md5Hex(fis));
-					fis.close();
 					video.setStatus("1");
 					video.setProgress(100);
 					videoService.updateVideo(video);

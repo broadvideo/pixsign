@@ -62,4 +62,7 @@ public interface DeviceService {
 	public JSONObject generateBundleJson(Device device) throws Exception;
 
 	public JSONObject generatePageJson(Device device) throws Exception;
+
+	public JSONObject generateAdplanJson(Device device) throws Exception;
+
 }

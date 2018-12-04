@@ -98,7 +98,7 @@
 										<input type="checkbox" name="vsp.diyflag" value="0"><spring:message code="pixsign.org.diyflag"/>
 									</label>
 									<label class="checkbox-inline">
-										<input type="checkbox" name="vsp.meetingflag" value="0"><spring:message code="pixsign.org.meetingflag"/>
+										<input type="checkbox" name="vsp.advertflag" value="0"><spring:message code="pixsign.org.advertflag"/>
 									</label>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.vipflag" value="0">VIP识别
@@ -108,9 +108,6 @@
 									</label>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="vsp.liftflag" value="0">电梯
-									</label>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="vsp.attendanceflag" value="0">考勤
 									</label>
 								</div>
 							</div>

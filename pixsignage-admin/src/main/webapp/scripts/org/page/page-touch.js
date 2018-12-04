@@ -650,7 +650,6 @@ var PageModule = function () {
 							$('.attendance-ctrl').css('display', '');
 						}
 						$('.diy-ctrl').css('display', DiyCtrl? '':'none');
-						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						if (_design.Object.limitflag == 1) {
 							$('.limit-1').css('display', 'none');

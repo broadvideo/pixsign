@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
+import com.broadvideo.pixsignage.domain.Adplan;
+import com.broadvideo.pixsignage.domain.Adplandtl;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Bundlezone;
 import com.broadvideo.pixsignage.domain.Bundlezonedtl;
@@ -25,6 +27,8 @@ import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.persistence.AdplanMapper;
+import com.broadvideo.pixsignage.persistence.AdplandtlMapper;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
@@ -54,6 +58,10 @@ public class DeviceServiceImpl implements DeviceService {
 	private BundleMapper bundleMapper;
 	@Autowired
 	private PageMapper pageMapper;
+	@Autowired
+	private AdplanMapper adplanMapper;
+	@Autowired
+	private AdplandtlMapper adplandtlMapper;
 
 	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
 			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search) {
@@ -704,4 +712,152 @@ public class DeviceServiceImpl implements DeviceService {
 		resultJson.put("videos", videoJsonArray);
 		return resultJson;
 	}
+
+	public JSONObject generateAdplanJson(Device device) throws Exception {
+		JSONObject resultJson = new JSONObject();
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
+
+		JSONArray adplansJsonArray = new JSONArray();
+		JSONArray videoJsonArray = new JSONArray();
+		JSONArray imageJsonArray = new JSONArray();
+		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+		List<Video> videoList = new ArrayList<Video>();
+		List<Image> imageList = new ArrayList<Image>();
+
+		List<Adplan> adplans = adplanMapper.selectByDevicegroup("" + device.getDevicegroupid());
+		for (Adplan adplan : adplans) {
+			List<Adplandtl> adplandtls = adplandtlMapper.selectActiveList("" + adplan.getAdplanid());
+			JSONObject adplanJson = new JSONObject();
+			adplanJson.put("advert_place", adplan.getAdplace());
+			JSONArray adplandtlsJsonArray = new JSONArray();
+			if (adplandtls.size() == 0) {
+				adplanJson.put("advert_plandtls", adplandtlsJsonArray);
+				adplansJsonArray.add(adplanJson);
+				continue;
+			}
+			int[] counterArray = new int[adplandtls.size()];
+			for (int i = 0; i < adplandtls.size(); i++) {
+				Adplandtl adplandtl = adplandtls.get(i);
+				counterArray[i] = adplandtl.getTimes();
+
+				if (adplandtl.getVideo() != null) {
+					if (videoHash.get(adplandtl.getAdid()) == null) {
+						Video video = adplandtl.getVideo();
+						JSONObject videoJson = new JSONObject();
+						videoJson.put("id", video.getVideoid());
+						videoJson.put("name", video.getName());
+						videoJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+						videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+						videoJson.put("file", video.getFilename());
+						videoJson.put("size", video.getSize());
+						videoJson.put("checksum", video.getMd5());
+						videoJson.put("thumbnail",
+								downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+						if (video.getRelateurl() != null && video.getRelateurl().length() > 0) {
+							videoJson.put("relate_url", video.getRelateurl());
+						} else {
+							videoJson.put("relate_type", "image");
+							videoJson.put("relate_id", video.getRelateid());
+						}
+						videoHash.put(video.getVideoid(), videoJson);
+						videoJsonArray.add(videoJson);
+						videoList.add(video);
+					}
+				} else if (imageHash.get(adplandtl.getAdid()) == null) {
+					Image image = adplandtl.getImage();
+					JSONObject imageJson = new JSONObject();
+					imageJson.put("id", image.getImageid());
+					imageJson.put("name", image.getName());
+					imageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
+					imageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
+					imageJson.put("file", image.getFilename());
+					imageJson.put("size", image.getSize());
+					imageJson.put("checksum", image.getMd5());
+					imageJson.put("thumbnail", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
+					if (image.getRelatetype().equals("2")) {
+						imageJson.put("relate_type", "image");
+						imageJson.put("relate_id", image.getRelateid());
+					} else if (image.getRelatetype().equals("3")) {
+						imageJson.put("relate_type", "link");
+						imageJson.put("relate_url", image.getRelateurl());
+					} else if (image.getRelatetype().equals("4")) {
+						imageJson.put("relate_type", "apk");
+						imageJson.put("relate_url", image.getRelateurl());
+					}
+					imageHash.put(image.getImageid(), imageJson);
+					imageJsonArray.add(imageJson);
+					imageList.add(image);
+				}
+			}
+
+			while (counterArray[0] > 0) {
+				for (int i = 0; i < adplandtls.size(); i++) {
+					if (counterArray[i] <= 0) {
+						break;
+					}
+					Adplandtl adplandtl = adplandtls.get(i);
+					JSONObject adplandtlJson = new JSONObject();
+					adplandtlJson.put("id", adplandtl.getAdid());
+					if (adplandtl.getAdtype().equals("1")) {
+						adplandtlJson.put("type", "video");
+					} else {
+						adplandtlJson.put("type", "image");
+					}
+					adplandtlsJsonArray.add(adplandtlJson);
+					counterArray[i]--;
+				}
+			}
+			adplanJson.put("advert_plandtls", adplandtlsJsonArray);
+			adplansJsonArray.add(adplanJson);
+		}
+
+		for (Video video : videoList) {
+			if (video.getRelateimage() != null && imageHash.get(video.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", video.getRelateid());
+				imageJson.put("name", video.getRelateimage().getName());
+				imageJson.put("oname", video.getRelateimage().getOname());
+				imageJson.put("url", downloadurl + "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + video.getRelateimage().getFilepath());
+				imageJson.put("file", video.getRelateimage().getFilename());
+				imageJson.put("size", video.getRelateimage().getSize());
+				imageJson.put("checksum", video.getRelateimage().getMd5());
+				imageJson.put("thumbnail", downloadurl + "/pixsigdata" + video.getRelateimage().getThumbnail());
+				imageJson.put("relate_url", "");
+				imageHash.put(video.getRelateid(), imageJson);
+				imageJsonArray.add(imageJson);
+			}
+		}
+		for (Image image : imageList) {
+			if (image.getRelateimage() != null && imageHash.get(image.getRelateid()) == null) {
+				JSONObject imageJson = new JSONObject();
+				imageJson.put("id", image.getRelateid());
+				imageJson.put("name", image.getRelateimage().getName());
+				imageJson.put("oname", image.getRelateimage().getOname());
+				imageJson.put("url", downloadurl + "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("path", "/pixsigdata" + image.getRelateimage().getFilepath());
+				imageJson.put("file", image.getRelateimage().getFilename());
+				imageJson.put("size", image.getRelateimage().getSize());
+				imageJson.put("checksum", image.getRelateimage().getMd5());
+				imageJson.put("thumbnail", downloadurl + "/pixsigdata" + image.getRelateimage().getThumbnail());
+				imageJson.put("relate_url", "");
+				imageHash.put(image.getRelateid(), imageJson);
+				imageJsonArray.add(imageJson);
+			}
+		}
+
+		resultJson.put("advert_plans", adplansJsonArray);
+		resultJson.put("videos", videoJsonArray);
+		resultJson.put("images", imageJsonArray);
+		return resultJson;
+	}
+
 }

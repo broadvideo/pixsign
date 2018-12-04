@@ -149,6 +149,12 @@ public class Device {
 
 	private String screenstatus;
 
+	private Integer batchid;
+
+	private Integer modelid;
+
+	private String qrcode;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -729,6 +735,30 @@ public class Device {
 
 	public void setScreenstatus(String screenstatus) {
 		this.screenstatus = screenstatus;
+	}
+
+	public Integer getBatchid() {
+		return batchid;
+	}
+
+	public void setBatchid(Integer batchid) {
+		this.batchid = batchid;
+	}
+
+	public Integer getModelid() {
+		return modelid;
+	}
+
+	public void setModelid(Integer modelid) {
+		this.modelid = modelid;
+	}
+
+	public String getQrcode() {
+		return qrcode;
+	}
+
+	public void setQrcode(String qrcode) {
+		this.qrcode = qrcode;
 	}
 
 	public Branch getBranch() {

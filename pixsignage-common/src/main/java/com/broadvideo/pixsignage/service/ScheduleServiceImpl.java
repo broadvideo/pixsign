@@ -116,7 +116,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
 		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 
-		if (org.getPlanflag().equals("1") && device.getDefaultbundle() != null) {
+		if (org.getBundleplanflag().equals("1") && device.getDefaultbundle() != null) {
 			Schedule schedule = new Schedule();
 			schedule.setScheduleid(0);
 			schedule.setScheduletype(Schedule.ScheduleType_Solo);
@@ -133,7 +133,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduledtls.add(scheduledtl);
 			schedule.setScheduledtls(scheduledtls);
 			scheduleList.add(schedule);
-		} else if (org.getPlanflag().equals("0")) {
+		} else if (org.getBundleplanflag().equals("0")) {
 			if (device.getDevicegroupid().intValue() == 0) {
 				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
 						Schedule.PlayMode_Daily);
@@ -213,7 +213,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Device device = deviceMapper.selectByPrimaryKey(deviceid);
 		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 
-		if (org.getPlanflag().equals("1") && device.getDefaultbundle() != null) {
+		if (org.getBundleplanflag().equals("1") && device.getDefaultbundle() != null) {
 			Schedule schedule = new Schedule();
 			schedule.setScheduleid(0);
 			schedule.setScheduletype(Schedule.ScheduleType_Solo);
@@ -230,7 +230,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduledtls.add(scheduledtl);
 			schedule.setScheduledtls(scheduledtls);
 			scheduleList.add(schedule);
-		} else if (org.getPlanflag().equals("0")) {
+		} else if (org.getBundleplanflag().equals("0")) {
 			if (device.getDevicegroupid().intValue() == 0) {
 				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
 						Schedule.PlayMode_Daily);

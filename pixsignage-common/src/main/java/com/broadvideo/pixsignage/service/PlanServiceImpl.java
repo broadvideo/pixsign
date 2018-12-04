@@ -220,7 +220,7 @@ public class PlanServiceImpl implements PlanService {
 	@Transactional
 	public void syncPlanByBundle(String orgid, String bundleid) throws Exception {
 		Org org = orgMapper.selectByPrimaryKey(orgid);
-		if (org.getPlanflag().equals("1")) {
+		if (org.getBundleplanflag().equals("1")) {
 			List<Device> deviceList = deviceMapper.selectByDefaultbundle(bundleid);
 			for (Device device : deviceList) {
 				syncPlan("1", "" + device.getDeviceid());
@@ -319,9 +319,7 @@ public class PlanServiceImpl implements PlanService {
 
 		// generate final json
 		List<Plan> planList = new ArrayList<Plan>();
-		// if (org.getPlanflag().equals("1") && device.getDefaultpage() != null)
-		// {
-		if (device.getDefaultpage() != null) {
+		if (org.getPageplanflag().equals("1") && device.getDefaultpage() != null) {
 			Plan plan = new Plan();
 			plan.setPlanid(0);
 			plan.setPlantype(Plan.PlanType_Page);
@@ -341,14 +339,14 @@ public class PlanServiceImpl implements PlanService {
 			plandtls.add(plandtl);
 			plan.setPlandtls(plandtls);
 			planList.add(plan);
-			/*
-			 * } else if (org.getPlanflag().equals("0")) { if
-			 * (device.getDevicegroupid().intValue() == 0) { planList =
-			 * planMapper.selectListByBind(Plan.PlanType_Page,
-			 * Planbind.BindType_Device, deviceid); } else { planList =
-			 * planMapper.selectListByBind(Plan.PlanType_Page,
-			 * Planbind.BindType_Devicegroup, "" + device.getDevicegroupid()); }
-			 */
+
+		} else if (org.getPageplanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Device, deviceid);
+			} else {
+				planList = planMapper.selectListByBind(Plan.PlanType_Page, Planbind.BindType_Devicegroup,
+						"" + device.getDevicegroupid());
+			}
 		}
 
 		for (Plan plan : planList) {

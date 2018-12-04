@@ -233,6 +233,7 @@ var TempletModule = function () {
 						$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
 						$('.massage-ctrl').css('display', MassageCtrl? '':'none');
+						$('.advert-ctrl').css('display', AdvertCtrl? '':'none');
 						$('#TempletModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);

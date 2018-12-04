@@ -573,12 +573,12 @@ public class Org {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
-	public String getMeetingflag() {
+	public String getAdvertflag() {
 		int i = 16;
 		return feature.substring(i - 1, i);
 	}
 
-	public void setMeetingflag(String flag) {
+	public void setAdvertflag(String flag) {
 		int i = 16;
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
@@ -613,22 +613,22 @@ public class Org {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
-	public String getAttendanceflag() {
+	public String getBundleplanflag() {
 		int i = 20;
 		return feature.substring(i - 1, i);
 	}
 
-	public void setAttendanceflag(String flag) {
+	public void setBundleplanflag(String flag) {
 		int i = 20;
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
-	public String getPlanflag() {
+	public String getPageplanflag() {
 		int i = 21;
 		return feature.substring(i - 1, i);
 	}
 
-	public void setPlanflag(String flag) {
+	public void setPageplanflag(String flag) {
 		int i = 21;
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}

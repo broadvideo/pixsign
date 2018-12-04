@@ -397,10 +397,10 @@ var OrgModule = function () {
 			+ $('input[name="org.videoinflag"]').val() + $('input[name="org.widgetflag"]').val()
 			+ $('input[name="org.rssflag"]').val() + $('input[name="org.diyflag"]').val()
 			+ $('input[name="org.flowrateflag"]:checked').val() + $('input[name="org.tagflag"]').val()
-			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.meetingflag"]').val()
+			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.advertflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
-			+ $('input[name="org.liftflag"]').val() + $('input[name="org.attendanceflag"]').val()
-			+ $('input[name="org.planflag"]').val() + $('input[name="org.massageflag"]').val()
+			+ $('input[name="org.liftflag"]').val() + $('input[name="org.bundleplanflag"]').val()
+			+ $('input[name="org.pageplanflag"]').val() + $('input[name="org.massageflag"]').val()
 			+ '000000000000000000';
 			formData.append('org.feature', feature);
 			
@@ -466,11 +466,10 @@ var OrgModule = function () {
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
 			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
-			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
+			$('.advert-ctrl').css('display', AdvertCtrl?'':'none');
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
-			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
 			
 			currentApps = {};
@@ -524,11 +523,10 @@ var OrgModule = function () {
 			$('.flowrate-ctrl').css('display', FlowrateCtrl?'':'none');
 			$('.tag-ctrl').css('display', TagCtrl?'':'none');
 			$('.school-ctrl').css('display', SchoolCtrl?'':'none');
-			$('.meeting-ctrl').css('display', MeetingCtrl?'':'none');
+			$('.advert-ctrl').css('display', AdvertCtrl?'':'none');
 			$('.vip-ctrl').css('display', VipCtrl?'':'none');
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
-			$('.attendance-ctrl').css('display', AttendanceCtrl?'':'none');
 			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
 			
 			currentApps = {};

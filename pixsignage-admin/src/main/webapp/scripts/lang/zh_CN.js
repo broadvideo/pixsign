@@ -112,6 +112,7 @@ var common = {
 		
 		region_mainflag_0: '',
 		region_mainflag_1: '主',
+		region_type_0: '广告位',
 		region_type_1: '播放',
 		region_type_2: 'Widget',
 		region_type_3: '文本',
@@ -323,6 +324,7 @@ var common = {
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',
 		code_required: '必须输入企业编码',
+		browser_check: '请使用Chrome/Firefox/Safari浏览器',
 		input_check: '请检查输入项',
 		login_failed: '信息输入有误，登陆失败',
 		register_failed: '信息输入有误，注册失败',

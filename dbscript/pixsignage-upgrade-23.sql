@@ -14,34 +14,97 @@ select last_insert_id() into @dbversionid;
 
 create table adplan( 
    adplanid int not null auto_increment,
+   orgid int not null,
    adplace varchar(32) not null,
-   bindtype char(1) not null,
-   bindid int not null,
-   price int default 0,
+   devicegroupid int not null,
+   unitprice int default 0,
    primary key (adplanid)
  )engine = innodb
 default character set utf8;
-alter table adplan add unique key adplan_unique_index1(adplace, bindtype, bindid);
+alter table adplan add unique key adplan_unique_index1(adplace, devicegroupid);
 
 create table adplandtl( 
    adplandtlid int not null auto_increment,
+   orgid int not null,
    adplanid int not null,
    adplace varchar(32) not null,
-   bindtype char(1) not null,
-   bindid int not null,
-   objtype char(1) not null,
-   objid int not null,
+   devicegroupid int not null,
+   adtype char(1) not null,
+   adid int not null,
    duration int not null,
    times int default 1,
+   months int default 1,
    starttime datetime,
    endtime datetime,
+   unitprice int default 0,
+   amount int default 0,
+   status char(1) default '0',
    primary key (adplandtlid)
  )engine = innodb
 default character set utf8;
- 
+alter table adplandtl add foreign key adplandtl_fk1(adplanid) references adplan(adplanid) on delete cascade on update cascade;
+
+create table area( 
+   areaid int not null auto_increment,
+   orgid int not null,
+   name varchar(64) not null,
+   points varchar(2048) default '[]',
+   primary key (areaid)
+ )engine = innodb
+default character set utf8;
+
+create table advertarea( 
+   advertareaid int not null auto_increment,
+   adtype char(1) not null,
+   adid int not null,
+   areaid int not null,
+   primary key (advertareaid)
+ )engine = innodb
+default character set utf8;
+alter table advertarea add foreign key advertarea_fk1(areaid) references area(areaid) on delete cascade on update cascade;
+alter table advertarea add unique key advertarea_unique_index1(adtype, adid, areaid);
+
 alter table image add relatetype char(1) default '2';
 alter table image add adflag char(1) default '0';
+alter table video add duration int default 0;
 alter table video add adflag char(1) default '0';
+
+
+create table model( 
+   modelid int not null auto_increment,
+   name varchar(32) not null,
+   model varchar(8) not null,
+   prefix varchar(8) not null,
+   programflag char(1) default 0,
+   touchflag char(1) default 0,
+   planflag char(1) default 0,
+   currentdeviceidx int default 0,
+   primary key (modelid)
+ )engine = innodb
+default character set utf8;
+
+create table batch( 
+   batchid int not null auto_increment,
+   modelid int not null,
+   name varchar(16) not null,
+   amount int default 0,
+   createtime timestamp not null default current_timestamp,
+   primary key (batchid)
+ )engine = innodb
+default character set utf8;
+
+alter table device add batchid int default 0;
+alter table device add modelid int default 0;
+alter table device add qrcode varchar(256) default '';
+
+alter table devicegroup add externalid varchar(8) default '';
+
+alter table pagezone add volume int default 50;
+alter table pagezone add speed int default 5;
+alter table pagezone add intervaltime int default 10;
+alter table templatezone add volume int default 50;
+alter table templatezone add speed int default 5;
+alter table templatezone add intervaltime int default 10;
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
@@ -52,6 +115,8 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10903,0,109,'menu.crash','crashreport.jsp','',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(201,1,0,'menu.sdomain','sdomain.jsp','fa-desktop',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(202,1,0,'menu.org','org.jsp','fa-cloud',1,2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(203,1,0,'型号管理','model.jsp','fa-cloud',1,3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(204,1,0,'批次管理','batch.jsp','fa-cloud',1,4);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(300,2,0,'menu.wizard','bundle/wizard.jsp','fa-hand-o-up',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(301,2,0,'menu.resource','','fa-qrcode',1,2);
@@ -73,7 +138,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30204,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,4);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30205,2,302,'menu.appfile','device/appfile.jsp','',1,5);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30206,2,302,'menu.deviceversion','device/deviceversion.jsp','',1,6);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30207,2,302,'menu.catalog','device/catalog.jsp','',1,7);
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30207,2,302,'menu.catalog','device/catalog.jsp','',1,7);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(303,2,0,'menu.bundlemanage','','fa-paw',1,4);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30301,2,303,'menu.bundle','bundle/bundle.jsp','',1,1);
@@ -129,13 +194,6 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30731,2,307,'menu.batchimport','classcardimport.jsp','','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30741,2,307,'menu.examinationroom','examinationroom.jsp','','1',41);
 
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(310,2,0,'menu.mrbm','','fa-cogs', '1',0);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31001,2,310,'menu.location','meeting/location.jsp','','1',1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31003,2,310,'menu.equipment','meeting/equipment.jsp','','1',2);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31002,2,310,'menu.meetingroom','meeting/meetingroom.jsp','','1',3);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31004,2,310,'menu.meeting','meeting/meeting.jsp','','1',4);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31005,2,310,'menu.meetingaudit','meeting/meetingaudit.jsp','','1',5);
-
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(311,2,0,'menu.vip','','fa-group','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31101,2,311,'menu.viproom','room/room.jsp','','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31102,2,311,'menu.viplist','person/person.jsp','','1',1);
@@ -151,9 +209,10 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(313,2,0,'menu.smartboxmanage','','fa-group','1',0);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(31301,2,313,'menu.smartbox','smartbox/smartbox.jsp','','1',1);
 
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(320,2,0,'menu.admanage','','fa-group','1',0);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(320,2,0,'menu.admanage','','fa-group','1',9);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(32001,2,320,'menu.advideo','advert/advideo.jsp','','1',1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(32002,2,320,'menu.adimage','advert/adimage.jsp','','1',2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(32003,2,320,'menu.adplan','advert/adplan.jsp','','1',3);
 
 ############################################################
 ## post script  ############################################

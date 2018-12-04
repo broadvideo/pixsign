@@ -597,6 +597,9 @@ public class BundleServiceImpl implements BundleService {
 						zoneJson.put("touch_apk", "");
 					}
 				}
+				if (bundlezone.getType().equals(Bundlezone.Type_ADVERT)) {
+					zoneJson.put("advert_place", bundlezone.getContent());
+				}
 				zoneJson.put("content", bundlezone.getContent());
 
 				JSONArray zonedtlJsonArray = new JSONArray();

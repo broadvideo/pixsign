@@ -11,6 +11,7 @@ var BundleDesignModule = function (mode) {
 	var BundleScale = 1;
 
 	var init = function () {
+		ZoneLimits['0'] = 3;
 		ZoneLimits['1'] = 10;
 		ZoneLimits['2'] = 10;
 		ZoneLimits['3'] = 100;
@@ -70,7 +71,11 @@ var BundleDesignModule = function (mode) {
 		$(bundlezone_div).append(inner_div);
 		$('#BundleDiv').append(bundlezone_div);	
 
-		if (bundlezone.type == 1) {
+		if (bundlezone.type == 0) {
+			//Advert Zone
+			var p_element = document.createElement('p');
+			$(inner_div).append(p_element);
+		} else if (bundlezone.type == 1) {
 			//Play Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
@@ -191,7 +196,17 @@ var BundleDesignModule = function (mode) {
 		} else {
 			$(bundlezoneDiv).find('#background').css({'background-image': 'none'});
 		}
-		if (bundlezone.type == 1) {
+		if (bundlezone.type == 0) {
+			//Advert Zone
+			$(bundlezoneDiv).find('p').html(bundlezone.content);
+			$(bundlezoneDiv).find('#rotatable').css({
+				'box-sizing': 'border-box',
+				'color': '#FFFFFF', 
+				'font-size': Math.ceil(50 * bundlezone.height / 100 / BundleScale) + 'px', 
+				'line-height': Math.ceil(bundlezone.height / BundleScale) + 'px', 
+				'word-wrap': 'break-word',
+			});
+		} else if (bundlezone.type == 1) {
 			//Play Zone
 			$(bundlezoneDiv).find('img').css({
 				'box-sizing': 'border-box',
@@ -977,6 +992,27 @@ var BundleDesignModule = function (mode) {
 			bundlezone.touchobjid = 0;
 			bundlezone.content = '';
 			bundlezone.bundlezonedtls = [];
+			
+			if (zonetype == 0) {
+				var advertzones = _self.Object.bundlezones.filter(function (el) {
+					return el.type == 0;
+				});
+				console.log('advertzones', advertzones);
+				for (var i=1; i<=3; i++) {
+					var find = false;
+					for (var j=0; j<advertzones.length; j++) {
+						if (advertzones[j].content == i) {
+							find = true;
+							break;
+						}
+					}
+					if (!find) {
+						bundlezone.content = i;
+						console.log('bundlezone.content', bundlezone.content);
+						break;
+					}
+				}
+			}
 			
 			_self.Object.bundlezones.push(bundlezone);
 			

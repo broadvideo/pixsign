@@ -35,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Diy;
-import com.broadvideo.pixsignage.domain.Diyaction;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
@@ -280,6 +279,9 @@ public class PageServiceImpl implements PageService {
 					pagezone.setAnimationinit(templatezone.getAnimationinit());
 					pagezone.setAnimationinitdelay(templatezone.getAnimationinitdelay());
 					pagezone.setAnimationclick(templatezone.getAnimationclick());
+					pagezone.setVolume(templatezone.getVolume());
+					pagezone.setSpeed(templatezone.getSpeed());
+					pagezone.setIntervaltime(templatezone.getIntervaltime());
 					pagezone.setContent(templatezone.getContent());
 					pagezoneMapper.insertSelective(pagezone);
 					for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {
@@ -393,6 +395,9 @@ public class PageServiceImpl implements PageService {
 				pagezone.setAnimationinit(frompagezone.getAnimationinit());
 				pagezone.setAnimationinitdelay(frompagezone.getAnimationinitdelay());
 				pagezone.setAnimationclick(frompagezone.getAnimationclick());
+				pagezone.setVolume(frompagezone.getVolume());
+				pagezone.setSpeed(frompagezone.getSpeed());
+				pagezone.setIntervaltime(frompagezone.getIntervaltime());
 				pagezone.setContent(frompagezone.getContent());
 				pagezoneMapper.insertSelective(pagezone);
 				for (Pagezonedtl frompagezonedtl : frompagezone.getPagezonedtls()) {
@@ -471,14 +476,6 @@ public class PageServiceImpl implements PageService {
 		FileUtils.writeByteArrayToFile(snapshotFile, Base64.decodeBase64(snapshotdtl), false);
 		page.setSnapshot(snapshotFilePath);
 		page.setUpdatetime(Calendar.getInstance().getTime());
-
-		if (page.getHomeflag().equals("1")) {
-			page.setExportflag("0");
-		} else {
-			Page homepage = pageMapper.selectByPrimaryKey("" + page.getHomepageid());
-			homepage.setExportflag("0");
-			pageMapper.updateByPrimaryKeySelective(homepage);
-		}
 		pageMapper.updateByPrimaryKeySelective(page);
 
 	}
@@ -658,6 +655,7 @@ public class PageServiceImpl implements PageService {
 		page.setSize(FileUtils.sizeOf(zipFile));
 		FileInputStream fis = new FileInputStream(zipFile);
 		page.setMd5(DigestUtils.md5Hex(fis));
+		page.setExportflag("0");
 		pageMapper.updateByPrimaryKeySelective(page);
 		logger.info("Making page zip done, pageid={}", pageid);
 	}
@@ -972,12 +970,14 @@ public class PageServiceImpl implements PageService {
 			for (Pagezone pagezone : t.getPagezones()) {
 				// Handle DiyAction
 				if (pagezone.getDiyaction() != null) {
-					Diy diy = diyHash.get(pagezone.getDiyaction().getDiyid());
-					Diyaction diyaction = diyService.selectByActionCode("" + diy.getDiyid(),
-							pagezone.getDiyaction().getCode());
-					if (diyaction != null) {
-						pagezone.setDiyactionid(diyaction.getDiyactionid());
-					}
+					/*
+					 * Diy diy =
+					 * diyHash.get(pagezone.getDiyaction().getDiyid());
+					 * Diyaction diyaction = diyService.selectByActionCode("" +
+					 * diy.getDiyid(), pagezone.getDiyaction().getCode()); if
+					 * (diyaction != null) {
+					 * pagezone.setDiyactionid(diyaction.getDiyactionid()); }
+					 */
 				}
 
 				pagezone.setPageid(pageHash.get(pagezone.getPageid()).getPageid());

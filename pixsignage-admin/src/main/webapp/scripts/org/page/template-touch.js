@@ -415,7 +415,6 @@ var TemplateModule = function () {
 							$('.attendance-ctrl').css('display', '');
 						}
 						$('.diy-ctrl').css('display', DiyCtrl?'':'none');
-						$('.meeting-ctrl').css('display', MeetingCtrl? '':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');
 						$('#PageModal').modal();
 					} else {

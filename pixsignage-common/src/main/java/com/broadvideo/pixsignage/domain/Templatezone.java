@@ -100,6 +100,12 @@ public class Templatezone {
 
 	private String animationclick;
 
+	private Integer volume;
+
+	private Integer speed;
+
+	private Integer intervaltime;
+
 	private String content;
 
 	private Diy diy;
@@ -458,6 +464,30 @@ public class Templatezone {
 
 	public void setAnimationclick(String animationclick) {
 		this.animationclick = animationclick;
+	}
+
+	public Integer getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Integer volume) {
+		this.volume = volume;
+	}
+
+	public Integer getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(Integer speed) {
+		this.speed = speed;
+	}
+
+	public Integer getIntervaltime() {
+		return intervaltime;
+	}
+
+	public void setIntervaltime(Integer intervaltime) {
+		this.intervaltime = intervaltime;
 	}
 
 	public String getContent() {

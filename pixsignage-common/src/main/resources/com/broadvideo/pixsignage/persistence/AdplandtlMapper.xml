@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.AdplandtlMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Adplandtl" >
+    <id column="adplandtlid" property="adplandtlid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="adplanid" property="adplanid" jdbcType="INTEGER" />
+    <result column="adplace" property="adplace" jdbcType="VARCHAR" />
+    <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
+    <result column="adtype" property="adtype" jdbcType="CHAR" />
+    <result column="adid" property="adid" jdbcType="INTEGER" />
+    <result column="duration" property="duration" jdbcType="INTEGER" />
+    <result column="times" property="times" jdbcType="INTEGER" />
+    <result column="months" property="months" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="unitprice" property="unitprice" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <association property="devicegroup" column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegroupMapper.selectBaseByPrimaryKey" />
+    <association property="video" column="{adtype=adtype,videoid=adid}" select="selectVideo" />
+    <association property="image" column="{adtype=adtype,imageid=adid}" select="selectImage" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    adplandtlid, orgid, adplanid, adplace, devicegroupid, adtype, adid, duration, times, 
+    months, starttime, endtime, unitprice, amount, status
+  </sql>
+  
+  <select id="selectVideo" resultMap="com.broadvideo.pixsignage.persistence.VideoMapper.BaseResultMap" >
+    select * from video
+    where '${adtype}' = '1' and videoid = #{videoid}
+  </select>
+  <select id="selectImage" resultMap="com.broadvideo.pixsignage.persistence.ImageMapper.BaseResultMap" >
+    select * from image
+    where '${adtype}' = '2' and imageid = #{imageid}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from adplandtl
+    where adplandtlid = #{adplandtlid}
+  </select>
+  
+  <select id="selectCount" resultType="Integer">
+    select count(1) from adplandtl
+    where adplanid = #{adplanid}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from adplandtl
+    where adplanid = #{adplanid}
+    order by adplandtlid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectActiveList" resultMap="BaseResultMap">
+    select * from adplandtl
+    where adplanid = #{adplanid}
+    and unix_timestamp(now()) between unix_timestamp(starttime) and unix_timestamp(endtime)
+    order by times desc 
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from adplandtl
+    where adplandtlid = #{adplandtlid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Adplandtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="adplandtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into adplandtl (orgid, adplanid, adplace, 
+      devicegroupid, adtype, adid, 
+      duration, times, months, 
+      starttime, endtime, unitprice, 
+      amount, status)
+    values (#{orgid,jdbcType=INTEGER}, #{adplanid,jdbcType=INTEGER}, #{adplace,jdbcType=VARCHAR}, 
+      #{devicegroupid,jdbcType=INTEGER}, #{adtype,jdbcType=CHAR}, #{adid,jdbcType=INTEGER}, 
+      #{duration,jdbcType=INTEGER}, #{times,jdbcType=INTEGER}, #{months,jdbcType=INTEGER}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{unitprice,jdbcType=INTEGER}, 
+      #{amount,jdbcType=INTEGER}, #{status,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Adplandtl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="adplandtlid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into adplandtl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="adplanid != null" >
+        adplanid,
+      </if>
+      <if test="adplace != null" >
+        adplace,
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid,
+      </if>
+      <if test="adtype != null" >
+        adtype,
+      </if>
+      <if test="adid != null" >
+        adid,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+      <if test="times != null" >
+        times,
+      </if>
+      <if test="months != null" >
+        months,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="unitprice != null" >
+        unitprice,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="adplanid != null" >
+        #{adplanid,jdbcType=INTEGER},
+      </if>
+      <if test="adplace != null" >
+        #{adplace,jdbcType=VARCHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        #{devicegroupid,jdbcType=INTEGER},
+      </if>
+      <if test="adtype != null" >
+        #{adtype,jdbcType=CHAR},
+      </if>
+      <if test="adid != null" >
+        #{adid,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="times != null" >
+        #{times,jdbcType=INTEGER},
+      </if>
+      <if test="months != null" >
+        #{months,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitprice != null" >
+        #{unitprice,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Adplandtl" >
+    update adplandtl
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="adplanid != null" >
+        adplanid = #{adplanid,jdbcType=INTEGER},
+      </if>
+      <if test="adplace != null" >
+        adplace = #{adplace,jdbcType=VARCHAR},
+      </if>
+      <if test="devicegroupid != null" >
+        devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      </if>
+      <if test="adtype != null" >
+        adtype = #{adtype,jdbcType=CHAR},
+      </if>
+      <if test="adid != null" >
+        adid = #{adid,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="times != null" >
+        times = #{times,jdbcType=INTEGER},
+      </if>
+      <if test="months != null" >
+        months = #{months,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitprice != null" >
+        unitprice = #{unitprice,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where adplandtlid = #{adplandtlid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Adplandtl" >
+    update adplandtl
+    set orgid = #{orgid,jdbcType=INTEGER},
+      adplanid = #{adplanid,jdbcType=INTEGER},
+      adplace = #{adplace,jdbcType=VARCHAR},
+      devicegroupid = #{devicegroupid,jdbcType=INTEGER},
+      adtype = #{adtype,jdbcType=CHAR},
+      adid = #{adid,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=INTEGER},
+      times = #{times,jdbcType=INTEGER},
+      months = #{months,jdbcType=INTEGER},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      unitprice = #{unitprice,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR}
+    where adplandtlid = #{adplandtlid,jdbcType=INTEGER}
+  </update>
+</mapper>

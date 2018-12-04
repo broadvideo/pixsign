@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.domain;
 import java.util.List;
 
 public class Bundlezone {
+	public final static byte Type_ADVERT = 0;
 	public final static byte Type_PLAY = 1;
 	public final static byte Type_WIDGET = 2;
 	public final static byte Type_TEXT = 3;

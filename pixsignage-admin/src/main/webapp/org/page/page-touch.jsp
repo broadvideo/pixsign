@@ -341,7 +341,7 @@
 								<i class="fa fa-calendar"></i><div>本周课表</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl attendance-ctrl limit-1" zonetype="13">
-								<i class="fa fa-credit-card"></i><div>上课考勤</div>
+								<i class="fa fa-credit-card"></i><div>考勤签到</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl limit-1" zonetype="14">
 								<i class="fa fa-child"></i><div>家校互动</div>
@@ -354,9 +354,6 @@
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone diy-ctrl limit-1" zonetype="21">
 								<i class="fa fa-arrows"></i><div>DIY互动</div>
-							</a>
-							<a href="javascript:;" class="icon-btn pix-addzone meeting-ctrl limit-1" zonetype="31">
-								<i class="fa fa-ge"></i><div>会议日程</div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone estate-ctrl limit-1" zonetype="41">
 								<i class="fa fa-home"></i><div>地产</div>
@@ -390,6 +387,12 @@
 										<form id="ZoneEditForm1" class="form-horizontal pix-bordered zoneform">
 											<div class="form-body">
 												<div class="form-group">
+													<label class="col-md-3 control-label">音量</label>
+													<div class="col-md-9">
+														<input class="volumeRange" type="text" name="volume" value=""/>
+													</div>
+												</div>
+												<div class="form-group">
 													<label class="col-md-3 control-label"></label>
 													<div class="col-md-9">
 														<a href="javascript:;" class="btn default btn-xs blue pix-video-library"><i class="fa fa-video-camera"></i> 选择视频</a>
@@ -418,6 +421,12 @@
 													<label class="col-md-3 control-label">透明</label>
 													<div class="col-md-9">
 														<input class="opacityRange" type="text" name="opacity" value=""/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">间隔</label>
+													<div class="col-md-9">
+														<input class="intervaltimeRange" type="text" name="intervaltime" value=""/>
 													</div>
 												</div>
 											</div>
@@ -562,6 +571,12 @@
 																</div>
 															</div>
 														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">移速</label>
+													<div class="col-md-9">
+														<input class="speedRange" type="text" name="speed" value=""/>
 													</div>
 												</div>
 											</div>
@@ -1310,7 +1325,6 @@
 <script>
 var SchoolCtrl = <%=(session_org != null && !session_org.getSchoolflag().equals("0"))%>;
 var DiyCtrl = <%=(session_org != null && !session_org.getDiyflag().equals("0"))%>;
-var MeetingCtrl = <%=(session_org != null && !session_org.getMeetingflag().equals("0"))%>;
 var EstateCtrl = <%=(session_org != null && !session_org.getEstateflag().equals("0"))%>;
 var AttendanceCtrl = <%=(session_org != null && !session_org.getAttendanceflag().equals("0"))%>;
 

@@ -66,7 +66,26 @@ var BundlePreviewModule = function () {
 				'height': '100%', 
 				'width': '100%', 
 			});
-			if (zone.type == 1) {
+			if (zone.type == 0) {
+				//Advert Zone
+				var p_element = document.createElement('p');
+				$(p_element).html(zone.content);
+				$(inner_div).append(p_element);
+				$(inner_div).css({
+					'box-sizing': 'border-box',
+					'color': '#FFFFFF', 
+					'font-size': Math.ceil(50 * zone.height / 100 / scale) + 'px', 
+					'line-height': Math.ceil(zone.height / scale) + 'px', 
+					'word-wrap': 'break-word',
+				});
+				$(p_element).css({
+					'word-wrap': 'break-word',
+					'text-align': 'center',
+					'overflow': 'hidden',
+					'text-overflow': 'clip',
+					'white-space': 'nowrap',
+				});
+			} else if (zone.type == '1') {
 				//Play Zone
 				if (zonedtls.length > 0 && zonedtls[0].video != null) {
 					var img_element = document.createElement('img');

@@ -154,6 +154,8 @@ public class ExportTask extends Thread {
 					ArrayList<Page> pageList = new ArrayList<Page>();
 					HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
 					page = pageService.selectByPrimaryKey("" + page.getPageid());
+					page.setExportflag("1");
+					pageService.updatePage(page);
 					pageList.add(page);
 					for (Page subpage : page.getSubpages()) {
 						Page p = pageService.selectByPrimaryKey("" + subpage.getPageid());
@@ -206,7 +208,7 @@ public class ExportTask extends Thread {
 					}
 					out.close();
 
-					page.setExportflag("1");
+					page = pageService.selectByPrimaryKey("" + page.getPageid());
 					page.setExportsize(FileUtils.sizeOf(zipFile));
 					pageService.updatePage(page);
 

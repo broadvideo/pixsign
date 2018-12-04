@@ -72,6 +72,9 @@
     <result column="temperatureflag" property="temperatureflag" jdbcType="CHAR" />
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
     <result column="screenstatus" property="screenstatus" jdbcType="CHAR" />
+    <result column="batchid" property="batchid" jdbcType="INTEGER" />
+    <result column="modelid" property="modelid" jdbcType="INTEGER" />
+    <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -91,7 +94,7 @@
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
     tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, 
-    hotspotfrequency, temperatureflag, relateid, screenstatus
+    hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, modelid, qrcode
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -234,12 +237,13 @@
     and appname like 'DigitalBox\_%'
     and appname != 'DigitalBox_LAUNCHER_UWIN'
     and appname not like 'DigitalBox_LAUNCHER_TOUPING%'
+    and appname not like '%\_DS'
   </select>
   <select id="selectMaxCount2" resultType="Integer">
     select count(1) from device 
     where status = 1
     and orgid = #{orgid}
-    and appname = 'DigitalBox_LAUNCHER_UWIN'
+    and (appname = 'DigitalBox_LAUNCHER_UWIN' or appname like '%\_DS')
   </select>
   <select id="selectMaxCount3" resultType="Integer">
     select count(1) from device 
@@ -301,7 +305,9 @@
     set upgradeflag = #{upgradeflag},
     appfileid = 0
     where orgid = #{orgid}
-    and branchid = #{branchid}
+    and exists (select 1 from branch b 
+      where b.branchid=device.branchid 
+      and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
   </update>
 
   <update id="updateBundle" >
@@ -413,7 +419,8 @@
       cataitemid1, cataitemid2, defaultbundleid, 
       defaultpageid, hotspotflag, hotspotssid, 
       hotspotpassword, hotspotfrequency, 
-      temperatureflag, relateid, screenstatus)
+      temperatureflag, relateid, screenstatus,
+      batchid, modelid, qrcode)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -436,7 +443,8 @@
       #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
       #{defaultpageid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
       #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR}, 
-      #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, #{screenstatus,jdbcType=CHAR})
+      #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, #{screenstatus,jdbcType=CHAR},
+      #{batchid,jdbcType=INTEGER}, #{modelid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -651,6 +659,15 @@
       <if test="screenstatus != null" >
         screenstatus,
       </if>
+      <if test="batchid != null" >
+        batchid,
+      </if>
+      <if test="modelid != null" >
+        modelid,
+      </if>
+      <if test="qrcode != null" >
+        qrcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -859,6 +876,15 @@
       </if>
       <if test="screenstatus != null" >
         #{screenstatus,jdbcType=CHAR},
+      </if>
+      <if test="batchid != null" >
+        #{batchid,jdbcType=INTEGER},
+      </if>
+      <if test="modelid != null" >
+        #{modelid,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null" >
+        #{qrcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -1072,6 +1098,15 @@
       <if test="screenstatus != null" >
         screenstatus = #{screenstatus,jdbcType=CHAR},
       </if>
+      <if test="batchid != null" >
+        batchid = #{batchid,jdbcType=INTEGER},
+      </if>
+      <if test="modelid != null" >
+        modelid = #{modelid,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null" >
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -1145,7 +1180,10 @@
       hotspotfrequency = #{hotspotfrequency,jdbcType=VARCHAR},
       temperatureflag = #{temperatureflag,jdbcType=CHAR},
       relateid = #{relateid,jdbcType=INTEGER},
-      screenstatus = #{screenstatus,jdbcType=CHAR}
+      screenstatus = #{screenstatus,jdbcType=CHAR},
+      batchid = #{batchid,jdbcType=INTEGER},
+      modelid = #{modelid,jdbcType=INTEGER},
+      qrcode = #{qrcode,jdbcType=VARCHAR}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">

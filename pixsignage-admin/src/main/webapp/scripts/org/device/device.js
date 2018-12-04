@@ -71,7 +71,7 @@ var DeviceModule = function () {
 				} else {
 					$('td:eq(3)', nRow).html('');
 				}
-				if (aData.longitude > 0 && aData.latitude > 0) {
+				if (aData.longitude > 0) {
 					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-map"><i class="fa fa-map-marker"></i> ' + common.view.map + '</a><br/>' + aData.position);
 				}
 				
@@ -1131,7 +1131,7 @@ var DeviceModule = function () {
 				var points = [];
 				for (var i=0; i<CurrentDevices.length; i++) {
 					var device = CurrentDevices[i];
-					if (device.longitude > 0 && device.latitude > 0) {
+					if (device.longitude > 0) {
 						var point = new BMap.Point(device.longitude, device.latitude);
 						points.push(point);
 						var marker = new BMap.Marker(point, {title : device.terminalid});
@@ -1197,7 +1197,7 @@ var DeviceModule = function () {
 				var bounds = new google.maps.LatLngBounds();
 				for (var i=0; i<CurrentDevices.length; i++) {
 					var device = CurrentDevices[i];
-					if (device.longitude > 0 && device.latitude > 0) {
+					if (device.longitude > 0) {
 						var point = new google.maps.LatLng(parseFloat(device.latitude), parseFloat(device.longitude));
 						var marker = new google.maps.Marker({
 							position: point,

@@ -54,6 +54,8 @@ public class Video {
 
 	private String tags;
 
+	private Integer duration;
+
 	private String adflag;
 
 	private Date createtime;
@@ -244,6 +246,14 @@ public class Video {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 
 	public String getAdflag() {

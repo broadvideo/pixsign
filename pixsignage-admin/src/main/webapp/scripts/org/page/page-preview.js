@@ -67,40 +67,40 @@ var PagePreviewModule = function () {
 			shadow += zone.shadowcolor;
 			if (zone.type == 1) {
 				//Video Zone
-				var img_element = document.createElement('img');
-				$(inner_div).append(img_element);
 				$(inner_div).css({
 					'box-shadow': shadow, 
 					'opacity': parseInt(zone.opacity)/255,
 				});
-				$(zone_div).find('img').css({
-					'box-sizing': 'border-box',
-					'border-color': zone.bdcolor, 
-					'border-style': zone.bdstyle, 
-					'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
-					'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
-				});
 				if (zonedtls.length > 0 && zonedtls[0].video != null) {
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
+					$(zone_div).find('img').css({
+						'box-sizing': 'border-box',
+						'border-color': zone.bdcolor, 
+						'border-style': zone.bdstyle, 
+						'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+						'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+					});
 					$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].video.thumbnail);
 					$(zone_div).find('img').attr('width', '100%');
 					$(zone_div).find('img').attr('height', '100%');
 				}
 			} else if (zone.type == '2') {
 				//Image Zone
-				var img_element = document.createElement('img');
-				$(inner_div).append(img_element);
 				$(inner_div).css({
 					'box-shadow': shadow, 
 					'opacity': parseInt(zone.opacity)/255,
 				});
-				$(zone_div).find('img').css({
-					'box-sizing': 'border-box',
-					'border-color': zone.bdcolor, 
-					'border-style': zone.bdstyle, 
-					'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
-					'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
-				});
 				if (zonedtls.length > 0 && zonedtls[0].image != null) {
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
+					$(zone_div).find('img').css({
+						'box-sizing': 'border-box',
+						'border-color': zone.bdcolor, 
+						'border-style': zone.bdstyle, 
+						'border-width': (parseInt(zone.bdwidth) / scale) + 'px', 
+						'border-radius': (parseInt(zone.bdradius) / scale) + 'px', 
+					});
 					$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].image.thumbnail);
 					$(zone_div).find('img').attr('width', '100%');
 					$(zone_div).find('img').attr('height', '100%');
@@ -363,13 +363,6 @@ var PagePreviewModule = function () {
 					$(zone_div).find('img').attr('width', '100%');
 					$(zone_div).find('img').attr('height', '100%');
 				}
-			} else if (zone.type == '31') {
-				//Meeting Zone
-				var img_element = document.createElement('img');
-				$(inner_div).append(img_element);
-				$(zone_div).find('img').attr('src', '/pixsignage-page/module/meeting/snapshot.jpg');
-				$(zone_div).find('img').attr('width', '100%');
-				$(zone_div).find('img').attr('height', '100%');
 			} else if (zone.type == '41') {
 				//Estate Zone
 				var img_element = document.createElement('img');

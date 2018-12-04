@@ -200,47 +200,47 @@ public class PixsignageService2 {
 			int max6 = Integer.parseInt(maxs[5]);
 			int max7 = maxs.length > 6 ? Integer.parseInt(maxs[6]) : 0;
 			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")
-					&& !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+					&& !appname.endsWith("_DS") && !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
 				// 单面屏
 				int currentDevices = deviceMapper.selectMaxCount1("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max1) {
-					return handleResult(1010, "Android单面屏授权数已达上限.");
+					return handleResult(1010, "Android单面屏授权数已达上限: " + currentDevices + "/" + max1);
 				}
-			} else if (appname.equals("DigitalBox_LAUNCHER_UWIN")) {
+			} else if (appname.equals("DigitalBox_LAUNCHER_UWIN") || appname.endsWith("_DS")) {
 				// 双面屏
 				int currentDevices = deviceMapper.selectMaxCount2("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max2) {
-					return handleResult(1010, "Android双面屏授权数已达上限.");
+					return handleResult(1010, "Android双面屏授权数已达上限: " + currentDevices + "/" + max2);
 				}
 			} else if (appname.startsWith("DigitalBox2_")) {
 				// H5标牌
 				int currentDevices = deviceMapper.selectMaxCount3("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max3) {
-					return handleResult(1010, "Android H5标牌授权数已达上限.");
+					return handleResult(1010, "Android H5标牌授权数已达上限: " + currentDevices + "/" + max3);
 				}
 			} else if (appname.startsWith("TeaTable_")) {
 				// 茶几
 				int currentDevices = deviceMapper.selectMaxCount4("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max4) {
-					return handleResult(1010, "Android茶几终端授权数已达上限.");
+					return handleResult(1010, "Android茶几终端授权数已达上限: " + currentDevices + "/" + max4);
 				}
 			} else if (appname.startsWith("PixMultiSign")) {
 				// 联屏
 				int currentDevices = deviceMapper.selectMaxCount5("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max5) {
-					return handleResult(1010, "Android联屏终端授权数已达上限.");
+					return handleResult(1010, "Android联屏终端授权数已达上限: " + currentDevices + "/" + max5);
 				}
 			} else if (ostype.equals("2")) {
 				// windows
 				int currentDevices = deviceMapper.selectMaxCount6("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max6) {
-					return handleResult(1010, "Windows终端授权数已达上限.");
+					return handleResult(1010, "Windows终端授权数已达上限: " + currentDevices + "/" + max6);
 				}
 			} else if (appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
 				// 投屏
 				int currentDevices = deviceMapper.selectMaxCount7("" + device.getOrgid());
 				if (!device.getStatus().equals("1") && currentDevices >= max7) {
-					return handleResult(1010, "Android投屏终端授权数已达上限.");
+					return handleResult(1010, "Android投屏终端授权数已达上限: " + currentDevices + "/" + max7);
 				}
 			}
 

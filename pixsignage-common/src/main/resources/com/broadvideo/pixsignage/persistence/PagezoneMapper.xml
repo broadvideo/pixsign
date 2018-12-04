@@ -47,6 +47,9 @@
     <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
     <result column="animationclick" property="animationclick" jdbcType="VARCHAR" />
 	<result column="sourcetype" property="sourcetype" jdbcType="CHAR" />
+    <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="speed" property="speed" jdbcType="INTEGER" />
+    <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
     <association property="diy" column="{diyid=diyid}" select="com.broadvideo.pixsignage.persistence.DiyMapper.selectByPrimaryKey" />
 	<association property="diyaction" column="{diyactionid=diyactionid}" select="com.broadvideo.pixsignage.persistence.DiyactionMapper.selectByPrimaryKey" />
 	<collection property="pagezonedtls" ofType="com.broadvideo.pixsignage.domain.Pagezonedtl"
@@ -61,7 +64,8 @@
     bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, shadowv, 
     shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, align, 
     lineheight, rows, cols, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchid, 
-    fixflag, diyactionid, animationinit, animationinitdelay, animationclick, sourcetype
+    fixflag, diyactionid, animationinit, animationinitdelay, animationclick, sourcetype, volume, 
+    speed, intervaltime
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -114,7 +118,8 @@
       dateformat, diyid, touchtype, 
       touchid, fixflag, diyactionid, 
       animationinit, animationinitdelay, animationclick, 
-      sourcetype, content)
+      sourcetype, volume, speed, 
+      intervaltime, content)
     values (#{pageid,jdbcType=INTEGER}, #{homepageid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
       #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
       #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
@@ -129,7 +134,8 @@
       #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
       #{touchid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, 
       #{animationinit,jdbcType=VARCHAR}, #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
-      #{sourcetype,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{sourcetype,jdbcType=CHAR}, #{volume,jdbcType=INTEGER}, #{speed,jdbcType=INTEGER}, 
+      #{intervaltime,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Pagezone" >
     <selectKey resultType="java.lang.Integer" keyProperty="pagezoneid" order="AFTER" >
@@ -269,6 +275,15 @@
       <if test="sourcetype != null" >
         sourcetype,
       </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="speed != null" >
+        speed,
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime,
+      </if>
       <if test="content != null" >
         content,
       </if>
@@ -405,6 +420,15 @@
       </if>
       <if test="sourcetype != null" >
         #{sourcetype,jdbcType=CHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        #{intervaltime,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -546,6 +570,15 @@
       <if test="sourcetype != null" >
         sourcetype = #{sourcetype,jdbcType=CHAR},
       </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        speed = #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime = #{intervaltime,jdbcType=INTEGER},
+      </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -598,6 +631,9 @@
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
       animationclick = #{animationclick,jdbcType=VARCHAR},
       sourcetype = #{sourcetype,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      speed = #{speed,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
       content = #{content,jdbcType=LONGVARCHAR}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
@@ -646,7 +682,10 @@
       animationinit = #{animationinit,jdbcType=VARCHAR},
       animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
       animationclick = #{animationclick,jdbcType=VARCHAR},
-      sourcetype = #{sourcetype,jdbcType=CHAR}
+      sourcetype = #{sourcetype,jdbcType=CHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      speed = #{speed,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER}
     where pagezoneid = #{pagezoneid,jdbcType=INTEGER}
   </update>
 </mapper>

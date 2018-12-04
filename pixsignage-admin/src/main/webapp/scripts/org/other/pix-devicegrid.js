@@ -670,6 +670,45 @@ $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 		
 		$('#snapshot_div').show();
 		redrawDevicegridPreview($('#snapshot_div'), CurrentDevicegrid, 512, false);
+		domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 })
+		.then(function (dataUrl) {
+			CurrentDevicegrid.snapshotdtl = dataUrl;
+			$('#snapshot_div').hide();
+
+			$.ajax({
+				type : 'POST',
+				url : myurls['devicegrid.design'],
+				data : '{"devicegrid":' + $.toJSON(CurrentDevicegrid) + '}',
+				dataType : 'json',
+				contentType : 'application/json;charset=utf-8',
+				success : function(data, status) {
+					submitflag = false;
+					Metronic.unblockUI();
+					$('#DevicegridModal').modal('hide');
+					if (data.errorcode == 0) {
+						bootbox.alert(common.tips.success);
+						$('#MyTable').dataTable()._fnAjaxUpdate();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					submitflag = false;
+					Metronic.unblockUI();
+					$('#DevicegridModal').modal('hide');
+					console.log('failue');
+				}
+			});
+		})
+		.catch(function (error) {
+			_submitflag = false;
+			$('#snapshot_div').hide();
+			Metronic.unblockUI();
+			$('#DevicegridModal').modal('hide');
+			bootbox.alert(common.tips.error + error);
+			console.error('oops, something went wrong!', error);
+		});
+		/*
 		html2canvas($('#snapshot_div'), {
 			onrendered: function(canvas) {
 				//console.log(canvas.toDataURL('image/jpeg'));
@@ -702,7 +741,7 @@ $('[type=submit]', $('#DevicegridModal')).on('click', function(event) {
 				});
 			}
 		});
-
+		*/
 		event.preventDefault();
 	}
 });	

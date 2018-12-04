@@ -165,7 +165,6 @@ var PageDesignModule = function (mode) {
 				var marquee_element = document.createElement('marquee');
 				$(marquee_element).attr('direction', 'left');
 				$(marquee_element).attr('behavior', 'scroll');
-				$(marquee_element).attr('scrollamount', '1');
 				$(marquee_element).attr('scrolldelay', '0');
 				$(marquee_element).attr('loop', '-1');
 				$(inner_div).append(marquee_element);
@@ -333,6 +332,7 @@ var PageDesignModule = function (mode) {
 				$(pagezoneDiv).find('marquee').css({
 					'text-decoration': pagezone.decoration,
 				});
+				$(pagezoneDiv).find('marquee').attr('scrollamount', pagezone.speed);
 				var text_val = pagezone.content;
 				if (text_val == undefined || text_val == null || text_val == '') {
 					text_val = 'Scrolling Text';
@@ -539,11 +539,6 @@ var PageDesignModule = function (mode) {
 					$(pagezoneDiv).find('img').attr('width', '100%');
 					$(pagezoneDiv).find('img').attr('height', '100%');
 				}
-			} else if (pagezone.type == 31) {
-				//Meeting Zone
-				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/meeting/snapshot.jpg');
-				$(pagezoneDiv).find('img').attr('width', '100%');
-				$(pagezoneDiv).find('img').attr('height', '100%');
 			} else if (pagezone.type == 41) {
 				//Estate Zone
 				$(pagezoneDiv).find('img').attr('src', '/pixsignage-page/module/estate/snapshot.jpg');
@@ -887,6 +882,54 @@ var PageDesignModule = function (mode) {
 				from: pagezone.bgopacity
 			});
 
+			$('.volumeRange').ionRangeSlider({
+				min: 0,
+				max: 100,
+				from: 50,
+				type: 'single',
+				step: 1,
+				hasGrid: false,
+				onChange: function(data) {
+					_self.Zone.volume = $('input[name=volume]').val();
+					refreshPagezone(_self.Zone);
+				}
+			});
+			$('.volumeRange').ionRangeSlider('update', {
+				from: pagezone.volume
+			});
+
+			$('.intervaltimeRange').ionRangeSlider({
+				min: 5,
+				max: 60,
+				from: 10,
+				type: 'single',
+				step: 5,
+				hasGrid: false,
+				onChange: function(data) {
+					_self.Zone.intervaltime = $('input[name=intervaltime]').val();
+					refreshPagezone(_self.Zone);
+				}
+			});
+			$('.intervaltimeRange').ionRangeSlider('update', {
+				from: pagezone.intervaltime
+			});
+
+			$('.speedRange').ionRangeSlider({
+				min: 1,
+				max: 10,
+				from: 5,
+				type: 'single',
+				step: 1,
+				hasGrid: false,
+				onChange: function(data) {
+					_self.Zone.speed = $('input[name=speed]').val();
+					refreshPagezone(_self.Zone);
+				}
+			});
+			$('.speedRange').ionRangeSlider('update', {
+				from: pagezone.speed
+			});
+
 			$('#spinner-fontsize').spinner();
 			$('#spinner-fontsize').spinner('setting', {value:parseInt(pagezone.fontsize), step: 1, min: 12, max: 255});
 			$('#spinner-lineheight').spinner();
@@ -1004,6 +1047,9 @@ var PageDesignModule = function (mode) {
 		$('.collapse').on('shown.bs.collapse', function () {
 			$('.opacityRange').ionRangeSlider('update');
 			$('.bgopacityRange').ionRangeSlider('update');
+			$('.volumeRange').ionRangeSlider('update');
+			$('.intervaltimeRange').ionRangeSlider('update');
+			$('.speedRange').ionRangeSlider('update');
 			$('.animationinitdelayRange').ionRangeSlider('update');
 		});
 
@@ -1543,6 +1589,9 @@ var PageDesignModule = function (mode) {
 			pagezone.touchid = 0;
 			pagezone.touchpageid = 0;
 			pagezone.fixflag = '1';
+			pagezone.volume = 50;
+			pagezone.intervaltime = 10;
+			pagezone.speed = 5;
 			pagezone.content = '';
 			pagezone.pagezonedtls = [];
 			if (pagezone.type == 5) {

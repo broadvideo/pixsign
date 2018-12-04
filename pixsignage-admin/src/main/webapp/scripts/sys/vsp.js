@@ -231,10 +231,10 @@ var VspModule = function () {
 			+ $('input[name="vsp.videoinflag"]').val() + $('input[name="vsp.widgetflag"]').val()
 			+ $('input[name="vsp.rssflag"]').val() + $('input[name="vsp.diyflag"]').val()
 			+ $('input[name="vsp.flowrateflag"]').val() + $('input[name="vsp.tagflag"]').val()
-			+ $('input[name="vsp.schoolflag"]').val() + $('input[name="vsp.meetingflag"]').val()
+			+ $('input[name="vsp.schoolflag"]').val() + $('input[name="vsp.advertflag"]').val()
 			+ $('input[name="vsp.vipflag"]').val() + $('input[name="vsp.estateflag"]').val()
-			+ $('input[name="vsp.liftflag"]').val() + $('input[name="vsp.attendanceflag"]').val()
-			+ '00000000000000000000';
+			+ $('input[name="vsp.liftflag"]').val() 
+			+ '000000000000000000000';
 			data.push({'name': 'vsp.feature', 'value': feature});
 
 			$.ajax({
