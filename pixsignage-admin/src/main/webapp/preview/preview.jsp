@@ -8,7 +8,7 @@
 	
 	<link rel="stylesheet" href="/pixsignage-page/plugin/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/plugin/animate.css/animate.min.css"/>
-	<link rel="stylesheet" href="/pixsignage-page/plugin/bxslider/jquery.bxslider.min.css"/>
+	<link rel="stylesheet" href="/pixsignage-page/plugin/swiper/swiper.min.css"/>
 
 	<link rel="stylesheet" href="/pixsignage-page/module/daily-course/daily-course.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/weekly-course/weekly-course.css"/>
@@ -17,7 +17,11 @@
 	<link rel="stylesheet" href="/pixsignage-page/module/exam-notice/exam-notice.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/personal-info/personal-info.css"/>
 	<link rel="stylesheet" href="/pixsignage-page/module/an-capacity/animate-ext.css"/>
-	<link rel="stylesheet" href="/pixsignage-page/module/meeting/meeting.css"/>
+	
+	<link rel="stylesheet" href="/pixsignage-page/module/meeting/1/meeting.css"/>
+	<link rel="stylesheet" href="/pixsignage-page/module/meeting/2/meeting.css"/>
+	<link rel="stylesheet" href="/pixsignage-page/module/meeting/3/meeting.css"/>
+	<link rel="stylesheet" href="/pixsignage-page/module/meeting/4/meeting.css"/>
 	
 	<link rel="stylesheet" href="pixpage/pixpage.css"/>
 </head>
@@ -30,7 +34,7 @@
 	<script src="/pixsignage-page/plugin/moment/moment.min.js"></script>
 	<script src="/pixsignage-page/plugin/moment/zh-cn.js"></script>
 	<script src="/pixsignage-page/plugin/base64/base64.min.js"></script>
-	<script src="/pixsignage-page/plugin/bxslider/jquery.bxslider.min.js"></script>
+	<script src="/pixsignage-page/plugin/swiper/swiper.min.js"></script>
 	<script src="/pixsignage-page/plugin/hammer/hammer.js"></script>
 	<script src="/pixsignage-page/plugin/vconsole/vconsole.min.js"></script>
 	
@@ -55,9 +59,13 @@
 	<script src="/pixsignage-page/module/personal-info/index.js"></script>
 	
 	<script src="/pixsignage-page/module/an-capacity/an-capacity.js"></script>
-	<script src="/pixsignage-page/module/meeting/index.js"></script>
 	<script src="/pixsignage-page/module/camera/index.js"></script>
 	<script src="/pixsignage-page/module/estate/index.js"></script>
+	<script src="/pixsignage-page/module/meeting/index.js"></script>
+	<script src="/pixsignage-page/module/meeting/1/index.js"></script>
+	<script src="/pixsignage-page/module/meeting/2/index.js"></script>
+	<script src="/pixsignage-page/module/meeting/3/index.js"></script>
+	<script src="/pixsignage-page/module/meeting/4/index.js"></script>
 
 <%
 	String content = new String(request.getParameter("content").getBytes("ISO-8859-1"), "UTF-8");

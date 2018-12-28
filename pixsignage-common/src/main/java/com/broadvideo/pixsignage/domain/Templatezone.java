@@ -106,6 +106,8 @@ public class Templatezone {
 
 	private Integer intervaltime;
 
+	private String effect;
+
 	private String content;
 
 	private Diy diy;
@@ -488,6 +490,14 @@ public class Templatezone {
 
 	public void setIntervaltime(Integer intervaltime) {
 		this.intervaltime = intervaltime;
+	}
+
+	public String getEffect() {
+		return effect;
+	}
+
+	public void setEffect(String effect) {
+		this.effect = effect;
 	}
 
 	public String getContent() {

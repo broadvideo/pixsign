@@ -26,6 +26,8 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
+import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.AdplanMapper;
 import com.broadvideo.pixsignage.persistence.AdplandtlMapper;
@@ -36,7 +38,11 @@ import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
+import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
+import com.broadvideo.pixsignage.util.CommonUtil;
+import com.broadvideo.pixsignage.util.DateUtil;
+import com.ibm.icu.util.Calendar;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -58,6 +64,8 @@ public class DeviceServiceImpl implements DeviceService {
 	private BundleMapper bundleMapper;
 	@Autowired
 	private PageMapper pageMapper;
+	@Autowired
+	private ScheduleMapper scheduleMapper;
 	@Autowired
 	private AdplanMapper adplanMapper;
 	@Autowired
@@ -478,64 +486,113 @@ public class DeviceServiceImpl implements DeviceService {
 		map.put("bundlezones", Bundlezone.class);
 		map.put("bundlezonedtls", Bundlezonedtl.class);
 
-		JSONArray bundleidJsonArray = new JSONArray();
+		JSONArray solobundleidJsonArray = new JSONArray();
+		JSONArray scheduleJsonArray = new JSONArray();
 		JSONArray bundleJsonArray = new JSONArray();
 		JSONArray videoJsonArray = new JSONArray();
 		JSONArray imageJsonArray = new JSONArray();
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+
+		List<Schedule> scheduleList = new ArrayList<Schedule>();
 		List<Bundle> bundleList = new ArrayList<Bundle>();
 
-		int defaultbundleid = 0;
-		if (device.getDevicegroupid() > 0) {
-			Devicegroup devicegroup = devicegroupMapper.selectByPrimaryKey("" + device.getDevicegroupid());
-			defaultbundleid = devicegroup.getDefaultbundleid();
-		} else {
-			defaultbundleid = device.getDefaultbundleid();
-		}
-		if (defaultbundleid == 0) {
-			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			defaultbundleid = org.getDefaultbundleid();
-		}
-		Bundle defaultbundle = bundleMapper.selectByPrimaryKey("" + defaultbundleid);
-		if (defaultbundle != null && !defaultbundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
-			JSONObject bundleJson = JSONObject.fromObject(defaultbundle.getJson());
-			defaultbundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
-		}
-		if (defaultbundle != null) {
-			bundleList.add(defaultbundle);
-			for (Bundle subbundle : defaultbundle.getSubbundles()) {
-				Bundle p = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
-				if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
-					JSONObject bundleJson = JSONObject.fromObject(p.getJson());
-					p = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
-				}
-				bundleList.add(p);
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+		if (org.getBundleplanflag().equals("0")) {
+			if (device.getDevicegroupid().intValue() == 0) {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device,
+						"" + device.getDeviceid(), Schedule.PlayMode_Daily);
+			} else {
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+						"" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
 			}
 		} else {
-			return resultJson;
+			int defaultbundleid = 0;
+			if (device.getDevicegroupid() > 0) {
+				Devicegroup devicegroup = devicegroupMapper.selectByPrimaryKey("" + device.getDevicegroupid());
+				defaultbundleid = devicegroup.getDefaultbundleid();
+			} else {
+				defaultbundleid = device.getDefaultbundleid();
+			}
+			if (defaultbundleid == 0) {
+				defaultbundleid = org.getDefaultbundleid();
+			}
+			Schedule schedule = new Schedule();
+			schedule.setScheduleid(0);
+			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setPlaymode(Schedule.PlayMode_Daily);
+			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			schedule.setEndtime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
+			Scheduledtl scheduledtl = new Scheduledtl();
+			scheduledtl.setScheduledtlid(0);
+			scheduledtl.setScheduleid(0);
+			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+			scheduledtl.setObjid(defaultbundleid);
+			scheduledtl.setDuration(0);
+			List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
+			scheduledtls.add(scheduledtl);
+			schedule.setScheduledtls(scheduledtls);
+			scheduleList.add(schedule);
 		}
-		String jsonPath = "/bundle/" + defaultbundleid + "/bundle-" + defaultbundleid + ".json";
-		File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
-		if (jsonFile.exists()) {
-			JSONObject bundleJson = new JSONObject();
-			bundleJson.put("bundle_id", defaultbundleid);
-			bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-			bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-			bundleJson.put("file", jsonFile.getName());
-			bundleJson.put("size", defaultbundle.getSize());
-			bundleJson.put("checksum", defaultbundle.getMd5());
 
-			bundleidJsonArray.add(defaultbundleid);
-			bundleJsonArray.add(bundleJson);
-		} else {
-			return resultJson;
+		for (int i = 0; i < scheduleList.size(); i++) {
+			Schedule schedule = scheduleList.get(i);
+			JSONObject scheduleJson = new JSONObject();
+			JSONArray bundleidJsonArray = new JSONArray();
+			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
+					Bundle bundle = bundleMapper.selectByPrimaryKey("" + scheduledtl.getObjid());
+					int d1 = Integer.parseInt(DateUtil.getDateStr(bundle.getStartdate(), "yyyyMMdd"));
+					int d2 = Integer.parseInt(DateUtil.getDateStr(bundle.getEnddate(), "yyyyMMdd"));
+					int now = Integer.parseInt(DateUtil.getDateStr(Calendar.getInstance().getTime(), "yyyyMMdd"));
+					if (now < d1 || now > d2) {
+						continue;
+					}
+
+					if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+						JSONObject bundleJson = JSONObject.fromObject(bundle.getJson());
+						bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+					}
+					bundleList.add(bundle);
+					for (Bundle subbundle : bundle.getSubbundles()) {
+						Bundle b = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
+						if (b != null && !b.getReviewflag().equals(Page.REVIEW_PASSED)) {
+							JSONObject bundleJson = JSONObject.fromObject(b.getJson());
+							b = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+						}
+						bundleList.add(b);
+					}
+
+					String jsonPath = "/bundle/" + bundle.getBundleid() + "/bundle-" + bundle.getBundleid() + ".json";
+					File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
+					if (jsonFile.exists()) {
+						JSONObject bundleJson = new JSONObject();
+						bundleJson.put("bundle_id", bundle.getBundleid());
+						bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+						bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+						bundleJson.put("file", jsonFile.getName());
+						bundleJson.put("size", bundle.getSize());
+						bundleJson.put("checksum", bundle.getMd5());
+						bundleidJsonArray.add(bundle.getBundleid());
+						if (i == 0) {
+							solobundleidJsonArray.add(bundle.getBundleid());
+						}
+						bundleJsonArray.add(bundleJson);
+					}
+				}
+			}
+			if (bundleidJsonArray.size() > 0) {
+				scheduleJson.put("start_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+				scheduleJson.put("bundle_ids", bundleidJsonArray);
+				scheduleJsonArray.add(scheduleJson);
+			}
 		}
 
 		List<Video> videoList = new ArrayList<Video>();
 		List<Image> imageList = new ArrayList<Image>();
-		for (Bundle p : bundleList) {
-			for (Bundlezone bundlezone : p.getBundlezones()) {
+		for (Bundle b : bundleList) {
+			for (Bundlezone bundlezone : b.getBundlezones()) {
 				for (Bundlezonedtl bundlezonedtl : bundlezone.getBundlezonedtls()) {
 					if (bundlezonedtl.getVideo() != null) {
 						if (videoHash.get(bundlezonedtl.getObjid()) == null) {
@@ -624,7 +681,8 @@ public class DeviceServiceImpl implements DeviceService {
 			}
 		}
 
-		resultJson.put("bundle_ids", bundleidJsonArray);
+		resultJson.put("bundle_ids", solobundleidJsonArray);
+		resultJson.put("schedules", scheduleJsonArray);
 		resultJson.put("bundles", bundleJsonArray);
 		resultJson.put("videos", videoJsonArray);
 		resultJson.put("images", imageJsonArray);

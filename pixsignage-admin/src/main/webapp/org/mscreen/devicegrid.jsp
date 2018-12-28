@@ -221,7 +221,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/pix-datainit.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/other/pix-branchtree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/other/pix-devicegrid.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/other/pix-devicegrid.js?t=${timestamp}1"></script>
 <script>
 jQuery(document).ready(function() {    
 	Metronic.init();

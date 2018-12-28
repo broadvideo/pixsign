@@ -282,6 +282,7 @@ public class PageServiceImpl implements PageService {
 					pagezone.setVolume(templatezone.getVolume());
 					pagezone.setSpeed(templatezone.getSpeed());
 					pagezone.setIntervaltime(templatezone.getIntervaltime());
+					pagezone.setEffect(templatezone.getEffect());
 					pagezone.setContent(templatezone.getContent());
 					pagezoneMapper.insertSelective(pagezone);
 					for (Templatezonedtl templatezonedtl : templatezone.getTemplatezonedtls()) {
@@ -398,6 +399,7 @@ public class PageServiceImpl implements PageService {
 				pagezone.setVolume(frompagezone.getVolume());
 				pagezone.setSpeed(frompagezone.getSpeed());
 				pagezone.setIntervaltime(frompagezone.getIntervaltime());
+				pagezone.setEffect(frompagezone.getEffect());
 				pagezone.setContent(frompagezone.getContent());
 				pagezoneMapper.insertSelective(pagezone);
 				for (Pagezonedtl frompagezonedtl : frompagezone.getPagezonedtls()) {

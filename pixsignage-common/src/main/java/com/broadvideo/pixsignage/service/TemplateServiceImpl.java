@@ -210,6 +210,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setVolume(fromtemplatezone.getVolume());
 				templatezone.setSpeed(fromtemplatezone.getSpeed());
 				templatezone.setIntervaltime(fromtemplatezone.getIntervaltime());
+				templatezone.setEffect(fromtemplatezone.getEffect());
 				templatezone.setContent(fromtemplatezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Templatezonedtl fromtemplatezonedtl : fromtemplatezone.getTemplatezonedtls()) {
@@ -420,6 +421,7 @@ public class TemplateServiceImpl implements TemplateService {
 				templatezone.setVolume(pagezone.getVolume());
 				templatezone.setSpeed(pagezone.getSpeed());
 				templatezone.setIntervaltime(pagezone.getIntervaltime());
+				templatezone.setEffect(pagezone.getEffect());
 				templatezone.setContent(pagezone.getContent());
 				templatezoneMapper.insertSelective(templatezone);
 				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {

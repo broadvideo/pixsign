@@ -418,6 +418,10 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			JSONObject locationJson = requestJson.optJSONObject("location");
+			int playbundleid = requestJson.optInt("bundle_id");
+			int playpageid = requestJson.optInt("page_id");
+			long nextpoweron = requestJson.optLong("power_on_time");
+			long nextpoweroff = requestJson.optLong("power_off_time");
 			long freebytes = requestJson.optLong("sdcard_free_bytes");
 			long totalbytes = requestJson.optLong("sdcard_total_bytes");
 			String temperature = requestJson.optString("temperature");
@@ -459,6 +463,10 @@ public class PixsignageService3 {
 				device.setAddr2(addr2);
 			}
 
+			device.setNextpoweron(nextpoweron);
+			device.setNextpoweroff(nextpoweroff);
+			device.setPlaybundleid(playbundleid);
+			device.setPlaypageid(playpageid);
 			device.setStorageavail(freebytes);
 			device.setStorageused(totalbytes - freebytes);
 			device.setTemperature(temperature);
@@ -639,6 +647,10 @@ public class PixsignageService3 {
 				String objtype = "0";
 				if (type.equalsIgnoreCase("video")) {
 					objtype = Devicefile.ObjType_Video;
+				} else if (type.equalsIgnoreCase("image")) {
+					objtype = Devicefile.ObjType_Image;
+				} else if (type.equalsIgnoreCase("bundle")) {
+					objtype = Devicefile.ObjType_Bundle;
 				} else if (type.equalsIgnoreCase("page")) {
 					objtype = Devicefile.ObjType_Page;
 				} else {

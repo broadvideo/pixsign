@@ -407,12 +407,8 @@ var TemplateModule = function () {
 						_design.Objectid = data.template.templateid;
 						_design.Zone = null;
 						$('.school-ctrl').css('display', 'none');
-						$('.attendance-ctrl').css('display', 'none');
 						if (SchoolCtrl) {
 							$('.school-ctrl').css('display', '');
-						}
-						if (AttendanceCtrl) {
-							$('.attendance-ctrl').css('display', '');
 						}
 						$('.diy-ctrl').css('display', DiyCtrl?'':'none');
 						$('.estate-ctrl').css('display', EstateCtrl? '':'none');

@@ -399,8 +399,8 @@ var OrgModule = function () {
 			+ $('input[name="org.flowrateflag"]:checked').val() + $('input[name="org.tagflag"]').val()
 			+ $('input[name="org.schoolflag"]:checked').val() + $('input[name="org.advertflag"]').val()
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
-			+ $('input[name="org.liftflag"]').val() + $('input[name="org.bundleplanflag"]').val()
-			+ $('input[name="org.pageplanflag"]').val() + $('input[name="org.massageflag"]').val()
+			+ $('input[name="org.liftflag"]').val() + $('input[name="org.bundleplanflag"]:checked').val()
+			+ $('input[name="org.pageplanflag"]:checked').val() + $('input[name="org.massageflag"]').val()
 			+ '000000000000000000';
 			formData.append('org.feature', feature);
 			

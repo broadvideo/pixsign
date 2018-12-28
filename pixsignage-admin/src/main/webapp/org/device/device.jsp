@@ -183,7 +183,7 @@
 										<input type="radio" name="device.powerflag" value="1" > <spring:message code="pixsign.prop.powerflag_1"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.powerflag" value="2" checked> <spring:message code="pixsign.prop.powerflag_2"/>
+										<input type="radio" name="device.powerflag" value="9" checked> <spring:message code="pixsign.prop.powerflag_9"/>
 									</label>
 								</div>
 							</div>

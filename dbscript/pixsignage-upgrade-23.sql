@@ -102,9 +102,19 @@ alter table devicegroup add externalid varchar(8) default '';
 alter table pagezone add volume int default 50;
 alter table pagezone add speed int default 5;
 alter table pagezone add intervaltime int default 10;
+alter table pagezone add effect varchar(16) default 'slide';
 alter table templatezone add volume int default 50;
 alter table templatezone add speed int default 5;
 alter table templatezone add intervaltime int default 10;
+alter table templatezone add effect varchar(16) default 'slide';
+
+alter table device add nextpoweron bigint default 0;
+alter table device add nextpoweroff bigint default 0;
+alter table device add playbundleid int default 0;
+alter table device add playpageid int default 0;
+alter table device modify powerflag tinyint default 9;
+update device set powerflag=9 where powerflag=2;
+
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);

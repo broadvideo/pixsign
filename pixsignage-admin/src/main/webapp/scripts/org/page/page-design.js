@@ -960,6 +960,8 @@ var PageDesignModule = function (mode) {
 			refreshFontStyle();
 			refreshFontFamilySelect();
 			
+			refreshEffectSelect();
+			
 			refreshTouchtypeSelect();
 			if (_self.Object.touchflag == 1) {
 				refreshSubObjectSelect();
@@ -1269,6 +1271,32 @@ var PageDesignModule = function (mode) {
 				_self.Zone.fontfamily = $('#FontFamilySelect').select2('data').id;
 			}
 			refreshPagezone(_self.Zone);
+		});	
+
+		function refreshEffectSelect() {
+			var effects = [];
+			effects.push({id: 'slide', text: common.effect.slide});
+			effects.push({id: 'fade', text: common.effect.fade});
+			effects.push({id: 'cube', text: common.effect.cube});
+			effects.push({id: 'flip', text: common.effect.flip});
+			$('#EffectSelect').select2({
+				placeholder: common.tips.detail_select,
+				minimumInputLength: 0,
+				minimumResultsForSearch: -1,
+				data: effects,
+				initSelection: function(element, callback) {
+					if (_self.Zone != null) {
+						callback({id: _self.Zone.effect, text: eval('common.effect.'+_self.Zone.effect) });
+					}
+				},
+				dropdownCssClass: 'bigdrop', 
+				escapeMarkup: function (m) { return m; } 
+			});
+		}
+		$('#EffectSelect').on('change', function(e) {
+			if ($('#EffectSelect').select2('data') != null) {
+				_self.Zone.effect = $('#EffectSelect').select2('data').id;
+			}
 		});	
 
 		function refreshTouchtypeSelect() {
@@ -1592,6 +1620,7 @@ var PageDesignModule = function (mode) {
 			pagezone.volume = 50;
 			pagezone.intervaltime = 10;
 			pagezone.speed = 5;
+			pagezone.effect = 'slide';
 			pagezone.content = '';
 			pagezone.pagezonedtls = [];
 			if (pagezone.type == 5) {

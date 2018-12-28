@@ -360,9 +360,44 @@ FormValidateOption.submitHandler = function(form) {
 	})[0];
 	$('#snapshot_div').show();
 	redrawGridlayout($('#snapshot_div'), gridlayout, 512);	
-	
+	domtoimage.toJpeg($('#snapshot_div')[0], { bgcolor: '#FFFFFF', quality: 0.95 })
+	.then(function (dataUrl) {
+		$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(dataUrl);
+		$('#snapshot_div').hide();
+
+		$.ajax({
+			type : 'POST',
+			url : $('#MyEditForm').attr('action'),
+			data : $('#MyEditForm').serialize(),
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					submitflag = false;
+					Metronic.unblockUI();
+					$('#MyEditModal').modal('hide');
+					bootbox.alert(common.tips.success);
+					$('#MyTable').dataTable()._fnAjaxUpdate();
+				} else {
+					bootbox.alert(common.tips.error + data.errormsg);
+				}
+			},
+			error : function() {
+				submitflag = false;
+				Metronic.unblockUI();
+				$('#MyEditModal').modal('hide');
+				console.log('failue');
+			}
+		});
+	})
+	.catch(function (error) {
+		_submitflag = false;
+		$('#snapshot_div').hide();
+		Metronic.unblockUI();
+		$('#DevicegridModal').modal('hide');
+		bootbox.alert(common.tips.error + error);
+		console.error('oops, something went wrong!', error);
+	});
+	/*
 	html2canvas($('#snapshot_div')[0]).then(function(canvas) {
-		//console.log(canvas.toDataURL('image/jpeg'));
 		$('#MyEditForm input[name="devicegrid.snapshotdtl"]').val(canvas.toDataURL('image/jpeg'));
 		$('#snapshot_div').hide();
 
@@ -389,6 +424,7 @@ FormValidateOption.submitHandler = function(form) {
 			}
 		});
 	});
+	*/
 
 };
 $('#MyEditForm').validate(FormValidateOption);

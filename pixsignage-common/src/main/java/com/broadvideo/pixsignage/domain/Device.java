@@ -155,6 +155,14 @@ public class Device {
 
 	private String qrcode;
 
+	private Long nextpoweron;
+
+	private Long nextpoweroff;
+
+	private Integer playbundleid;
+
+	private Integer playpageid;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -759,6 +767,38 @@ public class Device {
 
 	public void setQrcode(String qrcode) {
 		this.qrcode = qrcode;
+	}
+
+	public Long getNextpoweron() {
+		return nextpoweron;
+	}
+
+	public void setNextpoweron(Long nextpoweron) {
+		this.nextpoweron = nextpoweron;
+	}
+
+	public Long getNextpoweroff() {
+		return nextpoweroff;
+	}
+
+	public void setNextpoweroff(Long nextpoweroff) {
+		this.nextpoweroff = nextpoweroff;
+	}
+
+	public Integer getPlaybundleid() {
+		return playbundleid;
+	}
+
+	public void setPlaybundleid(Integer playbundleid) {
+		this.playbundleid = playbundleid;
+	}
+
+	public Integer getPlaypageid() {
+		return playpageid;
+	}
+
+	public void setPlaypageid(Integer playpageid) {
+		this.playpageid = playpageid;
 	}
 
 	public Branch getBranch() {

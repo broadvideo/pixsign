@@ -109,6 +109,8 @@ public class Pagezone {
 
 	private Integer intervaltime;
 
+	private String effect;
+
 	private String content;
 
 	private Diy diy;
@@ -507,6 +509,14 @@ public class Pagezone {
 
 	public void setIntervaltime(Integer intervaltime) {
 		this.intervaltime = intervaltime;
+	}
+
+	public String getEffect() {
+		return effect;
+	}
+
+	public void setEffect(String effect) {
+		this.effect = effect;
 	}
 
 	public String getContent() {

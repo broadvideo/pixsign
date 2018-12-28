@@ -159,14 +159,23 @@ var DeviceModule = function () {
 			sOut += '</tr>';
 			sOut += '<tr><td>IP:</td><td>'+aData.iip + '</td></tr>';
 			sOut += '<tr><td>MAC:</td><td>'+aData.mac + '</td></tr>';
-			sOut += '<tr><td>' + common.view.storage + ':</td><td>' + PixData.transferIntToByte(aData.storageused) + '/' + PixData.transferIntToByte(aData.storageavail) + '</td></tr>';
+			sOut += '<tr><td>' + common.view.storageused + ':</td><td>' + PixData.transferIntToByte(aData.storageused) + '</td></tr>';
+			sOut += '<tr><td>' + common.view.storageavail + ':</td><td>' + PixData.transferIntToByte(aData.storageavail) + '</td></tr>';
 			sOut += '<tr><td>' + common.view.city + ':</td><td>' + aData.city + '</td></tr>';
 			sOut += '<tr><td>' + common.view.addr + ':</td><td>' + aData.addr1 + ' ' + aData.addr2 + '</td></tr>';
 			sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.boardtype + ' ' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
 			sOut += '<tr><td>' + common.view.temperature + ':</td><td>' + aData.temperature + '</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadspeed + ':</td><td>' + aData.downloadspeed + ' KB/s</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + PixData.transferIntToByte(aData.downloadbytes) + '</td></tr>';
-			sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + aData.networkmode + '</td></tr>';
+			if (aData.networkmode == 0) {
+				sOut += '<tr><td>' + common.view.networkmode_0 + ':</td><td></td></tr>';
+			} else if (aData.networkmode == 1) {
+				sOut += '<tr><td>' + common.view.networkmode_1 + ':</td><td></td></tr>';
+			} else if (aData.networkmode == 2) {
+				sOut += '<tr><td>' + common.view.networkmode_2 + ':</td><td></td></tr>';
+			} else if (aData.networkmode == 3) {
+				sOut += '<tr><td>' + common.view.networkmode_3 + ':</td><td></td></tr>';
+			}
 			sOut += '<tr><td>' + common.view.networksignal + ':</td><td>' + aData.networksignal + '</td></tr>';
 			sOut += '<tr><td>' + common.view.brightness + ':</td><td>' + aData.brightness + '</td></tr>';
 			sOut += '<tr><td>Tags:</td><td>' + aData.tags + '</td></tr>';

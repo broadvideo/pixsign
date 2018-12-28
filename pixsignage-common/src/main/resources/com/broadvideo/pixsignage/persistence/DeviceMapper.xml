@@ -75,6 +75,10 @@
     <result column="batchid" property="batchid" jdbcType="INTEGER" />
     <result column="modelid" property="modelid" jdbcType="INTEGER" />
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+    <result column="nextpoweron" property="nextpoweron" jdbcType="BIGINT" />
+    <result column="nextpoweroff" property="nextpoweroff" jdbcType="BIGINT" />
+    <result column="playbundleid" property="playbundleid" jdbcType="INTEGER" />
+    <result column="playpageid" property="playpageid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -94,7 +98,8 @@
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
     tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, 
-    hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, modelid, qrcode
+    hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, modelid, qrcode, nextpoweron, nextpoweroff,
+    playbundleid, playpageid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -420,7 +425,9 @@
       defaultpageid, hotspotflag, hotspotssid, 
       hotspotpassword, hotspotfrequency, 
       temperatureflag, relateid, screenstatus,
-      batchid, modelid, qrcode)
+      batchid, modelid, qrcode,
+      nextpoweron, nextpoweroff, playbundleid,
+      playpageid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
@@ -444,7 +451,9 @@
       #{defaultpageid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
       #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR}, 
       #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, #{screenstatus,jdbcType=CHAR},
-      #{batchid,jdbcType=INTEGER}, #{modelid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR})
+      #{batchid,jdbcType=INTEGER}, #{modelid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR},
+      #{nextpoweron,jdbcType=BIGINT}, #{nextpoweroff,jdbcType=BIGINT}, #{playbundleid,jdbcType=INTEGER}
+      #{playpageid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -668,6 +677,18 @@
       <if test="qrcode != null" >
         qrcode,
       </if>
+      <if test="nextpoweron != null" >
+        nextpoweron,
+      </if>
+      <if test="nextpoweroff != null" >
+        nextpoweroff,
+      </if>
+      <if test="playbundleid != null" >
+        playbundleid,
+      </if>
+      <if test="playpageid != null" >
+        playpageid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -885,6 +906,18 @@
       </if>
       <if test="qrcode != null" >
         #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="nextpoweron != null" >
+        #{nextpoweron,jdbcType=BIGINT},
+      </if>
+      <if test="nextpoweroff != null" >
+        #{nextpoweroff,jdbcType=BIGINT},
+      </if>
+      <if test="playbundleid != null" >
+        #{playbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="playpageid != null" >
+        #{playpageid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -1107,6 +1140,18 @@
       <if test="qrcode != null" >
         qrcode = #{qrcode,jdbcType=VARCHAR},
       </if>
+      <if test="nextpoweron != null" >
+        nextpoweron = #{nextpoweron,jdbcType=BIGINT},
+      </if>
+      <if test="nextpoweroff != null" >
+        nextpoweroff = #{nextpoweroff,jdbcType=BIGINT},
+      </if>
+      <if test="playbundleid != null" >
+        playbundleid = #{playbundleid,jdbcType=INTEGER},
+      </if>
+      <if test="playpageid != null" >
+        playpageid = #{playpageid,jdbcType=INTEGER},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -1183,7 +1228,11 @@
       screenstatus = #{screenstatus,jdbcType=CHAR},
       batchid = #{batchid,jdbcType=INTEGER},
       modelid = #{modelid,jdbcType=INTEGER},
-      qrcode = #{qrcode,jdbcType=VARCHAR}
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      nextpoweron = #{nextpoweron,jdbcType=BIGINT},
+      nextpoweroff = #{nextpoweroff,jdbcType=BIGINT},
+      playbundleid = #{playbundleid,jdbcType=INTEGER},
+      playpageid = #{playpageid,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">
