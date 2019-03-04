@@ -21,6 +21,8 @@ public interface BranchMapper {
 
 	List<Branch> selectOrgBranchList(@Param("orgid") String orgid);
 
+	List<Branch> selectList(@Param("rootid") String rootid);
+
 	int deleteByPrimaryKey(@Param(value = "branchid") String branchid);
 
 	// int insert(Branch record);

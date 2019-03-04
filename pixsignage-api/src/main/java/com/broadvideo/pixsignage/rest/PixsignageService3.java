@@ -290,13 +290,6 @@ public class PixsignageService3 {
 				deviceMapper.unbind("" + device2.getDeviceid());
 			}
 
-			device1.setAppname("PIXCHAIR");
-			device1.setVname("1.0.0");
-			device1.setVcode(2);
-			device1.setMtype("mtk");
-			device1.setSign("a578e792aa10c81537f6b1e4418dd434");
-			device1.setUpgradeflag("1");
-
 			device1.setActivetime(Calendar.getInstance().getTime());
 			device1.setHardkey(hardkey);
 			device1.setStatus("1");

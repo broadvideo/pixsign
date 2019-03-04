@@ -169,6 +169,7 @@ var PlanModule = function () {
 										closeBtn : false,
 								        padding : 0,
 								        content: '<div id="BundlePreview"></div>',
+								        title: plandtl.objid,
 								    });
 									redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
 								} else {
@@ -192,6 +193,7 @@ var PlanModule = function () {
 										closeBtn : false,
 								        padding : 0,
 								        content: '<div id="PagePreview"></div>',
+								        title: plandtl.objid,
 								    });
 									PagePreviewModule.preview($('#PagePreview'), data.page, 800);
 								} else {

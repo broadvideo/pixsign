@@ -78,11 +78,19 @@
     and b.code != '' 
     and o.tagflag = '1'
   </select>
-    <select id="selectOrgBranchList" resultMap="BaseResultMap">
+  
+  <select id="selectOrgBranchList" resultMap="BaseResultMap">
     select * from branch
     where status='1'  and orgid = #{orgid}
     order by branchid asc
-    </select>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from branch
+    where status='1'
+    and (branchid=#{rootid} || parentid=#{rootid} || parentid2=#{rootid} || parentid3=#{rootid})
+    order by branchid asc
+  </select>
 
   <select id="selectByUuid" resultMap="BaseResultMap">
     select * from branch

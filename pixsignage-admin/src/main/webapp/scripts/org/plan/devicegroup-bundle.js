@@ -99,6 +99,7 @@ var DevicegroupModule = function () {
 									closeBtn : false,
 							        padding : 0,
 							        content: '<div id="BundlePreview"></div>',
+							        title: bundleid,
 							    });
 								BundlePreviewModule.preview($('#BundlePreview'), data.bundle, 800);
 							} else {

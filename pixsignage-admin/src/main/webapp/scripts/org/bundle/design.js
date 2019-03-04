@@ -1272,6 +1272,7 @@ var BundleDesignModule = function (mode) {
 			'oLanguage' : { 'sZeroRecords' : common.view.empty,
 							'sEmptyTable' : common.view.empty }, 
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(0)', nRow).html(iDisplayIndex+1);
 				$('td:eq(4)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn green btn-xs pix-bundlezonedtl-up"><i class="fa fa-arrow-up"></i></button>');
 				$('td:eq(5)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn blue btn-xs pix-bundlezonedtl-down"><i class="fa fa-arrow-down"></i></button>');
 				$('td:eq(6)', nRow).html('<button data-id="' + iDisplayIndex + '" class="btn red btn-xs pix-bundlezonedtl-delete"><i class="fa fa-trash-o"></i></button>');
@@ -1395,10 +1396,11 @@ var BundleDesignModule = function (mode) {
 			if (rowIndex == undefined) {
 				rowIndex = $(event.target).parent().attr('data-id');
 			}
+			/*
 			for (var i=rowIndex; i<$('#BundlezonedtlTable').dataTable().fnSettings().fnRecordsDisplay(); i++) {
 				var data = $('#BundlezonedtlTable').dataTable().fnGetData(i);
 				$('#BundlezonedtlTable').dataTable().fnUpdate(i, parseInt(i), 0);
-			}
+			}*/
 			$('#BundlezonedtlTable').dataTable().fnDeleteRow(rowIndex);
 			
 			for (var i=rowIndex; i<_self.Zone.bundlezonedtls.length; i++) {

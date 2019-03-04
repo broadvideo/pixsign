@@ -71,6 +71,9 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private AdplandtlMapper adplandtlMapper;
 
+	@Autowired
+	private BundleService bundleService;
+
 	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
 			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search) {
 		return deviceMapper.selectCount(orgid, branchid, subbranchflag, status, onlineflag, devicegroupid, devicegridid,
@@ -565,20 +568,21 @@ public class DeviceServiceImpl implements DeviceService {
 
 					String jsonPath = "/bundle/" + bundle.getBundleid() + "/bundle-" + bundle.getBundleid() + ".json";
 					File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
-					if (jsonFile.exists()) {
-						JSONObject bundleJson = new JSONObject();
-						bundleJson.put("bundle_id", bundle.getBundleid());
-						bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-						bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-						bundleJson.put("file", jsonFile.getName());
-						bundleJson.put("size", bundle.getSize());
-						bundleJson.put("checksum", bundle.getMd5());
-						bundleidJsonArray.add(bundle.getBundleid());
-						if (i == 0) {
-							solobundleidJsonArray.add(bundle.getBundleid());
-						}
-						bundleJsonArray.add(bundleJson);
+					if (!jsonFile.exists()) {
+						bundleService.makeJsonFile("" + bundle.getBundleid());
 					}
+					JSONObject bundleJson = new JSONObject();
+					bundleJson.put("bundle_id", bundle.getBundleid());
+					bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+					bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+					bundleJson.put("file", jsonFile.getName());
+					bundleJson.put("size", bundle.getSize());
+					bundleJson.put("checksum", bundle.getMd5());
+					bundleidJsonArray.add(bundle.getBundleid());
+					if (i == 0) {
+						solobundleidJsonArray.add(bundle.getBundleid());
+					}
+					bundleJsonArray.add(bundleJson);
 				}
 			}
 			if (bundleidJsonArray.size() > 0) {

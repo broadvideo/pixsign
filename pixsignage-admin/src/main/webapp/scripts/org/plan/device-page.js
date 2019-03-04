@@ -107,6 +107,7 @@ var DeviceModule = function () {
 									closeBtn : false,
 							        padding : 0,
 							        content: '<div id="PagePreview"></div>',
+							        title: pageid,
 							    });
 								PagePreviewModule.preview($('#PagePreview'), data.page, 800);
 							} else {

@@ -164,7 +164,7 @@ alter table bundledtl add volume int default 50;
 update bundle b, layout l set b.ratio=l.ratio, b.bgcolor=l.bgcolor, b.bgimageid=l.bgimageid where b.layoutid=l.layoutid;
 update bundledtl b, layoutdtl l set b.type=l.type, b.mainflag=l.mainflag, b.height=l.height, b.width=l.width, b.topoffset=l.topoffset, b.leftoffset=l.leftoffset, b.zindex=l.zindex, b.bgcolor=l.bgcolor, b.opacity=l.opacity, b.bgimageid=l.bgimageid, b.sleeptime=l.sleeptime, b.intervaltime=l.intervaltime, b.animation=l.animation, b.direction=l.direction, b.speed=l.speed, b.color=l.color, b.size=l.size, b.dateformat=l.dateformat, b.fitflag=l.fitflag, b.volume=l.volume where b.layoutdtlid=l.layoutdtlid;
 
-insert into hourplaylog(orgid, branchid, deviceid, mediatype, mediaid, starttime, total) select orgid, branchid, deviceid, mediatype, mediaid, concat(date_format(starttime,'%Y-%m-%d %H'),':00:00'), count(1) from playlog group by orgid, branchid, deviceid, mediatype, mediaid, date_format(starttime,'%Y%m%d%H');
+#insert into hourplaylog(orgid, branchid, deviceid, mediatype, mediaid, starttime, total) select orgid, branchid, deviceid, mediatype, mediaid, concat(date_format(starttime,'%Y-%m-%d %H'),':00:00'), count(1) from playlog group by orgid, branchid, deviceid, mediatype, mediaid, date_format(starttime,'%Y%m%d%H');
 
 
 ############################################################

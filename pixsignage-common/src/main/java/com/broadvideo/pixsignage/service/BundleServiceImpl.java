@@ -154,6 +154,7 @@ public class BundleServiceImpl implements BundleService {
 				bundle.setWidth(313);
 				bundle.setHeight(1920);
 			}
+			bundle.setTempletid(0);
 			bundle.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			bundle.setUpdatetime(Calendar.getInstance().getTime());
 			bundleMapper.insertSelective(bundle);

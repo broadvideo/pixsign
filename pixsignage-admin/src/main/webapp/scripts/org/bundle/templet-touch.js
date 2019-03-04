@@ -169,7 +169,7 @@ var TempletModule = function () {
 						url : 'templet!delete.action',
 						cache: false,
 						data : {
-							'templet.templetid': templet.templetid
+							'templet.templetid': templetid
 						},
 						success : function(data, status) {
 							if (data.errorcode == 0) {

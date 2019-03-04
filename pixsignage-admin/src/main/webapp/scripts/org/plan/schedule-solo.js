@@ -866,6 +866,7 @@ var ScheduleModule = function () {
 									closeBtn : false,
 							        padding : 0,
 							        content: '<div id="BundlePreview"></div>',
+							        title: objid,
 							    });
 								BundlePreviewModule.preview($('#BundlePreview'), data.bundle, 800);
 							} else {

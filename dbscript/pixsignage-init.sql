@@ -681,6 +681,7 @@ select last_insert_id() into @orgid;
 insert into branch(orgid,parentid,name,description,createstaffid) values(@orgid,0,'super','Default Root Branch',@staffid3);
 select last_insert_id() into @branchid;
 update org set topbranchid=@branchid where orgid=@orgid;
+insert into staff(subsystem,orgid,branchid,loginname,password,name) values(2,@orgid,@branchid,'admin@default','19c7b72b218c493c996536b57ab4b8c4','admin');
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(101,0,0,'menu.opmanage','','fa-cloud',1,1,'0');
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence,orgtype) values(10101,0,101,'menu.vsp','vsp.jsp','',1,1,'0');

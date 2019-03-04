@@ -43,6 +43,14 @@
     order by folderid 
   </select>
 
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from folder
+    where status=1
+    and orgid = #{orgid}
+    and branchid = #{branchid}
+    order by folderid asc
+  </select>
+
   <delete id="deleteByPrimaryKey" >
     update folder set status='9'
     where folderid = #{folderid}
