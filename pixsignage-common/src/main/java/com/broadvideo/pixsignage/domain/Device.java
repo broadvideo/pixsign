@@ -171,6 +171,8 @@ public class Device {
 
 	private List<Schedule> schedules;
 
+	private List<Schedule> attachschedules;
+
 	private Bundle defaultbundle;
 
 	private Page defaultpage;
@@ -831,6 +833,14 @@ public class Device {
 
 	public void setSchedules(List<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+
+	public List<Schedule> getAttachschedules() {
+		return attachschedules;
+	}
+
+	public void setAttachschedules(List<Schedule> attachschedules) {
+		this.attachschedules = attachschedules;
 	}
 
 	public Bundle getDefaultbundle() {

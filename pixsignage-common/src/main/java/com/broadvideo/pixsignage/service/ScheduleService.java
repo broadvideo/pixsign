@@ -7,9 +7,10 @@ import com.broadvideo.pixsignage.domain.Schedule;
 import net.sf.json.JSONObject;
 
 public interface ScheduleService {
-	public List<Schedule> selectList(String scheduletype, String bindtype, String bindid, String playmode);
+	public List<Schedule> selectList(String scheduletype, String attachflag, String bindtype, String bindid,
+			String playmode);
 
-	public void batch(String scheduletype, String bindtype, String bindid, Schedule[] schedules);
+	public void batch(String scheduletype, String attachflag, String bindtype, String bindid, Schedule[] schedules);
 
 	public void syncSchedule(String bindtype, String bindid) throws Exception;
 

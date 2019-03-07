@@ -64,9 +64,9 @@ var ScheduleModule = function () {
 				}
 				
 				var schedulehtml = '';
-				if (aData.schedules.length > 0) {
-					for (var i=0; i<aData.schedules.length; i++) {
-						var schedule = aData.schedules[i];
+				if (aData.attachschedules.length > 0) {
+					for (var i=0; i<aData.attachschedules.length; i++) {
+						var schedule = aData.attachschedules[i];
 						schedulehtml += '<div class="row">';
 						schedulehtml += '<div class="col-md-2 col-xs-2">';
 						schedulehtml += '<h3>' + schedule.starttime.substring(0,5) + ' </h3>';
@@ -160,9 +160,9 @@ var ScheduleModule = function () {
 				$('td:eq(2)', nRow).html(listhtml);
 				
 				var schedulehtml = '';
-				if (aData.schedules.length > 0) {
-					for (var i=0; i<aData.schedules.length; i++) {
-						var schedule = aData.schedules[i];
+				if (aData.attachschedules.length > 0) {
+					for (var i=0; i<aData.attachschedules.length; i++) {
+						var schedule = aData.attachschedules[i];
 						schedulehtml += '<div class="row">';
 						schedulehtml += '<div class="col-md-2 col-xs-2">';
 						schedulehtml += '<h3>' + schedule.starttime.substring(0,5) + ' </h3>';
@@ -586,7 +586,7 @@ var ScheduleModule = function () {
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							CurrentBind = data.device;
-							CurrentSchedules = CurrentBind.schedules;
+							CurrentSchedules = CurrentBind.attachschedules;
 							$('.schedule-edit').css('display', 'none');
 							$('.schedule-add').css('display', 'none');
 							$('.schedule-view').css('display', 'block');
@@ -613,7 +613,7 @@ var ScheduleModule = function () {
 					success : function(data, status) {
 						if (data.errorcode == 0) {
 							CurrentBind = data.devicegroup;
-							CurrentSchedules = CurrentBind.schedules;
+							CurrentSchedules = CurrentBind.attachschedules;
 							$('.schedule-edit').css('display', 'none');
 							$('.schedule-add').css('display', 'none');
 							$('.schedule-view').css('display', 'block');				
@@ -647,7 +647,7 @@ var ScheduleModule = function () {
 			CurrentSchedule = {};
 			CurrentSchedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
 			CurrentSchedule.scheduletype = 1;
-			CurrentSchedule.attachflag = 0;
+			CurrentSchedule.attachflag = 1;
 			CurrentSchedule.bindtype = CurrentBindtype;
 			CurrentSchedule.bindid = CurrentBindid;
 			CurrentScheduledtls = [];
@@ -710,7 +710,7 @@ var ScheduleModule = function () {
 					var schedule = {};
 					schedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
 					schedule.scheduletype = 1;
-					schedule.attachflag = 0;
+					schedule.attachflag = 1;
 					schedule.bindtype = CurrentBindtype;
 					schedule.bindid = CurrentBindid;
 					schedule.playmode = $('#ScheduleForm input[name=playmode]:checked').attr("value");
@@ -803,7 +803,7 @@ var ScheduleModule = function () {
 			}
 			var data = {
 				scheduletype: 1,
-				attachflag: 0,
+				attachflag: 1,
 				bindtype: CurrentBindtype,
 				bindid: CurrentBindid,
 				schedules: CurrentSchedules

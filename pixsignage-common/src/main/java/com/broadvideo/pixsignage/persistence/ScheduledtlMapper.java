@@ -13,9 +13,9 @@ public interface ScheduledtlMapper {
 
 	int deleteByPrimaryKey(@Param(value = "scheduledtlid") String scheduledtlid);
 
-	int deleteByDtl(@Param(value = "scheduletype") String scheduletype, @Param(value = "bindtype") String bindtype,
-			@Param(value = "bindid") String bindid, @Param(value = "playmode") String playmode,
-			@Param(value = "starttime") String starttime);
+	int deleteByDtl(@Param(value = "scheduletype") String scheduletype, @Param(value = "attachflag") String attachflag,
+			@Param(value = "bindtype") String bindtype, @Param(value = "bindid") String bindid,
+			@Param(value = "playmode") String playmode, @Param(value = "starttime") String starttime);
 
 	int deleteBySchedule(@Param(value = "scheduleid") String scheduleid);
 

@@ -44,14 +44,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Autowired
 	private DevicefileService devicefileService;
 
-	public List<Schedule> selectList(String scheduletype, String bindtype, String bindid, String playmode) {
-		return scheduleMapper.selectList(scheduletype, bindtype, bindid, playmode);
+	public List<Schedule> selectList(String scheduletype, String attachflag, String bindtype, String bindid,
+			String playmode) {
+		return scheduleMapper.selectList(scheduletype, attachflag, bindtype, bindid, playmode);
 	}
 
 	@Transactional
-	public void batch(String scheduletype, String bindtype, String bindid, Schedule[] schedules) {
-		scheduledtlMapper.deleteByDtl(scheduletype, bindtype, bindid, null, null);
-		scheduleMapper.deleteByDtl(scheduletype, bindtype, bindid, null, null);
+	public void batch(String scheduletype, String attachflag, String bindtype, String bindid, Schedule[] schedules) {
+		scheduledtlMapper.deleteByDtl(scheduletype, attachflag, bindtype, bindid, null, null);
+		scheduleMapper.deleteByDtl(scheduletype, attachflag, bindtype, bindid, null, null);
 		for (int i = 0; i < schedules.length; i++) {
 			scheduleMapper.insertSelective(schedules[i]);
 			List<Scheduledtl> scheduledtls = schedules[i].getScheduledtls();
@@ -135,10 +136,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleList.add(schedule);
 		} else if (org.getBundleplanflag().equals("0")) {
 			if (device.getDevicegroupid().intValue() == 0) {
-				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
-						Schedule.PlayMode_Daily);
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Device,
+						deviceid, Schedule.PlayMode_Daily);
 			} else {
-				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Devicegroup,
 						"" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
 			}
 		}
@@ -179,7 +180,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	public JSONObject generateDevicegroupBundleScheduleJson(String devicegroupid) {
-		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo,
+		List<Schedule> scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0",
 				Schedule.BindType_Devicegroup, devicegroupid, Schedule.PlayMode_Daily);
 		List<Integer> bundleids = new ArrayList<Integer>();
 
@@ -232,10 +233,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleList.add(schedule);
 		} else if (org.getBundleplanflag().equals("0")) {
 			if (device.getDevicegroupid().intValue() == 0) {
-				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Device, deviceid,
-						Schedule.PlayMode_Daily);
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Device,
+						deviceid, Schedule.PlayMode_Daily);
 			} else {
-				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, Schedule.BindType_Devicegroup,
+				scheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Devicegroup,
 						"" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
 			}
 		}

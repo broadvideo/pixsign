@@ -677,7 +677,7 @@ public class PlanServiceImpl implements PlanService {
 		}
 		List<Devicegrid> devicegrids = devicegridMapper.selectList(null, null, null, "0", null, null, null);
 		for (Devicegrid devicegrid : devicegrids) {
-			List<Schedule> schedules = scheduleMapper.selectList(Schedule.ScheduleType_Multi,
+			List<Schedule> schedules = scheduleMapper.selectList(Schedule.ScheduleType_Multi, "0",
 					Schedule.BindType_Devicegrid, "" + devicegrid.getDevicegridid(), Schedule.PlayMode_Daily);
 			for (Schedule schedule : schedules) {
 				Plan plan = new Plan();
@@ -714,7 +714,7 @@ public class PlanServiceImpl implements PlanService {
 
 		List<Devicegroup> devicegroups = devicegroupMapper.selectList(null, null, "2", null, null, null, null);
 		for (Devicegroup devicegroup : devicegroups) {
-			List<Schedule> schedules = scheduleMapper.selectList(Schedule.ScheduleType_Multi,
+			List<Schedule> schedules = scheduleMapper.selectList(Schedule.ScheduleType_Multi, "0",
 					Schedule.BindType_Devicegroup, "" + devicegroup.getDevicegroupid(), Schedule.PlayMode_Daily);
 			for (Schedule schedule : schedules) {
 				Plan plan = new Plan();

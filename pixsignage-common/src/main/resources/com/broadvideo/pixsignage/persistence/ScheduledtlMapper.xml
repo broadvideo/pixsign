@@ -66,6 +66,9 @@
     delete sd from schedule s, scheduledtl sd
     where s.scheduleid = sd.scheduleid
     and s.scheduletype = #{scheduletype} 
+    <if test="attachflag != null">
+      and s.attachflag = #{attachflag}
+    </if>
     and s.bindtype = #{bindtype} 
     and s.bindid = #{bindid}
     <if test="playmode != null">

@@ -647,18 +647,18 @@ public class BundleServiceImpl implements BundleService {
 		for (int i = 0; i < binds.length; i++) {
 			HashMap<String, Object> bind = binds[i];
 			logger.info("Push bundle to device: bindtype={}, bindid={}", bind.get("bindtype"), bind.get("bindid"));
-			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, "" + bind.get("bindtype"),
+			scheduledtlMapper.deleteByDtl(Schedule.ScheduleType_Solo, "0", "" + bind.get("bindtype"),
 					"" + bind.get("bindid"), null, null);
-			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, "" + bind.get("bindtype"), "" + bind.get("bindid"),
-					null, null);
+			scheduleMapper.deleteByDtl(Schedule.ScheduleType_Solo, "0", "" + bind.get("bindtype"),
+					"" + bind.get("bindid"), null, null);
 			Schedule schedule = new Schedule();
 			schedule.setScheduletype(Schedule.ScheduleType_Solo);
+			schedule.setAttachflag("0");
 			schedule.setBindtype("" + bind.get("bindtype"));
 			schedule.setBindid(Integer.parseInt("" + bind.get("bindid")));
 			schedule.setPlaymode(Schedule.PlayMode_Daily);
 			schedule.setStarttime(CommonUtil.parseDate("00:00:00", CommonConstants.DateFormat_Time));
 			scheduleMapper.insertSelective(schedule);
-
 			Scheduledtl scheduledtl = new Scheduledtl();
 			scheduledtl.setScheduleid(schedule.getScheduleid());
 			scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);

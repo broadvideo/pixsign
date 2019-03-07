@@ -88,6 +88,8 @@
     <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
+	<collection property="attachschedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
+		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectAttachListByDevice" />
   </resultMap>
   
   <sql id="Base_Column_List" >

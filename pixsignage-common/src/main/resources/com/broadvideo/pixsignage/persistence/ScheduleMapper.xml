@@ -6,6 +6,7 @@
     <result column="bindtype" property="bindtype" jdbcType="CHAR" />
     <result column="bindid" property="bindid" jdbcType="INTEGER" />
     <result column="scheduletype" property="scheduletype" jdbcType="CHAR" />
+    <result column="attachflag" property="attachflag" jdbcType="CHAR" />
     <result column="playmode" property="playmode" jdbcType="CHAR" />
     <result column="starttime" property="starttime" jdbcType="TIME" />
     <result column="endtime" property="endtime" jdbcType="TIME" />
@@ -21,7 +22,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    scheduleid, bindtype, bindid, scheduletype, playmode, starttime, endtime, intervaltime, 
+    scheduleid, bindtype, bindid, scheduletype, attachflag, playmode, starttime, endtime, intervaltime, 
     createtime
   </sql>
 
@@ -37,6 +38,18 @@
     <include refid="Base_Column_List" />
     from schedule
     where scheduletype = 1
+    and attachflag = 0
+    and bindtype = 1 
+    and bindid = #{deviceid}
+    order by starttime
+  </select>
+
+  <select id="selectAttachListByDevice" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from schedule
+    where scheduletype = 1
+    and attachflag = 1
     and bindtype = 1 
     and bindid = #{deviceid}
     order by starttime
@@ -46,7 +59,18 @@
     select 
     <include refid="Base_Column_List" />
     from schedule
-    where bindtype = 2 
+    where attachflag = 0
+    and bindtype = 2 
+    and bindid = #{devicegroupid}
+    order by starttime
+  </select>
+
+  <select id="selectAttachListByDevicegroup" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from schedule
+    where attachflag = 1
+    and bindtype = 2 
     and bindid = #{devicegroupid}
     order by starttime
   </select>
@@ -66,6 +90,9 @@
     <include refid="Base_Column_List" />
     from schedule
     where scheduletype = #{scheduletype} 
+    <if test="attachflag != null">
+      and attachflag = #{attachflag} 
+    </if>
     and bindtype = #{bindtype} 
     and bindid = #{bindid}
     <if test="playmode != null">
@@ -91,6 +118,9 @@
   <delete id="deleteByDtl" >
     delete from schedule
     where scheduletype = #{scheduletype} 
+    <if test="attachflag != null">
+      and attachflag = #{attachflag} 
+    </if>
     and bindtype = #{bindtype} 
     and bindid = #{bindid}
     <if test="playmode != null">
@@ -106,9 +136,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into schedule (bindtype, bindid, scheduletype, 
+      attachflag, 
       playmode, starttime, endtime, 
       intervaltime, createtime)
     values (#{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}, #{scheduletype,jdbcType=CHAR}, 
+      #{attachflag,jdbcType=CHAR}, 
       #{playmode,jdbcType=CHAR}, #{starttime,jdbcType=TIME}, #{endtime,jdbcType=TIME}, 
       #{intervaltime,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
@@ -126,6 +158,9 @@
       </if>
       <if test="scheduletype != null" >
         scheduletype,
+      </if>
+      <if test="attachflag != null" >
+        attachflag,
       </if>
       <if test="playmode != null" >
         playmode,
@@ -152,6 +187,9 @@
       </if>
       <if test="scheduletype != null" >
         #{scheduletype,jdbcType=CHAR},
+      </if>
+      <if test="attachflag != null" >
+        #{attachflag,jdbcType=CHAR},
       </if>
       <if test="playmode != null" >
         #{playmode,jdbcType=CHAR},
@@ -182,6 +220,9 @@
       <if test="scheduletype != null" >
         scheduletype = #{scheduletype,jdbcType=CHAR},
       </if>
+      <if test="attachflag != null" >
+        attachflag = #{attachflag,jdbcType=CHAR},
+      </if>
       <if test="playmode != null" >
         playmode = #{playmode,jdbcType=CHAR},
       </if>
@@ -205,6 +246,7 @@
     set bindtype = #{bindtype,jdbcType=CHAR},
       bindid = #{bindid,jdbcType=INTEGER},
       scheduletype = #{scheduletype,jdbcType=CHAR},
+      attachflag = #{attachflag,jdbcType=CHAR},
       playmode = #{playmode,jdbcType=CHAR},
       starttime = #{starttime,jdbcType=TIME},
       endtime = #{endtime,jdbcType=TIME},

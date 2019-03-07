@@ -17,6 +17,7 @@ public class ScheduleAction extends BaseDatatableAction {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String scheduletype;
+	private String attachflag;
 	private String bindtype;
 	private String bindid;
 	private Schedule[] schedules;
@@ -26,7 +27,7 @@ public class ScheduleAction extends BaseDatatableAction {
 
 	public String doBatch() {
 		try {
-			scheduleService.batch(scheduletype, bindtype, bindid, schedules);
+			scheduleService.batch(scheduletype, attachflag, bindtype, bindid, schedules);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("ScheduleAction doBatchAdd exception, ", ex);
@@ -42,6 +43,14 @@ public class ScheduleAction extends BaseDatatableAction {
 
 	public void setScheduletype(String scheduletype) {
 		this.scheduletype = scheduletype;
+	}
+
+	public String getAttachflag() {
+		return attachflag;
+	}
+
+	public void setAttachflag(String attachflag) {
+		this.attachflag = attachflag;
 	}
 
 	public String getBindtype() {

@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -44,6 +45,8 @@ import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Folder;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.domain.Templet;
 import com.broadvideo.pixsignage.domain.Video;
@@ -57,7 +60,9 @@ import com.broadvideo.pixsignage.persistence.StaffMapper;
 import com.broadvideo.pixsignage.persistence.TempletMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.service.BundleService;
+import com.broadvideo.pixsignage.service.ScheduleService;
 import com.broadvideo.pixsignage.util.CommonUtil;
+import com.broadvideo.pixsignage.util.DateUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -88,6 +93,9 @@ public class AdminService3 {
 	private BundleMapper bundleMapper;
 	@Autowired
 	private BundleService bundleService;
+
+	@Autowired
+	private ScheduleService scheduleService;
 
 	// ==============================================================================
 	// System Interface
@@ -888,6 +896,109 @@ public class AdminService3 {
 			}
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String bundleid = requestJson.optString("bundle_id");
+			String snapshotdtl = requestJson.optString("snapshotdtl");
+
+			Bundle bundle = bundleService.selectByPrimaryKey(bundleid);
+			List<Bundlezone> bundlezones = bundle.getBundlezones();
+			List<Bundlezone> newzones = new ArrayList<Bundlezone>();
+			bundle.setSnapshotdtl(snapshotdtl);
+			JSONArray zonesJson = requestJson.optJSONArray("zones");
+			for (int i = 0; i < zonesJson.size(); i++) {
+				JSONObject zoneJson = zonesJson.getJSONObject(i);
+				JSONArray zonedtlsJson = zoneJson.optJSONArray("zonedtls");
+				int zoneid = zoneJson.optInt("zone_id");
+				if (zoneid == 0) {
+					Bundlezone bundlezone = new Bundlezone();
+					bundlezone.setBundlezoneid(0);
+					bundlezone.setMainflag(zoneJson.optString("main_flag"));
+					bundlezone.setWidth(zoneJson.optInt("width"));
+					bundlezone.setHeight(zoneJson.optInt("height"));
+					bundlezone.setTopoffset(zoneJson.optInt("top"));
+					bundlezone.setLeftoffset(zoneJson.optInt("left"));
+					bundlezone.setZindex(zoneJson.optInt("zindex"));
+					bundlezone.setType(Byte.parseByte(zoneJson.optString("type")));
+					bundlezone.setSleeptime(zoneJson.optInt("sleep"));
+					bundlezone.setIntervaltime(zoneJson.optInt("interval"));
+					bundlezone.setSpeed(zoneJson.optString("speed"));
+					bundlezone.setColor(zoneJson.optString("color"));
+					bundlezone.setSize(zoneJson.optInt("size"));
+					bundlezone.setDateformat(zoneJson.optString("date_format"));
+					bundlezone.setFitflag(zoneJson.optString("fit_flag"));
+					bundlezone.setBgcolor(zoneJson.optString("bgcolor"));
+					bundlezone.setBgopacity(zoneJson.optInt("opacity"));
+					bundlezone.setVolume(zoneJson.optInt("volume"));
+					bundlezone.setContent(zoneJson.optString("content"));
+					List<Bundlezonedtl> bundlezonedtls = new ArrayList<Bundlezonedtl>();
+					for (int j = 0; j < zonedtlsJson.size(); j++) {
+						JSONObject zonedtlJson = zonedtlsJson.getJSONObject(j);
+						Bundlezonedtl bundlezonedtl = new Bundlezonedtl();
+						if (zonedtlJson.optString("type").equals("video")) {
+							bundlezonedtl.setObjtype(Bundlezonedtl.ObjType_Video);
+							bundlezonedtl.setObjid(zonedtlJson.optInt("id"));
+							bundlezonedtl.setSequence(zonedtlJson.optInt("sequence"));
+							bundlezonedtls.add(bundlezonedtl);
+						} else if (zonedtlJson.optString("type").equals("image")) {
+							bundlezonedtl.setObjtype(Bundlezonedtl.ObjType_Image);
+							bundlezonedtl.setObjid(zonedtlJson.optInt("id"));
+							bundlezonedtl.setSequence(zonedtlJson.optInt("sequence"));
+							bundlezonedtls.add(bundlezonedtl);
+						}
+					}
+					bundlezone.setBundlezonedtls(bundlezonedtls);
+					newzones.add(bundlezone);
+				} else {
+					for (Bundlezone bundlezone : bundlezones) {
+						if (bundlezone.getBundlezoneid().intValue() == zoneid) {
+							bundlezone.setMainflag(zoneJson.optString("main_flag"));
+							bundlezone.setWidth(zoneJson.optInt("width"));
+							bundlezone.setHeight(zoneJson.optInt("height"));
+							bundlezone.setTopoffset(zoneJson.optInt("top"));
+							bundlezone.setLeftoffset(zoneJson.optInt("left"));
+							bundlezone.setZindex(zoneJson.optInt("zindex"));
+							bundlezone.setType(Byte.parseByte(zoneJson.optString("type")));
+							bundlezone.setSleeptime(zoneJson.optInt("sleep"));
+							bundlezone.setIntervaltime(zoneJson.optInt("interval"));
+							bundlezone.setSpeed(zoneJson.optString("speed"));
+							bundlezone.setColor(zoneJson.optString("color"));
+							bundlezone.setSize(zoneJson.optInt("size"));
+							bundlezone.setDateformat(zoneJson.optString("date_format"));
+							bundlezone.setFitflag(zoneJson.optString("fit_flag"));
+							bundlezone.setBgcolor(zoneJson.optString("bgcolor"));
+							bundlezone.setBgopacity(zoneJson.optInt("opacity"));
+							bundlezone.setVolume(zoneJson.optInt("volume"));
+							bundlezone.setContent(zoneJson.optString("content"));
+							List<Bundlezonedtl> bundlezonedtls = new ArrayList<Bundlezonedtl>();
+							for (int j = 0; j < zonedtlsJson.size(); j++) {
+								JSONObject zonedtlJson = zonedtlsJson.getJSONObject(j);
+								Bundlezonedtl bundlezonedtl = new Bundlezonedtl();
+								bundlezonedtl.setBundlezoneid(bundlezone.getBundlezoneid());
+								if (zonedtlJson.optString("type").equals("video")) {
+									bundlezonedtl.setObjtype(Bundlezonedtl.ObjType_Video);
+									bundlezonedtl.setObjid(zonedtlJson.optInt("id"));
+									bundlezonedtl.setSequence(zonedtlJson.optInt("sequence"));
+									bundlezonedtls.add(bundlezonedtl);
+								} else if (zonedtlJson.optString("type").equals("image")) {
+									bundlezonedtl.setObjtype(Bundlezonedtl.ObjType_Image);
+									bundlezonedtl.setObjid(zonedtlJson.optInt("id"));
+									bundlezonedtl.setSequence(zonedtlJson.optInt("sequence"));
+									bundlezonedtls.add(bundlezonedtl);
+								}
+							}
+							bundlezone.setBundlezonedtls(bundlezonedtls);
+							newzones.add(bundlezone);
+							break;
+						}
+					}
+				}
+			}
+			bundle.setBundlezones(newzones);
+
+			bundleService.design(bundle);
+			if (bundle.getHomeflag().equals("1")) {
+				bundleService.makeJsonFile("" + bundle.getBundleid());
+			} else {
+				bundleService.makeJsonFile("" + bundle.getHomebundleid());
+			}
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
@@ -896,6 +1007,200 @@ public class AdminService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Admin3 bundle_design exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("device_schedule")
+	@Produces("application/json;charset=UTF-8")
+	public String deviceschedule(@QueryParam("device_id") String deviceid, @Context HttpHeaders headers) {
+		try {
+			MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
+			String token = headerParams.getFirst("TOKEN");
+			logger.info("Admin3 device_schedule: device_id={},token={}", deviceid, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+
+			List<Schedule> schedules = scheduleService.selectList(Schedule.ScheduleType_Solo, "0",
+					Schedule.BindType_Device, deviceid, Schedule.PlayMode_Daily);
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			JSONArray schedulesJson = new JSONArray();
+			for (Schedule schedule : schedules) {
+				JSONObject scheduleJson = new JSONObject();
+				scheduleJson.put("schedule_id", "" + schedule.getScheduleid());
+				scheduleJson.put("start_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+				JSONArray scheduledtlsJson = new JSONArray();
+				for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+					JSONObject scheduledtlJson = new JSONObject();
+					scheduledtlJson.put("bundle_id", "" + scheduledtl.getObjid());
+					scheduledtlJson.put("thumbnail", "/pixsigdata" + scheduledtl.getBundle().getSnapshot());
+					scheduledtlsJson.add(scheduledtlJson);
+				}
+				scheduleJson.put("scheduledtls", scheduledtlsJson);
+				schedulesJson.add(scheduleJson);
+			}
+			responseJson.put("schedules", schedulesJson);
+			logger.info("Admin3 device_schedule response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin3 device_schedule exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@GET
+	@Path("device_group_schedule")
+	@Produces("application/json;charset=UTF-8")
+	public String devicegroupschedule(@QueryParam("devicegroup_id") String devicegroupid,
+			@Context HttpHeaders headers) {
+		try {
+			MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
+			String token = headerParams.getFirst("TOKEN");
+			logger.info("Admin3 device_group_schedule: devicegroup_id={},token={}", devicegroupid, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+
+			List<Schedule> schedules = scheduleService.selectList(Schedule.ScheduleType_Solo, "0",
+					Schedule.BindType_Devicegroup, devicegroupid, Schedule.PlayMode_Daily);
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			JSONArray schedulesJson = new JSONArray();
+			for (Schedule schedule : schedules) {
+				JSONObject scheduleJson = new JSONObject();
+				scheduleJson.put("schedule_id", "" + schedule.getScheduleid());
+				scheduleJson.put("start_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+				JSONArray scheduledtlsJson = new JSONArray();
+				for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+					JSONObject scheduledtlJson = new JSONObject();
+					scheduledtlJson.put("bundle_id", "" + scheduledtl.getObjid());
+					scheduledtlJson.put("thumbnail", "/pixsigdata" + scheduledtl.getBundle().getSnapshot());
+					scheduledtlsJson.add(scheduledtlJson);
+				}
+				scheduleJson.put("scheduledtls", scheduledtlsJson);
+				schedulesJson.add(scheduleJson);
+			}
+			responseJson.put("schedules", schedulesJson);
+			logger.info("Admin3 device_group_schedule response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin3 device_group_schedule exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("update_device_schedule")
+	@Produces("application/json;charset=UTF-8")
+	public String updatedeviceschedule(String request, @Context HttpHeaders headers) {
+		try {
+			MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
+			String token = headerParams.getFirst("TOKEN");
+			logger.info("Admin3 update_device_schedule: request={},token={}", request, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+			JSONObject requestJson = JSONObject.fromObject(request);
+			int deviceid = requestJson.optInt("device_id");
+
+			JSONArray schedulesJson = requestJson.optJSONArray("schedules");
+			Schedule[] schedules = new Schedule[schedulesJson.size()];
+			for (int i = 0; i < schedulesJson.size(); i++) {
+				JSONObject scheduleJson = schedulesJson.getJSONObject(i);
+				schedules[i].setScheduleid(scheduleJson.optInt("schedule_id"));
+				schedules[i].setScheduletype(Schedule.ScheduleType_Solo);
+				schedules[i].setAttachflag("0");
+				schedules[i].setBindtype(Schedule.BindType_Device);
+				schedules[i].setBindid(deviceid);
+				schedules[i].setPlaymode(Schedule.PlayMode_Daily);
+				schedules[i].setStarttime(DateUtil.getDate(scheduleJson.optString("start_time"), "HH:mm"));
+				List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
+				JSONArray scheduledtlsJson = scheduleJson.optJSONArray("scheduledtls");
+				for (int j = 0; j < scheduledtlsJson.size(); j++) {
+					Scheduledtl scheduledtl = new Scheduledtl();
+					scheduledtl.setScheduledtlid(0);
+					scheduledtl.setObjid(scheduledtlsJson.optInt(j));
+					scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+					scheduledtl.setSequence(j + 1);
+					scheduledtls.add(scheduledtl);
+				}
+				schedules[i].setScheduledtls(scheduledtls);
+			}
+
+			scheduleService.batch(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Device, "" + deviceid, schedules);
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Admin3 update_device_schedule response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin3 update_device_schedule exception, ", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("update_devicegroup_schedule")
+	@Produces("application/json;charset=UTF-8")
+	public String updatedevicegroupschedule(String request, @Context HttpHeaders headers) {
+		try {
+			MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
+			String token = headerParams.getFirst("TOKEN");
+			logger.info("Admin3 update_devicegroup_schedule: request={},token={}", request, token);
+			Staff staff = staffMapper.selectByToken(token);
+			if (staff == null) {
+				return handleResult(1002, "Token失效");
+			}
+			JSONObject requestJson = JSONObject.fromObject(request);
+			int devicegroupid = requestJson.optInt("devicegroup_id");
+
+			JSONArray schedulesJson = requestJson.optJSONArray("schedules");
+			Schedule[] schedules = new Schedule[schedulesJson.size()];
+			for (int i = 0; i < schedulesJson.size(); i++) {
+				JSONObject scheduleJson = schedulesJson.getJSONObject(i);
+				schedules[i].setScheduleid(scheduleJson.optInt("schedule_id"));
+				schedules[i].setScheduletype(Schedule.ScheduleType_Solo);
+				schedules[i].setAttachflag("0");
+				schedules[i].setBindtype(Schedule.BindType_Devicegroup);
+				schedules[i].setBindid(devicegroupid);
+				schedules[i].setPlaymode(Schedule.PlayMode_Daily);
+				schedules[i].setStarttime(DateUtil.getDate(scheduleJson.optString("start_time"), "HH:mm"));
+				List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
+				JSONArray scheduledtlsJson = scheduleJson.optJSONArray("scheduledtls");
+				for (int j = 0; j < scheduledtlsJson.size(); j++) {
+					Scheduledtl scheduledtl = new Scheduledtl();
+					scheduledtl.setScheduledtlid(0);
+					scheduledtl.setObjid(scheduledtlsJson.optInt(j));
+					scheduledtl.setObjtype(Scheduledtl.ObjType_Bundle);
+					scheduledtl.setSequence(j + 1);
+					scheduledtls.add(scheduledtl);
+				}
+				schedules[i].setScheduledtls(scheduledtls);
+			}
+
+			scheduleService.batch(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Devicegroup, "" + devicegroupid,
+					schedules);
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Admin3 update_device_schedule response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Admin3 update_device_schedule exception, ", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

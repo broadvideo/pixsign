@@ -24,6 +24,8 @@ public class Schedule {
 
 	private String scheduletype;
 
+	private String attachflag;
+
 	private String playmode;
 
 	private Date starttime;
@@ -66,6 +68,14 @@ public class Schedule {
 
 	public void setScheduletype(String scheduletype) {
 		this.scheduletype = scheduletype == null ? null : scheduletype.trim();
+	}
+
+	public String getAttachflag() {
+		return attachflag;
+	}
+
+	public void setAttachflag(String attachflag) {
+		this.attachflag = attachflag;
 	}
 
 	public String getPlaymode() {
