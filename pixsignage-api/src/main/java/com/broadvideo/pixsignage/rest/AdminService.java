@@ -189,7 +189,7 @@ public class AdminService {
 			}
 
 			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), "" + staff.getBranchid(), "1", null,
-					null, null, null, null, null, null, start, length, "deviceid");
+					null, null, null, null, null, null, null, start, length, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

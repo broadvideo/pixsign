@@ -152,8 +152,12 @@
 								<a href="javascript:;" onClick="ScheduleModule.refresh();" class="reload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
-								<li id="DevicegroupNav"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
-								<li id="DeviceNav" class="active"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device"/></a></li>
+								<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+								<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
+								<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
+								<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
+								<li class="device-navigator" devicetype="2" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device2"/></a></li>
+								<li class="device-navigator" devicetype="1" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device1"/></a></li>
 							</ul>
 						</div>
 						<div class="portlet-body" id="SchedulePortlet">
@@ -213,6 +217,11 @@
 <script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
+var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
+var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
+var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
+var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

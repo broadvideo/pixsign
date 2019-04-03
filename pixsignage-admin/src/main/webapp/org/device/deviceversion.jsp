@@ -125,6 +125,18 @@
 							<div class="tools">
 								<a href="javascript:;" onClick="DeviceVersionModule.refresh();" class="reload"></a>
 							</div>
+							<ul class="nav nav-tabs" style="margin-right: 30px;">
+								<li class="device-navigator" devicetype="11" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device11"/></a></li>
+								<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
+								<li class="device-navigator" devicetype="9" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device9"/></a></li>
+								<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
+								<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
+								<li class="device-navigator" devicetype="5" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device5"/></a></li>
+								<li class="device-navigator" devicetype="4" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device4"/></a></li>
+								<li class="device-navigator" devicetype="3" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device3"/></a></li>
+								<li class="device-navigator" devicetype="2" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device2"/></a></li>
+								<li class="device-navigator" devicetype="1" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device1"/></a></li>
+							</ul>
 						</div>
 						<div class="portlet-body" id="DevicePortlet">
 							<div class="row">
@@ -177,6 +189,17 @@
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/deviceversion.js?t=${timestamp}"></script>
 <script>
+var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
+var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
+var Max3 = <%=session_org == null ? 0 : session_org.getMaxDevices("3")%>;
+var Max4 = <%=session_org == null ? 0 : session_org.getMaxDevices("4")%>;
+var Max5 = <%=session_org == null ? 0 : session_org.getMaxDevices("5")%>;
+var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
+var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
+var Max9 = <%=session_org == null ? 0 : session_org.getMaxDevices("9")%>;
+var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
+var Max11 = <%=session_org == null ? 0 : session_org.getMaxDevices("11")%>;
+
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();

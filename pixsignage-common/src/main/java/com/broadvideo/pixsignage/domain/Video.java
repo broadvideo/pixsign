@@ -48,6 +48,8 @@ public class Video {
 
 	private String thumbnail;
 
+	private String relatetype;
+
 	private Integer relateid;
 
 	private String relateurl;
@@ -61,6 +63,8 @@ public class Video {
 	private Date createtime;
 
 	private Integer createstaffid;
+
+	private Video relatevideo;
 
 	private Image relateimage;
 
@@ -224,6 +228,14 @@ public class Video {
 		this.thumbnail = thumbnail == null ? null : thumbnail.trim();
 	}
 
+	public String getRelatetype() {
+		return relatetype;
+	}
+
+	public void setRelatetype(String relatetype) {
+		this.relatetype = relatetype;
+	}
+
 	public Integer getRelateid() {
 		return relateid;
 	}
@@ -280,6 +292,14 @@ public class Video {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Video getRelatevideo() {
+		return relatevideo;
+	}
+
+	public void setRelatevideo(Video relatevideo) {
+		this.relatevideo = relatevideo;
 	}
 
 	public Image getRelateimage() {

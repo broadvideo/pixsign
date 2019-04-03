@@ -1,11 +1,54 @@
 var DeviceSelect = function (container) {
 	var _self = this;
 	this.container = container;
+	var _devicetype = 1;
 	var _leftdevices = [];
 	var _rightdevices = [];
 	var _selected = [];
 	
 	var init = function() {
+		if (typeof Max1 !='undefined' && Max1 > 0) {
+			$('.select-device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (typeof Max2 !='undefined' && Max2 > 0) {
+			$('.select-device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (typeof Max3 !='undefined' && Max3 > 0) {
+			$('.select-device-navigator[devicetype="3"]').addClass('active');
+			_devicetype = 3;
+		} else if (typeof Max4 !='undefined' && Max4 > 0) {
+			$('.select-device-navigator[devicetype="4"]').addClass('active');
+			_devicetype = 4;
+		} else if (typeof Max5 !='undefined' && Max5 > 0) {
+			$('.select-device-navigator[devicetype="5"]').addClass('active');
+			_devicetype = 5;
+		} else if (typeof Max6 !='undefined' && Max6 > 0) {
+			$('.select-device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (typeof Max7 !='undefined' && Max7 > 0) {
+			$('.select-device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (typeof Max9 !='undefined' && Max9 > 0) {
+			$('.select-device-navigator[devicetype="9"]').addClass('active');
+			_devicetype = 9;
+		} else if (typeof Max10 !='undefined' && Max10 > 0) {
+			$('.select-device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		}
+		$('.select-device-navigator[devicetype="1"]').css('display', typeof Max1=='undefined'||Max1==0?'none':'');
+		$('.select-device-navigator[devicetype="2"]').css('display', typeof Max2=='undefined'||Max2==0?'none':'');
+		$('.select-device-navigator[devicetype="3"]').css('display', typeof Max3=='undefined'||Max3==0?'none':'');
+		$('.select-device-navigator[devicetype="4"]').css('display', typeof Max4=='undefined'||Max4==0?'none':'');
+		$('.select-device-navigator[devicetype="5"]').css('display', typeof Max5=='undefined'||Max5==0?'none':'');
+		$('.select-device-navigator[devicetype="6"]').css('display', typeof Max6=='undefined'||Max6==0?'none':'');
+		$('.select-device-navigator[devicetype="7"]').css('display', typeof Max7=='undefined'||Max7==0?'none':'');
+		$('.select-device-navigator[devicetype="9"]').css('display', typeof Max9=='undefined'||Max9==0?'none':'');
+		$('.select-device-navigator[devicetype="10"]').css('display', typeof Max10=='undefined'||Max10==0?'none':'');
+		$('.select-device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$(container).find('#LeftDeviceTable').dataTable()._fnAjaxUpdate();
+		});
+		
 		var DeviceTree = new BranchTree($(container).find('#LeftPorlet'), _self.refresh);
 		$(container).find('#LeftDeviceTable').dataTable({
 			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -44,6 +87,7 @@ var DeviceSelect = function (container) {
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
 				aoData.push({'name':'subbranchflag','value':0 });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'devicegroupid','value':0 });
 			} 
 		});

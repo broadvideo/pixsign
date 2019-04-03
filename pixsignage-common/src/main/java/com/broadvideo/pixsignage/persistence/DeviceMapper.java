@@ -10,18 +10,26 @@ public interface DeviceMapper {
 	Device selectByPrimaryKey(@Param(value = "deviceid") String deviceid);
 
 	int selectCount(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "status") String status,
-			@Param(value = "onlineflag") String onlineflag, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "devicegridid") String devicegridid, @Param(value = "cataitemid1") String cataitemid1,
-			@Param(value = "cataitemid2") String cataitemid2, @Param(value = "search") String search);
+			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "type") String type,
+			@Param(value = "status") String status, @Param(value = "onlineflag") String onlineflag,
+			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "devicegridid") String devicegridid,
+			@Param(value = "cataitemid1") String cataitemid1, @Param(value = "cataitemid2") String cataitemid2,
+			@Param(value = "search") String search);
 
 	List<Device> selectList(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "status") String status,
-			@Param(value = "onlineflag") String onlineflag, @Param(value = "devicegroupid") String devicegroupid,
-			@Param(value = "devicegridid") String devicegridid, @Param(value = "cataitemid1") String cataitemid1,
-			@Param(value = "cataitemid2") String cataitemid2, @Param(value = "search") String search,
-			@Param(value = "start") String start, @Param(value = "length") String length,
-			@Param(value = "order") String order);
+			@Param(value = "subbranchflag") String subbranchflag, @Param(value = "type") String type,
+			@Param(value = "status") String status, @Param(value = "onlineflag") String onlineflag,
+			@Param(value = "devicegroupid") String devicegroupid, @Param(value = "devicegridid") String devicegridid,
+			@Param(value = "cataitemid1") String cataitemid1, @Param(value = "cataitemid2") String cataitemid2,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length, @Param(value = "order") String order);
+
+	int selectCountByType(@Param(value = "orgid") String orgid, @Param(value = "type") String type,
+			@Param(value = "search") String search);
+
+	List<Device> selectListByType(@Param(value = "orgid") String orgid, @Param(value = "type") String type,
+			@Param(value = "search") String search, @Param(value = "start") String start,
+			@Param(value = "length") String length);
 
 	List<Device> selectByDevicegroup(@Param(value = "devicegroupid") String devicegroupid);
 
@@ -34,6 +42,8 @@ public interface DeviceMapper {
 	List<Device> selectByDefaultbundle(@Param(value = "defaultbundleid") String defaultbundleid);
 
 	List<Device> selectByDefaultpage(@Param(value = "defaultpageid") String defaultpageid);
+
+	List<Device> selectByDefaultmedialist(@Param(value = "defaultmedialistid") String defaultmedialistid);
 
 	int selectMaxCount1(@Param(value = "orgid") String orgid);
 
@@ -58,6 +68,9 @@ public interface DeviceMapper {
 			@Param(value = "defaultbundleid") String defaultbundleid);
 
 	int updatePage(@Param(value = "deviceid") String deviceid, @Param(value = "defaultpageid") String defaultpageid);
+
+	int updateMedialist(@Param(value = "deviceid") String deviceid,
+			@Param(value = "defaultmedialistid") String defaultmedialistid);
 
 	// int insert(Device record);
 

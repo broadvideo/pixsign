@@ -116,6 +116,41 @@ alter table device modify powerflag tinyint default 9;
 update device set powerflag=9 where powerflag=2;
 
 alter table schedule add attachflag char(1) default '0';
+alter table video add relatetype char(1) default '2';
+alter table video modify oname varchar(512);
+alter table image modify oname varchar(512);
+alter table device modify type varchar(2) default '0';
+alter table device add defaultmedialistid int default 0;
+alter table org modify currentdeviceidx int default 0;
+
+alter table device add unique key device_unique_index1(terminalid);
+alter table sdomain add unique key sdomain_unique_index1(code);
+
+update device set type=1 where status = 1 and appname like 'DigitalBox\_%' 
+  and appname != 'DigitalBox_LAUNCHER_UWIN' and appname not like 'DigitalBox_LAUNCHER_TOUPING%'
+  and appname not like '%\_DS';
+update device set type=2 where status = 1 and (appname = 'DigitalBox_LAUNCHER_UWIN' or appname like '%\_DS');
+update device set type=3 where status = 1 and appname like 'DigitalBox2\_%';
+update device set type=4 where status = 1 and appname like 'TeaTable\_%';
+update device set type=5 where status = 1 and appname like 'PixMultiSign%';
+update device set type=6 where status = 1 and ostype = 2;
+update device set type=7 where status = 1 and appname like 'DigitalBox_LAUNCHER_TOUPING%';
+
+delete t from device d, devicefilehis t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, devicefile t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, schedule s, scheduledtl t where s.scheduleid=t.scheduleid and d.deviceid=s.bindid and s.bindtype=1 and (d.status=0 or d.type is null);
+delete t from device d, schedule t where d.deviceid=t.bindid and t.bindtype=1 and (d.status=0 or d.type is null);
+delete t from device d, planbind t where d.deviceid=t.bindid and t.bindtype=1 and (d.status=0 or d.type is null);
+delete t from device d, onlinelog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, monthlyplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, dailyplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, hourplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, hourflowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, pflowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, flowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete t from device d, msgevent t where d.deviceid=t.objid1 and t.objtype1=1 and (d.status=0 or d.type is null);
+delete t from device d, debugreport t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
+delete from device where type is null;
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
@@ -140,16 +175,25 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30109,2,301,'menu.widget','resource/widget.jsp','',1,9);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30110,2,301,'menu.rss','resource/rss.jsp','',1,10);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30111,2,301,'menu.diy','resource/diy.jsp','',1,11);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30120,2,301,'menu.medialist','resource/medialist.jsp','',1,20);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30130,2,301,'楼盘','resource/house.jsp','',1,30);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(302,2,0,'menu.devicemanage','','fa-desktop',1,3);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30201,2,302,'menu.device','device/device.jsp','',1,1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30202,2,302,'menu.devicegroup','device/devicegroup.jsp','',1,2);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30204,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,4);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30205,2,302,'menu.appfile','device/appfile.jsp','',1,5);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30206,2,302,'menu.deviceversion','device/deviceversion.jsp','',1,6);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30207,2,302,'menu.catalog','device/catalog.jsp','',1,7);
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30201,2,302,'menu.device','device/device.jsp','',1,1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30211,2,302,'menu.device1','device/device1.jsp','',1,11);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30212,2,302,'menu.device2','device/device2.jsp','',1,12);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30213,2,302,'menu.device3','device/device3.jsp','',1,13);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30214,2,302,'menu.device4','device/device4.jsp','',1,14);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30215,2,302,'menu.device5','device/device5.jsp','',1,15);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30216,2,302,'menu.device6','device/device6.jsp','',1,16);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30217,2,302,'menu.device7','device/device7.jsp','',1,17);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30219,2,302,'menu.device9','device/device9.jsp','','1',19);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30220,2,302,'menu.device10','device/device10.jsp','','1',20);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30221,2,302,'menu.device11','device/device11.jsp','','1',21);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30240,2,302,'menu.devicegroup','device/devicegroup.jsp','',1,40);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30250,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,50);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30251,2,302,'menu.appfile','device/appfile.jsp','',1,51);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30252,2,302,'menu.deviceversion','device/deviceversion.jsp','',1,52);
+#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30260,2,302,'menu.catalog','device/catalog.jsp','',1,60);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(303,2,0,'menu.bundlemanage','','fa-paw',1,4);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30301,2,303,'menu.bundle','bundle/bundle.jsp','',1,1);
@@ -167,12 +211,13 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','plan/schedule-solo.jsp','',1,1);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.attachschedule','plan/schedule-solo-attach.jsp','',1,2);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30503,2,305,'menu.devicebundle','plan/device-bundle.jsp','',1,3);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30504,2,305,'menu.devicegroupbundle','plan/devicegroup-bundle.jsp','',1,4);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30505,2,305,'menu.pageplan','plan/plan-page.jsp','',1,5);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30506,2,305,'menu.pageplan','plan/device-page.jsp','',1,6);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.playlist','plan/medialist.jsp','',1,1);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','plan/schedule-solo.jsp','',1,2);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.attachschedule','plan/schedule-solo-attach.jsp','',1,3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30503,2,305,'menu.devicebundle','plan/device-bundle.jsp','',1,4);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30504,2,305,'menu.devicegroupbundle','plan/devicegroup-bundle.jsp','',1,5);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30505,2,305,'menu.pageplan','plan/plan-page.jsp','',1,6);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30506,2,305,'menu.pageplan','plan/device-page.jsp','',1,7);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mscreen/mediagrid.jsp','',1,2);

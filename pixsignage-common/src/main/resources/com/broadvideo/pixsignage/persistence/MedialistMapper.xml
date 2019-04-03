@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.broadvideo.pixsignage.persistence.MedialistMapper" >
-  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Medialist" >
+  <resultMap id="MiniResultMap" type="com.broadvideo.pixsignage.domain.Medialist" >
     <id column="medialistid" property="medialistid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
@@ -11,6 +11,8 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Medialist" extends="MiniResultMap" >
 	<collection property="medialistdtls" ofType="com.broadvideo.pixsignage.domain.Medialistdtl"
 		column="{medialistid=medialistid}" select="com.broadvideo.pixsignage.persistence.MedialistdtlMapper.selectList" />
   </resultMap>
@@ -18,6 +20,13 @@
   <sql id="Base_Column_List" >
     medialistid, orgid, branchid, name, type, status, description, createtime, createstaffid
   </sql>
+  
+  <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from medialist
+    where medialistid = #{medialistid}
+  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
     select 

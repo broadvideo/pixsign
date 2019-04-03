@@ -49,7 +49,7 @@ var VideoModule = function () {
 				videohtml += '<div class="col-md-2 col-xs-2">';
 				
 				videohtml += '<div id="ThumbContainer" style="position:relative">';
-				var thumbnail = '../img/video.jpg';
+				var thumbnail = '../../img/video.jpg';
 				var thumbwidth = 100;
 				if (aData.thumbnail != null) {
 					thumbnail = '/pixsigdata' + aData.thumbnail;
@@ -69,7 +69,7 @@ var VideoModule = function () {
 						previewwidth = previewheight * aData.width / aData.height;
 					}
 					var videourl = '/pixsigdata/video/preview/' + aData.videoid + '.mp4';
-					videohtml += '<a class="btn default btn-sm green fancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '"><i class="fa fa-search"></i></a>';
+					videohtml += '<a class="btn default btn-sm green videofancybox" href="' + videourl + '" + previewwidth="' + previewwidth + '" + previewheight="' + previewheight + '"><i class="fa fa-search"></i></a>';
 				}
 				videohtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
 				videohtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
@@ -87,6 +87,35 @@ var VideoModule = function () {
 					videohtml += '<img src="/pixsigdata' + aData.relateimage.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relateimage.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					videohtml += '</div>';
 					videohtml += '</a>';
+				} else if (aData.relatevideo != null) {
+					var relatethumbnail = '../../img/video.jpg';
+					if (aData.relatevideo.thumbnail != null) {
+						relatethumbnail = '/pixsigdata' + aData.relatevideo.thumbnail;
+					}
+					aData.relatevideo.width = aData.relatevideo.width == null ? 100: aData.relatevideo.width;
+					aData.relatevideo.height = aData.relatevideo.height == null ? 100: aData.relatevideo.height;
+					thumbwidth = aData.relatevideo.width > aData.relatevideo.height ? 50 : 50*aData.relatevideo.width/aData.relatevideo.height;
+					thumbheight = aData.relatevideo.height > aData.relatevideo.width ? 50 : 50*aData.relatevideo.height/aData.relatevideo.width;
+					if (aData.relatevideo.filepath != null && aData.relatevideo.previewflag == 1) {
+						var previewwidth = 760;
+						if (aData.relatevideo.width > aData.relatevideo.height) {
+							previewwidth = 760;
+							previewheight = previewwidth * aData.relatevideo.height / aData.relatevideo.width;
+						} else {
+							previewheight = 760;
+							previewwidth = previewheight * aData.relatevideo.width / aData.relatevideo.height;
+						}
+						var videourl = '/pixsigdata/video/preview/' + aData.relatevideo.videoid + '.mp4';
+						videohtml += '<a class="videofancybox" href="' + videourl + '" previewwidth="' + previewwidth + '" previewheight="' + previewheight + '">';
+						videohtml += '<div id="RelateThumb" class="thumbs">';
+						videohtml += '<img src="' + relatethumbnail + '" class="imgthumb" width="100%" alt="' + aData.relatevideo.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+						videohtml += '</div>';
+						videohtml += '</a>';
+					} else {
+						videohtml += '<div id="RelateThumb" class="thumbs">';
+						videohtml += '<img src="' + relatethumbnail + '" class="imgthumb" width="100%" alt="' + aData.relatevideo.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+						videohtml += '</div>';
+					}
 				}
 				videohtml += '</div>';
 				
@@ -102,7 +131,7 @@ var VideoModule = function () {
 					}
 					$('#MediaContainer').append(videohtml);
 				}
-				$('.fancybox').click(function() {
+				$('.videofancybox').click(function() {
 					var href = this.href;
 					var previewwidth = $(this).attr('previewwidth');
 					var previewheight = $(this).attr('previewheight');
@@ -205,7 +234,28 @@ var VideoModule = function () {
 
 	var initVideoEditModal = function () {
 		var RelateImageSelect = new FolderImageSelect($('#RelateImageSelect'));
+		var RelateVideoSelect = new FolderVideoSelect($('#RelateVideoSelect'));
 		
+		$('#VideoEditForm input[name="video.relatetype"]').change(function(e) {
+			refreshRelateType();
+		});
+		function refreshRelateType() {
+			var relatetype = $('#VideoEditForm input[name="video.relatetype"]:checked').attr('value');
+			if (relatetype == 1) {
+				$('#RelateVideoSelect').css('display', '');
+				$('#RelateImageSelect').css('display', 'none');
+				$('#RelateText').css('display', 'none');
+			} else if (relatetype == 2) {
+				$('#RelateVideoSelect').css('display', 'none');
+				$('#RelateImageSelect').css('display', '');
+				$('#RelateText').css('display', 'none');
+			} else {
+				$('#RelateVideoSelect').css('display', 'none');
+				$('#RelateImageSelect').css('display', 'none');
+				$('#RelateText').css('display', '');
+			}
+		}
+
 		var EditFolderTreeData = [];
 		function createFolderTreeData(folderes, treeData) {
 			for (var i=0; i<folderes.length; i++) {
@@ -258,6 +308,12 @@ var VideoModule = function () {
 		formHandler.validateOption.rules['video.name']['minlength'] = 2;
 		formHandler.validateOption.submitHandler = function(form) {
 			$('#VideoEditForm input[name="video.folderid"]').attr('value', $('#EditFormFolderTree').jstree('get_selected', false)[0]);
+			var relatetype = $('#VideoEditForm input[name="video.relatetype"]:checked').attr('value');
+			if (relatetype == 1) {
+				$('#VideoEditForm input[name="video.relateid"]').attr('value', RelateVideoSelect.getVideoid);
+			} else if (relatetype == 2) {
+				$('#VideoEditForm input[name="video.relateid"]').attr('value', RelateImageSelect.getImageid);
+			}
 			$.ajax({
 				type : 'POST',
 				url : $('#VideoEditForm').attr('action'),
@@ -325,7 +381,12 @@ var VideoModule = function () {
 			$('#VideoEditForm').attr('action', 'video!update.action');
 			$('#TagSelect').select2('val', $(_video.tags.split(',')));
 			createEditFolderTree();
-			RelateImageSelect.refresh(_video);
+			refreshRelateType();
+			if (_video.relatetype == 1 && _video.relatevideo != null) {
+				RelateVideoSelect.setVideo(_video.relatevideo);
+			} else if (_video.relatetype == 2 && _video.relateimage != null) {
+				RelateImageSelect.setImage(_video.relateimage);
+			} 
 			$('#VideoEditModal').modal();
 		});
 	};

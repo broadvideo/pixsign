@@ -18,8 +18,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.service.BundleService;
-import com.broadvideo.pixsignage.service.PlanService;
-import com.broadvideo.pixsignage.service.ScheduleService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -37,9 +36,7 @@ public class BundleAction extends BaseDatatableAction {
 	@Autowired
 	private BundleService bundleService;
 	@Autowired
-	private ScheduleService scheduleService;
-	@Autowired
-	private PlanService planService;
+	private SyncService syncService;
 
 	public String doGet() {
 		try {
@@ -120,6 +117,7 @@ public class BundleAction extends BaseDatatableAction {
 				bundleService.makeJsonFile("" + bundle.getHomebundleid());
 			}
 
+			logger.info("Bundle add success, bundleid={}", bundle.getBundleid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doAdd exception, ", ex);
@@ -137,6 +135,7 @@ public class BundleAction extends BaseDatatableAction {
 			} else {
 				bundleService.makeJsonFile("" + bundle.getHomebundleid());
 			}
+			logger.info("Bundle update success, bundleid={}", bundle.getBundleid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doUpdate exception, ", ex);
@@ -149,6 +148,7 @@ public class BundleAction extends BaseDatatableAction {
 	public String doDelete() {
 		try {
 			bundleService.deleteBundle("" + bundle.getBundleid());
+			logger.info("Bundle delete success, bundleid={}", bundle.getBundleid());
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doDelete exception, ", ex);
@@ -161,9 +161,8 @@ public class BundleAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String bundleid = getParameter("bundleid");
-			scheduleService.syncScheduleByBundle(bundleid);
-			planService.syncPlanByBundle("" + getLoginStaff().getOrgid(), bundleid);
-			logger.info("Bundle sync success");
+			syncService.syncByBundle("" + getLoginStaff().getOrgid(), bundleid);
+			logger.info("Bundle sync success, bundleid={}", bundleid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("BundleAction doSync exception, ", ex);

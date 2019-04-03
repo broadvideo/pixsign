@@ -22,6 +22,7 @@
     <result column="progress" property="progress" jdbcType="INTEGER" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+    <result column="relatetype" property="relatetype" jdbcType="CHAR" />
     <result column="relateid" property="relateid" jdbcType="INTEGER" />
     <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
@@ -29,21 +30,22 @@
     <result column="adflag" property="adflag" jdbcType="CHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
-    <association property="relateimage" column="{imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
+    <association property="relatevideo" column="{relatetype=relatetype,videoid=relateid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectRelateVideo" />
+    <association property="relateimage" column="{relatetype=relatetype,imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, relateid, relateurl, tags, duration, adflag, createtime, createstaffid
+    thumbnail, relatetype, relateid, relateurl, tags, duration, adflag, createtime, createstaffid
   </sql>
   
   <select id="selectRelateVideo" resultMap="BaseResultMap" >
     select videoid, orgid, branchid, folderid, name, oname, uuid, type, width, height, format, filepath, 
     filename, size, md5, previewflag, status, progress, description, 
-    thumbnail, 0 as relateid, relateurl, tags, duration, adflag, createtime, createstaffid
+    thumbnail, relatetype, 0 as relateid, relateurl, tags, duration, adflag, createtime, createstaffid
     from video
-    where videoid = #{videoid}
+    where '${relatetype}' = '1' and videoid = #{videoid}
     and status != '9'
   </select>
 
@@ -136,7 +138,7 @@
       width, height, format, filepath, 
       filename, size, md5, 
       previewflag, status, progress, 
-      description, thumbnail, relateid, 
+      description, thumbnail, relatetype, relateid, 
       relateurl, tags, duration, 
       adflag, createtime, createstaffid
       )
@@ -145,7 +147,7 @@
       #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{format,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
       #{filename,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
       #{previewflag,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{progress,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relateid,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR}, #{relatetype,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, 
       #{relateurl,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, #{duration,jdbcType=INTEGER}, 
       #{adflag,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}
       )
@@ -212,6 +214,9 @@
       </if>
       <if test="thumbnail != null" >
         thumbnail,
+      </if>
+      <if test="relatetype != null" >
+        relatetype,
       </if>
       <if test="relateid != null" >
         relateid,
@@ -292,6 +297,9 @@
       </if>
       <if test="thumbnail != null" >
         #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="relatetype != null" >
+        #{relatetype,jdbcType=CHAR},
       </if>
       <if test="relateid != null" >
         #{relateid,jdbcType=INTEGER},
@@ -376,6 +384,9 @@
       <if test="thumbnail != null" >
         thumbnail = #{thumbnail,jdbcType=VARCHAR},
       </if>
+      <if test="relatetype != null" >
+        relatetype = #{relatetype,jdbcType=CHAR},
+      </if>
       <if test="relateid != null" >
         relateid = #{relateid,jdbcType=INTEGER},
       </if>
@@ -421,6 +432,7 @@
       progress = #{progress,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      relatetype = #{relatetype,jdbcType=CHAR},
       relateid = #{relateid,jdbcType=INTEGER},
       relateurl = #{relateurl,jdbcType=VARCHAR},
       tags = #{tags,jdbcType=VARCHAR},

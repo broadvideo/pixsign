@@ -14,6 +14,7 @@ import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Plan;
 import com.broadvideo.pixsignage.service.PlanService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -29,6 +30,8 @@ public class PlanAction extends BaseDatatableAction {
 
 	@Autowired
 	private PlanService planService;
+	@Autowired
+	private SyncService syncService;
 
 	public String doList() {
 		try {
@@ -123,7 +126,7 @@ public class PlanAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String planid = getParameter("planid");
-			planService.syncPlan(planid);
+			syncService.syncPlan(planid);
 			logger.info("Plan {} sync success", planid);
 			return SUCCESS;
 		} catch (Exception ex) {

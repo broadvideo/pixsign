@@ -111,7 +111,8 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 	}
 
 	public boolean validateBindTerminalId(Meetingroom meetingroom) {
-		if (StringUtils.isBlank(meetingroom.getTerminalid()) && StringUtils.isBlank(meetingroom.getTerminalid2())&& StringUtils.isBlank(meetingroom.getTerminalid3())) {
+		if (StringUtils.isBlank(meetingroom.getTerminalid()) && StringUtils.isBlank(meetingroom.getTerminalid2())
+				&& StringUtils.isBlank(meetingroom.getTerminalid3())) {
 			return true;
 		}
 		logger.info("Check meetingroom(meetingroomid:{},terminalid{}) is exists:", meetingroom.getMeetingroomid(),
@@ -120,7 +121,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 		List<Meetingroom> existRecords = null;
 		record.setMeetingroomid(meetingroom.getMeetingroomid());
 		record.setOrgid(meetingroom.getOrgid());
-		int containerSize=0;
+		int containerSize = 0;
 		Set<String> containerSet = new HashSet<String>();
 		if (StringUtils.isNotBlank(meetingroom.getTerminalid())) {
 			containerSize++;
@@ -152,17 +153,13 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 			}
 		}
 		// 修改记录，则需要判断本条记录是否设置存在冲突
-			if (containerSize != containerSet.size()) {
-				throw new ServiceException(RetCodeEnum.EXCEPTION, "绑定的终端id不允许重复.");
-			}
-	       
-
-
+		if (containerSize != containerSet.size()) {
+			throw new ServiceException(RetCodeEnum.EXCEPTION, "绑定的终端id不允许重复.");
+		}
 
 		return true;
 
 	}
-
 
 	@Override
 	public void addEquipments(Meetingroom meetingroom, String[] equipmentids) {
@@ -196,7 +193,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 	public List<Device> listUnbindTerminals(Integer orgid) {
 
 		List<Device> allDeviceList = this.deviceService.selectList(orgid + "", null, null, null, null, null, null, null,
-				null, null, "0", "999", null);
+				null, null, null, "0", "999", null);
 		List<Meetingroom> bindMeetingrooms = this.meetingroomMapper.selectBindMeetingrooms(orgid);
 		List<String> bindTerminalIds = new ArrayList<String>();
 		for (Meetingroom meetingroom : bindMeetingrooms) {
@@ -220,7 +217,8 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getHottestMeetingrooms(Date startDate, Date endDate, Integer length, Integer orgid) {
+	public List<Map<String, Object>> getHottestMeetingrooms(Date startDate, Date endDate, Integer length,
+			Integer orgid) {
 
 		return this.meetingroomMapper.selectHottestMeetingrooms(startDate, endDate, length, orgid);
 	}

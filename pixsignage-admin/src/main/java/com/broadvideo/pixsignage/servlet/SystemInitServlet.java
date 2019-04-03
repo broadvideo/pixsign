@@ -89,6 +89,7 @@ public class SystemInitServlet extends HttpServlet {
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/bv"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/changhong"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/mtk"));
+			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/tunqire"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/debug"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/win32"));
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/app/win64"));

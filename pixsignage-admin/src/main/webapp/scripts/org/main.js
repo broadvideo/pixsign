@@ -1,11 +1,40 @@
 var License = function () {
 	var init = function () {
 		$.ajax({
+			url: 'device!getlicense.action',
+			type : 'POST',
+			data : {},
+			dataType: 'json',
+			success : function(data, status) {
+				if (data.errorcode == 0) {
+					var maxdevices = data.aaData[0].maxdevices;
+					var currentdevices = data.aaData[0].currentdevices;
+					var devicePercent = 100;
+					if (maxdevices > 0) {
+						devicePercent = Math.floor(100*currentdevices/maxdevices);
+					}
+					if (devicePercent > 100) devicePercent = 100;
+					var classDeviceProgress = 'progress-bar-success';
+					if (devicePercent > 50 && devicePercent <= 80) {
+						classDeviceProgress = 'progress-bar-warning';
+					} else if (devicePercent > 80) {
+						classDeviceProgress = 'progress-bar-danger';
+					} 
+					
+					$('#CurrentDevices').html(common.view.currentdevices + ': ' + currentdevices + ' (' + devicePercent + '%)');
+					$('#MaxDevices').html(maxdevices);
+					$('#CurrentDevicesProgress').attr('class', 'progress-bar ' + classDeviceProgress);
+					$('#CurrentDevicesProgress').attr('style', 'width: ' + devicePercent + '%');
+				}
+			}
+		});
+		$.ajax({
 			url: 'org!get.action',
 			type : 'POST',
 			dataType: 'json',
 			success : function(data, status) {
 				if (data.errorcode == 0) {
+					/*
 					var devicePercent = 100;
 					if (data.org.maxdevices > 0) {
 						devicePercent = Math.floor(100*data.org.currentdevices/data.org.maxdevices);
@@ -17,7 +46,12 @@ var License = function () {
 					} else if (devicePercent > 80) {
 						classDeviceProgress = 'progress-bar-danger';
 					} 
-
+					$('#CurrentDevices').html(common.view.currentdevices + ': ' + data.org.currentdevices + ' (' + devicePercent + '%)');
+					$('#MaxDevices').html(data.org.maxdevices);
+					$('#CurrentDevicesProgress').attr('class', 'progress-bar ' + classDeviceProgress);
+					$('#CurrentDevicesProgress').attr('style', 'width: ' + devicePercent + '%');
+					*/
+					
 					var storagePercent = 100;
 					if (data.org.maxstorage > 0) {
 						storagePercent = Math.floor(100*data.org.currentstorage/data.org.maxstorage);
@@ -29,21 +63,17 @@ var License = function () {
 					} else if (storagePercent > 80) {
 						classStorageProgress = 'progress-bar-danger';
 					} 
+					$('#CurrentStorage').html(common.view.currentstorage + ': ' + data.org.currentstorage + ' MB (' + storagePercent + '%)');
+					$('#MaxStorage').html(data.org.maxstorage + ' MB');
+					$('#CurrentStorageProgress').attr('class', 'progress-bar ' + classStorageProgress);
+					$('#CurrentStorageProgress').attr('style', 'width: ' + storagePercent + '%');
 					
 					if (data.org.expireflag == 0) {
 						$('#ExpireTime').html(common.view.expiretime + ': ' + common.view.unlimited);
 					} else {
 						$('#ExpireTime').html(common.view.expiretime + ': ' + data.org.expiretime);
 					}
-					$('#CurrentDevices').html(common.view.currentdevices + ': ' + data.org.currentdevices + ' (' + devicePercent + '%)');
-					$('#MaxDevices').html(data.org.maxdevices);
-					$('#CurrentDevicesProgress').attr('class', 'progress-bar ' + classDeviceProgress);
-					$('#CurrentDevicesProgress').attr('style', 'width: ' + devicePercent + '%');
 
-					$('#CurrentStorage').html(common.view.currentstorage + ': ' + data.org.currentstorage + ' MB (' + storagePercent + '%)');
-					$('#MaxStorage').html(data.org.maxstorage + ' MB');
-					$('#CurrentStorageProgress').attr('class', 'progress-bar ' + classStorageProgress);
-					$('#CurrentStorageProgress').attr('style', 'width: ' + storagePercent + '%');
 				}
 			}
 		});

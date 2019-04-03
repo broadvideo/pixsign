@@ -13,7 +13,7 @@ import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.domain.Devicegrid;
 import com.broadvideo.pixsignage.domain.Planbind;
 import com.broadvideo.pixsignage.service.DevicegridService;
-import com.broadvideo.pixsignage.service.PlanService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -27,7 +27,7 @@ public class DevicegridAction extends BaseDatatableAction {
 	@Autowired
 	private DevicegridService devicegridService;
 	@Autowired
-	private PlanService planService;
+	private SyncService syncService;
 
 	public String doGet() {
 		try {
@@ -130,7 +130,7 @@ public class DevicegridAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String devicegridid = getParameter("devicegridid");
-			planService.syncPlan(Planbind.BindType_Devicegrid, devicegridid);
+			syncService.sync(Planbind.BindType_Devicegrid, devicegridid, false);
 			logger.info("Devicegrid plan sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

@@ -53,6 +53,8 @@ public class Image {
 
 	private Integer createstaffid;
 
+	private Video relatevideo;
+
 	private Image relateimage;
 
 	public Integer getImageid() {
@@ -247,6 +249,14 @@ public class Image {
 
 	public void setCreatestaffid(Integer createstaffid) {
 		this.createstaffid = createstaffid;
+	}
+
+	public Video getRelatevideo() {
+		return relatevideo;
+	}
+
+	public void setRelatevideo(Video relatevideo) {
+		this.relatevideo = relatevideo;
 	}
 
 	public Image getRelateimage() {

@@ -9,6 +9,10 @@ public class Device {
 	public final static String Online = "1";
 	public final static String Offline = "0";
 
+	public final static String Type_3DFanSolo = "9";
+	public final static String Type_3DFanUnion = "10";
+	public final static String Type_3DFanWall = "11";
+
 	private Integer deviceid;
 
 	private Integer orgid;
@@ -28,10 +32,6 @@ public class Device {
 	private String iip;
 
 	private String mac;
-
-	private String schedulestatus;
-
-	private String filestatus;
 
 	private String status;
 
@@ -135,6 +135,8 @@ public class Device {
 
 	private Integer defaultpageid;
 
+	private Integer defaultmedialistid;
+
 	private String hotspotflag;
 
 	private String hotspotssid;
@@ -176,6 +178,8 @@ public class Device {
 	private Bundle defaultbundle;
 
 	private Page defaultpage;
+
+	private Medialist defaultmedialist;
 
 	public Integer getDeviceid() {
 		return deviceid;
@@ -255,22 +259,6 @@ public class Device {
 
 	public void setMac(String mac) {
 		this.mac = mac == null ? null : mac.trim();
-	}
-
-	public String getSchedulestatus() {
-		return schedulestatus;
-	}
-
-	public void setSchedulestatus(String schedulestatus) {
-		this.schedulestatus = schedulestatus == null ? null : schedulestatus.trim();
-	}
-
-	public String getFilestatus() {
-		return filestatus;
-	}
-
-	public void setFilestatus(String filestatus) {
-		this.filestatus = filestatus == null ? null : filestatus.trim();
 	}
 
 	public String getStatus() {
@@ -691,6 +679,14 @@ public class Device {
 		this.defaultpageid = defaultpageid;
 	}
 
+	public Integer getDefaultmedialistid() {
+		return defaultmedialistid;
+	}
+
+	public void setDefaultmedialistid(Integer defaultmedialistid) {
+		this.defaultmedialistid = defaultmedialistid;
+	}
+
 	public String getHotspotflag() {
 		return hotspotflag;
 	}
@@ -857,5 +853,13 @@ public class Device {
 
 	public void setDefaultpage(Page defaultpage) {
 		this.defaultpage = defaultpage;
+	}
+
+	public Medialist getDefaultmedialist() {
+		return defaultmedialist;
+	}
+
+	public void setDefaultmedialist(Medialist defaultmedialist) {
+		this.defaultmedialist = defaultmedialist;
 	}
 }

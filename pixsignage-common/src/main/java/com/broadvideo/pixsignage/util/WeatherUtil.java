@@ -1,6 +1,16 @@
 package com.broadvideo.pixsignage.util;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Encoder;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -50,6 +60,83 @@ public class WeatherUtil {
 	}
 
 	public static String getYahooWeather(String city) {
+		try {
+			final String appId = "P9LnSG3e";
+			final String consumerKey = "dj0yJmk9MGYxemRmVlc1TERRJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTQw";
+			final String consumerSecret = "deb003c6e74850137454cccf0e193c586030554a";
+			final String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
+
+			long timestamp = new Date().getTime() / 1000;
+			byte[] nonce = new byte[32];
+			Random rand = new Random();
+			rand.nextBytes(nonce);
+			String oauthNonce = new String(nonce).replaceAll("\\W", "");
+
+			List<String> parameters = new ArrayList<>();
+			parameters.add("oauth_consumer_key=" + consumerKey);
+			parameters.add("oauth_nonce=" + oauthNonce);
+			parameters.add("oauth_signature_method=HMAC-SHA1");
+			parameters.add("oauth_timestamp=" + timestamp);
+			parameters.add("oauth_version=1.0");
+			// Make sure value is encoded
+			parameters.add("location=" + URLEncoder.encode(city, "UTF-8"));
+			parameters.add("format=json");
+			parameters.add("u=c");
+			Collections.sort(parameters);
+
+			StringBuffer parametersList = new StringBuffer();
+			for (int i = 0; i < parameters.size(); i++) {
+				parametersList.append(((i > 0) ? "&" : "") + parameters.get(i));
+			}
+
+			String signatureString = "GET&" + URLEncoder.encode(url, "UTF-8") + "&"
+					+ URLEncoder.encode(parametersList.toString(), "UTF-8");
+
+			String signature = null;
+			try {
+				SecretKeySpec signingKey = new SecretKeySpec((consumerSecret + "&").getBytes(), "HmacSHA1");
+				Mac mac = Mac.getInstance("HmacSHA1");
+				mac.init(signingKey);
+				byte[] rawHMAC = mac.doFinal(signatureString.getBytes());
+				Encoder encoder = Base64.getEncoder();
+				signature = encoder.encodeToString(rawHMAC);
+			} catch (Exception e) {
+				System.err.println("Unable to append signature");
+				System.exit(0);
+			}
+
+			String authorizationLine = "OAuth " + "oauth_consumer_key=\"" + consumerKey + "\", " + "oauth_nonce=\""
+					+ oauthNonce + "\", " + "oauth_timestamp=\"" + timestamp + "\", "
+					+ "oauth_signature_method=\"HMAC-SHA1\", " + "oauth_signature=\"" + signature + "\", "
+					+ "oauth_version=\"1.0\"";
+
+			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
+					.setConnectionRequestTimeout(30000).build();
+			CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+			HttpGet httpget = new HttpGet(url + "?location=" + URLEncoder.encode(city, "UTF-8") + "&format=json&u=c");
+			httpget.setHeader("Authorization", authorizationLine);
+			httpget.setHeader("X-Yahoo-App-Id", appId);
+			httpget.setHeader("Content-Type", "application/json");
+
+			CloseableHttpResponse response = httpclient.execute(httpget);
+			int status = response.getStatusLine().getStatusCode();
+			if (status == 200) {
+				String s = EntityUtils.toString(response.getEntity());
+				logger.info("Get weather of {} response: {}", city, s);
+				return s;
+			} else {
+				logger.error("Get weather of {} response code: {}", city, status);
+			}
+			httpclient.close();
+
+			return "";
+		} catch (Exception e) {
+			logger.error("get weather of {} error", city, e);
+			return "";
+		}
+	}
+
+	public static String getYahooWeather_old(String city) {
 		try {
 			String yql = "select location,item from weather.forecast where woeid in (select woeid from geo.places(1) where text=\""
 					+ city + "\")";

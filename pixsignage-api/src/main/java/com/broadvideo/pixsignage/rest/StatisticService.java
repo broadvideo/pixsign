@@ -33,7 +33,7 @@ public class StatisticService {
 		try {
 			logger.info("Stat devices");
 			List<Device> devices = deviceMapper.selectList(null, null, "1", null, null, null, null, null, null, null,
-					null, null, "deviceid");
+					null, null, null, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");

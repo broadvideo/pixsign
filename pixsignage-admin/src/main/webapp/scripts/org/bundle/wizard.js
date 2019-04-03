@@ -390,6 +390,37 @@ var WizardModule = function () {
 	};
 	
 	var initTab3 = function () {
+		var _devicetype = 1;
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+
+		$('.devicegroup-navigator').click(function(event) {
+			$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
+		});
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		});
+
 		var DeviceTree = new BranchTree($('#DeviceTab'));
 		$('#DeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
@@ -413,11 +444,14 @@ var WizardModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'devicegroupid','value':'0' });
 			}
 		});
+		$('#DeviceTable_wrapper').addClass('form-inline');
 		$('#DeviceTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#DeviceTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#DeviceTable_wrapper .dataTables_length select').select2();
 		$('#DeviceTable').css('width', '100%');
 
 		var DevicegroupTree = new BranchTree($('#DevicegroupTab'));
@@ -449,8 +483,10 @@ var WizardModule = function () {
 				aoData.push({'name':'type','value':'1' });
 			}
 		});
+		$('#DevicegroupTable_wrapper').addClass('form-inline');
 		$('#DevicegroupTable_wrapper .dataTables_filter input').addClass('form-control input-small');
 		$('#DevicegroupTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#DevicegroupTable_wrapper .dataTables_length select').select2();
 		$('#DevicegroupTable').css('width', '100%');
 
 		//SelectedBindTable初始化
@@ -470,16 +506,6 @@ var WizardModule = function () {
 			}
 		});
 
-		$('#nav_dtab1').click(function(event) {
-			$('#DeviceDiv').css('display', '');
-			$('#DevicegroupDiv').css('display', 'none');
-			$('#DeviceTable').dataTable()._fnAjaxUpdate();
-		});
-		$('#nav_dtab2').click(function(event) {
-			$('#DeviceDiv').css('display', 'none');
-			$('#DevicegroupDiv').css('display', '');
-			$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
-		});
 		//增加Device到SelectedBindTable
 		$('body').on('click', '.pix-bind-device-add', function(event) {
 			var rowIndex = $(event.target).attr('data-id');

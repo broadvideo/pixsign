@@ -12,10 +12,8 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Planbind;
-import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.service.DevicegroupService;
-import com.broadvideo.pixsignage.service.PlanService;
-import com.broadvideo.pixsignage.service.ScheduleService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -30,9 +28,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 	@Autowired
 	private DevicegroupService devicegroupService;
 	@Autowired
-	private ScheduleService scheduleService;
-	@Autowired
-	private PlanService planService;
+	private SyncService syncService;
 
 	public String doGet() {
 		try {
@@ -205,8 +201,7 @@ public class DevicegroupAction extends BaseDatatableAction {
 		try {
 			String devicegroupid = getParameter("devicegroupid");
 			logger.info("Devicegroup doSync, devicegroupid={}", devicegroupid);
-			planService.syncPlan(Planbind.BindType_Devicegroup, devicegroupid);
-			scheduleService.syncSchedule(Schedule.BindType_Devicegroup, devicegroupid);
+			syncService.sync(Planbind.BindType_Devicegroup, devicegroupid, true);
 			logger.info("Devicegroup doSync success, devicegroupid={}", devicegroupid);
 			return SUCCESS;
 		} catch (Exception ex) {

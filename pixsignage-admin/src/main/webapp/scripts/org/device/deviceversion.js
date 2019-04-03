@@ -1,4 +1,5 @@
 var DeviceVersionModule = function () {
+	var _devicetype = 1;
 	var _device = {};
 	this.DeviceTree = new BranchTree($('#DevicePortlet'));
 
@@ -13,6 +14,53 @@ var DeviceVersionModule = function () {
 	};
 	
 	var initDeviceTable = function () {
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max3 > 0) {
+			$('.device-navigator[devicetype="3"]').addClass('active');
+			_devicetype = 3;
+		} else if (Max4 > 0) {
+			$('.device-navigator[devicetype="4"]').addClass('active');
+			_devicetype = 4;
+		} else if (Max5 > 0) {
+			$('.device-navigator[devicetype="5"]').addClass('active');
+			_devicetype = 5;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max9 > 0) {
+			$('.device-navigator[devicetype="9"]').addClass('active');
+			_devicetype = 9;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		} else if (Max11 > 0) {
+			$('.device-navigator[devicetype="11"]').addClass('active');
+			_devicetype = 11;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="3"]').css('display', Max3==0?'none':'');
+		$('.device-navigator[devicetype="4"]').css('display', Max4==0?'none':'');
+		$('.device-navigator[devicetype="5"]').css('display', Max5==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="9"]').css('display', Max9==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+		$('.device-navigator[devicetype="11"]').css('display', Max11==0?'none':'');
+
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		});
+
 		$('#DeviceTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -71,6 +119,7 @@ var DeviceVersionModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'status','value':1 });
 			}
 		});

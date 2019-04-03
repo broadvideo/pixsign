@@ -272,6 +272,55 @@ var BranchModule = function () {
 			});
 		}
 
+		var _devicetype = 1;
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max3 > 0) {
+			$('.device-navigator[devicetype="3"]').addClass('active');
+			_devicetype = 3;
+		} else if (Max4 > 0) {
+			$('.device-navigator[devicetype="4"]').addClass('active');
+			_devicetype = 4;
+		} else if (Max5 > 0) {
+			$('.device-navigator[devicetype="5"]').addClass('active');
+			_devicetype = 5;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max9 > 0) {
+			$('.device-navigator[devicetype="9"]').addClass('active');
+			_devicetype = 9;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		} else if (Max11 > 0) {
+			$('.device-navigator[devicetype="11"]').addClass('active');
+			_devicetype = 11;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="3"]').css('display', Max3==0?'none':'');
+		$('.device-navigator[devicetype="4"]').css('display', Max4==0?'none':'');
+		$('.device-navigator[devicetype="5"]').css('display', Max5==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="9"]').css('display', Max9==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+		$('.device-navigator[devicetype="11"]').css('display', Max11==0?'none':'');
+
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#LeftTable').dataTable()._fnAjaxUpdate();
+			$('#RightTable').dataTable()._fnAjaxUpdate();
+		});
+
 		$('#LeftTable').dataTable({
 			'sDom' : '<"row"r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
 			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
@@ -298,19 +347,19 @@ var BranchModule = function () {
 				$('td:eq(1)', nRow).html(aData.terminalid + '(' + aData.name + ')');
 				if (aData.status == 0) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
-				} else if (aData.onlineflag == 9) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				} else if (aData.onlineflag == 1) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+				} else if (aData.onlineflag == 9) {
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				}
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':LeftBranchid });
 				aoData.push({'name':'subbranchflag','value':0 });
-				aoData.push({'name':'type','value':'1' });
+				aoData.push({'name':'type','value':_devicetype });
 			} 
 		});
 
@@ -340,19 +389,19 @@ var BranchModule = function () {
 				$('td:eq(1)', nRow).html(aData.terminalid + '(' + aData.name + ')');
 				if (aData.status == 0) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-default">' + common.view.unregister + '</span>');
-				} else if (aData.onlineflag == 9) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				} else if (aData.onlineflag == 1) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
+				} else if (aData.onlineflag == 9) {
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-warning">' + common.view.offline + '</span>');
 				}
 				return nRow;
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':RightBranchid });
 				aoData.push({'name':'subbranchflag','value':0 });
-				aoData.push({'name':'type','value':'1' });
+				aoData.push({'name':'type','value':_devicetype });
 			} 
 		});
 

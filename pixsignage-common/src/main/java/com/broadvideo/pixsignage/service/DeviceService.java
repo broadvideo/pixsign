@@ -7,10 +7,11 @@ import com.broadvideo.pixsignage.domain.Device;
 import net.sf.json.JSONObject;
 
 public interface DeviceService {
-	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
-			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search);
+	public int selectCount(String orgid, String branchid, String subbranchflag, String type, String status,
+			String onlineflag, String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2,
+			String search);
 
-	public List<Device> selectList(String orgid, String branchid, String subbranchflag, String status,
+	public List<Device> selectList(String orgid, String branchid, String subbranchflag, String type, String status,
 			String onlineflag, String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2,
 			String search, String start, String length, String order);
 
@@ -33,6 +34,8 @@ public interface DeviceService {
 	public void updateBundle(String[] deviceids, String defaultbundleid);
 
 	public void updatePage(String[] deviceids, String defaultpageid);
+
+	public void updateMedialist(String[] deviceids, String defaultmedialistid);
 
 	public void updateOnlineflag();
 
@@ -62,6 +65,8 @@ public interface DeviceService {
 	public JSONObject generateBundleJson(Device device) throws Exception;
 
 	public JSONObject generatePageJson(Device device) throws Exception;
+
+	public JSONObject generateMedialistJson(Device device) throws Exception;
 
 	public JSONObject generateAdplanJson(Device device) throws Exception;
 

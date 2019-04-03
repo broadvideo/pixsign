@@ -1,5 +1,6 @@
 var DeviceModule = function () {
 	var _submitflag = false;
+	var _devicetype = 1;
 	var _device = {};
 	var _bundle = {};
 	var timestamp = new Date().getTime();
@@ -16,6 +17,33 @@ var DeviceModule = function () {
 	};
 	
 	var initDeviceTable = function () {
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		});
+
 		var DeviceTree = new BranchTree($('#DevicePortlet'));
 
 		var oTable = $('#DeviceTable').dataTable({
@@ -45,7 +73,7 @@ var DeviceModule = function () {
 					devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
 				}
 				if (aData.name != aData.terminalid) {
-					devicehtml += aData.terminalid + '/' + aData.name;
+					devicehtml += aData.name + '(' + aData.terminalid + ')';
 				} else {
 					devicehtml += aData.terminalid + '';
 				}
@@ -82,6 +110,7 @@ var DeviceModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'devicegroupid','value':0 });
 			}
 		});

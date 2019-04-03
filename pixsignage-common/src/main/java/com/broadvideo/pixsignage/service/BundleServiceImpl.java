@@ -85,7 +85,7 @@ public class BundleServiceImpl implements BundleService {
 	private DeviceMapper deviceMapper;
 
 	@Autowired
-	private ScheduleService scheduleService;
+	private SyncService syncService;
 
 	public Bundle selectMiniByPrimaryKey(String bundleid) {
 		return bundleMapper.selectMiniByPrimaryKey(bundleid);
@@ -679,7 +679,7 @@ public class BundleServiceImpl implements BundleService {
 		// Handle sync
 		for (int i = 0; i < binds.length; i++) {
 			HashMap<String, Object> bind = binds[i];
-			scheduleService.syncSchedule("" + bind.get("bindtype"), "" + bind.get("bindid"));
+			syncService.sync("" + bind.get("bindtype"), "" + bind.get("bindid"), true);
 		}
 	}
 

@@ -25,6 +25,7 @@ var common = {
 		solopage: 'Page',
 		touchpage: 'Interactive Page',
 		mediagrid: 'Media Grid',
+		playlist: 'Play List',
 
 		bundle: 'Program',
 		touchbundle: 'Interactive Program',
@@ -304,6 +305,7 @@ var common = {
 		sync: 'Please confirm whether to sync schedules to ',
 		synclayout: 'Please confirm whether to sync the layout',
 		syncmediagrid: 'Please confirm whether to sync the media grid',
+		syncmedialist: 'Please confirm whether to sync the media list',
 		savetemplate: 'Please confirm whether to save the page as template',
 		config: 'Please confirm whether to push configuration to ',
 		pushall: 'Please confirm whether to push configuration to all devices',

@@ -25,6 +25,7 @@ var common = {
 		solopage: '单屏页面',
 		touchpage: '互动页面',
 		mediagrid: '联屏媒体',
+		playlist: '播放列表',
 
 		bundle: '单屏节目',
 		touchbundle: '互动节目',
@@ -302,8 +303,9 @@ var common = {
 		resetpassword: '请确认是否重置密码 ',
 		unbind: '请确认是否解绑 ',
 		sync: '是否同步播放计划至 ',
-		synclayout: '是否同步此布局至相关联的终端和终端组',
+		synclayout: '是否同步至相关联的终端和终端组',
 		syncmediagrid: '是否同步此联屏媒体至相关联的终端',
+		syncmedialist: '是否同步此媒体列表至相关联的终端',
 		savetemplate: '是否把此页面存为模板',
 		config: '是否重新推送配置至 ',
 		pushall: '是否推送配置至所有终端 ',

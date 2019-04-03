@@ -67,7 +67,13 @@ public class OrgServiceImpl implements OrgService {
 
 	@Transactional
 	public void addOrg(Org org) {
-		org.setCurrentdeviceidx(org.getMaxdevices());
+		String maxdetail = org.getMaxdetail();
+		String[] maxs = maxdetail.split(",");
+		int maxdevices = 0;
+		for (int i = 0; i < maxs.length; i++) {
+			maxdevices += Integer.parseInt(maxs[i]);
+		}
+		org.setMaxdevices(maxdevices);
 		orgMapper.insertSelective(org);
 
 		Branch branch = new Branch();
@@ -79,6 +85,56 @@ public class OrgServiceImpl implements OrgService {
 				+ messageSource.getMessage("global.headquarter", null, LocaleContextHolder.getLocale()));
 		branch.setCreatestaffid(org.getCreatestaffid());
 		branchService.addBranch(branch);
+
+		int currentdeviceidx = 0;
+		List<Device> devices = new ArrayList<Device>();
+		for (int type = 1; type <= 10; type++) {
+			int max = maxs.length > type - 1 ? Integer.parseInt(maxs[type - 1]) : 0;
+			for (int index = 0; index < max; index++) {
+				currentdeviceidx++;
+				String terminalid = "" + type;
+				String orgid = "" + org.getOrgid();
+				int k = 3 - orgid.length();
+				for (int i = 0; i < k; i++) {
+					orgid = "0" + orgid;
+				}
+				String tid = "" + currentdeviceidx;
+				k = 4 - tid.length();
+				for (int i = 0; i < k; i++) {
+					tid = "0" + tid;
+				}
+				terminalid = terminalid + orgid + tid;
+
+				// Generate the check digit
+				int[] terminalidArr = new int[terminalid.length()];
+				for (int i = 0; i < terminalid.length(); i++) {
+					terminalidArr[i] = Integer.valueOf(String.valueOf(terminalid.charAt(i)));
+				}
+				int sum = 0;
+				for (int i = 0; i < terminalid.length(); i++) {
+					if (i % 2 == 0) {
+						sum += terminalidArr[terminalid.length() - i - 1] * 3;
+					} else {
+						sum += terminalidArr[terminalid.length() - i - 1];
+					}
+				}
+				terminalid = terminalid + ((10 - sum % 10) % 10);
+
+				Device device = new Device();
+				device.setOrgid(org.getOrgid());
+				device.setBranchid(branch.getBranchid());
+				device.setTerminalid(terminalid);
+				device.setName(terminalid);
+				device.setType("" + type);
+				device.setStatus("0");
+				devices.add(device);
+			}
+		}
+		if (devices.size() > 0) {
+			deviceMapper.insertList(devices);
+		}
+
+		org.setCurrentdeviceidx(currentdeviceidx);
 		org.setTopbranchid(branch.getBranchid());
 		orgMapper.updateByPrimaryKeySelective(org);
 
@@ -98,26 +154,6 @@ public class OrgServiceImpl implements OrgService {
 		privileges.add(privilege);
 		staffMapper.assignStaffPrivileges(staff, privileges);
 
-		List<Device> devices = new ArrayList<Device>();
-		for (int i = 0; i < org.getMaxdevices(); i++) {
-			String terminalid = "" + (i + 1);
-			int k = 5 - terminalid.length();
-			for (int j = 0; j < k; j++) {
-				terminalid = "0" + terminalid;
-			}
-			terminalid = org.getCode() + terminalid;
-			Device device = new Device();
-			device.setOrgid(org.getOrgid());
-			device.setBranchid(branch.getBranchid());
-			device.setTerminalid(terminalid);
-			device.setName(terminalid);
-			device.setStatus("0");
-			devices.add(device);
-		}
-		if (devices.size() > 0) {
-			deviceMapper.insertList(devices);
-		}
-
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();
 
@@ -135,30 +171,66 @@ public class OrgServiceImpl implements OrgService {
 
 	@Transactional
 	public void updateOrg(Org org) {
-		Org oldOrg = orgMapper.selectByPrimaryKey("" + org.getOrgid());
-		if (org.getMaxdevices() != null && org.getMaxdevices() > oldOrg.getCurrentdeviceidx()) {
-			List<Device> devices = new ArrayList<Device>();
-			for (int i = oldOrg.getCurrentdeviceidx(); i < org.getMaxdevices(); i++) {
-				String terminalid = "" + (i + 1);
-				int k = 5 - terminalid.length();
-				for (int j = 0; j < k; j++) {
-					terminalid = "0" + terminalid;
-				}
-				if (!org.getCode().equals("default")) {
-					terminalid = org.getCode() + terminalid;
-				}
-				Device device = new Device();
-				device.setOrgid(org.getOrgid());
-				device.setBranchid(oldOrg.getTopbranchid());
-				device.setTerminalid(terminalid);
-				device.setName(terminalid);
-				device.setStatus("0");
-				devices.add(device);
+		String maxdetail = org.getMaxdetail();
+		if (maxdetail != null) {
+			String[] maxs = maxdetail.split(",");
+			int maxdevices = 0;
+			for (int i = 0; i < maxs.length; i++) {
+				maxdevices += Integer.parseInt(maxs[i]);
 			}
-			deviceMapper.insertList(devices);
-			org.setCurrentdeviceidx(org.getMaxdevices());
-		}
+			org.setMaxdevices(maxdevices);
 
+			Org oldOrg = orgMapper.selectByPrimaryKey("" + org.getOrgid());
+			int currentdeviceidx = oldOrg.getCurrentdeviceidx();
+			List<Device> devices = new ArrayList<Device>();
+			for (int type = 1; type <= 10; type++) {
+				int max = maxs.length > type - 1 ? Integer.parseInt(maxs[type - 1]) : 0;
+				int currentTypeCount = deviceMapper.selectCountByType("" + org.getOrgid(), "" + type, null);
+				for (int index = currentTypeCount; index < max; index++) {
+					currentdeviceidx++;
+					String terminalid = "" + type;
+					String orgid = "" + org.getOrgid();
+					int k = 3 - orgid.length();
+					for (int i = 0; i < k; i++) {
+						orgid = "0" + orgid;
+					}
+					String tid = "" + currentdeviceidx;
+					k = 4 - tid.length();
+					for (int i = 0; i < k; i++) {
+						tid = "0" + tid;
+					}
+					terminalid = terminalid + orgid + tid;
+
+					// Generate the check digit
+					int[] terminalidArr = new int[terminalid.length()];
+					for (int i = 0; i < terminalid.length(); i++) {
+						terminalidArr[i] = Integer.valueOf(String.valueOf(terminalid.charAt(i)));
+					}
+					int sum = 0;
+					for (int i = 0; i < terminalid.length(); i++) {
+						if (i % 2 == 0) {
+							sum += terminalidArr[terminalid.length() - i - 1] * 3;
+						} else {
+							sum += terminalidArr[terminalid.length() - i - 1];
+						}
+					}
+					terminalid = terminalid + ((10 - sum % 10) % 10);
+
+					Device device = new Device();
+					device.setOrgid(org.getOrgid());
+					device.setBranchid(oldOrg.getTopbranchid());
+					device.setTerminalid(terminalid);
+					device.setName(terminalid);
+					device.setType("" + type);
+					device.setStatus("0");
+					devices.add(device);
+				}
+			}
+			if (devices.size() > 0) {
+				deviceMapper.insertList(devices);
+			}
+			org.setCurrentdeviceidx(currentdeviceidx);
+		}
 		orgMapper.updateByPrimaryKeySelective(org);
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();

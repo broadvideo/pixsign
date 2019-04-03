@@ -125,5 +125,22 @@ var FolderImageSelect = function (container, image) {
 		});
 	}
 	
+	this.setImage = function(image) {
+		_image = image;
+		$(_container).find('.select2').select2('data', { 
+			text:_image.name, 
+			id:_image.imageid, 
+			image:_image, 
+		});
+	}
+	
+	this.getImageid = function() {
+		if ($(_container).find('.select2').select2('data') != null) {
+			return $(_container).find('.select2').select2('data').id;
+		} else {
+			return 0;
+		}
+	}
+	
 	init();
 };

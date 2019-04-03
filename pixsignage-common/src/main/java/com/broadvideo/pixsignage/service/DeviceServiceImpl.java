@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import com.broadvideo.pixsignage.domain.Bundlezonedtl;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicegroup;
 import com.broadvideo.pixsignage.domain.Image;
+import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Page;
@@ -29,12 +32,14 @@ import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Video;
+import com.broadvideo.pixsignage.exception.PixException;
 import com.broadvideo.pixsignage.persistence.AdplanMapper;
 import com.broadvideo.pixsignage.persistence.AdplandtlMapper;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
+import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
@@ -49,6 +54,7 @@ import net.sf.json.JSONObject;
 
 @Service("deviceService")
 public class DeviceServiceImpl implements DeviceService {
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private DeviceMapper deviceMapper;
@@ -67,6 +73,8 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private ScheduleMapper scheduleMapper;
 	@Autowired
+	private MedialistdtlMapper medialistdtlMapper;
+	@Autowired
 	private AdplanMapper adplanMapper;
 	@Autowired
 	private AdplandtlMapper adplandtlMapper;
@@ -74,17 +82,18 @@ public class DeviceServiceImpl implements DeviceService {
 	@Autowired
 	private BundleService bundleService;
 
-	public int selectCount(String orgid, String branchid, String subbranchflag, String status, String onlineflag,
-			String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2, String search) {
-		return deviceMapper.selectCount(orgid, branchid, subbranchflag, status, onlineflag, devicegroupid, devicegridid,
-				cataitemid1, cataitemid2, search);
+	public int selectCount(String orgid, String branchid, String subbranchflag, String type, String status,
+			String onlineflag, String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2,
+			String search) {
+		return deviceMapper.selectCount(orgid, branchid, subbranchflag, type, status, onlineflag, devicegroupid,
+				devicegridid, cataitemid1, cataitemid2, search);
 	}
 
-	public List<Device> selectList(String orgid, String branchid, String subbranchflag, String status,
+	public List<Device> selectList(String orgid, String branchid, String subbranchflag, String type, String status,
 			String onlineflag, String devicegroupid, String devicegridid, String cataitemid1, String cataitemid2,
 			String search, String start, String length, String order) {
-		return deviceMapper.selectList(orgid, branchid, subbranchflag, status, onlineflag, devicegroupid, devicegridid,
-				cataitemid1, cataitemid2, search, start, length, order);
+		return deviceMapper.selectList(orgid, branchid, subbranchflag, type, status, onlineflag, devicegroupid,
+				devicegridid, cataitemid1, cataitemid2, search, start, length, order);
 	}
 
 	public Device selectByPrimaryKey(String deviceid) {
@@ -100,8 +109,69 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Transactional
-	public void addDevice(Device device) {
-		deviceMapper.insertSelective(device);
+	public synchronized void addDevice(Device device) {
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+		int currentdeviceidx = org.getCurrentdeviceidx();
+		String maxdetail = org.getMaxdetail();
+		String[] maxs = maxdetail.split(",");
+		int t = Integer.parseInt(device.getType());
+		int max = maxs.length > t - 1 ? Integer.parseInt(maxs[t - 1]) : 0;
+		int currentTypeCount = deviceMapper.selectCountByType("" + device.getOrgid(), device.getType(), null);
+		if (currentTypeCount >= max) {
+			throw new PixException(3002,
+					"Device has reached the upper limit, type=" + device.getType() + ", max=" + max);
+		}
+
+		if (device.getType().equals(Device.Type_3DFanWall)) {
+			Device d = deviceMapper.selectByTerminalid(device.getTerminalid());
+			if (d != null) {
+				throw new PixException(3003, "Device terminalid duplicated, terminalid=" + device.getTerminalid());
+			}
+			device.setHardkey(device.getTerminalid());
+			device.setStatus("1");
+			device.setActivetime(Calendar.getInstance().getTime());
+			deviceMapper.insertSelective(device);
+			org.setCurrentdeviceidx(currentdeviceidx + 1);
+			orgMapper.updateByPrimaryKeySelective(org);
+			logger.info("Add one new device, name={}, orgid={}, type={}, terminalid={}", device.getName(),
+					device.getOrgid(), device.getType(), device.getTerminalid());
+		} else {
+			String terminalid = "" + device.getType();
+			String orgid = "" + device.getOrgid();
+			int k = 3 - orgid.length();
+			for (int i = 0; i < k; i++) {
+				orgid = "0" + orgid;
+			}
+			String tid = "" + (org.getCurrentdeviceidx() + 1);
+			k = 4 - tid.length();
+			for (int i = 0; i < k; i++) {
+				tid = "0" + tid;
+			}
+			terminalid = terminalid + orgid + tid;
+
+			// Generate the check digit
+			int[] terminalidArr = new int[terminalid.length()];
+			for (int i = 0; i < terminalid.length(); i++) {
+				terminalidArr[i] = Integer.valueOf(String.valueOf(terminalid.charAt(i)));
+			}
+			int sum = 0;
+			for (int i = 0; i < terminalid.length(); i++) {
+				if (i % 2 == 0) {
+					sum += terminalidArr[terminalid.length() - i - 1] * 3;
+				} else {
+					sum += terminalidArr[terminalid.length() - i - 1];
+				}
+			}
+			terminalid = terminalid + ((10 - sum % 10) % 10);
+
+			device.setTerminalid(terminalid);
+			device.setStatus("0");
+			deviceMapper.insertSelective(device);
+			org.setCurrentdeviceidx(currentdeviceidx + 1);
+			orgMapper.updateByPrimaryKeySelective(org);
+			logger.info("Add one new device, name={}, orgid={}, type={}, terminalid={}", device.getName(),
+					device.getOrgid(), device.getType(), device.getTerminalid());
+		}
 	}
 
 	@Transactional
@@ -111,6 +181,7 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void updateDeviceSelective(Device device) {
+		device.setTerminalid(null);
 		deviceMapper.updateByPrimaryKeySelective(device);
 		// deviceMapper.checkDevicegroup();
 	}
@@ -139,6 +210,12 @@ public class DeviceServiceImpl implements DeviceService {
 		}
 	}
 
+	public void updateMedialist(String[] deviceids, String defaultmedialistid) {
+		for (int i = 0; i < deviceids.length; i++) {
+			deviceMapper.updateMedialist(deviceids[i], defaultmedialistid);
+		}
+	}
+
 	@Transactional
 	public void updateOnlineflag() {
 		deviceMapper.updateOnlineflag();
@@ -146,8 +223,8 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Transactional
 	public void configall(String orgid) throws Exception {
-		List<Device> devices = deviceMapper.selectList(orgid, null, null, "1", "1", null, null, null, null, null, null,
-				null, null);
+		List<Device> devices = deviceMapper.selectList(orgid, null, null, null, "1", "1", null, null, null, null, null,
+				null, null, null);
 		for (Device device : devices) {
 			Msgevent msgevent = new Msgevent();
 			msgevent.setMsgtype(Msgevent.MsgType_Device_Config);
@@ -682,11 +759,18 @@ public class DeviceServiceImpl implements DeviceService {
 							videoJson.put("checksum", video.getMd5());
 							videoJson.put("thumbnail",
 									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
-							if (video.getRelateurl() != null && video.getRelateurl().length() > 0) {
-								videoJson.put("relate_url", video.getRelateurl());
-							} else {
+							if (video.getRelatetype().equals("1")) {
+								videoJson.put("relate_type", "video");
+								videoJson.put("relate_id", video.getRelateid());
+							} else if (video.getRelatetype().equals("2")) {
 								videoJson.put("relate_type", "image");
 								videoJson.put("relate_id", video.getRelateid());
+							} else if (video.getRelatetype().equals("3")) {
+								videoJson.put("relate_type", "link");
+								videoJson.put("relate_url", video.getRelateurl());
+							} else if (video.getRelatetype().equals("4")) {
+								videoJson.put("relate_type", "apk");
+								videoJson.put("relate_url", video.getRelateurl());
 							}
 							videoHash.put(video.getVideoid(), videoJson);
 							videoJsonArray.add(videoJson);
@@ -704,7 +788,10 @@ public class DeviceServiceImpl implements DeviceService {
 						imageJson.put("checksum", image.getMd5());
 						imageJson.put("thumbnail",
 								downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
-						if (image.getRelatetype().equals("2")) {
+						if (image.getRelatetype().equals("1")) {
+							imageJson.put("relate_type", "video");
+							imageJson.put("relate_id", image.getRelateid());
+						} else if (image.getRelatetype().equals("2")) {
 							imageJson.put("relate_type", "image");
 							imageJson.put("relate_id", image.getRelateid());
 						} else if (image.getRelatetype().equals("3")) {
@@ -721,8 +808,23 @@ public class DeviceServiceImpl implements DeviceService {
 				}
 			}
 		}
+
 		for (Video video : videoList) {
-			if (video.getRelateimage() != null && imageHash.get(video.getRelateid()) == null) {
+			if (video.getRelatevideo() != null && videoHash.get(video.getRelateid()) == null) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", video.getRelateid());
+				videoJson.put("name", video.getRelatevideo().getName());
+				videoJson.put("oname", video.getRelatevideo().getOname());
+				videoJson.put("url", downloadurl + "/pixsigdata" + video.getRelatevideo().getFilepath());
+				videoJson.put("path", "/pixsigdata" + video.getRelatevideo().getFilepath());
+				videoJson.put("file", video.getRelatevideo().getFilename());
+				videoJson.put("size", video.getRelatevideo().getSize());
+				videoJson.put("checksum", video.getRelatevideo().getMd5());
+				videoJson.put("thumbnail", downloadurl + "/pixsigdata" + video.getRelatevideo().getThumbnail());
+				videoJson.put("relate_url", "");
+				videoHash.put(video.getRelateid(), videoJson);
+				videoJsonArray.add(videoJson);
+			} else if (video.getRelateimage() != null && imageHash.get(video.getRelateid()) == null) {
 				JSONObject imageJson = new JSONObject();
 				imageJson.put("id", video.getRelateid());
 				imageJson.put("name", video.getRelateimage().getName());
@@ -753,6 +855,20 @@ public class DeviceServiceImpl implements DeviceService {
 				imageJson.put("relate_url", "");
 				imageHash.put(image.getRelateid(), imageJson);
 				imageJsonArray.add(imageJson);
+			} else if (image.getRelatevideo() != null && videoHash.get(image.getRelateid()) == null) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", image.getRelateid());
+				videoJson.put("name", image.getRelatevideo().getName());
+				videoJson.put("oname", image.getRelatevideo().getOname());
+				videoJson.put("url", downloadurl + "/pixsigdata" + image.getRelatevideo().getFilepath());
+				videoJson.put("path", "/pixsigdata" + image.getRelatevideo().getFilepath());
+				videoJson.put("file", image.getRelatevideo().getFilename());
+				videoJson.put("size", image.getRelatevideo().getSize());
+				videoJson.put("checksum", image.getRelatevideo().getMd5());
+				videoJson.put("thumbnail", downloadurl + "/pixsigdata" + image.getRelatevideo().getThumbnail());
+				videoJson.put("relate_url", "");
+				videoHash.put(image.getRelateid(), videoJson);
+				videoJsonArray.add(videoJson);
 			}
 		}
 
@@ -843,6 +959,52 @@ public class DeviceServiceImpl implements DeviceService {
 			}
 		}
 		resultJson.put("pages", pageJsonArray);
+		resultJson.put("videos", videoJsonArray);
+		return resultJson;
+	}
+
+	public JSONObject generateMedialistJson(Device device) throws Exception {
+		JSONObject resultJson = new JSONObject();
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
+
+		JSONArray medialistdtlJsonArray = new JSONArray();
+		JSONArray videoJsonArray = new JSONArray();
+		HashMap<Integer, Video> videoHash = new HashMap<Integer, Video>();
+
+		List<Medialistdtl> medialistdtls = medialistdtlMapper.selectList("" + device.getDefaultmedialistid());
+		for (Medialistdtl medialistdtl : medialistdtls) {
+			JSONObject medialistdtlJson = new JSONObject();
+			if (medialistdtl.getVideo() != null) {
+				if (videoHash.get(medialistdtl.getObjid()) == null) {
+					Video video = medialistdtl.getVideo();
+					videoHash.put(medialistdtl.getObjid(), video);
+					JSONObject videoJson = new JSONObject();
+					videoJson.put("id", video.getVideoid());
+					videoJson.put("name", video.getName());
+					videoJson.put("oname", video.getOname());
+					videoJson.put("duration", video.getDuration());
+					videoJson.put("url", downloadurl + "/pixsigdata" + video.getFilepath());
+					videoJson.put("path", "/pixsigdata" + video.getFilepath());
+					videoJson.put("file", video.getFilename());
+					videoJson.put("size", video.getSize());
+					videoJson.put("checksum", video.getMd5());
+					videoJson.put("thumbnail", downloadurl + "/pixsigdata" + video.getThumbnail());
+					videoJsonArray.add(videoJson);
+				}
+				medialistdtlJson.put("id", medialistdtl.getObjid());
+				medialistdtlJson.put("type", "video");
+				medialistdtlJsonArray.add(medialistdtlJson);
+			}
+		}
+
+		resultJson.put("playlist_dtls", medialistdtlJsonArray);
 		resultJson.put("videos", videoJsonArray);
 		return resultJson;
 	}

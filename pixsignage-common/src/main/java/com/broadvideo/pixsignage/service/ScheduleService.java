@@ -1,5 +1,6 @@
 package com.broadvideo.pixsignage.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.broadvideo.pixsignage.domain.Schedule;
@@ -10,15 +11,9 @@ public interface ScheduleService {
 	public List<Schedule> selectList(String scheduletype, String attachflag, String bindtype, String bindid,
 			String playmode);
 
+	public List<HashMap<String, Object>> selectBindListByObj(String objtype, String objid);
+
 	public void batch(String scheduletype, String attachflag, String bindtype, String bindid, Schedule[] schedules);
-
-	public void syncSchedule(String bindtype, String bindid) throws Exception;
-
-	public void syncScheduleByBundle(String bundleid) throws Exception;
-
-	public void syncScheduleByPage(String pageid) throws Exception;
-
-	public void syncScheduleByMediagrid(String mediagridid) throws Exception;
 
 	public JSONObject generateDeviceBundleScheduleJson(String deviceid);
 

@@ -1,5 +1,6 @@
 var DeviceModule = function () {
 	var _submitflag = false;
+	var _devicetype = 1;
 	var _device = {};
 	var _page = {};
 	var timestamp = new Date().getTime();
@@ -16,6 +17,21 @@ var DeviceModule = function () {
 	};
 	
 	var initDeviceTable = function () {
+		if (Max3 > 0) {
+			$('.device-navigator[devicetype="3"]').addClass('active');
+			_devicetype = 3;
+		} else if (Max4 > 0) {
+			$('.device-navigator[devicetype="4"]').addClass('active');
+			_devicetype = 4;
+		}
+		$('.device-navigator[devicetype="3"]').css('display', Max3==0?'none':'');
+		$('.device-navigator[devicetype="4"]').css('display', Max4==0?'none':'');
+
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		});
+
 		var DeviceTree = new BranchTree($('#DevicePortlet'));
 
 		var oTable = $('#DeviceTable').dataTable({
@@ -45,7 +61,7 @@ var DeviceModule = function () {
 					devicehtml += '<span class="label label-sm label-warning">' + common.view.offline + '</span> ';
 				}
 				if (aData.name != aData.terminalid) {
-					devicehtml += aData.terminalid + '/' + aData.name;
+					devicehtml += aData.name + '(' + aData.terminalid + ')';
 				} else {
 					devicehtml += aData.terminalid + '';
 				}
@@ -82,6 +98,7 @@ var DeviceModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 			}
 		});
 		$('#DeviceTable_wrapper').addClass('form-inline');

@@ -1,11 +1,12 @@
 var ScheduleModule = function () {
 	var _submitflag = false;
-	var CurrentBindtype = 1; //1: Device 2:Devicegroup
-	var CurrentBind;
-	var CurrentBindid;
-	var CurrentSchedules;
-	var CurrentSchedule;
-	var CurrentScheduledtls;
+	var _devicetype = 1;
+	var _bindtype = 1; //1: Device 2:Devicegroup
+	var _bind;
+	var _bindid;
+	var _schedules;
+	var _schedule;
+	var _scheduledtls;
 	var timestamp = new Date().getTime();
 
 	var timestamp = new Date().getTime();
@@ -22,12 +23,35 @@ var ScheduleModule = function () {
 	};
 	
 	var initTable = function () {
-		$('#DevicegroupNav').click(function(event) {
-			CurrentBindtype = 2;
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+
+		$('.devicegroup-navigator').click(function(event) {
+			_bindtype = 2;
 			$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
 		});
-		$('#DeviceNav').click(function(event) {
-			CurrentBindtype = 1;
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			_bindtype = 1;
 			$('#DeviceTable').dataTable()._fnAjaxUpdate();
 		});
 
@@ -122,6 +146,7 @@ var ScheduleModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':ScheduleTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'devicegroupid','value':0 });
 			}
 		});
@@ -264,16 +289,16 @@ var ScheduleModule = function () {
 				index = $(event.target).parent().attr('data-id');
 			}
 			var url, data;
-			if (CurrentBindtype == 1) {
-				CurrentBind = $('#DeviceTable').dataTable().fnGetData(index);
+			if (_bindtype == 1) {
+				_bind = $('#DeviceTable').dataTable().fnGetData(index);
 				url = 'device!sync.action';
-				data = { deviceid: CurrentBind.deviceid };
-			} else if (CurrentBindtype == 2) {
-				CurrentBind = $('#DevicegroupTable').dataTable().fnGetData(index);
+				data = { deviceid: _bind.deviceid };
+			} else if (_bindtype == 2) {
+				_bind = $('#DevicegroupTable').dataTable().fnGetData(index);
 				url = 'devicegroup!sync.action';
-				data = { devicegroupid: CurrentBind.devicegroupid };
+				data = { devicegroupid: _bind.devicegroupid };
 			}
-			bootbox.confirm(common.tips.sync + CurrentBind.name, function(result) {
+			bootbox.confirm(common.tips.sync + _bind.name, function(result) {
 				if (result == true) {
 					$.ajax({
 						type : 'GET',
@@ -306,10 +331,10 @@ var ScheduleModule = function () {
 	var initScheduleModal = function () {
 		function refreshScheduleDetail() {
 			$('#ScheduleDetail').empty();
-			if (CurrentSchedules.length > 0) {
+			if (_schedules.length > 0) {
 				var scheduleTabHtml = '<h3></h3><ul class="timeline">';
-				for (var i=0; i<CurrentSchedules.length; i++) {
-					var schedule = CurrentSchedules[i];
+				for (var i=0; i<_schedules.length; i++) {
+					var schedule = _schedules[i];
 					scheduleTabHtml += '<li class="timeline-grey">';
 					scheduleTabHtml += '<div class="timeline-time">';
 					scheduleTabHtml += '<span class="time">' + schedule.starttime.substring(0,5) + ' </span>';
@@ -531,13 +556,13 @@ var ScheduleModule = function () {
 		function refreshSelectedTable() {
 			var selectedTableHtml = '';
 			selectedTableHtml += '<tr>';
-			for (var i=0; i<CurrentScheduledtls.length; i++) {
-				var scheduledtl = CurrentScheduledtls[i];
+			for (var i=0; i<_scheduledtls.length; i++) {
+				var scheduledtl = _scheduledtls[i];
 				var name = '';
 				if (scheduledtl.objtype == 1) {
 					name = scheduledtl.bundle.name;
 				}
-				selectedTableHtml += '<td style="padding: 0px 10px 0px 0px;" width="' + (100/CurrentScheduledtls.length) + '%"><div class="thumbs" style="width:100px; height:100px;">';
+				selectedTableHtml += '<td style="padding: 0px 10px 0px 0px;" width="' + (100/_scheduledtls.length) + '%"><div class="thumbs" style="width:100px; height:100px;">';
 				if (scheduledtl.objtype == 1 && scheduledtl.bundle.snapshot != null) {
 					var thumbwidth = scheduledtl.bundle.width > scheduledtl.bundle.height? 100 : 100*scheduledtl.bundle.width/scheduledtl.bundle.height;
 					selectedTableHtml += '<img src="/pixsigdata' + scheduledtl.bundle.snapshot + '?t=' + timestamp + '" class="imgthumb" width="' + thumbwidth + '%" />';
@@ -554,8 +579,8 @@ var ScheduleModule = function () {
 			}
 			selectedTableHtml += '</tr>';
 			selectedTableHtml += '<tr>';
-			for (var i=0; i<CurrentScheduledtls.length; i++) {
-				var scheduledtl = CurrentScheduledtls[i];
+			for (var i=0; i<_scheduledtls.length; i++) {
+				var scheduledtl = _scheduledtls[i];
 				selectedTableHtml += '<td>';
 				if (scheduledtl.objtype == 1 && scheduledtl.bundle.touchflag == 0) {
 					selectedTableHtml += '<h6 class="pixtitle">' + common.view.bundle + '</h6>';
@@ -566,7 +591,7 @@ var ScheduleModule = function () {
 			}
 			selectedTableHtml += '</tr>';
 			$('#SelectedTable').html(selectedTableHtml);
-			$('#SelectedTable').width(110 * CurrentScheduledtls.length);
+			$('#SelectedTable').width(110 * _scheduledtls.length);
 			$('#SelectedTable .mask').each(function(i) {
 				$(this).width($(this).parent().width() + 2);
 				$(this).height($(this).parent().width() + 2);
@@ -574,19 +599,19 @@ var ScheduleModule = function () {
 		}
 
 		$('body').on('click', '.pix-schedule', function(event) {
-			if (CurrentBindtype == 1) {
-				CurrentBindid = $(event.target).attr('deviceid');
-				if (CurrentBindid == undefined) {
-					CurrentBindid = $(event.target).parent().attr('deviceid');
+			if (_bindtype == 1) {
+				_bindid = $(event.target).attr('deviceid');
+				if (_bindid == undefined) {
+					_bindid = $(event.target).parent().attr('deviceid');
 				}
 				$.ajax({
 					type : 'GET',
 					url : 'device!get.action',
-					data : {deviceid: CurrentBindid},
+					data : {deviceid: _bindid},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
-							CurrentBind = data.device;
-							CurrentSchedules = CurrentBind.schedules;
+							_bind = data.device;
+							_schedules = _bind.schedules;
 							$('.schedule-edit').css('display', 'none');
 							$('.schedule-add').css('display', 'none');
 							$('.schedule-view').css('display', 'block');
@@ -601,19 +626,19 @@ var ScheduleModule = function () {
 						console.log('failue');
 					}
 				});
-			} else if (CurrentBindtype == 2) {
-				CurrentBindid = $(event.target).attr('devicegroupid');
-				if (CurrentBindid == undefined) {
-					CurrentBindid = $(event.target).parent().attr('devicegroupid');
+			} else if (_bindtype == 2) {
+				_bindid = $(event.target).attr('devicegroupid');
+				if (_bindid == undefined) {
+					_bindid = $(event.target).parent().attr('devicegroupid');
 				}
 				$.ajax({
 					type : 'GET',
 					url : 'devicegroup!get.action',
-					data : {devicegroupid: CurrentBindid},
+					data : {devicegroupid: _bindid},
 					success : function(data, status) {
 						if (data.errorcode == 0) {
-							CurrentBind = data.devicegroup;
-							CurrentSchedules = CurrentBind.schedules;
+							_bind = data.devicegroup;
+							_schedules = _bind.schedules;
 							$('.schedule-edit').css('display', 'none');
 							$('.schedule-add').css('display', 'none');
 							$('.schedule-view').css('display', 'block');				
@@ -644,13 +669,13 @@ var ScheduleModule = function () {
 			$('.form-group').removeClass('has-error');
 			$('.help-block').remove();
 			$('#ScheduleForm input[name="starttime"]').attr('value', '');
-			CurrentSchedule = {};
-			CurrentSchedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
-			CurrentSchedule.scheduletype = 1;
-			CurrentSchedule.attachflag = 0;
-			CurrentSchedule.bindtype = CurrentBindtype;
-			CurrentSchedule.bindid = CurrentBindid;
-			CurrentScheduledtls = [];
+			_schedule = {};
+			_schedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
+			_schedule.scheduletype = 1;
+			_schedule.attachflag = 0;
+			_schedule.bindtype = _bindtype;
+			_schedule.bindid = _bindid;
+			_scheduledtls = [];
 			refreshMediaTable();
 			refreshSelectedTable();
 		});
@@ -660,15 +685,15 @@ var ScheduleModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentSchedule = CurrentSchedules[index];
-			CurrentScheduledtls = CurrentSchedule.scheduledtls.slice(0);
+			_schedule = _schedules[index];
+			_scheduledtls = _schedule.scheduledtls.slice(0);
 			
 			$('.schedule-edit').css('display', 'block');
 			$('.schedule-add').css('display', 'none');
 			$('.schedule-view').css('display', 'none');				
 			$('.form-group').removeClass('has-error');
 			$('.help-block').remove();
-			$('#ScheduleForm input[name="starttime"]').attr('value', CurrentSchedule.starttime);
+			$('#ScheduleForm input[name="starttime"]').attr('value', _schedule.starttime);
 			refreshMediaTable();
 			refreshSelectedTable();
 		});
@@ -678,7 +703,7 @@ var ScheduleModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('data-id');
 			}
-			CurrentSchedules.splice(index, 1);
+			_schedules.splice(index, 1);
 			refreshScheduleDetail();
 		});
 
@@ -700,26 +725,26 @@ var ScheduleModule = function () {
 				$('.schedule-view').css('display', 'block');
 				
 				var starttime = $('#ScheduleForm input[name=starttime]').val();
-				var schedules = CurrentSchedules.filter(function (el) {
+				var schedules = _schedules.filter(function (el) {
 					return (el.starttime == starttime);
 				});
 				if (schedules.length > 0) {
 					schedules[0].playmode = $('#ScheduleForm input[name=playmode]:checked').attr("value");
-					schedules[0].scheduledtls = CurrentScheduledtls;
+					schedules[0].scheduledtls = _scheduledtls;
 				} else {
 					var schedule = {};
 					schedule.scheduleid = 'B' + Math.round(Math.random()*100000000);
 					schedule.scheduletype = 1;
 					schedule.attachflag = 0;
-					schedule.bindtype = CurrentBindtype;
-					schedule.bindid = CurrentBindid;
+					schedule.bindtype = _bindtype;
+					schedule.bindid = _bindid;
 					schedule.playmode = $('#ScheduleForm input[name=playmode]:checked').attr("value");
 					schedule.starttime = $('#ScheduleForm input[name=starttime]').val();
-					schedule.scheduledtls = CurrentScheduledtls;
-					CurrentSchedules.push(schedule);
+					schedule.scheduledtls = _scheduledtls;
+					_schedules.push(schedule);
 				}
 				
-				CurrentSchedules.sort(function(a, b) {
+				_schedules.sort(function(a, b) {
 					return (a.starttime > b.starttime);
 				});
 				refreshScheduleDetail();
@@ -740,12 +765,12 @@ var ScheduleModule = function () {
 			var data = $('#BundleTable').dataTable().fnGetData(rowIndex);
 			var scheduledtl = {};
 			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
-			scheduledtl.scheduleid = CurrentSchedule.scheduleid;
+			scheduledtl.scheduleid = _schedule.scheduleid;
 			scheduledtl.objtype = 1;
 			scheduledtl.objid = data.bundleid;
 			scheduledtl.bundle = data;
-			scheduledtl.sequence = CurrentScheduledtls.length + 1;
-			CurrentScheduledtls.push(scheduledtl);
+			scheduledtl.sequence = _scheduledtls.length + 1;
+			_scheduledtls.push(scheduledtl);
 			refreshSelectedTable();
 		});
 		//增加Touchbundle到SelectedTable
@@ -757,12 +782,12 @@ var ScheduleModule = function () {
 			var data = $('#TouchbundleTable').dataTable().fnGetData(rowIndex);
 			var scheduledtl = {};
 			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
-			scheduledtl.scheduleid = CurrentSchedule.scheduleid;
+			scheduledtl.scheduleid = _schedule.scheduleid;
 			scheduledtl.objtype = 1;
 			scheduledtl.objid = data.bundleid;
 			scheduledtl.bundle = data;
-			scheduledtl.sequence = CurrentScheduledtls.length + 1;
-			CurrentScheduledtls.push(scheduledtl);
+			scheduledtl.sequence = _scheduledtls.length + 1;
+			_scheduledtls.push(scheduledtl);
 			refreshSelectedTable();
 		});
 
@@ -772,20 +797,20 @@ var ScheduleModule = function () {
 			if (index == undefined) {
 				index = $(event.target).parent().attr('index');
 			}
-			for (var i=index; i<CurrentScheduledtls.length; i++) {
-				CurrentScheduledtls[i].sequence = i;
+			for (var i=index; i<_scheduledtls.length; i++) {
+				_scheduledtls[i].sequence = i;
 			}
-			CurrentScheduledtls.splice(index, 1);
+			_scheduledtls.splice(index, 1);
 			refreshSelectedTable();
 		});
 
 		$('[type=submit]', $('#ScheduleModal')).on('click', function(event) {
-			for (var i=0; i<CurrentSchedules.length; i++) {
-				var schedule = CurrentSchedules[i];
-				if (i == CurrentSchedules.length - 1) {
-					schedule.endtime = CurrentSchedules[0].starttime;
+			for (var i=0; i<_schedules.length; i++) {
+				var schedule = _schedules[i];
+				if (i == _schedules.length - 1) {
+					schedule.endtime = _schedules[0].starttime;
 				} else {
-					schedule.endtime = CurrentSchedules[i+1].starttime;
+					schedule.endtime = _schedules[i+1].starttime;
 				}
 				if (('' + schedule.scheduleid).indexOf('B') == 0) {
 					schedule.scheduleid = '0';
@@ -804,9 +829,9 @@ var ScheduleModule = function () {
 			var data = {
 				scheduletype: 1,
 				attachflag: 0,
-				bindtype: CurrentBindtype,
-				bindid: CurrentBindid,
-				schedules: CurrentSchedules
+				bindtype: _bindtype,
+				bindid: _bindid,
+				schedules: _schedules
 			};
 			$.ajax({
 				type : 'POST',

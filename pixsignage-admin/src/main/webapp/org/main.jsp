@@ -49,8 +49,6 @@
 								<i class="fa fa-bell-o"></i><spring:message code="pixsign.main.title1"/>
 							</div>
 							<div class="actions">
-								<a href="device/device.jsp?CurrentP=30201&ParentP=302" class="btn btn-sm default easy-pie-chart-reload"><i
-									class="m-icon-swapright"></i> <spring:message code="global.more"/></a>
 							</div>
 						</div>
 						<div class="portlet-body">

@@ -125,5 +125,22 @@ var FolderVideoSelect = function (container, video) {
 		});
 	}
 	
+	this.setVideo = function(video) {
+		_video = video;
+		$(_container).find('.select2').select2('data', { 
+			text:_video.name, 
+			id:_video.videoid, 
+			video:_video, 
+		});
+	}
+	
+	this.getVideoid = function() {
+		if ($(_container).find('.select2').select2('data') != null) {
+			return $(_container).find('.select2').select2('data').id;
+		} else {
+			return 0;
+		}
+	}
+
 	init();
 };

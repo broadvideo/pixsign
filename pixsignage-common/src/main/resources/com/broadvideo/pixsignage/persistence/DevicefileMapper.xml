@@ -252,7 +252,7 @@
   <delete id="clearByDevice" >
     delete from devicefile
     where deviceid = #{deviceid} 
-    and period_diff(date_format(now(),'%Y%m%d'), date_format(updatetime, '%Y%m%d')) >0 ;
+    and period_diff(date_format(now(),'%Y%m%d%H'), date_format(updatetime, '%Y%m%d%H')) >0 ;
   </delete>
 
   <delete id="clearByMedia" >

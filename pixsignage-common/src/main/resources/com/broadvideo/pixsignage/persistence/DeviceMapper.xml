@@ -12,8 +12,6 @@
     <result column="ip" property="ip" jdbcType="VARCHAR" />
     <result column="iip" property="iip" jdbcType="VARCHAR" />
     <result column="mac" property="mac" jdbcType="VARCHAR" />
-    <result column="schedulestatus" property="schedulestatus" jdbcType="CHAR" />
-    <result column="filestatus" property="filestatus" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="onlineflag" property="onlineflag" jdbcType="CHAR" />
@@ -24,7 +22,7 @@
     <result column="vcode" property="vcode" jdbcType="INTEGER" />
     <result column="mtype" property="mtype" jdbcType="VARCHAR" />
     <result column="boardtype" property="boardtype" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="ostype" property="ostype" jdbcType="CHAR" />
     <result column="devicegroupid" property="devicegroupid" jdbcType="INTEGER" />
     <result column="longitude" property="longitude" jdbcType="VARCHAR" />
@@ -65,6 +63,7 @@
     <result column="cataitemid2" property="cataitemid2" jdbcType="INTEGER" />
     <result column="defaultbundleid" property="defaultbundleid" jdbcType="INTEGER" />
     <result column="defaultpageid" property="defaultpageid" jdbcType="INTEGER" />
+    <result column="defaultmedialistid" property="defaultmedialistid" jdbcType="INTEGER" />
     <result column="hotspotflag" property="hotspotflag" jdbcType="CHAR" />
     <result column="hotspotssid" property="hotspotssid" jdbcType="VARCHAR" />
     <result column="hotspotpassword" property="hotspotpassword" jdbcType="VARCHAR" />
@@ -86,6 +85,7 @@
     <association property="appfile" column="{appfileid=appfileid}" select="com.broadvideo.pixsignage.persistence.AppfileMapper.selectByPrimaryKey" />
     <association property="defaultbundle" column="{bundleid=defaultbundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectMiniByPrimaryKey" />
     <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
+    <association property="defaultmedialist" column="{medialistid=defaultmedialistid}" select="com.broadvideo.pixsignage.persistence.MedialistMapper.selectMiniByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
 	<collection property="attachschedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
@@ -93,15 +93,15 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, schedulestatus, 
-    filestatus, status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, boardtype, type, 
+    deviceid, orgid, branchid, terminalid, hardkey, name, position, ip, iip, mac, 
+    status, description, onlineflag, testflag, appname, sign, vname, vcode, mtype, boardtype, type, 
     ostype, devicegroupid, longitude, latitude, city, addr1, addr2, externalid, externalname, other, 
     createtime, activetime, refreshtime, devicegridid, xpos, ypos, powerflag, poweron, poweroff, 
     volumeflag, volume, interval1, interval2, boardinfo, storageused, storageavail, upgradeflag, 
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
-    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, hotspotflag, hotspotssid, hotspotpassword, 
-    hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, modelid, qrcode, nextpoweron, nextpoweroff,
-    playbundleid, playpageid
+    tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, defaultmedialistid, hotspotflag, 
+    hotspotssid, hotspotpassword, hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, 
+    modelid, qrcode, nextpoweron, nextpoweroff, playbundleid, playpageid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -129,6 +129,9 @@
           where b.branchid=device.branchid 
           and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
       </if>
+    </if>
+    <if test="type != null">
+      and type = #{type}
     </if>
     <if test="status != null">
       and status = #{status}
@@ -169,6 +172,9 @@
           and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
       </if>
     </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
     <if test="status != null">
       and status = #{status}
     </if>
@@ -201,6 +207,37 @@
     </if>
   </select>
 
+  <select id="selectCountByType" resultType="Integer">
+    select count(1) from device 
+    where 1 = 1
+    <if test="orgid != null">
+      and orgid = #{orgid}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+  </select>
+
+  <select id="selectListByType" resultMap="FullResultMap">
+    select * from device
+    where 1 = 1
+    <if test="orgid != null">
+      and orgid = #{orgid}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    <if test="search != null">
+      and (terminalid like #{search} or name like #{search})
+    </if>
+    order by deviceid desc
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
   <select id="selectByDevicegroup" resultMap="BaseResultMap">
     select * from device
     where devicegroupid = #{devicegroupid}
@@ -234,6 +271,12 @@
   <select id="selectByDefaultpage" resultMap="BaseResultMap">
     select * from device
     where defaultpageid = #{defaultpageid}
+    order by deviceid
+  </select>
+
+  <select id="selectByDefaultmedialist" resultMap="BaseResultMap">
+    select * from device
+    where defaultmedialistid = #{defaultmedialistid}
     order by deviceid
   </select>
 
@@ -329,6 +372,12 @@
     where deviceid = #{deviceid}
   </update>
 
+  <update id="updateMedialist" >
+    update device
+    set defaultmedialistid = #{defaultmedialistid}
+    where deviceid = #{deviceid}
+  </update>
+
   <update id="updateDevicegroup" >
     update device
     set devicegroupid = #{devicegroupid} 
@@ -406,9 +455,9 @@
     </selectKey>
     insert into device (orgid, branchid, terminalid, 
       hardkey, name, position, 
-      ip, iip, mac, schedulestatus, 
-      filestatus, status, description, 
-      onlineflag, testflag, appname, sign, 
+      ip, iip, mac, 
+      status, description, onlineflag, 
+      testflag, appname, sign, 
       vname, vcode, mtype, boardtype, 
       type, ostype, devicegroupid, 
       longitude, latitude, city, 
@@ -424,7 +473,7 @@
       downloadspeed, downloadbytes, networkmode,
       networksignal, brightness, tags, 
       cataitemid1, cataitemid2, defaultbundleid, 
-      defaultpageid, hotspotflag, hotspotssid, 
+      defaultpageid, defaultmedialistid, hotspotflag, hotspotssid, 
       hotspotpassword, hotspotfrequency, 
       temperatureflag, relateid, screenstatus,
       batchid, modelid, qrcode,
@@ -432,11 +481,11 @@
       playpageid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
-      #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{schedulestatus,jdbcType=CHAR}, 
-      #{filestatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
-      #{onlineflag,jdbcType=CHAR}, #{testflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{onlineflag,jdbcType=CHAR}, 
+      #{testflag,jdbcType=CHAR}, #{appname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
       #{vname,jdbcType=VARCHAR}, #{vcode,jdbcType=INTEGER}, #{mtype,jdbcType=VARCHAR}, #{boardtype,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, #{ostype,jdbcType=CHAR}, #{devicegroupid,jdbcType=INTEGER}, 
+      #{type,jdbcType=VARCHAR}, #{ostype,jdbcType=CHAR}, #{devicegroupid,jdbcType=INTEGER}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{externalid,jdbcType=VARCHAR}, 
       #{externalname,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
@@ -450,7 +499,7 @@
       #{downloadspeed,jdbcType=INTEGER}, #{downloadbytes,jdbcType=BIGINT}, #{networkmode,jdbcType=CHAR},
       #{networksignal,jdbcType=INTEGER}, #{brightness,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR},
       #{cataitemid1,jdbcType=INTEGER},#{cataitemid2,jdbcType=INTEGER}, defaultbundleid,jdbcType=INTEGER}, 
-      #{defaultpageid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
+      #{defaultpageid,jdbcType=INTEGER}, #{defaultmedialistid,jdbcType=INTEGER}, #{hotspotflag,jdbcType=CHAR}, #{hotspotssid,jdbcType=VARCHAR}, 
       #{hotspotpassword,jdbcType=VARCHAR}, #{hotspotfrequency,jdbcType=VARCHAR}, 
       #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, #{screenstatus,jdbcType=CHAR},
       #{batchid,jdbcType=INTEGER}, #{modelid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR},
@@ -489,12 +538,6 @@
       </if>
       <if test="mac != null" >
         mac,
-      </if>
-      <if test="schedulestatus != null" >
-        schedulestatus,
-      </if>
-      <if test="filestatus != null" >
-        filestatus,
       </if>
       <if test="status != null" >
         status,
@@ -649,6 +692,9 @@
       <if test="defaultpageid != null" >
         defaultpageid,
       </if>
+      <if test="defaultmedialistid != null" >
+        defaultmedialistid,
+      </if>
       <if test="hotspotflag != null" >
         hotspotflag,
       </if>
@@ -720,12 +766,6 @@
       <if test="mac != null" >
         #{mac,jdbcType=VARCHAR},
       </if>
-      <if test="schedulestatus != null" >
-        #{schedulestatus,jdbcType=CHAR},
-      </if>
-      <if test="filestatus != null" >
-        #{filestatus,jdbcType=CHAR},
-      </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
@@ -757,7 +797,7 @@
         #{boardtype,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
-        #{type,jdbcType=CHAR},
+        #{type,jdbcType=VARCHAR},
       </if>
       <if test="ostype != null" >
         #{ostype,jdbcType=CHAR},
@@ -879,6 +919,9 @@
       <if test="defaultpageid != null" >
         #{defaultpageid,jdbcType=INTEGER},
       </if>
+      <if test="defaultmedialistid != null" >
+        #{defaultmedialistid,jdbcType=INTEGER},
+      </if>
       <if test="hotspotflag != null" >
         #{hotspotflag,jdbcType=CHAR},
       </if>
@@ -953,12 +996,6 @@
       <if test="mac != null" >
         mac = #{mac,jdbcType=VARCHAR},
       </if>
-      <if test="schedulestatus != null" >
-        schedulestatus = #{schedulestatus,jdbcType=CHAR},
-      </if>
-      <if test="filestatus != null" >
-        filestatus = #{filestatus,jdbcType=CHAR},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -990,7 +1027,7 @@
         boardtype = #{boardtype,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
-        type = #{type,jdbcType=CHAR},
+        type = #{type,jdbcType=VARCHAR},
       </if>
       <if test="ostype != null" >
         ostype = #{ostype,jdbcType=CHAR},
@@ -1112,6 +1149,9 @@
       <if test="defaultpageid != null" >
         defaultpageid = #{defaultpageid,jdbcType=INTEGER},
       </if>
+      <if test="defaultmedialistid != null" >
+        defaultmedialistid = #{defaultmedialistid,jdbcType=INTEGER},
+      </if>
       <if test="hotspotflag != null" >
         hotspotflag = #{hotspotflag,jdbcType=CHAR},
       </if>
@@ -1168,8 +1208,6 @@
       ip = #{ip,jdbcType=VARCHAR},
       iip = #{iip,jdbcType=VARCHAR},
       mac = #{mac,jdbcType=VARCHAR},
-      schedulestatus = #{schedulestatus,jdbcType=CHAR},
-      filestatus = #{filestatus,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       onlineflag = #{onlineflag,jdbcType=CHAR},
@@ -1180,7 +1218,7 @@
       vcode = #{vcode,jdbcType=INTEGER},
       mtype = #{mtype,jdbcType=VARCHAR},
       boardtype = #{boardtype,jdbcType=VARCHAR},
-      type = #{type,jdbcType=CHAR},
+      type = #{type,jdbcType=VARCHAR},
       ostype = #{ostype,jdbcType=CHAR},
       devicegroupid = #{devicegroupid,jdbcType=INTEGER},
       longitude = #{longitude,jdbcType=VARCHAR},
@@ -1221,6 +1259,7 @@
       cataitemid2 = #{cataitemid2,jdbcType=INTEGER},
       defaultbundleid = #{defaultbundleid,jdbcType=INTEGER},
       defaultpageid = #{defaultpageid,jdbcType=INTEGER},
+      defaultmedialistid = #{defaultmedialistid,jdbcType=INTEGER},
       hotspotflag = #{hotspotflag,jdbcType=CHAR},
       hotspotssid = #{hotspotssid,jdbcType=VARCHAR},
       hotspotpassword = #{hotspotpassword,jdbcType=VARCHAR},

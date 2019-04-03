@@ -78,20 +78,13 @@
 					<form id="VideoEditForm" class="form-horizontal" method="POST">
 						<input type="hidden" name="video.videoid" value="0" />
 						<input type="hidden" name="video.folderid" value="0" />
+						<input type="hidden" name="video.relateid" value="0" />
 						<div class="form-body">
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="video.name" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.relateurl"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="video.relateurl" />
 									</div>
 								</div>
 							</div>
@@ -108,8 +101,38 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.relateimage"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.relatetype"/><span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="video.relatetype" value="1" checked> <spring:message code="pixsign.org.relatetype_1"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="video.relatetype" value="2" checked> <spring:message code="pixsign.org.relatetype_2"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="video.relatetype" value="3" > <spring:message code="pixsign.org.relatetype_3"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="video.relatetype" value="4" > <spring:message code="pixsign.org.relatetype_4"/>
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.relatecontent"/></label>
 								<div class="col-md-9">
+									<div id="RelateVideoSelect" class="input-group">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
+											<ul class="dropdown-menu" role="menu">
+												<div class="pre-scrollable foldertree">
+												</div>
+											</ul>
+										</span>
+										<input type="hidden" class="form-control select2">
+										<span class="input-group-btn">
+											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
+										</span>
+									</div>
 									<div id="RelateImageSelect" class="input-group">
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-folder-open"/></i></button>
@@ -118,10 +141,13 @@
 												</div>
 											</ul>
 										</span>
-										<input type="hidden" class="form-control select2" name="video.relateid">
+										<input type="hidden" class="form-control select2">
 										<span class="input-group-btn">
 											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
 										</span>
+									</div>
+									<div id="RelateText" class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="video.relateurl" />
 									</div>
 								</div>
 							</div>
@@ -338,6 +364,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/resource/video.js?t=${timestamp}"></script>
 <script>

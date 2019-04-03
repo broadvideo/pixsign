@@ -131,10 +131,45 @@ public class PixsignageService3 {
 				mtype = "debug";
 			}
 
+			String type = requestJson.optString("type");
+			if (type == null || type.equals("")) {
+				if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")
+						&& !appname.endsWith("_DS") && !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+					// 单面屏
+					type = "1";
+				} else if (appname.equals("DigitalBox_LAUNCHER_UWIN") || appname.endsWith("_DS")) {
+					// 双面屏
+					type = "2";
+				} else if (appname.startsWith("DigitalBox2_")) {
+					// H5标牌
+					type = "3";
+				} else if (appname.startsWith("TeaTable_")) {
+					// 茶几
+					type = "4";
+				} else if (appname.startsWith("PixMultiSign")) {
+					// 联屏
+					type = "5";
+				} else if (ostype.equals("2")) {
+					// windows
+					type = "6";
+				} else if (appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+					// 投屏
+					type = "7";
+				} else {
+					JSONObject responseJson = new JSONObject();
+					responseJson.put("code", 1003);
+					responseJson.put("message", "非法终端");
+					logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
+					return responseJson.toString();
+				}
+			}
+
+			logger.info("Pixsignage3 begin init: hardkey={}, type={}", hardkey, type);
 			String checkcode = CommonUtil.getMd5(hardkey, CommonConfig.SYSTEM_ID);
 			String qrcode = "http://" + configMapper.selectValueByCode("ServerIP") + ":"
 					+ configMapper.selectValueByCode("ServerPort")
-					+ "/pixsignage/app.jsp?appname=PixSignagePhone&hardkey=" + hardkey + "&checkcode=" + checkcode;
+					+ "/pixsignage/app.jsp?appname=PixSignagePhone&hardkey=" + hardkey + "&checkcode=" + checkcode
+					+ "&type=" + type;
 
 			Device device = deviceMapper.selectByHardkey(hardkey);
 			if (device == null || device.getStatus().equals("0")) {
@@ -142,6 +177,13 @@ public class PixsignageService3 {
 				responseJson.put("code", 1002);
 				responseJson.put("message", "终端未注册");
 				responseJson.put("qrcode", qrcode);
+				logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
+				return responseJson.toString();
+			} else if (!device.getType().equals(type)) {
+				deviceMapper.unbind("" + device.getDeviceid());
+				JSONObject responseJson = new JSONObject();
+				responseJson.put("code", 1011);
+				responseJson.put("message", "终端类型不匹配");
 				logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
 				return responseJson.toString();
 			}
@@ -170,15 +212,6 @@ public class PixsignageService3 {
 				logger.error("Pixsignage3 Service ip seek exception: {}", e.getMessage());
 			}
 
-			if (appname.equals("")) {
-				appname = "PIXCHAIR";
-				vname = "1.0.0";
-				vcode = 1;
-				mtype = "mtk";
-				sign = "a578e792aa10c81537f6b1e4418dd434";
-				device.setUpgradeflag("1");
-			}
-
 			device.setHardkey(hardkey);
 			device.setIp(ip);
 			device.setIip(iip);
@@ -192,7 +225,6 @@ public class PixsignageService3 {
 			device.setBoardinfo(boardinfo);
 			device.setStatus("1");
 			device.setOnlineflag("1");
-			device.setType("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
@@ -275,6 +307,7 @@ public class PixsignageService3 {
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
+			String type = requestJson.optString("type");
 
 			Device device1 = deviceMapper.selectByTerminalid(terminalid);
 			if (device1 == null) {
@@ -282,6 +315,8 @@ public class PixsignageService3 {
 			} else if (device1.getStatus().equals("1") && device1.getHardkey() != null
 					&& !device1.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
+			} else if (type != null && !type.equals("") && !device1.getType().equals(type)) {
+				return handleResult(1011, terminalid + "终端类型不匹配.");
 			}
 
 			Device device2 = deviceMapper.selectByHardkey(hardkey);
@@ -366,6 +401,38 @@ public class PixsignageService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_bundle exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_playlist")
+	public String getplaylist(String request) {
+		try {
+			logger.info("Pixsignage3 Service get_playlist: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1007, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1008, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1009, "无效终端号" + terminalid);
+			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1010, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson = deviceService.generateMedialistJson(device);
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Pixsignage3 Service get_playlist response({}): {}", terminalid, responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage3 Service get_playlist exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -537,12 +604,15 @@ public class PixsignageService3 {
 					"" + device.getDeviceid(), null, "" + Msgevent.Status_Wait);
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
-				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
+				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle)) {
 					eventJson.put("event_type", "bundle");
 					eventJson.put("event_content", deviceService.generateBundleJson(device));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Page)) {
 					eventJson.put("event_type", "page");
 					eventJson.put("event_content", deviceService.generatePageJson(device));
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Medialist)) {
+					eventJson.put("event_type", "playlist");
+					eventJson.put("event_content", deviceService.generateMedialistJson(device));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {
 					eventJson.put("event_type", "config");
 					JSONObject contentJson = new JSONObject();

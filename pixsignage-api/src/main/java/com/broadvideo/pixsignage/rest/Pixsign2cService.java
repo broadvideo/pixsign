@@ -204,10 +204,7 @@ public class Pixsign2cService {
 			device.setMtype(mtype);
 			device.setBoardinfo(boardinfo);
 			device.setStatus("1");
-			device.setSchedulestatus("0");
-			device.setFilestatus("0");
 			device.setOnlineflag("1");
-			device.setType("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
@@ -574,10 +571,10 @@ public class Pixsign2cService {
 					"" + device.getDeviceid(), null, Msgevent.Status_Wait);
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
-				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
+				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle)) {
 					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", planService.generateBundlePlanJson("" + device.getDeviceid()));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Page)) {
 					eventJson.put("event_type", "plan");
 					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {

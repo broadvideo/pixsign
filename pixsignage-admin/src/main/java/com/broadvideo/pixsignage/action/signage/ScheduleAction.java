@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.service.ScheduleService;
+import com.broadvideo.pixsignage.service.SyncService;
 
 @SuppressWarnings("serial")
 @Scope("request")
@@ -24,6 +25,8 @@ public class ScheduleAction extends BaseDatatableAction {
 
 	@Autowired
 	private ScheduleService scheduleService;
+	@Autowired
+	private SyncService syncService;
 
 	public String doBatch() {
 		try {

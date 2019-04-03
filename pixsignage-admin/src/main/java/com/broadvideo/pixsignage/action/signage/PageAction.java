@@ -23,7 +23,7 @@ import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Staff;
 import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PageService;
-import com.broadvideo.pixsignage.service.PlanService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 import net.sf.json.JSONArray;
@@ -48,7 +48,7 @@ public class PageAction extends BaseDatatableAction {
 	@Autowired
 	private PageService pageService;
 	@Autowired
-	private PlanService planService;
+	private SyncService syncService;
 	@Autowired
 	private OrgService orgService;
 
@@ -246,7 +246,7 @@ public class PageAction extends BaseDatatableAction {
 	public String doSync() {
 		try {
 			String pageid = getParameter("pageid");
-			planService.syncPlanByPage("" + getLoginStaff().getOrgid(), pageid);
+			syncService.syncByPage("" + getLoginStaff().getOrgid(), pageid);
 			logger.info("Page sync success");
 			return SUCCESS;
 		} catch (Exception ex) {

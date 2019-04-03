@@ -13,6 +13,7 @@ import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.domain.Medialist;
 import com.broadvideo.pixsignage.domain.Medialistdtl;
 import com.broadvideo.pixsignage.service.MedialistService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.SqlUtil;
 
 @SuppressWarnings("serial")
@@ -26,6 +27,8 @@ public class MedialistAction extends BaseDatatableAction {
 
 	@Autowired
 	private MedialistService medialistService;
+	@Autowired
+	private SyncService syncService;
 
 	public String doList() {
 		try {
@@ -122,6 +125,20 @@ public class MedialistAction extends BaseDatatableAction {
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("MedialistAction doDtlSync exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doSync() {
+		try {
+			String medialistid = getParameter("medialistid");
+			syncService.syncByMedialist(medialistid);
+			logger.info("Medialist sync success, medialistid={}", medialistid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("MedialistAction doSync exception, ", ex);
 			setErrorcode(-1);
 			setErrormsg(ex.getMessage());
 			return ERROR;

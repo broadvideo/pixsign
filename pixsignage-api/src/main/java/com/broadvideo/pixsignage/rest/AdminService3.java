@@ -142,7 +142,7 @@ public class AdminService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Admin3 getversion exception, ", e);
-			return handleResult(2001, "系统异常");
+			return handleResult(1001, "系统异常");
 		}
 	}
 
@@ -256,19 +256,20 @@ public class AdminService3 {
 	@GET
 	@Path("devices")
 	@Produces("application/json;charset=UTF-8")
-	public String devices(@QueryParam("branch_id") String branchid, @QueryParam("devicegroup_id") String devicegroupid,
-			@QueryParam("start") String start, @QueryParam("length") String length, @Context HttpHeaders headers) {
+	public String devices(@QueryParam("branch_id") String branchid, @QueryParam("type") String type,
+			@QueryParam("devicegroup_id") String devicegroupid, @QueryParam("start") String start,
+			@QueryParam("length") String length, @Context HttpHeaders headers) {
 		try {
 			MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
 			String token = headerParams.getFirst("TOKEN");
-			logger.info("Admin3 devices: branch_id={},devicegroup_id={},start={},length={},token={}", branchid,
+			logger.info("Admin3 devices: branch_id={},type={},devicegroup_id={},start={},length={},token={}", branchid,
 					devicegroupid, start, length, token);
 			Staff staff = staffMapper.selectByToken(token);
 			if (staff == null) {
 				return handleResult(1002, "Token失效");
 			}
 
-			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), branchid, "1", null, null,
+			List<Device> devices = deviceMapper.selectList("" + staff.getOrgid(), branchid, "1", type, null, null,
 					devicegroupid, null, null, null, null, start, length, "deviceid");
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
@@ -360,19 +361,22 @@ public class AdminService3 {
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String terminalid = requestJson.optString("terminal_id");
 			String hardkey = requestJson.optString("hardkey");
+			String type = requestJson.optString("type");
 			String checkcode = requestJson.optString("checkcode");
 			String name = requestJson.optString("name");
 
 			if (!checkcode.equals(CommonUtil.getMd5(hardkey, CommonConfig.SYSTEM_ID))) {
-				return handleResult(2004, "非法请求");
+				return handleResult(1004, "非法请求");
 			}
 
 			Device device1 = deviceMapper.selectByTerminalid(terminalid);
 			if (device1 == null) {
-				return handleResult(2007, "无效终端号" + terminalid);
+				return handleResult(1007, "无效终端号" + terminalid);
 			} else if (device1.getStatus().equals("1") && device1.getHardkey() != null
 					&& !device1.getHardkey().equals(hardkey)) {
-				return handleResult(2005, terminalid + "已经被别的终端注册.");
+				return handleResult(1005, terminalid + "已经被别的终端注册.");
+			} else if (type != null && !type.equals("") && !device1.getType().equals(type)) {
+				return handleResult(1011, terminalid + "终端类型不匹配.");
 			}
 
 			Device device2 = deviceMapper.selectByHardkey(hardkey);
@@ -902,10 +906,10 @@ public class AdminService3 {
 			List<Bundlezone> bundlezones = bundle.getBundlezones();
 			List<Bundlezone> newzones = new ArrayList<Bundlezone>();
 			bundle.setSnapshotdtl(snapshotdtl);
-			JSONArray zonesJson = requestJson.optJSONArray("zones");
+			JSONArray zonesJson = requestJson.getJSONArray("zones");
 			for (int i = 0; i < zonesJson.size(); i++) {
 				JSONObject zoneJson = zonesJson.getJSONObject(i);
-				JSONArray zonedtlsJson = zoneJson.optJSONArray("zonedtls");
+				JSONArray zonedtlsJson = zoneJson.getJSONArray("zonedtls");
 				int zoneid = zoneJson.optInt("zone_id");
 				if (zoneid == 0) {
 					Bundlezone bundlezone = new Bundlezone();
@@ -1115,10 +1119,11 @@ public class AdminService3 {
 			JSONObject requestJson = JSONObject.fromObject(request);
 			int deviceid = requestJson.optInt("device_id");
 
-			JSONArray schedulesJson = requestJson.optJSONArray("schedules");
+			JSONArray schedulesJson = requestJson.getJSONArray("schedules");
 			Schedule[] schedules = new Schedule[schedulesJson.size()];
 			for (int i = 0; i < schedulesJson.size(); i++) {
 				JSONObject scheduleJson = schedulesJson.getJSONObject(i);
+				schedules[i] = new Schedule();
 				schedules[i].setScheduleid(scheduleJson.optInt("schedule_id"));
 				schedules[i].setScheduletype(Schedule.ScheduleType_Solo);
 				schedules[i].setAttachflag("0");
@@ -1127,7 +1132,7 @@ public class AdminService3 {
 				schedules[i].setPlaymode(Schedule.PlayMode_Daily);
 				schedules[i].setStarttime(DateUtil.getDate(scheduleJson.optString("start_time"), "HH:mm"));
 				List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
-				JSONArray scheduledtlsJson = scheduleJson.optJSONArray("scheduledtls");
+				JSONArray scheduledtlsJson = scheduleJson.getJSONArray("scheduledtls");
 				for (int j = 0; j < scheduledtlsJson.size(); j++) {
 					Scheduledtl scheduledtl = new Scheduledtl();
 					scheduledtl.setScheduledtlid(0);
@@ -1167,10 +1172,11 @@ public class AdminService3 {
 			JSONObject requestJson = JSONObject.fromObject(request);
 			int devicegroupid = requestJson.optInt("devicegroup_id");
 
-			JSONArray schedulesJson = requestJson.optJSONArray("schedules");
+			JSONArray schedulesJson = requestJson.getJSONArray("schedules");
 			Schedule[] schedules = new Schedule[schedulesJson.size()];
 			for (int i = 0; i < schedulesJson.size(); i++) {
 				JSONObject scheduleJson = schedulesJson.getJSONObject(i);
+				schedules[i] = new Schedule();
 				schedules[i].setScheduleid(scheduleJson.optInt("schedule_id"));
 				schedules[i].setScheduletype(Schedule.ScheduleType_Solo);
 				schedules[i].setAttachflag("0");
@@ -1179,7 +1185,7 @@ public class AdminService3 {
 				schedules[i].setPlaymode(Schedule.PlayMode_Daily);
 				schedules[i].setStarttime(DateUtil.getDate(scheduleJson.optString("start_time"), "HH:mm"));
 				List<Scheduledtl> scheduledtls = new ArrayList<Scheduledtl>();
-				JSONArray scheduledtlsJson = scheduleJson.optJSONArray("scheduledtls");
+				JSONArray scheduledtlsJson = scheduleJson.getJSONArray("scheduledtls");
 				for (int j = 0; j < scheduledtlsJson.size(); j++) {
 					Scheduledtl scheduledtl = new Scheduledtl();
 					scheduledtl.setScheduledtlid(0);

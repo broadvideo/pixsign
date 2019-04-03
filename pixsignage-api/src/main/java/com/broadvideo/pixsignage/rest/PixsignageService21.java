@@ -166,6 +166,36 @@ public class PixsignageService21 {
 				mtype = "debug";
 			}
 
+			String type = requestJson.optString("type");
+			if (type == null || type.equals("")) {
+				if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")
+						&& !appname.endsWith("_DS") && !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+					// 单面屏
+					type = "1";
+				} else if (appname.equals("DigitalBox_LAUNCHER_UWIN") || appname.endsWith("_DS")) {
+					// 双面屏
+					type = "2";
+				} else if (appname.startsWith("DigitalBox2_")) {
+					// H5标牌
+					type = "3";
+				} else if (appname.startsWith("TeaTable_")) {
+					// 茶几
+					type = "4";
+				} else if (appname.startsWith("PixMultiSign")) {
+					// 联屏
+					type = "5";
+				} else if (ostype.equals("2")) {
+					// windows
+					type = "6";
+				} else if (appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
+					// 投屏
+					type = "7";
+				} else {
+					return handleResult(1003, terminalid + "非法终端");
+				}
+			}
+
+			logger.info("Pixsignage21 begin init: terminalid={}, hardkey={}, type={}", terminalid, hardkey, type);
 			Device device = deviceMapper.selectByHardkey(hardkey);
 			String oldhardkey = hardkey;
 			if (device != null && !device.getTerminalid().equals(terminalid)) {
@@ -187,62 +217,11 @@ public class PixsignageService21 {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
 			} else if (other != null && device.getOther().length() > 0 && !device.getOther().equals(other)) {
 				return handleResult(1007, terminalid + "登录位置不符，已经锁定.");
+			} else if (!device.getType().equals(type)) {
+				return handleResult(1011, terminalid + "终端类型不匹配");
 			}
 
 			Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
-			String maxdetail = org.getMaxdetail();
-			String[] maxs = maxdetail.split(",");
-			int max1 = Integer.parseInt(maxs[0]);
-			int max2 = Integer.parseInt(maxs[1]);
-			int max3 = Integer.parseInt(maxs[2]);
-			int max4 = Integer.parseInt(maxs[3]);
-			int max5 = Integer.parseInt(maxs[4]);
-			int max6 = Integer.parseInt(maxs[5]);
-			int max7 = maxs.length > 6 ? Integer.parseInt(maxs[6]) : 0;
-			if (appname.startsWith("DigitalBox_") && !appname.equals("DigitalBox_LAUNCHER_UWIN")
-					&& !appname.endsWith("_DS") && !appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
-				// 单面屏
-				int currentDevices = deviceMapper.selectMaxCount1("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max1) {
-					return handleResult(1010, "Android单面屏授权数已达上限: " + currentDevices + "/" + max1);
-				}
-			} else if (appname.equals("DigitalBox_LAUNCHER_UWIN") || appname.endsWith("_DS")) {
-				// 双面屏
-				int currentDevices = deviceMapper.selectMaxCount2("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max2) {
-					return handleResult(1010, "Android双面屏授权数已达上限: " + currentDevices + "/" + max2);
-				}
-			} else if (appname.startsWith("DigitalBox2_")) {
-				// H5标牌
-				int currentDevices = deviceMapper.selectMaxCount3("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max3) {
-					return handleResult(1010, "Android H5标牌授权数已达上限: " + currentDevices + "/" + max3);
-				}
-			} else if (appname.startsWith("TeaTable_")) {
-				// 茶几
-				int currentDevices = deviceMapper.selectMaxCount4("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max4) {
-					return handleResult(1010, "Android茶几终端授权数已达上限: " + currentDevices + "/" + max4);
-				}
-			} else if (appname.startsWith("PixMultiSign")) {
-				// 联屏
-				int currentDevices = deviceMapper.selectMaxCount5("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max5) {
-					return handleResult(1010, "Android联屏终端授权数已达上限: " + currentDevices + "/" + max5);
-				}
-			} else if (ostype.equals("2")) {
-				// windows
-				int currentDevices = deviceMapper.selectMaxCount6("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max6) {
-					return handleResult(1010, "Windows终端授权数已达上限: " + currentDevices + "/" + max6);
-				}
-			} else if (appname.startsWith("DigitalBox_LAUNCHER_TOUPING")) {
-				// 投屏
-				int currentDevices = deviceMapper.selectMaxCount7("" + device.getOrgid());
-				if (!device.getStatus().equals("1") && currentDevices >= max7) {
-					return handleResult(1010, "Android投屏终端授权数已达上限: " + currentDevices + "/" + max7);
-				}
-			}
 
 			try {
 				IPSeeker ipseeker = new IPSeeker("qqwry.dat", "/opt/pix/conf");
@@ -282,10 +261,7 @@ public class PixsignageService21 {
 			device.setMtype(mtype);
 			device.setBoardinfo(boardinfo);
 			device.setStatus("1");
-			device.setSchedulestatus("0");
-			device.setFilestatus("0");
 			device.setOnlineflag("1");
-			device.setType("1");
 			device.setRefreshtime(Calendar.getInstance().getTime());
 			deviceMapper.updateByPrimaryKey(device);
 
@@ -728,10 +704,10 @@ public class PixsignageService21 {
 					"" + device.getDeviceid(), null, Msgevent.Status_Wait);
 			for (Msgevent msgevent : msgevents) {
 				JSONObject eventJson = new JSONObject();
-				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Schedule)) {
+				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle)) {
 					eventJson.put("event_type", "schedule");
 					eventJson.put("event_content", scheduleService.generateScheduleJson("" + device.getDeviceid()));
-				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Plan)) {
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Page)) {
 					eventJson.put("event_type", "plan");
 					eventJson.put("event_content", planService.generatePlanJson("" + device.getDeviceid()));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Config)) {

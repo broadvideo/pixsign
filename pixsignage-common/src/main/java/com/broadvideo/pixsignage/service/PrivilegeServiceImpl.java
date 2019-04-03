@@ -66,6 +66,14 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		String bundleplanflag = org.getBundleplanflag();
 		String pageplanflag = org.getPageplanflag();
 		String massageflag = org.getMassageflag();
+
+		String maxdetail = org.getMaxdetail();
+		String[] maxs = maxdetail.split(",");
+		int[] maxdevices = new int[11];
+		for (int i = 0; i < maxdevices.length; i++) {
+			maxdevices[i] = maxs.length > i ? Integer.parseInt(maxs[i]) : 0;
+		}
+
 		while (it.hasNext()) {
 			Privilege p = it.next();
 			if (bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 300
@@ -132,8 +140,28 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 							&& p.getPrivilegeid().intValue() == 313) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
+			} else if (maxdevices[0] == 0 && p.getPrivilegeid().intValue() == 30211
+					|| maxdevices[1] == 0 && p.getPrivilegeid().intValue() == 30212
+					|| maxdevices[2] == 0 && p.getPrivilegeid().intValue() == 30213
+					|| maxdevices[3] == 0 && p.getPrivilegeid().intValue() == 30214
+					|| maxdevices[4] == 0 && p.getPrivilegeid().intValue() == 30215
+					|| maxdevices[5] == 0 && p.getPrivilegeid().intValue() == 30216
+					|| maxdevices[6] == 0 && p.getPrivilegeid().intValue() == 30217
+					|| maxdevices[8] == 0 && p.getPrivilegeid().intValue() == 30219
+					|| maxdevices[9] == 0 && p.getPrivilegeid().intValue() == 30220
+					|| maxdevices[10] == 0 && p.getPrivilegeid().intValue() == 30221) {
+				logger.info("remove privilege {}", p.getPrivilegeid());
+				it.remove();
+			} else if ((maxdevices[8] == 0 && maxdevices[10] == 0) && p.getPrivilegeid().intValue() == 30500) {
+				logger.info("remove privilege {}", p.getPrivilegeid());
+				it.remove();
+			} else if ((maxdevices[0] == 0 && maxdevices[1] == 0 && maxdevices[5] == 0 && maxdevices[6] == 0
+					&& maxdevices[9] == 0)
+					&& (p.getPrivilegeid().intValue() == 30240 || p.getPrivilegeid().intValue() == 30802)) {
+				logger.info("remove privilege {}", p.getPrivilegeid());
+				it.remove();
 			} else if (!org.getCode().equals("default")
-					&& (p.getPrivilegeid().intValue() == 30205 || p.getPrivilegeid().intValue() == 30909)) {
+					&& (p.getPrivilegeid().intValue() == 30251 || p.getPrivilegeid().intValue() == 30909)) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			}

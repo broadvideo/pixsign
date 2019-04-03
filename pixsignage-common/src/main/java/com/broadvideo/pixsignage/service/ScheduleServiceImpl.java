@@ -19,7 +19,6 @@ import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.ScheduledtlMapper;
-import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.DateUtil;
 import com.ibm.icu.util.Calendar;
@@ -49,6 +48,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleMapper.selectList(scheduletype, attachflag, bindtype, bindid, playmode);
 	}
 
+	public List<HashMap<String, Object>> selectBindListByObj(String objtype, String objid) {
+		return scheduleMapper.selectBindListByObj(objtype, objid);
+	}
+
 	@Transactional
 	public void batch(String scheduletype, String attachflag, String bindtype, String bindid, Schedule[] schedules) {
 		scheduledtlMapper.deleteByDtl(scheduletype, attachflag, bindtype, bindid, null, null);
@@ -62,54 +65,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 			}
 		}
 		devicefileService.refreshDevicefiles(bindtype, bindid);
-	}
-
-	@Transactional
-	public void syncSchedule(String bindtype, String bindid) throws Exception {
-		if (bindtype.equals(Schedule.BindType_Device)) {
-			JSONObject msgJson = new JSONObject();
-			msgJson.put("msg_id", 1);
-			msgJson.put("msg_type", "BUNDLE");
-			JSONObject msgBodyJson = generateDeviceBundleScheduleJson(bindid);
-			msgJson.put("msg_body", msgBodyJson);
-			String topic = "device-" + bindid;
-			ActiveMQUtil.publish(topic, msgJson.toString());
-		} else if (bindtype.equals(Schedule.BindType_Devicegroup)) {
-			JSONObject msgJson = new JSONObject();
-			msgJson.put("msg_id", 1);
-			msgJson.put("msg_type", "BUNDLE");
-			JSONObject msgBodyJson = generateDevicegroupBundleScheduleJson(bindid);
-			msgJson.put("msg_body", msgBodyJson);
-			String topic = "group-" + bindid;
-			ActiveMQUtil.publish(topic, msgJson.toString());
-		}
-
-	}
-
-	@Transactional
-	public void syncScheduleByBundle(String bundleid) throws Exception {
-		List<HashMap<String, Object>> bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Bundle,
-				bundleid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-		}
-	}
-
-	@Transactional
-	public void syncScheduleByPage(String pageid) throws Exception {
-		List<HashMap<String, Object>> bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Page, pageid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-		}
-	}
-
-	@Transactional
-	public void syncScheduleByMediagrid(String mediagridid) throws Exception {
-		List<HashMap<String, Object>> bindList = scheduleMapper.selectBindListByObj(Scheduledtl.ObjType_Mediagrid,
-				mediagridid);
-		for (HashMap<String, Object> bindObj : bindList) {
-			syncSchedule(bindObj.get("bindtype").toString(), bindObj.get("bindid").toString());
-		}
 	}
 
 	public JSONObject generateDeviceBundleScheduleJson(String deviceid) {

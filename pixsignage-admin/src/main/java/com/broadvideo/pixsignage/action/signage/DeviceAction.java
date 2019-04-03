@@ -25,17 +25,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Planbind;
-import com.broadvideo.pixsignage.domain.Schedule;
+import com.broadvideo.pixsignage.exception.PixException;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
-import com.broadvideo.pixsignage.service.PlanService;
-import com.broadvideo.pixsignage.service.ScheduleService;
+import com.broadvideo.pixsignage.service.SyncService;
 import com.broadvideo.pixsignage.util.EduCloudUtil;
 import com.broadvideo.pixsignage.util.PixedxUtil;
 import com.broadvideo.pixsignage.util.SqlUtil;
@@ -57,14 +58,47 @@ public class DeviceAction extends BaseDatatableAction {
 	private InputStream inputStream;
 
 	@Autowired
+	protected ResourceBundleMessageSource messageSource;
+
+	@Autowired
 	private ConfigMapper configMapper;
 
 	@Autowired
 	private DeviceService deviceService;
 	@Autowired
-	private ScheduleService scheduleService;
-	@Autowired
-	private PlanService planService;
+	private SyncService syncService;
+
+	public String doGetLicense() {
+		try {
+			String type = getParameter("type");
+			int currentDeviceCount = deviceService.selectCount("" + getLoginStaff().getOrgid(), null, null, type, "1",
+					null, null, null, null, null, null);
+			String maxdetail = getLoginStaff().getOrg().getMaxdetail();
+			String[] maxs = maxdetail.split(",");
+			int maxDeviceCount = 0;
+			if (type == null) {
+				for (int i = 0; i < maxs.length; i++) {
+					maxDeviceCount += Integer.parseInt(maxs[i]);
+				}
+			} else {
+				int t = Integer.parseInt(type);
+				maxDeviceCount = maxs.length > t - 1 ? Integer.parseInt(maxs[t - 1]) : 0;
+			}
+
+			HashMap<String, String> data1 = new HashMap<String, String>();
+			data1.put("currentdevices", "" + currentDeviceCount);
+			data1.put("maxdevices", "" + maxDeviceCount);
+			List<Object> aaData = new ArrayList<Object>();
+			aaData.add(data1);
+			this.setAaData(aaData);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doGet exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
 
 	public String doGet() {
 		try {
@@ -86,6 +120,7 @@ public class DeviceAction extends BaseDatatableAction {
 			String length = getParameter("iDisplayLength");
 			String search = getParameter("sSearch");
 			search = SqlUtil.likeEscapeH(search);
+			String type = getParameter("type");
 			String branchid = getParameter("branchid");
 			if ((branchid == null || branchid.equals("")) && getLoginStaff().getBranchid() != null) {
 				branchid = "" + getLoginStaff().getBranchid();
@@ -95,6 +130,9 @@ public class DeviceAction extends BaseDatatableAction {
 				subbranchflag = "1";
 			}
 			String status = getParameter("status");
+			if (status != null && status.equals("")) {
+				status = null;
+			}
 			String onlineflag = getParameter("onlineflag");
 			if (onlineflag != null && onlineflag.equals("")) {
 				onlineflag = null;
@@ -112,13 +150,13 @@ public class DeviceAction extends BaseDatatableAction {
 				orgid = "" + getLoginStaff().getOrgid();
 			}
 
-			int count = deviceService.selectCount(orgid, branchid, subbranchflag, status, onlineflag, devicegroupid,
-					devicegridid, cataitemid1, cataitemid2, search);
+			int count = deviceService.selectCount(orgid, branchid, subbranchflag, type, status, onlineflag,
+					devicegroupid, devicegridid, cataitemid1, cataitemid2, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Device> deviceList = deviceService.selectList(orgid, branchid, subbranchflag, status, onlineflag,
+			List<Device> deviceList = deviceService.selectList(orgid, branchid, subbranchflag, type, status, onlineflag,
 					devicegroupid, devicegridid, cataitemid1, cataitemid2, search, start, length, order);
 			for (int i = 0; i < deviceList.size(); i++) {
 				// avedia2 code
@@ -161,9 +199,14 @@ public class DeviceAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			device.setOrgid(getLoginStaff().getOrgid());
-			device.setBranchid(getLoginStaff().getBranchid());
+			// device.setBranchid(getLoginStaff().getBranchid());
 			deviceService.addDevice(device);
 			return SUCCESS;
+		} catch (PixException ex) {
+			logger.error("DeviceAction doAdd PixException, errorcode={}", ex.getErrorCode());
+			setErrorcode(ex.getErrorCode());
+			setErrormsg(ex.getLocaleMessage(messageSource, LocaleContextHolder.getLocale()));
+			return ERROR;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doAdd exception, ", ex);
 			setErrorcode(-1);
@@ -245,12 +288,26 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doUpdateMedialist() {
+		try {
+			String defaultmedialistid = getParameter("defaultmedialistid");
+			String deviceids = getParameter("deviceids");
+			logger.info("Device doUpdateMedialist, deviceids={},defaultmedialistid={}", deviceids, defaultmedialistid);
+			deviceService.updateMedialist(deviceids.split(","), defaultmedialistid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUpdateMedialist exception", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doSync() {
 		try {
 			String deviceid = getParameter("deviceid");
 			logger.info("Device doSync, deviceid={}", deviceid);
-			planService.syncPlan(Planbind.BindType_Device, deviceid);
-			scheduleService.syncSchedule(Schedule.BindType_Device, deviceid);
+			syncService.sync(Planbind.BindType_Device, deviceid, true);
 			logger.info("Device doSync success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
@@ -471,7 +528,7 @@ public class DeviceAction extends BaseDatatableAction {
 			HSSFCell cell;
 
 			List<Device> list = deviceService.selectList("" + getLoginStaff().getOrgid(),
-					"" + getLoginStaff().getBranchid(), "1", "1", null, null, null, null, null, null, null, null,
+					"" + getLoginStaff().getBranchid(), null, "1", "1", null, null, null, null, null, null, null, null,
 					"default");
 			for (int i = 0; i < list.size(); i++) {
 				Device device = list.get(i);

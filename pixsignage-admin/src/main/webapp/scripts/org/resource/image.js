@@ -54,7 +54,7 @@ var ImageModule = function () {
 				imagehtml += '<img src="/pixsigdata' + aData.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + aData.name + '" />';
 				imagehtml += '<div class="mask">';
 				imagehtml += '<div>';
-				imagehtml += '<a class="btn default btn-sm green fancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
+				imagehtml += '<a class="btn default btn-sm green imagefancybox" href="/pixsigdata' + aData.filepath + '" title="' + aData.name + '"><i class="fa fa-search"></i></a>';
 				imagehtml += '<a class="btn default btn-sm blue pix-update" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-pencil"></i></a>';
 				imagehtml += '<a class="btn default btn-sm red pix-delete" href="javascript:;" data-id="' + iDisplayIndex + '"><i class="fa fa-trash-o"></i></a>';
 				imagehtml += '</div>';
@@ -66,11 +66,40 @@ var ImageModule = function () {
 					aData.relateimage.height = aData.relateimage.height == null ? 100: aData.relateimage.height;
 					thumbwidth = aData.relateimage.width > aData.relateimage.height ? 50 : 50*aData.relateimage.width/aData.relateimage.height;
 					thumbheight = aData.relateimage.height > aData.relateimage.width ? 50 : 50*aData.relateimage.height/aData.relateimage.width;
-					imagehtml += '<a class="fancybox" href="/pixsigdata' + aData.relateimage.filepath + '" title="' + aData.relateimage.name + '">';
+					imagehtml += '<a class="imagefancybox" href="/pixsigdata' + aData.relateimage.filepath + '" title="' + aData.relateimage.name + '">';
 					imagehtml += '<div id="RelateThumb" class="thumbs">';
 					imagehtml += '<img src="/pixsigdata' + aData.relateimage.thumbnail + '" class="imgthumb" width="100%" alt="' + aData.relateimage.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
 					imagehtml += '</div>';
 					imagehtml += '</a>';
+				} else if (aData.relatevideo != null) {
+					var relatethumbnail = '../../img/video.jpg';
+					if (aData.relatevideo.thumbnail != null) {
+						relatethumbnail = '/pixsigdata' + aData.relatevideo.thumbnail;
+					}
+					aData.relatevideo.width = aData.relatevideo.width == null ? 100: aData.relatevideo.width;
+					aData.relatevideo.height = aData.relatevideo.height == null ? 100: aData.relatevideo.height;
+					thumbwidth = aData.relatevideo.width > aData.relatevideo.height ? 50 : 50*aData.relatevideo.width/aData.relatevideo.height;
+					thumbheight = aData.relatevideo.height > aData.relatevideo.width ? 50 : 50*aData.relatevideo.height/aData.relatevideo.width;
+					if (aData.relatevideo.filepath != null && aData.relatevideo.previewflag == 1) {
+						var previewwidth = 760;
+						if (aData.relatevideo.width > aData.relatevideo.height) {
+							previewwidth = 760;
+							previewheight = previewwidth * aData.relatevideo.height / aData.relatevideo.width;
+						} else {
+							previewheight = 760;
+							previewwidth = previewheight * aData.relatevideo.width / aData.relatevideo.height;
+						}
+						var videourl = '/pixsigdata/video/preview/' + aData.relatevideo.videoid + '.mp4';
+						imagehtml += '<a class="videofancybox" href="' + videourl + '" previewwidth="' + previewwidth + '" previewheight="' + previewheight + '">';
+						imagehtml += '<div id="RelateThumb" class="thumbs">';
+						imagehtml += '<img src="' + relatethumbnail + '" class="imgthumb" width="100%" alt="' + aData.relatevideo.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+						imagehtml += '</div>';
+						imagehtml += '</a>';
+					} else {
+						imagehtml += '<div id="RelateThumb" class="thumbs">';
+						imagehtml += '<img src="' + relatethumbnail + '" class="imgthumb" width="100%" alt="' + aData.relatevideo.name + '" thumbwidth="' + thumbwidth + '" thumbheight="' + thumbheight + '"/>';
+						imagehtml += '</div>';
+					}
 				}
 
 				imagehtml += '</div>';
@@ -87,6 +116,34 @@ var ImageModule = function () {
 					}
 					$('#MediaContainer').append(imagehtml);
 				}
+
+				$('.videofancybox').click(function() {
+					var href = this.href;
+					var previewwidth = $(this).attr('previewwidth');
+					var previewheight = $(this).attr('previewheight');
+					$.fancybox({
+						openEffect	: 'none',
+						closeEffect	: 'none',
+						closeBtn : false,
+			            padding : 0,
+			            content: '<div id="video_container">Loading the player ... </div>',
+			            afterShow: function(){
+			            	jwplayer.key='rMF5t+PiENAlr4SobpLajtNkDjTaqzQToz13+5sNGLI=';
+			                jwplayer('video_container').setup({ 
+			                	stretching: 'fill',
+			                	image: '/pixres/global/plugins/jwplayer/preview.jpg',
+			                    file: href,
+			                    width: previewwidth,
+			                    height: previewheight,
+			                    autostart: true,
+			                    primary: 'flash', 
+			                    bufferlength:10,
+			                    flashplayer: '/pixres/global/plugins/jwplayer/jwplayer.flash.swf'
+			                });
+			            }
+			        });
+			        return false;
+				});
 
 				return nRow;
 			},
@@ -106,7 +163,7 @@ var ImageModule = function () {
 					$(this).css('top', '0');
 					$(this).css('width', thumbwidth + '%');
 				});
-				$('.fancybox').fancybox({
+				$('.imagefancybox').fancybox({
 					openEffect	: 'none',
 					closeEffect	: 'none',
 					closeBtn : false,
@@ -162,7 +219,28 @@ var ImageModule = function () {
 
 	var initImageEditModal = function () {
 		var RelateImageSelect = new FolderImageSelect($('#RelateImageSelect'));
+		var RelateVideoSelect = new FolderVideoSelect($('#RelateVideoSelect'));
 		
+		$('#ImageEditForm input[name="image.relatetype"]').change(function(e) {
+			refreshRelateType();
+		});
+		function refreshRelateType() {
+			var relatetype = $('#ImageEditForm input[name="image.relatetype"]:checked').attr('value');
+			if (relatetype == 1) {
+				$('#RelateVideoSelect').css('display', '');
+				$('#RelateImageSelect').css('display', 'none');
+				$('#RelateText').css('display', 'none');
+			} else if (relatetype == 2) {
+				$('#RelateVideoSelect').css('display', 'none');
+				$('#RelateImageSelect').css('display', '');
+				$('#RelateText').css('display', 'none');
+			} else {
+				$('#RelateVideoSelect').css('display', 'none');
+				$('#RelateImageSelect').css('display', 'none');
+				$('#RelateText').css('display', '');
+			}
+		}
+
 		var EditFolderTreeData = [];
 		function createFolderTreeData(folderes, treeData) {
 			for (var i=0; i<folderes.length; i++) {
@@ -215,6 +293,12 @@ var ImageModule = function () {
 		formHandler.validateOption.rules['image.name']['minlength'] = 2;
 		formHandler.validateOption.submitHandler = function(form) {
 			$('#ImageEditForm input[name="image.folderid"]').attr('value', $('#EditFormFolderTree').jstree('get_selected', false)[0]);
+			var relatetype = $('#ImageEditForm input[name="image.relatetype"]:checked').attr('value');
+			if (relatetype == 1) {
+				$('#ImageEditForm input[name="image.relateid"]').attr('value', RelateVideoSelect.getVideoid);
+			} else if (relatetype == 2) {
+				$('#ImageEditForm input[name="image.relateid"]').attr('value', RelateImageSelect.getImageid);
+			}
 			$.ajax({
 				type : 'POST',
 				url : $('#ImageEditForm').attr('action'),
@@ -250,7 +334,12 @@ var ImageModule = function () {
 			formHandler.setdata('image', _image);
 			$('#ImageEditForm').attr('action', 'image!update.action');
 			createEditFolderTree();
-			RelateImageSelect.refresh(_image);
+			refreshRelateType();
+			if (_image.relatetype == 1 && _image.relatevideo != null) {
+				RelateVideoSelect.setVideo(_image.relatevideo);
+			} else if (_image.relatetype == 2 && _image.relateimage != null) {
+				RelateImageSelect.setImage(_image.relateimage);
+			} 
 			$('#ImageEditModal').modal();
 		});
 	};

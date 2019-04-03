@@ -116,7 +116,7 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.bundleplanflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="org.bundleplanflag" value="0"> <spring:message code="pixsign.org.planflag_0"/>
+										<input type="radio" name="org.bundleplanflag" value="0" checked> <spring:message code="pixsign.org.planflag_0"/>
 									</label>
 									<label class="radio-inline">
 										<input type="radio" name="org.bundleplanflag" value="1"> <spring:message code="pixsign.org.planflag_1"/>
@@ -130,7 +130,7 @@
 										<input type="radio" name="org.pageplanflag" value="0"> <spring:message code="pixsign.org.planflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="org.pageplanflag" value="1"> <spring:message code="pixsign.org.planflag_1"/>
+										<input type="radio" name="org.pageplanflag" value="1" checked> <spring:message code="pixsign.org.planflag_1"/>
 									</label>
 								</div>
 							</div>
@@ -191,6 +191,15 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.org.storage"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" value="0" />
+									</div>
+								</div>
+							</div>
+							<!-- 
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.maxdevices"/><span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
@@ -198,67 +207,82 @@
 									</div>
 								</div>
 							</div>
+							 -->
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max1"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device1"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max1" value="0" />
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max2"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device2"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max2" value="0" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max3"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device3"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max3" value="0" />
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max4"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device4"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max4" value="0" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max5"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device5"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max5" value="0" />
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max6"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device6"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max6" value="0" />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.max7"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device7"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max7" value="0" />
 									</div>
 								</div>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device8"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max8" value="0" />
+									</div>
+								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.org.storage"/><span class="required">*</span></label>
-								<div class="col-md-9">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device9"/><span class="required">*</span></label>
+								<div class="col-md-3">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="org.maxstorage" value="0" />
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max9" value="0" />
+									</div>
+								</div>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device10"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max10" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device11"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max11" value="0" />
 									</div>
 								</div>
 							</div>

@@ -95,6 +95,12 @@ public class Org {
 
 	List<App> applist;
 
+	public int getMaxDevices(String type) {
+		String[] maxs = maxdetail.split(",");
+		int t = Integer.parseInt(type);
+		return maxs.length > t - 1 ? Integer.parseInt(maxs[t - 1]) : 0;
+	}
+
 	public Integer getOrgid() {
 		return orgid;
 	}

@@ -729,6 +729,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="medialist!sync" method="doSync" class="medialistAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="medialist!dtllist" method="doDtlList" class="medialistAction">
 			<result name="success" type="json">
@@ -747,6 +753,12 @@
 			</result>
 		</action>
 
+		<action name="device!getlicense" method="doGetLicense" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
 		<action name="device!get" method="doGet" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -797,6 +809,12 @@
 			</result>
 		</action>
 		<action name="device!updatepage" method="doUpdatePage" class="deviceAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="device!updatemedialist" method="doUpdateMedialist" class="deviceAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>

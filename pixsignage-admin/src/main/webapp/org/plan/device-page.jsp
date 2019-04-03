@@ -123,6 +123,10 @@
 														<div id="LeftPorlet" class="portlet box blue">
 															<div class="portlet-title">
 																<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.plan.devicewarehouse"/></div>
+																<ul class="nav nav-tabs" style="margin-right: 30px;">
+																	<li class="select-device-navigator" devicetype="4" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device4"/></a></li>
+																	<li class="select-device-navigator" devicetype="3" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device3"/></a></li>
+																</ul>
 															</div>
 															<div class="portlet-body">
 																<div class="table-toolbar">
@@ -290,6 +294,10 @@
 							<div class="tools">
 								<a href="javascript:;" onClick="DeviceModule.refresh();" class="reload"></a>
 							</div>
+							<ul class="nav nav-tabs" style="margin-right: 30px;">
+								<li class="device-navigator" devicetype="4" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device4"/></a></li>
+								<li class="device-navigator" devicetype="3" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device3"/></a></li>
+							</ul>
 						</div>
 						<div class="portlet-body" id="DevicePortlet">
 							<div class="row">
@@ -345,6 +353,8 @@
 <script src="${base_ctx}/scripts/org/page/page-preview.js?t=${timestamp}"></script>
 <script>
 var TouchCtrl = <%=(session_org != null && session_org.getTouchflag().equals("1"))%>;
+var Max3 = <%=session_org == null ? 0 : session_org.getMaxDevices("3")%>;
+var Max4 = <%=session_org == null ? 0 : session_org.getMaxDevices("4")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
