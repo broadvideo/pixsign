@@ -29,7 +29,7 @@
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.DevicegridMapper.selectByDevicegroup" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevicegroup" />
-	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
+	<collection property="attachschedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{devicegroupid=devicegroupid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectAttachListByDevicegroup" />
   </resultMap>
   

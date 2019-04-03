@@ -39,9 +39,9 @@ var DeviceModule = function () {
 					}
 					if (devicePercent > 100) devicePercent = 100;
 					var classDeviceProgress = 'progress-bar-success';
-					if (devicePercent > 50 && devicePercent <= 80) {
+					if (devicePercent > 75 && devicePercent < 100) {
 						classDeviceProgress = 'progress-bar-warning';
-					} else if (devicePercent > 80) {
+					} else if (devicePercent >= 100) {
 						classDeviceProgress = 'progress-bar-danger';
 					} 
 					
