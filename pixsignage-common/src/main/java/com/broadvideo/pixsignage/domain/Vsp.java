@@ -370,6 +370,16 @@ public class Vsp {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
+	public String getDscreenflag() {
+		int i = 23;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setDscreenflag(String flag) {
+		int i = 23;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
 	public List<App> getApplist() {
 		return applist;
 	}

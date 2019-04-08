@@ -162,6 +162,20 @@
 									</label>
 								</div>
 							</div>
+							<div class="form-group flowrate-ctrl">
+								<label class="col-md-3 control-label">双面屏方式<span class="required">*</span></label>
+								<div class="col-md-9 radio-list">
+									<label class="radio-inline">
+										<input type="radio" name="org.dscreenflag" value="0" checked> <spring:message code="global.off"/>
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="org.dscreenflag" value="1"> 播放关联媒体
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="org.dscreenflag" value="2"> 播放独立节目
+									</label>
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="col-md-3 control-label">主板类型</label>
 								<div class="col-md-9">

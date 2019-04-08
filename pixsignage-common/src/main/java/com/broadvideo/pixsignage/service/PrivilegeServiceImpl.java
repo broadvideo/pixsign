@@ -66,6 +66,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		String bundleplanflag = org.getBundleplanflag();
 		String pageplanflag = org.getPageplanflag();
 		String massageflag = org.getMassageflag();
+		String dscreenflag = org.getDscreenflag();
 
 		String maxdetail = org.getMaxdetail();
 		String[] maxs = maxdetail.split(",");
@@ -115,6 +116,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30501
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
 					|| bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30502
+					|| !dscreenflag.equals("2") && p.getPrivilegeid().intValue() == 30502
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
 					|| bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30503
 					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504

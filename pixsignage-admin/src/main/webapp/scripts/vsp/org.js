@@ -413,7 +413,7 @@ var OrgModule = function () {
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
 			+ $('input[name="org.liftflag"]').val() + $('input[name="org.bundleplanflag"]:checked').val()
 			+ $('input[name="org.pageplanflag"]:checked').val() + $('input[name="org.massageflag"]').val()
-			+ '000000000000000000';
+			 + $('input[name="org.dscreenflag"]:checked').val()+ '00000000000000000';
 			formData.append('org.feature', feature);
 			
 			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()

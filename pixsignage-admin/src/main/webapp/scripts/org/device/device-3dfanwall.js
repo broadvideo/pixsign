@@ -601,19 +601,9 @@ var DeviceModule = function () {
 		});
 
 		$('#ConfigModal').on('shown.bs.modal', function (e) {
-			$('.volumeRange').ionRangeSlider({
-				min: 0,
-				max: 100,
+			$('.volumeRange').ionRangeSlider('update', {
 				from: _device.volume,
-				type: 'single',
-				step: 1,
-				hasGrid: false
 			});
-			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
-				$('.volumeflag').css('display', '');
-			} else {
-				$('.volumeflag').css('display', 'none');
-			}
 		})
 		$('input[name="device.volumeflag"]').click(function(e) {
 			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
