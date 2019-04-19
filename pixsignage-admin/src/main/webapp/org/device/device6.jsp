@@ -350,6 +350,40 @@
 		</div>
 	</div>
 
+	<div id="DeviceBindModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
+				</div>
+				<div class="modal-body">
+					<form id="DeviceBindForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
+						<input type="hidden" name="device.deviceid" value="0" />
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.terminalid"/></label>
+								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hardkey"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hardkey" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="UTextModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">

@@ -115,7 +115,7 @@ var DeviceModule = function () {
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-reboot"><i class="fa fa-circle-o"></i> ' + common.view.reboot + '</a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs yellow pix-poweroff"><i class="fa fa-power-off"></i> ' + common.view.shutdown + '</a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
+					//buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
 					buttonhtml += '</div>';
 					
 					buttonhtml += '<div class="util-btn-margin-bottom-5">';
@@ -485,6 +485,8 @@ var DeviceModule = function () {
 
 		var formHandler = new FormHandler($('#DeviceEditForm'));
 		formHandler.validateOption.rules = {};
+		formHandler.validateOption.rules['device.terminalid'] = {};
+		formHandler.validateOption.rules['device.terminalid']['required'] = true;
 		formHandler.validateOption.rules['device.name'] = {};
 		formHandler.validateOption.rules['device.name']['required'] = true;
 		formHandler.validateOption.submitHandler = function(form) {
@@ -525,6 +527,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('select_node', DeviceTree.branchid);
 			$('#DeviceEditForm input[name="device.type"]').val(_type);
 			$('#DeviceEditForm').attr('action', 'device!add.action');
+			$('#DeviceEditForm input[name="device.terminalid"]').removeAttr('readonly');
 			$('#DeviceEditModal').modal();
 		});
 		
@@ -539,6 +542,7 @@ var DeviceModule = function () {
 			$('#DeviceEditForm #BranchTree').jstree('select_node', _device.branchid);
 			$('#BoardtypeSelect').select2('val', _device.boardtype);
 			$('#DeviceEditForm').attr('action', 'device!update.action');
+			$('#DeviceEditForm input[name="device.terminalid"]').attr('readonly','readonly');
 			$('#DeviceEditModal').modal();
 		});
 	};

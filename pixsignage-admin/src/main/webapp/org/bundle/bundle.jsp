@@ -257,7 +257,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-6 zonetype-7">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-6 zonetype-7 zonetype-12">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse2"><spring:message code="pixsign.bundlezone.collapse2"/></a>
@@ -285,7 +285,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-4">
+								<div class="panel panel-default zone-ctl zonetype-4 zonetype-12">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse3"><spring:message code="pixsign.bundlezone.collapse3"/></a>
@@ -762,7 +762,7 @@
 						<div class="col-md-7">
 							<div class="portlet box blue tabbable">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.selected"/></div>
+									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device.selecting"/></div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
 										<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
 										<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>

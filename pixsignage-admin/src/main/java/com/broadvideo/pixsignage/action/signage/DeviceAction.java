@@ -227,11 +227,29 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doBind() {
+		try {
+			logger.info("Device bind, terminalid={}, hardkey={}", device.getTerminalid(), device.getHardkey());
+			deviceService.bind(device);
+			return SUCCESS;
+		} catch (PixException ex) {
+			logger.error("DeviceAction bind PixException, errorcode={}", ex.getErrorCode());
+			setErrorcode(ex.getErrorCode());
+			setErrormsg(ex.getLocaleMessage(messageSource, LocaleContextHolder.getLocale()));
+			return ERROR;
+		} catch (Exception ex) {
+			logger.error("DeviceAction bind exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public String doDelete() {
 		try {
 			String deviceid = getParameter("deviceid");
+			logger.info("Device unbind, deviceid={}", deviceid);
 			deviceService.unbind(deviceid);
-			logger.info("Device unbind success, deviceid={}", deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);
@@ -245,10 +263,11 @@ public class DeviceAction extends BaseDatatableAction {
 		try {
 			String orgid = "" + getLoginStaff().getOrgid();
 			String branchid = getParameter("branchid");
+			String type = getParameter("type");
 			String upgradeflag = getParameter("upgradeflag");
-			deviceService.updateUpgradeflag(orgid, branchid, upgradeflag);
-			logger.info("Device updateUpgradeflag success, orgid={},branchid={},upgradeflag={}", orgid, branchid,
-					upgradeflag);
+			deviceService.updateUpgradeflag(orgid, branchid, type, upgradeflag);
+			logger.info("Device updateUpgradeflag success, orgid={},branchid={},type={},upgradeflag={}", orgid,
+					branchid, type, upgradeflag);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doUpdateUpgradeflag exception, ", ex);

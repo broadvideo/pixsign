@@ -32,6 +32,7 @@ import com.broadvideo.pixsignage.domain.Debugreport;
 import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Devicefile;
 import com.broadvideo.pixsignage.domain.Devicefilehis;
+import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
@@ -42,6 +43,7 @@ import com.broadvideo.pixsignage.persistence.CrashreportMapper;
 import com.broadvideo.pixsignage.persistence.DebugreportMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.DevicefilehisMapper;
+import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
@@ -77,6 +79,8 @@ public class PixsignageService3 {
 	private CrashreportMapper crashreportMapper;
 	@Autowired
 	private DebugreportMapper debugreportMapper;
+	@Autowired
+	private HourflowlogMapper hourflowlogMapper;
 	@Autowired
 	private DevicefilehisMapper devicefilehisMapper;
 
@@ -814,6 +818,131 @@ public class PixsignageService3 {
 	}
 
 	@POST
+	@Path("report_playlog")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public String reportplaylog(@FormDataParam("meta") String request,
+			@FormDataParam("playlog") FormDataContentDisposition playlogHeader,
+			@FormDataParam("playlog") InputStream playlogFile) {
+		try {
+			logger.info("Pixsignage21 report_playlog: {}, playlogHeader: {}", request, playlogHeader);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			String filename = playlogHeader.getFileName();
+			String okname = filename + ".ok";
+			String tempname = filename + ".tmp";
+			File dir = new File(CommonConfig.CONFIG_PIXDATA_HOME + "/playlog/" + device.getDeviceid());
+			FileUtils.forceMkdir(dir);
+			if (new File(dir, filename).exists() || new File(dir, okname).exists()
+					|| new File(dir, tempname).exists()) {
+				return handleResult(1001, "文件已存在");
+			}
+			logger.info("Save {} playlog to: {}", terminalid, dir + "/" + filename);
+			File tempfile = new File(dir, tempname);
+			FileUtils.copyInputStreamToFile(playlogFile, tempfile);
+			FileUtils.moveFile(tempfile, new File(dir, okname));
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Pixsignage21 report_playlog response: {}", responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage21 report_playlog exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("report_flowrate")
+	public String reportflowrate(String request) {
+		try {
+			logger.info("Pixsignage21 report_flowrate: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			long starttime = requestJson.optLong("start_time");
+			int total = requestJson.optInt("total_delta");
+			int male = requestJson.optInt("male_delta");
+			int female = requestJson.optInt("female_delta");
+			int age1 = requestJson.optInt("child_delta");
+			int age2 = requestJson.optInt("juvenile_delta");
+			int age3 = requestJson.optInt("youndster_delta");
+			int age4 = requestJson.optInt("middle_delta");
+			int age5 = requestJson.optInt("elder_delta");
+
+			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
+				return handleResult(1020, "数据错误");
+			}
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1002, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1003, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1004, "无效终端号" + terminalid);
+			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1006, "硬件码和终端号不匹配");
+			}
+
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(starttime);
+			String flowdate = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+			String flowhour = new SimpleDateFormat("yyyyMMddHH").format(c.getTime());
+			Hourflowlog hourflowlog = hourflowlogMapper.selectByDetail("" + device.getDeviceid(), flowhour);
+			if (hourflowlog != null) {
+				hourflowlog.setTotal(hourflowlog.getTotal() + total);
+				hourflowlog.setMale(hourflowlog.getMale() + male);
+				hourflowlog.setFemale(hourflowlog.getFemale() + female);
+				hourflowlog.setAge1(hourflowlog.getAge1() + age1);
+				hourflowlog.setAge2(hourflowlog.getAge2() + age2);
+				hourflowlog.setAge3(hourflowlog.getAge3() + age3);
+				hourflowlog.setAge4(hourflowlog.getAge4() + age4);
+				hourflowlog.setAge5(hourflowlog.getAge5() + age5);
+				hourflowlogMapper.updateByPrimaryKeySelective(hourflowlog);
+			} else {
+				hourflowlog = new Hourflowlog();
+				hourflowlog.setOrgid(device.getOrgid());
+				hourflowlog.setBranchid(device.getBranchid());
+				hourflowlog.setDeviceid(device.getDeviceid());
+				hourflowlog.setFlowdate(flowdate);
+				hourflowlog.setFlowhour(flowhour);
+				hourflowlog.setTotal(total);
+				hourflowlog.setMale(male);
+				hourflowlog.setFemale(female);
+				hourflowlog.setAge1(age1);
+				hourflowlog.setAge2(age2);
+				hourflowlog.setAge3(age3);
+				hourflowlog.setAge4(age4);
+				hourflowlog.setAge5(age5);
+				hourflowlogMapper.insertSelective(hourflowlog);
+			}
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage21 report_flowrate exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
 	@Path("report_debug")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public String reportdebug(@FormDataParam("meta") String request,
@@ -973,6 +1102,59 @@ public class PixsignageService3 {
 			}
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_yahoo_weather exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_version")
+	public String getversion(String request) {
+		try {
+			logger.info("Pixsignage3 Service get_version: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String appname = requestJson.optString("app_name");
+			String sign = requestJson.optString("sign");
+			String mtype = null;
+			if (sign != null && sign.length() > 0) {
+				mtype = CommonConfig.CONFIG_SIGNATURE.get(sign);
+			}
+			if (mtype == null) {
+				logger.info("sign {} unrecognized, set as debug", sign);
+				mtype = "debug";
+			}
+
+			JSONObject responseJson = new JSONObject();
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+
+			Appfile appfile = appfileMapper.selectLatest(appname, mtype);
+			if (appfile == null) {
+				responseJson.put("version_name", "");
+				responseJson.put("version_code", "0");
+				responseJson.put("url", "");
+				responseJson.put("path", "");
+			} else {
+				String serverip = configMapper.selectValueByCode("ServerIP");
+				String serverport = configMapper.selectValueByCode("ServerPort");
+				String cdnserver = configMapper.selectValueByCode("CDNServer");
+				String downloadurl = "http://" + serverip + ":" + serverport;
+				if (cdnserver != null && cdnserver.trim().length() > 0) {
+					downloadurl = "http://" + cdnserver;
+				}
+				String url = downloadurl + "/pixsigdata" + appfile.getFilepath();
+				String path = "/pixsigdata" + appfile.getFilepath();
+				responseJson.put("version_name", appfile.getVname());
+				responseJson.put("version_code", "" + appfile.getVcode());
+				responseJson.put("url", url);
+				responseJson.put("path", path);
+			}
+
+			if (responseJson.optString("url").length() > 0) {
+				logger.info("Pixsignage3 Service get_version response: {}", responseJson.toString());
+			}
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage3 Service get_version exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

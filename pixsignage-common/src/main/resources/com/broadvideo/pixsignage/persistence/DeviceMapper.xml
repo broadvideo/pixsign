@@ -358,6 +358,7 @@
     and exists (select 1 from branch b 
       where b.branchid=device.branchid 
       and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+    and type = #{type}
   </update>
 
   <update id="updateBundle" >

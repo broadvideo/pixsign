@@ -214,8 +214,12 @@
 						<input type="hidden" name="device.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label required"><spring:message code="pixsign.prop.terminalid"/></label>
-								<label class="col-md-9 control-label" style="text-align: left;border-left: 1px solid #efefef;" name="device.terminalid"></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.terminalid"/><span class="required">*</span></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.terminalid" />
+									</div>
+								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.name"/><span class="required">*</span></label>
@@ -320,11 +324,9 @@
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">
-										<!-- 
 										<div class="btn-group">
 											<button class="btn green pix-add"><spring:message code="global.add"/><i class="fa fa-plus"></i></button>
 										</div>
-										-->
 										<div class="btn-group">
 											<button class="btn green pix-allmap"><spring:message code="pixsign.map"/> <i class="fa fa-map-marker"></i></button>
 										</div>

@@ -27,9 +27,11 @@ public interface DeviceService {
 
 	public void updateDeviceSelective(Device device);
 
+	public void bind(Device device);
+
 	public void unbind(String deviceid);
 
-	public void updateUpgradeflag(String orgid, String branchid, String upgradeflag);
+	public void updateUpgradeflag(String orgid, String branchid, String type, String upgradeflag);
 
 	public void updateBundle(String[] deviceids, String defaultbundleid);
 

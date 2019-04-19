@@ -141,6 +141,7 @@ var DeviceVersionModule = function () {
 				url : 'device!updateupgradeflag.action',
 				data : {
 					branchid: DeviceTree.branchid,
+					type: _devicetype, 
 					upgradeflag: $('#AllDeviceForm input[name="upgradeflag"]:checked').val()
 				},
 				success : function(data, status) {

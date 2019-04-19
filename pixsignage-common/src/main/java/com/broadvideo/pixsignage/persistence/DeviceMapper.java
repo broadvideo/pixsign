@@ -62,7 +62,7 @@ public interface DeviceMapper {
 	int unbind(@Param(value = "deviceid") String deviceid);
 
 	int updateUpgradeflag(@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
-			@Param(value = "upgradeflag") String upgradeflag);
+			@Param(value = "type") String type, @Param(value = "upgradeflag") String upgradeflag);
 
 	int updateBundle(@Param(value = "deviceid") String deviceid,
 			@Param(value = "defaultbundleid") String defaultbundleid);

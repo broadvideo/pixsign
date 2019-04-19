@@ -12,6 +12,7 @@ var DeviceModule = function () {
 		initDeviceTable();
 		initDeviceEvent();
 		initDeviceEditModal();
+		initDeviceBindModal();
 		initConfigModal();
 		initScreenModal();
 		initDeviceFileModal();
@@ -125,6 +126,7 @@ var DeviceModule = function () {
 					buttonhtml += '</div>';
 				} else {
 					buttonhtml += '<div class="util-btn-margin-bottom-5">';
+					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-bind"><i class="fa fa-code-fork"></i> ' + common.view.bind + ' </a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-config"><i class="fa fa-cog"></i> ' + common.view.config + ' </a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
 					buttonhtml += '</div>';
@@ -542,6 +544,42 @@ var DeviceModule = function () {
 			$('#BoardtypeSelect').select2('val', _device.boardtype);
 			$('#DeviceEditForm').attr('action', 'device!update.action');
 			$('#DeviceEditModal').modal();
+		});
+	};
+	
+	var initDeviceBindModal = function () {
+		$('body').on('click', '.pix-bind', function(event) {
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+			}
+			_device = $('#DeviceTable').dataTable().fnGetData(index);
+			var formdata = new Object();
+			for (var name in _device) {
+				formdata['device.' + name] = _device[name];
+			}
+			$('#DeviceBindForm').loadJSON(formdata);
+			$('#DeviceBindForm input[name="device.hardkey"]').val('');
+			$('#DeviceBindModal').modal();
+		});
+		$('[type=submit]', $('#DeviceBindModal')).on('click', function(event) {
+			$.ajax({
+				type : 'POST',
+				url : 'device!bind.action',
+				data : $('#DeviceBindForm').serialize(),
+				success : function(data, status) {
+					$('#DeviceBindModal').modal('hide');
+					if (data.errorcode == 0) {
+						bootbox.alert(common.tips.success);
+						refresh();
+					} else {
+						bootbox.alert(common.tips.error + data.errormsg);
+					}
+				},
+				error : function() {
+					console.log('failue');
+				}
+			});
 		});
 	};
 	

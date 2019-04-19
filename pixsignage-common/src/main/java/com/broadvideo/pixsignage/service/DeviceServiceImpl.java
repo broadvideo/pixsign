@@ -122,7 +122,7 @@ public class DeviceServiceImpl implements DeviceService {
 					"Device has reached the upper limit, type=" + device.getType() + ", max=" + max);
 		}
 
-		if (device.getType().equals(Device.Type_3DFanWall)) {
+		if (device.getType().equals(Device.Type_3DFanSolo) || device.getType().equals(Device.Type_3DFanWall)) {
 			Device d = deviceMapper.selectByTerminalid(device.getTerminalid());
 			if (d != null) {
 				throw new PixException(3003, "Device terminalid duplicated, terminalid=" + device.getTerminalid());
@@ -187,13 +187,31 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Transactional
+	public void bind(Device device) {
+		String terminalid = device.getTerminalid();
+		String hardkey = device.getHardkey();
+		if (hardkey == null || hardkey.equals("")) {
+			throw new PixException(3004, "Device hardkey error");
+		}
+
+		Device device2 = deviceMapper.selectByHardkey(hardkey);
+		if (device2 != null && !device2.getTerminalid().equals(terminalid)) {
+			throw new PixException(3005, "Device hardkey has been binded, hardkey=" + hardkey);
+		}
+		device.setActivetime(Calendar.getInstance().getTime());
+		device.setHardkey(hardkey);
+		device.setStatus("1");
+		deviceMapper.updateByPrimaryKeySelective(device);
+	}
+
+	@Transactional
 	public void unbind(String deviceid) {
 		deviceMapper.unbind(deviceid);
 	}
 
 	@Transactional
-	public void updateUpgradeflag(String orgid, String branchid, String upgradeflag) {
-		deviceMapper.updateUpgradeflag(orgid, branchid, upgradeflag);
+	public void updateUpgradeflag(String orgid, String branchid, String type, String upgradeflag) {
+		deviceMapper.updateUpgradeflag(orgid, branchid, type, upgradeflag);
 	}
 
 	@Transactional
