@@ -36,6 +36,7 @@ import com.broadvideo.pixsignage.domain.Hourflowlog;
 import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Onlinelog;
 import com.broadvideo.pixsignage.domain.Org;
+import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.domain.Weather;
 import com.broadvideo.pixsignage.persistence.AppfileMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
@@ -47,8 +48,10 @@ import com.broadvideo.pixsignage.persistence.HourflowlogMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
+import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.DevicefileService;
+import com.broadvideo.pixsignage.service.IntentService;
 import com.broadvideo.pixsignage.service.WeatherService;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.ipparse.IPSeeker;
@@ -83,6 +86,8 @@ public class PixsignageService3 {
 	private HourflowlogMapper hourflowlogMapper;
 	@Autowired
 	private DevicefilehisMapper devicefilehisMapper;
+	@Autowired
+	private VideoMapper videoMapper;
 
 	@Autowired
 	private DeviceService deviceService;
@@ -90,6 +95,8 @@ public class PixsignageService3 {
 	private DevicefileService devicefileService;
 	@Autowired
 	private WeatherService weatherService;
+	@Autowired
+	private IntentService intentService;
 
 	@POST
 	@Path("init")
@@ -166,6 +173,10 @@ public class PixsignageService3 {
 					logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
 					return responseJson.toString();
 				}
+			}
+			
+			if (type.equals("1") && appname.equals("DigitalBox_LAUNCHER_VE_CLOUDIA")) {
+				type = "13";
 			}
 
 			logger.info("Pixsignage3 begin init: hardkey={}, type={}", hardkey, type);
@@ -294,6 +305,51 @@ public class PixsignageService3 {
 			responseJson.put("password_flag", org.getDevicepassflag());
 			responseJson.put("password", org.getDevicepass());
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
+
+			if (device.getBackupvideoid() > 0) {
+				Video backupvideo = videoMapper.selectByPrimaryKey("" + device.getBackupvideoid());
+				device.setBackupvideo(backupvideo);
+			}
+			if (device.getBackupvideo() != null) {
+				JSONObject backupvideoJson = new JSONObject();
+				// backupvideoJson.put("type", "video");
+				backupvideoJson.put("id", device.getBackupvideoid());
+				backupvideoJson.put("url",
+						"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+								+ device.getBackupvideo().getFilepath());
+				backupvideoJson.put("path", "/pixsigdata" + device.getBackupvideo().getFilepath());
+				backupvideoJson.put("file", device.getBackupvideo().getFilename());
+				backupvideoJson.put("size", device.getBackupvideo().getSize());
+				responseJson.put("backup_media", backupvideoJson);
+			} else if (org.getBackupvideo() != null) {
+				JSONObject backupvideoJson = new JSONObject();
+				// backupvideoJson.put("type", "video");
+				backupvideoJson.put("id", org.getBackupvideoid());
+				backupvideoJson.put("url",
+						"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+								+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+								+ org.getBackupvideo().getFilepath());
+				backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
+				backupvideoJson.put("file", org.getBackupvideo().getFilename());
+				backupvideoJson.put("size", org.getBackupvideo().getSize());
+				responseJson.put("backup_media", backupvideoJson);
+			} else {
+				Org defaultOrg = orgMapper.selectByPrimaryKey("1");
+				if (defaultOrg.getBackupvideo() != null) {
+					JSONObject backupvideoJson = new JSONObject();
+					// backupvideoJson.put("type", "video");
+					backupvideoJson.put("id", defaultOrg.getBackupvideoid());
+					backupvideoJson.put("url",
+							"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+									+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+									+ defaultOrg.getBackupvideo().getFilepath());
+					backupvideoJson.put("path", "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
+					backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
+					backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
+					responseJson.put("backup_media", backupvideoJson);
+				}
+			}
 
 			logger.info("Pixsignage3 Service init response({}): {}", device.getTerminalid(), responseJson.toString());
 			return responseJson.toString();
@@ -437,6 +493,70 @@ public class PixsignageService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_playlist exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_all_pages")
+	public String getallpages(String request) {
+		try {
+			logger.info("Pixsignage3 Service get_all_pages: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1007, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1008, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1009, "无效终端号" + terminalid);
+			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1010, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson = deviceService.generateAllPagesJson(device);
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Pixsignage3 Service get_all_pages response({}): {}", terminalid, responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage3 Service get_all_pages exception", e);
+			return handleResult(1001, "系统异常");
+		}
+	}
+
+	@POST
+	@Path("get_all_intents")
+	public String getallintents(String request) {
+		try {
+			logger.info("Pixsignage3 Service get_all_intents: {}", request);
+			JSONObject requestJson = JSONObject.fromObject(request);
+			String hardkey = requestJson.optString("hardkey");
+			String terminalid = requestJson.optString("terminal_id");
+			if (hardkey == null || hardkey.equals("")) {
+				return handleResult(1007, "硬件码不能为空");
+			}
+			if (terminalid == null || terminalid.equals("")) {
+				return handleResult(1008, "终端号不能为空");
+			}
+			Device device = deviceMapper.selectByTerminalid(terminalid);
+			if (device == null) {
+				return handleResult(1009, "无效终端号" + terminalid);
+			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
+				return handleResult(1010, "硬件码和终端号不匹配");
+			}
+
+			JSONObject responseJson = intentService.generateAllIntentsJson("" + device.getOrgid());
+			responseJson.put("code", 0);
+			responseJson.put("message", "成功");
+			logger.info("Pixsignage3 Service get_all_intents response({}): {}", terminalid, responseJson.toString());
+			return responseJson.toString();
+		} catch (Exception e) {
+			logger.error("Pixsignage3 Service get_all_intents exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -652,6 +772,52 @@ public class PixsignageService3 {
 					}
 					contentJson.put("password_flag", org.getDevicepassflag());
 					contentJson.put("password", org.getDevicepass());
+
+					if (device.getBackupvideoid() > 0) {
+						Video backupvideo = videoMapper.selectByPrimaryKey("" + device.getBackupvideoid());
+						device.setBackupvideo(backupvideo);
+					}
+					if (device.getBackupvideo() != null) {
+						JSONObject backupvideoJson = new JSONObject();
+						// backupvideoJson.put("type", "video");
+						backupvideoJson.put("id", device.getBackupvideoid());
+						backupvideoJson.put("url",
+								"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+										+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+										+ device.getBackupvideo().getFilepath());
+						backupvideoJson.put("path", "/pixsigdata" + device.getBackupvideo().getFilepath());
+						backupvideoJson.put("file", device.getBackupvideo().getFilename());
+						backupvideoJson.put("size", device.getBackupvideo().getSize());
+						contentJson.put("backup_media", backupvideoJson);
+					} else if (org.getBackupvideo() != null) {
+						JSONObject backupvideoJson = new JSONObject();
+						// backupvideoJson.put("type", "video");
+						backupvideoJson.put("id", org.getBackupvideoid());
+						backupvideoJson.put("url",
+								"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+										+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+										+ org.getBackupvideo().getFilepath());
+						backupvideoJson.put("path", "/pixsigdata" + org.getBackupvideo().getFilepath());
+						backupvideoJson.put("file", org.getBackupvideo().getFilename());
+						backupvideoJson.put("size", org.getBackupvideo().getSize());
+						contentJson.put("backup_media", backupvideoJson);
+					} else {
+						Org defaultOrg = orgMapper.selectByPrimaryKey("1");
+						if (defaultOrg.getBackupvideo() != null) {
+							JSONObject backupvideoJson = new JSONObject();
+							// backupvideoJson.put("type", "video");
+							backupvideoJson.put("id", defaultOrg.getBackupvideoid());
+							backupvideoJson.put("url",
+									"http://" + configMapper.selectValueByCode("ServerIP") + ":"
+											+ configMapper.selectValueByCode("ServerPort") + "/pixsigdata"
+											+ defaultOrg.getBackupvideo().getFilepath());
+							backupvideoJson.put("path", "/pixsigdata" + defaultOrg.getBackupvideo().getFilepath());
+							backupvideoJson.put("file", defaultOrg.getBackupvideo().getFilename());
+							backupvideoJson.put("size", defaultOrg.getBackupvideo().getSize());
+							contentJson.put("backup_media", backupvideoJson);
+						}
+					}
+
 					eventJson.put("event_content", contentJson);
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Reboot)) {
 					eventJson.put("event_type", "reboot");
@@ -702,6 +868,10 @@ public class PixsignageService3 {
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
 				return handleResult(1010, "硬件码和终端号不匹配");
 			}
+
+			device.setOnlineflag("1");
+			device.setRefreshtime(Calendar.getInstance().getTime());
+			deviceMapper.updateByPrimaryKeySelective(device);
 
 			JSONArray fileJsonArray = requestJson.getJSONArray("files");
 			for (int i = 0; i < fileJsonArray.size(); i++) {
@@ -824,7 +994,7 @@ public class PixsignageService3 {
 			@FormDataParam("playlog") FormDataContentDisposition playlogHeader,
 			@FormDataParam("playlog") InputStream playlogFile) {
 		try {
-			logger.info("Pixsignage21 report_playlog: {}, playlogHeader: {}", request, playlogHeader);
+			logger.info("Pixsignage3 report_playlog: {}, playlogHeader: {}", request, playlogHeader);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -857,10 +1027,10 @@ public class PixsignageService3 {
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
 			responseJson.put("message", "成功");
-			logger.info("Pixsignage21 report_playlog response: {}", responseJson.toString());
+			logger.info("Pixsignage3 report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage21 report_playlog exception", e);
+			logger.error("Pixsignage3 report_playlog exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}
@@ -869,7 +1039,7 @@ public class PixsignageService3 {
 	@Path("report_flowrate")
 	public String reportflowrate(String request) {
 		try {
-			logger.info("Pixsignage21 report_flowrate: {}", request);
+			logger.info("Pixsignage3 report_flowrate: {}", request);
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
@@ -882,6 +1052,8 @@ public class PixsignageService3 {
 			int age3 = requestJson.optInt("youndster_delta");
 			int age4 = requestJson.optInt("middle_delta");
 			int age5 = requestJson.optInt("elder_delta");
+			int look1 = requestJson.optInt("normal_delta");
+			int look2 = requestJson.optInt("happy_delta");
 
 			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
 				return handleResult(1020, "数据错误");
@@ -913,6 +1085,8 @@ public class PixsignageService3 {
 				hourflowlog.setAge3(hourflowlog.getAge3() + age3);
 				hourflowlog.setAge4(hourflowlog.getAge4() + age4);
 				hourflowlog.setAge5(hourflowlog.getAge5() + age5);
+				hourflowlog.setLook1(hourflowlog.getLook1() + look1);
+				hourflowlog.setLook2(hourflowlog.getLook2() + look2);
 				hourflowlogMapper.updateByPrimaryKeySelective(hourflowlog);
 			} else {
 				hourflowlog = new Hourflowlog();
@@ -929,6 +1103,8 @@ public class PixsignageService3 {
 				hourflowlog.setAge3(age3);
 				hourflowlog.setAge4(age4);
 				hourflowlog.setAge5(age5);
+				hourflowlog.setLook1(look1);
+				hourflowlog.setLook2(look2);
 				hourflowlogMapper.insertSelective(hourflowlog);
 			}
 
@@ -937,7 +1113,7 @@ public class PixsignageService3 {
 			responseJson.put("message", "成功");
 			return responseJson.toString();
 		} catch (Exception e) {
-			logger.error("Pixsignage21 report_flowrate exception", e);
+			logger.error("Pixsignage3 report_flowrate exception", e);
 			return handleResult(1001, "系统异常");
 		}
 	}

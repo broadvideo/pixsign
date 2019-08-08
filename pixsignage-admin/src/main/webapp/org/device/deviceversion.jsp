@@ -126,6 +126,7 @@
 								<a href="javascript:;" onClick="DeviceVersionModule.refresh();" class="reload"></a>
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
+								<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 								<li class="device-navigator" devicetype="11" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device11"/></a></li>
 								<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 								<li class="device-navigator" devicetype="9" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device9"/></a></li>
@@ -199,6 +200,7 @@ var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max9 = <%=session_org == null ? 0 : session_org.getMaxDevices("9")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 var Max11 = <%=session_org == null ? 0 : session_org.getMaxDevices("11")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

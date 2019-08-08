@@ -21,7 +21,7 @@
 	
 	String title = "";
 	String css = "login-soft.css";
-	String bgcolor = "#666";
+	String bgcolor = "#E1E1E1";
 %>
 
 <!DOCTYPE html>
@@ -60,7 +60,7 @@
 </head>
 <!-- END HEAD -->
 
-<body class="login" style="background-image: url(/pixsignage/img/bg-kq.jpg);background-size: cover;">
+<body class="login" style="background-image: url(/pixsignage/img/bg-sbe.jpg);background-size: cover;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
 		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="100" alt="" />
@@ -71,7 +71,7 @@
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
 		<form id="LoginForm" class="login-form" method="post">
-			<h3 class="form-title" style="color: #999999"><spring:message code="global.login.hint"/></h3>
+			<h3 class="form-title"><spring:message code="global.login.hint"/></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span></span>
@@ -97,8 +97,6 @@
 				<label class="checkbox"><input type="checkbox" name="remember" value="1"/><spring:message code="global.login.remember"/></label>
 				<button type="submit" class="btn blue pull-right"><spring:message code="global.login.login"/><i class="m-icon-swapright m-icon-white"></i>
 				</button>
-	        	<a class="btn btn-xs green pix-language" data-id="zh_CN">中文</a>
-	            <a class="btn btn-xs purple pix-language" data-id="en_US">ENG</a>
 			</div>
 			<br/>
 		</form>
@@ -142,12 +140,7 @@
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init();
-		Login.init();
-		$('.pix-language').click(function(event){
-			event.preventDefault();
-			var language = $(event.target).attr('data-id');
-			document.location.href="index_kq.jsp?locale=" + language;
-		});
+		Login.init('org/main.jsp');
 	});
 </script>
 <!-- END JAVASCRIPTS -->

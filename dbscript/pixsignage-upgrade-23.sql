@@ -126,6 +126,8 @@ alter table org modify currentdeviceidx int default 0;
 alter table device add unique key device_unique_index1(terminalid);
 alter table sdomain add unique key sdomain_unique_index1(code);
 
+alter table device add backupvideoid int default 0;
+
 update device set type=1 where status = 1 and appname like 'DigitalBox\_%' 
   and appname != 'DigitalBox_LAUNCHER_UWIN' and appname not like 'DigitalBox_LAUNCHER_TOUPING%'
   and appname not like '%\_DS';
@@ -152,6 +154,24 @@ delete t from device d, msgevent t where d.deviceid=t.objid1 and t.objtype1=1 an
 delete t from device d, debugreport t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete from device where type is null;
 
+alter table hourflowlog add look1 int default 0;
+alter table hourflowlog add look2 int default 0;
+
+create table intent( 
+   intentid int not null auto_increment,
+   orgid int not null,
+   intentkey varchar(128) not null,
+   relatetype char(1) default 0,
+   relateid int default 0,
+   relateurl varchar(256) default '',
+   primary key (intentid)
+ )engine = innodb
+default character set utf8;
+
+insert into config(configid, code, name, value, refer, type) values(203, 'KafkaServer', 'config.kafka.server', '', '', '1');
+
+alter table device add unique key device_unique_index2(hardkey);
+
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(104,0,0,'menu.page','page.jsp','fa-html5',1,4);
@@ -175,6 +195,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30109,2,301,'menu.widget','resource/widget.jsp','',1,9);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30110,2,301,'menu.rss','resource/rss.jsp','',1,10);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30111,2,301,'menu.diy','resource/diy.jsp','',1,11);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30112,2,301,'Intent','resource/intent.jsp','',1,12);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30130,2,301,'楼盘','resource/house.jsp','',1,30);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(302,2,0,'menu.devicemanage','','fa-desktop',1,3);
@@ -189,6 +210,8 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30219,2,302,'menu.device9','device/device9.jsp','','1',19);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30220,2,302,'menu.device10','device/device10.jsp','','1',20);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30221,2,302,'menu.device11','device/device11.jsp','','1',21);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30222,2,302,'工行定制信发','device/device12.jsp','','1',22);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30223,2,302,'menu.device13','device/device13.jsp','','1',23);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30240,2,302,'menu.devicegroup','device/devicegroup.jsp','',1,40);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30250,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,50);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30251,2,302,'menu.appfile','device/appfile.jsp','',1,51);

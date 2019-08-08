@@ -356,6 +356,12 @@ var OrgModule = function () {
 		formHandler.validateOption.rules['org.max11'] = {};
 		formHandler.validateOption.rules['org.max11']['required'] = true;
 		formHandler.validateOption.rules['org.max11']['number'] = true;
+		formHandler.validateOption.rules['org.max12'] = {};
+		formHandler.validateOption.rules['org.max12']['required'] = true;
+		formHandler.validateOption.rules['org.max12']['number'] = true;
+		formHandler.validateOption.rules['org.max13'] = {};
+		formHandler.validateOption.rules['org.max13']['required'] = true;
+		formHandler.validateOption.rules['org.max13']['number'] = true;
 		formHandler.validateOption.rules['org.maxstorage'] = {};
 		formHandler.validateOption.rules['org.maxstorage']['required'] = true;
 		formHandler.validateOption.rules['org.maxstorage']['number'] = true;
@@ -413,7 +419,8 @@ var OrgModule = function () {
 			+ $('input[name="org.vipflag"]').val() + $('input[name="org.estateflag"]').val()
 			+ $('input[name="org.liftflag"]').val() + $('input[name="org.bundleplanflag"]:checked').val()
 			+ $('input[name="org.pageplanflag"]:checked').val() + $('input[name="org.massageflag"]').val()
-			 + $('input[name="org.dscreenflag"]:checked').val()+ '00000000000000000';
+			+ $('input[name="org.dscreenflag"]:checked').val() + $('input[name="org.cloudiaflag"]').val()
+			+ '0000000000000000';
 			formData.append('org.feature', feature);
 			
 			var maxdetail = $('input[name="org.max1"]').val() + ',' + $('input[name="org.max2"]').val()
@@ -421,7 +428,8 @@ var OrgModule = function () {
 			+ ',' + $('input[name="org.max5"]').val() + ',' + $('input[name="org.max6"]').val()
 			+ ',' + $('input[name="org.max7"]').val() + ',' + $('input[name="org.max8"]').val()
 			+ ',' + $('input[name="org.max9"]').val() + ',' + $('input[name="org.max10"]').val()
-			+ ',' + $('input[name="org.max11"]').val();
+			+ ',' + $('input[name="org.max11"]').val() + ',' + $('input[name="org.max12"]').val()
+			+ ',' + $('input[name="org.max13"]').val();
 			formData.append('org.maxdetail', maxdetail);
 			
 			$.ajax({
@@ -485,6 +493,7 @@ var OrgModule = function () {
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
+			$('.cloudia-ctrl').css('display', CloudiaCtrl?'':'none');
 			
 			currentApps = {};
 			refreshAppTreeData(currentAppTreeData);
@@ -516,6 +525,8 @@ var OrgModule = function () {
 			_org.max9 = maxs.length>8? maxs[8] : 0;
 			_org.max10 = maxs.length>9? maxs[9] : 0;
 			_org.max11 = maxs.length>10? maxs[10] : 0;
+			_org.max12 = maxs.length>11? maxs[11] : 0;
+			_org.max13 = maxs.length>12? maxs[12] : 0;
 			refreshVsp(_org);
 			formHandler.setdata('org', _org);
 			if ($('input[name="org.expireflag"]:checked').val() == 0) {
@@ -546,6 +557,7 @@ var OrgModule = function () {
 			$('.estate-ctrl').css('display', EstateCtrl?'':'none');
 			$('.lift-ctrl').css('display', LiftCtrl?'':'none');
 			$('.massage-ctrl').css('display', MassageCtrl?'':'none');
+			$('.cloudia-ctrl').css('display', CloudiaCtrl?'':'none');
 			
 			currentApps = {};
 			if (_org.applist != null) {

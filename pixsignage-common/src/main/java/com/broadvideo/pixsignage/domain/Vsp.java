@@ -380,6 +380,16 @@ public class Vsp {
 		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
 	}
 
+	public String getCloudiaflag() {
+		int i = 24;
+		return feature.substring(i - 1, i);
+	}
+
+	public void setCloudiaflag(String flag) {
+		int i = 24;
+		feature = feature.substring(0, i - 1) + flag + feature.substring(i);
+	}
+
 	public List<App> getApplist() {
 		return applist;
 	}

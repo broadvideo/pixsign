@@ -3,6 +3,7 @@ package com.broadvideo.pixsignage.service;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
+import com.broadvideo.pixsignage.domain.Stream;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.exception.PixException;
 import com.broadvideo.pixsignage.persistence.AdplanMapper;
@@ -44,10 +46,10 @@ import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
+import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
 import com.broadvideo.pixsignage.util.CommonUtil;
 import com.broadvideo.pixsignage.util.DateUtil;
-import com.ibm.icu.util.Calendar;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -78,6 +80,8 @@ public class DeviceServiceImpl implements DeviceService {
 	private AdplanMapper adplanMapper;
 	@Autowired
 	private AdplandtlMapper adplandtlMapper;
+	@Autowired
+	private VideoMapper videoMapper;
 
 	@Autowired
 	private BundleService bundleService;
@@ -122,7 +126,7 @@ public class DeviceServiceImpl implements DeviceService {
 					"Device has reached the upper limit, type=" + device.getType() + ", max=" + max);
 		}
 
-		if (device.getType().equals(Device.Type_3DFanSolo) || device.getType().equals(Device.Type_3DFanWall)) {
+		if (device.getType().equals(Device.Type_3DFanSolo) || device.getType().equals(Device.Type_3DFanWall) || device.getType().equals(Device.Type_Cloudia)) {
 			Device d = deviceMapper.selectByTerminalid(device.getTerminalid());
 			if (d != null) {
 				throw new PixException(3003, "Device terminalid duplicated, terminalid=" + device.getTerminalid());
@@ -563,8 +567,6 @@ public class DeviceServiceImpl implements DeviceService {
 		ActiveMQUtil.publish(topic, msgJson.toString());
 	}
 
-	@Override
-	@Transactional
 	public void resetExternalid(String externalid) {
 		this.deviceMapper.resetExternalid(externalid);
 	}
@@ -590,9 +592,11 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONArray bundleJsonArray = new JSONArray();
 		JSONArray videoJsonArray = new JSONArray();
 		JSONArray imageJsonArray = new JSONArray();
+		JSONArray streamJsonArray = new JSONArray();
 		HashMap<Integer, JSONObject> bundleHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
 
 		List<Schedule> mainscheduleList = new ArrayList<Schedule>();
 		List<Schedule> attachscheduleList = new ArrayList<Schedule>();
@@ -794,34 +798,46 @@ public class DeviceServiceImpl implements DeviceService {
 							videoJsonArray.add(videoJson);
 							videoList.add(video);
 						}
-					} else if (imageHash.get(bundlezonedtl.getObjid()) == null) {
-						Image image = bundlezonedtl.getImage();
-						JSONObject imageJson = new JSONObject();
-						imageJson.put("id", image.getImageid());
-						imageJson.put("name", image.getName());
-						imageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
-						imageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
-						imageJson.put("file", image.getFilename());
-						imageJson.put("size", image.getSize());
-						imageJson.put("checksum", image.getMd5());
-						imageJson.put("thumbnail",
-								downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
-						if (image.getRelatetype().equals("1")) {
-							imageJson.put("relate_type", "video");
-							imageJson.put("relate_id", image.getRelateid());
-						} else if (image.getRelatetype().equals("2")) {
-							imageJson.put("relate_type", "image");
-							imageJson.put("relate_id", image.getRelateid());
-						} else if (image.getRelatetype().equals("3")) {
-							imageJson.put("relate_type", "link");
-							imageJson.put("relate_url", image.getRelateurl());
-						} else if (image.getRelatetype().equals("4")) {
-							imageJson.put("relate_type", "apk");
-							imageJson.put("relate_url", image.getRelateurl());
+					} else if (bundlezonedtl.getImage() != null) {
+						if (imageHash.get(bundlezonedtl.getObjid()) == null) {
+							Image image = bundlezonedtl.getImage();
+							JSONObject imageJson = new JSONObject();
+							imageJson.put("id", image.getImageid());
+							imageJson.put("name", image.getName());
+							imageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
+							imageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + image.getFilepath());
+							imageJson.put("file", image.getFilename());
+							imageJson.put("size", image.getSize());
+							imageJson.put("checksum", image.getMd5());
+							imageJson.put("thumbnail",
+									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
+							if (image.getRelatetype().equals("1")) {
+								imageJson.put("relate_type", "video");
+								imageJson.put("relate_id", image.getRelateid());
+							} else if (image.getRelatetype().equals("2")) {
+								imageJson.put("relate_type", "image");
+								imageJson.put("relate_id", image.getRelateid());
+							} else if (image.getRelatetype().equals("3")) {
+								imageJson.put("relate_type", "link");
+								imageJson.put("relate_url", image.getRelateurl());
+							} else if (image.getRelatetype().equals("4")) {
+								imageJson.put("relate_type", "apk");
+								imageJson.put("relate_url", image.getRelateurl());
+							}
+							imageHash.put(image.getImageid(), imageJson);
+							imageJsonArray.add(imageJson);
+							imageList.add(image);
 						}
-						imageHash.put(image.getImageid(), imageJson);
-						imageJsonArray.add(imageJson);
-						imageList.add(image);
+					} else if (bundlezonedtl.getStream() != null) {
+						if (streamHash.get(bundlezonedtl.getObjid()) == null) {
+							Stream stream = bundlezonedtl.getStream();
+							JSONObject streamJson = new JSONObject();
+							streamJson.put("id", stream.getStreamid());
+							streamJson.put("name", stream.getName());
+							streamJson.put("url", stream.getUrl());
+							streamHash.put(stream.getStreamid(), streamJson);
+							streamJsonArray.add(streamJson);
+						}
 					}
 				}
 			}
@@ -896,6 +912,7 @@ public class DeviceServiceImpl implements DeviceService {
 		resultJson.put("bundles", bundleJsonArray);
 		resultJson.put("videos", videoJsonArray);
 		resultJson.put("images", imageJsonArray);
+		resultJson.put("streams", streamJsonArray);
 		return resultJson;
 	}
 
@@ -976,6 +993,186 @@ public class DeviceServiceImpl implements DeviceService {
 				}
 			}
 		}
+		resultJson.put("pages", pageJsonArray);
+		resultJson.put("videos", videoJsonArray);
+		return resultJson;
+	}
+
+	public JSONObject generateAllPagesJson(Device device) throws Exception {
+		JSONObject resultJson = new JSONObject();
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subpages", Page.class);
+		map.put("pagezones", Pagezone.class);
+		map.put("pagezonedtls", Pagezonedtl.class);
+
+		JSONArray pageJsonArray = new JSONArray();
+		JSONArray videoJsonArray = new JSONArray();
+		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+		List<Page> pageList = new ArrayList<Page>();
+
+		List<Page> allpageList = pageMapper.selectList("" + device.getOrgid(), null, null, null, null, "1", null, null,
+				null);
+
+		for (Page page : allpageList) {
+			page = pageMapper.selectByPrimaryKey("" + page.getPageid());
+			if (page != null && !page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+				JSONObject pageJson = JSONObject.fromObject(page.getJson());
+				page = (Page) JSONObject.toBean(pageJson, Page.class, map);
+			}
+			if (page != null) {
+				pageList.add(page);
+				for (Page subpage : page.getSubpages()) {
+					Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+					if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
+						JSONObject pageJson = JSONObject.fromObject(p.getJson());
+						p = (Page) JSONObject.toBean(pageJson, Page.class, map);
+					}
+					pageList.add(p);
+				}
+				String zipPath = "/page/" + page.getPageid() + "/page-" + page.getPageid() + ".zip";
+				File zipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + zipPath);
+				if (zipFile.exists()) {
+					JSONObject pageJson = new JSONObject();
+					pageJson.put("page_id", page.getPageid());
+					pageJson.put("name", page.getName());
+					pageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("file", zipFile.getName());
+					pageJson.put("size", page.getSize());
+					pageJson.put("checksum", page.getMd5());
+					pageJsonArray.add(pageJson);
+					resultJson.put("page_id", page.getPageid());
+				}
+			}
+		}
+
+		for (Page p : pageList) {
+			for (Pagezone pagezone : p.getPagezones()) {
+				for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) {
+					if (pagezonedtl.getVideo() != null) {
+						if (videoHash.get(pagezonedtl.getObjid()) == null) {
+							Video video = pagezonedtl.getVideo();
+							JSONObject videoJson = new JSONObject();
+							videoJson.put("id", video.getVideoid());
+							videoJson.put("name", video.getName());
+							videoJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+							videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+							videoJson.put("file", video.getFilename());
+							videoJson.put("size", video.getSize());
+							videoJson.put("checksum", video.getMd5());
+							videoJson.put("thumbnail",
+									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+							videoHash.put(video.getVideoid(), videoJson);
+							videoJsonArray.add(videoJson);
+						}
+					}
+				}
+			}
+		}
+		resultJson.put("pages", pageJsonArray);
+		resultJson.put("videos", videoJsonArray);
+		return resultJson;
+	}
+
+	public JSONObject generateAllIntentsJson(Device device) throws Exception {
+		JSONObject resultJson = new JSONObject();
+
+		String serverip = configMapper.selectValueByCode("ServerIP");
+		String serverport = configMapper.selectValueByCode("ServerPort");
+		String cdnserver = configMapper.selectValueByCode("CDNServer");
+		String downloadurl = "http://" + serverip + ":" + serverport;
+		if (cdnserver != null && cdnserver.trim().length() > 0) {
+			downloadurl = "http://" + cdnserver;
+		}
+		Map<String, Class> map = new HashMap<String, Class>();
+		map.put("subpages", Page.class);
+		map.put("pagezones", Pagezone.class);
+		map.put("pagezonedtls", Pagezonedtl.class);
+
+		JSONArray pageJsonArray = new JSONArray();
+		JSONArray videoJsonArray = new JSONArray();
+		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
+		List<Page> pageList = new ArrayList<Page>();
+
+		List<Page> allpageList = pageMapper.selectList("" + device.getOrgid(), null, null, null, null, "1", null, null,
+				null);
+
+		for (Page page : allpageList) {
+			page = pageMapper.selectByPrimaryKey("" + page.getPageid());
+			if (page != null && !page.getReviewflag().equals(Page.REVIEW_PASSED)) {
+				JSONObject pageJson = JSONObject.fromObject(page.getJson());
+				page = (Page) JSONObject.toBean(pageJson, Page.class, map);
+			}
+			if (page != null) {
+				pageList.add(page);
+				for (Page subpage : page.getSubpages()) {
+					Page p = pageMapper.selectByPrimaryKey("" + subpage.getPageid());
+					if (p != null && !p.getReviewflag().equals(Page.REVIEW_PASSED)) {
+						JSONObject pageJson = JSONObject.fromObject(p.getJson());
+						p = (Page) JSONObject.toBean(pageJson, Page.class, map);
+					}
+					pageList.add(p);
+				}
+				String zipPath = "/page/" + page.getPageid() + "/page-" + page.getPageid() + ".zip";
+				File zipFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + zipPath);
+				if (zipFile.exists()) {
+					JSONObject pageJson = new JSONObject();
+					pageJson.put("page_id", page.getPageid());
+					pageJson.put("key", page.getName());
+					pageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("file", zipFile.getName());
+					pageJson.put("size", page.getSize());
+					pageJson.put("checksum", page.getMd5());
+					pageJsonArray.add(pageJson);
+					resultJson.put("page_id", page.getPageid());
+				}
+			}
+		}
+
+		List<Video> allvideoList = videoMapper.selectList("" + device.getOrgid(), null, null, null, null, null, null,
+				null, null, null);
+		for (Video video : allvideoList) {
+			if (video.getTags() != null && video.getTags().length() > 0) {
+				JSONObject videoJson = new JSONObject();
+				videoJson.put("id", video.getVideoid());
+				videoJson.put("name", video.getName());
+				videoJson.put("key", video.getTags());
+				videoJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+				videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+				videoJson.put("file", video.getFilename());
+				videoJson.put("size", video.getSize());
+				videoJson.put("checksum", video.getMd5());
+				videoJson.put("thumbnail", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+				videoJsonArray.add(videoJson);
+			}
+		}
+		/*
+		 * for (Page p : pageList) { for (Pagezone pagezone : p.getPagezones())
+		 * { for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) { if
+		 * (pagezonedtl.getVideo() != null) { if
+		 * (videoHash.get(pagezonedtl.getObjid()) == null) { Video video =
+		 * pagezonedtl.getVideo(); JSONObject videoJson = new JSONObject();
+		 * videoJson.put("id", video.getVideoid()); videoJson.put("name",
+		 * video.getName()); videoJson.put("url", downloadurl +
+		 * CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
+		 * videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL +
+		 * video.getFilepath()); videoJson.put("file", video.getFilename());
+		 * videoJson.put("size", video.getSize()); videoJson.put("checksum",
+		 * video.getMd5()); videoJson.put("thumbnail", downloadurl +
+		 * CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+		 * videoHash.put(video.getVideoid(), videoJson);
+		 * videoJsonArray.add(videoJson); } } } } }
+		 */
+
 		resultJson.put("pages", pageJsonArray);
 		resultJson.put("videos", videoJsonArray);
 		return resultJson;

@@ -119,7 +119,7 @@ var VideoModule = function () {
 				}
 				videohtml += '</div>';
 				
-				videohtml += '<h6 class="pixtitle"><a href="/pixsigdata' + aData.filepath + '">' + aData.name + '</a><br>';
+				videohtml += '<h6 class="pixtitle">' + aData.name + '<br>';
 				var filesize = parseInt(aData['size'] / 1024);
 				videohtml += '(' + aData.videoid + ') ' + PixData.transferIntToComma(filesize) + ' KB</h6>';
 				videohtml += '</div>';
@@ -335,6 +335,7 @@ var VideoModule = function () {
 		$('#VideoEditForm').validate(formHandler.validateOption);
 
 		//Init Tags
+		/*
 		$.ajax({
 			type : 'GET',
 			url : 'org!get.action',
@@ -364,7 +365,7 @@ var VideoModule = function () {
 				console.log('failue');
 			}
 		});
-
+		*/
 		$('[type=submit]', $('#VideoEditModal')).on('click', function(event) {
 			if ($('#VideoEditForm').valid()) {
 				$('#VideoEditForm').submit();
@@ -379,7 +380,7 @@ var VideoModule = function () {
 			_video = $('#VideoTable').dataTable().fnGetData(index);
 			formHandler.setdata('video', _video);
 			$('#VideoEditForm').attr('action', 'video!update.action');
-			$('#TagSelect').select2('val', $(_video.tags.split(',')));
+			//$('#TagSelect').select2('val', $(_video.tags.split(',')));
 			createEditFolderTree();
 			refreshRelateType();
 			if (_video.relatetype == 1 && _video.relatevideo != null) {

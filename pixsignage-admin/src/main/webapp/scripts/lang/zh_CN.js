@@ -137,6 +137,7 @@ var common = {
 		region_type_16: 'DVB',
 		region_type_101: '按摩椅二维码',
 		region_type_102: '按摩椅控制',
+		region_type_103: 'Cloudia',
 
 		pagezone_type_1: '视频',
 		pagezone_type_2: '图片',
@@ -277,6 +278,8 @@ var common = {
 		age3: '18-40岁',
 		age4: '41-65岁',
 		age5: '66岁以上',
+		look1: '正常',
+		look2: '微笑',
 		
 		wxappid: '微信AppID',
 		wxsecret: '微信AppSecret',
@@ -357,6 +360,20 @@ var common = {
 		
 		session_timeout: '登录已失效，请重新登录',
 	},
+	bundleanimation: {
+		none: '无',
+		random: '随机',
+		fadeIn: '淡入',
+		slideInLeft: '向左平移',
+		slideInRight: '向右平移',
+		slideInUp: '向上平移',
+		slideInDown: '向下平移',
+		zoomIn: '放大进入',
+		rotateIn: '顺时针旋入',
+		rotateInUpLeft: '从左向上旋入',
+		flipInX: '水平翻转进入',
+		rollIn: '翻滚',
+	},
 	animation: {
 		none: '无',
 		pulse: '脉冲',
@@ -395,7 +412,7 @@ var common = {
 		zoomInDown: '放大',
 		slideInLeft: '左侧平移',
 		slideInRight: '右侧平移',
-		slideInDown: '从上到下平移',
+		slideInDown: '向下平移',
 	},
 	effect: {
 		slide: '平移',

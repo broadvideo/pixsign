@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="file:/opt/pix/conf/common.properties"></property>
+	</bean>
+	 -->
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven />
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/broadvideo/omps/persistence/*.xml" />
+		<property name="typeAliasesPackage" value="com.mybatis.model" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.broadvideo.pixbase.persistence,com.broadvideo.omps.persistence" />
+	</bean>
+
+	<!-- i18n -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />	  
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>resource.global</value>
+			</list>
+		</property>
+	</bean>
+	<context:component-scan base-package="com.broadvideo.omps" />
+	<context:component-scan base-package="com.broadvideo.pixbase" />
+
+
+	<import resource="classpath:applicationContext_quartz.xml" />
+	
+
+    <bean id="consumerProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="bootstrap.servers" value="10.155.0.110:30165" />
+                <entry key="group.id" value="omps-task" />
+                <entry key="enable.auto.commit" value="true" />
+                <entry key="session.timeout.ms" value="15000" />
+                <entry key="key.deserializer"
+                       value="org.apache.kafka.common.serialization.StringDeserializer" />
+                <entry key="value.deserializer"
+                       value="org.apache.kafka.common.serialization.StringDeserializer" />
+            </map>
+        </constructor-arg>
+    </bean>
+    <!-- 2.创建consumerFactory bean -->
+    <bean id="consumerFactory"
+          class="org.springframework.kafka.core.DefaultKafkaConsumerFactory" >
+        <constructor-arg>
+            <ref bean="consumerProperties" />
+        </constructor-arg>
+    </bean>
+     <!-- 3.定义消费实现类 -->
+    <bean id="kafkaConsumerService" class="com.broadvideo.omps.service.KafaConsumerServiceImpl" />
+     <!-- 4.消费者容器配置信息 -->
+    
+    <bean id="containerProperties" class="org.springframework.kafka.listener.config.ContainerProperties">
+        <!-- topic -->
+        <constructor-arg name="topics">
+            <list>
+            <!--  
+                <value>sync_report</value>
+                -->
+                <value>sync_report_single</value>
+                <value>sync_ping</value>
+            </list>
+        </constructor-arg>
+        <property name="messageListener" ref="kafkaConsumerService" />
+    </bean>
+     <!-- 5.消费者并发消息监听容器，执行doStart()方法 -->
+    <bean id="messageListenerContainer" class="org.springframework.kafka.listener.ConcurrentMessageListenerContainer" init-method="doStart" >
+        <constructor-arg ref="consumerFactory" />
+        <constructor-arg ref="containerProperties" />
+        <property name="concurrency" value="1" />
+    </bean>
+   <beans profile="dev">
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<property name="url"
+				value="jdbc:mysql://pixent-db:3306/omps?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
+			<property name="username" value="omps" />
+			<property name="password" value="omps@01" />
+			<property name="initialSize" value="20" />
+			<property name="maxActive" value="100" />
+			<property name="minIdle" value="20" />
+			<property name="maxWait" value="60000" />
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+	
+			<property name="validationQuery" value="select 1 from dual" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+	
+			<property name="poolPreparedStatements" value="false" />
+	
+			<property name="filters" value="stat" />
+	</bean>
+  </beans>
+ <beans profile="default">
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<property name="url"
+				value="jdbc:mysql://mysql:3306/omps?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
+			<property name="username" value="omps" />
+			<property name="password" value="omps@01" />
+			<property name="initialSize" value="20" />
+			<property name="maxActive" value="100" />
+			<property name="minIdle" value="20" />
+			<property name="maxWait" value="60000" />
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+	
+			<property name="validationQuery" value="select 1 from dual" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+	
+			<property name="poolPreparedStatements" value="false" />
+	
+			<property name="filters" value="stat" />
+	</bean>
+  </beans>
+
+</beans>

@@ -16,11 +16,13 @@
     <result column="age3" property="age3" jdbcType="INTEGER" />
     <result column="age4" property="age4" jdbcType="INTEGER" />
     <result column="age5" property="age5" jdbcType="INTEGER" />
+    <result column="look1" property="look1" jdbcType="INTEGER" />
+    <result column="look2" property="look2" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     hourflowlogid, orgid, branchid, deviceid, flowdate, flowhour, total, male, female, age1, age2, 
-    age3, age4, age5, createtime
+    age3, age4, age5, look1, look2, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -164,6 +166,8 @@
     <result column="age3" property="age3" jdbcType="INTEGER" />
     <result column="age4" property="age4" jdbcType="INTEGER" />
     <result column="age5" property="age5" jdbcType="INTEGER" />
+    <result column="look1" property="look1" jdbcType="INTEGER" />
+    <result column="look2" property="look2" jdbcType="INTEGER" />
   </resultMap>
   <select id="statCatalogByDeviceDay" resultMap="CatalogResultMap" >
     select ifnull(sum(male),0) as male, 
@@ -172,7 +176,9 @@
     ifnull(sum(age2),0) as age2, 
     ifnull(sum(age3),0) as age3, 
     ifnull(sum(age4),0) as age4, 
-    ifnull(sum(age5),0) as age5
+    ifnull(sum(age5),0) as age5,
+    ifnull(sum(look1),0) as look1,
+    ifnull(sum(look2),0) as look2
     from hourflowlog
     where deviceid = #{deviceid}
     and flowdate = #{day}
@@ -184,7 +190,9 @@
     ifnull(sum(age2),0) as age2, 
     ifnull(sum(age3),0) as age3, 
     ifnull(sum(age4),0) as age4, 
-    ifnull(sum(age5),0) as age5
+    ifnull(sum(age5),0) as age5,
+    ifnull(sum(look1),0) as look1, 
+    ifnull(sum(look2),0) as look2 
     from hourflowlog
     where deviceid = #{deviceid}
     and left(flowdate,6) = #{month}
@@ -196,7 +204,9 @@
     ifnull(sum(age2),0) as age2, 
     ifnull(sum(age3),0) as age3, 
     ifnull(sum(age4),0) as age4, 
-    ifnull(sum(age5),0) as age5
+    ifnull(sum(age5),0) as age5,
+    ifnull(sum(look1),0) as look1, 
+    ifnull(sum(look2),0) as look2 
     from hourflowlog
     where orgid = #{orgid}
     and flowdate = #{day}
@@ -208,7 +218,9 @@
     ifnull(sum(age2),0) as age2, 
     ifnull(sum(age3),0) as age3, 
     ifnull(sum(age4),0) as age4, 
-    ifnull(sum(age5),0) as age5
+    ifnull(sum(age5),0) as age5,
+    ifnull(sum(look1),0) as look1, 
+    ifnull(sum(look2),0) as look2 
     from hourflowlog
     where orgid = #{orgid}
     and left(flowdate,6) = #{month}
@@ -226,12 +238,14 @@
     insert into hourflowlog (orgid, branchid, deviceid, 
       flowdate, flowhour, total, male, 
       female, age1, age2, 
-      age3, age4, age5, createtime
+      age3, age4, age5, 
+      look1, look2, createtime
       )
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
       #{flowdate,jdbcType=VARCHAR}, #{flowhour,jdbcType=VARCHAR}, #{total,jdbcType=INTEGER}, #{male,jdbcType=INTEGER}, 
       #{female,jdbcType=INTEGER}, #{age1,jdbcType=INTEGER}, #{age2,jdbcType=INTEGER}, 
-      #{age3,jdbcType=INTEGER}, #{age4,jdbcType=INTEGER}, #{age5,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      #{age3,jdbcType=INTEGER}, #{age4,jdbcType=INTEGER}, #{age5,jdbcType=INTEGER}, 
+      #{look1,jdbcType=INTEGER}, #{look2,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Hourflowlog" >
@@ -279,6 +293,12 @@
       <if test="age5 != null" >
         age5,
       </if>
+      <if test="look1 != null" >
+        look1,
+      </if>
+      <if test="look2 != null" >
+        look2,
+      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -322,6 +342,12 @@
       </if>
       <if test="age5 != null" >
         #{age5,jdbcType=INTEGER},
+      </if>
+      <if test="look1 != null" >
+        #{look1,jdbcType=INTEGER},
+      </if>
+      <if test="look2 != null" >
+        #{look2,jdbcType=INTEGER},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -370,6 +396,12 @@
       <if test="age5 != null" >
         age5 = #{age5,jdbcType=INTEGER},
       </if>
+      <if test="look1 != null" >
+        look1 = #{look1,jdbcType=INTEGER},
+      </if>
+      <if test="look2 != null" >
+        look2 = #{look2,jdbcType=INTEGER},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -391,6 +423,8 @@
       age3 = #{age3,jdbcType=INTEGER},
       age4 = #{age4,jdbcType=INTEGER},
       age5 = #{age5,jdbcType=INTEGER},
+      look1 = #{look1,jdbcType=INTEGER},
+      look2 = #{look2,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where hourflowlogid = #{hourflowlogid,jdbcType=INTEGER}
   </update>

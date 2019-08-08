@@ -28,6 +28,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['16'] = 1;
 		ZoneLimits['101'] = 1;
 		ZoneLimits['102'] = 1;
+		ZoneLimits['103'] = 1;
 		
 		initEvent();
 	};
@@ -138,8 +139,8 @@ var BundleDesignModule = function (mode) {
 			//DVB Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
-		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
-			//Massage Zone
+		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
+			//Massage Zone & Cloudia Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
 		} else {
@@ -254,7 +255,8 @@ var BundleDesignModule = function (mode) {
 				text_val = text_val.replace(/&nbsp;/g, ' ');
 			}
 			$(bundlezoneDiv).find('marquee').html(text_val);
-
+			$(bundlezoneDiv).find('marquee').attr('scrollamount', bundlezone.speed*3);
+			
 			$(bundlezoneDiv).find('#rotatable').css({
 				'box-sizing': 'border-box',
 				'color': bundlezone.color, 
@@ -283,7 +285,7 @@ var BundleDesignModule = function (mode) {
 				'font-size': Math.ceil(bundlezone.size * bundlezone.height / 100 / BundleScale) + 'px', 
 				'line-height': Math.ceil(bundlezone.height / BundleScale) + 'px', 
 			});
-			$(bundlezoneDiv).find('span').html('深圳 20 ~ 17℃ 多云转小雨 <img src="http://api.map.baidu.com/images/weather/day/duoyun.png" /><img src="http://api.map.baidu.com/images/weather/night/xiaoyu.png" />');
+			$(bundlezoneDiv).find('span').html('City <img src="/pixsignage-page/image/weather/30.png" /> 30℃');
 			$(bundlezoneDiv).find('img').each(function() {
 				$(this).css('height', Math.ceil(bundlezone.size * bundlezone.height / 100 / BundleScale) + 'px');
 				$(this).css('display', 'inline');
@@ -381,8 +383,8 @@ var BundleDesignModule = function (mode) {
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
-		} else if (bundlezone.type == 101 || bundlezone.type == 102) {
-			//Massage Zone
+		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
+			//Massage Zone & Cloudia Zone
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-' + bundlezone.type + '.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
@@ -766,6 +768,7 @@ var BundleDesignModule = function (mode) {
 			$('#spinner-fontsize').spinner();
 			$('#spinner-fontsize').spinner('setting', {value:parseInt(bundlezone.fontsize), step: 1, min: 12, max: 255});
 
+			refreshAnimationSelect(bundlezone);
 			refreshLocSpinners(bundlezone);
 			new FolderImageSelect($('#BgImageGroup'), _self.Zone.bgimage);
 		}
@@ -800,6 +803,94 @@ var BundleDesignModule = function (mode) {
 			_self.Zone.height = $('#spinner-h').spinner('value');
 			refreshBundlezone(_self.Zone);
 		});	
+
+		function refreshAnimationSelect(bundlezone) {
+			var animationlist = [
+				{id: 'None', text: common.bundleanimation.none}, 
+				{id: 'Random', text: common.bundleanimation.random}, 
+				{id: 'FadeIn', text: common.bundleanimation.fadeIn}, 
+				{id: 'SlideInLeft', text: common.bundleanimation.slideInLeft}, 
+				{id: 'SlideInRight', text: common.bundleanimation.slideInRight}, 
+				{id: 'SlideInUp', text: common.bundleanimation.slideInUp}, 
+				{id: 'SlideInDown', text: common.bundleanimation.slideInDown}, 
+				{id: 'ZoomIn', text: common.bundleanimation.zoomIn}, 
+				{id: 'RotateIn', text: common.bundleanimation.rotateIn}, 
+				{id: 'RotateInUpLeft', text: common.bundleanimation.rotateInUpLeft}, 
+				{id: 'FlipInX', text: common.bundleanimation.flipInX}, 
+				{id: 'RollIn', text: common.bundleanimation.rollIn}, 
+//				{id: 'DropOut', text: 'DropOut'}, 
+//				{id: 'Landing', text: 'Landing'}, 
+//				{id: 'TakingOff', text: 'TakingOff'}, 
+//				{id: 'Flash', text: 'Flash'}, 
+//				{id: 'Pulse', text: 'Pulse'}, 
+//				{id: 'RubberBand', text: 'RubberBand'}, 
+//				{id: 'Shake', text: 'Shake'}, 
+//				{id: 'Swing', text: 'Swing'}, 
+//				{id: 'Wobble', text: 'Wobble'}, 
+//				{id: 'Bounce', text: 'Bounce'}, 
+//				{id: 'Tada', text: 'Tada'}, 
+//				{id: 'StandUp', text: 'StandUp'}, 
+//				{id: 'Wave', text: 'Wave'}, 
+//				{id: 'Hinge', text: 'Hinge'}, 
+//				{id: 'RollIn', text: 'RollIn'}, 
+//				{id: 'RollOut', text: 'RollOut'}, 
+//				{id: 'BounceIn', text: 'BounceIn'}, 
+//				{id: 'BounceInDown', text: 'BounceInDown'}, 
+//				{id: 'BounceInLeft', text: 'BounceInLeft'}, 
+//				{id: 'BounceInRight', text: 'BounceInRight'}, 
+//				{id: 'BounceInUp', text: 'BounceInUp'}, 
+//				{id: 'FadeIn', text: 'FadeIn'}, 
+//				{id: 'FadeInUp', text: 'FadeInUp'}, 
+//				{id: 'FadeInDown', text: 'FadeInDown'}, 
+//				{id: 'FadeInLeft', text: 'FadeInLeft'}, 
+//				{id: 'FadeInRight', text: 'FadeInRight'}, 
+//				{id: 'FadeOut', text: 'FadeOut'}, 
+//				{id: 'FadeOutDown', text: 'FadeOutDown'}, 
+//				{id: 'FadeOutLeft', text: 'FadeOutLeft'}, 
+//				{id: 'FadeOutRight', text: 'FadeOutRight'}, 
+//				{id: 'FadeOutUp', text: 'FadeOutUp'}, 
+//				{id: 'FlipInX', text: 'FlipInX'}, 
+//				{id: 'FlipOutX', text: 'FlipOutX'}, 
+//				{id: 'FlipOutY', text: 'FlipOutY'}, 
+//				{id: 'RotateIn', text: 'RotateIn'}, 
+//				{id: 'RotateInDownLeft', text: 'RotateInDownLeft'}, 
+//				{id: 'RotateInDownRight', text: 'RotateInDownRight'}, 
+//				{id: 'RotateInUpLeft', text: 'RotateInUpLeft'}, 
+//				{id: 'RotateInUpRight', text: 'RotateInUpRight'}, 
+//				{id: 'RotateOut', text: 'RotateOut'}, 
+//				{id: 'RotateOutDownLeft', text: 'RotateOutDownLeft'}, 
+//				{id: 'RotateOutDownRight', text: 'RotateOutDownRight'}, 
+//				{id: 'RotateOutUpLeft', text: 'RotateOutUpLeft'}, 
+//				{id: 'RotateOutUpRight', text: 'RotateOutUpRight'}, 
+//				{id: 'SlideInLeft', text: 'SlideInLeft'}, 
+//				{id: 'SlideInRight', text: 'SlideInRight'}, 
+//				{id: 'SlideInUp', text: 'SlideInUp'}, 
+//				{id: 'SlideInDown', text: 'SlideInDown'}, 
+//				{id: 'SlideOutLeft', text: 'SlideOutLeft'}, 
+//				{id: 'SlideOutRight', text: 'SlideOutRight'}, 
+//				{id: 'SlideOutUp', text: 'SlideOutUp'}, 
+//				{id: 'SlideOutDown', text: 'SlideOutDown'}, 
+//				{id: 'ZoomIn', text: 'ZoomIn'}, 
+//				{id: 'ZoomInDown', text: 'ZoomInDown'}, 
+//				{id: 'ZoomInLeft', text: 'ZoomInLeft'}, 
+//				{id: 'ZoomInRight', text: 'ZoomInRight'}, 
+//				{id: 'ZoomInUp', text: 'ZoomInUp'}, 
+//				{id: 'ZoomOut', text: 'ZoomOut'}, 
+//				{id: 'ZoomOutDown', text: 'ZoomOutDown'}, 
+//				{id: 'ZoomOutLeft', text: 'ZoomOutLeft'}, 
+//				{id: 'ZoomOutRight', text: 'ZoomOutRight'}, 
+//				{id: 'ZoomOutUp', text: 'ZoomOutUp'}, 
+			];
+			
+			$('#AnimationSelect').select2({
+				placeholder: common.tips.detail_select,
+				minimumInputLength: 0,
+				data: animationlist,
+				dropdownCssClass: 'bigdrop', 
+				escapeMarkup: function (m) { return m; } 
+			});
+			$('#AnimationSelect').select2('val', bundlezone.animation);
+		}
 
 		function refreshTouchtypeSelect() {
 			var touchtypelist = [];
@@ -924,6 +1015,7 @@ var BundleDesignModule = function (mode) {
 			_self.Zone.intervaltime = $('.zoneform input[name=intervaltime]').attr('value');
 			_self.Zone.sleeptime = $('.zoneform input[name=sleeptime]').attr('value');
 			_self.Zone.fitflag = $('.zoneform input[name=fitflag]:checked').attr('value');
+			_self.Zone.animation = $('#AnimationSelect').select2('val');
 			_self.Zone.volume = $('.zoneform input[name=volume]').attr('value');
 			_self.Zone.direction = $('.zoneform input[name=direction]:checked').attr('value');
 			_self.Zone.speed = $('.zoneform input[name=speed]:checked').attr('value');

@@ -26,12 +26,9 @@ var ConfigModule = function () {
 						} else if (config.code == 'CDNServer') {
 							$('#ConfigTable').dataTable().fnAddData([common.view.config_cdnserver, config.value]);
 							$('#ConfigEditForm input[name=cdnserver]').val(config.value);
-						} else if (config.code == 'PixedxIP' && SchoolCtrl) {
-							$('#ConfigTable').dataTable().fnAddData([common.view.config_pixedxip, config.value]);
-							$('#ConfigEditForm input[name=pixedxip]').val(config.value);
-						} else if (config.code == 'PixedxPort' && SchoolCtrl) {
-							$('#ConfigTable').dataTable().fnAddData([common.view.config_pixedxport, config.value]);
-							$('#ConfigEditForm input[name=pixedxport]').val(config.value);
+						} else if (config.code == 'KafkaServer') {
+							$('#ConfigTable').dataTable().fnAddData(['Kafka Server', config.value]);
+							$('#ConfigEditForm input[name=kafkaserver]').val(config.value);
 						}
 					}
 				} else {
@@ -130,7 +127,6 @@ var ConfigModule = function () {
 		});
 		
 		$('body').on('click', '.pix-update', function(event) {
-			$('.calendar-ctrl').css('display', SchoolCtrl?'':'none');
 			$('#ConfigEditForm').attr('action', 'config!update.action');
 			$('#ConfigEditModal').modal();
 		});

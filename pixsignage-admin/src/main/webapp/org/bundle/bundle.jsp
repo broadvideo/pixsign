@@ -189,6 +189,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="102">
 								<i class="fa fa-cog"></i><div>按摩椅控制</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
+								<i class="fa fa-cubes"></i><div>Cloudia</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -251,6 +254,12 @@
 														<label class="radio-inline">
 															<input type="radio" name="fitflag" value="1" checked> <spring:message code="pixsign.prop.fitflag_1"/>
 														</label>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.animation"/></label>
+													<div class="col-md-9">
+														<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 													</div>
 												</div>
 											</div>
@@ -922,6 +931,7 @@ var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
 var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
 var AdvertCtrl = <%=(session_org != null && session_org.getAdvertflag().equals("1"))%>;
+var CloudiaCtrl = <%=(session_org != null && session_org.getCloudiaflag().equals("1"))%>;
 
 var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
 var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;

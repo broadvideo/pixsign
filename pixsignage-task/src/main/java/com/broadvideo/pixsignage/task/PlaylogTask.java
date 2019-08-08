@@ -138,27 +138,29 @@ public class PlaylogTask {
 					endtime = json.getLong("end_time");
 					mediatype = json.getString("media_type");
 					mediaid = json.getString("media_id");
-					JSONArray visitorArray = json.getJSONArray("visitors");
-					persons = visitorArray.size();
-					for (int j = 0; j < visitorArray.size(); j++) {
-						JSONObject visitor = visitorArray.getJSONObject(j);
-						int age = visitor.getInt("age");
-						int sex = visitor.getInt("sex");
-						if (age <= 6) {
-							age1++;
-						} else if (age <= 17) {
-							age2++;
-						} else if (age <= 40) {
-							age3++;
-						} else if (age <= 65) {
-							age4++;
-						} else {
-							age5++;
-						}
-						if (sex == 0) {
-							male++;
-						} else {
-							female++;
+					if (json.has("visitors")) {
+						JSONArray visitorArray = json.getJSONArray("visitors");
+						persons = visitorArray.size();
+						for (int j = 0; j < visitorArray.size(); j++) {
+							JSONObject visitor = visitorArray.getJSONObject(j);
+							int age = visitor.getInt("age");
+							int sex = visitor.getInt("sex");
+							if (age <= 6) {
+								age1++;
+							} else if (age <= 17) {
+								age2++;
+							} else if (age <= 40) {
+								age3++;
+							} else if (age <= 65) {
+								age4++;
+							} else {
+								age5++;
+							}
+							if (sex == 0) {
+								male++;
+							} else {
+								female++;
+							}
 						}
 					}
 				} else {

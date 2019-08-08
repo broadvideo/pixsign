@@ -38,12 +38,16 @@ var ScheduleModule = function () {
 		} else if (Max10 > 0) {
 			$('.device-navigator[devicetype="10"]').addClass('active');
 			_devicetype = 10;
+		} else if (Max13 > 0) {
+			$('.device-navigator[devicetype="13"]').addClass('active');
+			_devicetype = 13;
 		}
 		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
 		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
 		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
 		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
 		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
 
 		$('.devicegroup-navigator').click(function(event) {
 			_bindtype = 2;

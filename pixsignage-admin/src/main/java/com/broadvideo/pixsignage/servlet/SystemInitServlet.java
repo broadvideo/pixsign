@@ -78,7 +78,7 @@ public class SystemInitServlet extends HttpServlet {
 
 		try {
 			if (System.getProperties().getProperty("os.name").startsWith("Windows")) {
-				CommonConfig.CONFIG_FFMPEG_CMD = "/opt/pix/ffmpeg/bin/ffmpeg.exe";
+				CommonConfig.CONFIG_FFMPEG_CMD = "/opt/pix/ffmpeg/ffmpeg.exe";
 			}
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME));

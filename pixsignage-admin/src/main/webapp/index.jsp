@@ -20,7 +20,7 @@
 	}
 	
 	String title = "";
-	String css = "login-soft.css";
+	String css = "login3.css";
 	String bgcolor = "#666";
 	if (!servername.equals("default")) {
 		title = sdomain.getName();
@@ -65,7 +65,7 @@
 </head>
 <!-- END HEAD -->
 
-<body class="login" style="background-color: <%=bgcolor%> !important;">
+<body class="login" style="background-image: url(/pixsignage/img/bg.jpg);background-size: cover;">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
 		<img src="/pixsigdata/sdomain/<%=sdomain.getCode()%>/logo.png?t=1" height="100" alt="" />

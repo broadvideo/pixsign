@@ -682,6 +682,31 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		
+		<action name="intent!list" method="doList" class="intentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">sEcho,iTotalRecords,iTotalDisplayRecords,aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="intent!add" method="doAdd" class="intentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="intent!update" method="doUpdate" class="intentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="intent!delete" method="doDelete" class="intentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="house!list" method="doList" class="houseAction">
 			<result name="success" type="json">

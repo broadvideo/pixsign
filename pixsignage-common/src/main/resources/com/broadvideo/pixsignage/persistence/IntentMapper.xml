@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsignage.persistence.IntentMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Intent" >
+    <id column="intentid" property="intentid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="intentkey" property="intentkey" jdbcType="VARCHAR" />
+    <result column="relatetype" property="relatetype" jdbcType="CHAR" />
+    <result column="relateid" property="relateid" jdbcType="INTEGER" />
+    <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
+    <association property="relatevideo" column="{relatetype=relatetype,videoid=relateid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectRelateVideo" />
+    <association property="relateimage" column="{relatetype=relatetype,imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    intentid, orgid, intentkey, relatetype, relateid, relateurl
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from intent
+    where intentid = #{intentid}
+  </select>
+
+  <select id="selectCount" resultType="Integer">
+    select count(1) from intent 
+    where orgid=#{orgid}
+    <if test="search != null">
+      and intentkey like #{search}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from intent
+    where orgid=#{orgid}
+    <if test="search != null">
+      and intentkey like #{search}
+    </if>
+    order by intentid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from intent
+    where intentid = #{intentid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Intent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="intentid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into intent (orgid, intentkey, relatetype, 
+      relateid, relateurl)
+    values (#{orgid,jdbcType=INTEGER}, #{intentkey,jdbcType=VARCHAR}, #{relatetype,jdbcType=CHAR}, 
+      #{relateid,jdbcType=INTEGER}, #{relateurl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Intent" >
+    <selectKey resultType="java.lang.Integer" keyProperty="intentid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into intent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="intentkey != null" >
+        intentkey,
+      </if>
+      <if test="relatetype != null" >
+        relatetype,
+      </if>
+      <if test="relateid != null" >
+        relateid,
+      </if>
+      <if test="relateurl != null" >
+        relateurl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="intentkey != null" >
+        #{intentkey,jdbcType=VARCHAR},
+      </if>
+      <if test="relatetype != null" >
+        #{relatetype,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="relateurl != null" >
+        #{relateurl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Intent" >
+    update intent
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="intentkey != null" >
+        intentkey = #{intentkey,jdbcType=VARCHAR},
+      </if>
+      <if test="relatetype != null" >
+        relatetype = #{relatetype,jdbcType=CHAR},
+      </if>
+      <if test="relateid != null" >
+        relateid = #{relateid,jdbcType=INTEGER},
+      </if>
+      <if test="relateurl != null" >
+        relateurl = #{relateurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where intentid = #{intentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Intent" >
+    update intent
+    set orgid = #{orgid,jdbcType=INTEGER},
+      intentkey = #{intentkey,jdbcType=VARCHAR},
+      relatetype = #{relatetype,jdbcType=CHAR},
+      relateid = #{relateid,jdbcType=INTEGER},
+      relateurl = #{relateurl,jdbcType=VARCHAR}
+    where intentid = #{intentid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -55,6 +55,7 @@
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device.selecting"/></div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
+										<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 										<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 										<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
 										<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
@@ -203,7 +204,7 @@
 
 <script src="${static_ctx}/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script> 
 <% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEizW2Mbk5ln3x0Jgm4o3Jd6lIjPyOsU8"></script>
 <% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <% } %>
@@ -223,6 +224,7 @@ var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
 var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

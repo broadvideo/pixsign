@@ -422,8 +422,8 @@ var ReviewModule = function () {
 					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
-				} else if (zone.type == 101 || zone.type == 102) {
-					//Massage Zone
+				} else if (zone.type == 101 || zone.type == 102 || zone.type == 103) {
+					//Massage Zone & Cloudia Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);
 					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-' + zone.type + '.jpg');

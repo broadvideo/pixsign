@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
@@ -562,6 +563,7 @@ public class AdminService3 {
 			video.setStatus("9");
 			video.setDescription(name);
 			video.setCreatestaffid(staff.getStaffid());
+			video.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			videoMapper.insertSelective(video);
 
 			String format = FilenameUtils.getExtension(filename).toLowerCase();
@@ -654,6 +656,7 @@ public class AdminService3 {
 			image.setObjid(0);
 			image.setDescription(name);
 			image.setCreatestaffid(staff.getStaffid());
+			image.setUuid(UUID.randomUUID().toString().replace("-", ""));
 			imageMapper.insertSelective(image);
 
 			String newFileName = "" + image.getImageid() + "." + FilenameUtils.getExtension(filename);

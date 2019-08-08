@@ -31,6 +31,10 @@ public class Hourflowlog {
 
 	private Integer age5;
 
+	private Integer look1;
+
+	private Integer look2;
+
 	private Date createtime;
 
 	public Integer getHourflowlogid() {
@@ -143,6 +147,22 @@ public class Hourflowlog {
 
 	public void setAge5(Integer age5) {
 		this.age5 = age5;
+	}
+
+	public Integer getLook1() {
+		return look1;
+	}
+
+	public void setLook1(Integer look1) {
+		this.look1 = look1;
+	}
+
+	public Integer getLook2() {
+		return look2;
+	}
+
+	public void setLook2(Integer look2) {
+		this.look2 = look2;
 	}
 
 	public Date getCreatetime() {

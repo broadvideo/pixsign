@@ -67,10 +67,11 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 		String pageplanflag = org.getPageplanflag();
 		String massageflag = org.getMassageflag();
 		String dscreenflag = org.getDscreenflag();
+		String cloudiaflag = org.getCloudiaflag();
 
 		String maxdetail = org.getMaxdetail();
 		String[] maxs = maxdetail.split(",");
-		int[] maxdevices = new int[11];
+		int[] maxdevices = new int[13];
 		for (int i = 0; i < maxdevices.length; i++) {
 			maxdevices[i] = maxs.length > i ? Integer.parseInt(maxs[i]) : 0;
 		}
@@ -137,6 +138,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| advertflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 320
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 311
 					|| vipflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 311
+					|| cloudiaflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30112
 					|| p.getPrivilegeid().intValue() == 312 || p.getParentid().intValue() == 312
 					|| !org.getCode().equals("jkcd") && !org.getCode().equals("zls")
 							&& p.getPrivilegeid().intValue() == 313) {
@@ -151,14 +153,16 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| maxdevices[6] == 0 && p.getPrivilegeid().intValue() == 30217
 					|| maxdevices[8] == 0 && p.getPrivilegeid().intValue() == 30219
 					|| maxdevices[9] == 0 && p.getPrivilegeid().intValue() == 30220
-					|| maxdevices[10] == 0 && p.getPrivilegeid().intValue() == 30221) {
+					|| maxdevices[10] == 0 && p.getPrivilegeid().intValue() == 30221
+					|| maxdevices[11] == 0 && p.getPrivilegeid().intValue() == 30222
+					|| maxdevices[12] == 0 && p.getPrivilegeid().intValue() == 30223) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if ((maxdevices[8] == 0 && maxdevices[10] == 0) && p.getPrivilegeid().intValue() == 30500) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if ((maxdevices[0] == 0 && maxdevices[1] == 0 && maxdevices[5] == 0 && maxdevices[6] == 0
-					&& maxdevices[9] == 0)
+					&& maxdevices[9] == 0 && maxdevices[12] == 0)
 					&& (p.getPrivilegeid().intValue() == 30240 || p.getPrivilegeid().intValue() == 30802)) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();

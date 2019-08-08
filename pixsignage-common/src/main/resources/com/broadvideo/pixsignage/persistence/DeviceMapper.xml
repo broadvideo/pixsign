@@ -78,6 +78,7 @@
     <result column="nextpoweroff" property="nextpoweroff" jdbcType="BIGINT" />
     <result column="playbundleid" property="playbundleid" jdbcType="INTEGER" />
     <result column="playpageid" property="playpageid" jdbcType="INTEGER" />
+    <result column="backupvideoid" property="backupvideoid" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsignage.domain.Device" extends="BaseResultMap" >
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsignage.persistence.BranchMapper.selectBaseByPrimaryKey" />
@@ -86,6 +87,7 @@
     <association property="defaultbundle" column="{bundleid=defaultbundleid}" select="com.broadvideo.pixsignage.persistence.BundleMapper.selectMiniByPrimaryKey" />
     <association property="defaultpage" column="{pageid=defaultpageid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectMiniByPrimaryKey" />
     <association property="defaultmedialist" column="{medialistid=defaultmedialistid}" select="com.broadvideo.pixsignage.persistence.MedialistMapper.selectMiniByPrimaryKey" />
+    <association property="backupvideo" column="{videoid=backupvideoid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectByPrimaryKey" />
 	<collection property="schedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
 		column="{deviceid=deviceid}" select="com.broadvideo.pixsignage.persistence.ScheduleMapper.selectListByDevice" />
 	<collection property="attachschedules" ofType="com.broadvideo.pixsignage.domain.Schedule"
@@ -101,7 +103,7 @@
     appfileid, tagflag, temperature,downloadspeed, downloadbytes, networkmode, networksignal, brightness, 
     tags, cataitemid1, cataitemid2, defaultbundleid, defaultpageid, defaultmedialistid, hotspotflag, 
     hotspotssid, hotspotpassword, hotspotfrequency, temperatureflag, relateid, screenstatus, batchid, 
-    modelid, qrcode, nextpoweron, nextpoweroff, playbundleid, playpageid
+    modelid, qrcode, nextpoweron, nextpoweroff, playbundleid, playpageid, backupvideoid
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap">
@@ -479,7 +481,7 @@
       temperatureflag, relateid, screenstatus,
       batchid, modelid, qrcode,
       nextpoweron, nextpoweroff, playbundleid,
-      playpageid)
+      playpageid, backupvideoid)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{terminalid,jdbcType=VARCHAR}, 
       #{hardkey,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{ip,jdbcType=VARCHAR}, #{iip,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, 
@@ -505,7 +507,7 @@
       #{temperatureflag,jdbcType=CHAR}, #{relateid,jdbcType=INTEGER}, #{screenstatus,jdbcType=CHAR},
       #{batchid,jdbcType=INTEGER}, #{modelid,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR},
       #{nextpoweron,jdbcType=BIGINT}, #{nextpoweroff,jdbcType=BIGINT}, #{playbundleid,jdbcType=INTEGER}
-      #{playpageid,jdbcType=INTEGER})
+      #{playpageid,jdbcType=INTEGER}, #{backupvideoid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Device" >
     <selectKey resultType="java.lang.Integer" keyProperty="deviceid" order="AFTER" >
@@ -738,6 +740,9 @@
       <if test="playpageid != null" >
         playpageid,
       </if>
+      <if test="backupvideoid != null" >
+        backupvideoid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orgid != null" >
@@ -964,6 +969,9 @@
       </if>
       <if test="playpageid != null" >
         #{playpageid,jdbcType=INTEGER},
+      </if>
+      <if test="backupvideoid != null" >
+        #{backupvideoid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -1195,6 +1203,9 @@
       <if test="playpageid != null" >
         playpageid = #{playpageid,jdbcType=INTEGER},
       </if>
+      <if test="backupvideoid != null" >
+        backupvideoid = #{backupvideoid,jdbcType=INTEGER},
+      </if>
     </set>
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
@@ -1274,7 +1285,8 @@
       nextpoweron = #{nextpoweron,jdbcType=BIGINT},
       nextpoweroff = #{nextpoweroff,jdbcType=BIGINT},
       playbundleid = #{playbundleid,jdbcType=INTEGER},
-      playpageid = #{playpageid,jdbcType=INTEGER}
+      playpageid = #{playpageid,jdbcType=INTEGER},
+      backupvideoid = #{backupvideoid,jdbcType=INTEGER}
     where deviceid = #{deviceid,jdbcType=INTEGER}
   </update>
   <update id="resetExternalid">

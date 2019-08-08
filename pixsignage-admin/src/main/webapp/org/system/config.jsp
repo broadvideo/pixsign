@@ -37,26 +37,18 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-4 control-label"><spring:message code="pixsign.config.cdnserver"/><span class="required">*</span></label>
+								<label class="col-md-4 control-label"><spring:message code="pixsign.config.cdnserver"/></label>
 								<div class="col-md-8">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="cdnserver" />
 									</div>
 								</div>
 							</div>
-							<div class="form-group calendar-ctrl">
-								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.ip"/></label>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Kafka Server</label>
 								<div class="col-md-8">
 									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="pixedxip" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group calendar-ctrl">
-								<label class="col-md-4 control-label"><spring:message code="pixsign.config.pixedx.port"/></label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="pixedxport" />
+										<i class="fa"></i> <input type="text" class="form-control" name="kafkaserver" />
 									</div>
 								</div>
 							</div>
@@ -134,7 +126,6 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/system/config.js?t=${timestamp}"></script>
 <script>
-var SchoolCtrl = <%=(session_org != null && session_org.getSchoolflag().equals("1"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

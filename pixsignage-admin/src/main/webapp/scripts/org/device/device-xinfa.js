@@ -655,6 +655,58 @@ var DeviceModule = function () {
 			} else {
 				$('.hotspotflag').css('display', 'none');
 			}
+
+			$('#BackupMediaSelect').select2({
+				placeholder: common.tips.detail_select,
+				minimumInputLength: 0,
+				ajax: { 
+					url: 'video!list.action',
+					type: 'GET',
+					dataType: 'json',
+					data: function (term, page) {
+						return {
+							sSearch: term, 
+							iDisplayStart: (page-1)*10,
+							iDisplayLength: 10,
+						};
+					},
+					results: function (data, page) {
+						var more = (page * 10) < data.iTotalRecords; 
+						return {
+							results : $.map(data.aaData, function (item) { 
+								return { 
+									text:item.name, 
+									id:item.videoid,
+									video:item,
+								};
+							}),
+							more: more
+						};
+					}
+				},
+				formatResult: function (data) {
+					if (data.video == null || data.video.thumbnail == null) {
+						return '<span><img src="../img/video.jpg" height="25" /> ' + data.text + '</span>';
+					} else {
+						return '<span><img src="/pixsigdata' + data.video.thumbnail + '" height="25" /> ' + data.text + '</span>';
+					}
+				},
+				formatSelection: function (data) {
+					if (data.video == null || data.video.thumbnail == null) {
+						return '<span><img src="../img/video.jpg" height="25" /> ' + data.text + '</span>';
+					} else {
+						return '<span><img src="/pixsigdata' + data.video.thumbnail + '" height="25" /> ' + data.text + '</span>';
+					}
+				},
+				initSelection: function(element, callback) {
+					if (_device.backupvideo != null) {
+						callback({id: _device.backupvideoid, text: _device.backupvideo.name, video: _device.backupvideo });
+					}
+				},
+				dropdownCssClass: 'bigdrop', 
+				escapeMarkup: function (m) { return m; } 
+			});
+
 			$('#ConfigModal').modal();
 		});
 		$('[type=submit]', $('#ConfigModal')).on('click', function(event) {

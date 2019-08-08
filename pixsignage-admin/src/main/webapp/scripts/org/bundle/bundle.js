@@ -45,7 +45,7 @@ var BundleModule = function () {
 					bundlehtml += '<div class="row" >';
 				}
 				bundlehtml += '<div class="col-md-3 col-xs-3">';
-				bundlehtml += '<h3>' + aData.name + '</h3>';
+				bundlehtml += '<h3 class="pixtitle">' + aData.name + '</h3>';
 				if (aData.reviewflag == 0) {
 					bundlehtml += '<h6><span class="label label-sm label-default">' + common.view.review_wait + '</span></h6>';
 				} else if (aData.reviewflag == 1) {
@@ -475,6 +475,7 @@ var BundleModule = function () {
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
 						$('.massage-ctrl').css('display', MassageCtrl? '':'none');
 						$('.advert-ctrl').css('display', AdvertCtrl? '':'none');
+						$('.cloudia-ctrl').css('display', CloudiaCtrl? '':'none');
 						$('#BundleModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);

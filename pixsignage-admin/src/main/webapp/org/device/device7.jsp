@@ -212,35 +212,41 @@
 									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
 								</div>
 							</div>
-							<!-- 
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval1"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.interval1" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval2"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.interval2" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.temperatureflag"/></label>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="device.temperatureflag" value="0"> <spring:message code="pixsign.prop.temperatureflag_0"/>
+										<input type="radio" name="device.hotspotflag" value="0"> <spring:message code="pixsign.prop.hotspotflag_0"/>
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="device.temperatureflag" value="1"> <spring:message code="pixsign.prop.temperatureflag_1"/>
+										<input type="radio" name="device.hotspotflag" value="1"> <spring:message code="pixsign.prop.hotspotflag_1"/>
 									</label>
 								</div>
 							</div>
-							 -->
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotssid"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotssid" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotpassword"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotpassword" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group hotspotflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotfrequency"/></label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotfrequency" />
+									</div>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -524,7 +530,7 @@
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEizW2Mbk5ln3x0Jgm4o3Jd6lIjPyOsU8"></script>
 <% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <% } %>

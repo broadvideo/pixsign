@@ -137,6 +137,7 @@ var common = {
 		region_type_16: 'DVB Zone',
 		region_type_101: 'Chair Qrcode',
 		region_type_102: 'Charr Control',
+		region_type_103: 'Cloudia',
 
 		pagezone_type_1: 'Video Zone',
 		pagezone_type_2: 'Image Zone',
@@ -277,6 +278,8 @@ var common = {
 		age3: '18-40',
 		age4: '41-65',
 		age5: '66+',
+		look1: 'Normal',
+		look2: 'Smile',
 		
 		wxappid: 'Weixin AppID',
 		wxsecret: 'Weixin AppSecret',
@@ -356,6 +359,20 @@ var common = {
 		maxorgs: 'Org count reaches the limit',
 
 		session_timeout: 'Session timeout, please login again',
+	},
+	bundleanimation: {
+		none: 'None',
+		random: 'Random',
+		fadeIn: 'Fade In',
+		slideInLeft: 'Slide In Left',
+		slideInRight: 'Slide In Right',
+		slideInUp: 'Slide In Up',
+		slideInDown: 'Slide In Down',
+		zoomIn: 'Zoom In',
+		rotateIn: 'Rotate In',
+		rotateInUpLeft: 'Rotate In Up Left',
+		flipInX: 'Flip In X',
+		rollIn: 'Roll In',
 	},
 	animation: {
 		none: 'None',

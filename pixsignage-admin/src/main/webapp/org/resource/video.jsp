@@ -88,12 +88,14 @@
 									</div>
 								</div>
 							</div>
+							<!-- 
 							<div class="form-group tag-ctrl">
 								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="TagSelect" class="form-control select2" name="video.tags">
 								</div>
 							</div>
+							 -->
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="global.folder"/><span class="required">*</span></label>
 								<div class="col-md-9">

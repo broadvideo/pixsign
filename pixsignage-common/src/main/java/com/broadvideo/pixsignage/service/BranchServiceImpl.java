@@ -35,7 +35,6 @@ public class BranchServiceImpl implements BranchService {
 		return branchMapper.selectChild(parentid);
 	}
 
-	@Override
 	public List<Branch> selectOrgBranchList(String orgid) {
 		return this.branchMapper.selectOrgBranchList(orgid);
 	}
@@ -94,7 +93,6 @@ public class BranchServiceImpl implements BranchService {
 		}
 	}
 
-	@Override
 	public Integer syncBranch(Branch branch, Integer orgid) {
 		Branch queryBranch = this.branchMapper.selectByUuid(branch.getUuid(), orgid + "");
 		branch.setOrgid(orgid);

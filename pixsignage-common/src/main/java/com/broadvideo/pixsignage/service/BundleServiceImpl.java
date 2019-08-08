@@ -614,14 +614,31 @@ public class BundleServiceImpl implements BundleService {
 						zonedtlJson.put("id", bundlezonedtl.getObjid());
 						zonedtlJson.put("type", "image");
 						zonedtlJsonArray.add(zonedtlJson);
-					} else if (bundlezonedtl.getObjtype().equals("6")) {
+					} else if (bundlezonedtl.getObjtype().equals("5")) {
 						zonedtlJson.put("id", bundlezonedtl.getObjid());
-						zonedtlJson.put("type", "audio");
+						zonedtlJson.put("type", "stream");
 						zonedtlJsonArray.add(zonedtlJson);
 					}
 				}
 				zoneJson.put("zonedtls", zonedtlJsonArray);
 				zoneJsonArray.add(zoneJson);
+
+				if (bundlezone.getType().intValue() == 103) {
+					zoneJson = new JSONObject();
+					zoneJson.put("zone_id", 1000000 + bundlezone.getBundlezoneid());
+					zoneJson.put("main_flag", "0");
+					zoneJson.put("width", bundlezone.getWidth());
+					zoneJson.put("height", bundle.getHeight() - bundlezone.getHeight() - bundlezone.getTopoffset());
+					zoneJson.put("top", bundlezone.getTopoffset() + bundlezone.getHeight());
+					zoneJson.put("left", bundlezone.getLeftoffset());
+					zoneJson.put("zindex", 100);
+					zoneJson.put("type", 104);
+					zoneJson.put("sleep", bundlezone.getSleeptime());
+					zoneJson.put("interval", bundlezone.getIntervaltime());
+					zoneJson.put("bgcolor", "#" + opacity + bundlezone.getBgcolor().trim().substring(1));
+					zoneJson.put("volume", bundlezone.getVolume());
+					zoneJsonArray.add(zoneJson);
+				}
 			}
 			bundleJson.put("zones", zoneJsonArray);
 			bundleJsonArray.add(bundleJson);

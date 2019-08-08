@@ -12,6 +12,8 @@ public class Device {
 	public final static String Type_3DFanSolo = "9";
 	public final static String Type_3DFanUnion = "10";
 	public final static String Type_3DFanWall = "11";
+	public final static String Type_ICBC = "12";
+	public final static String Type_Cloudia = "13";
 
 	private Integer deviceid;
 
@@ -165,6 +167,8 @@ public class Device {
 
 	private Integer playpageid;
 
+	private Integer backupvideoid;
+
 	private Branch branch;
 
 	private Devicegroup devicegroup;
@@ -180,6 +184,8 @@ public class Device {
 	private Page defaultpage;
 
 	private Medialist defaultmedialist;
+
+	private Video backupvideo;
 
 	public Integer getDeviceid() {
 		return deviceid;
@@ -799,6 +805,14 @@ public class Device {
 		this.playpageid = playpageid;
 	}
 
+	public Integer getBackupvideoid() {
+		return backupvideoid;
+	}
+
+	public void setBackupvideoid(Integer backupvideoid) {
+		this.backupvideoid = backupvideoid;
+	}
+
 	public Branch getBranch() {
 		return branch;
 	}
@@ -861,5 +875,13 @@ public class Device {
 
 	public void setDefaultmedialist(Medialist defaultmedialist) {
 		this.defaultmedialist = defaultmedialist;
+	}
+
+	public Video getBackupvideo() {
+		return backupvideo;
+	}
+
+	public void setBackupvideo(Video backupvideo) {
+		this.backupvideo = backupvideo;
 	}
 }

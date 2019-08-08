@@ -160,6 +160,12 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="device.backupvideoid">
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">

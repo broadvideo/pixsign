@@ -380,12 +380,14 @@
 																<a href="javascript:;" class="icon-btn pix-addzone touch-ctrl" zonetype="7">
 																	<i class="fa fa-hand-o-up"></i><div><spring:message code="pixsign.bundlezone.type.button"/></div>
 																</a>
+																<!-- 
 																<a href="javascript:;" class="icon-btn pix-addzone touch-ctrl" zonetype="8">
 																	<i class="fa fa-road"></i><div><spring:message code="pixsign.bundlezone.type.navigate"/></div>
 																</a>
 																<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
 																	<i class="fa fa-cog"></i><div><spring:message code="pixsign.bundlezone.type.control"/></div>
 																</a>
+																 -->
 																<a href="javascript:;" class="icon-btn pix-addzone stream-ctrl" zonetype="14">
 																	<i class="fa fa-cubes"></i><div><spring:message code="pixsign.bundlezone.type.stream"/></div>
 																</a>
@@ -394,6 +396,9 @@
 																</a>
 																<a href="javascript:;" class="icon-btn pix-addzone dvb-ctrl" zonetype="16">
 																	<i class="fa fa-joomla"></i><div>DVB</div>
+																</a>
+																<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
+																	<i class="fa fa-cubes"></i><div>Cloudia</div>
 																</a>
 															</div>
 														</div>
@@ -457,6 +462,12 @@
 																							<label class="radio-inline">
 																								<input type="radio" name="fitflag" value="1" checked> <spring:message code="pixsign.prop.fitflag_1"/>
 																							</label>
+																						</div>
+																					</div>
+																					<div class="form-group">
+																						<label class="col-md-3 control-label"><spring:message code="pixsign.prop.animation"/></label>
+																						<div class="col-md-9">
+																							<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
 																						</div>
 																					</div>
 																				</div>
@@ -696,6 +707,7 @@
 														<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.selected"/></div>
 														<ul class="nav nav-tabs" style="margin-right: 30px;">
 															<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+															<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 															<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 															<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
 															<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
@@ -819,12 +831,14 @@ var RssCtrl = <%=(session_org != null && session_org.getRssflag().equals("1"))%>
 var StreamCtrl = <%=(session_org != null && session_org.getStreamflag().equals("1"))%>;
 var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>;
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
+var CloudiaCtrl = <%=(session_org != null && session_org.getCloudiaflag().equals("1"))%>;
 
 var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
 var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
 var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

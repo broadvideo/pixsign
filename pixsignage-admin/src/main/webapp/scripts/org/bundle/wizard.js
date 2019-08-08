@@ -57,7 +57,19 @@ var WizardModule = function () {
 						return false;
 					}
 				} else if (index == 1 && clickedIndex == 2) {
-					initData3();
+					var mainzone = false;
+					for (var i=0; i<_design.Object.bundlezones.length; i++) {
+						if (_design.Object.bundlezones[i].mainflag == 1) {
+							mainzone = true;
+							break;
+						}
+					}			
+					if (mainzone == false) {
+						bootbox.alert(common.tips.mainzone_missed);
+						return false;
+					} else {
+						initData3();
+					}
 				} else if (index == 2 && clickedIndex == 3) {
 					if (_bindlist.length == 0) {
 						bootbox.alert(common.tips.device_missed);
@@ -75,7 +87,19 @@ var WizardModule = function () {
 						return false;
 					}
 				} else if (index == 2) {
-					initData3();
+					var mainzone = false;
+					for (var i=0; i<_design.Object.bundlezones.length; i++) {
+						if (_design.Object.bundlezones[i].mainflag == 1) {
+							mainzone = true;
+							break;
+						}
+					}			
+					if (mainzone == false) {
+						bootbox.alert(common.tips.mainzone_missed);
+						return false;
+					} else {
+						initData3();
+					}
 				} else if (index == 3) {
 					if (_bindlist.length == 0) {
 						bootbox.alert(common.tips.device_missed);
@@ -387,6 +411,7 @@ var WizardModule = function () {
 		$('.stream-ctrl').css('display', StreamCtrl? '':'none');
 		$('.dvb-ctrl').css('display', DvbCtrl? '':'none');
 		$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
+		$('.cloudia-ctrl').css('display', CloudiaCtrl? '':'none');
 	};
 	
 	var initTab3 = function () {
@@ -406,12 +431,16 @@ var WizardModule = function () {
 		} else if (Max10 > 0) {
 			$('.device-navigator[devicetype="10"]').addClass('active');
 			_devicetype = 10;
+		} else if (Max13 > 0) {
+			$('.device-navigator[devicetype="13"]').addClass('active');
+			_devicetype = 13;
 		}
 		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
 		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
 		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
 		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
 		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
 
 		$('.devicegroup-navigator').click(function(event) {
 			$('#DevicegroupTable').dataTable()._fnAjaxUpdate();

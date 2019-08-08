@@ -106,11 +106,14 @@
 										<div class="col-md-6 col-sm-12" id="StatLoding2">
 											<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
 										</div>
-										<div class="col-md-3 col-sm-12" id="StatByDay2_1" class="display-none">
+										<div class="col-md-2 col-sm-12" id="StatByDay2_1" class="display-none">
 											<div id="StatByDayPie1" class="chart"></div>
 										</div>
-										<div class="col-md-3 col-sm-12" id="StatByDay2_2" class="display-none">
+										<div class="col-md-2 col-sm-12" id="StatByDay2_2" class="display-none">
 											<div id="StatByDayPie2" class="chart"></div>
+										</div>
+										<div class="col-md-2 col-sm-12" id="StatByDay2_3" class="display-none">
+											<div id="StatByDayPie3" class="chart"></div>
 										</div>
 									</div>
 								</div>
@@ -142,11 +145,14 @@
 										<div class="col-md-6 col-sm-12" id="StatLoding4">
 											<img src="${static_ctx}/admin/layout/img/loading.gif" alt="loading" />
 										</div>
-										<div class="col-md-3 col-sm-12" id="StatByMonth2_1" class="display-none">
+										<div class="col-md-2 col-sm-12" id="StatByMonth2_1" class="display-none">
 											<div id="StatByMonthPie1" class="chart"></div>
 										</div>
-										<div class="col-md-3 col-sm-12" id="StatByMonth2_2" class="display-none">
+										<div class="col-md-2 col-sm-12" id="StatByMonth2_2" class="display-none">
 											<div id="StatByMonthPie2" class="chart"></div>
+										</div>
+										<div class="col-md-2 col-sm-12" id="StatByMonth2_3" class="display-none">
+											<div id="StatByMonthPie3" class="chart"></div>
 										</div>
 									</div>
 								</div>

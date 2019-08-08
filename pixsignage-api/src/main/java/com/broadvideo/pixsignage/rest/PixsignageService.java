@@ -109,7 +109,7 @@ public class PixsignageService {
 			logger.info("Pixsignage init: {}, from {}, {}", request, req.getRemoteAddr(), req.getRemoteHost());
 			JSONObject requestJson = JSONObject.fromObject(request);
 			String hardkey = requestJson.optString("hardkey");
-			String terminalid = requestJson.optString("terminal_id");
+			String terminalid = requestJson.optString("terminal_id").toLowerCase();
 			String mac = requestJson.optString("mac");
 			String iip = requestJson.optString("ip");
 			String ostype = requestJson.optString("os_type");

@@ -68,6 +68,10 @@ public interface DeviceService {
 
 	public JSONObject generatePageJson(Device device) throws Exception;
 
+	public JSONObject generateAllPagesJson(Device device) throws Exception;
+
+	public JSONObject generateAllIntentsJson(Device device) throws Exception;
+
 	public JSONObject generateMedialistJson(Device device) throws Exception;
 
 	public JSONObject generateAdplanJson(Device device) throws Exception;

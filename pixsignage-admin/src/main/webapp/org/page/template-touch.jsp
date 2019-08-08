@@ -149,34 +149,34 @@
 					<div class="row">
 						<div class="col-md-12">
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="1">
-								<i class="fa fa-video-camera"></i><div>视频</div>
+								<i class="fa fa-video-camera"></i><div><spring:message code="pixsign.zone.video"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="2">
-								<i class="fa fa-image"></i><div>图片</div>
+								<i class="fa fa-image"></i><div><spring:message code="pixsign.zone.image"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="3">
-								<i class="fa fa-font"></i><div>文本</div>
+								<i class="fa fa-font"></i><div><spring:message code="pixsign.zone.text"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="4">
-								<i class="fa fa-long-arrow-left"></i><div>滚动</div>
+								<i class="fa fa-long-arrow-left"></i><div><spring:message code="pixsign.zone.scroll"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="5">
-								<i class="fa fa-history"></i><div>时间</div>
+								<i class="fa fa-history"></i><div><spring:message code="pixsign.zone.time"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="6">
-								<i class="fa fa-building"></i><div>网页</div>
+								<i class="fa fa-building"></i><div><spring:message code="pixsign.zone.web"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="7">
-								<i class="fa fa-hand-o-up"></i><div>按键</div>
+								<i class="fa fa-hand-o-up"></i><div><spring:message code="pixsign.zone.button"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="8">
-								<i class="fa fa-sun-o"></i><div>天气</div>
+								<i class="fa fa-sun-o"></i><div><spring:message code="pixsign.zone.weather"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="9">
-								<i class="fa fa-steam"></i><div>流媒体</div>
+								<i class="fa fa-steam"></i><div><spring:message code="pixsign.zone.stream"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="10">
-								<i class="fa fa-camera"></i><div>摄像头</div>
+								<i class="fa fa-camera"></i><div><spring:message code="pixsign.zone.camera"/></div>
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone school-ctrl" zonetype="11">
 								<i class="fa fa-bars"></i><div>今日课表</div>

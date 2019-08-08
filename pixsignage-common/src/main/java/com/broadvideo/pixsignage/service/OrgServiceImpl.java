@@ -88,8 +88,8 @@ public class OrgServiceImpl implements OrgService {
 
 		int currentdeviceidx = 0;
 		List<Device> devices = new ArrayList<Device>();
-		for (int type = 1; type <= 10; type++) {
-			if (type == 9) {
+		for (int type = 1; type <= 13; type++) {
+			if (type == 9 || type == 11 || type == 13) {
 				continue;
 			}
 			int max = maxs.length > type - 1 ? Integer.parseInt(maxs[type - 1]) : 0;
@@ -186,8 +186,8 @@ public class OrgServiceImpl implements OrgService {
 			Org oldOrg = orgMapper.selectByPrimaryKey("" + org.getOrgid());
 			int currentdeviceidx = oldOrg.getCurrentdeviceidx();
 			List<Device> devices = new ArrayList<Device>();
-			for (int type = 1; type <= 10; type++) {
-				if (type == 9) {
+			for (int type = 1; type <= 13; type++) {
+				if (type == 9 || type == 11 || type == 13) {
 					continue;
 				}
 				int max = maxs.length > type - 1 ? Integer.parseInt(maxs[type - 1]) : 0;

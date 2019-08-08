@@ -110,6 +110,9 @@
 									<label class="checkbox-inline massage-ctrl">
 										<input type="checkbox" name="org.massageflag" value="0">按摩椅
 									</label>
+									<label class="checkbox-inline cloudia-ctrl">
+										<input type="checkbox" name="org.cloudiaflag" value="0">Cloudia
+									</label>
 								</div>
 							</div>
 							<div class="form-group">
@@ -162,7 +165,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="form-group flowrate-ctrl">
+							<div class="form-group">
 								<label class="col-md-3 control-label">双面屏方式<span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -297,6 +300,20 @@
 								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max11" value="0" />
+									</div>
+								</div>
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device12"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max12" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device13"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max13" value="0" />
 									</div>
 								</div>
 							</div>
@@ -446,6 +463,7 @@ var VipCtrl = <%=(session_vsp != null && session_vsp.getVipflag().equals("1"))%>
 var EstateCtrl = <%=(session_vsp != null && session_vsp.getEstateflag().equals("1"))%>;
 var LiftCtrl = <%=(session_vsp != null && session_vsp.getLiftflag().equals("1"))%>;
 var MassageCtrl = <%=(session_vsp != null && session_vsp.getMassageflag().equals("1"))%>;
+var CloudiaCtrl = <%=(session_vsp != null && session_vsp.getCloudiaflag().equals("1"))%>;
 
 var MaxDevices = <%=session_vsp.getMaxdevices()%>;
 var CurrentDevices = <%=session_vsp.getCurrentdevices()%>;

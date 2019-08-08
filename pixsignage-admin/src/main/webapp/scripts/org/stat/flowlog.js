@@ -108,6 +108,7 @@ var FlowlogModule = function () {
 			$('#StatByDayPlot').hide();
 			$('#StatByDayPie1').hide();
 			$('#StatByDayPie2').hide();
+			$('#StatByDayPie3').hide();
 
 			$.ajax({
 				url: 'flowlog!statperiodbyday.action',
@@ -139,6 +140,7 @@ var FlowlogModule = function () {
 						$('#StatLoding2').hide();
 						$('#StatByDayPie1').show();
 						$('#StatByDayPie2').show();
+						$('#StatByDayPie3').show();
 						initStatByDayPie(data.aaData);
 					}
 				}
@@ -284,6 +286,15 @@ var FlowlogModule = function () {
 			statdata2[4].label = common.view.age5;
 			statdata2[4].data = data[0].age5;
 			$.plot($("#StatByDayPie2"), statdata2, options);
+			var statdata3 = [];
+			statdata3[0] = {};
+			statdata3[0].label = common.view.look1;
+			statdata3[0].data = data[0].look1;
+			statdata3[1] = {};
+			statdata3[1].label = common.view.look2;
+			statdata3[1].data = data[0].look2;
+			console.log(statdata3);
+			$.plot($("#StatByDayPie3"), statdata3, options);
 
 		}
 
@@ -352,6 +363,7 @@ var FlowlogModule = function () {
 			$('#StatByMonthPlot').hide();
 			$('#StatByMonthPie1').hide();
 			$('#StatByMonthPie2').hide();
+			$('#StatByMonthPie3').hide();
 
 			$.ajax({
 				url: 'flowlog!statperiodbymonth.action',
@@ -383,6 +395,7 @@ var FlowlogModule = function () {
 						$('#StatLoding4').hide();
 						$('#StatByMonthPie1').show();
 						$('#StatByMonthPie2').show();
+						$('#StatByMonthPie3').show();
 						initStatByMonthPie(data.aaData);
 					}
 				}
@@ -528,6 +541,14 @@ var FlowlogModule = function () {
 			statdata2[4].label = common.view.age5;
 			statdata2[4].data = data[0].age5;
 			$.plot($("#StatByMonthPie2"), statdata2, options);
+			var statdata3 = [];
+			statdata3[0] = {};
+			statdata3[0].label = common.view.look1;
+			statdata3[0].data = data[0].look1;
+			statdata3[1] = {};
+			statdata3[1].label = common.view.look2;
+			statdata3[1].data = data[0].look2;
+			$.plot($("#StatByMonthPie3"), statdata3, options);
 
 		}
 		

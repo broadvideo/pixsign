@@ -246,6 +246,12 @@
 														</label>
 													</div>
 												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label"><spring:message code="pixsign.prop.animation"/></label>
+													<div class="col-md-9">
+														<input type="hidden" id="AnimationSelect" class="form-control select2" name="animation">
+													</div>
+												</div>
 											</div>
 										</form>
 									</div>
