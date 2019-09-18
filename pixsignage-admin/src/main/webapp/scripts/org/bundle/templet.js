@@ -152,6 +152,7 @@ var TempletModule = function () {
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['templet.name'] = {};
 		formHandler.validateOption.rules['templet.name']['required'] = true;
+		formHandler.validateOption.rules['templet.name']['maxlength'] = 32;
 		formHandler.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',

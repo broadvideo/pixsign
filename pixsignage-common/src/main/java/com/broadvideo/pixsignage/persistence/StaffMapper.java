@@ -62,4 +62,6 @@ public interface StaffMapper {
 
 	int assignStaffRoles(@Param(value = "staff") Staff staff, @Param(value = "roles") List<Role> roles);
 
+	int changeBranch(@Param(value = "branchid1") String branchid1, @Param(value = "branchid2") String branchid2);
+
 }

@@ -188,8 +188,9 @@ var WizardModule = function () {
 	var initTab1 = function () {
 		var formHandler = new FormHandler($('#BundleForm'));
 		formHandler.validateOption.rules = {};
-		//formHandler.validateOption.rules['name'] = {};
+		formHandler.validateOption.rules['name'] = {};
 		//formHandler.validateOption.rules['name']['required'] = true;
+		formHandler.validateOption.rules['name']['maxlength'] = 32;
 		$('#BundleForm').validate(formHandler.validateOption);
 
 		$('#TempletTable thead').css('display', 'none');
@@ -495,7 +496,7 @@ var WizardModule = function () {
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '80%' },
 							{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '10%' }],
-			'iDisplayLength' : 10,
+			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {

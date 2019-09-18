@@ -42,6 +42,7 @@ var DeviceConfigModule = function () {
 						var devicepasshtml = '<span class="label label-xs label-warning">' + common.view.off + '</span>';
 						$('#DeviceConfigTable').dataTable().fnAddData([common.view.devicepassflag, devicepasshtml]);
 					}
+					/*
 					if (BundleCtrl) {
 						if (_org.backupvideo != null) {
 							var backupvideohtml = '';
@@ -55,7 +56,6 @@ var DeviceConfigModule = function () {
 							$('#DeviceConfigTable').dataTable().fnAddData([common.view.backupvideo, '']);
 						}
 					}
-					/*
 					if (_org.defaultpage != null) {
 						var defaultpagehtml = '';
 						if (_org.defaultpage.snapshot == null) {
@@ -141,10 +141,13 @@ var DeviceConfigModule = function () {
 	var initDeviceConfigModal = function () {
 		var formHandler = new FormHandler($('#DeviceConfigForm'));
 		formHandler.validateOption.rules = {};
+		formHandler.validateOption.rules['org.city'] = {};
+		formHandler.validateOption.rules['org.city']['maxlength'] = 16;
 		formHandler.validateOption.rules['org.devicepass'] = {};
 		formHandler.validateOption.rules['org.devicepass']['required'] = true;
 		formHandler.validateOption.rules['org.devicepass']['number'] = true;
 		formHandler.validateOption.rules['org.devicepass']['minlength'] = 6;
+		formHandler.validateOption.rules['org.devicepass']['maxlength'] = 6;
 		formHandler.validateOption.rules['org.hightemperature'] = {};
 		formHandler.validateOption.rules['org.hightemperature']['required'] = true;
 		formHandler.validateOption.rules['org.hightemperature']['number'] = true;

@@ -68,9 +68,11 @@
 									<label class="radio-inline">
 										<input type="radio" name="templetflag" value="1"> <spring:message code="pixsign.prop.templetflag_1"/>
 									</label>
+									<!-- 
 									<label class="radio-inline">
 										<input type="radio" name="templetflag" value="2"> <spring:message code="pixsign.prop.templetflag_2"/>
 									</label>
+									 -->
 								</div>
 							</div>
 							<div class="form-group templet-ctrl">

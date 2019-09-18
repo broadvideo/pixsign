@@ -89,6 +89,20 @@ public class IntentAction extends BaseDatatableAction {
 		}
 	}
 
+	public String doPush() {
+		try {
+			logger.info("Intent doPush");
+			intentService.pushall("" + getLoginStaff().getOrgid());
+			logger.info("Intent pushall success, orgid={}", getLoginStaff().getOrgid());
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction push config error ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
 	public Intent getIntent() {
 		return intent;
 	}

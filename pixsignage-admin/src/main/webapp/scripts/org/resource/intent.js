@@ -25,6 +25,7 @@ var IntentModule = function () {
 							{'sTitle' : 'Content', 'mData' : 'intentid', 'bSortable' : false, 'sWidth' : '30%', 'sClass': 'autowrap' },
 							{'sTitle' : '', 'mData' : 'intentid', 'bSortable' : false, 'sWidth' : '10%' },
 							{'sTitle' : '', 'mData' : 'intentid', 'bSortable' : false, 'sWidth' : '10%' }],
+			'order': [],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -98,6 +99,36 @@ var IntentModule = function () {
 					});				
 				}
 			 });
+		});
+
+		$('body').on('click', '.pix-push', function(event) {
+			bootbox.confirm('Please confirm whether to push intents to all devices', function(result) {
+				if (result == true) {
+					$.ajax({
+						type : 'GET',
+						url : 'intent!push.action',
+						cache: false,
+						data : {},
+						dataType : 'json',
+						contentType : 'application/json;charset=utf-8',
+						beforeSend: function ( xhr ) {
+							Metronic.startPageLoading({animate: true});
+						},
+						success : function(data, status) {
+							Metronic.stopPageLoading();
+							if (data.errorcode == 0) {
+								bootbox.alert(common.tips.success);
+							} else {
+								bootbox.alert(common.tips.error + data.errormsg);
+							}
+						},
+						error : function() {
+							Metronic.stopPageLoading();
+							console.log('failue');
+						}
+					});				
+				}
+			});
 		});
 	};
 

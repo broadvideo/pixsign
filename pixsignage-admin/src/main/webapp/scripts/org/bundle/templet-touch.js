@@ -193,6 +193,7 @@ var TempletModule = function () {
 		formHandler1.validateOption.rules = {};
 		formHandler1.validateOption.rules['templet.name'] = {};
 		formHandler1.validateOption.rules['templet.name']['required'] = true;
+		formHandler1.validateOption.rules['templet.name']['maxlength'] = 32;
 		formHandler1.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',
@@ -223,6 +224,7 @@ var TempletModule = function () {
 		formHandler2.validateOption.rules = {};
 		formHandler2.validateOption.rules['templet.name'] = {};
 		formHandler2.validateOption.rules['templet.name']['required'] = true;
+		formHandler2.validateOption.rules['templet.name']['maxlength'] = 32;
 		formHandler2.validateOption.rules['templet.homeidletime'] = {};
 		formHandler2.validateOption.rules['templet.homeidletime']['required'] = true;
 		formHandler2.validateOption.rules['templet.homeidletime']['number'] = true;

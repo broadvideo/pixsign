@@ -152,13 +152,13 @@ var DeviceModule = function () {
 			sOut += '<tr><td>' + common.view.downloadspeed + ':</td><td>' + aData.downloadspeed + ' KB/s</td></tr>';
 			sOut += '<tr><td>' + common.view.downloadbytes + ':</td><td>' + PixData.transferIntToByte(aData.downloadbytes) + '</td></tr>';
 			if (aData.networkmode == 0) {
-				sOut += '<tr><td>' + common.view.networkmode_0 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_0 + '</td></tr>';
 			} else if (aData.networkmode == 1) {
-				sOut += '<tr><td>' + common.view.networkmode_1 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_1 + '</td></tr>';
 			} else if (aData.networkmode == 2) {
-				sOut += '<tr><td>' + common.view.networkmode_2 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_2 + '</td></tr>';
 			} else if (aData.networkmode == 3) {
-				sOut += '<tr><td>' + common.view.networkmode_3 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_3 + '</td></tr>';
 			}
 			sOut += '<tr><td>' + common.view.networksignal + ':</td><td>' + aData.networksignal + '</td></tr>';
 			sOut += '<tr><td>' + common.view.brightness + ':</td><td>' + aData.brightness + '</td></tr>';

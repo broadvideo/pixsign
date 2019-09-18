@@ -73,6 +73,7 @@ var ScheduleModule = function () {
 							{'sTitle' : common.view.onlineflag, 'mData' : 'onlineflag', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.schedule, 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '60%' }, 
 							{'sTitle' : '', 'mData' : 'deviceid', 'bSortable' : false, 'sWidth' : '10%' }],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -162,8 +163,8 @@ var ScheduleModule = function () {
 
 		var devicegroupTable = $('#DevicegroupTable').dataTable({
 			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
-			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
-							[ 10, 25, 50, 100 ] 
+			'aLengthMenu' : [ [ 20, 40, 60, 100 ],
+							[ 20, 40, 60, 100 ] 
 							],
 			'bProcessing' : true,
 			'bServerSide' : true,
@@ -173,6 +174,7 @@ var ScheduleModule = function () {
 							{'sTitle' : common.view.detail, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '25%' },
 							{'sTitle' : common.view.schedule, 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '55%' }, 
 							{'sTitle' : '', 'mData' : 'devicegroupid', 'bSortable' : false, 'sWidth' : '5%' }],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -407,6 +409,7 @@ var ScheduleModule = function () {
 			'sAjaxSource' : 'bundle!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 							{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 12,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -484,6 +487,7 @@ var ScheduleModule = function () {
 			'sAjaxSource' : 'bundle!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 							{'sTitle' : common.view.operation, 'mData' : 'bundleid', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 12,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,

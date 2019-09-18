@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.Device;
 import com.broadvideo.pixsignage.domain.Image;
 import com.broadvideo.pixsignage.domain.Intent;
+import com.broadvideo.pixsignage.domain.Msgevent;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
 import com.broadvideo.pixsignage.domain.Video;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
+import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.IntentMapper;
+import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -28,6 +32,10 @@ public class IntentServiceImpl implements IntentService {
 	private IntentMapper intentMapper;
 	@Autowired
 	private ConfigMapper configMapper;
+	@Autowired
+	private DeviceMapper deviceMapper;
+	@Autowired
+	private MsgeventMapper msgeventMapper;
 
 	public int selectCount(String orgid, String search) {
 		return intentMapper.selectCount(orgid, search);
@@ -54,6 +62,24 @@ public class IntentServiceImpl implements IntentService {
 	@Transactional
 	public void deleteIntent(String intentid) {
 		intentMapper.deleteByPrimaryKey(intentid);
+	}
+	
+	@Transactional
+	public void pushall(String orgid) {
+		List<Device> devices = deviceMapper.selectList(orgid, null, null, null, "1", "1", null, null, null, null, null,
+				null, null, null);
+		for (Device device : devices) {
+			Msgevent msgevent = new Msgevent();
+			msgevent.setMsgtype(Msgevent.MsgType_Intent_Push);
+			msgevent.setObjtype1(Msgevent.ObjType_1_Device);
+			msgevent.setObjid1(device.getDeviceid());
+			msgevent.setObjtype2(Msgevent.ObjType_2_None);
+			msgevent.setObjid2(0);
+			msgevent.setStatus(Msgevent.Status_Wait);
+			msgeventMapper.deleteByDtl(Msgevent.MsgType_Intent_Push, Msgevent.ObjType_1_Device,
+					"" + device.getDeviceid(), null, null, null);
+			msgeventMapper.insertSelective(msgevent);
+		}
 	}
 
 	public JSONObject generateAllIntentsJson(String orgid) throws Exception {

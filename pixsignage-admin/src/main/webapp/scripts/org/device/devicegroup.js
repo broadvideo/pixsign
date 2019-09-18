@@ -171,6 +171,7 @@ var DevicegroupModule = function () {
 		formHandler.validateOption.rules = {};
 		formHandler.validateOption.rules['devicegroup.name'] = {};
 		formHandler.validateOption.rules['devicegroup.name']['required'] = true;
+		formHandler.validateOption.rules['devicegroup.name']['maxlength'] = 32;
 		formHandler.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',
@@ -230,6 +231,7 @@ var DevicegroupModule = function () {
 			_devicegroup = $('#DevicegroupTable').dataTable().fnGetData(index);
 			selectedDevices = [];
 			selectedDevicegpDtls = [];
+			//$('#DevicegpDtlModal input[type=search]').val('').change();
 			$('#DeviceTable').dataTable()._fnAjaxUpdate();
 			$('#DevicegpDtlTable').dataTable()._fnAjaxUpdate();
 			$('#DevicegpDtlModal').modal();
@@ -299,7 +301,7 @@ var DevicegroupModule = function () {
 				} else if (aData.onlineflag == 1) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.offline + '</span>');
 				}
 				return nRow;
 			},
@@ -348,7 +350,7 @@ var DevicegroupModule = function () {
 				} else if (aData.onlineflag == 1) {
 					$('td:eq(3)', nRow).html('<span class="label label-sm label-success">' + common.view.online + '</span>');
 				} else if (aData.onlineflag == 0) {
-					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.idle + '</span>');
+					$('td:eq(3)', nRow).html('<span class="label label-sm label-info">' + common.view.offline + '</span>');
 				}
 				return nRow;
 			},

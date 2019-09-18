@@ -303,7 +303,7 @@ var common = {
 	},
 	tips: {
 		remove: '请确认是否删除 ',
-		resetpassword: '请确认是否重置密码 ',
+		resetpassword: '密码将被重置成与登陆名一致，请确认 ',
 		unbind: '请确认是否解绑 ',
 		sync: '是否同步播放计划至 ',
 		synclayout: '是否同步至相关联的终端和终端组',
@@ -334,6 +334,7 @@ var common = {
 		page_zero: '请选择节目',
 		bind_zero: '请选择终端',
 		
+		loginname_repeat: '用户名重复',
 		username_required: '必须输入用户名',
 		password_required: '必须输入密码',
 		code_required: '必须输入企业编码',

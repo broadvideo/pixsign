@@ -707,6 +707,12 @@
 				<param name="includeProperties">errorcode,errormsg</param>
 			</result>
 		</action>
+		<action name="intent!push" method="doPush" class="intentAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 
 		<action name="house!list" method="doList" class="houseAction">
 			<result name="success" type="json">
@@ -2505,6 +2511,97 @@
 		</action>
 		
 
+		<action name="routeguide!list" method="doList" class="routeguideAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="routeguide!routelist" method="doRouteList" class="routeguideAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="routeguide!validate" method="doValidate" class="routeguideAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="json">
+				<param name="enableSMD">true</param>
+			</interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="routeguide!add" method="doAdd" class="routeguideAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="routeguide!update" method="doUpdate" class="routeguideAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="routeguide!delete" method="doDelete" class="routeguideAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="routeguide!zip" method="doZip" class="routeguideAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
+
+		<action name="routeguidedtl!list" method="doList" class="routeguidedtlAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
+			</result>
+		</action>
+		<action name="routeguidedtl!add" method="doAdd" class="routeguidedtlAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="routeguidedtl!update" method="doUpdate" class="routeguidedtlAction">
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">512000</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+			<result name="input" type="json"></result>
+		</action>
+		<action name="routeguidedtl!delete" method="doDelete" class="routeguidedtlAction">
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+				<param name="includeProperties">errorcode,errormsg</param>
+			</result>
+		</action>
 	</package>
 
 </struts>

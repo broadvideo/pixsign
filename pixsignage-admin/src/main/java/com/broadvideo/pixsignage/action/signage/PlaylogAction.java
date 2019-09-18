@@ -149,6 +149,14 @@ public class PlaylogAction extends BaseDatatableAction {
 			HSSFRow row;
 			HSSFCell cell;
 
+			row = sheet.createRow(count);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Type");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Name");
+			cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Amount");
+
 			List<HashMap<String, Object>> list = dailyplaylogMapper.statByPeriod(deviceid, from, to);
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> hash = list.get(i);
@@ -208,6 +216,20 @@ public class PlaylogAction extends BaseDatatableAction {
 			int count = 0;
 			HSSFRow row;
 			HSSFCell cell;
+
+			row = sheet.createRow(count);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Day");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Device");
+			cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Position");
+			cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Type");
+			cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Name");
+			cell = row.createCell(5, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Amount");
 
 			List<HashMap<String, Object>> list = dailyplaylogMapper.statByDay(deviceid, day);
 			for (int i = 0; i < list.size(); i++) {
@@ -276,6 +298,20 @@ public class PlaylogAction extends BaseDatatableAction {
 			int count = 0;
 			HSSFRow row;
 			HSSFCell cell;
+
+			row = sheet.createRow(count);
+			cell = row.createCell(0, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Month");
+			cell = row.createCell(1, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Device");
+			cell = row.createCell(2, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Position");
+			cell = row.createCell(3, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Type");
+			cell = row.createCell(4, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Name");
+			cell = row.createCell(5, HSSFCell.CELL_TYPE_STRING);
+			cell.setCellValue("Amount");
 
 			List<HashMap<String, Object>> list = dailyplaylogMapper.statByMonth(deviceid, month);
 			for (int i = 0; i < list.size(); i++) {

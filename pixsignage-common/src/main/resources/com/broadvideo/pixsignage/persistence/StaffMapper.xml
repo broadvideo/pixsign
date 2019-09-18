@@ -180,6 +180,12 @@
     where status='1' and uuid=#{uuid} and orgid=#{orgid}
   </select>
 
+  <update id="changeBranch" >
+    update staff
+    set branchid = #{branchid2} 
+    where branchid = #{branchid1}
+  </update>
+
   <delete id="deleteByPrimaryKey" >
     update staff set status='9'
     where staffid = #{staffid}

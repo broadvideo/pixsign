@@ -18,6 +18,8 @@ public interface IntentService {
 	public void updateIntent(Intent intent);
 
 	public void deleteIntent(String intentid);
+	
+	public void pushall(String orgid);
 
 	public JSONObject generateAllIntentsJson(String orgid) throws Exception;
 }

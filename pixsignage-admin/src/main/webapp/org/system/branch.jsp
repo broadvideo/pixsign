@@ -18,6 +18,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 				</div>
 				<ul class="nav nav-tabs">
+					<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 					<li class="device-navigator" devicetype="11" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device11"/></a></li>
 					<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 					<li class="device-navigator" devicetype="9" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device9"/></a></li>
@@ -203,7 +204,7 @@
 <script src="${static_ctx}/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/system/branch.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/system/branch.js?t=${timestamp}1"></script>
 <script>
 var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
 var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
@@ -215,6 +216,7 @@ var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max9 = <%=session_org == null ? 0 : session_org.getMaxDevices("9")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 var Max11 = <%=session_org == null ? 0 : session_org.getMaxDevices("11")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

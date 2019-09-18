@@ -251,6 +251,7 @@ var BundleModule = function () {
 		formHandler1.validateOption.rules = {};
 		formHandler1.validateOption.rules['bundle.name'] = {};
 		formHandler1.validateOption.rules['bundle.name']['required'] = true;
+		formHandler1.validateOption.rules['bundle.name']['maxlength'] = 32;
 		formHandler1.validateOption.submitHandler = function(form) {
 			$.ajax({
 				type : 'POST',
@@ -281,6 +282,7 @@ var BundleModule = function () {
 		formHandler2.validateOption.rules = {};
 		formHandler2.validateOption.rules['bundle.name'] = {};
 		formHandler2.validateOption.rules['bundle.name']['required'] = true;
+		formHandler2.validateOption.rules['bundle.name']['maxlength'] = 32;
 		formHandler2.validateOption.rules['bundle.homeidletime'] = {};
 		formHandler2.validateOption.rules['bundle.homeidletime']['required'] = true;
 		formHandler2.validateOption.rules['bundle.homeidletime']['number'] = true;

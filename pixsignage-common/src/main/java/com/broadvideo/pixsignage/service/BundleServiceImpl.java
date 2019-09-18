@@ -694,10 +694,12 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		// Handle sync
+		/*
 		for (int i = 0; i < binds.length; i++) {
 			HashMap<String, Object> bind = binds[i];
 			syncService.sync("" + bind.get("bindtype"), "" + bind.get("bindid"), true);
 		}
+		*/
 	}
 
 	@Transactional

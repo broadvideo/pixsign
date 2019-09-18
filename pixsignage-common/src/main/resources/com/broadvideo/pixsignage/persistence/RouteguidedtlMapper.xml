@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.broadvideo.pixsignage.persistence.RouteguidedtlMapper">
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsignage.domain.Routeguidedtl">
+    <id column="routeguidedtlid" jdbcType="INTEGER" property="routeguidedtlid" />
+    <result column="routeguideid" jdbcType="INTEGER" property="routeguideid" />
+    <result column="routeid" jdbcType="INTEGER" property="routeid" />
+    <result column="routelines" jdbcType="VARCHAR" property="routelines" />
+    <association property="route" column="{routeid=routeid}" select="com.broadvideo.pixsignage.persistence.RouteMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    routeguidedtlid, routeguideid, routeid, routelines
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from routeguidedtl
+    where routeguidedtlid = #{routeguidedtlid}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from routeguidedtl
+    where routeguideid = #{routeguideid}
+    order by routeguidedtlid 
+  </select>
+  
+  <delete id="deleteByPrimaryKey">
+    delete from routeguidedtl
+    where routeguidedtlid = #{routeguidedtlid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Routeguidedtl">
+    <selectKey keyProperty="routeguidedtlid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into routeguidedtl (routeguideid, routeid, routelines
+      )
+    values (#{routeguideid,jdbcType=INTEGER}, #{routeid,jdbcType=INTEGER}, #{routelines,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Routeguidedtl">
+    <selectKey keyProperty="routeguidedtlid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into routeguidedtl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="routeguideid != null">
+        routeguideid,
+      </if>
+      <if test="routeid != null">
+        routeid,
+      </if>
+      <if test="routelines != null">
+        routelines,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="routeguideid != null">
+        #{routeguideid,jdbcType=INTEGER},
+      </if>
+      <if test="routeid != null">
+        #{routeid,jdbcType=INTEGER},
+      </if>
+      <if test="routelines != null">
+        #{routelines,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsignage.domain.Routeguidedtl">
+    update routeguidedtl
+    <set>
+      <if test="routeguideid != null">
+        routeguideid = #{routeguideid,jdbcType=INTEGER},
+      </if>
+      <if test="routeid != null">
+        routeid = #{routeid,jdbcType=INTEGER},
+      </if>
+      <if test="routelines != null">
+        routelines = #{routelines,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where routeguidedtlid = #{routeguidedtlid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsignage.domain.Routeguidedtl">
+    update routeguidedtl
+    set routeguideid = #{routeguideid,jdbcType=INTEGER},
+      routeid = #{routeid,jdbcType=INTEGER},
+      routelines = #{routelines,jdbcType=VARCHAR}
+    where routeguidedtlid = #{routeguidedtlid,jdbcType=INTEGER}
+  </update>
+</mapper>

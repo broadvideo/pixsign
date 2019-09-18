@@ -20,7 +20,7 @@
 
 <body>
 	<div id="TempletEditModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -132,6 +132,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="102">
 								<i class="fa fa-cog"></i><div>按摩椅控制</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
+								<i class="fa fa-cubes"></i><div>Cloudia</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -153,7 +156,7 @@
 								-->
 							</div>
 							<div class="panel-group" id="ZoneEditPanel">
-								<div class="panel panel-default zone-ctl zonetype-1">
+								<div class="panel panel-default zone-ctl zonetype-0 zonetype-1">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse1"><spring:message code="pixsign.bundlezone.collapse1"/></a>
@@ -206,7 +209,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-6 zonetype-7">
+								<div class="panel panel-default zone-ctl zonetype-3 zonetype-4 zonetype-5 zonetype-6 zonetype-7 zonetype-12">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse2"><spring:message code="pixsign.bundlezone.collapse2"/></a>
@@ -234,7 +237,7 @@
 										</form>
 									</div>
 								</div>
-								<div class="panel panel-default zone-ctl zonetype-4">
+								<div class="panel panel-default zone-ctl zonetype-4 zonetype-12">
 									<div class="panel-heading">
 										<h4 class="panel-title">
 											<a data-toggle="collapse" data-parent="#ZoneEditPanel" href="#Collapse3"><spring:message code="pixsign.bundlezone.collapse3"/></a>
@@ -778,6 +781,7 @@ var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
 var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
 var AdvertCtrl = <%=(session_org != null && session_org.getAdvertflag().equals("1"))%>;
+var CloudiaCtrl = <%=(session_org != null && session_org.getCloudiaflag().equals("1"))%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

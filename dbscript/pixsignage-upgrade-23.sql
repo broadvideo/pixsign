@@ -172,6 +172,35 @@ insert into config(configid, code, name, value, refer, type) values(203, 'KafkaS
 
 alter table device add unique key device_unique_index2(hardkey);
 
+create table routeguide( 
+   routeguideid int not null auto_increment,
+   name varchar(64) not null,
+   code varchar(64) not null,
+   description varchar(128) default '',
+   primary key (routeguideid)
+ )engine = innodb
+default character set utf8;
+alter table routeguide add unique key routeguide_unique_index1(code);
+
+create table route( 
+   routeid int not null auto_increment,
+   name varchar(64) not null,
+   code varchar(64) not null,
+   primary key (routeid)
+ )engine = innodb
+default character set utf8;
+alter table route add unique key route_unique_index1(code);
+
+create table routeguidedtl( 
+   routeguidedtlid int not null auto_increment,
+   routeguideid int not null,
+   routeid int not null,
+   routelines varchar(512),
+   primary key (routeguidedtlid)
+ )engine = innodb
+default character set utf8;
+alter table routeguidedtl add unique key routeguidedtl_unique_index1(routeguideid, routeid);
+
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(104,0,0,'menu.page','page.jsp','fa-html5',1,4);
@@ -183,6 +212,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(202,1,0,'menu.org','org.jsp','fa-cloud',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(203,1,0,'型号管理','model.jsp','fa-cloud',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(204,1,0,'批次管理','batch.jsp','fa-cloud',1,4);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(205,1,0,'导览管理','routeguide.jsp','fa-cloud',1,5);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(300,2,0,'menu.wizard','bundle/wizard.jsp','fa-hand-o-up',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(301,2,0,'menu.resource','','fa-qrcode',1,2);

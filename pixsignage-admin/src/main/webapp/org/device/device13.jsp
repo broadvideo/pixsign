@@ -153,6 +153,12 @@
 									</label>
 								</div>
 							</div>
+							<div class="form-group volumeflag">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
+								<div class="col-md-9">
+									<input class="volumeRange" type="text" name="device.volume" value="50"/>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -179,7 +185,7 @@
 						<input type="hidden" name="device.status" value="1" />
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.terminalid"/><span class="required">*</span></label>
+								<label class="col-md-3 control-label">IMEI<span class="required">*</span></label>
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.terminalid" />

@@ -127,7 +127,7 @@ public class PixsignageService3 {
 			}
 
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 
 			String mtype = null;
@@ -169,7 +169,7 @@ public class PixsignageService3 {
 				} else {
 					JSONObject responseJson = new JSONObject();
 					responseJson.put("code", 1003);
-					responseJson.put("message", "非法终端");
+					responseJson.put("message", "Invalid device.");
 					logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
 					return responseJson.toString();
 				}
@@ -190,7 +190,7 @@ public class PixsignageService3 {
 			if (device == null || device.getStatus().equals("0")) {
 				JSONObject responseJson = new JSONObject();
 				responseJson.put("code", 1002);
-				responseJson.put("message", "终端未注册");
+				responseJson.put("message", "Device unregistered.");
 				responseJson.put("qrcode", qrcode);
 				logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
 				return responseJson.toString();
@@ -198,7 +198,7 @@ public class PixsignageService3 {
 				deviceMapper.unbind("" + device.getDeviceid());
 				JSONObject responseJson = new JSONObject();
 				responseJson.put("code", 1011);
-				responseJson.put("message", "终端类型不匹配");
+				responseJson.put("message", "Device type invalid.");
 				logger.info("Pixsignage3 Service init response: {}", responseJson.toString());
 				return responseJson.toString();
 			}
@@ -253,7 +253,7 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			responseJson.put("qrcode", qrcode);
 			responseJson.put("terminal_id", device.getTerminalid());
 			responseJson.put("name", device.getName());
@@ -355,7 +355,7 @@ public class PixsignageService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service init exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System error.");
 		}
 	}
 
@@ -371,7 +371,7 @@ public class PixsignageService3 {
 
 			Device device1 = deviceMapper.selectByTerminalid(terminalid);
 			if (device1 == null) {
-				return handleResult(1008, "无效终端号" + terminalid);
+				return handleResult(1008, "Invalid Terminal ID " + terminalid);
 			} else if (device1.getStatus().equals("1") && device1.getHardkey() != null
 					&& !device1.getHardkey().equals(hardkey)) {
 				return handleResult(1005, terminalid + "已经被别的终端注册.");
@@ -392,12 +392,12 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 bind response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 bind exception, ", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -410,26 +410,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = deviceService.generatePageJson(device);
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_page response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_page exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -442,26 +442,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = deviceService.generateBundleJson(device);
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_bundle response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_bundle exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -474,26 +474,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = deviceService.generateMedialistJson(device);
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_playlist response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_playlist exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -506,26 +506,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = deviceService.generateAllPagesJson(device);
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_all_pages response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_all_pages exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -538,26 +538,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = intentService.generateAllIntentsJson("" + device.getOrgid());
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_all_intents response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_all_intents exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -570,26 +570,26 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			JSONObject responseJson = deviceService.generateAdplanJson(device);
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_advert_plan response({}): {}", terminalid, responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_advert_plan exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -616,16 +616,16 @@ public class PixsignageService3 {
 			int brightness = requestJson.optInt("brightness");
 
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			if (locationJson != null) {
@@ -667,7 +667,7 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getUpgradeflag().equals("0")) {
@@ -831,6 +831,9 @@ public class PixsignageService3 {
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Device_Debug)) {
 					eventJson.put("event_type", "debug");
 					eventJson.put("event_content", new JSONObject());
+				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Intent_Push)) {
+					eventJson.put("event_type", "intent");
+					eventJson.put("event_content", new JSONObject());
 				}
 				msgevent.setStatus(Msgevent.Status_Sent);
 				msgeventMapper.updateByPrimaryKeySelective(msgevent);
@@ -844,7 +847,7 @@ public class PixsignageService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service refresh exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -857,16 +860,16 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			device.setOnlineflag("1");
@@ -937,11 +940,11 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service report_file exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -957,16 +960,16 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/screen/" + device.getDeviceid()));
@@ -978,12 +981,12 @@ public class PixsignageService3 {
 			FileUtils.copyInputStreamToFile(screenFile, file);
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service report_screen response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service report_screen exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -999,16 +1002,16 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1002, "硬件码不能为空");
+				return handleResult(1002, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1003, "终端号不能为空");
+				return handleResult(1003, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
+				return handleResult(1004, "Invalid Terminal ID " + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1006, "硬件码和终端号不匹配");
+				return handleResult(1006, "Hardkey & Terminalid ID not matched.");
 			}
 
 			String filename = playlogHeader.getFileName();
@@ -1018,7 +1021,7 @@ public class PixsignageService3 {
 			FileUtils.forceMkdir(dir);
 			if (new File(dir, filename).exists() || new File(dir, okname).exists()
 					|| new File(dir, tempname).exists()) {
-				return handleResult(1001, "文件已存在");
+				return handleResult(1001, "File exists.");
 			}
 			logger.info("Save {} playlog to: {}", terminalid, dir + "/" + filename);
 			File tempfile = new File(dir, tempname);
@@ -1026,12 +1029,12 @@ public class PixsignageService3 {
 			FileUtils.moveFile(tempfile, new File(dir, okname));
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 report_playlog response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 report_playlog exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1056,19 +1059,19 @@ public class PixsignageService3 {
 			int look2 = requestJson.optInt("happy_delta");
 
 			if (total < 0 || male < 0 || female < 0 || age1 < 0 || age2 < 0 || age3 < 0 || age4 < 0 || age5 < 0) {
-				return handleResult(1020, "数据错误");
+				return handleResult(1020, "Data error.");
 			}
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1002, "硬件码不能为空");
+				return handleResult(1002, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1003, "终端号不能为空");
+				return handleResult(1003, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
+				return handleResult(1004, "Invalid Terminal ID " + terminalid);
 			} else if (!device.getStatus().equals("1") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1006, "硬件码和终端号不匹配");
+				return handleResult(1006, "Hardkey & Terminalid ID not matched.");
 			}
 
 			Calendar c = Calendar.getInstance();
@@ -1110,11 +1113,11 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 report_flowrate exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1130,16 +1133,16 @@ public class PixsignageService3 {
 			String hardkey = requestJson.optString("hardkey");
 			String terminalid = requestJson.optString("terminal_id");
 			if (hardkey == null || hardkey.equals("")) {
-				return handleResult(1007, "硬件码不能为空");
+				return handleResult(1007, "Hardkey cannot be null.");
 			}
 			if (terminalid == null || terminalid.equals("")) {
-				return handleResult(1008, "终端号不能为空");
+				return handleResult(1008, "Terminal ID cannot be null.");
 			}
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1009, "无效终端号" + terminalid);
+				return handleResult(1009, "Invalid Terminal ID " + terminalid);
 			} else if (device.getStatus().equals("0") || !device.getHardkey().equals(hardkey)) {
-				return handleResult(1010, "硬件码和终端号不匹配");
+				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
 			FileUtils.forceMkdir(new File(CommonConfig.CONFIG_PIXDATA_HOME + "/debug/" + device.getDeviceid()));
@@ -1157,12 +1160,12 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service report_debug response: {}", responseJson.toString());
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service report_debug exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1200,11 +1203,11 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service report_crash exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1217,7 +1220,7 @@ public class PixsignageService3 {
 
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
+				return handleResult(1004, "Invalid Terminal ID " + terminalid);
 			}
 			if (city == null || city.length() == 0) {
 				city = device.getCity();
@@ -1232,14 +1235,14 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 			responseJson.put("city", city);
 			Weather weather = weatherService.selectByCity(Weather.Type_Baidu, city);
 			responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_baidu_weather exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1252,7 +1255,7 @@ public class PixsignageService3 {
 
 			Device device = deviceMapper.selectByTerminalid(terminalid);
 			if (device == null) {
-				return handleResult(1004, "无效终端号" + terminalid);
+				return handleResult(1004, "Invalid Terminal ID " + terminalid);
 			}
 			if (city == null || city.length() == 0) {
 				city = device.getCity();
@@ -1269,16 +1272,16 @@ public class PixsignageService3 {
 			if (weather.getWeather() != null && weather.getWeather().length() > 0) {
 				JSONObject responseJson = new JSONObject();
 				responseJson.put("code", 0);
-				responseJson.put("message", "成功");
+				responseJson.put("message", "Success");
 				responseJson.put("city", city);
 				responseJson.put("weather", JSONObject.fromObject(weather.getWeather()));
 				return responseJson.toString();
 			} else {
-				return handleResult(1009, "天气无法获得");
+				return handleResult(1009, "Weather fetch failed.");
 			}
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_yahoo_weather exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 
@@ -1301,7 +1304,7 @@ public class PixsignageService3 {
 
 			JSONObject responseJson = new JSONObject();
 			responseJson.put("code", 0);
-			responseJson.put("message", "成功");
+			responseJson.put("message", "Success");
 
 			Appfile appfile = appfileMapper.selectLatest(appname, mtype);
 			if (appfile == null) {
@@ -1331,7 +1334,7 @@ public class PixsignageService3 {
 			return responseJson.toString();
 		} catch (Exception e) {
 			logger.error("Pixsignage3 Service get_version exception", e);
-			return handleResult(1001, "系统异常");
+			return handleResult(1001, "System Error.");
 		}
 	}
 

@@ -66,6 +66,7 @@ var BranchModule = function () {
 			        		{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }],
+   			'order': [],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -123,6 +124,7 @@ var BranchModule = function () {
 		formHandler.validateOption.rules['branch.name'] = {};
 		formHandler.validateOption.rules['branch.name']['required'] = true;
 		formHandler.validateOption.rules['branch.name']['minlength'] = 2;
+		formHandler.validateOption.rules['branch.name']['maxlength'] = 16;
 		formHandler.validateOption.rules['branch.name']['remote'] = {
 			url: 'branch!validate.action',
 			type: 'post',
@@ -303,6 +305,9 @@ var BranchModule = function () {
 		} else if (Max11 > 0) {
 			$('.device-navigator[devicetype="11"]').addClass('active');
 			_devicetype = 11;
+		} else if (Max13 > 0) {
+			$('.device-navigator[devicetype="13"]').addClass('active');
+			_devicetype = 13;
 		}
 		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
 		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
@@ -314,6 +319,7 @@ var BranchModule = function () {
 		$('.device-navigator[devicetype="9"]').css('display', Max9==0?'none':'');
 		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
 		$('.device-navigator[devicetype="11"]').css('display', Max11==0?'none':'');
+		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
 
 		$('.device-navigator').click(function(event) {
 			_devicetype = $(this).attr('devicetype');
@@ -333,6 +339,7 @@ var BranchModule = function () {
 			                {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 							{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false },
 							{'sTitle' : common.view.status, 'mData' : 'onlineflag', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -375,6 +382,7 @@ var BranchModule = function () {
 			                {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false }, 
 							{'sTitle' : common.view.position, 'mData' : 'position', 'bSortable' : false },
 							{'sTitle' : common.view.status, 'mData' : 'onlineflag', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,

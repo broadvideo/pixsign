@@ -16,6 +16,25 @@
 	</bean>
 	 -->
 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://pixsignage-db:3306/pixsignage?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
+		<property name="username" value="pixsignage" />
+		<property name="password" value="pixsignage@01" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="maxWait" value="5" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+		<property name="numTestsPerEvictionRun" value="100" />
+	</bean>
+
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -25,12 +44,12 @@
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath*:com/broadvideo/omps/persistence/*.xml" />
+		<property name="mapperLocations" value="classpath*:com/pix/pixsignage/persistence/*.xml" />
 		<property name="typeAliasesPackage" value="com.mybatis.model" />
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.broadvideo.pixbase.persistence,com.broadvideo.omps.persistence" />
+		<property name="basePackage" value="com.broadvideo.pixsignage.persistence" />
 	</bean>
 
 	<!-- i18n -->
@@ -43,18 +62,21 @@
 			</list>
 		</property>
 	</bean>
-	<context:component-scan base-package="com.broadvideo.omps" />
-	<context:component-scan base-package="com.broadvideo.pixbase" />
 
+	<context:component-scan base-package="com.broadvideo.pixsignage" />
+	<!-- <context:component-scan base-package="com.broadvideo.pixsignage" use-default-filters="false"> 
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" 
+		/> <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" 
+		/> <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" 
+		/> </context:component-scan> -->
 
 	<import resource="classpath:applicationContext_quartz.xml" />
-	
 
     <bean id="consumerProperties" class="java.util.HashMap">
         <constructor-arg>
             <map>
-                <entry key="bootstrap.servers" value="10.155.0.110:30165" />
-                <entry key="group.id" value="omps-task" />
+                <entry key="bootstrap.servers" value="pixsignage-kafka:31074" />
+                <entry key="group.id" value="pixsignage-task" />
                 <entry key="enable.auto.commit" value="true" />
                 <entry key="session.timeout.ms" value="15000" />
                 <entry key="key.deserializer"
@@ -72,17 +94,14 @@
         </constructor-arg>
     </bean>
      <!-- 3.定义消费实现类 -->
-    <bean id="kafkaConsumerService" class="com.broadvideo.omps.service.KafaConsumerServiceImpl" />
+    <bean id="kafkaConsumerService" class="com.broadvideo.pixsignage.task.KafkaConsumerListener" />
      <!-- 4.消费者容器配置信息 -->
     
     <bean id="containerProperties" class="org.springframework.kafka.listener.config.ContainerProperties">
         <!-- topic -->
         <constructor-arg name="topics">
             <list>
-            <!--  
-                <value>sync_report</value>
-                -->
-                <value>sync_report_single</value>
+                <value>roc2vpn</value>
                 <value>sync_ping</value>
             </list>
         </constructor-arg>
@@ -94,55 +113,5 @@
         <constructor-arg ref="containerProperties" />
         <property name="concurrency" value="1" />
     </bean>
-   <beans profile="dev">
-	
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-			<property name="url"
-				value="jdbc:mysql://pixent-db:3306/omps?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
-			<property name="username" value="omps" />
-			<property name="password" value="omps@01" />
-			<property name="initialSize" value="20" />
-			<property name="maxActive" value="100" />
-			<property name="minIdle" value="20" />
-			<property name="maxWait" value="60000" />
-			<property name="timeBetweenEvictionRunsMillis" value="60000" />
-			<property name="minEvictableIdleTimeMillis" value="300000" />
-	
-			<property name="validationQuery" value="select 1 from dual" />
-			<property name="testWhileIdle" value="true" />
-			<property name="testOnBorrow" value="false" />
-			<property name="testOnReturn" value="false" />
-	
-			<property name="poolPreparedStatements" value="false" />
-	
-			<property name="filters" value="stat" />
-	</bean>
-  </beans>
- <beans profile="default">
-	
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-			<property name="url"
-				value="jdbc:mysql://mysql:3306/omps?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true" />
-			<property name="username" value="omps" />
-			<property name="password" value="omps@01" />
-			<property name="initialSize" value="20" />
-			<property name="maxActive" value="100" />
-			<property name="minIdle" value="20" />
-			<property name="maxWait" value="60000" />
-			<property name="timeBetweenEvictionRunsMillis" value="60000" />
-			<property name="minEvictableIdleTimeMillis" value="300000" />
-	
-			<property name="validationQuery" value="select 1 from dual" />
-			<property name="testWhileIdle" value="true" />
-			<property name="testOnBorrow" value="false" />
-			<property name="testOnReturn" value="false" />
-	
-			<property name="poolPreparedStatements" value="false" />
-	
-			<property name="filters" value="stat" />
-	</bean>
-  </beans>
 
 </beans>

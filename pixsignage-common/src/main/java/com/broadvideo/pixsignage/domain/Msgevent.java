@@ -23,6 +23,8 @@ public class Msgevent {
 	public final static String MsgType_Device_UBundle = "12";
 	public final static String MsgType_Device_UCancel = "13";
 
+	public final static String MsgType_Intent_Push = "14";
+
 	public final static String ObjType_1_None = "0";
 	public final static String ObjType_1_Device = "1";
 	public final static String ObjType_1_Devicegroup = "2";

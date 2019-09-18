@@ -101,9 +101,11 @@
 									<label class="radio-inline">
 										<input type="radio" name="templetflag" value="1"> <spring:message code="pixsign.prop.templetflag_1"/>
 									</label>
+									<!-- 
 									<label class="radio-inline">
 										<input type="radio" name="templetflag" value="2"> <spring:message code="pixsign.prop.templetflag_2"/>
 									</label>
+									 -->
 								</div>
 							</div>
 							<div class="form-group templet-ctrl">
@@ -774,6 +776,7 @@
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device.selecting"/></div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
 										<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+										<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 										<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 										<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
 										<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
@@ -938,6 +941,7 @@ var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
 var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

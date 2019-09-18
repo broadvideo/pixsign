@@ -117,6 +117,9 @@
 								<div class="btn-group">
 									<button class="btn green pix-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></button>
 								</div>
+								<div class="btn-group">
+									<button class="btn green pix-push">Sync to all <i class="fa fa-cogs"></i></button>
+								</div>
 							</div>
 							<table id="IntentTable" class="table table-striped table-bordered table-hover">
 								<thead></thead>

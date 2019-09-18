@@ -303,10 +303,10 @@ var common = {
 	},
 	tips: {
 		remove: 'Please confirm whether to delete ',
-		resetpassword: 'Please confirm whether to reset the password of ',
+		resetpassword: 'The password will be reset to the same with the username, please confirm',
 		unbind: 'Please confirm whether to unbind ',
 		sync: 'Please confirm whether to sync schedules to ',
-		synclayout: 'Please confirm whether to sync the layout',
+		synclayout: 'Please confirm whether to sync the program',
 		syncmediagrid: 'Please confirm whether to sync the media grid',
 		syncmedialist: 'Please confirm whether to sync the media list',
 		savetemplate: 'Please confirm whether to save the page as template',
@@ -334,6 +334,7 @@ var common = {
 		page_zero: 'Please select program',
 		bind_zero: 'Please select device',
 
+		loginname_repeat: 'Login name duplicated ',
 		username_required: 'Username required',
 		password_required: 'Password required',
 		code_required: 'ORG code required',

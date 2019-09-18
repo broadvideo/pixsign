@@ -93,7 +93,7 @@ var StaffModule = function () {
 				index = $(event.target).parent().attr('data-id');
 			}
 			_staff = $('#StaffTable').dataTable().fnGetData(index);
-			bootbox.confirm(common.tips.resetpassword + _staff.name, function(result) {
+			bootbox.confirm(common.tips.resetpassword, function(result) {
 				if (result == true) {
 					$.ajax({
 						type : 'POST',

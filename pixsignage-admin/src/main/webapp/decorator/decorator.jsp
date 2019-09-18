@@ -245,7 +245,7 @@ var AllPrivilegeList = [];
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li><a href="javascript:;" id="change_password"><i class="fa fa-lock"></i> <spring:message code="global.chanegepassword"/></a></li>
 							<li class="divider"></li>
-							<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-arrows"></i> <spring:message code="global.fullscreen"/></a></li>
+							<!-- <li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-arrows"></i> <spring:message code="global.fullscreen"/></a></li>  -->
 							<li><a href="logout.action"><i class="fa fa-key"></i> <spring:message code="global.logout"/></a></li>
 						</ul>
 					</li>

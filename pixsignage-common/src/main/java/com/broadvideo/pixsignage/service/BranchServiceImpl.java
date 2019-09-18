@@ -12,6 +12,7 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.persistence.BranchMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
 import com.broadvideo.pixsignage.persistence.FolderMapper;
+import com.broadvideo.pixsignage.persistence.StaffMapper;
 
 @Service("branchService")
 public class BranchServiceImpl implements BranchService {
@@ -22,6 +23,8 @@ public class BranchServiceImpl implements BranchService {
 	private FolderMapper folderMapper;
 	@Autowired
 	private DeviceMapper deviceMapper;
+	@Autowired
+	private StaffMapper staffMapper;
 
 	public Branch selectByPrimaryKey(String branchid) {
 		return branchMapper.selectByPrimaryKey(branchid);
@@ -80,6 +83,7 @@ public class BranchServiceImpl implements BranchService {
 
 	@Transactional
 	public void deleteBranch(Org org, String branchid) {
+		staffMapper.changeBranch(branchid, "" + org.getTopbranchid());
 		deviceMapper.changeBranch(branchid, "" + org.getTopbranchid());
 		branchMapper.deleteByPrimaryKey(branchid);
 	}

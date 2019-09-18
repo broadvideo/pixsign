@@ -21,14 +21,15 @@ var OplogModule = function () {
 							{'sTitle' : common.view.name, 'mData' : 'staff.name', 'bSortable' : false, 'sWidth' : '25%' },
 							{'sTitle' : common.view.loginname, 'mData' : 'staff.loginname', 'bSortable' : false, 'sWidth' : '25%' },
 							{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false, 'sWidth' : '30%' }],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				if (aData.type == 1) {
-					$('td:eq(0)', nRow).html('<span class="label label-sm label-success">登录</span>');
+					$('td:eq(0)', nRow).html('<span class="label label-sm label-success">Login</span>');
 				} else {
-					$('td:eq(0)', nRow).html('<span class="label label-sm label-default">未知</span>');
+					$('td:eq(0)', nRow).html('<span class="label label-sm label-default">' + common.view.unknown + '</span>');
 				}
 				return nRow;
 			}

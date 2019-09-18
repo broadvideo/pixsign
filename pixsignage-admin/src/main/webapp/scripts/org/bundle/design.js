@@ -688,7 +688,7 @@ var BundleDesignModule = function (mode) {
 			$('.bgcolorPick input').val(bundlezone.bgcolor);
 
 			$('.intervalRange').ionRangeSlider({
-				min: 0,
+				min: 5,
 				max: 60,
 				from: 10,
 				type: 'single',
@@ -1013,7 +1013,6 @@ var BundleDesignModule = function (mode) {
 			}
 			_self.Zone.sleeptime = $('.zoneform input[name=sleeptime]').attr('value');
 			_self.Zone.intervaltime = $('.zoneform input[name=intervaltime]').attr('value');
-			_self.Zone.sleeptime = $('.zoneform input[name=sleeptime]').attr('value');
 			_self.Zone.fitflag = $('.zoneform input[name=fitflag]:checked').attr('value');
 			_self.Zone.animation = $('#AnimationSelect').select2('val');
 			_self.Zone.volume = $('.zoneform input[name=volume]').attr('value');

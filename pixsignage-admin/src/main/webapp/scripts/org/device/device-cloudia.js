@@ -72,6 +72,7 @@ var DeviceModule = function () {
 			'aoColumnDefs': [
 		 					{'bSortable': false, 'aTargets': [ 0 ] }
 		 				],
+			'order': [],
 			'iDisplayLength' : 20,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -155,13 +156,13 @@ var DeviceModule = function () {
 			sOut += '<tr><td>' + common.view.storageavail + ':</td><td>' + PixData.transferIntToByte(aData.storageavail) + '</td></tr>';
 			sOut += '<tr><td>' + common.view.versioncode + ':</td><td>' + aData.boardtype + ' ' + aData.mtype + ' ' + aData.appname + ' ' + aData.vname + '(' + aData.vcode + ')</td></tr>';
 			if (aData.networkmode == 0) {
-				sOut += '<tr><td>' + common.view.networkmode_0 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_0 + '</td></tr>';
 			} else if (aData.networkmode == 1) {
-				sOut += '<tr><td>' + common.view.networkmode_1 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_1 + '</td></tr>';
 			} else if (aData.networkmode == 2) {
-				sOut += '<tr><td>' + common.view.networkmode_2 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_2 + '</td></tr>';
 			} else if (aData.networkmode == 3) {
-				sOut += '<tr><td>' + common.view.networkmode_3 + ':</td><td></td></tr>';
+				sOut += '<tr><td>' + common.view.networkmode + ':</td><td>' + common.view.networkmode_3 + '</td></tr>';
 			}
 			sOut += '<tr><td>' + common.view.networksignal + ':</td><td>' + aData.networksignal + '</td></tr>';
 			sOut += '<tr><td>' + common.view.boardinfo + ':</td><td class="autowrap">' + aData.boardinfo + '</td></tr>';
@@ -189,7 +190,6 @@ var DeviceModule = function () {
 		onlinelist.push({id: 'All', text: 'All' });
 		onlinelist.push({id: 'Online', text: 'Online' });
 		onlinelist.push({id: 'Offline', text: 'Offline' });
-		onlinelist.push({id: 'Unregister', text: 'Unregister' });
 		$('#OnlineSelect').select2({
 			minimumResultsForSearch: -1,
 			minimumInputLength: 0,
@@ -470,6 +470,7 @@ var DeviceModule = function () {
 		formHandler.validateOption.rules['device.terminalid']['required'] = true;
 		formHandler.validateOption.rules['device.name'] = {};
 		formHandler.validateOption.rules['device.name']['required'] = true;
+		formHandler.validateOption.rules['device.name']['maxlength'] = 32;
 		formHandler.validateOption.submitHandler = function(form) {
 			if ($('#DeviceEditForm #BranchTree').jstree('get_selected', false).length > 0) {
 				$('#DeviceEditForm input[name="device.branchid"]').attr('value', $('#DeviceEditForm #BranchTree').jstree('get_selected', false)[0]);
@@ -550,6 +551,9 @@ var DeviceModule = function () {
 			});
 			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
 				$('.volumeflag').css('display', '');
+				$('.volumeRange').ionRangeSlider('update', {
+					from: _device.volume,
+				});
 			} else {
 				$('.volumeflag').css('display', 'none');
 			}
@@ -583,6 +587,9 @@ var DeviceModule = function () {
 		$('input[name="device.volumeflag"]').click(function(e) {
 			if ($('input[name="device.volumeflag"]:checked').val() == 1) {
 				$('.volumeflag').css('display', '');
+				$('.volumeRange').ionRangeSlider('update', {
+					from: _device.volume,
+				});
 			} else {
 				$('.volumeflag').css('display', 'none');
 			}
@@ -626,6 +633,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -672,6 +680,7 @@ var DeviceModule = function () {
 							{'sTitle' : common.view.size, 'mData' : 'devicefileid', 'bSortable' : false }, 
 							{'sTitle' : common.view.progress, 'mData' : 'progress', 'bSortable' : false },
 							{'sTitle' : common.view.updatetime, 'mData' : 'updatetime', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 10,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,

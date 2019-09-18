@@ -94,6 +94,7 @@ var DeviceTable = function () {
 			'aoColumns' : [ {'sTitle' : common.view.terminalid, 'mData' : 'terminalid', 'bSortable' : false },
 							{'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 							{'sTitle' : common.view.online, 'mData' : 'onlineflag', 'bSortable' : false }],
+			'order': [],
 			'iDisplayLength' : 7,
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -186,6 +187,7 @@ var PlaylogTable = function () {
 							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '45%' },
 							{'sTitle' : common.view.amount, 'mData' : 'amount', 'bSortable' : false, 'sWidth' : '10%' },
 							{'sTitle' : common.view.dcount, 'mData' : 'dcount', 'bSortable' : false, 'sWidth' : '10%' }],
+			'order': [],
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
@@ -509,6 +511,7 @@ var APPTable = function () {
 							{'sTitle' : common.view.size, 'mData' : 'appfile.size', 'bSortable' : false, 'sWidth' : '10%' }, 
 							{'sTitle' : common.view.download, 'mData' : 'appfile.filename', 'bSortable' : false, 'sWidth' : '30%' }, 
 							{'sTitle' : common.view.updatetime, 'mData' : 'appfile.createtime', 'bSortable' : false, 'sWidth' : '20%' }],
+			'order': [],
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
 				$('td:eq(2)', nRow).html(aData.appfile.vname + ' (' + aData.appfile.vcode + ')');
@@ -590,6 +593,7 @@ var AttendanceTable = function () {
 							{'sTitle' : '', 'mData' : 'mediaid', 'bSortable' : false, 'sWidth' : '45%' },
 							{'sTitle' : common.view.amount, 'mData' : 'amount', 'bSortable' : false, 'sWidth' : '10%' },
 							{'sTitle' : common.view.dcount, 'mData' : 'dcount', 'bSortable' : false, 'sWidth' : '10%' }],
+			'order': [],
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
