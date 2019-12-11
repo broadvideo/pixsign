@@ -168,14 +168,13 @@ create table intent(
  )engine = innodb
 default character set utf8;
 
-insert into config(configid, code, name, value, refer, type) values(203, 'KafkaServer', 'config.kafka.server', '', '', '1');
-
 alter table device add unique key device_unique_index2(hardkey);
 
 create table routeguide( 
    routeguideid int not null auto_increment,
    name varchar(64) not null,
    code varchar(64) not null,
+   type char(1) default 1,
    description varchar(128) default '',
    primary key (routeguideid)
  )engine = innodb
@@ -200,6 +199,15 @@ create table routeguidedtl(
  )engine = innodb
 default character set utf8;
 alter table routeguidedtl add unique key routeguidedtl_unique_index1(routeguideid, routeid);
+
+
+alter table devicefile drop foreign key devicefile_ibfk_1;
+alter table devicefile drop foreign key devicefile_ibfk_2;
+alter table devicefilehis drop foreign key devicefilehis_ibfk_1;
+alter table devicefilehis drop foreign key devicefilehis_ibfk_2;
+alter table devicefile add foreign key devicefile_fk1(deviceid) references device(deviceid) on delete cascade on update cascade;
+alter table devicefilehis add foreign key devicefilehis_fk1(deviceid) references device(deviceid) on delete cascade on update cascade;
+
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);

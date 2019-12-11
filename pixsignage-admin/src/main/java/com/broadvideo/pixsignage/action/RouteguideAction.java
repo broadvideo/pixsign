@@ -30,6 +30,10 @@ public class RouteguideAction extends BaseDatatableAction {
 	private String picContentType;
 	private String picFileName;
 
+	private File pic2;
+	private String pic2ContentType;
+	private String pic2FileName;
+
 	@Autowired
 	private RouteguideService routeguideService;
 
@@ -80,6 +84,16 @@ public class RouteguideAction extends BaseDatatableAction {
 				CommonUtil.resizeImage(pic, fileToCreate, 1920);
 				FileUtils.deleteQuietly(pic);
 			}
+			if (pic2 != null) {
+				logger.info("Begin handle pic2, {}", pic2FileName);
+				String newFileName = "/routeguide/" + routeguide.getRouteguideid() + "/" + "guide02.png";
+				File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + newFileName);
+				if (fileToCreate.exists()) {
+					fileToCreate.delete();
+				}
+				CommonUtil.resizeImage(pic2, fileToCreate, 1920);
+				FileUtils.deleteQuietly(pic2);
+			}
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("RouteguideAction doAdd exception, ", ex);
@@ -100,6 +114,16 @@ public class RouteguideAction extends BaseDatatableAction {
 				}
 				CommonUtil.resizeImage(pic, fileToCreate, 1920);
 				FileUtils.deleteQuietly(pic);
+			}
+			if (pic2 != null) {
+				logger.info("Begin handle pic2, {}", pic2FileName);
+				String newFileName = "/routeguide/" + routeguide.getRouteguideid() + "/" + "guide02.png";
+				File fileToCreate = new File(CommonConfig.CONFIG_PIXDATA_HOME + newFileName);
+				if (fileToCreate.exists()) {
+					fileToCreate.delete();
+				}
+				CommonUtil.resizeImage(pic2, fileToCreate, 1920);
+				FileUtils.deleteQuietly(pic2);
 			}
 			routeguideService.updateRouteguide(routeguide);
 			return SUCCESS;
@@ -185,5 +209,29 @@ public class RouteguideAction extends BaseDatatableAction {
 
 	public void setPicFileName(String picFileName) {
 		this.picFileName = picFileName;
+	}
+
+	public File getPic2() {
+		return pic2;
+	}
+
+	public void setPic2(File pic2) {
+		this.pic2 = pic2;
+	}
+
+	public String getPic2ContentType() {
+		return pic2ContentType;
+	}
+
+	public void setPic2ContentType(String pic2ContentType) {
+		this.pic2ContentType = pic2ContentType;
+	}
+
+	public String getPic2FileName() {
+		return pic2FileName;
+	}
+
+	public void setPic2FileName(String pic2FileName) {
+		this.pic2FileName = pic2FileName;
 	}
 }

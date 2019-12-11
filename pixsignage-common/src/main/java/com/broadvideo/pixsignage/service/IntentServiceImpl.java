@@ -121,14 +121,13 @@ public class IntentServiceImpl implements IntentService {
 					videoJson.put("thumbnail", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
 					videoHash.put(video.getVideoid(), videoJson);
 					videoJsonArray.add(videoJson);
-
-					JSONObject intentJson = new JSONObject();
-					intentJson.put("intent_id", intent.getIntentid());
-					intentJson.put("key", intent.getIntentkey());
-					intentJson.put("relatetype", "video");
-					intentJson.put("relateid", intent.getRelateid());
-					intentJsonArray.add(intentJson);
 				}
+				JSONObject intentJson = new JSONObject();
+				intentJson.put("intent_id", intent.getIntentid());
+				intentJson.put("key", intent.getIntentkey());
+				intentJson.put("relatetype", "video");
+				intentJson.put("relateid", intent.getRelateid());
+				intentJsonArray.add(intentJson);
 			} else if (intent.getRelateimage() != null) {
 				if (imageHash.get(intent.getRelateid()) == null) {
 					Image image = intent.getRelateimage();
@@ -144,14 +143,20 @@ public class IntentServiceImpl implements IntentService {
 					imageJson.put("thumbnail", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + image.getThumbnail());
 					imageHash.put(image.getImageid(), imageJson);
 					imageJsonArray.add(imageJson);
-
-					JSONObject intentJson = new JSONObject();
-					intentJson.put("intent_id", intent.getIntentid());
-					intentJson.put("key", intent.getIntentkey());
-					intentJson.put("relatetype", "image");
-					intentJson.put("relateid", intent.getRelateid());
-					intentJsonArray.add(intentJson);
 				}
+				JSONObject intentJson = new JSONObject();
+				intentJson.put("intent_id", intent.getIntentid());
+				intentJson.put("key", intent.getIntentkey());
+				intentJson.put("relatetype", "image");
+				intentJson.put("relateid", intent.getRelateid());
+				intentJsonArray.add(intentJson);
+			} else if (intent.getRelateurl() != null) {
+				JSONObject intentJson = new JSONObject();
+				intentJson.put("intent_id", intent.getIntentid());
+				intentJson.put("key", intent.getIntentkey());
+				intentJson.put("relatetype", "link");
+				intentJson.put("relate_url", intent.getRelateurl());
+				intentJsonArray.add(intentJson);
 			}
 		}
 

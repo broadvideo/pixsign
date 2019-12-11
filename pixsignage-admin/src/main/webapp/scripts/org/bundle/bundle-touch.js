@@ -597,6 +597,7 @@ var BundleModule = function () {
 						$('.videoin-ctrl').css('display', VideoinCtrl? '':'none');
 						$('.massage-ctrl').css('display', MassageCtrl? '':'none');
 						$('.advert-ctrl').css('display', AdvertCtrl? '':'none');
+						$('.cloudia-ctrl').css('display', CloudiaCtrl? '':'none');
 						$('#BundleModal').modal();
 					} else {
 						bootbox.alert(common.tips.error + data.errormsg);
@@ -670,6 +671,41 @@ var BundleModule = function () {
 	
 	var initBundlePushModal = function () {
 		var SelectedBindList = [];
+		var _devicetype = 1;
+		var _bindtype = 1; //1: Device 2:Devicegroup
+		if (Max1 > 0) {
+			$('.device-navigator[devicetype="1"]').addClass('active');
+			_devicetype = 1;
+		} else if (Max2 > 0) {
+			$('.device-navigator[devicetype="2"]').addClass('active');
+			_devicetype = 2;
+		} else if (Max6 > 0) {
+			$('.device-navigator[devicetype="6"]').addClass('active');
+			_devicetype = 6;
+		} else if (Max7 > 0) {
+			$('.device-navigator[devicetype="7"]').addClass('active');
+			_devicetype = 7;
+		} else if (Max10 > 0) {
+			$('.device-navigator[devicetype="10"]').addClass('active');
+			_devicetype = 10;
+		} else if (Max13 > 0) {
+			$('.device-navigator[devicetype="13"]').addClass('active');
+			_devicetype = 13;
+		}
+		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
+		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
+		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
+		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
+		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
+		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
+
+		$('.devicegroup-navigator').click(function(event) {
+			$('#DevicegroupTable').dataTable()._fnAjaxUpdate();
+		});
+		$('.device-navigator').click(function(event) {
+			_devicetype = $(this).attr('devicetype');
+			$('#DeviceTable').dataTable()._fnAjaxUpdate();
+		});
 
 		var DeviceTree = new BranchTree($('#DeviceTab'));
 		$('#DeviceTable').dataTable({
@@ -694,6 +730,7 @@ var BundleModule = function () {
 			},
 			'fnServerParams': function(aoData) { 
 				aoData.push({'name':'branchid','value':DeviceTree.branchid });
+				aoData.push({'name':'type','value':_devicetype });
 				aoData.push({'name':'devicegroupid','value':'0' });
 			}
 		});

@@ -6,6 +6,8 @@ public class Routeguide {
     private String name;
 
     private String code;
+    
+    private String type;
 
     private String description;
 
@@ -33,7 +35,15 @@ public class Routeguide {
         this.code = code == null ? null : code.trim();
     }
 
-    public String getDescription() {
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDescription() {
         return description;
     }
 

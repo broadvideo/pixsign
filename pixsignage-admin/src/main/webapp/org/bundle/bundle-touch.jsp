@@ -209,6 +209,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="102">
 								<i class="fa fa-cog"></i><div>按摩椅控制</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
+								<i class="fa fa-cubes"></i><div>Cloudia</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
@@ -790,12 +793,13 @@
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.selected"/></div>
 									<ul class="nav nav-tabs">
-										<li id="nav_dtab1" class="active">
-											<a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device"/></a>
-										</li>
-										<li id="nav_dtab2">
-											<a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a>
-										</li>
+										<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+										<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
+										<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
+										<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
+										<li class="device-navigator" devicetype="6" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device6"/></a></li>
+										<li class="device-navigator" devicetype="2" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device2"/></a></li>
+										<li class="device-navigator" devicetype="1" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device1"/></a></li>
 									</ul>
 								</div>
 								<div class="portlet-body">
@@ -946,6 +950,14 @@ var DvbCtrl = <%=(session_org != null && session_org.getDvbflag().equals("1"))%>
 var VideoinCtrl = <%=(session_org != null && session_org.getVideoinflag().equals("1"))%>;
 var MassageCtrl = <%=(session_org != null && session_org.getMassageflag().equals("1"))%>;
 var AdvertCtrl = <%=(session_org != null && session_org.getAdvertflag().equals("1"))%>;
+var CloudiaCtrl = <%=(session_org != null && session_org.getCloudiaflag().equals("1"))%>;
+
+var Max1 = <%=session_org == null ? 0 : session_org.getMaxDevices("1")%>;
+var Max2 = <%=session_org == null ? 0 : session_org.getMaxDevices("2")%>;
+var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
+var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
+var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
+var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

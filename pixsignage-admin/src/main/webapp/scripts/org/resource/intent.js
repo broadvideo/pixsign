@@ -35,6 +35,8 @@ var IntentModule = function () {
 					typehtml += '<span class="label label-sm label-success">' + common.view.video + '</span> ';
 				} else if (aData.relatetype == 2) {
 					typehtml += '<span class="label label-sm label-info">' + common.view.image + '</span> ';
+				} else if (aData.relatetype == 3) {
+					typehtml += '<span class="label label-sm label-warning">URL</span> ';
 				}
 				$('td:eq(1)', nRow).html(typehtml);
 				var contenthtml = '';
@@ -54,6 +56,8 @@ var IntentModule = function () {
 					}
 					contenthtml += '</div>';
 					contenthtml += '<h6 class="pixtitle">' + aData.relateimage.name + '</h6>';
+				} else if (aData.relateurl != null) {
+					contenthtml += aData.relateurl;
 				}
 				$('td:eq(2)', nRow).html(contenthtml);
 				$('td:eq(3)', nRow).html('<a href="javascript:;" privilegeid="101010" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');

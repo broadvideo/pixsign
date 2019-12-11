@@ -5,10 +5,11 @@
     <id column="routeguideid" jdbcType="INTEGER" property="routeguideid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="type" jdbcType="CHAR" property="type" />
     <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   <sql id="Base_Column_List">
-    routeguideid, name, code, description
+    routeguideid, name, code, type, description
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -41,9 +42,9 @@
     <selectKey keyProperty="routeguideid" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into routeguide (name, code, description
+    insert into routeguide (name, code, type, description
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Routeguide">
@@ -58,6 +59,9 @@
       <if test="code != null">
         code,
       </if>
+      <if test="type != null">
+        type,
+      </if>
       <if test="description != null">
         description,
       </if>
@@ -68,6 +72,9 @@
       </if>
       <if test="code != null">
         #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -83,6 +90,9 @@
       <if test="code != null">
         code = #{code,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        type = #{type,jdbcType=CHAR},
+      </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -93,6 +103,7 @@
     update routeguide
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR}
     where routeguideid = #{routeguideid,jdbcType=INTEGER}
   </update>

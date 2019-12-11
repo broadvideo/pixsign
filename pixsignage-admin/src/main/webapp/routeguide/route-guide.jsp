@@ -2,6 +2,7 @@
 
 <%
 	String id = new String(request.getParameter("id").getBytes("ISO-8859-1"), "UTF-8");
+	String index = new String(request.getParameter("index").getBytes("ISO-8859-1"), "UTF-8");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@
             var data=[];
 
             RouteGuide.defaultbg='guide.png';
-            var routeGuide=new RouteGuide($('div.container'),null,null,null,'/pixsigdata/routeguide/<%=id%>/');
+            var routeGuide=new RouteGuide($('div.container'),null,null,null,'/pixsigdata/routeguide/<%=id%>/',<%=index%>);
 
 
 

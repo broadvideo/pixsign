@@ -641,6 +641,7 @@ public class BundleServiceImpl implements BundleService {
 				}
 			}
 			bundleJson.put("zones", zoneJsonArray);
+			bundleJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 			bundleJsonArray.add(bundleJson);
 		}
 
@@ -694,12 +695,11 @@ public class BundleServiceImpl implements BundleService {
 		}
 
 		// Handle sync
-		/*
 		for (int i = 0; i < binds.length; i++) {
 			HashMap<String, Object> bind = binds[i];
 			syncService.sync("" + bind.get("bindtype"), "" + bind.get("bindid"), true);
 		}
-		*/
+		
 	}
 
 	@Transactional

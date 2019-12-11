@@ -439,6 +439,11 @@
     and appfileid = #{appfileid}
   </update>
 
+  <delete id="deleteByPrimaryKey" >
+    delete from device
+    where deviceid = #{deviceid}
+  </delete>
+  
   <insert id="insertList">
     insert into device(orgid, branchid, terminalid, name, type, status) 
     values 

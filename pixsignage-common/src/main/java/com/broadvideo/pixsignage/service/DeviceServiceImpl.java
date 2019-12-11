@@ -40,6 +40,8 @@ import com.broadvideo.pixsignage.persistence.AdplandtlMapper;
 import com.broadvideo.pixsignage.persistence.BundleMapper;
 import com.broadvideo.pixsignage.persistence.ConfigMapper;
 import com.broadvideo.pixsignage.persistence.DeviceMapper;
+import com.broadvideo.pixsignage.persistence.DevicefileMapper;
+import com.broadvideo.pixsignage.persistence.DevicefilehisMapper;
 import com.broadvideo.pixsignage.persistence.DevicegroupMapper;
 import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
@@ -82,6 +84,10 @@ public class DeviceServiceImpl implements DeviceService {
 	private AdplandtlMapper adplandtlMapper;
 	@Autowired
 	private VideoMapper videoMapper;
+	@Autowired
+	private DevicefileMapper devicefileMapper;
+	@Autowired
+	private DevicefilehisMapper devicefilehisMapper;
 
 	@Autowired
 	private BundleService bundleService;
@@ -211,6 +217,16 @@ public class DeviceServiceImpl implements DeviceService {
 	@Transactional
 	public void unbind(String deviceid) {
 		deviceMapper.unbind(deviceid);
+	}
+
+	@Transactional
+	public void delete(String deviceid) {
+		Device device = deviceMapper.selectByPrimaryKey(deviceid);
+		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
+		int currentdeviceidx = org.getCurrentdeviceidx();
+		org.setCurrentdeviceidx(currentdeviceidx - 1);
+		orgMapper.updateByPrimaryKeySelective(org);
+		deviceMapper.deleteByPrimaryKey(deviceid);
 	}
 
 	@Transactional

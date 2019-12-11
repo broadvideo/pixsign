@@ -39,6 +39,9 @@
 									<label class="radio-inline">
 										<input type="radio" name="intent.relatetype" value="2" checked> <spring:message code="pixsign.org.relatetype_2"/>
 									</label>
+									<label class="radio-inline">
+										<input type="radio" name="intent.relatetype" value="3" > <spring:message code="pixsign.org.relatetype_3"/>
+									</label>
 								</div>
 							</div>
 							<div class="form-group">
@@ -70,11 +73,9 @@
 											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
 										</span>
 									</div>
-									<!-- 
 									<div id="RelateText" class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="video.relateurl" />
+										<i class="fa"></i> <input type="text" class="form-control" name="intent.relateurl" />
 									</div>
-									 -->
 								</div>
 							</div>
 						</div>

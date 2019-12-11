@@ -27,7 +27,6 @@ public class PixResourceConfig extends ResourceConfig {
 		register(ResRooms.class);
 		register(ResPersons.class);
 		register(ResEvents.class);
-		register(ResAttendances.class);
 		register(ResConfigs.class);
 		register(AttendanceService.class);
 	}

@@ -111,12 +111,13 @@ var DeviceModule = function () {
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-sync"><i class="fa fa-rss"></i> ' + common.view.syncplan + ' </a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-file"><i class="fa fa-list-ul"></i> ' + common.view.fileview + '</a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
-					//buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.unbind + '</a>';
+					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 					buttonhtml += '</div>';
 				} else {
 					buttonhtml += '<div class="util-btn-margin-bottom-5">';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-config"><i class="fa fa-cog"></i> ' + common.view.config + ' </a>';
 					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>';
+					buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 					buttonhtml += '</div>';
 				}
 				$('td:eq(5)', nRow).html(buttonhtml);
@@ -227,7 +228,7 @@ var DeviceModule = function () {
 				index = $(event.target).parent().attr('data-id');
 			}
 			_device = $('#DeviceTable').dataTable().fnGetData(index);
-			bootbox.confirm(common.tips.unbind + _device.name, function(result) {
+			bootbox.confirm(common.tips.delete + _device.name, function(result) {
 				if (result == true) {
 					$.ajax({
 						type : 'POST',

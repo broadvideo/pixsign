@@ -232,7 +232,7 @@ var DeviceModule = function () {
 				if (result == true) {
 					$.ajax({
 						type : 'POST',
-						url : 'device!delete.action',
+						url : 'device!unbind.action',
 						cache: false,
 						data : {
 							deviceid: _device.deviceid,

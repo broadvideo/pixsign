@@ -72,6 +72,8 @@ public interface DeviceMapper {
 	int updateMedialist(@Param(value = "deviceid") String deviceid,
 			@Param(value = "defaultmedialistid") String defaultmedialistid);
 
+	int deleteByPrimaryKey(@Param(value = "deviceid") String deviceid);
+
 	// int insert(Device record);
 
 	int insertSelective(Device record);

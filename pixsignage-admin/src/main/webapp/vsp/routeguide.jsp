@@ -41,6 +41,15 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">类型</label>
+								<div class="col-md-9">
+									<select class="form-control" name="routeguide.type" tabindex="-1">
+										<option value="1" selected="selected">单层</option>
+										<option value="2">双层</option>
+									</select>
+								</div>
+							</div>
 							<div class="form-group pix-control">
 								<label class="col-md-3 control-label">背景图</label>
 								<div class="col-md-9">
@@ -56,6 +65,27 @@
 												<span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select</span>
 												<span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
 												<input type="file" class="default" name="pic" />
+											</span>
+											<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group pix-control">
+								<label class="col-md-3 control-label">背景图2</label>
+								<div class="col-md-9">
+									<div class="fileupload fileupload-new" data-provides="fileupload">
+										<div class="input-group">
+											<span class="input-group-btn">
+												<span class="uneditable-input">
+													<i class="fa fa-file fileupload-exists"></i>
+													<span class="fileupload-preview"></span>
+												</span>
+											</span>
+											<span class="btn default btn-file">
+												<span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select</span>
+												<span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+												<input type="file" class="default" name="pic2" />
 											</span>
 											<a href="#" class="btn red fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
 										</div>
@@ -136,8 +166,10 @@
 										<div class="btn-group">
 											<form method="post" target="_blank" id="DesignForm" style="display:none" action="/pixsignage/routeguide/route-guide.jsp" >
 												<input type="hidden" name="id" value="" />
+												<input type="hidden" name="index" value="1" />
 											</form>
-											<a href="javascript:;" class="btn blue pix-routeguidedtl-design"><i class="fa fa-video-camera"></i> 设计</a>
+											<a href="javascript:;" class="btn blue pix-routeguidedtl-design"><i class="fa fa-video-camera"></i> 第一层</a>&nbsp;
+											<a href="javascript:;" class="btn blue pix-routeguidedtl-design2"><i class="fa fa-video-camera"></i> 第二层</a>&nbsp;
 											<a href="javascript:;" class="btn green pix-routeguidedtl-add"><spring:message code="global.add"/> <i class="fa fa-plus"></i></a>
 										</div>
 									</div>

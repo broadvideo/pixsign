@@ -2,7 +2,7 @@
  * Created by charles on 2017/9/16.
  */
 
-var RouteGuide=function(zonediv,zone,scalew,scaleh,diydir){
+var RouteGuide=function(zonediv,zone,scalew,scaleh,diydir,index){
     this.width=1920;
     this.height=1080;
     this.zone=zone;
@@ -10,6 +10,12 @@ var RouteGuide=function(zonediv,zone,scalew,scaleh,diydir){
     this.guidediv=null;
     this.canvas=null;
     this.diydir=diydir;
+    this.index=index;
+    if (index == 1) {
+    	 RouteGuide.defaultbg='guide.png';
+    } else if (index == 2) {
+    	 RouteGuide.defaultbg='guide02.png';
+    }
     this.init();
 };
  RouteGuide.animationcounter=0;

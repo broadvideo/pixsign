@@ -136,6 +136,9 @@ public class RouteguideServiceImpl implements RouteguideService {
 		out.putNextEntry(new ZipEntry(routeguide.getCode() + "/img/"));
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/guide.png"), routeguide.getCode() + "/img/guide.png");
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/guide.png"), routeguide.getCode() + "/img/guide01.png");
+		if (routeguide.getType().equals("2") && new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/guide02.png").exists()) {
+			CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/guide02.png"), routeguide.getCode() + "/img/guide02.png");
+		}
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/step.png"), routeguide.getCode() + "/img/step.png");
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/diy.json"), routeguide.getCode() + "/diy.json");
 		CommonUtil.zip(out, new File(CommonConfig.CONFIG_PIXDATA_HOME + "/routeguide/" + routeguideid + "/diy.data.js"), routeguide.getCode() + "/diy.data.js");

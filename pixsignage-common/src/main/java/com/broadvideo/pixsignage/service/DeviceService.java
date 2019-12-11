@@ -31,6 +31,8 @@ public interface DeviceService {
 
 	public void unbind(String deviceid);
 
+	public void delete(String deviceid);
+
 	public void updateUpgradeflag(String orgid, String branchid, String type, String upgradeflag);
 
 	public void updateBundle(String[] deviceids, String defaultbundleid);

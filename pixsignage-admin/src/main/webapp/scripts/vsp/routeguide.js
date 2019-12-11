@@ -21,12 +21,21 @@ var RouteguideModule = function () {
 			'sAjaxSource' : 'routeguide!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 							{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
+							{'sTitle' : '类型', 'mData' : 'type', 'bSortable' : false }, 
 							{'sTitle' : '下载', 'mData' : 'routeguideid', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'routeguideid', 'bSortable' : false }],
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(2)', nRow).html('<a href="/pixsigdata/routeguide/' + aData.routeguideid + '/' + aData.code + '.zip">' + aData.code + '.zip</a>');
+				var typehtml = '';
+				if (aData.type == 1) {
+					typehtml += '<span class="label label-sm label-default">单层</span> ';
+				} else if (aData.type == 2) {
+					typehtml += '<span class="label label-sm label-success">双层</span> ';
+				}
+				$('td:eq(2)', nRow).html(typehtml);
+				
+				$('td:eq(3)', nRow).html('<a href="/pixsigdata/routeguide/' + aData.routeguideid + '/' + aData.code + '.zip">' + aData.code + '.zip</a>');
 				var buttonhtml = '';
 				buttonhtml += '<div class="util-btn-margin-bottom-5">';
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-zip"><i class="fa fa-edit"></i> 打包</a>';
@@ -34,7 +43,7 @@ var RouteguideModule = function () {
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-routeguidedtl"><i class="fa fa-list-ul"></i> 明细</a>';
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				buttonhtml += '</div>';
-				$('td:eq(3)', nRow).html(buttonhtml);
+				$('td:eq(4)', nRow).html(buttonhtml);
 				return nRow;
 			}
 		});
@@ -354,6 +363,13 @@ var RouteguideModule = function () {
 
 		$('.pix-routeguidedtl-design').on('click', function(event) {
 			$('#DesignForm input[name="id"]').val(_routeguide.routeguideid);
+			$('#DesignForm input[name="index"]').val(1);
+			$('#DesignForm').submit();
+		});
+
+		$('.pix-routeguidedtl-design2').on('click', function(event) {
+			$('#DesignForm input[name="id"]').val(_routeguide.routeguideid);
+			$('#DesignForm input[name="index"]').val(2);
 			$('#DesignForm').submit();
 		});
 	};

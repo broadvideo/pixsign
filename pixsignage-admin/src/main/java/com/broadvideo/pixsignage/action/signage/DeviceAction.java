@@ -245,11 +245,25 @@ public class DeviceAction extends BaseDatatableAction {
 		}
 	}
 
-	public String doDelete() {
+	public String doUnbind() {
 		try {
 			String deviceid = getParameter("deviceid");
 			logger.info("Device unbind, deviceid={}", deviceid);
 			deviceService.unbind(deviceid);
+			return SUCCESS;
+		} catch (Exception ex) {
+			logger.error("DeviceAction doUnbind exception, ", ex);
+			setErrorcode(-1);
+			setErrormsg(ex.getMessage());
+			return ERROR;
+		}
+	}
+
+	public String doDelete() {
+		try {
+			String deviceid = getParameter("deviceid");
+			logger.info("Device delete, deviceid={}", deviceid);
+			deviceService.delete(deviceid);
 			return SUCCESS;
 		} catch (Exception ex) {
 			logger.error("DeviceAction doDelete exception, ", ex);
