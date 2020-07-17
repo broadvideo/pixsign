@@ -12,6 +12,7 @@
     <association property="stream" column="{objtype=objtype,streamid=objid}" select="selectStream" />
     <association property="audio" column="{objtype=objtype,audioid=objid}" select="selectAudio" />
     <association property="dvb" column="{objtype=objtype,dvbid=objid}" select="selectDvb" />
+    <association property="page" column="{objtype=objtype,pageid=objid}" select="selectPage" />
   </resultMap>
   <sql id="Base_Column_List" >
     bundlezonedtlid, bundlezoneid, objtype, objid, sequence
@@ -36,6 +37,10 @@
   <select id="selectDvb" resultMap="com.broadvideo.pixsignage.persistence.DvbMapper.BaseResultMap" >
     select * from dvb
     where '${objtype}' = '7' and dvbid = #{dvbid}
+  </select>
+  <select id="selectPage" resultMap="com.broadvideo.pixsignage.persistence.PageMapper.MiniResultMap" >
+    select * from page
+    where '${objtype}' = '8' and pageid = #{pageid}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >

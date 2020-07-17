@@ -709,6 +709,7 @@
 														<div class="caption"><i class="fa fa-reorder"></i><spring:message code="global.selected"/></div>
 														<ul class="nav nav-tabs" style="margin-right: 30px;">
 															<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+															<li class="device-navigator" devicetype="15" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device15"/></a></li>
 															<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 															<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 															<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
@@ -841,6 +842,7 @@ var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
+var Max15 = <%=session_org == null ? 0 : session_org.getMaxDevices("15")%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

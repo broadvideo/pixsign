@@ -42,6 +42,9 @@
 									<label class="radio-inline">
 										<input type="radio" name="intent.relatetype" value="3" > <spring:message code="pixsign.org.relatetype_3"/>
 									</label>
+									<label class="radio-inline">
+										<input type="radio" name="intent.relatetype" value="4" > Page
+									</label>
 								</div>
 							</div>
 							<div class="form-group">
@@ -72,6 +75,9 @@
 										<span class="input-group-btn">
 											<button class="btn default remove" type="button"><i class="fa fa-trash-o"/></i></button>
 										</span>
+									</div>
+									<div id="RelatePageSelect">
+										<input type="hidden" class="form-control select2">
 									</div>
 									<div id="RelateText" class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="intent.relateurl" />
@@ -155,7 +161,7 @@
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-video-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/folder-image-select.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/resource/intent.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/resource/intent.js?t=${timestamp}1"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init();

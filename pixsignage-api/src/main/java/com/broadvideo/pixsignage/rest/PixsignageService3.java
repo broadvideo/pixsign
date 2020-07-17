@@ -174,7 +174,7 @@ public class PixsignageService3 {
 					return responseJson.toString();
 				}
 			}
-			
+
 			if (type.equals("1") && appname.equals("DigitalBox_LAUNCHER_VE_CLOUDIA")) {
 				type = "13";
 			}
@@ -1260,7 +1260,7 @@ public class PixsignageService3 {
 			if (city == null || city.length() == 0) {
 				city = device.getCity();
 			}
-			if (city == null || city.length() == 0) {
+			if (city == null || city.length() == 0 || city.equalsIgnoreCase("Unknown")) {
 				Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 				city = org.getCity();
 			}

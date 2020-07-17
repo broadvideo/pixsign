@@ -135,6 +135,7 @@ var common = {
 		region_type_14: '视频流',
 		region_type_15: 'VideoIn',
 		region_type_16: 'DVB',
+		region_type_17: 'Page',
 		region_type_101: '按摩椅二维码',
 		region_type_102: '按摩椅控制',
 		region_type_103: 'Cloudia',

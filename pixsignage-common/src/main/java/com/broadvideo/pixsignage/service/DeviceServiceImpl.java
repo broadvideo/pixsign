@@ -609,10 +609,12 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONArray videoJsonArray = new JSONArray();
 		JSONArray imageJsonArray = new JSONArray();
 		JSONArray streamJsonArray = new JSONArray();
+		JSONArray pageJsonArray = new JSONArray();
 		HashMap<Integer, JSONObject> bundleHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> pageHash = new HashMap<Integer, JSONObject>();
 
 		List<Schedule> mainscheduleList = new ArrayList<Schedule>();
 		List<Schedule> attachscheduleList = new ArrayList<Schedule>();
@@ -854,6 +856,23 @@ public class DeviceServiceImpl implements DeviceService {
 							streamHash.put(stream.getStreamid(), streamJson);
 							streamJsonArray.add(streamJson);
 						}
+					} else if (bundlezonedtl.getPage() != null) {
+						if (pageHash.get(bundlezonedtl.getObjid()) == null) {
+							Page page = bundlezonedtl.getPage();
+							String zipPath = "/page/" + page.getPageid() + "/page-" + page.getPageid() + ".zip";
+							JSONObject pageJson = new JSONObject();
+							pageJson.put("id", page.getPageid());
+							pageJson.put("name", page.getName());
+							pageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+							pageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+							pageJson.put("file", "page-" + page.getPageid() + ".zip");
+							pageJson.put("size", page.getSize());
+							pageJson.put("checksum", page.getMd5());
+							pageJson.put("snapshot",
+									downloadurl + CommonConfig.CONFIG_PIXDATA_URL + page.getSnapshot());
+							pageHash.put(page.getPageid(), pageJson);
+							pageJsonArray.add(pageJson);
+						}
 					}
 				}
 			}
@@ -929,6 +948,7 @@ public class DeviceServiceImpl implements DeviceService {
 		resultJson.put("videos", videoJsonArray);
 		resultJson.put("images", imageJsonArray);
 		resultJson.put("streams", streamJsonArray);
+		resultJson.put("pages", pageJsonArray);
 		return resultJson;
 	}
 

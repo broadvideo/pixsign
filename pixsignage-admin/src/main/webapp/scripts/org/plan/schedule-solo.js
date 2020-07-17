@@ -41,6 +41,9 @@ var ScheduleModule = function () {
 		} else if (Max13 > 0) {
 			$('.device-navigator[devicetype="13"]').addClass('active');
 			_devicetype = 13;
+		} else if (Max15 > 0) {
+			$('.device-navigator[devicetype="15"]').addClass('active');
+			_devicetype = 15;
 		}
 		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
 		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
@@ -48,6 +51,7 @@ var ScheduleModule = function () {
 		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
 		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
 		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
+		$('.device-navigator[devicetype="15"]').css('display', Max15==0?'none':'');
 
 		$('.devicegroup-navigator').click(function(event) {
 			_bindtype = 2;
@@ -335,6 +339,8 @@ var ScheduleModule = function () {
 	};
 
 	var initScheduleModal = function () {
+		var bundleselect = new BundleSelect($('#ScheduleModal'), TouchCtrl);
+
 		function refreshScheduleDetail() {
 			$('#ScheduleDetail').empty();
 			if (_schedules.length > 0) {
@@ -392,9 +398,10 @@ var ScheduleModule = function () {
 		}
 
 		function refreshMediaTable() {
-			$('#BundleTable').dataTable()._fnAjaxUpdate();
+			bundleselect.refresh();
 		}
 
+		/*
 		//Bundle table初始化
 		$('#BundleTable thead').css('display', 'none');
 		$('#BundleTable tbody').css('display', 'none');	
@@ -560,6 +567,7 @@ var ScheduleModule = function () {
 			$('#TouchbundleDiv').css('display', '');
 			$('#TouchbundleTable').dataTable()._fnAjaxUpdate();
 		});
+		*/
 
 		function refreshSelectedTable() {
 			var selectedTableHtml = '';
@@ -765,40 +773,29 @@ var ScheduleModule = function () {
 		});
 
 		//增加Bundle到SelectedTable
-		$('body').on('click', '.pix-scheduledtl-bundle-add', function(event) {
-			var rowIndex = $(event.target).attr("data-id");
-			if (rowIndex == undefined) {
-				rowIndex = $(event.target).parent().attr('data-id');
-			}
-			var data = $('#BundleTable').dataTable().fnGetData(rowIndex);
+		$('body').on('click', '.pix-bundle-set', function(event) {
 			var scheduledtl = {};
 			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
 			scheduledtl.scheduleid = _schedule.scheduleid;
 			scheduledtl.objtype = 1;
-			scheduledtl.objid = data.bundleid;
-			scheduledtl.bundle = data;
+			scheduledtl.objid = bundleselect.getBundle().bundleid;
+			scheduledtl.bundle = bundleselect.getBundle();
 			scheduledtl.sequence = _scheduledtls.length + 1;
 			_scheduledtls.push(scheduledtl);
 			refreshSelectedTable();
 		});
-		//增加Touchbundle到SelectedTable
-		$('body').on('click', '.pix-scheduledtl-touchbundle-add', function(event) {
-			var rowIndex = $(event.target).attr("data-id");
-			if (rowIndex == undefined) {
-				rowIndex = $(event.target).parent().attr('data-id');
-			}
-			var data = $('#TouchbundleTable').dataTable().fnGetData(rowIndex);
+		$('body').on('click', '.pix-touchbundle-set', function(event) {
 			var scheduledtl = {};
 			scheduledtl.scheduledtlid = 'D' + Math.round(Math.random()*100000000);
 			scheduledtl.scheduleid = _schedule.scheduleid;
 			scheduledtl.objtype = 1;
-			scheduledtl.objid = data.bundleid;
-			scheduledtl.bundle = data;
+			scheduledtl.objid = bundleselect.getBundle().bundleid;
+			scheduledtl.bundle = bundleselect.getBundle();
 			scheduledtl.sequence = _scheduledtls.length + 1;
 			_scheduledtls.push(scheduledtl);
 			refreshSelectedTable();
 		});
-
+		
 		//删除SelectedTable
 		$('body').on('click', '.pix-scheduledtl-del', function(event) {
 			var index = $(event.target).attr('index');

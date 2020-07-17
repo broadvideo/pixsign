@@ -618,6 +618,10 @@ public class BundleServiceImpl implements BundleService {
 						zonedtlJson.put("id", bundlezonedtl.getObjid());
 						zonedtlJson.put("type", "stream");
 						zonedtlJsonArray.add(zonedtlJson);
+					} else if (bundlezonedtl.getObjtype().equals("8")) {
+						zonedtlJson.put("id", bundlezonedtl.getObjid());
+						zonedtlJson.put("type", "page");
+						zonedtlJsonArray.add(zonedtlJson);
 					}
 				}
 				zoneJson.put("zonedtls", zonedtlJsonArray);

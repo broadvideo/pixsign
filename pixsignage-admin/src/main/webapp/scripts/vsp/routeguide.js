@@ -23,6 +23,7 @@ var RouteguideModule = function () {
 							{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
 							{'sTitle' : '类型', 'mData' : 'type', 'bSortable' : false }, 
 							{'sTitle' : '下载', 'mData' : 'routeguideid', 'bSortable' : false }, 
+							{'sTitle' : '时间', 'mData' : 'createtime', 'bSortable' : false }, 
 							{'sTitle' : '', 'mData' : 'routeguideid', 'bSortable' : false }],
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
@@ -43,7 +44,7 @@ var RouteguideModule = function () {
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-routeguidedtl"><i class="fa fa-list-ul"></i> 明细</a>';
 				buttonhtml += '<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>';
 				buttonhtml += '</div>';
-				$('td:eq(4)', nRow).html(buttonhtml);
+				$('td:eq(5)', nRow).html(buttonhtml);
 				return nRow;
 			}
 		});
@@ -359,6 +360,36 @@ var RouteguideModule = function () {
 			refreshRoute();
 			$('#RouteguidedtlModal').modal('hide');
 			$('#RouteguidedtlEditModal').modal();
+		});
+
+		$('body').on('click', '.pix-routeguidedtl-delete', function(event) {
+			var index = $(event.target).attr('data-id');
+			if (index == undefined) {
+				index = $(event.target).parent().attr('data-id');
+			}
+			_routeguidedtl = $('#RouteguidedtlTable').dataTable().fnGetData(index);
+			bootbox.confirm(common.tips.remove + _routeguidedtl.route.name, function(result) {
+				if (result == true) {
+					$.ajax({
+						type : 'POST',
+						url : 'routeguidedtl!delete.action',
+						cache: false,
+						data : {
+							'routeguidedtl.routeguidedtlid': _routeguidedtl.routeguidedtlid
+						},
+						success : function(data, status) {
+							if (data.errorcode == 0) {
+								$('#RouteguidedtlTable').dataTable()._fnAjaxUpdate();
+							} else {
+								bootbox.alert(common.tips.error + data.errormsg);
+							}
+						},
+						error : function() {
+							console.log('failue');
+						}
+					});				
+				}
+			 });
 		});
 
 		$('.pix-routeguidedtl-design').on('click', function(event) {

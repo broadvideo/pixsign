@@ -12,7 +12,7 @@ var BundleDesignModule = function (mode) {
 
 	var init = function () {
 		ZoneLimits['0'] = 3;
-		ZoneLimits['1'] = 10;
+		ZoneLimits['1'] = 30;
 		ZoneLimits['2'] = 10;
 		ZoneLimits['3'] = 100;
 		ZoneLimits['4'] = 5;
@@ -26,6 +26,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['14'] = 4;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['16'] = 1;
+		ZoneLimits['17'] = 1;
 		ZoneLimits['101'] = 1;
 		ZoneLimits['102'] = 1;
 		ZoneLimits['103'] = 1;
@@ -137,6 +138,10 @@ var BundleDesignModule = function (mode) {
 			$(inner_div).append(img_element);
 		} else if (bundlezone.type == 16) {
 			//DVB Zone
+			var img_element = document.createElement('img');
+			$(inner_div).append(img_element);
+		} else if (bundlezone.type == 17) {
+			//Page Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
 		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
@@ -383,6 +388,16 @@ var BundleDesignModule = function (mode) {
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
 			$(bundlezoneDiv).find('img').attr('height', '100%');
+		} else if (bundlezone.type == 17) {
+			//Page Zone
+			$(bundlezoneDiv).find('img').css({
+				'box-sizing': 'border-box',
+			});
+			if (bundlezone.bundlezonedtls.length > 0 && bundlezone.bundlezonedtls[0].page != null) {
+				$(bundlezoneDiv).find('img').attr('src', '/pixsigdata' + bundlezone.bundlezonedtls[0].page.snapshot);
+				$(bundlezoneDiv).find('img').attr('width', '100%');
+				$(bundlezoneDiv).find('img').attr('height', '100%');
+			}
 		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
 			//Massage Zone & Cloudia Zone
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-' + bundlezone.type + '.jpg');
@@ -610,6 +625,62 @@ var BundleDesignModule = function (mode) {
 								});
 							}
 							$('#DVBModal').modal();
+						} else if (bundlezones[0].type == 17) {
+							//Page Zone
+							_self.Zone = bundlezones[0];
+							$('#PageSelect').select2({
+								placeholder: common.tips.detail_select,
+								minimumInputLength: 0,
+								ajax: { 
+									url: 'page!list.action',
+									type: 'GET',
+									dataType: 'json',
+									data: function (term, page) {
+										return {
+											sSearch: term, 
+											iDisplayStart: (page-1)*10,
+											iDisplayLength: 10,
+										};
+									},
+									results: function (data, page) {
+										var more = (page * 10) < data.iTotalRecords; 
+										return {
+											results : $.map(data.aaData, function (item) {
+												return {
+													name:item.name, 
+													id:item.pageid,
+													page:item
+												};
+											}),
+											more: more
+										};
+									}
+								},
+								formatResult: function (item) {
+									var width = 40;
+									var height = 40 * item.page.height / item.page.width;
+									if (item.page.width < item.page.height) {
+										height = 40;
+										width = 40 * item.page.width / item.page.height;
+									}
+									var html = '<span><img src="/pixsigdata' + item.page.snapshot + '" width="' + width + 'px" height="' + height + 'px"/> ' + item.page.name + '</span>'
+									return html;
+								},
+								formatSelection: function (item) {
+									return item.name;				
+								},
+								dropdownCssClass: 'bigdrop', 
+								escapeMarkup: function (m) { return m; } 
+							});
+							console.log(_self.Zone);
+							if (_self.Zone.bundlezonedtls[0] != null && _self.Zone.bundlezonedtls[0].page != null) {
+								$('#PageSelect').select2('data', {
+									name:_self.Zone.bundlezonedtls[0].page.name, 
+									id:_self.Zone.bundlezonedtls[0].page.pageid,
+									page:_self.Zone.bundlezonedtls[0].page
+								});
+							}
+							$('#PageModal').modal();
 						} else {
 							return;
 						}
@@ -1163,6 +1234,30 @@ var BundleDesignModule = function (mode) {
 				}
 			}
 			$('#DVBModal').modal('hide');
+		});
+		$('[type=submit]', $('#PageModal')).on('click', function(event) {
+			var page = $('#PageSelect').select2('data');
+			console.log('page', page);
+			if (page != null) {
+				if (_self.Zone.bundlezonedtls.length == 0) {
+					var bundlezonedtl = {};
+					bundlezonedtl.bundlezonedtlid = 0;
+					bundlezonedtl.bundlezoneid = _self.Zone.bundlezoneid;
+					bundlezonedtl.objtype = '8';
+					bundlezonedtl.objid = page.page.pageid;
+					bundlezonedtl.sequence = 1;
+					bundlezonedtl.page = page.page;
+					_self.Zone.bundlezonedtls.push(bundlezonedtl);
+					_self.Zone.content = page.page.pageid;
+				} else {
+					_self.Zone.bundlezonedtls[0].objtype = '8';
+					_self.Zone.bundlezonedtls[0].objid = page.page.pageid;
+					_self.Zone.bundlezonedtls[0].page = page.page;
+					_self.Zone.content = page.page.pageid;
+				}
+			}
+			refreshBundlezone(_self.Zone);
+			$('#PageModal').modal('hide');
 		});
 
 		//图片table初始化

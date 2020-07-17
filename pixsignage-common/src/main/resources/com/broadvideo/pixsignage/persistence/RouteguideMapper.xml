@@ -7,9 +7,10 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="type" jdbcType="CHAR" property="type" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List">
-    routeguideid, name, code, type, description
+    routeguideid, name, code, type, description, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -42,9 +43,9 @@
     <selectKey keyProperty="routeguideid" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into routeguide (name, code, type, description
+    insert into routeguide (name, code, type, description, createtime
       )
-    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Routeguide">
@@ -65,6 +66,9 @@
       <if test="description != null">
         description,
       </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -78,6 +82,9 @@
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -96,6 +103,9 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where routeguideid = #{routeguideid,jdbcType=INTEGER}
   </update>
@@ -104,7 +114,8 @@
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
     where routeguideid = #{routeguideid,jdbcType=INTEGER}
   </update>
 </mapper>

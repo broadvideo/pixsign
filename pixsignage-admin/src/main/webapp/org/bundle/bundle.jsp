@@ -185,6 +185,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone dvb-ctrl" zonetype="16">
 								<i class="fa fa-joomla"></i><div>DVB</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="17">
+								<i class="fa fa-html5"></i><div>Page</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="101">
 								<i class="fa fa-qrcode"></i><div>按摩椅二维码</div>
 							</a>
@@ -756,6 +759,39 @@
 		</div>
 	</div>
 
+	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.page"/></div>
+						</div>
+						<div class="portlet-body">
+							<form id="PageForm" class="form-horizontal" method="POST">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.page"/></label>
+										<div class="col-md-9">
+											<input type="hidden" id="PageSelect" class="form-control select2" name="page" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- 推送对话框  -->
 	<div id="PushModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-full">
@@ -776,6 +812,7 @@
 									<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.device.selecting"/></div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
 										<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+										<li class="device-navigator" devicetype="15" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device15"/></a></li>
 										<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 										<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 										<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
@@ -942,6 +979,7 @@ var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
+var Max15 = <%=session_org == null ? 0 : session_org.getMaxDevices("15")%>;
 
 jQuery(document).ready(function() {    
 	Metronic.init();

@@ -63,7 +63,7 @@ public class PixOppUtil {
 		try {
 			logger.info("send refresh message type={}, key={}, checkcode={}, svrversion={}, dbversion={}", type, key,
 					checkcode, svrversion, dbversion);
-			String url = "http://180.96.19.239/pixopp/rest/pixsign/refresh?type=" + type + "&key=" + key + "&checkcode="
+			String url = "http://114.115.174.53/pixopp/rest/pixsign/refresh?type=" + type + "&key=" + key + "&checkcode="
 					+ checkcode + "&svrversion=" + svrversion + "&dbversion=" + dbversion;
 
 			RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)

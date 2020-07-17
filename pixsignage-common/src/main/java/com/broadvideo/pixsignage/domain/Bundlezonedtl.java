@@ -6,6 +6,7 @@ public class Bundlezonedtl {
 	public final static String ObjType_Stream = "5";
 	public final static String ObjType_Audio = "6";
 	public final static String ObjType_Dvb = "7";
+	public final static String ObjType_Page = "8";
 
 	private Integer bundlezonedtlid;
 
@@ -26,6 +27,8 @@ public class Bundlezonedtl {
 	private Audio audio;
 
 	private Dvb dvb;
+
+	private Page page;
 
 	public Integer getBundlezonedtlid() {
 		return bundlezonedtlid;
@@ -105,5 +108,13 @@ public class Bundlezonedtl {
 
 	public void setDvb(Dvb dvb) {
 		this.dvb = dvb;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
 	}
 }

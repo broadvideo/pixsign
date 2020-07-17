@@ -103,6 +103,7 @@ public class IntentServiceImpl implements IntentService {
 		JSONArray pageJsonArray = new JSONArray();
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> pageHash = new HashMap<Integer, JSONObject>();
 
 		List<Intent> intentList = intentMapper.selectList(orgid, null, null, null);
 		for (Intent intent : intentList) {
@@ -148,6 +149,29 @@ public class IntentServiceImpl implements IntentService {
 				intentJson.put("intent_id", intent.getIntentid());
 				intentJson.put("key", intent.getIntentkey());
 				intentJson.put("relatetype", "image");
+				intentJson.put("relateid", intent.getRelateid());
+				intentJsonArray.add(intentJson);
+			} else if (intent.getRelatepage() != null) {
+				if (pageHash.get(intent.getRelateid()) == null) {
+					Page page = intent.getRelatepage();
+					String zipPath = "/page/" + page.getPageid() + "/page-" + page.getPageid() + ".zip";
+					JSONObject pageJson = new JSONObject();
+					pageJson.put("id", page.getPageid());
+					pageJson.put("name", page.getName());
+					pageJson.put("key", intent.getIntentkey());
+					pageJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + zipPath);
+					pageJson.put("file", "page-" + page.getPageid() + ".zip");
+					pageJson.put("size", page.getSize());
+					pageJson.put("checksum", page.getMd5());
+					pageJson.put("thumbnail", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + page.getSnapshot());
+					pageHash.put(page.getPageid(), pageJson);
+					pageJsonArray.add(pageJson);
+				}
+				JSONObject intentJson = new JSONObject();
+				intentJson.put("intent_id", intent.getIntentid());
+				intentJson.put("key", intent.getIntentkey());
+				intentJson.put("relatetype", "page");
 				intentJson.put("relateid", intent.getRelateid());
 				intentJsonArray.add(intentJson);
 			} else if (intent.getRelateurl() != null) {

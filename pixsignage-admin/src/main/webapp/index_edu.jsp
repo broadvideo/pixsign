@@ -9,20 +9,20 @@
 <%@page import="com.broadvideo.pixsignage.common.CommonConfig"%> 
 
 <%
-	ServletContext servletContext = this.getServletContext();
-	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
-	String servername = request.getServerName();
-	Sdomain sdomain = sdomainService.selectByServername(servername);
-	if (sdomain == null) {
-		servername = "default";
-		sdomain = sdomainService.selectByServername("default");
-	}
-	
-	String title = "";
-	String css = "login-soft.css";
-	String bgcolor = "#666";
-%>
+ 	ServletContext servletContext = this.getServletContext();
+ 	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+ 	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
+ 	String servername = request.getServerName();
+ 	Sdomain sdomain = sdomainService.selectByServername(servername);
+ 	if (sdomain == null) {
+ 		servername = "default";
+ 		sdomain = sdomainService.selectByServername("default");
+ 	}
+ 	
+ 	String title = "";
+ 	String css = "login-soft.css";
+ 	String bgcolor = "#666";
+ %>
 
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -107,8 +107,10 @@
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
-		<%if (sdomain == null || sdomain.getDescription() == null) { %>
-		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
+		<%
+			if (sdomain == null || sdomain.getDescription() == null) {
+		%>
+		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID%><br/>
 		<%=CommonConfig.SYSTEM_COPYRIGHT%> <%=CommonConfig.SYSTEM_ICP%><br/>	
 		<%} else { %>
 		©<%=sdomain.getDescription()%>

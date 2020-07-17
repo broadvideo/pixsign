@@ -129,7 +129,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device15"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="ConfigForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
@@ -157,6 +157,12 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.volume"/></label>
 								<div class="col-md-9">
 									<input class="volumeRange" type="text" name="device.volume" value="50"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
+								<div class="col-md-9">
+									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="device.backupvideoid">
 								</div>
 							</div>
 							<div class="form-group">
@@ -195,58 +201,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group tag-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.tagflag"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="device.tagflag" value="0"> <spring:message code="pixsign.prop.tagflag_0"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="device.tagflag" value="1"> <spring:message code="pixsign.prop.tagflag_1"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group tag-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
-								<div class="col-md-9">
-									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotflag"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="device.hotspotflag" value="0"> <spring:message code="pixsign.prop.hotspotflag_0"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="device.hotspotflag" value="1"> <spring:message code="pixsign.prop.hotspotflag_1"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group hotspotflag">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotssid"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotssid" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group hotspotflag">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotpassword"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotpassword" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group hotspotflag">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.hotspotfrequency"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.hotspotfrequency" />
-									</div>
-								</div>
-							</div>
 						</div>
 					</form>
 				</div>
@@ -263,7 +217,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device15"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="DeviceEditForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
@@ -326,7 +280,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device15"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="DeviceBindForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
@@ -360,7 +314,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
+					<h4 class="modal-title"><spring:message code="pixsign.device15"/></h4>
 				</div>
 				<div class="modal-body">
 					<form id="UTextForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
@@ -450,7 +404,7 @@
 
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="pixsign.device7"/></h3>
+			<h3 class="page-title"><spring:message code="pixsign.device15"/></h3>
 			<div class="row ">
 				<div class="col-md-12">
 					<span id="CurrentDevices"></span><span id="MaxDevices" class="badge badge-danger" style="float: right;"></span>
@@ -463,7 +417,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.device7"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.device15"/></div>
 							<div class="tools">
 								<a href="javascript:;" onClick="DeviceModule.refresh();" class="reload"></a>
 							</div>
@@ -530,7 +484,7 @@
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEizW2Mbk5ln3x0Jgm4o3Jd6lIjPyOsU8"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
 <% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <% } %>
@@ -544,15 +498,13 @@
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/device/device-xinfa.js?t=${timestamp}"></script>
 <script>
-var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
-$('.tag-ctrl').css('display', TagCtrl?'':'none');
 var MapSource = <%=(session_org != null && !session_org.getTimezone().equals("Asia/Shanghai"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	PixData.init('${locale}');
-	DeviceModule.init(7);
+	DeviceModule.init(15);
 });
 
 </script>

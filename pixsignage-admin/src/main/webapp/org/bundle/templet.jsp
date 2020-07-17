@@ -126,6 +126,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone dvb-ctrl" zonetype="16">
 								<i class="fa fa-joomla"></i><div>DVB</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="17">
+								<i class="fa fa-html5"></i><div>Page</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone massage-ctrl" zonetype="101">
 								<i class="fa fa-qrcode"></i><div>按摩椅二维码</div>
 							</a>
@@ -682,6 +685,39 @@
 										<label class="col-md-3 control-label"><spring:message code="pixsign.dvb"/></label>
 										<div class="col-md-9">
 											<input type="hidden" id="DVBSelect" class="form-control select2" name="dvb" />
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
+					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.close"/></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="PageModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i><spring:message code="pixsign.page"/></div>
+						</div>
+						<div class="portlet-body">
+							<form id="PageForm" class="form-horizontal" method="POST">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label"><spring:message code="pixsign.page"/></label>
+										<div class="col-md-9">
+											<input type="hidden" id="PageSelect" class="form-control select2" name="page" />
 										</div>
 									</div>
 								</div>

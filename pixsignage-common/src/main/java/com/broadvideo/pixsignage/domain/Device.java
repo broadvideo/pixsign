@@ -14,6 +14,8 @@ public class Device {
 	public final static String Type_3DFanWall = "11";
 	public final static String Type_ICBC = "12";
 	public final static String Type_Cloudia = "13";
+	public final static String Type_Xinhua = "14";
+	public final static String Type_Daping = "15";
 
 	private Integer deviceid;
 

@@ -318,6 +318,14 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-md-3 control-label">芯华测温<span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max14" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.timezone"/></label>
 								<div class="col-md-9">
 									<input type="hidden" id="TimezoneSelect" class="form-control select2" name="org.timezone">

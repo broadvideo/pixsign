@@ -49,6 +49,13 @@
     json
   </sql>
   
+  <select id="selectRelatePage" resultMap="MiniResultMap" >
+    select *
+    from page
+    where '${relatetype}' = '4' and pageid = #{pageid}
+    and status != '9'
+  </select>
+
   <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
     select * from page
     where pageid = #{pageid}

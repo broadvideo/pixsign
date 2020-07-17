@@ -71,7 +71,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 		String maxdetail = org.getMaxdetail();
 		String[] maxs = maxdetail.split(",");
-		int[] maxdevices = new int[13];
+		int[] maxdevices = new int[14];
 		for (int i = 0; i < maxdevices.length; i++) {
 			maxdevices[i] = maxs.length > i ? Integer.parseInt(maxs[i]) : 0;
 		}
@@ -155,7 +155,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| maxdevices[9] == 0 && p.getPrivilegeid().intValue() == 30220
 					|| maxdevices[10] == 0 && p.getPrivilegeid().intValue() == 30221
 					|| maxdevices[11] == 0 && p.getPrivilegeid().intValue() == 30222
-					|| maxdevices[12] == 0 && p.getPrivilegeid().intValue() == 30223) {
+					|| maxdevices[12] == 0 && p.getPrivilegeid().intValue() == 30223
+					|| maxdevices[13] == 0 && p.getPrivilegeid().intValue() == 30224) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if ((maxdevices[8] == 0 && maxdevices[10] == 0) && p.getPrivilegeid().intValue() == 30500) {

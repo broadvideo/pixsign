@@ -81,6 +81,37 @@
 																			<div class="row">
 																				<div class="col-md-12">
 																					<div id="BundleDiv">
+																						<div class="row">
+																							<div class="col-md-3">
+																								<div class="row"><div class="col-md-12 branchtree"></div></div>
+																							</div>
+																							<div class="col-md-9">
+																								<table class="table table-condensed table-hover bundletable">
+																									<thead></thead>
+																									<tbody></tbody>
+																								</table>
+																							</div>
+																						</div>
+																					</div>
+																					<div id="TouchbundleDiv" style="display:none">
+																						<div class="row">
+																							<div class="col-md-3">
+																								<div class="row"><div class="col-md-12 branchtree"></div></div>
+																							</div>
+																							<div class="col-md-9">
+																								<table class="table table-condensed table-hover touchbundletable">
+																									<thead></thead>
+																									<tbody></tbody>
+																								</table>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<!-- 
+																			<div class="row">
+																				<div class="col-md-12">
+																					<div id="BundleDiv">
 																						<table id="BundleTable" class="table table-condensed table-hover">
 																							<thead></thead>
 																							<tbody></tbody>
@@ -94,6 +125,7 @@
 																					</div>
 																				</div>
 																			</div>
+																			-->
 																		</div>
 																	</div>
 																</div>
@@ -153,6 +185,7 @@
 							</div>
 							<ul class="nav nav-tabs" style="margin-right: 30px;">
 								<li class="devicegroup-navigator"><a href="#DevicegroupTab" data-toggle="tab"><spring:message code="pixsign.devicegroup"/></a></li>
+								<li class="device-navigator" devicetype="15" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device15"/></a></li>
 								<li class="device-navigator" devicetype="13" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device13"/></a></li>
 								<li class="device-navigator" devicetype="10" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device10"/></a></li>
 								<li class="device-navigator" devicetype="7" style="display:none;"><a href="#DeviceTab" data-toggle="tab"><spring:message code="pixsign.device7"/></a></li>
@@ -214,6 +247,7 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/common/bundle-select.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/plan/schedule-solo.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/org/bundle/preview.js?t=${timestamp}"></script>
 <script>
@@ -224,6 +258,7 @@ var Max6 = <%=session_org == null ? 0 : session_org.getMaxDevices("6")%>;
 var Max7 = <%=session_org == null ? 0 : session_org.getMaxDevices("7")%>;
 var Max10 = <%=session_org == null ? 0 : session_org.getMaxDevices("10")%>;
 var Max13 = <%=session_org == null ? 0 : session_org.getMaxDevices("13")%>;
+var Max15 = <%=session_org == null ? 0 : session_org.getMaxDevices("15")%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();

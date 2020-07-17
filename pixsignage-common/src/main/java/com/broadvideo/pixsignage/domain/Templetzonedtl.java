@@ -21,6 +21,8 @@ public class Templetzonedtl {
 
 	private Dvb dvb;
 
+	private Page page;
+
 	public Integer getTempletzonedtlid() {
 		return templetzonedtlid;
 	}
@@ -99,5 +101,13 @@ public class Templetzonedtl {
 
 	public void setDvb(Dvb dvb) {
 		this.dvb = dvb;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
 	}
 }

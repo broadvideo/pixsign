@@ -47,6 +47,9 @@ var DeviceVersionModule = function () {
 		} else if (Max13 > 0) {
 			$('.device-navigator[devicetype="13"]').addClass('active');
 			_devicetype = 13;
+		} else if (Max15 > 0) {
+			$('.device-navigator[devicetype="15"]').addClass('active');
+			_devicetype = 15;
 		}
 		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
 		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
@@ -59,6 +62,7 @@ var DeviceVersionModule = function () {
 		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
 		$('.device-navigator[devicetype="11"]').css('display', Max11==0?'none':'');
 		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
+		$('.device-navigator[devicetype="15"]').css('display', Max15==0?'none':'');
 
 		$('.device-navigator').click(function(event) {
 			_devicetype = $(this).attr('devicetype');

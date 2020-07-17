@@ -10,6 +10,7 @@
     <result column="relateurl" property="relateurl" jdbcType="VARCHAR" />
     <association property="relatevideo" column="{relatetype=relatetype,videoid=relateid}" select="com.broadvideo.pixsignage.persistence.VideoMapper.selectRelateVideo" />
     <association property="relateimage" column="{relatetype=relatetype,imageid=relateid}" select="com.broadvideo.pixsignage.persistence.ImageMapper.selectRelateImage" />
+    <association property="relatepage" column="{relatetype=relatetype,pageid=relateid}" select="com.broadvideo.pixsignage.persistence.PageMapper.selectRelatePage" />
   </resultMap>
   <sql id="Base_Column_List" >
     intentid, orgid, intentkey, relatetype, relateid, relateurl

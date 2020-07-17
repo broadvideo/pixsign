@@ -135,6 +135,7 @@ var common = {
 		region_type_14: 'Stream Zone',
 		region_type_15: 'VideoIn Zone',
 		region_type_16: 'DVB Zone',
+		region_type_17: 'Page Zone',
 		region_type_101: 'Chair Qrcode',
 		region_type_102: 'Charr Control',
 		region_type_103: 'Cloudia',

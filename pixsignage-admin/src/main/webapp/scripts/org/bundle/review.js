@@ -422,6 +422,15 @@ var ReviewModule = function () {
 					$(inner_div).find('img').attr('src', '/pixsignage/img/zone/zone-dvb.jpg');
 					$(inner_div).find('img').attr('width', '100%');
 					$(inner_div).find('img').attr('height', '100%');
+				} else if (zone.type == 17) {
+					//Page Zone
+					var img_element = document.createElement('img');
+					$(inner_div).append(img_element);
+					if (zonedtls.length > 0 && zonedtls[0].page != null) {
+						$(zone_div).find('img').attr('src', '/pixsigdata' + zonedtls[0].page.snapshot);
+						$(zone_div).find('img').attr('width', '100%');
+						$(zone_div).find('img').attr('height', '100%');
+					}
 				} else if (zone.type == 101 || zone.type == 102 || zone.type == 103) {
 					//Massage Zone & Cloudia Zone
 					var img_element = document.createElement('img');

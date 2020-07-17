@@ -1,10 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" 
  import="org.springframework.web.context.WebApplicationContext,
  org.springframework.web.context.support.WebApplicationContextUtils,
- com.broadvideo.pixsignage.service.SchoolclassService,
- com.broadvideo.pixsignage.common.PageInfo,
- com.broadvideo.pixsignage.common.PageResult,
- java.util.*"
+ com.broadvideo.pixsignage.service.SchoolclassService,com.supercat.supertrain.common.PageInfo,com.supercat.supertrain.common.PageResult,java.util.*"
 pageEncoding="UTF-8"%>
 <%@include file="/common/taglibs.jsp"%>
 <%@include file="/common/session.jsp"%>

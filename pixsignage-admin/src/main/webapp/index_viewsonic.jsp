@@ -11,25 +11,25 @@
 <%@page import="com.broadvideo.pixsignage.domain.Staff"%> 
 
 <%
-	ServletContext servletContext = this.getServletContext();
-	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
-	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
-	if (sdomain == null) {
-		sdomain = sdomainService.selectByServername("default");
-	}
-	String title = sdomain.getName();
+ 	ServletContext servletContext = this.getServletContext();
+ 	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+ 	SdomainService sdomainService = (SdomainService) ctx.getBean("sdomainService");
+ 	Sdomain sdomain = sdomainService.selectByServername(request.getServerName());
+ 	if (sdomain == null) {
+ 		sdomain = sdomainService.selectByServername("default");
+ 	}
+ 	String title = sdomain.getName();
 
-	Staff session_staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
-	String subsystem = "";
-	if (session_staff != null && session_staff.getSubsystem().equals("0")) {
-		subsystem = "sys";
-	} else if (session_staff != null && session_staff.getSubsystem().equals("1")) {
-		subsystem = "vsp";
-	} else if (session_staff != null && session_staff.getSubsystem().equals("2")) {
-		subsystem = "org";
-	}
-%>
+ 	Staff session_staff = (Staff)session.getAttribute(CommonConstants.SESSION_STAFF);
+ 	String subsystem = "";
+ 	if (session_staff != null && session_staff.getSubsystem().equals("0")) {
+ 		subsystem = "sys";
+ 	} else if (session_staff != null && session_staff.getSubsystem().equals("1")) {
+ 		subsystem = "vsp";
+ 	} else if (session_staff != null && session_staff.getSubsystem().equals("2")) {
+ 		subsystem = "org";
+ 	}
+ %>
 
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -309,8 +309,8 @@
 
 <!-- 
 	<div class="copyright">
-		<%if (sdomain == null || sdomain.getDescription() == null) { %>
-		<%=CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")"%>, S/N：<%=com.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID %><br/>
+if (sdomain == null || sdomain.getDescription() == null) {) { %>
+	CommonConfig.CURRENT_APPVERSION + "(" + CommonConfig.CURRENT_DBVERSION + ")" ")"%>, S/Ncom.broadvideo.pixsignage.common.CommonConfig.SYSTEM_ID_ID %><br/>
 		<%=CommonConfig.SYSTEM_COPYRIGHT%> <%=CommonConfig.SYSTEM_ICP%><br/>	
 		<%} else { %>
 		©<%=sdomain.getDescription()%>

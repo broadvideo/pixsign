@@ -17,6 +17,8 @@ public class Intent {
 
 	private Image relateimage;
 
+	private Page relatepage;
+
 	public Integer getIntentid() {
 		return intentid;
 	}
@@ -79,5 +81,13 @@ public class Intent {
 
 	public void setRelateimage(Image relateimage) {
 		this.relateimage = relateimage;
+	}
+
+	public Page getRelatepage() {
+		return relatepage;
+	}
+
+	public void setRelatepage(Page relatepage) {
+		this.relatepage = relatepage;
 	}
 }

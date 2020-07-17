@@ -146,7 +146,6 @@ delete t from device d, planbind t where d.deviceid=t.bindid and t.bindtype=1 an
 delete t from device d, onlinelog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete t from device d, monthlyplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete t from device d, dailyplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
-delete t from device d, hourplaylog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete t from device d, hourflowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete t from device d, pflowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
 delete t from device d, flowlog t where d.deviceid=t.deviceid and (d.status=0 or d.type is null);
@@ -208,6 +207,8 @@ alter table devicefilehis drop foreign key devicefilehis_ibfk_2;
 alter table devicefile add foreign key devicefile_fk1(deviceid) references device(deviceid) on delete cascade on update cascade;
 alter table devicefilehis add foreign key devicefilehis_fk1(deviceid) references device(deviceid) on delete cascade on update cascade;
 
+alter table routeguide add createtime timestamp not null default current_timestamp;
+alter table routeguidedtl modify routelines varchar(1024);
 
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
@@ -250,6 +251,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30221,2,302,'menu.device11','device/device11.jsp','','1',21);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30222,2,302,'工行定制信发','device/device12.jsp','','1',22);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30223,2,302,'menu.device13','device/device13.jsp','','1',23);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30224,2,302,'芯华测温','device/device14.jsp','','1',24);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30240,2,302,'menu.devicegroup','device/devicegroup.jsp','',1,40);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30250,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,50);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30251,2,302,'menu.appfile','device/appfile.jsp','',1,51);

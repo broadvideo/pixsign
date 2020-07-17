@@ -57,8 +57,8 @@ public class OrgServiceImpl implements OrgService {
 		/*
 		 * Org org = orgMapper.selectByPrimaryKey(orgid); List<App> appList =
 		 * org.getApplist(); if (appList != null) { for (App app : appList) {
-		 * app.setDescription( messageSource.getMessage("app." + app.getName(),
-		 * null, LocaleContextHolder.getLocale())); }
+		 * app.setDescription( messageSource.getMessage("app." + app.getName(), null,
+		 * LocaleContextHolder.getLocale())); }
 		 * 
 		 * }
 		 */
@@ -88,7 +88,7 @@ public class OrgServiceImpl implements OrgService {
 
 		int currentdeviceidx = 0;
 		List<Device> devices = new ArrayList<Device>();
-		for (int type = 1; type <= 13; type++) {
+		for (int type = 1; type <= 15; type++) {
 			if (type == 9 || type == 11 || type == 13) {
 				continue;
 			}
@@ -186,7 +186,7 @@ public class OrgServiceImpl implements OrgService {
 			Org oldOrg = orgMapper.selectByPrimaryKey("" + org.getOrgid());
 			int currentdeviceidx = oldOrg.getCurrentdeviceidx();
 			List<Device> devices = new ArrayList<Device>();
-			for (int type = 1; type <= 13; type++) {
+			for (int type = 1; type <= 15; type++) {
 				if (type == 9 || type == 11 || type == 13) {
 					continue;
 				}

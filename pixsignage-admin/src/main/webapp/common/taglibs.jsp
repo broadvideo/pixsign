@@ -6,4 +6,4 @@
 <c:set var="base_ctx" value="/pixsignage" />
 <c:set var="static_ctx" value="/pixres" />
 <c:set var="locale"><%=org.springframework.context.i18n.LocaleContextHolder.getLocale().toString() %></c:set>
-<c:set var="timestamp"><%=com.broadvideo.pixsignage.common.CommonConfig.Timestamp %></c:set>
+<c:set var="timestamp"><%=com.broadvideo.pixsignage.common.CommonConfig.Timestamp%></c:set>

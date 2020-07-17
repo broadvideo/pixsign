@@ -282,6 +282,7 @@ var TempletModule = function () {
 						_design.Object.templetzones[i].templetzonedtls[j].video = undefined;
 						_design.Object.templetzones[i].templetzonedtls[j].stream = undefined;
 						_design.Object.templetzones[i].templetzonedtls[j].dvb = undefined;
+						_design.Object.templetzones[i].templetzonedtls[j].page = undefined;
 					}
 				}
 				$.ajax({
