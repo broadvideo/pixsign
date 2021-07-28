@@ -447,9 +447,13 @@ var VideoModule = function () {
 		}); 
 
 		$('body').on('click', '.pix-add', function(event) {
-			$('#UploadForm').find('.cancel').click();
-			$('#UploadForm .files').html('');
-			$('#UploadModal').modal();
+			if (VideoTree.full == 1) {
+				bootbox.alert(common.tips.storage_full);
+			} else {
+				$('#UploadForm').find('.cancel').click();
+				$('#UploadForm .files').html('');
+				$('#UploadModal').modal();
+			}
 		});			
 
 		$('body').on('click', '.pix-upload-close', function(event) {

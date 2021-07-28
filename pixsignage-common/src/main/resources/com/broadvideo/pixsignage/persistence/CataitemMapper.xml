@@ -16,7 +16,7 @@
   </select>
   
   <select id="selectListByCatalog" resultMap="BaseResultMap" >
-    select *from cataitem
+    select * from cataitem
     where catalogid = #{catalogid}
   </select>
   

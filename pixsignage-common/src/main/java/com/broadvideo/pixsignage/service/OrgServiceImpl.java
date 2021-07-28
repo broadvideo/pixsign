@@ -84,11 +84,12 @@ public class OrgServiceImpl implements OrgService {
 		branch.setDescription(org.getName() + " "
 				+ messageSource.getMessage("global.headquarter", null, LocaleContextHolder.getLocale()));
 		branch.setCreatestaffid(org.getCreatestaffid());
+		branch.setMaxstorage(org.getMaxstorage());
 		branchService.addBranch(branch);
 
 		int currentdeviceidx = 0;
 		List<Device> devices = new ArrayList<Device>();
-		for (int type = 1; type <= 15; type++) {
+		for (int type = 1; type <= 16; type++) {
 			if (type == 9 || type == 11 || type == 13) {
 				continue;
 			}
@@ -186,7 +187,7 @@ public class OrgServiceImpl implements OrgService {
 			Org oldOrg = orgMapper.selectByPrimaryKey("" + org.getOrgid());
 			int currentdeviceidx = oldOrg.getCurrentdeviceidx();
 			List<Device> devices = new ArrayList<Device>();
-			for (int type = 1; type <= 15; type++) {
+			for (int type = 1; type <= 16; type++) {
 				if (type == 9 || type == 11 || type == 13) {
 					continue;
 				}
@@ -237,6 +238,10 @@ public class OrgServiceImpl implements OrgService {
 			}
 			org.setCurrentdeviceidx(currentdeviceidx);
 		}
+
+		Branch branch = branchService.selectByPrimaryKey("" + org.getTopbranchid());
+		branch.setMaxstorage(org.getMaxstorage());
+		branchService.updateBranch(branch);
 		orgMapper.updateByPrimaryKeySelective(org);
 		vspMapper.updateCurrentdevices();
 		vspMapper.updateCurrentstorage();

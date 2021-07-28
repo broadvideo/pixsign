@@ -18,6 +18,7 @@ import com.broadvideo.pixsignage.common.CommonConfig;
 import com.broadvideo.pixsignage.common.CommonConstants;
 import com.broadvideo.pixsignage.domain.Adplan;
 import com.broadvideo.pixsignage.domain.Adplandtl;
+import com.broadvideo.pixsignage.domain.Audio;
 import com.broadvideo.pixsignage.domain.Bundle;
 import com.broadvideo.pixsignage.domain.Bundlezone;
 import com.broadvideo.pixsignage.domain.Bundlezonedtl;
@@ -30,6 +31,9 @@ import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Pagezone;
 import com.broadvideo.pixsignage.domain.Pagezonedtl;
+import com.broadvideo.pixsignage.domain.Plan;
+import com.broadvideo.pixsignage.domain.Planbind;
+import com.broadvideo.pixsignage.domain.Plandtl;
 import com.broadvideo.pixsignage.domain.Schedule;
 import com.broadvideo.pixsignage.domain.Scheduledtl;
 import com.broadvideo.pixsignage.domain.Stream;
@@ -47,6 +51,7 @@ import com.broadvideo.pixsignage.persistence.MedialistdtlMapper;
 import com.broadvideo.pixsignage.persistence.MsgeventMapper;
 import com.broadvideo.pixsignage.persistence.OrgMapper;
 import com.broadvideo.pixsignage.persistence.PageMapper;
+import com.broadvideo.pixsignage.persistence.PlanMapper;
 import com.broadvideo.pixsignage.persistence.ScheduleMapper;
 import com.broadvideo.pixsignage.persistence.VideoMapper;
 import com.broadvideo.pixsignage.util.ActiveMQUtil;
@@ -76,6 +81,8 @@ public class DeviceServiceImpl implements DeviceService {
 	private PageMapper pageMapper;
 	@Autowired
 	private ScheduleMapper scheduleMapper;
+	@Autowired
+	private PlanMapper planMapper;
 	@Autowired
 	private MedialistdtlMapper medialistdtlMapper;
 	@Autowired
@@ -132,7 +139,8 @@ public class DeviceServiceImpl implements DeviceService {
 					"Device has reached the upper limit, type=" + device.getType() + ", max=" + max);
 		}
 
-		if (device.getType().equals(Device.Type_3DFanSolo) || device.getType().equals(Device.Type_3DFanWall) || device.getType().equals(Device.Type_Cloudia)) {
+		if (device.getType().equals(Device.Type_3DFanSolo) || device.getType().equals(Device.Type_3DFanWall)
+				|| device.getType().equals(Device.Type_Cloudia)) {
 			Device d = deviceMapper.selectByTerminalid(device.getTerminalid());
 			if (d != null) {
 				throw new PixException(3003, "Device terminalid duplicated, terminalid=" + device.getTerminalid());
@@ -587,7 +595,7 @@ public class DeviceServiceImpl implements DeviceService {
 		this.deviceMapper.resetExternalid(externalid);
 	}
 
-	public JSONObject generateBundleJson(Device device) throws Exception {
+	public JSONObject generateBundleScheduleJson(Device device) throws Exception {
 		JSONObject resultJson = new JSONObject();
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
@@ -608,11 +616,13 @@ public class DeviceServiceImpl implements DeviceService {
 		JSONArray bundleJsonArray = new JSONArray();
 		JSONArray videoJsonArray = new JSONArray();
 		JSONArray imageJsonArray = new JSONArray();
+		JSONArray audioJsonArray = new JSONArray();
 		JSONArray streamJsonArray = new JSONArray();
 		JSONArray pageJsonArray = new JSONArray();
 		HashMap<Integer, JSONObject> bundleHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> videoHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> imageHash = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> audioHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> streamHash = new HashMap<Integer, JSONObject>();
 		HashMap<Integer, JSONObject> pageHash = new HashMap<Integer, JSONObject>();
 
@@ -620,8 +630,10 @@ public class DeviceServiceImpl implements DeviceService {
 		List<Schedule> attachscheduleList = new ArrayList<Schedule>();
 		List<Bundle> bundleList = new ArrayList<Bundle>();
 
+		String scheduleType = "";
 		Org org = orgMapper.selectByPrimaryKey("" + device.getOrgid());
 		if (org.getBundleplanflag().equals("0")) {
+			scheduleType = "1";
 			if (device.getDevicegroupid().intValue() == 0) {
 				mainscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "0", Schedule.BindType_Device,
 						"" + device.getDeviceid(), Schedule.PlayMode_Daily);
@@ -633,7 +645,8 @@ public class DeviceServiceImpl implements DeviceService {
 				attachscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "1",
 						Schedule.BindType_Devicegroup, "" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
 			}
-		} else {
+		} else if (org.getBundleplanflag().equals("1")) {
+			scheduleType = "1";
 			int defaultbundleid = 0;
 			if (device.getDevicegroupid() > 0) {
 				Devicegroup devicegroup = devicegroupMapper.selectByPrimaryKey("" + device.getDevicegroupid());
@@ -660,66 +673,169 @@ public class DeviceServiceImpl implements DeviceService {
 			scheduledtls.add(scheduledtl);
 			schedule.setScheduledtls(scheduledtls);
 			mainscheduleList.add(schedule);
+
+			if (device.getDevicegroupid().intValue() == 0) {
+				attachscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "1",
+						Schedule.BindType_Device, "" + device.getDeviceid(), Schedule.PlayMode_Daily);
+			} else {
+				attachscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "1",
+						Schedule.BindType_Devicegroup, "" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
+			}
+		} else if (org.getBundleplanflag().equals("2")) {
+			// 按日期排schedule
+			scheduleType = "2";
+
+			if (device.getDevicegroupid().intValue() == 0) {
+				attachscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "1",
+						Schedule.BindType_Device, "" + device.getDeviceid(), Schedule.PlayMode_Daily);
+			} else {
+				attachscheduleList = scheduleMapper.selectList(Schedule.ScheduleType_Solo, "1",
+						Schedule.BindType_Devicegroup, "" + device.getDevicegroupid(), Schedule.PlayMode_Daily);
+			}
 		}
 
 		// main schedule
-		for (int i = 0; i < mainscheduleList.size(); i++) {
-			Schedule schedule = mainscheduleList.get(i);
-			JSONObject scheduleJson = new JSONObject();
-			JSONArray bundleidJsonArray = new JSONArray();
-			for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
-				if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
-					if (bundleHash.get(scheduledtl.getObjid()) == null) {
-						Bundle bundle = bundleMapper.selectByPrimaryKey("" + scheduledtl.getObjid());
-						int d1 = Integer.parseInt(DateUtil.getDateStr(bundle.getStartdate(), "yyyyMMdd"));
-						int d2 = Integer.parseInt(DateUtil.getDateStr(bundle.getEnddate(), "yyyyMMdd"));
-						int now = Integer.parseInt(DateUtil.getDateStr(Calendar.getInstance().getTime(), "yyyyMMdd"));
-						if (now < d1 || now > d2) {
-							continue;
-						}
+		if (org.getBundleplanflag().equals("2")) {
+			// 按日期排schedule
+			List<Plan> planList;
+			if (device.getDevicegroupid().intValue() == 0) {
+				planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Device,
+						"" + device.getDeviceid());
+			} else {
+				planList = planMapper.selectListByBind(Plan.PlanType_Bundle, Planbind.BindType_Devicegroup,
+						"" + device.getDevicegroupid());
+			}
+			for (Plan plan : planList) {
+				JSONObject planJson = new JSONObject();
+				planJson.put("schedule_id", plan.getPlanid());
+				planJson.put("priority", plan.getPriority());
+				planJson.put("play_mode", "daily");
+				planJson.put("start_date",
+						new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getStartdate()));
+				planJson.put("end_date",
+						new SimpleDateFormat(CommonConstants.DateFormat_Date).format(plan.getEnddate()));
+				planJson.put("start_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getStarttime()));
+				planJson.put("end_time",
+						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(plan.getEndtime()));
 
-						if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
-							JSONObject bundleJson = JSONObject.fromObject(bundle.getJson());
-							bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
-						}
-						bundleList.add(bundle);
-						for (Bundle subbundle : bundle.getSubbundles()) {
-							Bundle b = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
-							if (b != null && !b.getReviewflag().equals(Page.REVIEW_PASSED)) {
-								JSONObject bundleJson = JSONObject.fromObject(b.getJson());
-								b = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+				JSONArray plandtlJsonArray = new JSONArray();
+				for (Plandtl plandtl : plan.getPlandtls()) {
+					if (plandtl.getObjtype().equals(Plandtl.ObjType_Bundle)) {
+						JSONObject plandtlJson = new JSONObject();
+						plandtlJson.put("scheduledtl_id", plandtl.getPlandtlid());
+						plandtlJson.put("media_type", "bundle");
+						plandtlJson.put("media_id", plandtl.getObjid());
+						plandtlJsonArray.add(plandtlJson);
+
+						if (bundleHash.get(plandtl.getObjid()) == null) {
+							Bundle bundle = bundleMapper.selectByPrimaryKey("" + plandtl.getObjid());
+							int d1 = Integer.parseInt(DateUtil.getDateStr(bundle.getStartdate(), "yyyyMMdd"));
+							int d2 = Integer.parseInt(DateUtil.getDateStr(bundle.getEnddate(), "yyyyMMdd"));
+							int now = Integer
+									.parseInt(DateUtil.getDateStr(Calendar.getInstance().getTime(), "yyyyMMdd"));
+							if (now < d1 || now > d2) {
+								continue;
 							}
-							bundleList.add(b);
-						}
 
-						String jsonPath = "/bundle/" + bundle.getBundleid() + "/bundle-" + bundle.getBundleid()
-								+ ".json";
-						File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
-						if (!jsonFile.exists()) {
-							bundleService.makeJsonFile("" + bundle.getBundleid());
+							if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+								JSONObject bundleJson = JSONObject.fromObject(bundle.getJson());
+								bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+							}
+							bundleList.add(bundle);
+							for (Bundle subbundle : bundle.getSubbundles()) {
+								Bundle b = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
+								if (b != null && !b.getReviewflag().equals(Page.REVIEW_PASSED)) {
+									JSONObject bundleJson = JSONObject.fromObject(b.getJson());
+									b = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+								}
+								bundleList.add(b);
+							}
+
+							String jsonPath = "/bundle/" + bundle.getBundleid() + "/bundle-" + bundle.getBundleid()
+									+ ".json";
+							File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
+							if (!jsonFile.exists()) {
+								bundleService.makeJsonFile("" + bundle.getBundleid());
+							}
+							JSONObject bundleJson = new JSONObject();
+							bundleJson.put("bundle_id", bundle.getBundleid());
+							bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+							bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+							bundleJson.put("file", jsonFile.getName());
+							bundleJson.put("size", bundle.getSize());
+							bundleJson.put("checksum", bundle.getMd5());
+							bundleHash.put(bundle.getBundleid(), bundleJson);
+							bundleJsonArray.add(bundleJson);
 						}
-						JSONObject bundleJson = new JSONObject();
-						bundleJson.put("bundle_id", bundle.getBundleid());
-						bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-						bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
-						bundleJson.put("file", jsonFile.getName());
-						bundleJson.put("size", bundle.getSize());
-						bundleJson.put("checksum", bundle.getMd5());
-						bundleHash.put(bundle.getBundleid(), bundleJson);
-						bundleJsonArray.add(bundleJson);
 					}
 
-					bundleidJsonArray.add(scheduledtl.getObjid());
-					if (i == 0) {
-						solobundleidJsonArray.add(scheduledtl.getObjid());
+				}
+				planJson.put("scheduledtls", plandtlJsonArray);
+				mainscheduleJsonArray.add(planJson);
+			}
+
+		} else {
+			// 旧模式
+			for (int i = 0; i < mainscheduleList.size(); i++) {
+				Schedule schedule = mainscheduleList.get(i);
+				JSONObject scheduleJson = new JSONObject();
+				JSONArray bundleidJsonArray = new JSONArray();
+				for (Scheduledtl scheduledtl : schedule.getScheduledtls()) {
+					if (scheduledtl.getObjtype().equals(Scheduledtl.ObjType_Bundle)) {
+						if (bundleHash.get(scheduledtl.getObjid()) == null) {
+							Bundle bundle = bundleMapper.selectByPrimaryKey("" + scheduledtl.getObjid());
+							int d1 = Integer.parseInt(DateUtil.getDateStr(bundle.getStartdate(), "yyyyMMdd"));
+							int d2 = Integer.parseInt(DateUtil.getDateStr(bundle.getEnddate(), "yyyyMMdd"));
+							int now = Integer
+									.parseInt(DateUtil.getDateStr(Calendar.getInstance().getTime(), "yyyyMMdd"));
+							if (now < d1 || now > d2) {
+								continue;
+							}
+
+							if (!bundle.getReviewflag().equals(Bundle.REVIEW_PASSED)) {
+								JSONObject bundleJson = JSONObject.fromObject(bundle.getJson());
+								bundle = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+							}
+							bundleList.add(bundle);
+							for (Bundle subbundle : bundle.getSubbundles()) {
+								Bundle b = bundleMapper.selectByPrimaryKey("" + subbundle.getBundleid());
+								if (b != null && !b.getReviewflag().equals(Page.REVIEW_PASSED)) {
+									JSONObject bundleJson = JSONObject.fromObject(b.getJson());
+									b = (Bundle) JSONObject.toBean(bundleJson, Bundle.class, map);
+								}
+								bundleList.add(b);
+							}
+
+							String jsonPath = "/bundle/" + bundle.getBundleid() + "/bundle-" + bundle.getBundleid()
+									+ ".json";
+							File jsonFile = new File(CommonConfig.CONFIG_PIXDATA_HOME + jsonPath);
+							if (!jsonFile.exists()) {
+								bundleService.makeJsonFile("" + bundle.getBundleid());
+							}
+							JSONObject bundleJson = new JSONObject();
+							bundleJson.put("bundle_id", bundle.getBundleid());
+							bundleJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+							bundleJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + jsonPath);
+							bundleJson.put("file", jsonFile.getName());
+							bundleJson.put("size", bundle.getSize());
+							bundleJson.put("checksum", bundle.getMd5());
+							bundleHash.put(bundle.getBundleid(), bundleJson);
+							bundleJsonArray.add(bundleJson);
+						}
+
+						bundleidJsonArray.add(scheduledtl.getObjid());
+						if (i == 0) {
+							solobundleidJsonArray.add(scheduledtl.getObjid());
+						}
 					}
 				}
-			}
-			if (bundleidJsonArray.size() > 0) {
-				scheduleJson.put("start_time",
-						new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
-				scheduleJson.put("bundle_ids", bundleidJsonArray);
-				mainscheduleJsonArray.add(scheduleJson);
+				if (bundleidJsonArray.size() > 0) {
+					scheduleJson.put("start_time",
+							new SimpleDateFormat(CommonConstants.DateFormat_Time).format(schedule.getStarttime()));
+					scheduleJson.put("bundle_ids", bundleidJsonArray);
+					mainscheduleJsonArray.add(scheduleJson);
+				}
 			}
 		}
 
@@ -846,6 +962,20 @@ public class DeviceServiceImpl implements DeviceService {
 							imageJsonArray.add(imageJson);
 							imageList.add(image);
 						}
+					} else if (bundlezonedtl.getAudio() != null) {
+						if (audioHash.get(bundlezonedtl.getObjid()) == null) {
+							Audio audio = bundlezonedtl.getAudio();
+							JSONObject audioJson = new JSONObject();
+							audioJson.put("id", audio.getAudioid());
+							audioJson.put("name", audio.getName());
+							audioJson.put("url", downloadurl + CommonConfig.CONFIG_PIXDATA_URL + audio.getFilepath());
+							audioJson.put("path", CommonConfig.CONFIG_PIXDATA_URL + audio.getFilepath());
+							audioJson.put("file", audio.getFilename());
+							audioJson.put("size", audio.getSize());
+							audioJson.put("checksum", audio.getMd5());
+							audioHash.put(audio.getAudioid(), audioJson);
+							audioJsonArray.add(audioJson);
+						}
 					} else if (bundlezonedtl.getStream() != null) {
 						if (streamHash.get(bundlezonedtl.getObjid()) == null) {
 							Stream stream = bundlezonedtl.getStream();
@@ -941,18 +1071,20 @@ public class DeviceServiceImpl implements DeviceService {
 			}
 		}
 
-		resultJson.put("bundle_ids", solobundleidJsonArray);
+		// resultJson.put("bundle_ids", solobundleidJsonArray);
+		resultJson.put("schedule_type", scheduleType);
 		resultJson.put("schedules", mainscheduleJsonArray);
 		resultJson.put("attachschedules", attachscheduleJsonArray);
 		resultJson.put("bundles", bundleJsonArray);
 		resultJson.put("videos", videoJsonArray);
 		resultJson.put("images", imageJsonArray);
+		resultJson.put("audios", audioJsonArray);
 		resultJson.put("streams", streamJsonArray);
 		resultJson.put("pages", pageJsonArray);
 		return resultJson;
 	}
 
-	public JSONObject generatePageJson(Device device) throws Exception {
+	public JSONObject generatePageScheduleJson(Device device) throws Exception {
 		JSONObject resultJson = new JSONObject();
 
 		String serverip = configMapper.selectValueByCode("ServerIP");
@@ -1192,21 +1324,19 @@ public class DeviceServiceImpl implements DeviceService {
 			}
 		}
 		/*
-		 * for (Page p : pageList) { for (Pagezone pagezone : p.getPagezones())
-		 * { for (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) { if
-		 * (pagezonedtl.getVideo() != null) { if
-		 * (videoHash.get(pagezonedtl.getObjid()) == null) { Video video =
-		 * pagezonedtl.getVideo(); JSONObject videoJson = new JSONObject();
-		 * videoJson.put("id", video.getVideoid()); videoJson.put("name",
+		 * for (Page p : pageList) { for (Pagezone pagezone : p.getPagezones()) { for
+		 * (Pagezonedtl pagezonedtl : pagezone.getPagezonedtls()) { if
+		 * (pagezonedtl.getVideo() != null) { if (videoHash.get(pagezonedtl.getObjid())
+		 * == null) { Video video = pagezonedtl.getVideo(); JSONObject videoJson = new
+		 * JSONObject(); videoJson.put("id", video.getVideoid()); videoJson.put("name",
 		 * video.getName()); videoJson.put("url", downloadurl +
-		 * CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath());
-		 * videoJson.put("path", CommonConfig.CONFIG_PIXDATA_URL +
-		 * video.getFilepath()); videoJson.put("file", video.getFilename());
-		 * videoJson.put("size", video.getSize()); videoJson.put("checksum",
-		 * video.getMd5()); videoJson.put("thumbnail", downloadurl +
-		 * CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
-		 * videoHash.put(video.getVideoid(), videoJson);
-		 * videoJsonArray.add(videoJson); } } } } }
+		 * CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath()); videoJson.put("path",
+		 * CommonConfig.CONFIG_PIXDATA_URL + video.getFilepath()); videoJson.put("file",
+		 * video.getFilename()); videoJson.put("size", video.getSize());
+		 * videoJson.put("checksum", video.getMd5()); videoJson.put("thumbnail",
+		 * downloadurl + CommonConfig.CONFIG_PIXDATA_URL + video.getThumbnail());
+		 * videoHash.put(video.getVideoid(), videoJson); videoJsonArray.add(videoJson);
+		 * } } } } }
 		 */
 
 		resultJson.put("pages", pageJsonArray);

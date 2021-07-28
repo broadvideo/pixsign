@@ -422,7 +422,7 @@ public class PixsignageService3 {
 				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
-			JSONObject responseJson = deviceService.generatePageJson(device);
+			JSONObject responseJson = deviceService.generatePageScheduleJson(device);
 			responseJson.put("code", 0);
 			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_page response({}): {}", terminalid, responseJson.toString());
@@ -454,7 +454,7 @@ public class PixsignageService3 {
 				return handleResult(1010, "Hardkey & Terminalid ID not matched.");
 			}
 
-			JSONObject responseJson = deviceService.generateBundleJson(device);
+			JSONObject responseJson = deviceService.generateBundleScheduleJson(device);
 			responseJson.put("code", 0);
 			responseJson.put("message", "Success");
 			logger.info("Pixsignage3 Service get_bundle response({}): {}", terminalid, responseJson.toString());
@@ -730,10 +730,10 @@ public class PixsignageService3 {
 				JSONObject eventJson = new JSONObject();
 				if (msgevent.getMsgtype().equals(Msgevent.MsgType_Bundle)) {
 					eventJson.put("event_type", "bundle");
-					eventJson.put("event_content", deviceService.generateBundleJson(device));
+					eventJson.put("event_content", deviceService.generateBundleScheduleJson(device));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Page)) {
 					eventJson.put("event_type", "page");
-					eventJson.put("event_content", deviceService.generatePageJson(device));
+					eventJson.put("event_content", deviceService.generatePageScheduleJson(device));
 				} else if (msgevent.getMsgtype().equals(Msgevent.MsgType_Medialist)) {
 					eventJson.put("event_type", "playlist");
 					eventJson.put("event_content", deviceService.generateMedialistJson(device));

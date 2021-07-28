@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.broadvideo.pixsignage.persistence.OnlinelogMapper;
+import com.broadvideo.pixsignage.service.BranchService;
 import com.broadvideo.pixsignage.service.DeviceService;
 import com.broadvideo.pixsignage.service.OrgService;
 
@@ -19,6 +20,8 @@ public class DeviceTask {
 	private OnlinelogMapper onlinelogMapper;
 	@Autowired
 	private OrgService orgService;
+	@Autowired
+	private BranchService branchService;
 
 	public void work() {
 		if (workflag) {
@@ -31,6 +34,7 @@ public class DeviceTask {
 			onlinelogMapper.updateAll();
 			orgService.updateCurrentdevices();
 			orgService.updateCurrentstorage();
+			branchService.updateCurrentstorage();
 		} catch (Exception e) {
 			logger.error("Device Quartz Task error: {}", e.getMessage());
 		}

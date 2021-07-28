@@ -210,6 +210,9 @@ alter table devicefilehis add foreign key devicefilehis_fk1(deviceid) references
 alter table routeguide add createtime timestamp not null default current_timestamp;
 alter table routeguidedtl modify routelines varchar(1024);
 
+alter table branch add maxstorage int default 0 after code;
+alter table branch add currentstorage int default 0 after maxstorage;
+
 delete from privilege where privilegeid > 0;
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(104,0,0,'menu.page','page.jsp','fa-html5',1,4);
@@ -227,7 +230,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(301,2,0,'menu.resource','','fa-qrcode',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30102,2,301,'menu.video','resource/video.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30104,2,301,'menu.image','resource/image.jsp','',1,4);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30105,2,301,'menu.audio','resource/audio.jsp','',1,5);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30105,2,301,'menu.audio','resource/audio.jsp','',1,5);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30106,2,301,'menu.text','resource/text.jsp','',1,6);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30107,2,301,'menu.stream','resource/stream.jsp','',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30108,2,301,'menu.dvb','resource/dvb.jsp','',1,8);
@@ -252,6 +255,8 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30222,2,302,'工行定制信发','device/device12.jsp','','1',22);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30223,2,302,'menu.device13','device/device13.jsp','','1',23);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30224,2,302,'芯华测温','device/device14.jsp','','1',24);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30225,2,302,'体感互动','device/device15.jsp','','1',25);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30226,2,302,'WindowsH5','device/device16.jsp','','1',26);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30240,2,302,'menu.devicegroup','device/devicegroup.jsp','',1,40);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30250,2,302,'menu.deviceconfig','device/deviceconfig.jsp','',1,50);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30251,2,302,'menu.appfile','device/appfile.jsp','',1,51);
@@ -273,7 +278,6 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30409,2,304,'menu.pagereview','page/page-review.jsp','',1,9);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(305,2,0,'menu.schedulemanage','','fa-calendar',1,6);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30500,2,305,'menu.playlist','plan/medialist.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30501,2,305,'menu.schedule','plan/schedule-solo.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30502,2,305,'menu.attachschedule','plan/schedule-solo-attach.jsp','',1,3);
@@ -281,6 +285,7 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30504,2,305,'menu.devicegroupbundle','plan/devicegroup-bundle.jsp','',1,5);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30505,2,305,'menu.pageplan','plan/plan-page.jsp','',1,6);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30506,2,305,'menu.pageplan','plan/device-page.jsp','',1,7);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30507,2,305,'menu.bundleplan','plan/plan-bundle.jsp','',1,2);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(306,2,0,'menu.mscreen','','fa-codepen',1,7);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30602,2,306,'menu.mediagrid','mscreen/mediagrid.jsp','',1,2);

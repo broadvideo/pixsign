@@ -23,6 +23,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['9'] = 1;
 		ZoneLimits['10'] = 1;
 		ZoneLimits['12'] = 1;
+		ZoneLimits['13'] = 1;
 		ZoneLimits['14'] = 4;
 		ZoneLimits['15'] = 1;
 		ZoneLimits['16'] = 1;
@@ -30,6 +31,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['101'] = 1;
 		ZoneLimits['102'] = 1;
 		ZoneLimits['103'] = 1;
+		ZoneLimits['104'] = 1;
 		
 		initEvent();
 	};
@@ -128,6 +130,10 @@ var BundleDesignModule = function (mode) {
 			//RSS Zone
 			var p_element = document.createElement('p');
 			$(inner_div).append(p_element);
+		} else if (bundlezone.type == 13) {
+			//Audio Zone
+			var p_element = document.createElement('p');
+			$(inner_div).append(p_element);
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
 			var img_element = document.createElement('img');
@@ -144,7 +150,7 @@ var BundleDesignModule = function (mode) {
 			//Page Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
-		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
+		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103 || bundlezone.type == 104) {
 			//Massage Zone & Cloudia Zone
 			var img_element = document.createElement('img');
 			$(inner_div).append(img_element);
@@ -373,6 +379,14 @@ var BundleDesignModule = function (mode) {
 				'word-wrap': 'break-word',
 			});
 			$(bundlezoneDiv).find('p').html(bundlezone.content);
+		} else if (bundlezone.type == 13) {
+			//Audio Zone
+			$(bundlezoneDiv).find('#rotatable').css({
+				'box-sizing': 'border-box',
+				'text-align': 'left', 
+				'word-wrap': 'break-word',
+			});
+			$(bundlezoneDiv).find('p').html('Audio');
 		} else if (bundlezone.type == 14) {
 			//Stream Zone
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-stream.jpg');
@@ -398,7 +412,7 @@ var BundleDesignModule = function (mode) {
 				$(bundlezoneDiv).find('img').attr('width', '100%');
 				$(bundlezoneDiv).find('img').attr('height', '100%');
 			}
-		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103) {
+		} else if (bundlezone.type == 101 || bundlezone.type == 102 || bundlezone.type == 103 || bundlezone.type == 104) {
 			//Massage Zone & Cloudia Zone
 			$(bundlezoneDiv).find('img').attr('src', '/pixsignage/img/zone/zone-' + bundlezone.type + '.jpg');
 			$(bundlezoneDiv).find('img').attr('width', '100%');
@@ -525,6 +539,9 @@ var BundleDesignModule = function (mode) {
 							$('#LibraryModal #ImageLiTab').css('display', '');
 							$('#LibraryModal #ImageLiTab').removeClass('active');
 							$('#LibraryModal #ImageLibraryTab').removeClass('active');
+							$('#LibraryModal #AudioLiTab').css('display', 'none');
+							$('#LibraryModal #AudioLiTab').removeClass('active');
+							$('#LibraryModal #AudioLibraryTab').removeClass('active');
 							$('#LibraryModal #StreamLiTab').css('display', 'none');
 							$('#LibraryModal #StreamLiTab').removeClass('active');
 							$('#LibraryModal #StreamLibraryTab').removeClass('active');
@@ -554,6 +571,9 @@ var BundleDesignModule = function (mode) {
 							$('#LibraryModal #ImageLiTab').css('display', '');
 							$('#LibraryModal #ImageLiTab').addClass('active');
 							$('#LibraryModal #ImageLibraryTab').addClass('active');
+							$('#LibraryModal #AudioLiTab').css('display', 'none');
+							$('#LibraryModal #AudioLiTab').removeClass('active');
+							$('#LibraryModal #AudioLibraryTab').removeClass('active');
 							$('#LibraryModal #StreamLiTab').css('display', 'none');
 							$('#LibraryModal #StreamLiTab').removeClass('active');
 							$('#LibraryModal #StreamLibraryTab').removeClass('active');
@@ -563,6 +583,22 @@ var BundleDesignModule = function (mode) {
 							_self.Zone = bundlezones[0];
 							$('#WebForm').loadJSON(_self.Zone);
 							$('#WebModal').modal();
+						} else if (bundlezones[0].type == 13) {
+							//Audio Zone
+							_self.Zone = bundlezones[0];
+							$('#LibraryModal #VideoLiTab').css('display', 'none');
+							$('#LibraryModal #VideoLiTab').removeClass('active');
+							$('#LibraryModal #VideoLibraryTab').removeClass('active');
+							$('#LibraryModal #ImageLiTab').css('display', 'none');
+							$('#LibraryModal #ImageLiTab').removeClass('active');
+							$('#LibraryModal #ImageLibraryTab').removeClass('active');
+							$('#LibraryModal #AudioLiTab').css('display', '');
+							$('#LibraryModal #AudioLiTab').addClass('active');
+							$('#LibraryModal #AudioLibraryTab').addClass('active');
+							$('#LibraryModal #StreamLiTab').css('display', 'none');
+							$('#LibraryModal #StreamLiTab').removeClass('active');
+							$('#LibraryModal #StreamLibraryTab').removeClass('active');
+							$('#LibraryModal').modal();
 						} else if (bundlezones[0].type == 14) {
 							//Stream Zone
 							_self.Zone = bundlezones[0];
@@ -1413,6 +1449,37 @@ var BundleDesignModule = function (mode) {
 		$('#VideoTable_wrapper .dataTables_length select').addClass('form-control input-small'); 
 		$('#VideoTable').css('width', '100%');
 
+		//Audio table初始化
+		var AudioTree = new BranchTree($('#AudioLibraryTab'));
+		$('#AudioTable').dataTable({
+			'sDom' : '<"row"<"col-md-6 col-sm-12"l><"col-md-6 col-sm-12"f>r>t<"row"<"col-md-5 col-sm-12"i><"col-md-7 col-sm-12"p>>', 
+			'aLengthMenu' : [ [ 10, 25, 50, 100 ],
+							[ 10, 25, 50, 100 ] 
+							],
+			'bProcessing' : true,
+			'bServerSide' : true,
+			'sAjaxSource' : 'audio!list.action',
+			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false },
+							{'sTitle' : common.view.filename, 'mData' : 'filename', 'bSortable' : false }, 
+							{'sTitle' : common.view.size, 'mData' : 'size', 'bSortable' : false }, 
+							{'sTitle' : '', 'mData' : 'audioid', 'bSortable' : false }],
+			'iDisplayLength' : 10,
+			'sPaginationType' : 'bootstrap',
+			'oLanguage' : PixData.tableLanguage,
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
+				$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs green pix-bundlezonedtl-audio-add"><i class="fa fa-plus"></i></a>');
+				return nRow;
+			},
+			'fnServerParams': function(aoData) { 
+				aoData.push({'name':'branchid','value':AudioTree.branchid });
+			}
+		});
+		$('#AudioTable_wrapper').addClass('form-inline');
+		$('#AudioTable_wrapper .dataTables_filter input').addClass('form-control input-small');
+		$('#AudioTable_wrapper .dataTables_length select').addClass('form-control input-small');
+		$('#AudioTable_wrapper .dataTables_length select').select2();
+		$('#AudioTable').css('width', '100%').css('table-layout', 'fixed');
+
 		//Stream table初始化
 		var StreamTree = new BranchTree($('#StreamLibraryTab'));
 		$('#StreamTable').dataTable({
@@ -1492,6 +1559,9 @@ var BundleDesignModule = function (mode) {
 				} else if (bundlezonedtl.objtype == 5) {
 					mediatype = common.view.stream;
 					medianame = bundlezonedtl.stream.name;
+				} else if (bundlezonedtl.objtype == 6) {
+					mediatype = common.view.audio;
+					medianame = bundlezonedtl.audio.name;
 				} else {
 					mediatype = common.view.unknown;
 				}
@@ -1554,6 +1624,25 @@ var BundleDesignModule = function (mode) {
 			var thumbwidth = data.width > data.height? 100 : 100*data.width/data.height;
 			var thumbhtml = '<div class="thumbs" style="width:40px; height:40px;"><img src="/pixsigdata' + data.thumbnail + '" class="imgthumb" width="' + thumbwidth + '%" alt="' + data.name + '"></div>';
 			$('#BundlezonedtlTable').dataTable().fnAddData([bundlezonedtl.sequence, common.view.image, thumbhtml, data.name, 0, 0, 0]);
+			refreshBundlezone(_self.Zone);
+		});
+
+		//增加Audio到播放明细Table
+		$('body').on('click', '.pix-bundlezonedtl-audio-add', function(event) {
+			var rowIndex = $(event.target).attr("data-id");
+			if (rowIndex == undefined) {
+				rowIndex = $(event.target).parent().attr('data-id');
+			}
+			var data = $('#AudioTable').dataTable().fnGetData(rowIndex);
+			var bundlezonedtl = {};
+			bundlezonedtl.bundlezonedtlid = 0;
+			bundlezonedtl.bundlezoneid = _self.Zone.bundlezoneid;
+			bundlezonedtl.objtype = '6';
+			bundlezonedtl.objid = data.audioid;
+			bundlezonedtl.sequence = _self.Zone.bundlezonedtls.length + 1;
+			bundlezonedtl.audio = data;
+			_self.Zone.bundlezonedtls.push(bundlezonedtl);
+			$('#BundlezonedtlTable').dataTable().fnAddData([bundlezonedtl.sequence, common.view.audio, '', data.name, 0, 0, 0]);
 			refreshBundlezone(_self.Zone);
 		});
 

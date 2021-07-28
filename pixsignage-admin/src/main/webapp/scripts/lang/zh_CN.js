@@ -16,6 +16,7 @@ var common = {
 		intvideo: '视频',
 		extvideo: '引入视频',
 		image: '图片',
+		audio: '音频',
 		text: '文本',
 		stream: '视频流',
 		dvb: '数字频道',

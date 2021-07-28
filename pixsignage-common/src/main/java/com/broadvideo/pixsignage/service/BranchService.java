@@ -25,4 +25,6 @@ public interface BranchService {
 	public boolean validateName(Branch branch, String orgid);
 
 	public Integer syncBranch(Branch branch, Integer orgid);
+
+	public void updateCurrentstorage();
 }

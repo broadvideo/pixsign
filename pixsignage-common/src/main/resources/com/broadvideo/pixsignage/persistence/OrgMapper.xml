@@ -106,10 +106,15 @@
   </update>
 
   <update id="updateCurrentstorage" >
-    update org o, 
-    (select floor(coalesce(sum(size),0)/1048576) as value, orgid from video where status='1' group by orgid) r 
-    set o.currentstorage=r.value 
-    where o.orgid=r.orgid and o.status=1
+update org o, 
+(select floor(coalesce(sum(size),0)/1048576) as value, orgid from
+(select size, videoid, orgid from video where status=1
+union
+select size, imageid, orgid from image where status=1
+) source
+group by orgid) r
+set o.currentstorage=r.value 
+where o.orgid=r.orgid and o.status=1
   </update>
 
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Org" >

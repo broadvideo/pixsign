@@ -107,6 +107,9 @@ public class BranchServiceImpl implements BranchService {
 			this.addBranch(branch);
 		}
 		return branch.getBranchid();
+	}
 
+	public void updateCurrentstorage() {
+		branchMapper.updateCurrentstorage();
 	}
 }

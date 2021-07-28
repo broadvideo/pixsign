@@ -63,6 +63,8 @@ var BranchModule = function () {
 			'sAjaxSource' : 'branch!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 			        		{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
+			        		{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
+			        		{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
 			        		{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }],
@@ -71,11 +73,17 @@ var BranchModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
-				if (aData.childcount == 0) {
-					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+				if (aData.maxstorage == 0) {
+					$('td:eq(2)', nRow).html('无限制');
 				} else {
-					$('td:eq(4)', nRow).html('');
+					$('td:eq(2)', nRow).html(aData.maxstorage + 'MB');
+				}
+				$('td:eq(3)', nRow).html(aData.currentstorage + 'MB');
+				$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				if (aData.childcount == 0) {
+					$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+				} else {
+					$('td:eq(6)', nRow).html('');
 				}
 				return nRow;
 			},
@@ -121,6 +129,9 @@ var BranchModule = function () {
 	var initBranchEditModal = function () {
 		var formHandler = new FormHandler($('#BranchEditForm'));
 		formHandler.validateOption.rules = {};
+		formHandler.validateOption.rules['branch.maxstorage'] = {};
+		formHandler.validateOption.rules['branch.maxstorage']['required'] = true;
+		formHandler.validateOption.rules['branch.maxstorage']['number'] = true;
 		formHandler.validateOption.rules['branch.name'] = {};
 		formHandler.validateOption.rules['branch.name']['required'] = true;
 		formHandler.validateOption.rules['branch.name']['minlength'] = 2;

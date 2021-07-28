@@ -11,6 +11,8 @@
     <result column="parentid3" property="parentid3" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="maxstorage" property="maxstorage" jdbcType="BIGINT" />
+    <result column="currentstorage" property="currentstorage" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
@@ -25,7 +27,7 @@
   
   <sql id="Base_Column_List" >
     branchid, uuid, orgid, parentid, name, status, description, createtime, createstaffid, 
-    topfolderid, code, parentid2, parentid3
+    topfolderid, code, maxstorage, currentstorage, parentid2, parentid3
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="FullResultMap" >
@@ -102,6 +104,29 @@
     where branchid = #{branchid}
   </delete>
   
+  <update id="updateCurrentstorage" >
+update branch b, 
+(select floor(coalesce(sum(size),0)/1048576) as value , branchid from
+(select size, v0.videoid, b0.branchid from video v0, branch b0 where v0.branchid=b0.branchid and v0.status=1 and b0.status=1
+union
+select size, v1.videoid, b1.parentid from video v1, branch b1 where v1.branchid=b1.branchid and v1.status=1 and b1.status=1 and b1.parentid>0
+union
+select size, v2.videoid, b2.parentid2 from video v2, branch b2 where v2.branchid=b2.branchid and v2.status=1 and b2.status=1 and b2.parentid2>0
+union
+select size, v3.videoid, b3.parentid3 from video v3, branch b3 where v3.branchid=b3.branchid and v3.status=1 and b3.status=1 and b3.parentid3>0
+union
+select size, i0.imageid, b0.branchid from image i0, branch b0 where i0.branchid=b0.branchid and i0.status=1 and b0.status=1
+union
+select size, i1.imageid, b1.parentid from image i1, branch b1 where i1.branchid=b1.branchid and i1.status=1 and b1.status=1 and b1.parentid>0
+union
+select size, i2.imageid, b2.parentid2 from image i2, branch b2 where i2.branchid=b2.branchid and i2.status=1 and b2.status=1 and b2.parentid2>0
+union
+select size, i3.imageid, b3.parentid3 from image i3, branch b3 where i3.branchid=b3.branchid and i3.status=1 and b3.status=1 and b3.parentid3>0) source
+group by branchid) r
+set b.currentstorage=r.value 
+where b.branchid=r.branchid and b.status=1
+  </update>
+
   <insert id="insert" parameterType="com.broadvideo.pixsignage.domain.Branch" >
     <selectKey resultType="java.lang.Integer" keyProperty="branchid" order="AFTER" >
       SELECT LAST_INSERT_ID()
@@ -109,12 +134,14 @@
     insert into branch (uuid, orgid, parentid, 
       name, status, description, 
       createtime, createstaffid, topfolderid, 
-      code, parentid2, parentid3
+      code, maxstorage, currentstorage, 
+      parentid2, parentid3
       )
     values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
       #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{description,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{createstaffid,jdbcType=INTEGER}, #{topfolderid,jdbcType=INTEGER}, 
-      #{code,jdbcType=VARCHAR}, #{parentid2,jdbcType=INTEGER}, #{parentid3,jdbcType=INTEGER}
+      #{code,jdbcType=VARCHAR}, #{maxstorage,jdbcType=BIGINT}, #{currentstorage,jdbcType=BIGINT}, 
+      #{parentid2,jdbcType=INTEGER}, #{parentid3,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsignage.domain.Branch" >
@@ -146,6 +173,12 @@
       </if>
       <if test="code != null" >
         code,
+      </if>
+      <if test="maxstorage != null" >
+        maxstorage,
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage,
       </if>
       <if test="status != null" >
         status,
@@ -184,6 +217,12 @@
       </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="maxstorage != null" >
+        #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentstorage != null" >
+        #{currentstorage,jdbcType=BIGINT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -226,6 +265,12 @@
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
+      <if test="maxstorage != null" >
+        maxstorage = #{maxstorage,jdbcType=BIGINT},
+      </if>
+      <if test="currentstorage != null" >
+        currentstorage = #{currentstorage,jdbcType=BIGINT},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -251,6 +296,8 @@
       parentid3 = #{parentid3,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
+      maxstorage = #{maxstorage,jdbcType=BIGINT},
+      currentstorage = #{currentstorage,jdbcType=BIGINT},
       status = #{status,jdbcType=CHAR},
       description = #{description,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},

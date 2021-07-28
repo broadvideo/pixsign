@@ -365,6 +365,12 @@ var OrgModule = function () {
 		formHandler.validateOption.rules['org.max14'] = {};
 		formHandler.validateOption.rules['org.max14']['required'] = true;
 		formHandler.validateOption.rules['org.max14']['number'] = true;
+		formHandler.validateOption.rules['org.max15'] = {};
+		formHandler.validateOption.rules['org.max15']['required'] = true;
+		formHandler.validateOption.rules['org.max15']['number'] = true;
+		formHandler.validateOption.rules['org.max16'] = {};
+		formHandler.validateOption.rules['org.max16']['required'] = true;
+		formHandler.validateOption.rules['org.max16']['number'] = true;
 		formHandler.validateOption.rules['org.maxstorage'] = {};
 		formHandler.validateOption.rules['org.maxstorage']['required'] = true;
 		formHandler.validateOption.rules['org.maxstorage']['number'] = true;
@@ -432,7 +438,8 @@ var OrgModule = function () {
 			+ ',' + $('input[name="org.max7"]').val() + ',' + $('input[name="org.max8"]').val()
 			+ ',' + $('input[name="org.max9"]').val() + ',' + $('input[name="org.max10"]').val()
 			+ ',' + $('input[name="org.max11"]').val() + ',' + $('input[name="org.max12"]').val()
-			+ ',' + $('input[name="org.max13"]').val() + ',' + $('input[name="org.max14"]').val();
+			+ ',' + $('input[name="org.max13"]').val() + ',' + $('input[name="org.max14"]').val()
+			+ ',' + $('input[name="org.max15"]').val() + ',' + $('input[name="org.max16"]').val();
 			formData.append('org.maxdetail', maxdetail);
 			
 			$.ajax({
@@ -531,6 +538,8 @@ var OrgModule = function () {
 			_org.max12 = maxs.length>11? maxs[11] : 0;
 			_org.max13 = maxs.length>12? maxs[12] : 0;
 			_org.max14 = maxs.length>13? maxs[13] : 0;
+			_org.max15 = maxs.length>14? maxs[14] : 0;
+			_org.max16 = maxs.length>15? maxs[15] : 0;
 			refreshVsp(_org);
 			formHandler.setdata('org', _org);
 			if ($('input[name="org.expireflag"]:checked').val() == 0) {

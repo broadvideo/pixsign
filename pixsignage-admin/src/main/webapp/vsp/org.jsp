@@ -24,6 +24,7 @@
 				<div class="modal-body">
 					<form id="OrgEditForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
 						<input type="hidden" name="org.orgid" value="0" />
+						<input type="hidden" name="org.topbranchid" value="0" />
 						<input type="hidden" name="org.status" value="1" />
 						<input type="hidden" name="org.apps" value="" />
 						<div class="form-body">
@@ -40,6 +41,14 @@
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.code" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">城市</label>
+								<div class="col-md-9">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.city" />
 									</div>
 								</div>
 							</div>
@@ -119,10 +128,13 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.bundleplanflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="org.bundleplanflag" value="0" checked> <spring:message code="pixsign.org.planflag_0"/>
+										<input type="radio" name="org.bundleplanflag" value="0" checked> 单日编排版
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="org.bundleplanflag" value="1"> <spring:message code="pixsign.org.planflag_1"/>
+										<input type="radio" name="org.bundleplanflag" value="1"> 单一播放版
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="org.bundleplanflag" value="2"> 多日编排版
 									</label>
 								</div>
 							</div>
@@ -130,10 +142,10 @@
 								<label class="col-md-3 control-label"><spring:message code="pixsign.org.pageplanflag"/><span class="required">*</span></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
-										<input type="radio" name="org.pageplanflag" value="0"> <spring:message code="pixsign.org.planflag_0"/>
+										<input type="radio" name="org.pageplanflag" value="0"> 多日编排版
 									</label>
 									<label class="radio-inline">
-										<input type="radio" name="org.pageplanflag" value="1" checked> <spring:message code="pixsign.org.planflag_1"/>
+										<input type="radio" name="org.pageplanflag" value="1" checked> 单一播放版
 									</label>
 								</div>
 							</div>
@@ -316,12 +328,38 @@
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max13" value="0" />
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
 								<label class="col-md-3 control-label">芯华测温<span class="required">*</span></label>
 								<div class="col-md-3">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="org.max14" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label"><spring:message code="pixsign.device13"/><span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max13" value="0" />
+									</div>
+								</div>
+								<label class="col-md-3 control-label">芯华测温<span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max14" value="0" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">体感互动<span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max15" value="0" />
+									</div>
+								</div>
+								<label class="col-md-3 control-label">WindowsH5<span class="required">*</span></label>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<i class="fa"></i> <input type="text" class="form-control" name="org.max16" value="0" />
 									</div>
 								</div>
 							</div>

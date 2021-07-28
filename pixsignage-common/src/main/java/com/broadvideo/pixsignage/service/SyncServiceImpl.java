@@ -50,7 +50,7 @@ public class SyncServiceImpl implements SyncService {
 	public void sync(String bindtype, String bindid, boolean isMQ) throws Exception {
 		if (bindtype.equals(Planbind.BindType_Device)) {
 			Device device = deviceMapper.selectByPrimaryKey(bindid);
-			if (device.getOnlineflag().equals(Device.Online)) {
+			if (device != null && device.getOnlineflag().equals(Device.Online)) {
 				syncEvent(bindid);
 				if (isMQ) {
 					syncScheduleMQ(bindid);
@@ -198,11 +198,10 @@ public class SyncServiceImpl implements SyncService {
 		/*
 		 * Org org = orgMapper.selectByPrimaryKey(orgid); if
 		 * (org.getPlanflag().equals("1")) { List<Device> deviceList =
-		 * deviceMapper.selectByDefaultpage(pageid); for (Device device :
-		 * deviceList) { syncPlan("1", "" + device.getDeviceid()); } } else {
-		 * List<HashMap<String, Object>> bindList =
-		 * planMapper.selectBindListByObj(Plandtl.ObjType_Page, pageid); for
-		 * (HashMap<String, Object> bindObj : bindList) {
+		 * deviceMapper.selectByDefaultpage(pageid); for (Device device : deviceList) {
+		 * syncPlan("1", "" + device.getDeviceid()); } } else { List<HashMap<String,
+		 * Object>> bindList = planMapper.selectBindListByObj(Plandtl.ObjType_Page,
+		 * pageid); for (HashMap<String, Object> bindObj : bindList) {
 		 * syncPlan(bindObj.get("bindtype").toString(),
 		 * bindObj.get("bindid").toString()); } }
 		 */

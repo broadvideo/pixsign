@@ -14,7 +14,7 @@
 <body>
 	<div id="DeviceConfigModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
 		<div class="modal-dialog modal-wide">
-			<div class="modal-content">
+			<div class="modal-content">R
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 					<h4 class="modal-title"><spring:message code="global.config"/></h4>
@@ -23,6 +23,7 @@
 					<form id="DeviceConfigForm" class="form-horizontal" method="POST">
 						<input type="hidden" name="org.orgid" value="0" />
 						<div class="form-body">
+							<!-- 
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.city"/></label>
 								<div class="col-md-9">
@@ -31,7 +32,6 @@
 									</div>
 								</div>
 							</div>
-							<!-- 
 							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.upgradeflag"/></label>
 								<div class="col-md-9 radio-list">

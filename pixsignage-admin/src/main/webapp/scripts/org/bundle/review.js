@@ -431,7 +431,7 @@ var ReviewModule = function () {
 						$(zone_div).find('img').attr('width', '100%');
 						$(zone_div).find('img').attr('height', '100%');
 					}
-				} else if (zone.type == 101 || zone.type == 102 || zone.type == 103) {
+				} else if (zone.type == 101 || zone.type == 102 || zone.type == 103 || zone.type == 104) {
 					//Massage Zone & Cloudia Zone
 					var img_element = document.createElement('img');
 					$(inner_div).append(img_element);

@@ -71,7 +71,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
 		String maxdetail = org.getMaxdetail();
 		String[] maxs = maxdetail.split(",");
-		int[] maxdevices = new int[14];
+		int[] maxdevices = new int[16];
 		for (int i = 0; i < maxdevices.length; i++) {
 			maxdevices[i] = maxs.length > i ? Integer.parseInt(maxs[i]) : 0;
 		}
@@ -113,20 +113,22 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| reviewflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30409
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 305
 					|| sscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 305
-					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501
-					|| bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30501
-					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502
-					|| bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30502
-					|| !dscreenflag.equals("2") && p.getPrivilegeid().intValue() == 30502
-					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503
-					|| bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30503
-					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504
-					|| bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30504
-					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30505
-					|| pageplanflag.equals("1") && p.getPrivilegeid().intValue() == 30505
-					|| p.getPrivilegeid().intValue() == 30505
-					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30506
-					|| pageplanflag.equals("0") && p.getPrivilegeid().intValue() == 30506
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30501 // bundle单日版
+					|| !bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30501 // bundle单日版
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30507 // bundle多日版
+					|| !bundleplanflag.equals("2") && p.getPrivilegeid().intValue() == 30507 // bundle多日版
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30502 // 副屏bundle单日版
+					// || !bundleplanflag.equals("0") && p.getPrivilegeid().intValue() == 30502
+					|| !dscreenflag.equals("2") && p.getPrivilegeid().intValue() == 30502 // 副屏bundle单日版
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30503 // bundle单一版
+					|| !bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30503 // bundle单一版
+					|| bundleflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30504 // bundle单一版（devicegroup）
+					|| !bundleplanflag.equals("1") && p.getPrivilegeid().intValue() == 30504 // bundle单一版（devicegroup）
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30505 // page多日版
+					|| pageplanflag.equals("1") && p.getPrivilegeid().intValue() == 30505 // page多日版
+					|| p.getPrivilegeid().intValue() == 30505 // page多日版
+					|| pageflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 30506 // page单一版
+					|| pageplanflag.equals("0") && p.getPrivilegeid().intValue() == 30506 // page单一版
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getPrivilegeid().intValue() == 306
 					|| mscreenflag.equals(Org.FUNCTION_DISABLED) && p.getParentid().intValue() == 306
 					|| !flowrateflag.equals("1") && p.getPrivilegeid().intValue() == 30821
@@ -156,7 +158,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 					|| maxdevices[10] == 0 && p.getPrivilegeid().intValue() == 30221
 					|| maxdevices[11] == 0 && p.getPrivilegeid().intValue() == 30222
 					|| maxdevices[12] == 0 && p.getPrivilegeid().intValue() == 30223
-					|| maxdevices[13] == 0 && p.getPrivilegeid().intValue() == 30224) {
+					|| maxdevices[13] == 0 && p.getPrivilegeid().intValue() == 30224
+					|| maxdevices[14] == 0 && p.getPrivilegeid().intValue() == 30225
+					|| maxdevices[15] == 0 && p.getPrivilegeid().intValue() == 30226) {
 				logger.info("remove privilege {}", p.getPrivilegeid());
 				it.remove();
 			} else if ((maxdevices[8] == 0 && maxdevices[10] == 0) && p.getPrivilegeid().intValue() == 30500) {

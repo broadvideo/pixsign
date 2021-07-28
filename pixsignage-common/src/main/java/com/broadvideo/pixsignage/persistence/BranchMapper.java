@@ -32,4 +32,6 @@ public interface BranchMapper {
 	int updateByPrimaryKeySelective(Branch record);
 
 	// int updateByPrimaryKey(Branch record);
+
+	int updateCurrentstorage();
 }

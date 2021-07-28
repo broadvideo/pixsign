@@ -16,6 +16,7 @@ var common = {
 		intvideo: 'Video',
 		extvideo: 'External Video',
 		image: 'Image',
+		audio: 'Audio',
 		text: 'Text',
 		stream: 'Stream',
 		dvb: 'DVB',

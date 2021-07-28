@@ -93,20 +93,20 @@
 										<a href="javascript:;" class="reload pix-DeviceFileReload"></a>
 									</div>
 									<ul class="nav nav-tabs" style="margin-right: 30px;">
-										<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="pixsign.image"/></a></li>
-										<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="pixsign.video"/></a></li>
+										<li id="nav_tab2"><a href="#portlet_tab2" data-toggle="tab"><spring:message code="pixsign.video"/></a></li>
+										<li id="nav_tab1" class="active"><a href="#portlet_tab1" data-toggle="tab"><spring:message code="pixsign.page"/></a></li>
 									</ul>
 								</div>
 								<div class="portlet-body">
 									<div class="tab-content">
 										<div class="tab-pane active" id="portlet_tab1">
-											<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
+											<table id="DevicePageTable" class="table table-striped table-bordered table-hover">
 												<thead></thead>
 												<tbody></tbody>
 											</table>
 										</div>
 										<div class="tab-pane" id="portlet_tab2">
-											<table id="DeviceImageTable" class="table table-striped table-bordered table-hover">
+											<table id="DeviceVideoTable" class="table table-striped table-bordered table-hover">
 												<thead></thead>
 												<tbody></tbody>
 											</table>
@@ -160,12 +160,6 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.backupvideo"/></label>
-								<div class="col-md-9">
-									<input type="hidden" id="BackupMediaSelect" class="form-control select2" name="device.backupvideoid">
-								</div>
-							</div>
-							<div class="form-group">
 								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.powerflag"/></label>
 								<div class="col-md-9 radio-list">
 									<label class="radio-inline">
@@ -201,52 +195,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group tag-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.tagflag"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="device.tagflag" value="0"> <spring:message code="pixsign.prop.tagflag_0"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="device.tagflag" value="1"> <spring:message code="pixsign.prop.tagflag_1"/>
-									</label>
-								</div>
-							</div>
-							<div class="form-group tag-ctrl">
-								<label class="col-md-3 control-label"><spring:message code="global.tag"/></label>
-								<div class="col-md-9">
-									<input type="hidden" id="TagSelect" class="form-control select2" name="device.tags">
-								</div>
-							</div>
-							<!-- 
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval1"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.interval1" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.deviceinterval2"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.interval2" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.temperatureflag"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="device.temperatureflag" value="0"> <spring:message code="pixsign.prop.temperatureflag_0"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="device.temperatureflag" value="1"> <spring:message code="pixsign.prop.temperatureflag_1"/>
-									</label>
-								</div>
-							</div>
-							 -->
 						</div>
 					</form>
 				</div>
@@ -281,14 +229,6 @@
 								<div class="col-md-9">
 									<div class="input-icon right">
 										<i class="fa"></i> <input type="text" class="form-control" name="device.name" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.city"/></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="device.city" />
 									</div>
 								</div>
 							</div>
@@ -363,102 +303,9 @@
 		</div>
 	</div>
 
-	<div id="UTextModal" class="modal fade modal-scroll" tabindex="-1" role="dialog" data-backdrop="static">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title"><spring:message code="pixsign.device"/></h4>
-				</div>
-				<div class="modal-body">
-					<form id="UTextForm" class="form-horizontal form-bordered form-row-stripped" method="POST">
-						<div class="form-body">
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.count"/><span class="required">*</span></label>
-								<div class="col-md-9">
-									<div class="input-icon right">
-										<i class="fa"></i> <input type="text" class="form-control" name="count" value="0" />
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.position"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="position" value="top"> <spring:message code="pixsign.prop.position.top"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="position" value="center"> <spring:message code="pixsign.prop.position.center"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="position" value="bottom" checked> <spring:message code="pixsign.prop.position.bottom"/>
-									</label>  
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.speed"/></label>
-								<div class="col-md-9 radio-list">
-									<label class="radio-inline">
-										<input type="radio" name="speed" value="1"> <spring:message code="pixsign.prop.speed_1"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="speed" value="2" checked> <spring:message code="pixsign.prop.speed_2"/>
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="speed" value="3"> <spring:message code="pixsign.prop.speed_3"/>
-									</label>  
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.color"/></label>
-								<div class="col-md-9">
-									<div class="input-group colorpicker-component colorPick">
-										<input type="text" name="color" value="#FFFFFF" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
-										<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.size"/></label>
-								<div class="col-md-9">
-									<input class="sizeRange" type="text" name="size" value="50"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.bgcolor"/></label>
-								<div class="col-md-9">
-									<div class="input-group colorpicker-component bgcolorPick">
-										<input type="text" name="bgcolor" value="#000000" class="form-control" readonly="readonly" style="cursor:default; background:#FFFFFF;" />
-										<span class="input-group-addon"><i style="display:inline-block;width:16px; height:16px;"></i></span>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.opacity"/></label>
-								<div class="col-md-9">
-									<input class="opacityRange" type="text" name="opacity" value=""/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-3 control-label"><spring:message code="pixsign.prop.text"/><span class="required">*</span></label>
-								<div class="col-md-9">
-									<textarea class="form-control" rows="3" name="text"></textarea>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn blue"><spring:message code="global.submit"/></button>
-					<button type="button" class="btn default" data-dismiss="modal"><spring:message code="global.cancel"/></button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<h3 class="page-title"><spring:message code="pixsign.device1"/></h3>
+			<h3 class="page-title">WindowsH5</h3>
 			<div class="row ">
 				<div class="col-md-12">
 					<span id="CurrentDevices"></span><span id="MaxDevices" class="badge badge-danger" style="float: right;"></span>
@@ -471,7 +318,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-desktop"></i><spring:message code="pixsign.device1"/></div>
+							<div class="caption"><i class="fa fa-desktop"></i>WindowsH5</div>
 							<div class="tools">
 								<a href="javascript:;" onClick="DeviceModule.refresh();" class="reload"></a>
 							</div>
@@ -483,25 +330,6 @@
 								</div>
 								<div class="col-md-10">
 									<div class="table-toolbar">
-										<!-- 
-										<div class="btn-group">
-											<button class="btn green pix-add"><spring:message code="global.add"/><i class="fa fa-plus"></i></button>
-										</div>
-										-->
-										<div class="btn-group">
-											<button class="btn green pix-allmap"><spring:message code="pixsign.map"/> <i class="fa fa-map-marker"></i></button>
-										</div>
-										<!--
-										<div class="btn-group">
-											<button class="btn red pix-utext"><spring:message code="pixsign.utext"/> <i class="fa fa-bolt"></i></button>
-										</div>
-										<div class="btn-group">
-											<button class="btn blue pix-ucancel"><spring:message code="pixsign.ucancel"/> <i class="fa fa-circle-o-notch"></i></button>
-										</div>
-										<div class="btn-group">
-											<a href="device!export.action" class="btn blue pix-export"><spring:message code="global.export"/> <i class="fa fa-download"></i></a>
-										</div>
-										-->
 									</div>
 									<div class="row">
 										<div class="col-md-6 col-sm-12"><input type="hidden" id="OnlineSelect" class="form-control select2 input-medium"></div>
@@ -538,7 +366,7 @@
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <script src="${static_ctx}/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.${locale}.js" type="text/javascript"></script>
 <% if (session_org != null && !session_org.getTimezone().equals("Asia/Shanghai")) { %>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEtGRNEtPc6JMA-EXHR1vn5yiEJU2Zyg4"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEizW2Mbk5ln3x0Jgm4o3Jd6lIjPyOsU8"></script>
 <% } else { %>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=vItwdDkCtAtruyhGGHxhkvlTTakaY9RO" type="text/javascript"></script>
 <% } %>
@@ -550,17 +378,15 @@
 <script src="${base_ctx}/scripts/lang/${locale}.js?t=${timestamp}" type="text/javascript"></script>
 <script src="${base_ctx}/scripts/common/pix.js?t=${timestamp}"></script>
 <script src="${base_ctx}/scripts/common/branch-tree.js?t=${timestamp}"></script>
-<script src="${base_ctx}/scripts/org/device/device-xinfa.js?t=${timestamp}"></script>
+<script src="${base_ctx}/scripts/org/device/device-page.js?t=${timestamp}"></script>
 <script>
-var TagCtrl = <%=(session_org != null && !session_org.getTagflag().equals("0"))%>;
-$('.tag-ctrl').css('display', TagCtrl?'':'none');
 var MapSource = <%=(session_org != null && !session_org.getTimezone().equals("Asia/Shanghai"))%>;
 
 jQuery(document).ready(function() {
 	Metronic.init();
 	Layout.init();
 	PixData.init('${locale}');
-	DeviceModule.init(1);
+	DeviceModule.init(16);
 });
 
 </script>

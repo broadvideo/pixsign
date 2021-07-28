@@ -34,6 +34,9 @@ var DeviceSelect = function (container) {
 		} else if (typeof Max10 !='undefined' && Max10 > 0) {
 			$('.select-device-navigator[devicetype="10"]').addClass('active');
 			_devicetype = 10;
+		} else if (typeof Max16 !='undefined' && Max16 > 0) {
+			$('.select-device-navigator[devicetype="16"]').addClass('active');
+			_devicetype = 16;
 		}
 		$('.select-device-navigator[devicetype="1"]').css('display', typeof Max1=='undefined'||Max1==0?'none':'');
 		$('.select-device-navigator[devicetype="2"]').css('display', typeof Max2=='undefined'||Max2==0?'none':'');
@@ -44,6 +47,7 @@ var DeviceSelect = function (container) {
 		$('.select-device-navigator[devicetype="7"]').css('display', typeof Max7=='undefined'||Max7==0?'none':'');
 		$('.select-device-navigator[devicetype="9"]').css('display', typeof Max9=='undefined'||Max9==0?'none':'');
 		$('.select-device-navigator[devicetype="10"]').css('display', typeof Max10=='undefined'||Max10==0?'none':'');
+		$('.select-device-navigator[devicetype="16"]').css('display', typeof Max16=='undefined'||Max16==0?'none':'');
 		$('.select-device-navigator').click(function(event) {
 			_devicetype = $(this).attr('devicetype');
 			$(container).find('#LeftDeviceTable').dataTable()._fnAjaxUpdate();

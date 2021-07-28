@@ -58,7 +58,16 @@ public class BranchAction extends BaseDatatableAction {
 			JSONObject branchJson = new JSONObject();
 			branchJson.put("id", branch.getBranchid());
 			branchJson.put("parent", "#");
-			branchJson.put("text", branch.getName());
+			if (branch.getMaxstorage() > 0) {
+				branchJson.put("text", branch.getName() + "(" + branch.getMaxstorage() + "M)");
+			} else {
+				branchJson.put("text", branch.getName());
+			}
+			int full = 0;
+			if (branch.getMaxstorage() > 0 && branch.getMaxstorage() < branch.getCurrentstorage()) {
+				full = 1;
+			}
+			branchJson.put("full", full);
 			branchJson.put("branch", branch);
 			if (branch.getChildcount().intValue() == 0) {
 				branchJson.put("children", false);
@@ -72,7 +81,31 @@ public class BranchAction extends BaseDatatableAction {
 				JSONObject branchJson = new JSONObject();
 				branchJson.put("id", branch.getBranchid());
 				branchJson.put("parent", id);
-				branchJson.put("text", branch.getName());
+				if (branch.getMaxstorage() > 0) {
+					branchJson.put("text", branch.getName() + "(" + branch.getMaxstorage() + "M)");
+				} else {
+					branchJson.put("text", branch.getName());
+				}
+				int full = 0;
+				if (branch.getMaxstorage() > 0 && branch.getMaxstorage() < branch.getCurrentstorage()) {
+					full = 1;
+				} else {
+					Branch b1 = branchService.selectByPrimaryKey("" + branch.getParentid());
+					if (b1 != null && b1.getMaxstorage() > 0 && b1.getMaxstorage() < b1.getCurrentstorage()) {
+						full = 1;
+					} else {
+						Branch b2 = branchService.selectByPrimaryKey("" + branch.getParentid2());
+						if (b2 != null && b2.getMaxstorage() > 0 && b2.getMaxstorage() < b2.getCurrentstorage()) {
+							full = 1;
+						} else {
+							Branch b3 = branchService.selectByPrimaryKey("" + branch.getParentid3());
+							if (b3 != null && b3.getMaxstorage() > 0 && b3.getMaxstorage() < b3.getCurrentstorage()) {
+								full = 1;
+							}
+						}
+					}
+				}
+				branchJson.put("full", full);
 				branchJson.put("branch", branch);
 				if (branch.getChildcount().intValue() == 0) {
 					branchJson.put("children", false);

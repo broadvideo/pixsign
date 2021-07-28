@@ -402,6 +402,9 @@
 																<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
 																	<i class="fa fa-cubes"></i><div>Cloudia</div>
 																</a>
+																<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="104">
+																	<i class="fa fa-cubes"></i><div>定制区</div>
+																</a>
 															</div>
 														</div>
 														<div class="row">

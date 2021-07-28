@@ -3,6 +3,7 @@ var BranchTree = function (container, refresh) {
 	this.container = container;
 	this.branchid = 0;
 	this.folderid = 0;
+	this.full = 0;
 	var _refresh = refresh;
 	var BranchTree = $(container).find('.branchtree');
 	var FolderTree = $(container).find('.foldertree');
@@ -68,6 +69,7 @@ var BranchTree = function (container, refresh) {
 					'data': function(node) {
 						return {
 							'id': node.id,
+							'full': node.full,
 						}
 					}
 				}
@@ -76,11 +78,13 @@ var BranchTree = function (container, refresh) {
 		});
 		BranchTree.on('loaded.jstree', function() {
 			_self.branchid = BranchTree.jstree(true).get_json('#')[0].id;
+			console.log('BranchTree.#', BranchTree.jstree(true).get_json('#')[0]);
 			BranchTree.jstree('select_node', _self.branchid);
 		});
 		BranchTree.on('select_node.jstree', function(event, data) {
 			_self.branchid = data.instance.get_node(data.selected[0]).id;
 			_self.folderid = null;
+			_self.full = data.instance.get_node(data.selected[0]).original.full;
 			if (FolderTree.length > 0) {
 				initFolderTree();
 			}

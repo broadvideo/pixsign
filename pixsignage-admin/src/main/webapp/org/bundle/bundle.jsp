@@ -176,6 +176,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone rss-ctrl" zonetype="12">
 								<i class="fa fa-rss"></i><div>RSS</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="13">
+								<i class="fa fa-video-camera"></i><div>Audio</div>
+							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone stream-ctrl" zonetype="14">
 								<i class="fa fa-cubes"></i><div><spring:message code="pixsign.bundlezone.type.stream"/></div>
 							</a>
@@ -196,6 +199,9 @@
 							</a>
 							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="103">
 								<i class="fa fa-cubes"></i><div>Cloudia</div>
+							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="104">
+								<i class="fa fa-cubes"></i><div>定制区</div>
 							</a>
 						</div>
 					</div>
@@ -519,6 +525,9 @@
 										<li id="VideoLiTab" class="active">
 											<a href="#VideoLibraryTab" data-toggle="tab"><spring:message code="pixsign.video"/></a>
 										</li>
+										<li id="AudioLiTab">
+											<a href="#AudioLibraryTab" data-toggle="tab"><spring:message code="pixsign.audio"/></a>
+										</li>
 										<li id="StreamLiTab">
 											<a href="#StreamLibraryTab" data-toggle="tab"><spring:message code="pixsign.stream"/></a>
 										</li>
@@ -550,6 +559,19 @@
 												</div>
 												<div class="col-md-9">
 													<table id="VideoTable" class="table table-condensed table-hover">
+														<thead></thead>
+														<tbody></tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane active" id="AudioLibraryTab">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="row"><div class="col-md-12 branchtree"></div></div>
+												</div>
+												<div class="col-md-9">
+													<table id="AudioTable" class="table table-condensed table-hover">
 														<thead></thead>
 														<tbody></tbody>
 													</table>

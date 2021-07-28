@@ -17,8 +17,8 @@ var DeviceConfigModule = function () {
 					_org = data.org;
 					$('#DeviceConfigTable').dataTable().fnClearTable();
 
-					$('#DeviceConfigTable').dataTable().fnAddData([common.view.city, _org.city]);
 					/*
+					$('#DeviceConfigTable').dataTable().fnAddData([common.view.city, _org.city]);
 					if (_org.upgradeflag == 1) {
 						var upgradehtml = '<span class="label label-xs label-success">' + common.view.on + '</span>';
 						$('#DeviceConfigTable').dataTable().fnAddData([common.view.upgradeflag, upgradehtml]);

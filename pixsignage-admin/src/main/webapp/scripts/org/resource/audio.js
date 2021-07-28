@@ -132,7 +132,7 @@ var AudioModule = function () {
 			autoUpload: false,
 			disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
 			maxFileSize: 20480000,
-			acceptFileTypes: /(\.|\/)(mp3|aac|wma)$/i,
+			acceptFileTypes: /(\.|\/)(mp3|aac|wma|wav)$/i,
 			// Uncomment the following to send cross-domain cookies:
 			//xhrFields: {withCredentials: true},				
 		});

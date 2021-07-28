@@ -66,9 +66,9 @@ public interface DeviceService {
 
 	public void resetExternalid(String externalid);
 
-	public JSONObject generateBundleJson(Device device) throws Exception;
+	public JSONObject generateBundleScheduleJson(Device device) throws Exception;
 
-	public JSONObject generatePageJson(Device device) throws Exception;
+	public JSONObject generatePageScheduleJson(Device device) throws Exception;
 
 	public JSONObject generateAllPagesJson(Device device) throws Exception;
 

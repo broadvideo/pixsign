@@ -7,6 +7,8 @@ var PlanModule = function () {
 	var CurrentPlandtls;
 	var CurrentPlanbinds;
 	this.PlanTree = new BranchTree($('#PlanPortlet'));
+	this.BundleTree = new BranchTree($('#BundleDiv'));
+	this.TouchbundleTree = new BranchTree($('#TouchbundleDiv'));
 	
 	var timestamp = new Date().getTime();
 
@@ -53,7 +55,7 @@ var PlanModule = function () {
 					playtimehtml += aData.enddate;
 				}
 				playtimehtml += '<br/>';
-				if (aData.starttime == '00:00:00' && aData.endtime == '00:00:00') {
+				if (aData.starttime == '00:00:00' && aData.endtime == '23:59:59') {
 					playtimehtml += common.view.fulltime;
 				} else {
 					playtimehtml += aData.starttime + ' ~ ' + aData.endtime;
@@ -171,7 +173,8 @@ var PlanModule = function () {
 								        content: '<div id="BundlePreview"></div>',
 								        title: plandtl.objid,
 								    });
-									redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
+									//redrawBundlePreview($('#BundlePreview'), data.bundle, 800, 1);
+									BundlePreviewModule.preview($('#BundlePreview'), data.bundle, 800);
 								} else {
 									bootbox.alert(common.tips.error + data.errormsg);
 								}
@@ -289,7 +292,7 @@ var PlanModule = function () {
 			CurrentPlan.startdate = '1970-01-01';
 			CurrentPlan.enddate = '2037-01-01';
 			CurrentPlan.starttime = '00:00:00';
-			CurrentPlan.endtime = '00:00:00';
+			CurrentPlan.endtime = '23:59:59';
 			initWizard();
 			$('#PlanModal').modal();
 		});
@@ -377,6 +380,7 @@ var PlanModule = function () {
 					});
 				},
 				'fnServerParams': function(aoData) { 
+					aoData.push({'name':'branchid','value':BundleTree.branchid });
 					aoData.push({'name':'touchflag','value':'0' });
 				}
 			});
@@ -453,6 +457,7 @@ var PlanModule = function () {
 					});
 				},
 				'fnServerParams': function(aoData) { 
+					aoData.push({'name':'branchid','value':TouchbundleTree.branchid });
 					aoData.push({'name':'touchflag','value':'1' });
 					aoData.push({'name':'homeflag','value':'1' });
 				}
@@ -1057,7 +1062,7 @@ var PlanModule = function () {
 					$('input[name="plan.starttime"]').parent().css('display', '');
 					$('input[name="plan.endtime"]').parent().css('display', '');
 					$('input[name="plan.starttime"]').val('00:00:00');
-					$('input[name="plan.endtime"]').val('00:00:00');
+					$('input[name="plan.endtime"]').val('23:59:59');
 				}
 			});  
 		}
@@ -1088,7 +1093,7 @@ var PlanModule = function () {
 				$('input[name="plan.enddate"]').parent().css('display', '');
 				$('input[name="plan.enddate"]').val(CurrentPlan.enddate);
 			}
-			if (CurrentPlan.starttime == '00:00:00' && CurrentPlan.endtime == '00:00:00') {
+			if (CurrentPlan.starttime == '00:00:00' && CurrentPlan.endtime == '23:59:59') {
 				$('input[name="plan.fulltime"]').attr('checked', 'checked');
 				$('input[name="plan.fulltime"]').parent().addClass('checked');
 				$('input[name="plan.starttime"]').parent().css('display', 'none');
@@ -1206,7 +1211,7 @@ var PlanModule = function () {
 			}
 			if ($('input[name="plan.fulltime"]').attr('checked')) {
 				CurrentPlan.starttime = '00:00:00';
-				CurrentPlan.endtime = '00:00:00';
+				CurrentPlan.endtime = '23:59:59';
 			} else {
 				CurrentPlan.starttime = $('input[name="plan.starttime"]').val();
 				CurrentPlan.endtime = $('input[name="plan.endtime"]').val();
@@ -1303,7 +1308,7 @@ var PlanModule = function () {
 			autoclose: true,
 			isRTL: Metronic.isRTL(),
 			format: 'hh:ii:ss',
-			pickerPosition: (Metronic.isRTL() ? 'top-right' : 'top-left'),
+			pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
 			language: 'zh-CN',
 			minuteStep: 5,
 			startView: 1,
@@ -1314,7 +1319,7 @@ var PlanModule = function () {
 			autoclose: true,
 			isRTL: Metronic.isRTL(),
 			format: 'yyyy-mm-dd',
-			pickerPosition: (Metronic.isRTL() ? 'top-right' : 'top-left'),
+			pickerPosition: (Metronic.isRTL() ? 'bottom-right' : 'bottom-left'),
 			language: 'zh-CN',
 			minView: 'month',
 			todayBtn: true

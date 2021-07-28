@@ -23,9 +23,13 @@ var DeviceModule = function () {
 		} else if (Max4 > 0) {
 			$('.device-navigator[devicetype="4"]').addClass('active');
 			_devicetype = 4;
+		} else if (Max16 > 0) {
+			$('.device-navigator[devicetype="16"]').addClass('active');
+			_devicetype = 16;
 		}
 		$('.device-navigator[devicetype="3"]').css('display', Max3==0?'none':'');
 		$('.device-navigator[devicetype="4"]').css('display', Max4==0?'none':'');
+		$('.device-navigator[devicetype="16"]').css('display', Max16==0?'none':'');
 
 		$('.device-navigator').click(function(event) {
 			_devicetype = $(this).attr('devicetype');

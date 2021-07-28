@@ -181,16 +181,30 @@
 																		<div class="row">
 																			<div class="col-md-12">
 																				<div id="BundleDiv">
-																					<table id="BundleTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
+																					<div class="row">
+																						<div class="col-md-3">
+																							<div class="row"><div class="col-md-12 branchtree"></div></div>
+																						</div>
+																						<div class="col-md-9">
+																							<table id="BundleTable" class="table table-condensed table-hover bundletable">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																					</div>
 																				</div>
 																				<div id="TouchbundleDiv" style="display:none">
-																					<table id="TouchbundleTable" class="table table-condensed table-hover">
-																						<thead></thead>
-																						<tbody></tbody>
-																					</table>
+																					<div class="row">
+																						<div class="col-md-3">
+																							<div class="row"><div class="col-md-12 branchtree"></div></div>
+																						</div>
+																						<div class="col-md-9">
+																							<table id="TouchbundleTable" class="table table-condensed table-hover touchbundletable">
+																								<thead></thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																					</div>
 																				</div>
 																			</div>
 																		</div>
