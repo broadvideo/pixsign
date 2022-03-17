@@ -138,8 +138,10 @@ var common = {
 		region_type_16: 'DVB Zone',
 		region_type_17: 'Page Zone',
 		region_type_101: 'Chair Qrcode',
-		region_type_102: 'Charr Control',
+		region_type_102: 'Chair Control',
 		region_type_103: 'Cloudia',
+		region_type_104: 'Customize',
+		region_type_105: 'Gesture',
 
 		pagezone_type_1: 'Video Zone',
 		pagezone_type_2: 'Image Zone',

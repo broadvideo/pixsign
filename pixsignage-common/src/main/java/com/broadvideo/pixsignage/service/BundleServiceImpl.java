@@ -837,31 +837,6 @@ public class BundleServiceImpl implements BundleService {
 		responseJson.put("width", bundle.getWidth());
 		responseJson.put("height", bundle.getHeight());
 		responseJson.put("bg_color", "#000000");
-		JSONObject bundleBgImageJson = new JSONObject();
-		if (bundle.getBgimage() != null) {
-			bundleBgImageJson.put("id", bundle.getBgimageid());
-			bundleBgImageJson.put("name", bundle.getBgimage().getName());
-			bundleBgImageJson.put("url",
-					"http://" + serverip + ":" + serverport + "/pixsigdata" + bundle.getBgimage().getFilepath());
-			bundleBgImageJson.put("path", "/pixsigdata" + bundle.getBgimage().getFilepath());
-			bundleBgImageJson.put("file", bundle.getBgimage().getFilename());
-			bundleBgImageJson.put("size", bundle.getBgimage().getSize());
-			bundleBgImageJson.put("thumbnail",
-					"http://" + serverip + ":" + serverport + "/pixsigdata" + bundle.getBgimage().getThumbnail());
-			if (imageHash.get(bundle.getBgimageid()) == null) {
-				imageHash.put(bundle.getBgimageid(), bundleBgImageJson);
-				imageJsonArray.add(bundleBgImageJson);
-			}
-		} else {
-			bundleBgImageJson.put("id", 0);
-			bundleBgImageJson.put("name", "");
-			bundleBgImageJson.put("url", "");
-			bundleBgImageJson.put("path", "");
-			bundleBgImageJson.put("file", "");
-			bundleBgImageJson.put("size", 0);
-			bundleBgImageJson.put("thumbnail", "");
-		}
-		responseJson.put("bg_image", bundleBgImageJson);
 
 		List<Video> videoList = new ArrayList<Video>();
 		List<Image> imageList = new ArrayList<Image>();
@@ -957,32 +932,6 @@ public class BundleServiceImpl implements BundleService {
 					regionJson.put("touch_apk", "");
 				}
 			}
-
-			JSONObject regionBgImageJson = new JSONObject();
-			if (bundlezone.getBgimage() != null) {
-				regionBgImageJson.put("id", bundlezone.getBgimageid());
-				regionBgImageJson.put("name", bundlezone.getBgimage().getName());
-				regionBgImageJson.put("url", "http://" + serverip + ":" + serverport + "/pixsigdata"
-						+ bundlezone.getBgimage().getFilepath());
-				regionBgImageJson.put("path", "/pixsigdata" + bundlezone.getBgimage().getFilepath());
-				regionBgImageJson.put("file", bundlezone.getBgimage().getFilename());
-				regionBgImageJson.put("size", bundlezone.getBgimage().getSize());
-				regionBgImageJson.put("thumbnail", "http://" + serverip + ":" + serverport + "/pixsigdata"
-						+ bundlezone.getBgimage().getThumbnail());
-				if (imageHash.get(bundlezone.getBgimageid()) == null) {
-					imageHash.put(bundlezone.getBgimageid(), regionBgImageJson);
-					imageJsonArray.add(regionBgImageJson);
-				}
-			} else {
-				regionBgImageJson.put("id", 0);
-				regionBgImageJson.put("name", "");
-				regionBgImageJson.put("url", "");
-				regionBgImageJson.put("path", "");
-				regionBgImageJson.put("file", "");
-				regionBgImageJson.put("size", 0);
-				regionBgImageJson.put("thumbnail", "");
-			}
-			regionJson.put("bg_image", regionBgImageJson);
 
 			JSONArray playlistJsonArray = new JSONArray();
 

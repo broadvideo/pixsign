@@ -304,6 +304,11 @@ public class PixsignageService3 {
 
 			responseJson.put("password_flag", org.getDevicepassflag());
 			responseJson.put("password", org.getDevicepass());
+
+			int expireDays = (int) ((org.getExpiretime().getTime() - Calendar.getInstance().getTimeInMillis())
+					/ (1000 * 60 * 60 * 24));
+			responseJson.put("expire_days", expireDays);
+
 			responseJson.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
 			if (device.getBackupvideoid() > 0) {

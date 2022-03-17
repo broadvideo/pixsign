@@ -20,6 +20,7 @@ public class Bundlezone {
 	public final static byte Type_STREAM = 14;
 	public final static byte Type_VIDEOIN = 15;
 	public final static byte Type_DVB = 16;
+	public final static byte Type_PAGE = 17;
 
 	private Integer bundlezoneid;
 

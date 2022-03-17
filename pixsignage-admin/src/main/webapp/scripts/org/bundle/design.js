@@ -32,6 +32,7 @@ var BundleDesignModule = function (mode) {
 		ZoneLimits['102'] = 1;
 		ZoneLimits['103'] = 1;
 		ZoneLimits['104'] = 1;
+		ZoneLimits['105'] = 1;
 		
 		initEvent();
 	};

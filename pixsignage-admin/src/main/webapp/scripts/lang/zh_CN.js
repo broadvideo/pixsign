@@ -140,6 +140,8 @@ var common = {
 		region_type_101: '按摩椅二维码',
 		region_type_102: '按摩椅控制',
 		region_type_103: 'Cloudia',
+		region_type_104: '定制',
+		region_type_105: '手势识别',
 
 		pagezone_type_1: '视频',
 		pagezone_type_2: '图片',

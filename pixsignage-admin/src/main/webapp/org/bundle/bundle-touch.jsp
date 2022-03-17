@@ -215,6 +215,9 @@
 							<a href="javascript:;" class="icon-btn pix-addzone cloudia-ctrl" zonetype="104">
 								<i class="fa fa-cubes"></i><div>定制区</div>
 							</a>
+							<a href="javascript:;" class="icon-btn pix-addzone" zonetype="105">
+								<i class="fa fa-cubes"></i><div>手势识别区</div>
+							</a>
 						</div>
 					</div>
 					<div class="row">
