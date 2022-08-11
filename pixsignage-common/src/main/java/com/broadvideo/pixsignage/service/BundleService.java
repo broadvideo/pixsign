@@ -49,6 +49,6 @@ public interface BundleService {
 
 	public JSONArray generateBundleJsonArray(List<Integer> bundleids);
 
-	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
+	public Bundle importZip(Integer orgid, Integer branchid, Integer folderid, File zipFile) throws Exception;
 
 }

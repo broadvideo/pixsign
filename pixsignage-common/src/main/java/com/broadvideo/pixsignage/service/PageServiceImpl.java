@@ -715,7 +715,7 @@ public class PageServiceImpl implements PageService {
 	}
 
 	@Transactional
-	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception {
+	public Page importZip(Integer orgid, Integer branchid, Integer folderid, File zipFile) throws Exception {
 		String fileName = zipFile.getName();
 		logger.info("Begin to import page {}", fileName);
 		fileName = fileName.substring(0, fileName.lastIndexOf("."));
@@ -816,9 +816,9 @@ public class PageServiceImpl implements PageService {
 							File fromFile = new File(unzipFilePath + "/image", image.getFilename());
 							toImage = new Image();
 							toImage.setUuid(image.getUuid());
-							toImage.setOrgid(1);
-							toImage.setBranchid(1);
-							toImage.setFolderid(1);
+							toImage.setOrgid(orgid);
+							toImage.setBranchid(branchid);
+							toImage.setFolderid(folderid);
 							toImage.setName(image.getName());
 							toImage.setFilename(image.getFilename());
 							toImage.setStatus("9");
@@ -871,9 +871,9 @@ public class PageServiceImpl implements PageService {
 							}
 							toVideo = new Video();
 							toVideo.setUuid(video.getUuid());
-							toVideo.setOrgid(1);
-							toVideo.setBranchid(1);
-							toVideo.setFolderid(1);
+							toVideo.setOrgid(orgid);
+							toVideo.setBranchid(branchid);
+							toVideo.setFolderid(folderid);
 							toVideo.setType(Video.TYPE_INTERNAL);
 							toVideo.setName(video.getName());
 							toVideo.setOname(video.getOname());
@@ -943,8 +943,8 @@ public class PageServiceImpl implements PageService {
 				// Handle DIY
 				if (pagezone.getDiy() != null) {
 					Diy diy = pagezone.getDiy();
-					diy.setOrgid(1);
-					diy.setBranchid(1);
+					diy.setOrgid(orgid);
+					diy.setBranchid(branchid);
 					int fromdiyid = diy.getDiyid();
 					diyService.uploadDiy(diy);
 					String thumbnailPath = "/diy/snapshot/" + diy.getDiyid() + "."

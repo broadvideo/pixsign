@@ -1249,7 +1249,7 @@ public class BundleServiceImpl implements BundleService {
 	}
 
 	@Transactional
-	public Bundle importZip(Integer orgid, Integer branchid, File zipFile) throws Exception {
+	public Bundle importZip(Integer orgid, Integer branchid, Integer folderid, File zipFile) throws Exception {
 		String fileName = zipFile.getName();
 		logger.info("Begin to import bundle {}", fileName);
 		fileName = fileName.substring(0, fileName.lastIndexOf("."));
@@ -1345,9 +1345,9 @@ public class BundleServiceImpl implements BundleService {
 							File fromFile = new File(unzipFilePath + "/image", relateImage.getFilename());
 							toImage = new Image();
 							toImage.setUuid(relateImage.getUuid());
-							toImage.setOrgid(1);
-							toImage.setBranchid(1);
-							toImage.setFolderid(1);
+							toImage.setOrgid(orgid);
+							toImage.setBranchid(branchid);
+							toImage.setFolderid(folderid);
 							toImage.setName(relateImage.getName());
 							toImage.setFilename(relateImage.getFilename());
 							toImage.setStatus("9");
@@ -1398,9 +1398,9 @@ public class BundleServiceImpl implements BundleService {
 							File fromFile = new File(unzipFilePath + "/image", image.getFilename());
 							toImage = new Image();
 							toImage.setUuid(image.getUuid());
-							toImage.setOrgid(1);
-							toImage.setBranchid(1);
-							toImage.setFolderid(1);
+							toImage.setOrgid(orgid);
+							toImage.setBranchid(branchid);
+							toImage.setFolderid(folderid);
 							toImage.setName(image.getName());
 							toImage.setFilename(image.getFilename());
 							toImage.setStatus("9");
@@ -1453,9 +1453,9 @@ public class BundleServiceImpl implements BundleService {
 							File fromFile = new File(unzipFilePath + "/video", video.getFilename());
 							toVideo = new Video();
 							toVideo.setUuid(video.getUuid());
-							toVideo.setOrgid(1);
-							toVideo.setBranchid(1);
-							toVideo.setFolderid(1);
+							toVideo.setOrgid(orgid);
+							toVideo.setBranchid(branchid);
+							toVideo.setFolderid(folderid);
 							toVideo.setType(Video.TYPE_INTERNAL);
 							toVideo.setName(video.getName());
 							toVideo.setOname(video.getOname());

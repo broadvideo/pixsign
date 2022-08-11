@@ -48,10 +48,10 @@ public class ImportTask {
 			for (int i = 0; i < zips.length; i++) {
 				if (zips[i].getName().startsWith("bundle")) {
 					logger.info("Begin to import bundle {}", zips[i].getAbsolutePath());
-					bundleService.importZip(1, 1, zips[i]);
+					bundleService.importZip(1, 1, 1, zips[i]);
 				} else if (zips[i].getName().startsWith("page-")) {
 					logger.info("Begin to import page {}", zips[i].getAbsolutePath());
-					pageService.importZip(1, 1, zips[i]);
+					pageService.importZip(1, 1, 1, zips[i]);
 				} else if (zips[i].getName().startsWith("template-")) {
 					logger.info("Begin to import template {}", zips[i].getAbsolutePath());
 					templateService.importZip(zips[i]);

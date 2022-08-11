@@ -43,7 +43,7 @@ public interface PageService {
 
 	public void exportZip(String pageid, File zipFile) throws Exception;
 
-	public Page importZip(Integer orgid, Integer branchid, File zipFile) throws Exception;
+	public Page importZip(Integer orgid, Integer branchid, Integer folderid, File zipFile) throws Exception;
 
 	public void addStaffs(Page page, String[] staffids);
 
