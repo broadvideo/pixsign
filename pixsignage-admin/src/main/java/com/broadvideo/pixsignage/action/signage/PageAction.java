@@ -18,9 +18,11 @@ import org.springframework.stereotype.Controller;
 
 import com.broadvideo.pixsignage.action.BaseDatatableAction;
 import com.broadvideo.pixsignage.common.CommonConfig;
+import com.broadvideo.pixsignage.domain.Branch;
 import com.broadvideo.pixsignage.domain.Org;
 import com.broadvideo.pixsignage.domain.Page;
 import com.broadvideo.pixsignage.domain.Staff;
+import com.broadvideo.pixsignage.service.BranchService;
 import com.broadvideo.pixsignage.service.OrgService;
 import com.broadvideo.pixsignage.service.PageService;
 import com.broadvideo.pixsignage.service.SyncService;
@@ -51,6 +53,8 @@ public class PageAction extends BaseDatatableAction {
 	private SyncService syncService;
 	@Autowired
 	private OrgService orgService;
+	@Autowired
+	private BranchService branchService;
 
 	public String doList() {
 		try {
@@ -348,7 +352,8 @@ public class PageAction extends BaseDatatableAction {
 					jsonItem.put("filename", mypageFileName[i]);
 					jsonItem.put("size", FileUtils.sizeOf(mypage[i]));
 					Org org = orgService.selectByPrimaryKey(orgids[i]);
-					Page page = pageService.importZip(org.getOrgid(), org.getTopbranchid(), mypage[i]);
+					Branch branch = branchService.selectByPrimaryKey(""+org.getTopbranchid());
+					Page page = pageService.importZip(org.getOrgid(), org.getTopbranchid(), branch.getTopfolderid(), mypage[i]);
 					jsonItem.put("name", page.getName());
 				} catch (Exception e) {
 					logger.info("Page parse error, file={}", mypageFileName[i], e);
