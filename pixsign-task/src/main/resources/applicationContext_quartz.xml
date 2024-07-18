@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       ">
+
+	<bean id="deviceTask" class="com.broadvideo.pixsign.task.DeviceTask"></bean>
+	<bean id="deviceJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="deviceTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="deviceJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="deviceJob" />
+		</property>
+		<property name="cronExpression">
+			<value>5 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="weatherTask" class="com.broadvideo.pixsign.task.WeatherTask"></bean>
+	<bean id="weatherJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="weatherTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="weatherJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="weatherJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 30 7-19 * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="videoTask" class="com.broadvideo.pixsign.task.VideoTask"></bean>
+	<bean id="videoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="videoTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="videoJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="videoJob" />
+		</property>
+		<property name="cronExpression">
+			<value>30 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="playlogTask" class="com.broadvideo.pixsign.task.PlaylogTask"></bean>
+	<bean id="playlogJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="playlogTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="playlogJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="playlogJob" />
+		</property>
+		<property name="cronExpression">
+			<value>10 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="importTask" class="com.broadvideo.pixsign.task.ImportTask"></bean>
+	<bean id="importJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="importTask" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<bean id="importJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="importJob" />
+		</property>
+		<property name="cronExpression">
+			<value>40 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="deviceJobTrigger" />
+				<ref bean="weatherJobTrigger" />
+				<ref bean="videoJobTrigger" />
+				<ref bean="playlogJobTrigger" />
+				<ref bean="importJobTrigger" />
+				
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.TemplatezoneMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Templatezone" >
+    <id column="templatezoneid" property="templatezoneid" jdbcType="INTEGER" />
+    <result column="templateid" property="templateid" jdbcType="INTEGER" />
+    <result column="hometemplateid" property="hometemplateid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="topoffset" property="topoffset" jdbcType="INTEGER" />
+    <result column="leftoffset" property="leftoffset" jdbcType="INTEGER" />
+    <result column="zindex" property="zindex" jdbcType="INTEGER" />
+    <result column="transform" property="transform" jdbcType="VARCHAR" />
+    <result column="bdcolor" property="bdcolor" jdbcType="VARCHAR" />
+    <result column="bdstyle" property="bdstyle" jdbcType="VARCHAR" />
+    <result column="bdwidth" property="bdwidth" jdbcType="INTEGER" />
+    <result column="bdradius" property="bdradius" jdbcType="INTEGER" />
+    <result column="bgcolor" property="bgcolor" jdbcType="VARCHAR" />
+    <result column="bgopacity" property="bgopacity" jdbcType="INTEGER" />
+    <result column="opacity" property="opacity" jdbcType="INTEGER" />
+    <result column="padding" property="padding" jdbcType="INTEGER" />
+    <result column="shadowh" property="shadowh" jdbcType="INTEGER" />
+    <result column="shadowv" property="shadowv" jdbcType="INTEGER" />
+    <result column="shadowblur" property="shadowblur" jdbcType="INTEGER" />
+    <result column="shadowcolor" property="shadowcolor" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="fontfamily" property="fontfamily" jdbcType="VARCHAR" />
+    <result column="fontsize" property="fontsize" jdbcType="INTEGER" />
+    <result column="fontweight" property="fontweight" jdbcType="VARCHAR" />
+    <result column="fontstyle" property="fontstyle" jdbcType="VARCHAR" />
+    <result column="decoration" property="decoration" jdbcType="VARCHAR" />
+    <result column="align" property="align" jdbcType="VARCHAR" />
+    <result column="lineheight" property="lineheight" jdbcType="INTEGER" />
+    <result column="rowss" property="rowss" jdbcType="INTEGER" />
+    <result column="colss" property="colss" jdbcType="INTEGER" />
+    <result column="rules" property="rules" jdbcType="VARCHAR" />
+    <result column="rulecolor" property="rulecolor" jdbcType="VARCHAR" />
+    <result column="rulewidth" property="rulewidth" jdbcType="INTEGER" />
+    <result column="dateformat" property="dateformat" jdbcType="VARCHAR" />
+    <result column="diyid" property="diyid" jdbcType="INTEGER" />
+    <result column="touchtype" property="touchtype" jdbcType="CHAR" />
+    <result column="touchid" property="touchid" jdbcType="INTEGER" />
+    <result column="fixflag" property="fixflag" jdbcType="CHAR" />
+    <result column="diyactionid" property="diyactionid" jdbcType="INTEGER" />
+    <result column="animationinit" property="animationinit" jdbcType="VARCHAR" />
+    <result column="animationinitdelay" property="animationinitdelay" jdbcType="INTEGER" />
+    <result column="animationclick" property="animationclick" jdbcType="VARCHAR" />
+    <result column="volume" property="volume" jdbcType="INTEGER" />
+    <result column="speed" property="speed" jdbcType="INTEGER" />
+    <result column="intervaltime" property="intervaltime" jdbcType="INTEGER" />
+    <result column="effect" property="effect" jdbcType="VARCHAR" />
+    <collection property="templatezonedtls" ofType="com.broadvideo.pixsign.domain.Templatezonedtl"
+		column="{templatezoneid=templatezoneid}" select="com.broadvideo.pixsign.persistence.TemplatezonedtlMapper.selectList" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.broadvideo.pixsign.domain.Templatezone" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    templatezoneid, templateid, hometemplateid, type, height, width, topoffset, leftoffset, zindex, 
+    transform, bdcolor, bdstyle, bdwidth, bdradius, bgcolor, bgopacity, opacity, padding, shadowh, 
+    shadowv, shadowblur, shadowcolor, color, fontfamily, fontsize, fontweight, fontstyle, decoration, 
+    align, lineheight, rowss, colss, rules, rulecolor, rulewidth, dateformat, diyid, touchtype, touchid, 
+    fixflag, diyactionid, animationinit, animationinitdelay, animationclick, volume, speed, intervaltime, 
+    effect
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from templatezone
+    where templatezoneid = #{templatezoneid}
+  </select>
+  
+  <select id="selectList" resultMap="ResultMapWithBLOBs">
+    select * from templatezone
+    where templateid = #{templateid}
+    order by templatezoneid
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from templatezone
+    where templatezoneid = #{templatezoneid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsign.domain.Templatezone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="templatezoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into templatezone (templateid, hometemplateid, type, height, 
+      width, topoffset, leftoffset, 
+      zindex, transform, bdcolor, 
+      bdstyle, bdwidth, bdradius, 
+      bgcolor, bgopacity, opacity, 
+      padding, shadowh, shadowv, 
+      shadowblur, shadowcolor, color, 
+      fontfamily, fontsize, fontweight, 
+      fontstyle, decoration, align, 
+      lineheight, rowss, colss, 
+      rules, rulecolor, rulewidth, 
+      dateformat, diyid, touchtype, 
+      touchid, fixflag, diyactionid, 
+      animationinit, animationinitdelay, animationclick,
+      volume, speed, intervaltime, 
+      effect, content)
+    values (#{templateid,jdbcType=INTEGER}, #{hometemplateid,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{height,jdbcType=INTEGER}, 
+      #{width,jdbcType=INTEGER}, #{topoffset,jdbcType=INTEGER}, #{leftoffset,jdbcType=INTEGER}, 
+      #{zindex,jdbcType=INTEGER}, #{transform,jdbcType=VARCHAR}, #{bdcolor,jdbcType=VARCHAR}, 
+      #{bdstyle,jdbcType=VARCHAR}, #{bdwidth,jdbcType=INTEGER}, #{bdradius,jdbcType=INTEGER}, 
+      #{bgcolor,jdbcType=VARCHAR}, #{bgopacity,jdbcType=INTEGER}, #{opacity,jdbcType=INTEGER}, 
+      #{padding,jdbcType=INTEGER}, #{shadowh,jdbcType=INTEGER}, #{shadowv,jdbcType=INTEGER}, 
+      #{shadowblur,jdbcType=INTEGER}, #{shadowcolor,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{fontfamily,jdbcType=VARCHAR}, #{fontsize,jdbcType=INTEGER}, #{fontweight,jdbcType=VARCHAR}, 
+      #{fontstyle,jdbcType=VARCHAR}, #{decoration,jdbcType=VARCHAR}, #{align,jdbcType=VARCHAR}, 
+      #{lineheight,jdbcType=INTEGER}, #{rowss,jdbcType=INTEGER}, #{colss,jdbcType=INTEGER}, 
+      #{rules,jdbcType=VARCHAR}, #{rulecolor,jdbcType=VARCHAR}, #{rulewidth,jdbcType=INTEGER}, 
+      #{dateformat,jdbcType=VARCHAR}, #{diyid,jdbcType=INTEGER}, #{touchtype,jdbcType=CHAR}, 
+      #{touchid,jdbcType=INTEGER}, #{fixflag,jdbcType=CHAR}, #{diyactionid,jdbcType=INTEGER}, 
+      #{animationinit,jdbcType=VARCHAR}, #{animationinitdelay,jdbcType=INTEGER}, #{animationclick,jdbcType=VARCHAR}, 
+      #{volume,jdbcType=INTEGER}, #{speed,jdbcType=INTEGER}, #{intervaltime,jdbcType=INTEGER}, 
+      #{effect,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsign.domain.Templatezone" >
+    <selectKey resultType="java.lang.Integer" keyProperty="templatezoneid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into templatezone
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templateid != null" >
+        templateid,
+      </if>
+      <if test="hometemplateid != null" >
+        hometemplateid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="topoffset != null" >
+        topoffset,
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset,
+      </if>
+      <if test="zindex != null" >
+        zindex,
+      </if>
+      <if test="transform != null" >
+        transform,
+      </if>
+      <if test="bdcolor != null" >
+        bdcolor,
+      </if>
+      <if test="bdstyle != null" >
+        bdstyle,
+      </if>
+      <if test="bdwidth != null" >
+        bdwidth,
+      </if>
+      <if test="bdradius != null" >
+        bdradius,
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor,
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity,
+      </if>
+      <if test="opacity != null" >
+        opacity,
+      </if>
+      <if test="padding != null" >
+        padding,
+      </if>
+      <if test="shadowh != null" >
+        shadowh,
+      </if>
+      <if test="shadowv != null" >
+        shadowv,
+      </if>
+      <if test="shadowblur != null" >
+        shadowblur,
+      </if>
+      <if test="shadowcolor != null" >
+        shadowcolor,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="fontfamily != null" >
+        fontfamily,
+      </if>
+      <if test="fontsize != null" >
+        fontsize,
+      </if>
+      <if test="fontweight != null" >
+        fontweight,
+      </if>
+      <if test="fontstyle != null" >
+        fontstyle,
+      </if>
+      <if test="decoration != null" >
+        decoration,
+      </if>
+      <if test="align != null" >
+        align,
+      </if>
+      <if test="lineheight != null" >
+        lineheight,
+      </if>
+      <if test="rowss != null" >
+        rowss,
+      </if>
+      <if test="colss != null" >
+        colss,
+      </if>
+      <if test="rules != null" >
+        rules,
+      </if>
+      <if test="rulecolor != null" >
+        rulecolor,
+      </if>
+      <if test="rulewidth != null" >
+        rulewidth,
+      </if>
+      <if test="dateformat != null" >
+        dateformat,
+      </if>
+      <if test="diyid != null" >
+        diyid,
+      </if>
+      <if test="touchtype != null" >
+        touchtype,
+      </if>
+      <if test="touchid != null" >
+        touchid,
+      </if>
+      <if test="fixflag != null" >
+        fixflag,
+      </if>
+      <if test="diyactionid != null" >
+        diyactionid,
+      </if>
+      <if test="animationinit != null" >
+        animationinit,
+      </if>
+      <if test="animationinitdelay != null" >
+        animationinitdelay,
+      </if>
+      <if test="animationclick != null" >
+        animationclick,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="speed != null" >
+        speed,
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime,
+      </if>
+      <if test="effect != null" >
+        effect,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templateid != null" >
+        #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="hometemplateid != null" >
+        #{hometemplateid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="transform != null" >
+        #{transform,jdbcType=VARCHAR},
+      </if>
+      <if test="bdcolor != null" >
+        #{bdcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bdstyle != null" >
+        #{bdstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bdwidth != null" >
+        #{bdwidth,jdbcType=INTEGER},
+      </if>
+      <if test="bdradius != null" >
+        #{bdradius,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        #{bgopacity,jdbcType=INTEGER},
+      </if>
+      <if test="opacity != null" >
+        #{opacity,jdbcType=INTEGER},
+      </if>
+      <if test="padding != null" >
+        #{padding,jdbcType=INTEGER},
+      </if>
+      <if test="shadowh != null" >
+        #{shadowh,jdbcType=INTEGER},
+      </if>
+      <if test="shadowv != null" >
+        #{shadowv,jdbcType=INTEGER},
+      </if>
+      <if test="shadowblur != null" >
+        #{shadowblur,jdbcType=INTEGER},
+      </if>
+      <if test="shadowcolor != null" >
+        #{shadowcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fontfamily != null" >
+        #{fontfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="fontsize != null" >
+        #{fontsize,jdbcType=INTEGER},
+      </if>
+      <if test="fontweight != null" >
+        #{fontweight,jdbcType=VARCHAR},
+      </if>
+      <if test="fontstyle != null" >
+        #{fontstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="decoration != null" >
+        #{decoration,jdbcType=VARCHAR},
+      </if>
+      <if test="align != null" >
+        #{align,jdbcType=VARCHAR},
+      </if>
+      <if test="lineheight != null" >
+        #{lineheight,jdbcType=INTEGER},
+      </if>
+      <if test="rowss != null" >
+        #{rowss,jdbcType=INTEGER},
+      </if>
+      <if test="colss != null" >
+        #{colss,jdbcType=INTEGER},
+      </if>
+      <if test="rules != null" >
+        #{rules,jdbcType=VARCHAR},
+      </if>
+      <if test="rulecolor != null" >
+        #{rulecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="rulewidth != null" >
+        #{rulewidth,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        #{dateformat,jdbcType=VARCHAR},
+      </if>
+      <if test="diyid != null" >
+        #{diyid,jdbcType=INTEGER},
+      </if>
+      <if test="touchtype != null" >
+        #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchid != null" >
+        #{touchid,jdbcType=INTEGER},
+      </if>
+      <if test="fixflag != null" >
+        #{fixflag,jdbcType=CHAR},
+      </if>
+      <if test="diyactionid != null" >
+        #{diyactionid,jdbcType=INTEGER},
+      </if>
+      <if test="animationinit != null" >
+        #{animationinit,jdbcType=VARCHAR},
+      </if>
+      <if test="animationinitdelay != null" >
+        #{animationinitdelay,jdbcType=INTEGER},
+      </if>
+      <if test="animationclick != null" >
+        #{animationclick,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="effect != null" >
+        #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsign.domain.Templatezone" >
+    update templatezone
+    <set >
+      <if test="templateid != null" >
+        templateid = #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="hometemplateid != null" >
+        hometemplateid = #{hometemplateid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="topoffset != null" >
+        topoffset = #{topoffset,jdbcType=INTEGER},
+      </if>
+      <if test="leftoffset != null" >
+        leftoffset = #{leftoffset,jdbcType=INTEGER},
+      </if>
+      <if test="zindex != null" >
+        zindex = #{zindex,jdbcType=INTEGER},
+      </if>
+      <if test="transform != null" >
+        transform = #{transform,jdbcType=VARCHAR},
+      </if>
+      <if test="bdcolor != null" >
+        bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bdstyle != null" >
+        bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bdwidth != null" >
+        bdwidth = #{bdwidth,jdbcType=INTEGER},
+      </if>
+      <if test="bdradius != null" >
+        bdradius = #{bdradius,jdbcType=INTEGER},
+      </if>
+      <if test="bgcolor != null" >
+        bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="bgopacity != null" >
+        bgopacity = #{bgopacity,jdbcType=INTEGER},
+      </if>
+      <if test="opacity != null" >
+        opacity = #{opacity,jdbcType=INTEGER},
+      </if>
+      <if test="padding != null" >
+        padding = #{padding,jdbcType=INTEGER},
+      </if>
+      <if test="shadowh != null" >
+        shadowh = #{shadowh,jdbcType=INTEGER},
+      </if>
+      <if test="shadowv != null" >
+        shadowv = #{shadowv,jdbcType=INTEGER},
+      </if>
+      <if test="shadowblur != null" >
+        shadowblur = #{shadowblur,jdbcType=INTEGER},
+      </if>
+      <if test="shadowcolor != null" >
+        shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fontfamily != null" >
+        fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      </if>
+      <if test="fontsize != null" >
+        fontsize = #{fontsize,jdbcType=INTEGER},
+      </if>
+      <if test="fontweight != null" >
+        fontweight = #{fontweight,jdbcType=VARCHAR},
+      </if>
+      <if test="fontstyle != null" >
+        fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      </if>
+      <if test="decoration != null" >
+        decoration = #{decoration,jdbcType=VARCHAR},
+      </if>
+      <if test="align != null" >
+        align = #{align,jdbcType=VARCHAR},
+      </if>
+      <if test="lineheight != null" >
+        lineheight = #{lineheight,jdbcType=INTEGER},
+      </if>
+      <if test="rowss != null" >
+        rowss = #{rowss,jdbcType=INTEGER},
+      </if>
+      <if test="colss != null" >
+        colss = #{colss,jdbcType=INTEGER},
+      </if>
+      <if test="rules != null" >
+        rules = #{rules,jdbcType=VARCHAR},
+      </if>
+      <if test="rulecolor != null" >
+        rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="rulewidth != null" >
+        rulewidth = #{rulewidth,jdbcType=INTEGER},
+      </if>
+      <if test="dateformat != null" >
+        dateformat = #{dateformat,jdbcType=VARCHAR},
+      </if>
+      <if test="diyid != null" >
+        diyid = #{diyid,jdbcType=INTEGER},
+      </if>
+      <if test="touchtype != null" >
+        touchtype = #{touchtype,jdbcType=CHAR},
+      </if>
+      <if test="touchid != null" >
+        touchid = #{touchid,jdbcType=INTEGER},
+      </if>
+      <if test="fixflag != null" >
+        fixflag = #{fixflag,jdbcType=CHAR},
+      </if>
+      <if test="diyactionid != null" >
+        diyactionid = #{diyactionid,jdbcType=INTEGER},
+      </if>
+      <if test="animationinit != null" >
+        animationinit = #{animationinit,jdbcType=VARCHAR},
+      </if>
+      <if test="animationinitdelay != null" >
+        animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      </if>
+      <if test="animationclick != null" >
+        animationclick = #{animationclick,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        speed = #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="intervaltime != null" >
+        intervaltime = #{intervaltime,jdbcType=INTEGER},
+      </if>
+      <if test="effect != null" >
+        effect = #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where templatezoneid = #{templatezoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.broadvideo.pixsign.domain.Templatezone" >
+    update templatezone
+    set templateid = #{templateid,jdbcType=INTEGER},
+      hometemplateid = #{hometemplateid,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER},
+      transform = #{transform,jdbcType=VARCHAR},
+      bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=INTEGER},
+      bdradius = #{bdradius,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
+      opacity = #{opacity,jdbcType=INTEGER},
+      padding = #{padding,jdbcType=INTEGER},
+      shadowh = #{shadowh,jdbcType=INTEGER},
+      shadowv = #{shadowv,jdbcType=INTEGER},
+      shadowblur = #{shadowblur,jdbcType=INTEGER},
+      shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=INTEGER},
+      fontweight = #{fontweight,jdbcType=VARCHAR},
+      fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      decoration = #{decoration,jdbcType=VARCHAR},
+      align = #{align,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=INTEGER},
+      rowss = #{rowss,jdbcType=INTEGER},
+      colss = #{colss,jdbcType=INTEGER},
+      rules = #{rules,jdbcType=VARCHAR},
+      rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      rulewidth = #{rulewidth,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      diyid = #{diyid,jdbcType=INTEGER},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchid = #{touchid,jdbcType=INTEGER},
+      fixflag = #{fixflag,jdbcType=CHAR},
+      diyactionid = #{diyactionid,jdbcType=INTEGER},
+      animationinit = #{animationinit,jdbcType=VARCHAR},
+      animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      animationclick = #{animationclick,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      speed = #{speed,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
+      effect = #{effect,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where templatezoneid = #{templatezoneid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsign.domain.Templatezone" >
+    update templatezone
+    set templateid = #{templateid,jdbcType=INTEGER},
+      hometemplateid = #{hometemplateid,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      topoffset = #{topoffset,jdbcType=INTEGER},
+      leftoffset = #{leftoffset,jdbcType=INTEGER},
+      zindex = #{zindex,jdbcType=INTEGER},
+      transform = #{transform,jdbcType=VARCHAR},
+      bdcolor = #{bdcolor,jdbcType=VARCHAR},
+      bdstyle = #{bdstyle,jdbcType=VARCHAR},
+      bdwidth = #{bdwidth,jdbcType=INTEGER},
+      bdradius = #{bdradius,jdbcType=INTEGER},
+      bgcolor = #{bgcolor,jdbcType=VARCHAR},
+      bgopacity = #{bgopacity,jdbcType=INTEGER},
+      opacity = #{opacity,jdbcType=INTEGER},
+      padding = #{padding,jdbcType=INTEGER},
+      shadowh = #{shadowh,jdbcType=INTEGER},
+      shadowv = #{shadowv,jdbcType=INTEGER},
+      shadowblur = #{shadowblur,jdbcType=INTEGER},
+      shadowcolor = #{shadowcolor,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fontfamily = #{fontfamily,jdbcType=VARCHAR},
+      fontsize = #{fontsize,jdbcType=INTEGER},
+      fontweight = #{fontweight,jdbcType=VARCHAR},
+      fontstyle = #{fontstyle,jdbcType=VARCHAR},
+      decoration = #{decoration,jdbcType=VARCHAR},
+      align = #{align,jdbcType=VARCHAR},
+      lineheight = #{lineheight,jdbcType=INTEGER},
+      rowss = #{rowss,jdbcType=INTEGER},
+      colss = #{colss,jdbcType=INTEGER},
+      rules = #{rules,jdbcType=VARCHAR},
+      rulecolor = #{rulecolor,jdbcType=VARCHAR},
+      rulewidth = #{rulewidth,jdbcType=INTEGER},
+      dateformat = #{dateformat,jdbcType=VARCHAR},
+      diyid = #{diyid,jdbcType=INTEGER},
+      touchtype = #{touchtype,jdbcType=CHAR},
+      touchid = #{touchid,jdbcType=INTEGER}
+      fixflag = #{fixflag,jdbcType=CHAR}
+      diyactionid = #{diyactionid,jdbcType=INTEGER},
+      animationinit = #{animationinit,jdbcType=VARCHAR},
+      animationinitdelay = #{animationinitdelay,jdbcType=INTEGER},
+      animationclick = #{animationclick,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      speed = #{speed,jdbcType=INTEGER},
+      intervaltime = #{intervaltime,jdbcType=INTEGER},
+      effect = #{effect,jdbcType=VARCHAR}
+    where templatezoneid = #{templatezoneid,jdbcType=INTEGER}
+  </update>
+</mapper>

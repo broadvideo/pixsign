@@ -1,3 +1,5 @@
-CREATE DATABASE IF NOT EXISTS pixsignage DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS pixsign DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
-GRANT ALL ON pixsignage.* TO pixsignage@'%' IDENTIFIED BY 'pixsignage@01';
+CREATE USER 'pixsign' IDENTIFIED BY 'pixsign@01';
+
+GRANT ALL ON pixsign.* TO pixsign@'%';

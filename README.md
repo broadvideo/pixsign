@@ -1,4 +1,4 @@
-# Pixsignage
+# Pixsign
 
 
 # 安装指南
@@ -7,20 +7,18 @@
 CentOS 7, JDK1.8.0 (/opt/pix/jdk8/)
 
 ## Build(需要 maven 3.3.3, JDK1.8)
-- git clone git@192.168.0.202:pixsignage/pixsignage.git pixsignage
-- cd pixsignage
-- mvn install:install-file -Dfile=lib/gif4j.jar -DgroupId=gif4j -DartifactId=gif4j -Dversion=1.0 -Dpackaging=jar
-- mvn install:install-file -Dfile=lib/cloud-java-sdk-smn-2.0.1.jar -DgroupId=smn -DartifactId=cloud-java-sdk-smn -Dversion=2.0.1 -Dpackaging=jar
+- git clone git@192.168.0.202:pixsign/pixsign.git pixsign
+- cd pixsign
 - mvn clean
 - mvn package
-- 进入pixsignage-dist/target目录获取pixsignage-[version]-dist.tar.gz
+- 进入pixsign-dist/target目录获取pixsign-[version]-dist.tar.gz
 
 
 ## 安装、管理和配置
 ###安装    
 
 - 上传压缩包至服务器/tmp/目录。
-- 解压安装包后得到pixsignage-[version]-dist目录
+- 解压安装包后得到pixsign-[version]-dist目录
 - 进入目录，执行安装脚本 ./install/install.sh
 
 

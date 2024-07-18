@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.StatMapper" >
+  <resultMap id="BaseResultMap" type="java.util.HashMap" >
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="statDevices" resultMap="BaseResultMap" >
+    select onlineflag as label, count(*) as value
+    from device
+    where testflag = 0
+    and status = 1
+    and orgid = #{orgid}
+    and exists (select 1 from branch b 
+      where b.branchid=device.branchid 
+      and (b.branchid=#{branchid} or b.parentid=#{branchid} or b.parentid2=#{branchid} or b.parentid3=#{branchid}) )
+    <if test="cataitemid1 != null">
+      and cataitemid1 = #{cataitemid1}
+    </if>
+    <if test="cataitemid2 != null">
+      and cataitemid2 = #{cataitemid2}
+    </if>
+    group by onlineflag
+    order by onlineflag desc
+  </select>
+
+  <select id="statVideoCount" resultMap="BaseResultMap" >
+    select count(1) as value, 
+    date(createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(createtime)) as sequence
+    from video 
+    where orgid = #{orgid} 
+    and status='1'
+    group by date(createtime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+  <select id="statImageCount" resultMap="BaseResultMap" >
+    select count(1) as value, 
+    date(createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(createtime)) as sequence
+    from image 
+    where orgid = #{orgid} 
+    and status='1'
+    group by date(createtime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+  <select id="statFilesizeSum" resultMap="BaseResultMap" >
+    select sum(dfh.size) as value, 
+    date(dfh.createtime) as label, 
+    DATEDIFF(DATE(NOW()),DATE(dfh.createtime)) as sequence
+    from devicefilehis dfh, device d
+    where d.orgid = #{orgid} 
+    and dfh.deviceid=d.deviceid
+    group by date(dfh.createtime)
+    having sequence &lt; 30
+    order by label
+  </select>
+
+</mapper>

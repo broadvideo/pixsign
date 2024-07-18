@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.PageMapper" >
+  <resultMap id="MiniResultMap" type="com.broadvideo.pixsign.domain.Page" >
+    <id column="pageid" property="pageid" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="templateid" property="templateid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
+    <result column="ratio" property="ratio" jdbcType="CHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="limitflag" property="limitflag" jdbcType="CHAR" />
+    <result column="privilegeflag" property="privilegeflag" jdbcType="CHAR" />
+    <result column="touchflag" property="touchflag" jdbcType="CHAR" />
+    <result column="homeflag" property="homeflag" jdbcType="CHAR" />
+    <result column="homepageid" property="homepageid" jdbcType="INTEGER" />
+    <result column="homeidletime" property="homeidletime" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="size" property="size" jdbcType="BIGINT" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="reviewflag" property="reviewflag" jdbcType="CHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="exportflag" property="exportflag" jdbcType="CHAR" />
+    <result column="exportsize" property="exportsize" jdbcType="BIGINT" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Page" extends="MiniResultMap" >
+    <collection property="subpages" ofType="com.broadvideo.pixsign.domain.Page" column="{homepageid=pageid}" select="com.broadvideo.pixsign.persistence.PageMapper.selectSubList" />
+  </resultMap>
+
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsign.domain.Page" extends="BaseResultMap" >
+    <result column="json" property="json" jdbcType="LONGVARCHAR" />
+    <collection property="pagezones" ofType="com.broadvideo.pixsign.domain.Pagezone" column="{pageid=pageid}" select="com.broadvideo.pixsign.persistence.PagezoneMapper.selectList" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    pageid, uuid, orgid, branchid, templateid, name, snapshot, ratio, height, width, limitflag, privilegeflag, touchflag, 
+    homeflag, homepageid, homeidletime, status, size, md5, description, reviewflag, comment, exportflag, exportsize, createtime, 
+    updatetime, createstaffid
+  </sql>
+  <sql id="Blob_Column_List" >
+    json
+  </sql>
+  
+  <select id="selectRelatePage" resultMap="MiniResultMap" >
+    select *
+    from page
+    where '${relatetype}' = '4' and pageid = #{pageid}
+    and status != '9'
+  </select>
+
+  <select id="selectMiniByPrimaryKey" resultMap="MiniResultMap" >
+    select * from page
+    where pageid = #{pageid}
+  </select>
+  
+  <select id="selectBaseByPrimaryKey" resultMap="BaseResultMap" >
+    select * from page
+    where pageid = #{pageid}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="FullResultMap" >
+    select * from page
+    where pageid = #{pageid}
+  </select>
+  
+  <select id="selectByUuid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from page
+    where orgid = #{orgid}
+    and uuid = #{uuid}
+  </select>
+
+  <select id="selectCount" resultType="Integer" >
+    select count(1) from page 
+    where status = 1 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="reviewflag != null">
+      and reviewflag = #{reviewflag}
+    </if>
+    <if test="ratio != null">
+      and ratio = #{ratio}
+    </if>
+    <if test="touchflag != null">
+      and touchflag = #{touchflag}
+    </if>
+    <if test="homeflag != null">
+      and homeflag = #{homeflag}
+    </if>
+    <if test="search != null">
+      and name like #{search}
+    </if>
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from page
+    where status = 1 
+    and orgid = #{orgid}
+    <if test="branchid != null">
+      and branchid = #{branchid}
+    </if>
+    <if test="reviewflag != null">
+      and reviewflag = #{reviewflag}
+    </if>
+    <if test="ratio != null">
+      and ratio = #{ratio}
+    </if>
+    <if test="touchflag != null">
+      and touchflag = #{touchflag}
+    </if>
+    <if test="homeflag != null">
+      and homeflag = #{homeflag}
+    </if>
+    <if test="search != null">
+      and name like #{search}
+    </if>
+    order by pageid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectSubList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from page
+    where status=1
+    and homepageid = #{homepageid}
+  </select>
+
+  <select id="selectExportList" resultMap="MiniResultMap">
+    select <include refid="Base_Column_List" />
+    from page
+    where status=1
+   and homeflag = 1
+    and exportflag = 0
+  </select>
+
+  <select id="selectStaffPage" resultMap="com.broadvideo.pixsign.persistence.StaffMapper.BaseResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and s.staffid = #{staffid}
+    and sp.pageid = #{pageid}
+  </select>
+
+  <select id="selectStaffCount" resultType="Integer" >
+    select count(1)
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff" resultMap="com.broadvideo.pixsign.persistence.StaffMapper.FullResultMap">
+    select s.*
+    from staffpage sp, staff s
+    where sp.staffid=s.staffid
+    and s.status = 1 
+    and sp.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <select id="selectStaff2SelectCount" resultType="Integer" >
+    select count(1)
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+  </select>
+
+  <select id="selectStaff2Select" resultMap="com.broadvideo.pixsign.persistence.StaffMapper.FullResultMap">
+    select s.* 
+    from staff s, page p, branch b 
+    where p.branchid=b.branchid
+    and (s.branchid=b.branchid or s.branchid=b.parentid or s.branchid=b.parentid2 or s.branchid=b.parentid3) 
+    and s.status = 1 
+    and p.pageid = #{pageid}
+    <if test="search != null">
+      and s.name like #{search}
+    </if>
+    order by b.branchid desc, s.staffid desc 
+    <if test="start != null and length != null">
+      limit ${start}, ${length}
+    </if>
+  </select>
+
+  <delete id="addStaff" >
+    insert into staffpage(staffid, pageid)
+    values(#{staffid}, #{pageid})
+  </delete>
+  
+  <delete id="deleteStaff" >
+    delete from staffpage
+    where staffid = #{staffid}
+    and pageid = #{pageid}
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" >
+    update page set status='9'
+    where pageid = #{pageid}
+  </delete>
+  
+  <delete id="clearPagezones" >
+    delete from pagezone
+    where pageid = #{pageid}
+  </delete>
+  
+  <delete id="clearSubpages" >
+    delete from page
+    where homepageid = #{pageid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsign.domain.Page" >
+    <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into page (uuid, orgid, branchid, templateid, 
+      name, snapshot, ratio, 
+      height, width, limitflag, 
+      privilegeflag, touchflag, 
+      homeflag, homepageid, homeidletime, 
+      status, size, md5, 
+      description, reviewflag, 
+      comment, exportflag, exportsize, 
+      createtime, updatetime, 
+      createstaffid, json
+      )
+    values (#{uuid,jdbcType=VARCHAR}, #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{templateid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{snapshot,jdbcType=VARCHAR}, #{ratio,jdbcType=CHAR}, 
+      #{height,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, #{limitflag,jdbcType=CHAR}, 
+      #{privilegeflag,jdbcType=CHAR}, #{touchflag,jdbcType=CHAR}, 
+      #{homeflag,jdbcType=CHAR}, #{homepageid,jdbcType=INTEGER}, #{homeidletime,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{size,jdbcType=BIGINT}, #{md5,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{reviewflag,jdbcType=CHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{exportflag,jdbcType=CHAR}, #{exportsize,jdbcType=BIGINT}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER}, #{json,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsign.domain.Page" >
+    <selectKey resultType="java.lang.Integer" keyProperty="pageid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into page
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="templateid != null" >
+        templateid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="snapshot != null" >
+        snapshot,
+      </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="limitflag != null" >
+        limitflag,
+      </if>
+      <if test="privilegeflag != null" >
+        privilegeflag,
+      </if>
+      <if test="touchflag != null" >
+        touchflag,
+      </if>
+      <if test="homeflag != null" >
+        homeflag,
+      </if>
+      <if test="homepageid != null" >
+        homepageid,
+      </if>
+      <if test="homeidletime != null" >
+        homeidletime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="md5 != null" >
+        md5,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="reviewflag != null" >
+        reviewflag,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="exportflag != null" >
+        exportflag,
+      </if>
+      <if test="exportsize != null" >
+        exportsize,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+      <if test="json != null" >
+        json,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="templateid != null" >
+        #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="limitflag != null" >
+        #{limitflag,jdbcType=CHAR},
+      </if>
+      <if test="privilegeflag != null" >
+        #{privilegeflag,jdbcType=CHAR},
+      </if>
+      <if test="touchflag != null" >
+        #{touchflag,jdbcType=CHAR},
+      </if>
+      <if test="homeflag != null" >
+        #{homeflag,jdbcType=CHAR},
+      </if>
+      <if test="homepageid != null" >
+        #{homepageid,jdbcType=INTEGER},
+      </if>
+      <if test="homeidletime != null" >
+        #{homeidletime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewflag != null" >
+        #{reviewflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="exportflag != null" >
+        #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        #{exportsize,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="json != null" >
+        #{json,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsign.domain.Page" >
+    update page
+    <set >
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="templateid != null" >
+        templateid = #{templateid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=CHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="limitflag != null" >
+        limitflag = #{limitflag,jdbcType=CHAR},
+      </if>
+      <if test="privilegeflag != null" >
+        privilegeflag = #{privilegeflag,jdbcType=CHAR},
+      </if>
+      <if test="touchflag != null" >
+        touchflag = #{touchflag,jdbcType=CHAR},
+      </if>
+      <if test="homeflag != null" >
+        homeflag = #{homeflag,jdbcType=CHAR},
+      </if>
+      <if test="homepageid != null" >
+        homepageid = #{homepageid,jdbcType=INTEGER},
+      </if>
+      <if test="homeidletime != null" >
+        homeidletime = #{homeidletime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=BIGINT},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewflag != null" >
+        reviewflag = #{reviewflag,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="exportflag != null" >
+        exportflag = #{exportflag,jdbcType=CHAR},
+      </if>
+      <if test="exportsize != null" >
+        exportsize = #{exportsize,jdbcType=BIGINT},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+      <if test="json != null" >
+        json = #{json,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where pageid = #{pageid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsign.domain.Page" >
+    update page
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      templateid = #{templateid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
+      ratio = #{ratio,jdbcType=CHAR},
+      height = #{height,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      limitflag = #{limitflag,jdbcType=CHAR},
+      privilegeflag = #{privilegeflag,jdbcType=CHAR},
+      touchflag = #{touchflag,jdbcType=CHAR},
+      homeflag = #{homeflag,jdbcType=CHAR},
+      homepageid = #{homepageid,jdbcType=INTEGER},
+      homeidletime = #{homeidletime,jdbcType=INTEGER},
+      status = #{status,jdbcType=CHAR},
+      size = #{size,jdbcType=BIGINT},
+      md5 = #{md5,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      reviewflag = #{reviewflag,jdbcType=CHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      exportflag = #{exportflag,jdbcType=CHAR},
+      exportsize = #{exportsize,jdbcType=BIGINT},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER},
+      json = #{json,jdbcType=LONGVARCHAR}
+    where pageid = #{pageid,jdbcType=INTEGER}
+  </update>
+</mapper>

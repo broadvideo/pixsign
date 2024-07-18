@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.FolderMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Folder" >
+    <id column="folderid" property="folderid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="branchid" property="branchid" jdbcType="INTEGER" />
+    <result column="parentid" property="parentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createstaffid" property="createstaffid" jdbcType="INTEGER" />
+    <association property="parent" column="{id=parentid}" select="selectParent" />
+    <collection property="children" ofType="com.broadvideo.pixsign.domain.Folder" column="{id=folderid}" select="selectChild" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    folderid, orgid, branchid, parentid, name, status, createtime, createstaffid
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from folder
+    where folderid = #{folderid}
+  </select>
+  
+  <select id="selectChild" resultMap="BaseResultMap" >
+    select * from folder
+    where status = 1 and parentid = #{id} order by folderid
+  </select>
+
+  <select id="selectParent" resultMap="BaseResultMap" >
+    select * from folder
+    where status = 1 and folderid = #{id}
+  </select>
+
+  <select id="selectRoot" resultMap="BaseResultMap">
+    select * from folder 
+    where status=1 
+    and parentid=0 
+    and orgid = #{orgid}
+    and branchid = #{branchid}
+    order by folderid 
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from folder
+    where status=1
+    and orgid = #{orgid}
+    and branchid = #{branchid}
+    order by folderid asc
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    update folder set status='9'
+    where folderid = #{folderid}
+  </delete>
+  
+  <insert id="insert" parameterType="com.broadvideo.pixsign.domain.Folder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="folderid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into folder (orgid, branchid, parentid, 
+      name, status, createtime, 
+      createstaffid)
+    values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createstaffid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsign.domain.Folder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="folderid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into folder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        orgid,
+      </if>
+      <if test="branchid != null" >
+        branchid,
+      </if>
+      <if test="parentid != null" >
+        parentid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsign.domain.Folder" >
+    update folder
+    <set >
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="branchid != null" >
+        branchid = #{branchid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        parentid = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createstaffid != null" >
+        createstaffid = #{createstaffid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where folderid = #{folderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsign.domain.Folder" >
+    update folder
+    set orgid = #{orgid,jdbcType=INTEGER},
+      branchid = #{branchid,jdbcType=INTEGER},
+      parentid = #{parentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createstaffid = #{createstaffid,jdbcType=INTEGER}
+    where folderid = #{folderid,jdbcType=INTEGER}
+  </update>
+</mapper>

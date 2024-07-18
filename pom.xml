@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.broadvideo</groupId>
-	<artifactId>pixsignage</artifactId>
+	<artifactId>pixsign</artifactId>
 	<version>2.3.6</version>
 	<packaging>pom</packaging>
 
-	<name>pixsignage</name>
+	<name>pixsign</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -348,10 +348,10 @@
 	</build>
 
 	<modules>
-		<module>pixsignage-common</module>
-		<module>pixsignage-admin</module>
-		<module>pixsignage-task</module>
-		<module>pixsignage-api</module>
-		<module>pixsignage-dist</module>
+		<module>pixsign-common</module>
+		<module>pixsign-admin</module>
+		<module>pixsign-task</module>
+		<module>pixsign-api</module>
+		<module>pixsign-dist</module>
   </modules>
 </project>

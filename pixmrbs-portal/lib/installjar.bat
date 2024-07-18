@@ -1,1 +1,0 @@
-mvn install:install-file -Dfile=zszq_jdk1.5_javapso.jar -DgroupId=com.pixmrbs.sso -DartifactId=zszq_jdk1.5_javapso -Dversion=1.0 -Dpackaging=jar

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.PrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Privilege" >
+    <id column="privilegeid" property="privilegeid" jdbcType="INTEGER" />
+    <result column="subsystem" property="subsystem" jdbcType="CHAR" />
+    <result column="parentid" property="parentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="menuurl" property="menuurl" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="parent" column="{id=parentid}" select="selectParent" />
+    <collection property="children" ofType="com.broadvideo.pixsign.domain.Privilege" column="{id=privilegeid}" select="selectChild" />
+  </resultMap>
+
+  <select id="selectSysTreeList" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid > 0 and parentid = 0 and subsystem = 0 order by sequence
+  </select>
+  
+  <select id="selectVspTreeList" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid > 0 and parentid = 0 and subsystem = 1 order by sequence
+  </select>
+  
+  <select id="selectOrgTreeList" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid > 0 and parentid = 0 and subsystem = 2 order by sequence
+  </select>
+
+  <select id="selectChild" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid > 0 and parentid = #{id} order by sequence
+  </select>
+
+  <select id="selectParent" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid > 0 and privilegeid = #{id}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select *
+    from privilege
+    where privilegeid = '${privilegeid}'
+  </select>
+  
+  <select id="selectByStaff" resultMap="BaseResultMap">
+    select p.*
+    from privilege p, staffprivilege sp
+    where p.privilegeid = sp.privilegeid and sp.staffid = #{staffid}
+    union
+    select p.*
+    from privilege p, roleprivilege rp, staffrole sr
+    where p.privilegeid = rp.privilegeid and rp.roleid = sr.roleid and sr.staffid = #{staffid}
+  </select>
+
+  <select id="selectByRole" resultMap="BaseResultMap">
+    select p.*
+    from privilege p, roleprivilege rp
+    where p.privilegeid = rp.privilegeid and rp.roleid = #{roleid}
+  </select>
+</mapper>

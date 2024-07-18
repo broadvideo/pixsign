@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.broadvideo.pixsign.persistence.PlanbindMapper" >
+  <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Planbind" >
+    <id column="planbindid" property="planbindid" jdbcType="INTEGER" />
+    <result column="planid" property="planid" jdbcType="INTEGER" />
+    <result column="bindtype" property="bindtype" jdbcType="CHAR" />
+    <result column="bindid" property="bindid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="FullResultMap" type="com.broadvideo.pixsign.domain.Planbind" extends="BaseResultMap" >
+    <association property="device" column="{bindtype=bindtype,deviceid=bindid}" select="selectDevice" />
+    <association property="devicegroup" column="{bindtype=bindtype,devicegroupid=bindid}" select="selectDevicegroup" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    planbindid, planid, bindtype, bindid
+  </sql>
+  
+  <select id="selectDevice" resultMap="com.broadvideo.pixsign.persistence.DeviceMapper.BaseResultMap" >
+    select * from device
+    where '${bindtype}' = '1' and deviceid = #{deviceid}
+  </select>
+
+  <select id="selectDevicegroup" resultMap="com.broadvideo.pixsign.persistence.DevicegroupMapper.BaseResultMap" >
+    select * from devicegroup
+    where '${bindtype}' = '2' and devicegroupid = #{devicegroupid}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="FullResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from planbind
+    where planbindid = #{planbindid}
+  </select>
+  
+  <select id="selectList" resultMap="FullResultMap">
+    select * from planbind
+    where planid = #{planid}
+    order by bindtype, bindid
+  </select>
+  
+  <delete id="deleteByPrimaryKey">
+    delete from planbind
+    where planbindid = #{planbindid}
+  </delete>
+  
+  <delete id="deleteByPlan" >
+    delete from planbind
+    where planid = #{planid}
+  </delete>
+
+  <insert id="insert" parameterType="com.broadvideo.pixsign.domain.Planbind" >
+    <selectKey resultType="java.lang.Integer" keyProperty="planbindid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into planbind (planid, bindtype, bindid
+      )
+    values (#{planid,jdbcType=INTEGER}, #{bindtype,jdbcType=CHAR}, #{bindid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.broadvideo.pixsign.domain.Planbind" >
+    <selectKey resultType="java.lang.Integer" keyProperty="planbindid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into planbind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planid != null" >
+        planid,
+      </if>
+      <if test="bindtype != null" >
+        bindtype,
+      </if>
+      <if test="bindid != null" >
+        bindid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planid != null" >
+        #{planid,jdbcType=INTEGER},
+      </if>
+      <if test="bindtype != null" >
+        #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        #{bindid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsign.domain.Planbind" >
+    update planbind
+    <set >
+      <if test="planid != null" >
+        planid = #{planid,jdbcType=INTEGER},
+      </if>
+      <if test="bindtype != null" >
+        bindtype = #{bindtype,jdbcType=CHAR},
+      </if>
+      <if test="bindid != null" >
+        bindid = #{bindid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where planbindid = #{planbindid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsign.domain.Planbind" >
+    update planbind
+    set planid = #{planid,jdbcType=INTEGER},
+      bindtype = #{bindtype,jdbcType=CHAR},
+      bindid = #{bindid,jdbcType=INTEGER}
+    where planbindid = #{planbindid,jdbcType=INTEGER}
+  </update>
+</mapper>
