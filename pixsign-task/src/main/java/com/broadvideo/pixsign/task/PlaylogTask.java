@@ -25,7 +25,6 @@ import com.broadvideo.pixsign.persistence.DailyplaylogMapper;
 import com.broadvideo.pixsign.persistence.DeviceMapper;
 import com.broadvideo.pixsign.persistence.MonthlyplaylogMapper;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class PlaylogTask {
@@ -117,14 +116,6 @@ public class PlaylogTask {
 				long endtime = 0;
 				String mediatype = "";
 				String mediaid = "";
-				int persons = 0;
-				int male = 0;
-				int female = 0;
-				int age1 = 0;
-				int age2 = 0;
-				int age3 = 0;
-				int age4 = 0;
-				int age5 = 0;
 
 				if (line.startsWith("{")) {
 					// JSON format
@@ -133,31 +124,6 @@ public class PlaylogTask {
 					endtime = json.getLong("end_time");
 					mediatype = json.getString("media_type");
 					mediaid = json.getString("media_id");
-					if (json.has("visitors")) {
-						JSONArray visitorArray = json.getJSONArray("visitors");
-						persons = visitorArray.size();
-						for (int j = 0; j < visitorArray.size(); j++) {
-							JSONObject visitor = visitorArray.getJSONObject(j);
-							int age = visitor.getInt("age");
-							int sex = visitor.getInt("sex");
-							if (age <= 6) {
-								age1++;
-							} else if (age <= 17) {
-								age2++;
-							} else if (age <= 40) {
-								age3++;
-							} else if (age <= 65) {
-								age4++;
-							} else {
-								age5++;
-							}
-							if (sex == 0) {
-								male++;
-							} else {
-								female++;
-							}
-						}
-					}
 				} else {
 					// CSV format
 					String[] ss = line.split(",");
@@ -197,14 +163,6 @@ public class PlaylogTask {
 						mediaid, playdate);
 				if (dailyplaylog != null) {
 					dailyplaylog.setTotal(dailyplaylog.getTotal() + 1);
-					dailyplaylog.setPersons(dailyplaylog.getPersons() + persons);
-					dailyplaylog.setMale(dailyplaylog.getMale() + male);
-					dailyplaylog.setFemale(dailyplaylog.getFemale() + female);
-					dailyplaylog.setAge1(dailyplaylog.getAge1() + age1);
-					dailyplaylog.setAge2(dailyplaylog.getAge2() + age2);
-					dailyplaylog.setAge3(dailyplaylog.getAge3() + age3);
-					dailyplaylog.setAge4(dailyplaylog.getAge4() + age4);
-					dailyplaylog.setAge5(dailyplaylog.getAge5() + age5);
 					dailyplaylogMapper.updateByPrimaryKeySelective(dailyplaylog);
 				} else {
 					dailyplaylog = new Dailyplaylog();
@@ -215,14 +173,6 @@ public class PlaylogTask {
 					dailyplaylog.setMediaid(Integer.parseInt(mediaid));
 					dailyplaylog.setPlaydate(playdate);
 					dailyplaylog.setTotal(1);
-					dailyplaylog.setPersons(persons);
-					dailyplaylog.setMale(male);
-					dailyplaylog.setFemale(female);
-					dailyplaylog.setAge1(age1);
-					dailyplaylog.setAge2(age2);
-					dailyplaylog.setAge3(age3);
-					dailyplaylog.setAge4(age4);
-					dailyplaylog.setAge5(age5);
 					dailyplaylogMapper.insertSelective(dailyplaylog);
 				}
 
@@ -231,14 +181,6 @@ public class PlaylogTask {
 						mediatype, mediaid, playmonth);
 				if (monthlyplaylog != null) {
 					monthlyplaylog.setTotal(monthlyplaylog.getTotal() + 1);
-					monthlyplaylog.setPersons(monthlyplaylog.getPersons() + persons);
-					monthlyplaylog.setMale(monthlyplaylog.getMale() + male);
-					monthlyplaylog.setFemale(monthlyplaylog.getFemale() + female);
-					monthlyplaylog.setAge1(monthlyplaylog.getAge1() + age1);
-					monthlyplaylog.setAge2(monthlyplaylog.getAge2() + age2);
-					monthlyplaylog.setAge3(monthlyplaylog.getAge3() + age3);
-					monthlyplaylog.setAge4(monthlyplaylog.getAge4() + age4);
-					monthlyplaylog.setAge5(monthlyplaylog.getAge5() + age5);
 					monthlyplaylogMapper.updateByPrimaryKeySelective(monthlyplaylog);
 				} else {
 					monthlyplaylog = new Monthlyplaylog();
@@ -249,14 +191,6 @@ public class PlaylogTask {
 					monthlyplaylog.setMediaid(Integer.parseInt(mediaid));
 					monthlyplaylog.setPlaymonth(playmonth);
 					monthlyplaylog.setTotal(1);
-					monthlyplaylog.setPersons(persons);
-					monthlyplaylog.setMale(male);
-					monthlyplaylog.setFemale(female);
-					monthlyplaylog.setAge1(age1);
-					monthlyplaylog.setAge2(age2);
-					monthlyplaylog.setAge3(age3);
-					monthlyplaylog.setAge4(age4);
-					monthlyplaylog.setAge5(age5);
 					monthlyplaylogMapper.insertSelective(monthlyplaylog);
 				}
 			}

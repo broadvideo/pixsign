@@ -32,8 +32,6 @@ public class AppAction extends BaseDatatableAction {
 			List<App> appList = null;
 			if (getLoginStaff().getSubsystem().equals(CommonConstants.SUBSYSTEM_SYS)) {
 				appList = appMapper.selectList();
-			} else if (getLoginStaff().getSubsystem().equals(CommonConstants.SUBSYSTEM_VSP)) {
-				appList = getLoginStaff().getVsp().getApplist();
 			} else if (getLoginStaff().getSubsystem().equals(CommonConstants.SUBSYSTEM_ORG)) {
 				appList = getLoginStaff().getOrg().getApplist();
 			}

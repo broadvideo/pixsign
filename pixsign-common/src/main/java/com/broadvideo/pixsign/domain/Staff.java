@@ -7,11 +7,10 @@ import org.apache.struts2.json.annotations.JSON;
 
 public class Staff {
 	private Integer staffid;
+	
 	private String uuid;
 
 	private String subsystem;
-
-	private Integer vspid;
 
 	private Integer orgid;
 
@@ -44,15 +43,11 @@ public class Staff {
 
 	private Date logintime;
 
-	private Vsp vsp;
-
 	private Org org;
 
 	private Branch branch;
 
 	private List<Privilege> privileges;
-
-	private List<Role> roles;
 
 	private String oldpassword;
 
@@ -78,14 +73,6 @@ public class Staff {
 
 	public void setSubsystem(String subsystem) {
 		this.subsystem = subsystem == null ? null : subsystem.trim();
-	}
-
-	public Integer getVspid() {
-		return vspid;
-	}
-
-	public void setVspid(Integer vspid) {
-		this.vspid = vspid;
 	}
 
 	public Integer getOrgid() {
@@ -220,14 +207,6 @@ public class Staff {
 		this.logintime = logintime;
 	}
 
-	public Vsp getVsp() {
-		return vsp;
-	}
-
-	public void setVsp(Vsp vsp) {
-		this.vsp = vsp;
-	}
-
 	public Org getOrg() {
 		return org;
 	}
@@ -246,14 +225,6 @@ public class Staff {
 
 	public List<Privilege> getPrivileges() {
 		return privileges;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
 	}
 
 	public void setPrivileges(List<Privilege> privileges) {

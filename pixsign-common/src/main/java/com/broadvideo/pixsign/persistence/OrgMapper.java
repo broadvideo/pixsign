@@ -9,7 +9,7 @@ import com.broadvideo.pixsign.domain.Org;
 public interface OrgMapper {
 	Org selectByPrimaryKey(@Param(value = "orgid") String orgid);
 
-	List<Org> selectList(@Param(value = "vspid") String vspid, @Param(value = "orgid") String orgid);
+	List<Org> selectList(@Param(value = "orgid") String orgid);
 
 	List<Org> selectByName(@Param(value = "name") String name);
 

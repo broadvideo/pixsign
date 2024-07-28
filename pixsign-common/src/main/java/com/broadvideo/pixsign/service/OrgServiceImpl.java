@@ -11,15 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsign.common.CommonConstants;
 import com.broadvideo.pixsign.domain.Branch;
-import com.broadvideo.pixsign.domain.Device;
 import com.broadvideo.pixsign.domain.Org;
 import com.broadvideo.pixsign.domain.Privilege;
 import com.broadvideo.pixsign.domain.Staff;
-import com.broadvideo.pixsign.persistence.DeviceMapper;
 import com.broadvideo.pixsign.persistence.OrgMapper;
 import com.broadvideo.pixsign.persistence.PrivilegeMapper;
 import com.broadvideo.pixsign.persistence.StaffMapper;
-import com.broadvideo.pixsign.persistence.VspMapper;
 import com.broadvideo.pixsign.util.CommonUtil;
 
 @Service("orgService")
@@ -27,8 +24,6 @@ public class OrgServiceImpl implements OrgService {
 
 	@Autowired
 	private OrgMapper orgMapper;
-	@Autowired
-	private VspMapper vspMapper;
 	@Autowired
 	private StaffMapper staffMapper;
 	@Autowired
@@ -39,8 +34,8 @@ public class OrgServiceImpl implements OrgService {
 	@Autowired
 	protected ResourceBundleMessageSource messageSource;
 
-	public List<Org> selectList(String vspid, String orgid) {
-		return orgMapper.selectList(vspid, orgid);
+	public List<Org> selectList(String orgid) {
+		return orgMapper.selectList(orgid);
 	}
 
 	public Org selectByCode(String code) {
@@ -113,8 +108,6 @@ public class OrgServiceImpl implements OrgService {
 	public void deleteOrg(String orgid) {
 		staffMapper.deleteByOrg(orgid);
 		orgMapper.deleteByPrimaryKey(orgid);
-		vspMapper.updateCurrentdevices();
-		vspMapper.updateCurrentstorage();
 	}
 
 	public boolean validateName(Org org) {

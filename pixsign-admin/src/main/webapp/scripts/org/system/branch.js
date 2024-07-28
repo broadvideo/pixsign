@@ -63,8 +63,6 @@ var BranchModule = function () {
 			'sAjaxSource' : 'branch!list.action',
 			'aoColumns' : [ {'sTitle' : common.view.name, 'mData' : 'name', 'bSortable' : false }, 
 			        		{'sTitle' : common.view.code, 'mData' : 'code', 'bSortable' : false }, 
-			        		{'sTitle' : common.view.maxstorage, 'mData' : 'maxstorage', 'bSortable' : false }, 
-			        		{'sTitle' : common.view.currentstorage, 'mData' : 'currentstorage', 'bSortable' : false }, 
 			        		{'sTitle' : common.view.createtime, 'mData' : 'createtime', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }, 
 			        		{'sTitle' : '', 'mData' : 'branchid', 'bSortable' : false }],
@@ -73,17 +71,11 @@ var BranchModule = function () {
 			'sPaginationType' : 'bootstrap',
 			'oLanguage' : PixData.tableLanguage,
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex) {
-				if (aData.maxstorage == 0) {
-					$('td:eq(2)', nRow).html('无限制');
-				} else {
-					$('td:eq(2)', nRow).html(aData.maxstorage + 'MB');
-				}
-				$('td:eq(3)', nRow).html(aData.currentstorage + 'MB');
-				$('td:eq(5)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
+				$('td:eq(3)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs blue pix-update"><i class="fa fa-edit"></i> ' + common.view.edit + '</a>');
 				if (aData.childcount == 0) {
-					$('td:eq(6)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
+					$('td:eq(4)', nRow).html('<a href="javascript:;" data-id="' + iDisplayIndex + '" class="btn default btn-xs red pix-delete"><i class="fa fa-trash-o"></i> ' + common.view.remove + '</a>');
 				} else {
-					$('td:eq(6)', nRow).html('');
+					$('td:eq(4)', nRow).html('');
 				}
 				return nRow;
 			},
@@ -129,9 +121,6 @@ var BranchModule = function () {
 	var initBranchEditModal = function () {
 		var formHandler = new FormHandler($('#BranchEditForm'));
 		formHandler.validateOption.rules = {};
-		formHandler.validateOption.rules['branch.maxstorage'] = {};
-		formHandler.validateOption.rules['branch.maxstorage']['required'] = true;
-		formHandler.validateOption.rules['branch.maxstorage']['number'] = true;
 		formHandler.validateOption.rules['branch.name'] = {};
 		formHandler.validateOption.rules['branch.name']['required'] = true;
 		formHandler.validateOption.rules['branch.name']['minlength'] = 2;
@@ -286,56 +275,7 @@ var BranchModule = function () {
 		}
 
 		var _devicetype = 1;
-		if (Max1 > 0) {
-			$('.device-navigator[devicetype="1"]').addClass('active');
-			_devicetype = 1;
-		} else if (Max2 > 0) {
-			$('.device-navigator[devicetype="2"]').addClass('active');
-			_devicetype = 2;
-		} else if (Max3 > 0) {
-			$('.device-navigator[devicetype="3"]').addClass('active');
-			_devicetype = 3;
-		} else if (Max4 > 0) {
-			$('.device-navigator[devicetype="4"]').addClass('active');
-			_devicetype = 4;
-		} else if (Max5 > 0) {
-			$('.device-navigator[devicetype="5"]').addClass('active');
-			_devicetype = 5;
-		} else if (Max6 > 0) {
-			$('.device-navigator[devicetype="6"]').addClass('active');
-			_devicetype = 6;
-		} else if (Max7 > 0) {
-			$('.device-navigator[devicetype="6"]').addClass('active');
-			_devicetype = 7;
-		} else if (Max9 > 0) {
-			$('.device-navigator[devicetype="9"]').addClass('active');
-			_devicetype = 9;
-		} else if (Max10 > 0) {
-			$('.device-navigator[devicetype="10"]').addClass('active');
-			_devicetype = 10;
-		} else if (Max11 > 0) {
-			$('.device-navigator[devicetype="11"]').addClass('active');
-			_devicetype = 11;
-		} else if (Max13 > 0) {
-			$('.device-navigator[devicetype="13"]').addClass('active');
-			_devicetype = 13;
-		} else if (Max15 > 0) {
-			$('.device-navigator[devicetype="15"]').addClass('active');
-			_devicetype = 15;
-		}
-		$('.device-navigator[devicetype="1"]').css('display', Max1==0?'none':'');
-		$('.device-navigator[devicetype="2"]').css('display', Max2==0?'none':'');
-		$('.device-navigator[devicetype="3"]').css('display', Max3==0?'none':'');
-		$('.device-navigator[devicetype="4"]').css('display', Max4==0?'none':'');
-		$('.device-navigator[devicetype="5"]').css('display', Max5==0?'none':'');
-		$('.device-navigator[devicetype="6"]').css('display', Max6==0?'none':'');
-		$('.device-navigator[devicetype="7"]').css('display', Max7==0?'none':'');
-		$('.device-navigator[devicetype="9"]').css('display', Max9==0?'none':'');
-		$('.device-navigator[devicetype="10"]').css('display', Max10==0?'none':'');
-		$('.device-navigator[devicetype="11"]').css('display', Max11==0?'none':'');
-		$('.device-navigator[devicetype="13"]').css('display', Max13==0?'none':'');
-		$('.device-navigator[devicetype="15"]').css('display', Max15==0?'none':'');
-
+		$('.device-navigator[devicetype="1"]').addClass('active');
 		$('.device-navigator').click(function(event) {
 			_devicetype = $(this).attr('devicetype');
 			$('#LeftTable').dataTable()._fnAjaxUpdate();

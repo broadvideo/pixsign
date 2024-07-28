@@ -5,7 +5,6 @@
     <id column="staffid" property="staffid" jdbcType="INTEGER" />
     <result column="uuid" property="uuid" jdbcType="VARCHAR" />
     <result column="subsystem" property="subsystem" jdbcType="CHAR" />
-    <result column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="orgid" property="orgid" jdbcType="INTEGER" />
     <result column="branchid" property="branchid" jdbcType="INTEGER" />
     <result column="loginname" property="loginname" jdbcType="VARCHAR" />
@@ -24,17 +23,14 @@
     <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="FullResultMap" type="com.broadvideo.pixsign.domain.Staff" extends="BaseResultMap">
-    <association property="vsp" column="{vspid=vspid}" select="com.broadvideo.pixsign.persistence.VspMapper.selectByPrimaryKey" />
     <association property="org" column="{orgid=orgid}" select="com.broadvideo.pixsign.persistence.OrgMapper.selectByPrimaryKey" />
     <association property="branch" column="{branchid=branchid}" select="com.broadvideo.pixsign.persistence.BranchMapper.selectBaseByPrimaryKey" />
     <collection property="privileges" ofType="com.broadvideo.pixsign.domain.Privilege"
       column="{staffid=staffid}" select="com.broadvideo.pixsign.persistence.PrivilegeMapper.selectByStaff" />
-    <collection property="roles" ofType="com.broadvideo.pixsign.domain.Role"
-      column="{staffid=staffid}" select="com.broadvideo.pixsign.persistence.RoleMapper.selectByStaff" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    staffid, uuid, subsystem, vspid, orgid, branchid, loginname, phone, password, name, email, 
+    staffid, uuid, subsystem, orgid, branchid, loginname, phone, password, name, email, 
     status, token, description, createtime, createstaffid, loginflag, logintime, sourcetype, 
     sourceid
   </sql>
@@ -58,9 +54,6 @@
     where status = '1' 
     and subsystem = #{subsystem}
     and sourcetype = '1'
-    <if test="vspid != null" >
-      and vspid = #{vspid}
-    </if>
     <if test="orgid != null" >
       and orgid = #{orgid}
     </if>
@@ -81,9 +74,6 @@
     where status = '1'
     and subsystem = #{subsystem}
     and sourcetype = '1'
-    <if test="vspid != null" >
-      and vspid = #{vspid}
-    </if>
     <if test="orgid != null" >
       and orgid = #{orgid}
     </if>
@@ -146,33 +136,6 @@
     and status='1'
   </select>
   
-  <select id="select2cByLoginname" resultMap="FullResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from staff
-    where status='1' 
-    and vspid=#{vspid}
-    and loginname = #{loginname}
-  </select>
-
-  <select id="select2cByPhone" resultMap="FullResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from staff
-    where status='1' 
-    and vspid=#{vspid}
-    and phone = #{phone}
-  </select>
-
-  <select id="login2c" resultMap="FullResultMap">
-    select *
-    from staff
-    where vspid=#{vspid} 
-    and loginname=#{loginname} 
-    and password=#{password}
-    and status='1'
-  </select>
-  
   <select  id="selectByUuid"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -196,23 +159,18 @@
     where orgid = #{orgid}
   </delete>
   
-  <delete id="deleteByVsp" >
-    update staff set status='9'
-    where vspid = #{vspid}
-  </delete>
-  
   <insert id="insert" parameterType="com.broadvideo.pixsign.domain.Staff" >
     <selectKey resultType="java.lang.Integer" keyProperty="staffid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into staff (uuid, subsystem, vspid, 
+    insert into staff (uuid, subsystem, 
       orgid, branchid, loginname, phone, 
       password, name, email, 
       status, token, description, 
       createtime, createstaffid, loginflag, 
       logintime, sourcetype, sourceid
       )
-    values (#{uuid,jdbcType=VARCHAR}, #{subsystem,jdbcType=CHAR}, #{vspid,jdbcType=INTEGER}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{subsystem,jdbcType=CHAR}, 
       #{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{token,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
@@ -231,9 +189,6 @@
       </if>
       <if test="subsystem != null" >
         subsystem,
-      </if>
-      <if test="vspid != null" >
-        vspid,
       </if>
       <if test="orgid != null" >
         orgid,
@@ -290,9 +245,6 @@
       </if>
       <if test="subsystem != null" >
         #{subsystem,jdbcType=CHAR},
-      </if>
-      <if test="vspid != null" >
-        #{vspid,jdbcType=INTEGER},
       </if>
       <if test="orgid != null" >
         #{orgid,jdbcType=INTEGER},
@@ -353,9 +305,6 @@
       <if test="subsystem != null" >
         subsystem = #{subsystem,jdbcType=CHAR},
       </if>
-      <if test="vspid != null" >
-        vspid = #{vspid,jdbcType=INTEGER},
-      </if>
       <if test="orgid != null" >
         orgid = #{orgid,jdbcType=INTEGER},
       </if>
@@ -411,7 +360,6 @@
     update staff
     set uuid = #{uuid,jdbcType=VARCHAR},
       subsystem = #{subsystem,jdbcType=CHAR},
-      vspid = #{vspid,jdbcType=INTEGER},
       orgid = #{orgid,jdbcType=INTEGER},
       branchid = #{branchid,jdbcType=INTEGER},
       loginname = #{loginname,jdbcType=VARCHAR},
@@ -440,18 +388,6 @@
     insert into staffprivilege(staffid, privilegeid) values 
     <foreach collection="privileges" item="item"  separator=",">
       (#{staff.staffid}, #{item.privilegeid})
-    </foreach>
-  </insert>
-
-  <delete id="clearStaffRoles" parameterType="com.broadvideo.pixsign.domain.Staff">
-    delete from staffrole
-    where staffid = #{staff.staffid}
-  </delete>
-
-  <insert id="assignStaffRoles">
-    insert into staffrole(staffid, roleid) values 
-    <foreach collection="roles" item="item"  separator=",">
-      (#{staff.staffid}, #{item.roleid})
     </foreach>
   </insert>
 

@@ -223,10 +223,6 @@ var AllPrivilegeList = [];
 						if (session_staff.getSubsystem().equals("0")) {
 						%>
 						<%
-						} else if (session_staff.getSubsystem().equals("1")) {
-						%>
-						<%=session_staff.getVsp().getName()%>
-						<%
 						} else if (session_staff.getSubsystem().equals("2")) {
 						%>
 						<%=session_staff.getOrg().getName()%> - <%=session_staff.getBranch().getName()%>

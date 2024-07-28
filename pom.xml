@@ -4,7 +4,7 @@
 
 	<groupId>com.broadvideo</groupId>
 	<artifactId>pixsign</artifactId>
-	<version>2.3.6</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>pixsign</name>
@@ -288,11 +288,6 @@
 			<groupId>com.twelvemonkeys.imageio</groupId>
 			<artifactId>imageio-jpeg</artifactId>
 			<version>3.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>smn</groupId>
-			<artifactId>cloud-java-sdk-smn</artifactId>
-			<version>2.0.1</version>
 		</dependency>
 		
 		<dependency>

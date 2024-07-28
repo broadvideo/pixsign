@@ -5,17 +5,16 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.broadvideo.pixsign.domain.Privilege;
-import com.broadvideo.pixsign.domain.Role;
 import com.broadvideo.pixsign.domain.Staff;
 
 public interface StaffMapper {
 	Staff selectByPrimaryKey(@Param(value = "staffid") String staffid);
 
-	int selectCount(@Param(value = "subsystem") String subsystem, @Param(value = "vspid") String vspid,
+	int selectCount(@Param(value = "subsystem") String subsystem, 
 			@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search);
 
-	List<Staff> selectList(@Param(value = "subsystem") String subsystem, @Param(value = "vspid") String vspid,
+	List<Staff> selectList(@Param(value = "subsystem") String subsystem, 
 			@Param(value = "orgid") String orgid, @Param(value = "branchid") String branchid,
 			@Param(value = "search") String search, @Param(value = "start") String start,
 			@Param(value = "length") String length);
@@ -32,18 +31,9 @@ public interface StaffMapper {
 
 	Staff login(@Param(value = "loginname") String loginname, @Param(value = "password") String password);
 
-	Staff select2cByLoginname(@Param(value = "vspid") String vspid, @Param(value = "loginname") String loginname);
-
-	Staff select2cByPhone(@Param(value = "vspid") String vspid, @Param(value = "phone") String phone);
-
-	Staff login2c(@Param(value = "vspid") String vspid, @Param(value = "loginname") String loginname,
-			@Param(value = "password") String password);
-
 	int deleteByPrimaryKey(@Param(value = "staffid") String staffid);
 
 	int deleteByOrg(@Param(value = "orgid") String orgid);
-
-	int deleteByVsp(@Param(value = "vspid") String vspid);
 
 	// int insert(Staff record);
 
@@ -57,10 +47,6 @@ public interface StaffMapper {
 
 	int assignStaffPrivileges(@Param(value = "staff") Staff staff,
 			@Param(value = "privileges") List<Privilege> privileges);
-
-	int clearStaffRoles(@Param(value = "staff") Staff staff);
-
-	int assignStaffRoles(@Param(value = "staff") Staff staff, @Param(value = "roles") List<Role> roles);
 
 	int changeBranch(@Param(value = "branchid1") String branchid1, @Param(value = "branchid2") String branchid2);
 

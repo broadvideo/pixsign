@@ -3,7 +3,6 @@
 <mapper namespace="com.broadvideo.pixsign.persistence.OrgMapper" >
   <resultMap id="BaseResultMap" type="com.broadvideo.pixsign.domain.Org" >
     <id column="orgid" property="orgid" jdbcType="INTEGER" />
-    <result column="vspid" property="vspid" jdbcType="INTEGER" />
     <result column="topbranchid" property="topbranchid" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
@@ -50,7 +49,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    orgid, vspid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
+    orgid, topbranchid, name, code, status, feature, expireflag, expiretime, maxdevices, currentdevices, 
     currentdeviceidx, maxdetail, maxstorage, currentstorage, copyright, description, backupvideoid, 
     powerflag, poweron, poweroff, qrcodeflag, devicepassflag, devicepass, upgradeflag, volumeflag, volume, timezone, 
     apps, logo, tags, defaultbundleid, defaultpageid, mainpage, city, boardtype, hightemperature, lowtemperature, 
@@ -69,9 +68,6 @@
     <include refid="Base_Column_List" />
     from org
     where status=1
-    <if test="vspid != null" >
-      and vspid = #{vspid}
-    </if>
     <if test="orgid != null" >
       and orgid = #{orgid}
     </if>
@@ -121,7 +117,7 @@ where o.orgid=r.orgid and o.status=1
     <selectKey resultType="java.lang.Integer" keyProperty="orgid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into org (vspid, topbranchid, name, 
+    insert into org (topbranchid, name, 
       code, status, feature, 
       expireflag, expiretime, maxdevices, 
       currentdevices, currentdeviceidx, 
@@ -135,7 +131,7 @@ where o.orgid=r.orgid and o.status=1
       mainpage, city, boardtype, 
       hightemperature, lowtemperature, 
       createtime, createstaffid)
-    values (#{vspid,jdbcType=INTEGER}, #{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{topbranchid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{feature,jdbcType=VARCHAR}, 
       #{expireflag,jdbcType=CHAR}, #{expiretime,jdbcType=TIMESTAMP}, #{maxdevices,jdbcType=INTEGER}, 
       #{currentdevices,jdbcType=INTEGER}, #{currentdeviceidx,jdbcType=INTEGER}, 
@@ -156,9 +152,6 @@ where o.orgid=r.orgid and o.status=1
     </selectKey>
     insert into org
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="vspid != null" >
-        vspid,
-      </if>
       <if test="topbranchid != null" >
         topbranchid,
       </if>
@@ -275,9 +268,6 @@ where o.orgid=r.orgid and o.status=1
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="vspid != null" >
-        #{vspid,jdbcType=INTEGER},
-      </if>
       <if test="topbranchid != null" >
         #{topbranchid,jdbcType=INTEGER},
       </if>
@@ -397,9 +387,6 @@ where o.orgid=r.orgid and o.status=1
   <update id="updateByPrimaryKeySelective" parameterType="com.broadvideo.pixsign.domain.Org" >
     update org
     <set >
-      <if test="vspid != null" >
-        vspid = #{vspid,jdbcType=INTEGER},
-      </if>
       <if test="topbranchid != null" >
         topbranchid = #{topbranchid,jdbcType=INTEGER},
       </if>
@@ -519,8 +506,7 @@ where o.orgid=r.orgid and o.status=1
   </update>
   <update id="updateByPrimaryKey" parameterType="com.broadvideo.pixsign.domain.Org" >
     update org
-    set vspid = #{vspid,jdbcType=INTEGER},
-      topbranchid = #{topbranchid,jdbcType=INTEGER},
+    set topbranchid = #{topbranchid,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},

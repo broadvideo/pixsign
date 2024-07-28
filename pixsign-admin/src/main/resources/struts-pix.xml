@@ -131,47 +131,6 @@
 			</result>
 		</action>
 
-		<action name="vsp!list" method="doList" class="vspAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="vsp!validate" method="doValidate" class="vspAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="vsp!add" method="doAdd" class="vspAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="vsp!update" method="doUpdate" class="vspAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="vsp!delete" method="doDelete" class="vspAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="vsp!get" method="doGet" class="vspAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">vsp.*,errorcode,errormsg</param>
-			</result>
-		</action>
-
 		<action name="org!list" method="doList" class="orgAction">
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
@@ -305,46 +264,6 @@
 			<result name="success" type="json">
 				<param name="ignoreHierarchy">false</param>
 				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-
-		<action name="role!list" method="doList" class="roleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="role!add" method="doAdd" class="roleAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="role!update" method="doUpdate" class="roleAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="json">
-				<param name="enableSMD">true</param>
-			</interceptor-ref>
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="role!delete" method="doDelete" class="roleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">errorcode,errormsg</param>
-			</result>
-		</action>
-		<action name="role!privilegelist" method="doPrivilegeList"
-			class="roleAction">
-			<result name="success" type="json">
-				<param name="ignoreHierarchy">false</param>
-				<param name="includeProperties">aaData.*,errorcode,errormsg</param>
 			</result>
 		</action>
 

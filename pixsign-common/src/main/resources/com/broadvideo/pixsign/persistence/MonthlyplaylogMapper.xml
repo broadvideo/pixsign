@@ -10,19 +10,10 @@
     <result column="mediaid" property="mediaid" jdbcType="INTEGER" />
     <result column="playmonth" property="playmonth" jdbcType="VARCHAR" />
     <result column="total" property="total" jdbcType="INTEGER" />
-    <result column="persons" property="persons" jdbcType="INTEGER" />
-    <result column="male" property="male" jdbcType="INTEGER" />
-    <result column="female" property="female" jdbcType="INTEGER" />
-    <result column="age1" property="age1" jdbcType="INTEGER" />
-    <result column="age2" property="age2" jdbcType="INTEGER" />
-    <result column="age3" property="age3" jdbcType="INTEGER" />
-    <result column="age4" property="age4" jdbcType="INTEGER" />
-    <result column="age5" property="age5" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    monthlyplaylogid, orgid, branchid, deviceid, mediatype, mediaid, playmonth, total, persons, male, female, 
-    age1, age2, age3, age4, age5, createtime
+    monthlyplaylogid, orgid, branchid, deviceid, mediatype, mediaid, playmonth, total, createtime
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -45,12 +36,6 @@
     <result column="mediaid" property="mediaid" jdbcType="INTEGER" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="dcount" property="dcount" jdbcType="INTEGER" />
-    <result column="persons" property="persons" jdbcType="INTEGER" />
-    <result column="age1" property="age1" jdbcType="INTEGER" />
-    <result column="age2" property="age2" jdbcType="INTEGER" />
-    <result column="age3" property="age3" jdbcType="INTEGER" />
-    <result column="age4" property="age4" jdbcType="INTEGER" />
-    <result column="age5" property="age5" jdbcType="INTEGER" />
     <association property="video" column="{mediatype=mediatype,videoid=mediaid}" select="selectVideoid" />
     <association property="image" column="{mediatype=mediatype,imageid=mediaid}" select="selectImageid" />
   </resultMap>
@@ -66,12 +51,6 @@
     select mediatype, mediaid, 
     sum(total) as amount, 
     count(distinct deviceid) as dcount,
-    sum(persons) as persons, 
-    sum(age1) as age1, 
-    sum(age2) as age2, 
-    sum(age3) as age3, 
-    sum(age4) as age4, 
-    sum(age5) as age5
     from monthlyplaylog
     where orgid = #{orgid}
     <if test="branchid != null">
@@ -95,14 +74,10 @@
     </selectKey>
     insert into monthlyplaylog (orgid, branchid, deviceid, 
       mediatype, mediaid, playmonth, 
-      total, persons, male, female, 
-      age1, age2, age3, age4, 
-      age5, createtime)
+      total, createtime)
     values (#{orgid,jdbcType=INTEGER}, #{branchid,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, 
       #{mediatype,jdbcType=CHAR}, #{mediaid,jdbcType=INTEGER}, #{playmonth,jdbcType=VARCHAR}, 
-      #{total,jdbcType=INTEGER}, #{persons,jdbcType=INTEGER}, #{male,jdbcType=INTEGER}, #{female,jdbcType=INTEGER}, 
-      #{age1,jdbcType=INTEGER}, #{age2,jdbcType=INTEGER}, #{age3,jdbcType=INTEGER}, #{age4,jdbcType=INTEGER}, 
-      #{age5,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+      #{total,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.broadvideo.pixsign.domain.Monthlyplaylog" >
     <selectKey resultType="java.lang.Integer" keyProperty="monthlyplaylogid" order="AFTER" >
@@ -131,30 +106,6 @@
       <if test="total != null" >
         total,
       </if>
-      <if test="persons != null" >
-        persons,
-      </if>
-      <if test="male != null" >
-        male,
-      </if>
-      <if test="female != null" >
-        female,
-      </if>
-      <if test="age1 != null" >
-        age1,
-      </if>
-      <if test="age2 != null" >
-        age2,
-      </if>
-      <if test="age3 != null" >
-        age3,
-      </if>
-      <if test="age4 != null" >
-        age4,
-      </if>
-      <if test="age5 != null" >
-        age5,
-      </if>
       <if test="createtime != null" >
         createtime,
       </if>
@@ -180,30 +131,6 @@
       </if>
       <if test="total != null" >
         #{total,jdbcType=INTEGER},
-      </if>
-      <if test="persons != null" >
-        #{persons,jdbcType=INTEGER},
-      </if>
-      <if test="male != null" >
-        #{male,jdbcType=INTEGER},
-      </if>
-      <if test="female != null" >
-        #{female,jdbcType=INTEGER},
-      </if>
-      <if test="age1 != null" >
-        #{age1,jdbcType=INTEGER},
-      </if>
-      <if test="age2 != null" >
-        #{age2,jdbcType=INTEGER},
-      </if>
-      <if test="age3 != null" >
-        #{age3,jdbcType=INTEGER},
-      </if>
-      <if test="age4 != null" >
-        #{age4,jdbcType=INTEGER},
-      </if>
-      <if test="age5 != null" >
-        #{age5,jdbcType=INTEGER},
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
@@ -234,30 +161,6 @@
       <if test="total != null" >
         total = #{total,jdbcType=INTEGER},
       </if>
-      <if test="persons != null" >
-        persons = #{persons,jdbcType=INTEGER},
-      </if>
-      <if test="male != null" >
-        male = #{male,jdbcType=INTEGER},
-      </if>
-      <if test="female != null" >
-        female = #{female,jdbcType=INTEGER},
-      </if>
-      <if test="age1 != null" >
-        age1 = #{age1,jdbcType=INTEGER},
-      </if>
-      <if test="age2 != null" >
-        age2 = #{age2,jdbcType=INTEGER},
-      </if>
-      <if test="age3 != null" >
-        age3 = #{age3,jdbcType=INTEGER},
-      </if>
-      <if test="age4 != null" >
-        age4 = #{age4,jdbcType=INTEGER},
-      </if>
-      <if test="age5 != null" >
-        age5 = #{age5,jdbcType=INTEGER},
-      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -273,14 +176,6 @@
       mediaid = #{mediaid,jdbcType=INTEGER},
       playmonth = #{playmonth,jdbcType=VARCHAR},
       total = #{total,jdbcType=INTEGER},
-      persons = #{persons,jdbcType=INTEGER},
-      male = #{male,jdbcType=INTEGER},
-      female = #{female,jdbcType=INTEGER},
-      age1 = #{age1,jdbcType=INTEGER},
-      age2 = #{age2,jdbcType=INTEGER},
-      age3 = #{age3,jdbcType=INTEGER},
-      age4 = #{age4,jdbcType=INTEGER},
-      age5 = #{age5,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP}
     where monthlyplaylogid = #{monthlyplaylogid,jdbcType=INTEGER}
   </update>

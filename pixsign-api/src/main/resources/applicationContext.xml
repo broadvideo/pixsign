@@ -85,7 +85,5 @@
 	<aop:config>
 		<aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
 	</aop:config>
-	<bean id="wxmpservice" class="com.broadvideo.pixsign.service.WxMpServiceImpl" />
-	<bean id="smartdoorkeeperService" class="com.broadvideo.pixsign.service.SmartdoorkeeperService" />
 
 </beans>

@@ -64,27 +64,8 @@ CREATE TABLE `config`  (
   PRIMARY KEY (`configid`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE `vsp`  (
-  `vspid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) NOT NULL,
-  `code` varchar(16) NOT NULL,
-  `status` char(1) NULL DEFAULT '1',
-  `description` varchar(512) NULL DEFAULT NULL,
-  `createtime` timestamp(0) NOT NULL DEFAULT current_timestamp,
-  `createstaffid` int(11) NULL DEFAULT NULL,
-  `maxdevices` int(11) NULL DEFAULT NULL,
-  `maxstorage` bigint(20) NULL DEFAULT NULL,
-  `currentdevices` int(11) NULL DEFAULT 0,
-  `currentstorage` bigint(20) NULL DEFAULT 0,
-  `apps` varchar(128) NULL DEFAULT NULL,
-  `feature` varchar(40) NULL DEFAULT '1010000000000000000000000000000000000000',
-  `type` char(1) NULL DEFAULT '1',
-  PRIMARY KEY (`vspid`)
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
- 
 CREATE TABLE `org`  (
   `orgid` int(11) NOT NULL AUTO_INCREMENT,
-  `vspid` int(11) NOT NULL,
   `topbranchid` int(11) NULL DEFAULT NULL,
   `name` varchar(64) NOT NULL,
   `code` varchar(16) NOT NULL,
@@ -129,9 +110,7 @@ CREATE TABLE `org`  (
   `boardtype` varchar(512) NULL DEFAULT 'Common',
   `hightemperature` int(11) NULL DEFAULT 50,
   `lowtemperature` int(11) NULL DEFAULT 40,
-  PRIMARY KEY (`orgid`),
-  INDEX `vspid`(`vspid`),
-  CONSTRAINT `org_ibfk_1` FOREIGN KEY (`vspid`) REFERENCES `vsp` (`vspid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  PRIMARY KEY (`orgid`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
  
 CREATE TABLE `branch`  (
@@ -159,7 +138,6 @@ CREATE TABLE `staff`  (
   `staffid` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(32) NULL DEFAULT NULL COMMENT '全局唯一标识',
   `subsystem` char(1) NULL DEFAULT '1',
-  `vspid` int(11) NULL DEFAULT NULL,
   `orgid` int(11) NULL DEFAULT NULL,
   `branchid` int(11) NULL DEFAULT NULL,
   `loginname` varchar(32) NOT NULL,
@@ -179,17 +157,6 @@ CREATE TABLE `staff`  (
   PRIMARY KEY (`staffid`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
  
-CREATE TABLE `role`  (
-  `roleid` int(11) NOT NULL AUTO_INCREMENT,
-  `subsystem` char(1) NULL DEFAULT '1',
-  `vspid` int(11) NULL DEFAULT NULL,
-  `orgid` int(11) NULL DEFAULT NULL,
-  `name` varchar(64) NOT NULL,
-  `createtime` timestamp(0) NOT NULL DEFAULT current_timestamp,
-  `createstaffid` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`roleid`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
- 
 CREATE TABLE `privilege`  (
   `privilegeid` int(11) NOT NULL,
   `subsystem` char(1) NULL DEFAULT NULL,
@@ -204,17 +171,6 @@ CREATE TABLE `privilege`  (
   PRIMARY KEY (`privilegeid`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE `staffrole`  (
-  `staffroleid` int(11) NOT NULL AUTO_INCREMENT,
-  `staffid` int(11) NOT NULL,
-  `roleid` int(11) NOT NULL,
-  PRIMARY KEY (`staffroleid`),
-  UNIQUE INDEX `staffid`(`staffid`, `roleid`),
-  INDEX `roleid`(`roleid`),
-  CONSTRAINT `staffrole_ibfk_1` FOREIGN KEY (`staffid`) REFERENCES `staff` (`staffid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `staffrole_ibfk_2` FOREIGN KEY (`roleid`) REFERENCES `role` (`roleid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE `staffprivilege`  (
   `staffprivilegeid` int(11) NOT NULL AUTO_INCREMENT,
   `staffid` int(11) NOT NULL,
@@ -223,16 +179,6 @@ CREATE TABLE `staffprivilege`  (
   UNIQUE INDEX `staffid`(`staffid`, `privilegeid`),
   CONSTRAINT `staffprivilege_ibfk_1` FOREIGN KEY (`staffid`) REFERENCES `staff` (`staffid`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
-
-CREATE TABLE `roleprivilege`  (
-  `roleprivilegeid` int(11) NOT NULL AUTO_INCREMENT,
-  `roleid` int(11) NOT NULL,
-  `privilegeid` int(11) NOT NULL,
-  PRIMARY KEY (`roleprivilegeid`),
-  UNIQUE INDEX `roleid`(`roleid`, `privilegeid`),
-  CONSTRAINT `roleprivilege_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `role` (`roleid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
-
 
 CREATE TABLE `image`  (
   `imageid` int(11) NOT NULL AUTO_INCREMENT,
@@ -1003,14 +949,6 @@ CREATE TABLE `dailyplaylog`  (
   `playdate` varchar(8) NULL DEFAULT NULL,
   `total` int(11) NULL DEFAULT 0,
   `createtime` timestamp(0) NOT NULL DEFAULT current_timestamp,
-  `persons` int(11) NULL DEFAULT 0,
-  `male` int(11) NULL DEFAULT 0,
-  `female` int(11) NULL DEFAULT 0,
-  `age1` int(11) NULL DEFAULT 0,
-  `age2` int(11) NULL DEFAULT 0,
-  `age3` int(11) NULL DEFAULT 0,
-  `age4` int(11) NULL DEFAULT 0,
-  `age5` int(11) NULL DEFAULT 0,
   PRIMARY KEY (`dailyplaylogid`),
   UNIQUE INDEX `dailyplaylog_index4`(`deviceid`, `mediatype`, `mediaid`, `playdate`),
   INDEX `dailyplaylog_index1`(`deviceid`),
@@ -1028,14 +966,6 @@ CREATE TABLE `monthlyplaylog`  (
   `playmonth` varchar(6) NULL DEFAULT NULL,
   `total` int(11) NULL DEFAULT 0,
   `createtime` timestamp(0) NOT NULL DEFAULT current_timestamp,
-  `persons` int(11) NULL DEFAULT 0,
-  `male` int(11) NULL DEFAULT 0,
-  `female` int(11) NULL DEFAULT 0,
-  `age1` int(11) NULL DEFAULT 0,
-  `age2` int(11) NULL DEFAULT 0,
-  `age3` int(11) NULL DEFAULT 0,
-  `age4` int(11) NULL DEFAULT 0,
-  `age5` int(11) NULL DEFAULT 0,
   PRIMARY KEY (`monthlyplaylogid`),
   UNIQUE INDEX `monthlyplaylog_index4`(`deviceid`, `mediatype`, `mediaid`, `playmonth`),
   INDEX `monthlyplaylog_index1`(`deviceid`),
@@ -1066,9 +996,7 @@ insert into staffprivilege(staffid,privilegeid) values(@staffid1,0);
 insert into staffprivilege(staffid,privilegeid) values(@staffid2,0);
 insert into staffprivilege(staffid,privilegeid) values(@staffid3,0);
 
-insert into vsp(name,code,maxdevices,maxstorage,createstaffid) values('default','default',100,10000,@staffid1);
-select last_insert_id() into @vspid;
-insert into org(vspid,name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values(@vspid,'default','default',0,'2037-01-01 00:00:00',0,0,0,'Default Org',@staffid2);
+insert into org(name,code,expireflag,expiretime,maxdevices,maxstorage,currentdeviceidx,description,createstaffid) values('default','default',0,'2037-01-01 00:00:00',0,0,0,'Default Org',@staffid2);
 select last_insert_id() into @orgid;
 insert into branch(orgid,parentid,name,description,createstaffid) values(@orgid,0,'super','Default Root Branch',@staffid3);
 select last_insert_id() into @branchid;
@@ -1707,13 +1635,11 @@ insert into timezone values(613, 'VST');
 
 
 delete from privilege where privilegeid>0;
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(101,0,0,'menu.vsp','vsp.jsp','fa-cloud',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(104,0,0,'menu.page','page.jsp','fa-html5',1,4);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(109,0,0,'menu.systemmanage','','fa-cogs',1,9);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10901,0,109,'menu.config','config.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10902,0,109,'menu.debug','debugreport.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(10903,0,109,'menu.crash','crashreport.jsp','',1,3);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(202,1,0,'menu.org','org.jsp','fa-cloud',1,2);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(301,2,0,'menu.resource','','fa-qrcode',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30102,2,301,'menu.video','resource/video.jsp','',1,2);
@@ -1751,12 +1677,10 @@ insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequ
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30801,2,308,'menu.onlinelog','stat/onlinelog.jsp','',1,1);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30802,2,308,'menu.playlog','stat/playlog.jsp','',1,2);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30811,2,308,'menu.oplog','stat/oplog.jsp','',1,11);
-insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30823,2,308,'menu.viewstat','stat/viewstat.jsp','',1,23);
 
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(309,2,0,'menu.systemmanage','','fa-cogs',1,99);
 #insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30901,2,309,'menu.staff','system/staff.jsp','',1,1);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30902,2,309,'menu.role','system/role.jsp','',1,2);
-#insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30903,2,309,'menu.branch','system/branch.jsp','',1,3);
+insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30903,2,309,'menu.branch','system/branch.jsp','',1,3);
 insert into privilege(privilegeid,subsystem,parentid,name,menuurl,icon,type,sequence) values(30909,2,309,'menu.config','system/config.jsp','',1,9);
 
 

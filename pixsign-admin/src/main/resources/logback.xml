@@ -3,7 +3,7 @@
 <configuration scan="true" scanPeriod="20 seconds">
 
 	<substitutionProperty name="log.base"
-		value="/opt/pix/logs/pixsign/pixsignage" />
+		value="/opt/pix/logs/pixsign/pixsign" />
 
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">

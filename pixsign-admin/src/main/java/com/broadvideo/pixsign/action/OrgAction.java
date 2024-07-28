@@ -34,14 +34,7 @@ public class OrgAction extends BaseDatatableAction {
 	public String doList() {
 		try {
 			List<Object> aaData = new ArrayList<Object>();
-			List<Org> orgList;
-			if (getLoginStaff().getVspid() == null && getLoginStaff().getOrgid() == null) {
-				orgList = orgService.selectList(null, null);
-			} else if (getLoginStaff().getVspid() == null) {
-				orgList = orgService.selectList(null, "" + getLoginStaff().getOrgid());
-			} else {
-				orgList = orgService.selectList("" + getLoginStaff().getVspid(), null);
-			}
+			List<Org> orgList = orgService.selectList(null);
 			for (int i = 0; i < orgList.size(); i++) {
 				aaData.add(orgList.get(i));
 			}
@@ -58,7 +51,6 @@ public class OrgAction extends BaseDatatableAction {
 	public String doAdd() {
 		try {
 			org.setCreatestaffid(getLoginStaff().getStaffid());
-			org.setVspid(getLoginStaff().getVspid());
 			org.setCurrentdevices(0);
 			org.setCurrentstorage((long) 0);
 			orgService.addOrg(org);

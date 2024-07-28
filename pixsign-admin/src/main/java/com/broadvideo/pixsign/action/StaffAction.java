@@ -43,20 +43,17 @@ public class StaffAction extends BaseDatatableAction {
 			}
 
 			String subsystem = (String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM);
-			String vspid = null;
 			String orgid = null;
-			if (subsystem.equals(CommonConstants.SUBSYSTEM_VSP)) {
-				vspid = "" + getLoginStaff().getVspid();
-			} else {
+			if (subsystem.equals(CommonConstants.SUBSYSTEM_ORG)) {
 				orgid = "" + getLoginStaff().getOrgid();
 			}
 
-			int count = staffService.selectCount(subsystem, vspid, orgid, branchid, search);
+			int count = staffService.selectCount(subsystem, orgid, branchid, search);
 			this.setiTotalRecords(count);
 			this.setiTotalDisplayRecords(count);
 
 			List<Object> aaData = new ArrayList<Object>();
-			List<Staff> staffList = staffService.selectList(subsystem, vspid, orgid, branchid, search, start, length);
+			List<Staff> staffList = staffService.selectList(subsystem, orgid, branchid, search, start, length);
 			for (int i = 0; i < staffList.size(); i++) {
 				aaData.add(staffList.get(i));
 			}
@@ -75,7 +72,6 @@ public class StaffAction extends BaseDatatableAction {
 		try {
 			staff.setCreatestaffid(getLoginStaff().getStaffid());
 			staff.setSubsystem((String) getSession().getAttribute(CommonConstants.SESSION_SUBSYSTEM));
-			staff.setVspid(getLoginStaff().getVspid());
 			staff.setOrgid(getLoginStaff().getOrgid());
 			staffService.addStaff(staff);
 			return SUCCESS;

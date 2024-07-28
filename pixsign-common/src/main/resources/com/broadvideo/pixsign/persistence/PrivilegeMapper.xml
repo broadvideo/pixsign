@@ -21,12 +21,6 @@
     where privilegeid > 0 and parentid = 0 and subsystem = 0 order by sequence
   </select>
   
-  <select id="selectVspTreeList" resultMap="BaseResultMap" >
-    select *
-    from privilege
-    where privilegeid > 0 and parentid = 0 and subsystem = 1 order by sequence
-  </select>
-  
   <select id="selectOrgTreeList" resultMap="BaseResultMap" >
     select *
     from privilege
@@ -55,15 +49,5 @@
     select p.*
     from privilege p, staffprivilege sp
     where p.privilegeid = sp.privilegeid and sp.staffid = #{staffid}
-    union
-    select p.*
-    from privilege p, roleprivilege rp, staffrole sr
-    where p.privilegeid = rp.privilegeid and rp.roleid = sr.roleid and sr.staffid = #{staffid}
-  </select>
-
-  <select id="selectByRole" resultMap="BaseResultMap">
-    select p.*
-    from privilege p, roleprivilege rp
-    where p.privilegeid = rp.privilegeid and rp.roleid = #{roleid}
   </select>
 </mapper>

@@ -11,9 +11,7 @@ public class CommonConstants {
 	public static final String SESSION_EDUCLOUD_UID = "SESSION_EDUCLOUD_UID";
 
 	public static final String SUBSYSTEM_SYS = "0";
-	public static final String SUBSYSTEM_VSP = "1";
 	public static final String SUBSYSTEM_ORG = "2";
-	public static final String SUBSYSTEM_USR = "3";
 
 	public static final String PRIVILEGE_SUPER = "0";
 

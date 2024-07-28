@@ -11,7 +11,5 @@ public interface PrivilegeMapper {
 
 	List<Privilege> selectSysTreeList();
 
-	List<Privilege> selectVspTreeList();
-
 	List<Privilege> selectOrgTreeList();
 }

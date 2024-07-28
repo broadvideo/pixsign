@@ -1,6 +1,5 @@
 package com.broadvideo.pixsign.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.broadvideo.pixsign.common.CommonConstants;
-import com.broadvideo.pixsign.domain.Role;
 import com.broadvideo.pixsign.domain.Staff;
 import com.broadvideo.pixsign.persistence.StaffMapper;
 import com.broadvideo.pixsign.util.CommonUtil;
@@ -19,13 +17,13 @@ public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffMapper staffMapper;
 
-	public int selectCount(String subsystem, String vspid, String orgid, String branchid, String search) {
-		return staffMapper.selectCount(subsystem, vspid, orgid, branchid, search);
+	public int selectCount(String subsystem, String orgid, String branchid, String search) {
+		return staffMapper.selectCount(subsystem, orgid, branchid, search);
 	}
 
-	public List<Staff> selectList(String subsystem, String vspid, String orgid, String branchid, String search,
+	public List<Staff> selectList(String subsystem, String orgid, String branchid, String search,
 			String start, String length) {
-		return staffMapper.selectList(subsystem, vspid, orgid, branchid, search, start, length);
+		return staffMapper.selectList(subsystem, orgid, branchid, search, start, length);
 	}
 
 	@Transactional
@@ -34,19 +32,12 @@ public class StaffServiceImpl implements StaffService {
 		staff.setPassword(CommonUtil.getPasswordMd5(loginname, staff.getPassword()));
 		staffMapper.insertSelective(staff);
 		staffMapper.updateByPrimaryKeySelective(staff);
-		if (staff.getRoles().size() > 0) {
-			staffMapper.assignStaffRoles(staff, staff.getRoles());
-		}
 	}
 
 	@Transactional
 	public void updateStaff(Staff staff) {
 		staff.setPassword(null);
 		staffMapper.updateByPrimaryKeySelective(staff);
-		staffMapper.clearStaffRoles(staff);
-		if (staff.getRoles().size() > 0) {
-			staffMapper.assignStaffRoles(staff, staff.getRoles());
-		}
 	}
 
 	@Transactional
@@ -94,7 +85,6 @@ public class StaffServiceImpl implements StaffService {
 		staff.setOrgid(orgid);
 		staff.setSubsystem(CommonConstants.SUBSYSTEM_ORG);
 		staff.setPassword(staff.getUuid());
-		staff.setRoles(new ArrayList<Role>());
 		if (qStaff != null) {
 			staff.setStaffid(qStaff.getStaffid());
 			this.updateStaff(staff);
